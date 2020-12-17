@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="parentCategory"
+            type="com.example.project_myfit.ui.main.database.ParentCategory" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardElevation="@dimen/_4sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:text="@{parentCategory.title}"
+            android:textSize="@dimen/_16ssp"
+            tools:text="Top" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/add_icon"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:srcCompat="@drawable/icon_add" />
+    </com.google.android.material.card.MaterialCardView>
+</layout>

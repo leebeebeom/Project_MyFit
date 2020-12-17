@@ -1,0 +1,77 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Project_MyFit" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <!--        ↑ 앱바, 바텀네비게이션 선택 됐을때 컬러-->
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!--        액션모드 뒤로가기 컬러-->
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnBackground">@color/black</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <!--        폰트 변경-->
+        <item name="fontFamily">@font/font_ibm_plex_sans</item>
+        <!--        네비게이션 바 컬러 변경-->
+        <item name="android:navigationBarColor">@color/light_gray</item>
+        <!--        메뉴 컬러 변경-->
+        <item name="android:textColorSecondary">@android:color/black</item>
+        <!--        텍스트 컬러 변경-->
+        <item name="android:textColor">@color/black</item>
+        <!--        메뉴 텍스트 스타일-->
+        <item name="actionMenuTextAppearance">@style/menuTextStyle</item>
+        <!--        액션모드 업 버튼-->
+        <item name="actionBarTheme">@style/myActionModeUpButton</item>
+
+    </style>
+    <!--    툴바 텍스트-->
+    <!--    fragmen_main.xml에서 정의-->
+    <style name="myToolbarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <!--    메뉴 텍스트 스타일-->
+    <style name="menuTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+    <!--    에딧 텍스트 코너-->
+    <!--    fragment_input.xml에서 정의-->
+    <style name="editTextCornerRounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+    <!--    바텀 네비게이션 액티브 컬러-->
+    <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+    </style>
+    <!--    알러트 다이얼로그-->
+    <!--    MainFragment에서 따로 입혔음-->
+    <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/black</item>
+        <item name="textColorAlertDialogListItem">@color/black</item>
+    </style>
+    <!--    액션 모드 업 버튼-->
+    <style name="myActionModeUpButton" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+        <item name="actionMenuTextColor">@color/black</item>
+    </style>
+    <!--    에딧텍스트 포커스 아웃라인-->
+    <!--    xml에서 적용-->
+    <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="colorPrimary">@color/black</item>
+    </style>
+    <!--    브랜드 텍스트 컬러-->
+    <style name="myItemBrandColor" parent="Theme.AppCompat.DayNight">
+        <item name="android:textColor">@color/deep_gray</item>
+    </style>
+
+</resources>

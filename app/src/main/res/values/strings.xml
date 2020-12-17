@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Project_MyFit</string>
+    <string name="done">DONE</string>
+    <string name="main">MAIN</string>
+    <string name="favorite">FAVORITE</string>
+    <string name="setting">SETTING</string>
+    <string name="http">http//:</string>
+    <string name="memo">memo</string>
+    <string name="save">SAVE</string>
+    <string name="sort">SORT</string>
+    <string name="add">ADD</string>
+    <string name="brand">브랜드</string>
+    <string name="name">제품명</string>
+    <string name="size">사이즈</string>
+    <string name="length">총장</string>
+    <string name="shoulder">어깨</string>
+    <string name="chest">가슴</string>
+    <string name="sleeve">소매</string>
+    <string name="move">MOVE</string>
+    <string name="go_to">GO TO</string>
+    <string name="go">GO</string>
+    <string name="category">Category</string>
+</resources>
