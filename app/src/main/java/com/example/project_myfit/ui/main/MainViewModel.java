@@ -12,11 +12,11 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.example.project_myfit.ui.main.database.AppDataBase;
 import com.example.project_myfit.ui.main.database.CategoryDao;
 import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
-import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +35,6 @@ public class MainViewModel extends AndroidViewModel {
     private final SharedPreferences mPreferences_sort;
     private int mRunCount;
     private int mSort;
-    private CategoryAdapter mAdapter;
-    private RecyclerViewExpandableItemManager mManager;
-    private RecyclerView.Adapter mAdapter2;
 
 
     public MainViewModel(@NonNull Application application) {
@@ -55,8 +52,6 @@ public class MainViewModel extends AndroidViewModel {
         mPreferences_sort = application.getSharedPreferences(SORT, Context.MODE_PRIVATE);
         //실행시 sort 값 저장
         mSort = mPreferences_sort.getInt(SORT, 0);
-        //어드밴스드 리사이클러 뷰 초기화
-        mManager = new RecyclerViewExpandableItemManager(null);
     }
 
 
@@ -108,10 +103,6 @@ public class MainViewModel extends AndroidViewModel {
     }
 
 
-    public CategoryAdapter getAdapter() {
-        return mAdapter;
-    }
-
     public SharedPreferences getPreferences_sort() {
         return mPreferences_sort;
     }
@@ -137,21 +128,13 @@ public class MainViewModel extends AndroidViewModel {
         return mCategoryDao.getAllCategory();
     }
 
-    public RecyclerViewExpandableItemManager getManager() {
-        return mManager;
-    }
 
-
-    public RecyclerView.Adapter getmAdapter2() {
-        return mAdapter2;
-    }
-
-    public List<ParentCategory> getData(List<ChildCategory> childCategoryList) {
-        List<ParentCategory> parentCategories = new ArrayList<>();
-        List<ChildCategory> top = new ArrayList<>();
-        List<ChildCategory> bottom = new ArrayList<>();
-        List<ChildCategory> outer = new ArrayList<>();
-        List<ChildCategory> etc = new ArrayList<>();
+    public List<BaseNode> getData(List<ChildCategory> childCategoryList) {
+        List<BaseNode> parentCategories = new ArrayList<>();
+        List<BaseNode> top = new ArrayList<>();
+        List<BaseNode> bottom = new ArrayList<>();
+        List<BaseNode> outer = new ArrayList<>();
+        List<BaseNode> etc = new ArrayList<>();
         for (ChildCategory childCategory : childCategoryList) {
             if (childCategory.getParentCategory().equals("Top")) {
                 top.add(childCategory);

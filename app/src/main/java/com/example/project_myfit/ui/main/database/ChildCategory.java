@@ -7,16 +7,19 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //엔티티
 @Entity
-public class ChildCategory implements Parcelable {
+public class ChildCategory extends BaseNode {
     @Ignore
     public static final String SHORT_SLEEVE = "SHORT SLEEVE";
     @Ignore
@@ -46,24 +49,6 @@ public class ChildCategory implements Parcelable {
         this.childCategory = childCategory;
         this.parentCategory = parentCategory;
     }
-
-    protected ChildCategory(Parcel in) {
-        id = in.readInt();
-        childCategory = in.readString();
-        parentCategory = in.readString();
-    }
-
-    public static final Creator<ChildCategory> CREATOR = new Creator<ChildCategory>() {
-        @Override
-        public ChildCategory createFromParcel(Parcel in) {
-            return new ChildCategory(in);
-        }
-
-        @Override
-        public ChildCategory[] newArray(int size) {
-            return new ChildCategory[size];
-        }
-    };
 
     public Integer getImage() {
         map = new HashMap<>();
@@ -113,14 +98,9 @@ public class ChildCategory implements Parcelable {
                 '}';
     }
 
+    @Nullable
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(childCategory );
-
+    public List<BaseNode> getChildNode() {
+        return null;
     }
 }

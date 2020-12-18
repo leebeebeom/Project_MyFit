@@ -10,11 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,19 +29,15 @@ import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager;
-import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainFragment extends Fragment {
     public static final String TAG = "로그";
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
-    private RecyclerView.Adapter mAdapter;
-    private CategoryAdapter adapter;
+    private int answer = 0;
+    private int clickedPosition;
+    private NodeTreeAdapter mRealAdapter;
 
 
     @Override
@@ -69,20 +62,38 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        mBinding.recyclerView.setLayoutManager(layoutManager);
         mBinding.recyclerView.setHasFixedSize(true);
         DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         mBinding.recyclerView.addItemDecoration(decoration);
-        List<ChildCategory> childCategories = new ArrayList<>();
-        adapter = new CategoryAdapter(mModel.getData(childCategories));
-        mBinding.recyclerView.setAdapter(adapter);
+        mRealAdapter = new NodeTreeAdapter();
+        mBinding.recyclerView.setAdapter(mRealAdapter);
+        //DiffUtil 정의ㅣㅣㅣ
         mModel.getAll().observe(getViewLifecycleOwner(), childCategoryList -> {
-            adapter = new CategoryAdapter(mModel.getData(childCategoryList));
-            adapter.setOnItemClickListener(this::showDialog);
+            if (answer == 0) {
+                mRealAdapter.setList(mModel.getData(childCategoryList));
+                answer++;
+            }else {
+                    final int addItem = childCategoryList.size() - 1;
+                    final int childIndex = mRealAdapter.getData().get(clickedPosition).getChildNode().size();
+                    mRealAdapter.nodeAddData(mRealAdapter.getData().get(clickedPosition), childIndex,
+                            childCategoryList.get(addItem));
+
+            }
+
+        });
+        mRealAdapter.setOnItemChildClickListener((adapter1, view, position) -> {
+            clickedPosition = position;
+            onPause();
+            showDialog((ParentCategory) adapter1.getData().get(position));
         });
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: 호출");
     }
 
     @Override
@@ -173,11 +184,20 @@ public class MainFragment extends Fragment {
         builder.setPositiveButton("확인", (dialog, which) -> {
             TextInputEditText editText = frameLayout.findViewById(R.id.editText_dialog);
             if (!TextUtils.isEmpty(editText.getText())) {
-                mModel.insert(new ChildCategory(editText.getText().toString(), parentCategory.getTitle()));
+                mModel.insert(new ChildCategory(editText.getText().toString(), parentCategory.getParentCategory()));
             }
         });
         builder.setNegativeButton("취소", null);
         builder.show();
+    }
+
+    private void update() {
+        mModel.getAll().observe(getViewLifecycleOwner(), childCategories -> {
+            final int addItem = childCategories.size() - 1;
+            final int childIndex = mRealAdapter.getData().get(clickedPosition).getChildNode().size();
+            mRealAdapter.nodeAddData(mRealAdapter.getData().get(clickedPosition), childIndex,
+                    childCategories.get(addItem));
+        });
     }
 
 }

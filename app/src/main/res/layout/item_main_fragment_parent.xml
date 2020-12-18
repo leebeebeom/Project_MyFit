@@ -22,11 +22,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+<!--        android:text="@{parentCategory.title}"-->
         <TextView
+            android:id="@+id/parent_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
-            android:text="@{parentCategory.title}"
             android:textSize="@dimen/_16ssp"
             tools:text="Top" />
 

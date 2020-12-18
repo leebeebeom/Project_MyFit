@@ -16,13 +16,12 @@
         android:layout_marginStart="4dp"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground">
-
+<!--        android:text="@{childCategory.childCategory}"-->
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/child_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
-            android:text="@{childCategory.childCategory}"
             android:textSize="@dimen/_12ssp"
             tools:text="Short Sleeve" />
     </LinearLayout>
