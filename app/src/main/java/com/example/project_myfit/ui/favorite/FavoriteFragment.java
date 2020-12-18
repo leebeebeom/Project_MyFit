@@ -14,12 +14,12 @@ import android.view.ViewGroup;
 
 import com.example.project_myfit.R;
 
-public class FavoriteFargment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
-    private FavoriteFargmentViewModel mViewModel;
+    private FavoriteFragmentViewModel mViewModel;
 
-    public static FavoriteFargment newInstance() {
-        return new FavoriteFargment();
+    public static FavoriteFragment newInstance() {
+        return new FavoriteFragment();
     }
 
     @Override
@@ -31,8 +31,7 @@ public class FavoriteFargment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(FavoriteFargmentViewModel.class);
-        // TODO: Use the ViewModel
+        mViewModel = new ViewModelProvider(this).get(FavoriteFragmentViewModel.class);
     }
 
 }

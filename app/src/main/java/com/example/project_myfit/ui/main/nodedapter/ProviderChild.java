@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main;
+package com.example.project_myfit.ui.main.nodedapter;
 
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;

@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main;
+package com.example.project_myfit.ui.main.nodedapter;
 
 import android.view.View;
 
@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.example.project_myfit.R;
-import com.example.project_myfit.databinding.ItemMainFragmentChildBinding;
 import com.example.project_myfit.ui.main.database.ParentCategory;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,6 @@ public class ProviderParent extends BaseNodeProvider {
 
     @Override
     public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
-        getAdapter().expandOrCollapse(position, true, true, NodeTreeAdapter.EXPAND_COLLAPSE_PAYLOAD);
+        getAdapter().expandOrCollapse(position, true, true, MainFragmentAdapter.EXPAND_COLLAPSE_PAYLOAD);
     }
 }

@@ -14,7 +14,7 @@ public class InputViewModel extends AndroidViewModel {
 
     public InputViewModel(@NonNull Application application) {
         super(application);
-        mDao = AppDataBase.getsInstance(application).topSizeDao();
+        mDao = AppDataBase.getsInstance(application).sizeDao();
     }
 
     //인서트

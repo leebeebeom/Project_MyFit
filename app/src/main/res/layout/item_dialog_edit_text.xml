@@ -12,11 +12,12 @@
         android:hint="@string/category"
         android:theme="@style/myEditText"
         app:endIconMode="clear_text"
-        app:placeholderText="ex)Short Sleeve, Shirt">
+        app:placeholderText="ex)Short Sleeve or Nike">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText_dialog"
             android:layout_width="match_parent"
+            android:inputType="text"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone" />
     </com.google.android.material.textfield.TextInputLayout>

@@ -1,14 +1,7 @@
-package com.example.project_myfit.ui.main;
-
-import android.view.View;
-
-import androidx.annotation.NonNull;
+package com.example.project_myfit.ui.main.nodedapter;
 
 import com.chad.library.adapter.base.BaseNodeAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.node.BaseNode;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.example.project_myfit.R;
 import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
@@ -17,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class NodeTreeAdapter extends BaseNodeAdapter {
+public class MainFragmentAdapter extends BaseNodeAdapter {
 
-    public NodeTreeAdapter() {
+    public MainFragmentAdapter() {
         super();
         addChildClickViewIds(R.id.add_icon);
         addNodeProvider(new ProviderParent());

@@ -20,7 +20,7 @@ public class ListViewModel extends AndroidViewModel {
     public ListViewModel(@NonNull Application application) {
         super(application);
         //Dao
-        mDao = AppDataBase.getsInstance(application).topSizeDao();
+        mDao = AppDataBase.getsInstance(application).sizeDao();
         //어댑터
         mAdapter = new ListFragmentAdapter();
     }

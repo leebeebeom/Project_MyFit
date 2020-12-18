@@ -16,8 +16,5 @@
     <string name="shoulder">어깨</string>
     <string name="chest">가슴</string>
     <string name="sleeve">소매</string>
-    <string name="move">MOVE</string>
-    <string name="go_to">GO TO</string>
-    <string name="go">GO</string>
     <string name="category">Category</string>
 </resources>

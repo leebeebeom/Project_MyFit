@@ -11,6 +11,8 @@ public class MainActivityViewModel extends ViewModel {
     //ListFragment에서 클릭된 아이템
     private Size size;
 
+
+    //게터 세터
     public ChildCategory getChildCategory() {
         return childCategory;
     }

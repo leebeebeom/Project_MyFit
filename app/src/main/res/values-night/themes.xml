@@ -6,7 +6,6 @@
         <!--        ↑ 앱바, 바텀네비게이션 선택 됐을때 컬러-->
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!--        ↑ 액션 모드 뒤로가기 컬러-->
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/white</item>
@@ -29,8 +28,6 @@
         <item name="android:textColor">@color/white</item>
         <!--        메뉴 텍스트 스타일-->
         <item name="actionMenuTextAppearance">@style/menuTextStyle</item>
-        <!--        액션 모드 메뉴 컬러-->
-        <item name="actionBarTheme">@style/myActionModeUpButtonDark</item>
 
     </style>
     <!--    바텀 네비게이션 액티브 컬러-->
@@ -43,11 +40,6 @@
     <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/white</item>
         <item name="android:textColor">@color/white</item>
-    </style>
-
-    <!--    액션 모드 뒤로가기-->
-    <style name="myActionModeUpButtonDark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="actionMenuTextColor">@color/white</item>
     </style>
 
     <!--    에딧텍스트 포커스 아웃라인-->

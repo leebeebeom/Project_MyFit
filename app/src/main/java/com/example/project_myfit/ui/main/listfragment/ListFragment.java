@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentListBinding;
+
 
 public class ListFragment extends Fragment {
 
@@ -69,7 +71,6 @@ public class ListFragment extends Fragment {
                 //클릭 리스너
             });
         });
-
     }
 
     //옵션 메뉴 인플레이트

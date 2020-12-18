@@ -1,13 +1,12 @@
 package com.example.project_myfit;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import android.os.Bundle;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
 
@@ -22,15 +21,15 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //툴바
+        //ToolBar
         setSupportActionBar(binding.toolbar);
 
-        //Top Level Destination 지정.
+        //Top Level Destination 지정
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.mainFragment, R.id.favoriteFragment, R.id.averageFragment
         ).build();
 
-        //NavController 객체 생성
+        //NavController
         mNavController = Navigation.findNavController(this, R.id.host_fragment);
 
         //액티비티의 액션바를 호스트 프래그먼트 안의 프래그먼트들이 공유할 수 있게 해줌.
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
     }
 
-    //업버튼 활성
+    //업버튼
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) ||

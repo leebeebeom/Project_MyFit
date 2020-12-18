@@ -6,7 +6,6 @@
         <!--        ↑ 앱바, 바텀네비게이션 선택 됐을때 컬러-->
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!--        액션모드 뒤로가기 컬러-->
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/black</item>
@@ -30,8 +29,6 @@
         <item name="android:textColor">@color/black</item>
         <!--        메뉴 텍스트 스타일-->
         <item name="actionMenuTextAppearance">@style/menuTextStyle</item>
-        <!--        액션모드 업 버튼-->
-        <item name="actionBarTheme">@style/myActionModeUpButton</item>
 
     </style>
     <!--    툴바 텍스트-->
@@ -60,10 +57,7 @@
         <item name="colorPrimary">@color/black</item>
         <item name="textColorAlertDialogListItem">@color/black</item>
     </style>
-    <!--    액션 모드 업 버튼-->
-    <style name="myActionModeUpButton" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
-        <item name="actionMenuTextColor">@color/black</item>
-    </style>
+
     <!--    에딧텍스트 포커스 아웃라인-->
     <!--    xml에서 적용-->
     <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">

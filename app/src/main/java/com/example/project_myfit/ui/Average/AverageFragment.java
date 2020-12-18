@@ -32,7 +32,6 @@ public class AverageFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(AverageViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }
