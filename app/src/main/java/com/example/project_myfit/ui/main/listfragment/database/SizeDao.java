@@ -11,8 +11,11 @@ import java.util.List;
 
 @Dao
 public interface SizeDao {
-    @Query("SELECT * FROM Size WHERE folderId LIKE :id")
-    LiveData<List<Size>> getAllSizeByFolderId(int id);
+    @Query("SELECT * FROM Size WHERE folderId = :id")
+    List<Size> getAllSizeByFolderId(int id);
+
+    @Query("SELECT * FROM Size WHERE folderId = :id")
+    LiveData<List<Size>> getAllSizeByFolderIdLive(int id);
 
     @Insert
     void insert(Size size);
@@ -22,4 +25,10 @@ public interface SizeDao {
 
     @Delete
     void delete(Size size);
+
+    @Query("DELETE FROM Size WHERE folderId = :id")
+    void deleteByFolderId(int id);
+
+    @Insert
+    void insertList(List<Size> sizes);
 }

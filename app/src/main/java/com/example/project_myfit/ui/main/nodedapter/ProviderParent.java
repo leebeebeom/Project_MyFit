@@ -18,17 +18,20 @@ public class ProviderParent extends BaseNodeProvider {
 
     @Override
     public int getLayoutId() {
+        //Root
         return R.layout.item_main_fragment_parent;
     }
 
     @Override
     public void convert(@NotNull BaseViewHolder helper, BaseNode data) {
+        //Bind
         ParentCategory parentCategory = (ParentCategory) data;
         helper.setText(R.id.parent_text, parentCategory.getParentCategory());
     }
 
     @Override
     public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
-        getAdapter().expandOrCollapse(position, true, true, MainFragmentAdapter.EXPAND_COLLAPSE_PAYLOAD);
+        //Click
+        getAdapter().expandOrCollapse(position, true, true);
     }
 }

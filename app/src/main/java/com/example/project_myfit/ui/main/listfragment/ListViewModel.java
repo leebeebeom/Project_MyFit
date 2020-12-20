@@ -31,7 +31,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Size>> getSizeList(int folderId) {
-        return mDao.getAllSizeByFolderId(folderId);
+        return mDao.getAllSizeByFolderIdLive(folderId);
     }
 
     public ListFragmentAdapter getAdapter() {

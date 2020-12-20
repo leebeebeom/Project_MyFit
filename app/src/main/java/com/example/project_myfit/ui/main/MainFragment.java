@@ -1,12 +1,11 @@
 package com.example.project_myfit.ui.main;
 
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,16 +20,21 @@ import com.example.project_myfit.databinding.FragmentMainBinding;
 import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
 public class MainFragment extends Fragment {
+    public static final String TAG = "로그";
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
-    private boolean firstLoad = true;
+    private boolean mFirstLoad = true;
     private int clickedPosition;
+    private boolean mAddLoad = false;
+    private List<ChildCategory> mCurrentChildList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -41,73 +45,169 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //Initialize
+        init();
+        mModel.getAll().observe(getViewLifecycleOwner(), childCategoryList -> {
+            mCurrentChildList = childCategoryList;
+            //프래그먼트 생성시 한번만 갱신(for nodeAddData)
+            if (mFirstLoad) {
+                mModel.getMainFragmentAdapter().setList(mModel.getData(childCategoryList));
+                mFirstLoad = false;
+            }
+            else if (mAddLoad) {
+                //Add Update
+                addLoad(childCategoryList);
+                mAddLoad = false;
+            }
+            //for First Run
+            if (mModel.isFirstRun()) {
+                mModel.getMainFragmentAdapter().setList(mModel.getData(childCategoryList));
+            }
+        });
+        setClickListener();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //뷰모델
-        mModel = new ViewModelProvider(this).get(MainViewModel.class);
-        //메인 액티비티 뷰모델
-        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        //프래그먼트 독립 메뉴 사용
-        setHasOptionsMenu(true);
-        //리사이클러 뷰 셋팅
-        recyclerViewInit();
-        mModel.getAll().observe(getViewLifecycleOwner(), childCategoryList -> {
-            Log.d("로그", "onActivityCreated: onChanged 호출");
-            //프래그먼트 생성시 한번만 셋팅(for nodeAddData)
-            if (firstLoad) {
-                mModel.getMainFragmentAdapter().setList(mModel.getData(childCategoryList));
-                firstLoad = false;
-            } else if (!firstLoad) {
-                Log.d("로그", "onActivityCreated: 왜호출됨");
-                //카테고리 추가시 호출
-                listUpdate(childCategoryList);
-            }
-        });
-        // + 아이콘 클릭
-        mModel.getMainFragmentAdapter().setOnItemChildClickListener((adapter, view, position) -> {
-            //클릭된 포지션 저장
-            clickedPosition = position;
-            //카테고리 생성 다이얼로그(클릭된 부모 카테고리)
-            showDialog((ParentCategory) adapter.getData().get(position));
-        });
+    public void onStop() {
+        super.onStop();
+        //First Run Check
+        if (mModel.isFirstRun()) {
+            mModel.setPreferences();
+        }
+        mCurrentChildList.clear();
     }
 
-    //리사이클러 뷰 셋팅
-    private void recyclerViewInit() {
+    //Initialize
+    private void init() {
+        //View Model
+        mModel = new ViewModelProvider(this).get(MainViewModel.class);
+        //Activity View Model
+        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        //Options Menu
+        setHasOptionsMenu(true);
+        //Recycler View
         mBinding.recyclerView.setHasFixedSize(true);
-        //디바이더
         mBinding.recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         mBinding.recyclerView.setAdapter(mModel.getMainFragmentAdapter());
     }
 
-    //리스트 업데이트
-    private void listUpdate(List<ChildCategory> childCategoryList) {
-        BaseNode parentNode = mModel.getMainFragmentAdapter().getData().get(clickedPosition);//추가될 부모 카테고리
-        final int addItem = childCategoryList.size() - 1; // 추가될 아이템 인덱스(childCategoryList 마지막)
-        final int childIndex = mModel.getMainFragmentAdapter().getData().get(clickedPosition).getChildNode().size(); //추가될 위치(리스트 마지막)
+    //Click Listener
+    private void setClickListener() {
+        mModel.getMainFragmentAdapter().setOnItemChildClickListener((adapter, view, position) -> {
+            Toast.makeText(requireContext(), "포지션" + position, Toast.LENGTH_SHORT).show();
+            // Add
+            if (view.getId() == R.id.add_icon) {
+                //Save Clicked Position
+                clickedPosition = position;
+                //Show Add Dialog
+                showAddDialog((ParentCategory) adapter.getData().get(position));
+            }// Edit
+            else if (view.getId() == R.id.edit_icon) {
+                ChildCategory childCategory = (ChildCategory) adapter.getItem(position);
+                //Show Edit Dialog
+                showEditDialog(childCategory);
+            } else if (view.getId() == R.id.delete_icon) {
+                ChildCategory childCategory = (ChildCategory) adapter.getItem(position);
+                //Show Delete Dialog
+                showDeleteDialog(childCategory, position);
+            }
+        });
+    }
+
+    //Add Dialog
+    private void showAddDialog(ParentCategory parentCategory) {
+        //Edit Text
+        FrameLayout frameLayout = (FrameLayout) View.inflate(requireContext(), R.layout.item_dialog_edit_text, null);
+        TextInputEditText editText = frameLayout.findViewById(R.id.editText_dialog);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog);
+        builder.setView(frameLayout);
+        builder.setNegativeButton("CANCEL", null);
+        builder.setTitle("Add");
+        builder.setPositiveButton("DONE", (dialog, which) -> {
+            ChildCategory childCategory = new ChildCategory(editText.getText().toString(), parentCategory.getParentCategory());
+            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 추가됨", BaseTransientBottomBar.LENGTH_LONG)
+                    .setAnchorView(R.id.bottom_nav)
+                    .setAction("Undo", v -> {
+                        //Undo
+                        mFirstLoad = true;
+                        //Last Data
+                        mModel.delete(mCurrentChildList.get(mCurrentChildList.size() - 1));
+                    }).show();
+            //Insert
+            mAddLoad = true;
+            mModel.insert(childCategory);
+        });
+        builder.show();
+    }
+
+    //Add Update
+    private void addLoad(List<ChildCategory> childCategoryList) {
+        BaseNode parentNode = mModel.getMainFragmentAdapter().getData().get(clickedPosition);//Parent Category
+        final int childIndex = mModel.getMainFragmentAdapter().getData().get(clickedPosition).getChildNode().size(); //Add Position
+        final int addItem = childCategoryList.size() - 1; //Add Item Index
         mModel.getMainFragmentAdapter().nodeAddData(parentNode, childIndex, childCategoryList.get(addItem));
     }
 
-    //자식 카테고리 추가 다이얼로그
-    private void showDialog(ParentCategory parentCategory) {
-        //다이얼로그에 넣을 에딧텍스트
+    //Edit Dialog
+    private void showEditDialog(ChildCategory childCategory) {
+        String oldChildCategory = childCategory.getChildCategory();
         FrameLayout frameLayout = (FrameLayout) View.inflate(requireContext(), R.layout.item_dialog_edit_text, null);
+        TextInputEditText editText = frameLayout.findViewById(R.id.editText_dialog);
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog);
         builder.setView(frameLayout);
-        builder.setTitle("Add");
-        builder.setPositiveButton("확인", (dialog, which) -> {
-            TextInputEditText editText = frameLayout.findViewById(R.id.editText_dialog);
-            if (!TextUtils.isEmpty(editText.getText())) {//텍스트가 비어있지 않다면(띄어쓰기 포함)
-                //인서트(onActivityCreate observe 호출)
-                mModel.insert(new ChildCategory(editText.getText().toString(), parentCategory.getParentCategory()));
-            }
+        builder.setNegativeButton("CANCEL", null);
+        builder.setTitle("Edit");
+        builder.setPositiveButton("DONE", (dialog, which) -> {
+            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
+                    .setAnchorView(R.id.bottom_nav)
+                    .setAction("Undo", v -> {
+                        childCategory.setChildCategory(oldChildCategory);
+                        mModel.update(childCategory);
+                        mModel.getMainFragmentAdapter().notifyDataSetChanged();
+                    }).show();
+            //childCategory = In Adapter
+            childCategory.setChildCategory(editText.getText().toString());
+            mModel.update(childCategory);
+            mModel.getMainFragmentAdapter().notifyDataSetChanged();
         });
-        builder.setNegativeButton("취소", null);
+        builder.show();
+    }
+
+    //Delete Dialog
+    private void showDeleteDialog(ChildCategory childCategory, int position) {
+        int parentPosition = mModel.getMainFragmentAdapter().findParentNode(childCategory);
+        ParentCategory parentCategory = (ParentCategory) mModel.getMainFragmentAdapter().getData().get(parentPosition);
+        mModel.getCurrentSizeList(childCategory.getId());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog);
+        builder.setTitle("Warning");
+        builder.setMessage("카테고리 안 모든 아이템이 삭제됩니다.\n삭제하시겠습니까?");
+        builder.setPositiveButton("DONE", (dialog, which) -> {
+            //Undo
+            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
+                    .setAnchorView(R.id.bottom_nav)
+                    .setAction("Undo", v -> {
+                        mModel.insert(childCategory);
+                        mModel.restoreCurrentSizeList();
+                        mFirstLoad = true;
+                    }).show();
+            int LastPosition = mModel.getMainFragmentAdapter().getData().size() - 1;
+            if (LastPosition == position) {
+                //if childCategory is last data
+                //Live Data Load
+                mFirstLoad = true;
+                //Delete
+                mModel.delete(childCategory);
+                mModel.deleteSizeListByFolderId(childCategory.getId());
+            } else {
+                mModel.delete(childCategory);
+                mModel.deleteSizeListByFolderId(childCategory.getId());
+                mModel.getMainFragmentAdapter().nodeRemoveData(parentCategory, childCategory);
+            }
+
+        });
+        builder.setNegativeButton("CANCEL", null);
         builder.show();
     }
 }

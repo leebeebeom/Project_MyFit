@@ -16,19 +16,16 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:cardElevation="@dimen/_4sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardElevation="@dimen/_4sdp">
 
-<!--        android:text="@{parentCategory.title}"-->
         <TextView
             android:id="@+id/parent_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
-            android:textSize="@dimen/_16ssp"
+            android:includeFontPadding="false"
+            android:layout_marginVertical="@dimen/_2sdp"
+            android:textSize="@dimen/_20sdp"
             tools:text="Top" />
 
         <androidx.appcompat.widget.AppCompatImageView

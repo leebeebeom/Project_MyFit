@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Binding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -26,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Top Level Destination 지정
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.mainFragment, R.id.favoriteFragment, R.id.averageFragment
-        ).build();
+                R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
 
         //NavController
         mNavController = Navigation.findNavController(this, R.id.host_fragment);

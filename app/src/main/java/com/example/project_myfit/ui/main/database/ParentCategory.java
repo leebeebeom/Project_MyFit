@@ -3,11 +3,12 @@ package com.example.project_myfit.ui.main.database;
 import com.chad.library.adapter.base.entity.node.BaseExpandNode;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ParentCategory extends BaseExpandNode {//BRVAH BaseNode Class
+public class ParentCategory extends BaseExpandNode {
 
     private final String parentCategory;
     private final List<BaseNode> childCategoryList;
@@ -27,5 +28,14 @@ public class ParentCategory extends BaseExpandNode {//BRVAH BaseNode Class
     @Override
     public List<BaseNode> getChildNode() {
         return childCategoryList;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "ParentCategory{" +
+                "parentCategory='" + parentCategory + '\'' +
+                ", childCategoryList=" + childCategoryList +
+                '}';
     }
 }

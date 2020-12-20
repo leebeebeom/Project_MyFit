@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @Entity
-public class ChildCategory extends BaseNode {//BRVAH BaseNode Class
+public class ChildCategory extends BaseNode {
     @PrimaryKey(autoGenerate = true)
     private int id;
     /*

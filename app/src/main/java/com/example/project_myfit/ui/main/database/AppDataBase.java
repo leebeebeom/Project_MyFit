@@ -17,7 +17,6 @@ import java.util.List;
 @Database(entities = {ChildCategory.class, Size.class}, version = 2, exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
-
     public abstract SizeDao sizeDao();
 
     private static AppDataBase sInstance;

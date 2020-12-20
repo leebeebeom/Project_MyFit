@@ -10,7 +10,7 @@
         android:icon="@drawable/icon_favorite"
         android:title="@string/favorite" />
     <item
-        android:id="@+id/averageFragment"
+        android:id="@+id/settingFragment"
         android:icon="@drawable/icon_setting"
         android:title="@string/setting" />
 </menu>
