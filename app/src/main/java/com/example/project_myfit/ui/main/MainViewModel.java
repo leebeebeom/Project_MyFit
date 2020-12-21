@@ -3,7 +3,6 @@ package com.example.project_myfit.ui.main;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,7 +15,6 @@ import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
-import com.example.project_myfit.ui.main.nodedapter.MainFragmentAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +22,17 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
 
     public static final String FIRST_RUN = "first run";
+    public static final String TOP = "Top";
+    public static final String BOTTOM = "Bottom";
+    public static final String OUTER = "Outer";
+    public static final String ETC = "ETC";
     private final CategoryDao mCategoryDao;
     private final SizeDao mSizeDao;
     private List<Size> mCurrentSizeList;
-    private final MainFragmentAdapter mAdapter;
     private final SharedPreferences mPreferences;
     private boolean mFirstRun;
+    private int mLargestOrder;
+    private List<ChildCategory> mCurrentChildList;
 
 
     public MainViewModel(@NonNull Application application) {
@@ -37,95 +40,117 @@ public class MainViewModel extends AndroidViewModel {
         //Dao
         mCategoryDao = AppDataBase.getsInstance(application).categoryDao();
         mSizeDao = AppDataBase.getsInstance(application).sizeDao();
-        //어댑터
-        mAdapter = new MainFragmentAdapter();
-        //프리퍼런스
+        //Preference
         mPreferences = application.getSharedPreferences(FIRST_RUN, Context.MODE_PRIVATE);
         mFirstRun = mPreferences.getBoolean(FIRST_RUN, true);
-
     }
 
-    //최초 실행 체크
+    /*
+    TODO
+    최초 실행 후 갱신 완료 후 프리퍼런스 실행
+     */
+    //First Run Check
     public void setPreferences() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        mFirstRun = false;
-        editor.putBoolean(FIRST_RUN, mFirstRun);
-        editor.apply();
+        if (mFirstRun) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            mFirstRun = false;
+            editor.putBoolean(FIRST_RUN, mFirstRun);
+            editor.apply();
+        }
     }
 
-    //인서트
+    //Insert
     public void insert(ChildCategory childCategory) {
         new Thread(() -> mCategoryDao.insert(childCategory)).start();
     }
 
-    //업데이트
+    //Update
     public void update(ChildCategory childCategory) {
         new Thread(() -> mCategoryDao.update(childCategory)).start();
     }
 
-    //딜리트
+    //Delete
     public void delete(ChildCategory childCategory) {
         new Thread(() -> mCategoryDao.delete(childCategory)).start();
     }
 
-    public void getCurrentSizeList(int id) {
-        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolderId(id)).start();
+    //Order Update
+    public void updateOrder(List<ChildCategory> childCategoryList) {
+        new Thread(() -> mCategoryDao.updateOrder(childCategoryList)).start();
     }
 
-    public void deleteSizeListByFolderId(int id) {
-        new Thread(() -> mSizeDao.deleteByFolderId(id)).start();
+    //Get Size List By Folder Id
+    public void getAllSizeByFolder(int id) {
+        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolder(id)).start();
     }
 
-    public void restoreCurrentSizeList() {
-        new Thread(() -> mSizeDao.insertList(mCurrentSizeList)).start();
+    //Delete Size List By Folder Id
+    public void deleteSizeByFolder(int id) {
+        new Thread(() -> mSizeDao.deleteSizeByFolder(id)).start();
     }
 
-
-    //로드
-    public LiveData<List<ChildCategory>> getAll() {
-        return mCategoryDao.getAllChildCategory();
+    //Restore Deleted Size List
+    public void restoreDeletedSize() {
+        new Thread(() -> mSizeDao.restoreDeletedSize(mCurrentSizeList)).start();
     }
 
-    //데이터 생성
-    public List<BaseNode> getData(List<ChildCategory> childCategoryList) {
+    //Get All Child Category By Order
+    public LiveData<List<ChildCategory>> getAllChildByOrder() {
+        return mCategoryDao.getAllChildByOrder();
+    }
+
+    //Generate Parent Category List
+    public List<BaseNode> generateParent(List<ChildCategory> childCategoryList) {
         List<BaseNode> parentCategories = new ArrayList<>();
         List<BaseNode> top = new ArrayList<>();
         List<BaseNode> bottom = new ArrayList<>();
         List<BaseNode> outer = new ArrayList<>();
         List<BaseNode> etc = new ArrayList<>();
         for (ChildCategory childCategory : childCategoryList) {
-            if (childCategory.getParentCategory().equals("Top")) {
+            if (childCategory.getParentCategory().equals(TOP)) {
                 top.add(childCategory);
             }
         }
         for (ChildCategory childCategory : childCategoryList) {
-            if (childCategory.getParentCategory().equals("Bottom")) {
+            if (childCategory.getParentCategory().equals(BOTTOM)) {
                 bottom.add(childCategory);
             }
         }
         for (ChildCategory childCategory : childCategoryList) {
-            if (childCategory.getParentCategory().equals("Outer")) {
+            if (childCategory.getParentCategory().equals(OUTER)) {
                 outer.add(childCategory);
             }
         }
         for (ChildCategory childCategory : childCategoryList) {
-            if (childCategory.getParentCategory().equals("ETC")) {
+            if (childCategory.getParentCategory().equals(ETC)) {
                 etc.add(childCategory);
             }
         }
-        parentCategories.add(new ParentCategory("Top", top));
-        parentCategories.add(new ParentCategory("Bottom", bottom));
-        parentCategories.add(new ParentCategory("Outer", outer));
-        parentCategories.add(new ParentCategory("ETC", etc));
+        parentCategories.add(new ParentCategory(TOP, top));
+        parentCategories.add(new ParentCategory(BOTTOM, bottom));
+        parentCategories.add(new ParentCategory(OUTER, outer));
+        parentCategories.add(new ParentCategory(ETC, etc));
         return parentCategories;
     }
 
-    public MainFragmentAdapter getMainFragmentAdapter() {
-        return mAdapter;
+    //Get Largest Order Number
+    public void setLargestOrder() {
+        new Thread(() -> mLargestOrder = mCategoryDao.getLargestOrder()).start();
     }
 
     public boolean isFirstRun() {
         return mFirstRun;
     }
 
+    public int getLargestOrder() {
+        return mLargestOrder;
+    }
+
+    public List<ChildCategory> getCurrentChildList() {
+        return mCurrentChildList;
+    }
+
+    public void setCurrentChildList(List<ChildCategory> childCategoryList) {
+        this.mCurrentChildList = childCategoryList;
+    }
 }

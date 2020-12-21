@@ -14,17 +14,15 @@ import java.util.List;
 public class ChildCategory extends BaseNode {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    /*
-    TODO
-    order 추가, PrimaryKeys 공부
-     */
+    private int orderNumber;
     private String childCategory;
     private String parentCategory;
 
 
-    public ChildCategory(String childCategory, String parentCategory) {
+    public ChildCategory(String childCategory, String parentCategory, int orderNumber) {
         this.childCategory = childCategory;
         this.parentCategory = parentCategory;
+        this.orderNumber = orderNumber;
     }
 
     public int getId() {
@@ -51,11 +49,22 @@ public class ChildCategory extends BaseNode {
         this.parentCategory = parentCategory;
     }
 
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
     @NotNull
     @Override
     public String toString() {
-        return "Clothing{" +
-                "clothing='" + childCategory + '\'' +
+        return "ChildCategory{" +
+                "id=" + id +
+                ", order=" + orderNumber +
+                ", childCategory='" + childCategory + '\'' +
+                ", parentCategory='" + parentCategory + '\'' +
                 '}';
     }
 
@@ -64,4 +73,5 @@ public class ChildCategory extends BaseNode {
     public List<BaseNode> getChildNode() {
         return null;
     }
+
 }

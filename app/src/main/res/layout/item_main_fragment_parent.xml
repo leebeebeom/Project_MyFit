@@ -25,7 +25,7 @@
             android:layout_marginStart="@dimen/_12sdp"
             android:includeFontPadding="false"
             android:layout_marginVertical="@dimen/_2sdp"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_18sdp"
             tools:text="Top" />
 
         <androidx.appcompat.widget.AppCompatImageView

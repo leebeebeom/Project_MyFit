@@ -14,9 +14,10 @@ import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {ChildCategory.class, Size.class}, version = 2, exportSchema = false)
+@Database(entities = {ChildCategory.class, Size.class}, version = 1, exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
+
     public abstract SizeDao sizeDao();
 
     private static AppDataBase sInstance;
@@ -29,13 +30,13 @@ public abstract class AppDataBase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             List<ChildCategory> childCategoryList = new ArrayList<>();
-                            childCategoryList.add(new ChildCategory("Short Sleeve", "Top"));
-                            childCategoryList.add(new ChildCategory("Long Sleeve", "Top"));
-                            childCategoryList.add(new ChildCategory("Long Pants", "Bottom"));
-                            childCategoryList.add(new ChildCategory("Short Pants", "Bottom"));
-                            childCategoryList.add(new ChildCategory("Jacket", "Outer"));
-                            childCategoryList.add(new ChildCategory("Coat", "Outer"));
-                            childCategoryList.add(new ChildCategory("Shoes", "ETC"));
+                            childCategoryList.add(new ChildCategory("Short Sleeve", "Top", 1));
+                            childCategoryList.add(new ChildCategory("Long Sleeve", "Top", 2));
+                            childCategoryList.add(new ChildCategory("Long Pants", "Bottom", 3));
+                            childCategoryList.add(new ChildCategory("Short Pants", "Bottom", 4));
+                            childCategoryList.add(new ChildCategory("Jacket", "Outer", 5));
+                            childCategoryList.add(new ChildCategory("Coat", "Outer", 6));
+                            childCategoryList.add(new ChildCategory("Shoes", "ETC", 7));
                             //인서트
                             new Thread(() -> {
                                 for (ChildCategory childCategory : childCategoryList) {

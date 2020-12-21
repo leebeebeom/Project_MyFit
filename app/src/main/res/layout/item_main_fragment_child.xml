@@ -35,7 +35,6 @@
                 android:id="@+id/edit_icon"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="match_parent"
-                android:layout_gravity="end"
                 android:background="?attr/colorPrimary"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
@@ -55,15 +54,12 @@
                 app:tint="?attr/colorControlNormal" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <FrameLayout
             android:id="@+id/rootLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/child_text"
@@ -71,10 +67,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
                 android:textSize="@dimen/_16sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Short Sleeve" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/drag_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/_8sdp"
+                app:srcCompat="@drawable/icon_drag_handle" />
+        </FrameLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
 
 </layout>

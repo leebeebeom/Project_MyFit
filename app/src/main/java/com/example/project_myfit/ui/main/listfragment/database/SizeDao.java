@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface SizeDao {
     @Query("SELECT * FROM Size WHERE folderId = :id")
-    List<Size> getAllSizeByFolderId(int id);
+    List<Size> getAllSizeByFolder(int id);
 
     @Query("SELECT * FROM Size WHERE folderId = :id")
     LiveData<List<Size>> getAllSizeByFolderIdLive(int id);
@@ -27,8 +27,8 @@ public interface SizeDao {
     void delete(Size size);
 
     @Query("DELETE FROM Size WHERE folderId = :id")
-    void deleteByFolderId(int id);
+    void deleteSizeByFolder(int id);
 
     @Insert
-    void insertList(List<Size> sizes);
+    void restoreDeletedSize(List<Size> sizes);
 }
