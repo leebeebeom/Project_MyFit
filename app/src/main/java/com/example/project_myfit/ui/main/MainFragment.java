@@ -1,5 +1,6 @@
 package com.example.project_myfit.ui.main;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -45,18 +46,18 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
     private ItemTouchHelper mItemTouchHelper;
     private MainFragmentAdapter mAdapter;
     private ParentCategory addParentCategory;
-    private ActionBar mActionBar;
 
+    /*
+    TODO
+     최초실행 문제 해결 
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Binding
         mBinding = FragmentMainBinding.inflate(inflater);
         //Set Custom View to ActionBar title
-        mActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setCustomView(R.layout.title_main);
+        setTitle();
         return mBinding.getRoot();
     }
 
@@ -98,6 +99,14 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         if (mModel.isFirstRun()) {
             mModel.setPreferences();
         }
+    }
+
+    //Set Custom View to ActionBar title
+    private void setTitle() {
+        ActionBar mActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setCustomView(R.layout.title_main);
     }
 
     //Initialize

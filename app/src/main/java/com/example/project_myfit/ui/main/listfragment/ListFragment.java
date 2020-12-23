@@ -29,20 +29,22 @@ public class ListFragment extends Fragment {
     private Animation rotateOpen, rotateClose, fromBottomAdd, toBottomAdd, fromBottomFolder, toBottomAddFolder;
     private boolean isFabOpened = false;
 
+    /*
+    TODO
+     Folder Dao
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Binding
         mBinding = FragmentListBinding.inflate(getLayoutInflater());
-        TitleListBinding titleBinding = TitleListBinding.inflate(getLayoutInflater());
         //Activity View Model
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         //Set Title
-        titleBinding.setChildCategory(mActivityModel.getChildCategory().getChildCategory());
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        actionBar.setCustomView(titleBinding.listTitleContainer);
+        setTitle();
         return mBinding.getRoot();
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -73,6 +75,14 @@ public class ListFragment extends Fragment {
         });
         mBinding.fabAdd.setOnClickListener(v -> {
         });
+    }
+
+    //Set Title
+    private void setTitle() {
+        TitleListBinding titleBinding = TitleListBinding.inflate(getLayoutInflater());
+        titleBinding.setChildCategory(mActivityModel.getChildCategory().getChildCategory());
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        actionBar.setCustomView(titleBinding.listTitleContainer);
     }
 
     private void init() {
