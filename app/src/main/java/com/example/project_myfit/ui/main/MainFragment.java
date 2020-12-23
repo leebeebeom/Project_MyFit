@@ -56,7 +56,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         mActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setCustomView(R.layout.main_title);
+        mActionBar.setCustomView(R.layout.title_main);
         return mBinding.getRoot();
     }
 
@@ -87,7 +87,6 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         });
         //Click Listener
         setClickListener();
-
         //Drag
         setDrag();
     }
@@ -99,8 +98,6 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         if (mModel.isFirstRun()) {
             mModel.setPreferences();
         }
-        mActionBar.setDisplayShowTitleEnabled(true);
-        mActionBar.setDisplayShowCustomEnabled(false);
     }
 
     //Initialize
@@ -111,8 +108,6 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         //List Refresh On
         mRefreshOn = true;
-        //Options Menu
-        setHasOptionsMenu(true);
         //Adapter
         mAdapter = new MainFragmentAdapter(this);
         //Recycler View

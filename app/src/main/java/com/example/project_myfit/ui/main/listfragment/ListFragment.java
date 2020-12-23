@@ -1,31 +1,24 @@
 package com.example.project_myfit.ui.main.listfragment;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentListBinding;
+import com.example.project_myfit.databinding.TitleListBinding;
 
 
 public class ListFragment extends Fragment {
@@ -41,50 +34,22 @@ public class ListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         //Binding
         mBinding = FragmentListBinding.inflate(getLayoutInflater());
-//        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-//        TextView textView = requireActivity().findViewById(R.id.main_title);
-//        textView.setText(mActivityModel.getChildCategory().getChildCategory());
-//        actionBar.setDisplayShowTitleEnabled(false);
-//        actionBar.setDisplayShowCustomEnabled(true);
-//        actionBar.setCustomView(R.layout.main_title);
-
-        return mBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //뷰모델
-        mModel = new ViewModelProvider(this).get(ListViewModel.class);
-        //액티비티 뷰모델
+        TitleListBinding titleBinding = TitleListBinding.inflate(getLayoutInflater());
+        //Activity View Model
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        //타이틀 설정
-        //캐스팅 안해주면 NPE
-        //캐스팅 해야 SupportActionBar 가져올 수 있음
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if (activity != null && activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setTitle(mActivityModel.getChildCategory().getChildCategory());
-        }
-        //독립 옵션 메뉴
-        setHasOptionsMenu(true);
-
+        //Set Title
+        titleBinding.setChildCategory(mActivityModel.getChildCategory().getChildCategory());
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        FrameLayout frameLayout = requireActivity().findViewById(R.id.main_title_container);
-        TextView textView = frameLayout.findViewById(R.id.main_title);
-        textView.setText(mActivityModel.getChildCategory().getChildCategory());
-        int asd = textView.getTextSizeUnit();
-        textView.setTextSize(asd, 20);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(frameLayout);
-
+        actionBar.setCustomView(titleBinding.listTitleContainer);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        //어댑터 셋팅
+        //Initialize
+        init();
+        //Adapter
         mModel.getSizeList(mActivityModel.getChildCategory().getId()).observe(getViewLifecycleOwner(), Sizes -> {
             mBinding.listFragmentRecyclerView.setAdapter(mModel.setAdapterItem(Sizes));
             mModel.getAdapter().setOnItemClickedListener(size -> {
@@ -108,6 +73,11 @@ public class ListFragment extends Fragment {
         });
         mBinding.fabAdd.setOnClickListener(v -> {
         });
+    }
+
+    private void init() {
+        //View Model
+        mModel = new ViewModelProvider(this).get(ListViewModel.class);
     }
 
     private void onFabClicked() {
