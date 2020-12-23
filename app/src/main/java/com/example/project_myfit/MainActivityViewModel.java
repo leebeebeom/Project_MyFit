@@ -6,12 +6,11 @@ import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
 public class MainActivityViewModel extends ViewModel {
-    //MainFragment에서 클릭된 아이템
+    //From MainFragment Clicked Item
     private ChildCategory childCategory;
-    //ListFragment에서 클릭된 아이템
+    //From ListFragment Clicked Item
     private Size size;
 
-    //게터 세터
     public ChildCategory getChildCategory() {
         return childCategory;
     }

@@ -3,54 +3,56 @@
     <style name="Theme.Project_MyFit" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
-        <!--        ↑ 앱바, 바텀네비게이션 선택 됐을때 컬러-->
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/black</item>
-
+        <!-- From Material Design. -->
         <item name="colorSurface">#FF121212</item>
         <item name="colorOnBackground">#FFFFFF</item>
         <item name="colorOnSurface">#FFFFFF</item>
         <item name="colorOnError">#000000</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
         <!-- Customize your theme here. -->
-        <!--        폰트 변경-->
+        <!--        Font-->
         <item name="fontFamily">@font/font_ibm_plex_sans</item>
-        <!--        네비게이션 바 컬러 변경-->
+        <!--        Phone Navigation Bar Color-->
         <item name="android:navigationBarColor">@color/black</item>
-        <!--        메뉴 컬러 변경-->
+        <!--        Menu Text Color-->
         <item name="android:textColorSecondary">@android:color/white</item>
-        <!--        텍스트 컬러 변경-->
-        <item name="android:textColor">@color/white</item>
-        <!--        메뉴 텍스트 스타일-->
+        <!--        Menu Text Style-->
         <item name="actionMenuTextAppearance">@style/menuTextStyle</item>
+        <!--        Text Color-->
+        <item name="android:textColor">@color/white</item>
+        <!--        Snack Bar Text Style-->
+        <item name="snackbarTextViewStyle">@style/mySnackBarText</item>
+        <!--        Snack Bar Action Style-->
+        <item name="snackbarButtonStyle">@style/mySnackBarButton</item>
+        <!--        Snack Bar Style-->
+        <item name="snackbarStyle">@style/mySnackBar</item>
 
     </style>
-    <!--    바텀 네비게이션 액티브 컬러-->
+    <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
     </style>
-
-    <!-- 알러트 다이얼로그-->
-    <!--    MainFragment에서 따로 입혔음-->
+    <!--    Alert Dialog Style-->
+    <!--    In MainFragment.java-->
     <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/white</item>
         <item name="android:textColor">@color/white</item>
     </style>
-
-    <!--    에딧텍스트 포커스 아웃라인-->
-    <!--    xml에서 적용-->
+    <!--    Edit Text Focused Outline-->
+    <!--    In fragment_input.xml-->
     <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/white</item>
     </style>
-
-    <!--    브랜드 텍스트 컬러-->
+    <!--    List Fragment Brand Colors-->
     <style name="myItemBrandColor" parent="Theme.AppCompat.DayNight">
-        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:textColor">@color/gainsboro_gray</item>
     </style>
-
 </resources>

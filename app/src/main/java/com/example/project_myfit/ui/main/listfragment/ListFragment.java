@@ -1,5 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,13 +11,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
@@ -28,12 +33,21 @@ public class ListFragment extends Fragment {
     private ListViewModel mModel;
     private FragmentListBinding mBinding;
     private MainActivityViewModel mActivityModel;
+    private Animation rotateOpen, rotateClose, fromBottomAdd, toBottomAdd, fromBottomFolder, toBottomAddFolder;
+    private boolean isFabOpened = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //바인딩
+        //Binding
         mBinding = FragmentListBinding.inflate(getLayoutInflater());
+//        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+//        TextView textView = requireActivity().findViewById(R.id.main_title);
+//        textView.setText(mActivityModel.getChildCategory().getChildCategory());
+//        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setDisplayShowCustomEnabled(true);
+//        actionBar.setCustomView(R.layout.main_title);
+
         return mBinding.getRoot();
     }
 
@@ -53,6 +67,17 @@ public class ListFragment extends Fragment {
         }
         //독립 옵션 메뉴
         setHasOptionsMenu(true);
+
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        FrameLayout frameLayout = requireActivity().findViewById(R.id.main_title_container);
+        TextView textView = frameLayout.findViewById(R.id.main_title);
+        textView.setText(mActivityModel.getChildCategory().getChildCategory());
+        int asd = textView.getTextSizeUnit();
+        textView.setTextSize(asd, 20);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(frameLayout);
+
     }
 
     @Override
@@ -71,21 +96,52 @@ public class ListFragment extends Fragment {
                 //클릭 리스너
             });
         });
+        rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
+        rotateClose = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close);
+        fromBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_from_bottom);
+        toBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_to_bottom);
+        fromBottomFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_from_bottom);
+        toBottomAddFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_to_bottom);
+
+        mBinding.fabMain.setOnClickListener(v -> onFabClicked());
+        mBinding.fabFolder.setOnClickListener(v -> {
+        });
+        mBinding.fabAdd.setOnClickListener(v -> {
+        });
     }
 
-    //옵션 메뉴 인플레이트
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.listfragment_menu, menu);
+    private void onFabClicked() {
+        setVisibility(isFabOpened);
+        setAnimation(isFabOpened);
+        setClickable(isFabOpened);
+        isFabOpened = !isFabOpened;
     }
 
-    //메뉴 클릭
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.add_item) {
-            goInputFragment();
+    private void setAnimation(boolean isFabOpened) {
+        if (!isFabOpened) {
+            mBinding.fabAdd.startAnimation(fromBottomAdd);
+            mBinding.fabFolder.startAnimation(fromBottomFolder);
+            mBinding.fabMain.startAnimation(rotateOpen);
+        } else {
+            mBinding.fabAdd.startAnimation(toBottomAdd);
+            mBinding.fabFolder.startAnimation(toBottomAddFolder);
+            mBinding.fabMain.startAnimation(rotateClose);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void setVisibility(boolean isFabOpened) {
+        if (!isFabOpened) {
+            mBinding.fabAdd.setVisibility(View.VISIBLE);
+            mBinding.fabFolder.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.fabAdd.setVisibility(View.INVISIBLE);
+            mBinding.fabFolder.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setClickable(boolean isFabOpened) {
+        mBinding.fabAdd.setClickable(!isFabOpened);
+        mBinding.fabFolder.setClickable(!isFabOpened);
     }
 
     private void goInputFragment() {

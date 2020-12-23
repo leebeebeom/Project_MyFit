@@ -1,8 +1,7 @@
 package com.example.project_myfit.ui.main;
 
-import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,11 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +24,9 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentMainBinding;
+import com.example.project_myfit.ui.main.adapter.MainFragmentAdapter;
 import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
-import com.example.project_myfit.ui.main.nodedapter.MainFragmentAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,21 +36,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
-public class MainFragment extends Fragment implements DragListener {
+public class MainFragment extends Fragment implements DragCallBack.DragListener {
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
-    private boolean mRefreshOn = true;
+    private boolean mRefreshOn;
     private boolean mAddRenewalOn = false;
     private ItemTouchHelper mItemTouchHelper;
     private MainFragmentAdapter mAdapter;
     private ParentCategory addParentCategory;
+    private ActionBar mActionBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Binding
         mBinding = FragmentMainBinding.inflate(inflater);
+        //Set Custom View to ActionBar title
+        mActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setCustomView(R.layout.main_title);
         return mBinding.getRoot();
     }
 
@@ -92,6 +99,8 @@ public class MainFragment extends Fragment implements DragListener {
         if (mModel.isFirstRun()) {
             mModel.setPreferences();
         }
+        mActionBar.setDisplayShowTitleEnabled(true);
+        mActionBar.setDisplayShowCustomEnabled(false);
     }
 
     //Initialize
@@ -100,13 +109,14 @@ public class MainFragment extends Fragment implements DragListener {
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         //Activity View Model
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        //List Refresh On
+        mRefreshOn = true;
         //Options Menu
         setHasOptionsMenu(true);
         //Adapter
         mAdapter = new MainFragmentAdapter(this);
         //Recycler View
         mBinding.recyclerView.setHasFixedSize(true);
-        mBinding.recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         mBinding.recyclerView.setAdapter(mAdapter);
     }
 
@@ -139,6 +149,11 @@ public class MainFragment extends Fragment implements DragListener {
                 int childIndex = getChildIndex(childCategory, parentCategory);
                 //Show Delete Dialog
                 showDeleteDialog(childCategory, parentCategory, childIndex, position);
+            } else if (view.getId() == R.id.item_child_root) {
+                //Clicked Child
+                ChildCategory childCategory = (ChildCategory) mAdapter.getItem(position);
+                mActivityModel.setChildCategory(childCategory);
+                Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_listFragment);
             }
         });
     }
@@ -335,14 +350,13 @@ public class MainFragment extends Fragment implements DragListener {
     private final OnItemDragListener onItemDragListener = new OnItemDragListener() {
         @Override
         public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
-            //Draw Shadow
-            final BaseViewHolder holder = ((BaseViewHolder) viewHolder);
-            int startColor = Color.WHITE;
-            int endColor = Color.WHITE;
-            ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
-            v.addUpdateListener(animation -> holder.itemView.setBackgroundColor((int) animation.getAnimatedValue()));
-            v.setDuration(300);
-            v.start();
+            BaseViewHolder holder = (BaseViewHolder) viewHolder;
+            TypedValue typedValue = new TypedValue();
+            requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            int colorPrimary = typedValue.data;
+            holder.itemView.findViewById(R.id.divider_top1).setVisibility(View.VISIBLE);
+            holder.itemView.findViewById(R.id.divider_top2).setVisibility(View.VISIBLE);
+            holder.itemView.setBackgroundColor(colorPrimary);
         }
 
         @Override
@@ -414,6 +428,11 @@ public class MainFragment extends Fragment implements DragListener {
         @Override
         public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
             mModel.updateOrder(mModel.getCurrentChildList());
+            BaseViewHolder holder = (BaseViewHolder) viewHolder;
+            holder.itemView.findViewById(R.id.divider_top1).setVisibility(View.GONE);
+            holder.itemView.findViewById(R.id.divider_top2).setVisibility(View.GONE);
+            holder.itemView.setBackgroundColor(0);
+
         }
     };
 
@@ -439,4 +458,5 @@ public class MainFragment extends Fragment implements DragListener {
             }
         }
     }
+
 }

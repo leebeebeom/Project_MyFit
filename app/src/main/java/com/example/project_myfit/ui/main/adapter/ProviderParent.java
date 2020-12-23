@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.nodedapter;
+package com.example.project_myfit.ui.main.adapter;
 
 import android.view.View;
 

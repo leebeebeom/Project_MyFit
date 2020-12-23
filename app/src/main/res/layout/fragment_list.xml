@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.listfragment.ListFragment">
@@ -11,9 +12,55 @@
             android:id="@+id/list_fragment_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="10"
             tools:listitem="@layout/item_list_fragment" />
 
-    </FrameLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_folder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/_56sdp"
+            android:layout_marginBottom="@dimen/_48sdp"
+            android:contentDescription="@string/add_folder"
+            android:visibility="invisible"
+            android:src="@drawable/icon_folder"
+            app:backgroundTint="?attr/colorControlNormal"
+            app:fabCustomSize="@dimen/_32sdp"
+            app:rippleColor="?attr/colorPrimary"
+            app:tint="?attr/colorPrimary" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/_22sdp"
+            android:layout_marginBottom="@dimen/_64sdp"
+            android:contentDescription="@string/add_folder"
+            android:src="@drawable/icon_add"
+            android:visibility="invisible"
+            app:backgroundTint="?attr/colorControlNormal"
+            app:fabCustomSize="@dimen/_32sdp"
+            app:rippleColor="?attr/colorPrimary"
+            app:tint="?attr/colorPrimary" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/_16sdp"
+            android:contentDescription="@string/add"
+            android:src="@drawable/icon_add"
+            app:backgroundTint="?attr/colorSurface"
+            app:fabCustomSize="@dimen/_44sdp"
+            app:rippleColor="@color/gainsboro_gray"
+            app:tint="?attr/colorPrimaryVariant">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

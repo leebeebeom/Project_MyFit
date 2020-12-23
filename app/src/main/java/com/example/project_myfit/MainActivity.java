@@ -25,21 +25,21 @@ public class MainActivity extends AppCompatActivity {
         //ToolBar
         setSupportActionBar(binding.toolbar);
 
-        //Top Level Destination 지정
+        //Top Level Destination
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
 
         //NavController
         mNavController = Navigation.findNavController(this, R.id.host_fragment);
 
-        //액티비티의 액션바를 호스트 프래그먼트 안의 프래그먼트들이 공유할 수 있게 해줌.
+        //Action Bar Share
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
 
-        //바텀네비게이션뷰와 NavController 연결.
+        //Connect Bottom Navigation with NavController
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
     }
 
-    //업버튼
+    //Up Button
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) ||

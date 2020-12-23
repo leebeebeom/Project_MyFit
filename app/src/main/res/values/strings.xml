@@ -17,4 +17,6 @@
     <string name="chest">가슴</string>
     <string name="sleeve">소매</string>
     <string name="category">Category</string>
+    <string name="add_folder">Add Folder</string>
+    <string name="myFit">MyFit</string>
 </resources>

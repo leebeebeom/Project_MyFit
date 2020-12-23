@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:sml="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -18,16 +17,24 @@
         app:dragEdge="right"
         app:mode="same_level">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible">
+        <FrameLayout
+            android:layout_width="@dimen/_64sdp"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/divider_top1"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_gravity="top"
+                android:background="@color/dark_gray2"
+                android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:includeFontPadding="false"
+                android:paddingVertical="@dimen/_2sdp"
                 android:text=""
                 android:textSize="@dimen/_16sdp" />
 
@@ -35,7 +42,6 @@
                 android:id="@+id/edit_icon"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="center"
@@ -46,26 +52,51 @@
                 android:id="@+id/delete_icon"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
+                android:layout_gravity="end"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="center"
                 android:src="@drawable/icon_delete"
                 app:tint="?attr/colorControlNormal" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_gravity="bottom"
+                android:background="@color/dark_gray2" />
+
+        </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/rootLayout"
+            android:id="@+id/item_child_root"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:visibility="visible">
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/divider_top2"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_gravity="top"
+                android:background="@color/dark_gray2"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:scaleX="0.3"
+                android:scaleY="0.3"
+                android:src="@drawable/icon_dot" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/child_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginStart="@dimen/_24sdp"
+                android:includeFontPadding="false"
+                android:paddingVertical="@dimen/_2sdp"
                 android:textSize="@dimen/_16sdp"
                 tools:text="Short Sleeve" />
 
@@ -76,6 +107,12 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginEnd="@dimen/_8sdp"
                 app:srcCompat="@drawable/icon_drag_handle" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_gravity="bottom"
+                android:background="@color/dark_gray2" />
         </FrameLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
 

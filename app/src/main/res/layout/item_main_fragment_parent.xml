@@ -10,21 +10,20 @@
             type="com.example.project_myfit.ui.main.database.ParentCategory" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardElevation="@dimen/_4sdp">
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/parent_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
             android:includeFontPadding="false"
-            android:layout_marginVertical="@dimen/_2sdp"
             android:textSize="@dimen/_18sdp"
             tools:text="Top" />
 
@@ -36,6 +35,13 @@
             android:layout_marginEnd="@dimen/_12sdp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:srcCompat="@drawable/icon_add" />
-    </com.google.android.material.card.MaterialCardView>
+            app:srcCompat="@drawable/icon_add"
+            app:tint="?attr/colorControlNormal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:background="@color/dark_gray2" />
+    </FrameLayout>
 </layout>

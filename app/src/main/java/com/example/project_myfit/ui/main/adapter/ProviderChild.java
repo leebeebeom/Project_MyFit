@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.nodedapter;
+package com.example.project_myfit.ui.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.MotionEvent;
@@ -8,16 +8,16 @@ import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.project_myfit.R;
-import com.example.project_myfit.ui.main.DragListener;
+import com.example.project_myfit.ui.main.DragCallBack;
 import com.example.project_myfit.ui.main.database.ChildCategory;
 
 import org.jetbrains.annotations.NotNull;
 
 public class ProviderChild extends BaseNodeProvider {
     ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    DragListener listener;
+    DragCallBack.DragListener listener;
 
-    public ProviderChild(DragListener listener) {
+    public ProviderChild(DragCallBack.DragListener listener) {
         this.listener = listener;
     }
 

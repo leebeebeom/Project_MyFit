@@ -1,6 +1,10 @@
 package com.example.project_myfit.ui.main;
 
 import android.graphics.Canvas;
+import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -8,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback;
 import com.chad.library.adapter.base.module.BaseDraggableModule;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.example.project_myfit.ui.main.database.ParentCategory;
-import com.example.project_myfit.ui.main.nodedapter.MainFragmentAdapter;
+import com.example.project_myfit.ui.main.adapter.MainFragmentAdapter;
 
 public class DragCallBack extends DragAndSwipeCallback {
     private final MainFragmentAdapter mAdapter;
@@ -30,7 +35,7 @@ public class DragCallBack extends DragAndSwipeCallback {
         int currentParentPosition = mAdapter.findParentNode(current.getAdapterPosition());
         int targetParentPosition = mAdapter.findParentNode(target.getAdapterPosition());
         boolean sameParent;
-        //If target is parent : targetParentPosition = -1
+        //If target is not parent && Not same parent, Can drop
         if (targetParentPosition != -1) {
             ParentCategory currentParent = (ParentCategory) mAdapter.getItem(currentParentPosition);
             ParentCategory targetParent = (ParentCategory) mAdapter.getItem(targetParentPosition);
@@ -38,7 +43,7 @@ public class DragCallBack extends DragAndSwipeCallback {
         } else {
             sameParent = false;
         }
-        return target.getItemViewType() == 2 && targetParentPosition != -1 && sameParent;
+        return target.getItemViewType() == 2 && sameParent;
     }
 
     @Override
@@ -57,11 +62,11 @@ public class DragCallBack extends DragAndSwipeCallback {
         RecyclerView.ViewHolder nextViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAdapterPosition() + 1);
         boolean isDraggingUp = dY < 0;
         boolean isDraggingDown = dY > 0;
-        //if without 'previousViewHolder != null & nextViewHolder != null' NPE
-        boolean canDrag = (isDraggingUp && previousViewHolder != null && !canDropOver(recyclerView, viewHolder, previousViewHolder))
+        //If without 'previousViewHolder != null & nextViewHolder != null' NPE
+        boolean cantDrag = (isDraggingUp && previousViewHolder != null && !canDropOver(recyclerView, viewHolder, previousViewHolder))
                 || (isDraggingDown && nextViewHolder != null && !canDropOver(recyclerView, viewHolder, nextViewHolder));
         float newDy;
-        if (canDrag) {
+        if (cantDrag) {
             newDy = 0f;
         } else {
             newDy = dY;
@@ -69,6 +74,9 @@ public class DragCallBack extends DragAndSwipeCallback {
         super.onChildDraw(c, recyclerView, viewHolder, dX, newDy, actionState, isCurrentlyActive);
     }
 
+    public interface DragListener {
+        void onStartDrag(BaseViewHolder holder);
+    }
 }
 
 

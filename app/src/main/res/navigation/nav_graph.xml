@@ -7,7 +7,6 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.project_myfit.ui.main.MainFragment"
-        android:label="CATEGORY"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_listFragment"
@@ -63,7 +62,6 @@
     <fragment
         android:id="@+id/outputFragment"
         android:name="com.example.project_myfit.ui.main.listfragment.outputfragment.OutputFragment"
-        android:label="output_fragment"
         tools:layout="@layout/fragment_input">
         <action
             android:id="@+id/action_outputFragment_to_listFragment"
