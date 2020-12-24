@@ -1,6 +1,5 @@
 package com.example.project_myfit.ui.main;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -36,6 +35,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 
 public class MainFragment extends Fragment implements DragCallBack.DragListener {
     private MainViewModel mModel;
@@ -46,6 +46,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
     private ItemTouchHelper mItemTouchHelper;
     private MainFragmentAdapter mAdapter;
     private ParentCategory addParentCategory;
+    private List<ChildCategory> mCurrentChildList;
 
     /*
     TODO
@@ -69,6 +70,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         //Get Child By Order
         mModel.getAllChildByOrder().observe(getViewLifecycleOwner(), childCategoryList -> {
             //Set Current Child List
+            mCurrentChildList = childCategoryList;
             mModel.setCurrentChildList(childCategoryList);
             //Set Largest Order
             mModel.setLargestOrder();
@@ -103,10 +105,12 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
 
     //Set Custom View to ActionBar title
     private void setTitle() {
-        ActionBar mActionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setCustomView(R.layout.title_main);
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.title_main);
+        }
     }
 
     //Initialize
@@ -184,7 +188,8 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
             int largestOrder = mModel.getLargestOrder();
             largestOrder++;
             //Create new ChildCategory
-            ChildCategory newChildCategory = new ChildCategory(editText.getText().toString(), addParentCategory.getParentCategory(), largestOrder);
+            ChildCategory newChildCategory;
+            newChildCategory = new ChildCategory(editText.getText().toString(), addParentCategory.getParentCategory(), largestOrder);
             //insert
             mAddRenewalOn = true; // -> Renewal
             mModel.insert(newChildCategory);
@@ -320,7 +325,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
     private int getChildIndex(ChildCategory childCategory, ParentCategory parentCategory) {
         int childIndex = 0;
         for (BaseNode child : parentCategory.getChildNode()) {
-            if (child.equals(childCategory)) {
+            if (!child.equals(childCategory)) {
                 break;
             }
             childIndex++;
@@ -367,76 +372,33 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
             //If target is not parent
             if (target.getItemViewType() != -1) {
-                //Get source Parent
-                ParentCategory sourceParent = (ParentCategory) mAdapter.getItem(mAdapter.findParentNode(from));
-                //If parent is Top
-                switch (sourceParent.getParentCategory()) {
-                    case MainViewModel.TOP:
-                        //Position -1
-                        from--;
-                        to--;
-                        orderChange(from, to);
+                ChildCategory sourceItem = (ChildCategory) mAdapter.getItem(to);
+                ChildCategory targetItem = (ChildCategory) mAdapter.getItem(from);
+                int sourceIndex = 0;
+                for (ChildCategory childCategory : mCurrentChildList) {
+                    if (childCategory.getId() == sourceItem.getId()) {
                         break;
-                    case MainViewModel.BOTTOM:
-                        //Position -2
-                        from -= 2;
-                        to -= 2;
-                        //If Top Parent is Expanded
-                        if (mAdapter.getItem(1) instanceof ParentCategory) {
-                            from += mAdapter.getItem(1).getChildNode().size();
-                            to += mAdapter.getItem(1).getChildNode().size();
-                        }
-                        orderChange(from, to);
-                        break;
-                    case MainViewModel.OUTER:
-                        //Position -3
-                        from -= 3;
-                        to -= 3;
-                        //If Top Parent is Expanded
-                        if (mAdapter.getItem(1) instanceof ParentCategory) {
-                            from += mAdapter.getItem(1).getChildNode().size();
-                            to += mAdapter.getItem(1).getChildNode().size();
-                        }
-                        //If Bottom Parent is Expanded
-                        if (mAdapter.getItem(2) instanceof ParentCategory) {
-                            from += mAdapter.getItem(2).getChildNode().size();
-                            to += mAdapter.getItem(2).getChildNode().size();
-                        }
-                        orderChange(from, to);
-                        break;
-                    case MainViewModel.ETC:
-                        //Position -4
-                        from -= 4;
-                        to -= 4;
-                        //If Top Parent is Expanded
-                        if (mAdapter.getItem(1) instanceof ParentCategory) {
-                            from += mAdapter.getItem(1).getChildNode().size();
-                            to += mAdapter.getItem(1).getChildNode().size();
-                        }
-                        //If Bottom Parent is Expanded
-                        if (mAdapter.getItem(2) instanceof ParentCategory) {
-                            from += mAdapter.getItem(2).getChildNode().size();
-                            to += mAdapter.getItem(2).getChildNode().size();
-                        }
-                        //If Outer Parent is Expanded
-                        if (mAdapter.getItem(3) instanceof ParentCategory) {
-                            from += mAdapter.getItem(3).getChildNode().size();
-                            to += mAdapter.getItem(3).getChildNode().size();
-                        }
-                        orderChange(from, to);
-                        break;
+                    }
+                    sourceIndex++;
                 }
+                int targetIndex = 0;
+                for (ChildCategory childCategory : mCurrentChildList) {
+                    if (childCategory.getId() == targetItem.getId()) {
+                        break;
+                    }
+                    targetIndex++;
+                }
+                orderChange(sourceIndex, targetIndex);
             }
         }
 
         @Override
         public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-            mModel.updateOrder(mModel.getCurrentChildList());
+            mModel.updateOrder(mCurrentChildList);
             BaseViewHolder holder = (BaseViewHolder) viewHolder;
             holder.itemView.findViewById(R.id.divider_top1).setVisibility(View.GONE);
             holder.itemView.findViewById(R.id.divider_top2).setVisibility(View.GONE);
             holder.itemView.setBackgroundColor(0);
-
         }
     };
 
@@ -448,8 +410,8 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 Collections.swap(mModel.getCurrentChildList(), i, i + 1);
                 int targetOrder = mModel.getCurrentChildList().get(i).getOrderNumber();
                 int sourceOrder = mModel.getCurrentChildList().get(i + 1).getOrderNumber();
-                mModel.getCurrentChildList().get(i).setOrderNumber(sourceOrder);
-                mModel.getCurrentChildList().get(i + 1).setOrderNumber(targetOrder);
+                mCurrentChildList.get(i).setOrderNumber(sourceOrder);
+                mCurrentChildList.get(i + 1).setOrderNumber(targetOrder);
             }
         }//Dragging Up
         else {
@@ -457,10 +419,9 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 Collections.swap(mModel.getCurrentChildList(), i, i - 1);
                 int targetOrder = mModel.getCurrentChildList().get(i).getOrderNumber();
                 int sourceOrder = mModel.getCurrentChildList().get(i - 1).getOrderNumber();
-                mModel.getCurrentChildList().get(i).setOrderNumber(sourceOrder);
-                mModel.getCurrentChildList().get(i - 1).setOrderNumber(targetOrder);
+                mCurrentChildList.get(i).setOrderNumber(sourceOrder);
+                mCurrentChildList.get(i - 1).setOrderNumber(targetOrder);
             }
         }
     }
-
 }

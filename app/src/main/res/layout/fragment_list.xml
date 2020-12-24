@@ -9,7 +9,8 @@
         tools:context=".ui.main.listfragment.ListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_fragment_recyclerView"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:id="@+id/list_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
@@ -26,7 +27,7 @@
             android:layout_marginBottom="@dimen/_48sdp"
             android:contentDescription="@string/add_folder"
             android:visibility="invisible"
-            android:src="@drawable/icon_folder"
+            android:src="@drawable/icon_folder_add"
             app:backgroundTint="?attr/colorControlNormal"
             app:fabCustomSize="@dimen/_32sdp"
             app:rippleColor="?attr/colorPrimary"

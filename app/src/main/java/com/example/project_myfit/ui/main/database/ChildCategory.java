@@ -19,7 +19,7 @@ public class ChildCategory extends BaseNode {
     private String parentCategory;
 
 
-    public ChildCategory(String childCategory, String parentCategory, int orderNumber) {
+    public ChildCategory(@Nullable String childCategory, String parentCategory, int orderNumber) {
         this.childCategory = childCategory;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;

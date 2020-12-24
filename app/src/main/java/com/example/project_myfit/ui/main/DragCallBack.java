@@ -1,10 +1,6 @@
 package com.example.project_myfit.ui.main;
 
 import android.graphics.Canvas;
-import android.view.View;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -13,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback;
 import com.chad.library.adapter.base.module.BaseDraggableModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.example.project_myfit.ui.main.database.ParentCategory;
 import com.example.project_myfit.ui.main.adapter.MainFragmentAdapter;
+import com.example.project_myfit.ui.main.database.ChildCategory;
+import com.example.project_myfit.ui.main.database.ParentCategory;
 
 public class DragCallBack extends DragAndSwipeCallback {
     private final MainFragmentAdapter mAdapter;
@@ -43,7 +40,7 @@ public class DragCallBack extends DragAndSwipeCallback {
         } else {
             sameParent = false;
         }
-        return target.getItemViewType() == 2 && sameParent;
+        return target.getItemViewType() == 2 && targetParentPosition != -1 &&sameParent;
     }
 
     @Override
@@ -76,6 +73,16 @@ public class DragCallBack extends DragAndSwipeCallback {
 
     public interface DragListener {
         void onStartDrag(BaseViewHolder holder);
+    }
+
+    @Override
+    public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder source, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+        ChildCategory sourceItem = (ChildCategory) mAdapter.getItem(fromPos);
+        ChildCategory targetItem = (ChildCategory) mAdapter.getItem(toPos);
+
+
+
+        super.onMoved(recyclerView, source, fromPos, target, toPos, x, y);
     }
 }
 

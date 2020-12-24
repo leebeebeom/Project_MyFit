@@ -1,57 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <data>
-
-        <variable
-            name="size"
-            type="com.example.project_myfit.ui.main.listfragment.database.Size" />
-    </data>
-
-    <LinearLayout
-        android:id="@+id/layout"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item_parent_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="4dp"
+        app:cardElevation="@dimen/_4sdp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/item_parent_root"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:layout_marginBottom="4dp"
-            app:cardElevation="@dimen/_4sdp">
+            android:layout_height="@dimen/_44sdp"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/list_brand"
+                style="@style/myItemBrandColor"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/_12sdp"
+                tools:text="앤더슨벨" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:includeFontPadding="false"
-                    android:text="@{size.brand}"
-                    style="@style/myItemBrandColor"
-                    android:textSize="@dimen/_12sdp"
-                    tools:text="앤더슨벨" />
+            <TextView
+                android:id="@+id/list_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="-4dp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/_16sdp"
+                tools:text="다 찢어진 니트;;" />
 
-                <TextView
-                    android:layout_marginTop="-4dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginBottom="@dimen/_4sdp"
-                    android:includeFontPadding="false"
-                    android:text="@{size.name}"
-                    android:textSize="@dimen/_16sdp"
-                    tools:text="다 찢어진 니트;;" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-</layout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

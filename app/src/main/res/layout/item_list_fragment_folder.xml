@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        app:dragEdge="right"
+        app:mode="same_level">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/edit_icon"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="center"
+                android:src="@drawable/icon_edit"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/delete_icon"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:scaleType="center"
+                android:src="@drawable/icon_delete"
+                app:tint="?attr/colorControlNormal" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/item_parent_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginBottom="4dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardElevation="@dimen/_4sdp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    app:srcCompat="@drawable/icon_folder" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/list_folder_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginVertical="@dimen/_4sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/_16sdp"
+                    tools:text="NIKE" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/_4sdp"
+                app:srcCompat="@drawable/icon_drag_handle"
+                app:tint="?attr/colorControlNormal" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -11,18 +11,22 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.project_myfit.ui.main.listfragment.database.Converters;
+import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
+import com.example.project_myfit.ui.main.listfragment.database.ListFolderDao;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {ChildCategory.class, Size.class}, version = 1, exportSchema = false)
+@Database(entities = {ChildCategory.class, Size.class, ListFolder.class}, version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class AppDataBase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
 
     public abstract SizeDao sizeDao();
+
+    public abstract ListFolderDao listFolderDao();
 
     private static AppDataBase sInstance;
 
@@ -51,7 +55,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             childCategoryList.add(new ChildCategory("Glass", "ETC", 15));
                             childCategoryList.add(new ChildCategory("Necklace", "ETC", 16));
                             childCategoryList.add(new ChildCategory("Ring", "ETC", 17));
-                            //인서트
+                            //insert
                             new Thread(() -> {
                                 for (ChildCategory childCategory : childCategoryList) {
                                     getsInstance(context).categoryDao().insert(childCategory);

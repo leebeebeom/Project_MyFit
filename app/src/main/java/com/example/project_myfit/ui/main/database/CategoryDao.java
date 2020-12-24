@@ -24,7 +24,7 @@ public interface CategoryDao {
     @Update
     void update(ChildCategory childCategory);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     void updateOrder(List<ChildCategory> childCategoryList);
 
     @Delete

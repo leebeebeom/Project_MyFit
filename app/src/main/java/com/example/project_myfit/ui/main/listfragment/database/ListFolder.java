@@ -3,18 +3,24 @@ package com.example.project_myfit.ui.main.listfragment.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.chad.library.adapter.base.entity.node.BaseExpandNode;
+import com.chad.library.adapter.base.entity.node.BaseNode;
+
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 @Entity
-public class ListFolder {
+public class ListFolder extends BaseExpandNode {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String folderName;
-    private List<Size> sizeList;
+    private List<BaseNode> sizeList;
 
-    public ListFolder(String folderName, List<Size> sizeList) {
+    public ListFolder(String folderName) {
         this.folderName = folderName;
-        this.sizeList = sizeList;
+
+        setExpanded(false);
     }
 
     public int getId() {
@@ -33,11 +39,11 @@ public class ListFolder {
         this.folderName = folderName;
     }
 
-    public List<Size> getSizeList() {
+    public List<BaseNode> getSizeList() {
         return sizeList;
     }
 
-    public void setSizeList(List<Size> sizeList) {
+    public void setSizeList(List<BaseNode> sizeList) {
         this.sizeList = sizeList;
     }
 
@@ -47,5 +53,12 @@ public class ListFolder {
                 "id=" + id +
                 ", folderName='" + folderName + '\'' +
                 '}';
+    }
+
+
+    @Nullable
+    @Override
+    public List<BaseNode> getChildNode() {
+        return getSizeList();
     }
 }

@@ -30,7 +30,7 @@ public class MainViewModel extends AndroidViewModel {
     private final SizeDao mSizeDao;
     private List<Size> mCurrentSizeList;
     private final SharedPreferences mPreferences;
-    private boolean mFirstRun;
+    private final boolean mFirstRun;
     private int mLargestOrder;
     private List<ChildCategory> mCurrentChildList;
 
@@ -45,16 +45,11 @@ public class MainViewModel extends AndroidViewModel {
         mFirstRun = mPreferences.getBoolean(FIRST_RUN, true);
     }
 
-    /*
-    TODO
-    최초 실행 후 갱신 완료 후 프리퍼런스 실행
-     */
     //First Run Check
     public void setPreferences() {
         if (mFirstRun) {
             SharedPreferences.Editor editor = mPreferences.edit();
-            mFirstRun = false;
-            editor.putBoolean(FIRST_RUN, mFirstRun);
+            editor.putBoolean(FIRST_RUN, false);
             editor.apply();
         }
     }

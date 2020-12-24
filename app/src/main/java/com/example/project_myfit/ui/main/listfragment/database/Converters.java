@@ -2,6 +2,7 @@ package com.example.project_myfit.ui.main.listfragment.database;
 
 import androidx.room.TypeConverter;
 
+import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -10,26 +11,26 @@ import java.util.List;
 
 public class Converters {
     @TypeConverter
-    public static String fromSizeList(List<Size> sizeList) {
+    public static String fromSizeList(List<BaseNode> sizeList) {
         if (sizeList == null) {
             return null;
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<List<Size>>() {
+        Type type = new TypeToken<List<BaseNode>>() {
         }.getType();
         String json = gson.toJson(sizeList, type);
         return json;
     }
 
     @TypeConverter
-    public static List<Size> toSizeList(String sizeString) {
+    public static List<BaseNode> toSizeList(String sizeString) {
         if (sizeString == null) {
             return null;
         }
         Gson gson = new Gson();
         Type type = new TypeToken<List<Size>>() {
         }.getType();
-        List<Size> sizeList = gson.fromJson(sizeString, type);
+        List<BaseNode> sizeList = gson.fromJson(sizeString, type);
         return sizeList;
     }
 }

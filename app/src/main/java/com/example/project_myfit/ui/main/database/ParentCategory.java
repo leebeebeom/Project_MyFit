@@ -24,7 +24,6 @@ public class ParentCategory extends BaseExpandNode {
         return parentCategory;
     }
 
-
     @Nullable
     @Override
     public List<BaseNode> getChildNode() {
