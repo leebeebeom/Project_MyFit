@@ -40,7 +40,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/_22sdp"
             android:layout_marginBottom="@dimen/_64sdp"
-            android:contentDescription="@string/add_folder"
+            android:contentDescription="@string/add_content"
             android:src="@drawable/icon_add"
             android:visibility="invisible"
             app:backgroundTint="?attr/colorControlNormal"

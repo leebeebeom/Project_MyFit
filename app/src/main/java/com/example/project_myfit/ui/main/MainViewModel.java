@@ -30,9 +30,8 @@ public class MainViewModel extends AndroidViewModel {
     private final SizeDao mSizeDao;
     private List<Size> mCurrentSizeList;
     private final SharedPreferences mPreferences;
-    private final boolean mFirstRun;
+    private boolean mFirstRun;
     private int mLargestOrder;
-    private List<ChildCategory> mCurrentChildList;
 
 
     public MainViewModel(@NonNull Application application) {
@@ -47,11 +46,9 @@ public class MainViewModel extends AndroidViewModel {
 
     //First Run Check
     public void setPreferences() {
-        if (mFirstRun) {
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putBoolean(FIRST_RUN, false);
-            editor.apply();
-        }
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(FIRST_RUN, false);
+        editor.apply();
     }
 
     //Insert
@@ -90,42 +87,42 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     //Get All Child Category By Order
-    public LiveData<List<ChildCategory>> getAllChildByOrder() {
-        return mCategoryDao.getAllChildByOrder();
+    public LiveData<List<ChildCategory>> getAllChild() {
+        return mCategoryDao.getAllChild();
     }
 
     //Generate Parent Category List
     public List<BaseNode> generateParent(List<ChildCategory> childCategoryList) {
-        List<BaseNode> parentCategories = new ArrayList<>();
-        List<BaseNode> top = new ArrayList<>();
-        List<BaseNode> bottom = new ArrayList<>();
-        List<BaseNode> outer = new ArrayList<>();
-        List<BaseNode> etc = new ArrayList<>();
+        List<BaseNode> parentCategoryList = new ArrayList<>();
+        List<BaseNode> parentTop = new ArrayList<>();
+        List<BaseNode> parentBottom = new ArrayList<>();
+        List<BaseNode> parentOuter = new ArrayList<>();
+        List<BaseNode> parentETC = new ArrayList<>();
         for (ChildCategory childCategory : childCategoryList) {
             if (childCategory.getParentCategory().equals(TOP)) {
-                top.add(childCategory);
+                parentTop.add(childCategory);
             }
         }
         for (ChildCategory childCategory : childCategoryList) {
             if (childCategory.getParentCategory().equals(BOTTOM)) {
-                bottom.add(childCategory);
+                parentBottom.add(childCategory);
             }
         }
         for (ChildCategory childCategory : childCategoryList) {
             if (childCategory.getParentCategory().equals(OUTER)) {
-                outer.add(childCategory);
+                parentOuter.add(childCategory);
             }
         }
         for (ChildCategory childCategory : childCategoryList) {
             if (childCategory.getParentCategory().equals(ETC)) {
-                etc.add(childCategory);
+                parentETC.add(childCategory);
             }
         }
-        parentCategories.add(new ParentCategory(TOP, top));
-        parentCategories.add(new ParentCategory(BOTTOM, bottom));
-        parentCategories.add(new ParentCategory(OUTER, outer));
-        parentCategories.add(new ParentCategory(ETC, etc));
-        return parentCategories;
+        parentCategoryList.add(new ParentCategory(TOP, parentTop));
+        parentCategoryList.add(new ParentCategory(BOTTOM, parentBottom));
+        parentCategoryList.add(new ParentCategory(OUTER, parentOuter));
+        parentCategoryList.add(new ParentCategory(ETC, parentETC));
+        return parentCategoryList;
     }
 
     //Get Largest Order Number
@@ -141,11 +138,7 @@ public class MainViewModel extends AndroidViewModel {
         return mLargestOrder;
     }
 
-    public List<ChildCategory> getCurrentChildList() {
-        return mCurrentChildList;
-    }
-
-    public void setCurrentChildList(List<ChildCategory> childCategoryList) {
-        this.mCurrentChildList = childCategoryList;
+    public void setFirstRun(boolean mFirstRun) {
+        this.mFirstRun = mFirstRun;
     }
 }

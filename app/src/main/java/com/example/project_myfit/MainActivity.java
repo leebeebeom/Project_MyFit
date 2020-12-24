@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
         //ToolBar
         setSupportActionBar(binding.toolbar);
+        //Title disable
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //CustomView enable
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+
 
         //Top Level Destination
         mAppBarConfiguration = new AppBarConfiguration.Builder(

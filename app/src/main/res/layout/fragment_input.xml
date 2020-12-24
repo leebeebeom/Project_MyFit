@@ -28,7 +28,6 @@
                         android:id="@+id/image"
                         android:layout_width="@dimen/_280sdp"
                         android:layout_height="@dimen/_280sdp"
-                        android:contentDescription="@string/app_name"
                         android:scaleType="fitCenter"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

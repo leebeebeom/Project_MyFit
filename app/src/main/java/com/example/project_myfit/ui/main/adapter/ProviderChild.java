@@ -41,7 +41,6 @@ public class ProviderChild extends BaseNodeProvider {
         //Swipe
         viewBinderHelper.setOpenOnlyOne(true);
         viewBinderHelper.bind(baseViewHolder.getView(R.id.swipeLayout), ((ChildCategory) baseNode).getChildCategory());
-        viewBinderHelper.closeLayout(String.valueOf(childCategory.getChildCategory()));
         //Start Drag Listener
         baseViewHolder.itemView.findViewById(R.id.drag_handle).setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {

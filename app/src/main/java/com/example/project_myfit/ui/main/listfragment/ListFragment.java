@@ -90,8 +90,6 @@ public class ListFragment extends Fragment {
         TitleListBinding titleBinding = TitleListBinding.inflate(getLayoutInflater());
         titleBinding.setChildCategory(mActivityModel.getChildCategory().getChildCategory());
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(titleBinding.listTitleContainer);
     }
 

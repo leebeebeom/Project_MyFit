@@ -45,10 +45,6 @@ public class ChildCategory extends BaseNode {
         return parentCategory;
     }
 
-    public void setParentCategory(String parentCategory) {
-        this.parentCategory = parentCategory;
-    }
-
     public int getOrderNumber() {
         return orderNumber;
     }

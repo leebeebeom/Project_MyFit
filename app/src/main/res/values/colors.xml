@@ -4,13 +4,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gainsboro_gray">#FFDCDCDC</color>
-    <color name="light_gray">#FFD3D3D3</color>
-    <color name="silver_gray">#FFC0C0C0</color>
     <color name="dark_gray2">#FFA9A9A9</color>
-    <color name="gray">#FF808080</color>
-    <color name="dim_gray">#FF696969</color>
     <color name="deep_gray">#FF424242</color>
     <color name="dart_mode_image">#FFCFCFCF</color>
     <color name="dark_gray">#FF222222</color>
-    <color name="Undo">#80DEEA</color>
 </resources>
