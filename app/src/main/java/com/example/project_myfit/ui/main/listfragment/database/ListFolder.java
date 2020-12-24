@@ -15,11 +15,14 @@ public class ListFolder extends BaseExpandNode {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String folderName;
+    private int folderId;
+    private int orderNumberFolder;
     private List<BaseNode> sizeList;
 
-    public ListFolder(String folderName) {
+    public ListFolder(String folderName, int folderId, int orderNumberFolder) {
         this.folderName = folderName;
-
+        this.folderId = folderId;
+        this.orderNumberFolder = orderNumberFolder;
         setExpanded(false);
     }
 
@@ -45,6 +48,22 @@ public class ListFolder extends BaseExpandNode {
 
     public void setSizeList(List<BaseNode> sizeList) {
         this.sizeList = sizeList;
+    }
+
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
+    }
+
+    public int getOrderNumberFolder() {
+        return orderNumberFolder;
+    }
+
+    public void setOrderNumberFolder(int orderNumberFolder) {
+        this.orderNumberFolder = orderNumberFolder;
     }
 
     @Override

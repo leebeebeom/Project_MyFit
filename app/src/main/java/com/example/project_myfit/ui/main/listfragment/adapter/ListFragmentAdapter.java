@@ -2,6 +2,7 @@ package com.example.project_myfit.ui.main.listfragment.adapter;
 
 import com.chad.library.adapter.base.BaseNodeAdapter;
 import com.chad.library.adapter.base.entity.node.BaseNode;
+import com.example.project_myfit.R;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
@@ -13,6 +14,7 @@ public class ListFragmentAdapter extends BaseNodeAdapter {
 
     public ListFragmentAdapter() {
         super();
+        addChildClickViewIds(R.id.edit_icon_folder, R.id.delete_icon_folder);
         addNodeProvider(new ProviderFolder());
         addNodeProvider(new ProviderSize());
     }

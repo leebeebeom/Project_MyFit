@@ -11,8 +11,8 @@
         android:id="@+id/parent_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginVertical="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_16sdp"
         android:includeFontPadding="false"
         android:textSize="@dimen/_18sdp"
         tools:text="Top" />

@@ -207,7 +207,7 @@ public class InputFragment extends Fragment {
             isFavorite = true;
         }
         //인서트
-        mModel.SizeInsert(new Size(dataMap, sizeMap, etcMap, isFavorite, mActivityModel.getChildCategory().getId()));
+        mModel.SizeInsert(new Size(dataMap, sizeMap, etcMap, isFavorite, mActivityModel.getChildCategory().getId(), 1));
     }
 
     //다이얼로그

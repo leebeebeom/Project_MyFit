@@ -13,9 +13,13 @@ import java.util.List;
 public interface SizeDao {
     @Query("SELECT * FROM Size WHERE folderId = :id")
     List<Size> getAllSizeByFolder(int id);
+    //Use at Main Fragment Delete
 
-    @Query("SELECT * FROM Size WHERE folderId = :id")
-    LiveData<List<Size>> getAllSizeByFolderIdLive(int id);
+    @Query("SELECT * FROM Size WHERE folderId = :id ORDER BY orderNumberSize")
+    LiveData<List<Size>> getAllSize(int id);
+
+    @Query("SELECT MAX(orderNumberFolder, orderNumberSize) FROM ListFolder, Size")
+    int getLargestOrder();
 
     @Insert
     void insert(Size size);

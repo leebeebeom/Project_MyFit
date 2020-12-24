@@ -36,6 +36,7 @@ public class Size extends BaseNode {
     public static final String MEMO = "memo";
     @PrimaryKey(autoGenerate = true)
     private int id;
+    private int orderNumberSize;
     private String brand;
     private String name;
     private String size;
@@ -52,7 +53,7 @@ public class Size extends BaseNode {
 
     }
 
-    public Size(Map<String, String> dataMap, Map<String, String> sizeMap, Map<String, String> etcMap, boolean isFavorite, int folderId) {
+    public Size(Map<String, String> dataMap, Map<String, String> sizeMap, Map<String, String> etcMap, boolean isFavorite, int folderId, int orderNumberSize) {
         this.brand = dataMap.getOrDefault(BRAND, "");
         this.name = dataMap.getOrDefault(NAME, "");
         this.size = dataMap.getOrDefault(SIZE, "");
@@ -67,6 +68,8 @@ public class Size extends BaseNode {
 
         this.isFavorite = isFavorite;
         this.folderId = folderId;
+
+        this.orderNumberSize = orderNumberSize;
 
     }
 
@@ -164,6 +167,14 @@ public class Size extends BaseNode {
 
     public void setFolderId(int folderId) {
         this.folderId = folderId;
+    }
+
+    public int getOrderNumberSize() {
+        return orderNumberSize;
+    }
+
+    public void setOrderNumberSize(int orderNumberSize) {
+        this.orderNumberSize = orderNumberSize;
     }
 
     @NotNull

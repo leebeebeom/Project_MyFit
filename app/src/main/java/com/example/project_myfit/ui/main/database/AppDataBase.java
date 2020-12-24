@@ -18,7 +18,7 @@ import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {ChildCategory.class, Size.class, ListFolder.class}, version = 2, exportSchema = false)
+@Database(entities = {ChildCategory.class, Size.class, ListFolder.class}, version = 2 , exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class AppDataBase extends RoomDatabase {
     public abstract CategoryDao categoryDao();

@@ -12,8 +12,11 @@ import java.util.List;
 @Dao
 public interface ListFolderDao {
 
-    @Query("SELECT * FROM ListFolder")
-    LiveData<List<ListFolder>> getAllListFolder();
+    @Query("SELECT * FROM ListFolder WHERE folderId = :folderId ORDER BY orderNumberFolder")
+    LiveData<List<ListFolder>> getAllListFolder(int folderId);
+
+    @Query("SELECT MAX(orderNumberFolder) FROM ListFolder WHERE folderId = :folderId")
+    int getLargestOrder(int folderId);
 
     @Insert
     void insert(ListFolder listFolder);

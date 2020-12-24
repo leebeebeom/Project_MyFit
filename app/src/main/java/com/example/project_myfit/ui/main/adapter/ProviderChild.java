@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.project_myfit.R;
 import com.example.project_myfit.ui.main.DragCallBack;
@@ -40,7 +41,7 @@ public class ProviderChild extends BaseNodeProvider {
         baseViewHolder.setText(R.id.child_text, childCategory.getChildCategory());
         //Swipe
         viewBinderHelper.setOpenOnlyOne(true);
-        viewBinderHelper.bind(baseViewHolder.getView(R.id.swipeLayout), ((ChildCategory) baseNode).getChildCategory());
+        viewBinderHelper.bind(baseViewHolder.getView(R.id.swipeLayout), String.valueOf(((ChildCategory) baseNode).getId()));
         //Start Drag Listener
         baseViewHolder.itemView.findViewById(R.id.drag_handle).setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {

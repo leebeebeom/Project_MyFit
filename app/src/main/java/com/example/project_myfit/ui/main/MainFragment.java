@@ -21,9 +21,11 @@ import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.module.BaseDraggableModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentMainBinding;
+import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.ui.main.adapter.MainFragmentAdapter;
 import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
@@ -47,12 +49,14 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
     private MainFragmentAdapter mAdapter;
     private ParentCategory addedParentCategory;
     private List<ChildCategory> mCurrentChildList;
+    private ItemDialogEditTextBinding mDialogEditText;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Binding
         mBinding = FragmentMainBinding.inflate(inflater);
+        mDialogEditText = ItemDialogEditTextBinding.inflate(inflater);
         //Set Custom View to ActionBar title
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         actionBar.setCustomView(R.layout.title_main);
@@ -123,6 +127,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 showAddDialog(addedParentCategory);
             }// Edit
             else if (view.getId() == R.id.edit_icon) {
+                closeLayout(position);
                 //Casting
                 ChildCategory childCategory = (ChildCategory) adapter.getItem(position);
                 //Get Parent Category
@@ -133,6 +138,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 showEditDialog(childCategory, parentCategory, childIndex, position);
             }// Delete
             else if (view.getId() == R.id.delete_icon) {
+                closeLayout(position);
                 //Casting
                 ChildCategory childCategory = (ChildCategory) adapter.getItem(position);
                 //Get Parent Category
@@ -150,6 +156,10 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         });
     }
 
+    private void closeLayout(int position) {
+        ((SwipeRevealLayout) mAdapter.getViewByPosition(position, R.id.swipeLayout)).close(true);
+    }
+
     //Drag
     private void setDrag() {
         BaseDraggableModule draggableModule = new BaseDraggableModule(mAdapter);
@@ -160,10 +170,9 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
 
     //Add Dialog
     private void showAddDialog(ParentCategory addedParentCategory) {
+        setEditText("");
         //builder
-        MaterialAlertDialogBuilder builder = getDialogBuilder(getFrameLayout()).setTitle("Add");
-        //Edit Text
-        TextInputEditText editText = getFrameLayout().findViewById(R.id.editText_dialog);
+        MaterialAlertDialogBuilder builder = getDialogBuilder().setTitle("Add");
         //DONE Clicked
         builder.setPositiveButton("DONE", (dialog, which) -> {
             //Get Largest Order
@@ -171,7 +180,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
             largestOrder++;
             //Create new ChildCategory
             ChildCategory newChildCategory;
-            newChildCategory = new ChildCategory(editText.getText().toString(), addedParentCategory.getParentCategory(), largestOrder);
+            newChildCategory = new ChildCategory(mDialogEditText.editTextDialog.getText().toString(), addedParentCategory.getParentCategory(), largestOrder);
             //insert
             mAddRenewOn = true; // -> Renew
             mModel.insert(newChildCategory);
@@ -185,7 +194,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                         //Adapter Last Item(Parent or Child)
                         BaseNode baseNode = mAdapter.getData().get(getLastPosition());
                         if (baseNode instanceof ParentCategory) {
-                            //if Last Item is Parent
+                            //if baseNode is Parent
                             mAdapter.nodeRemoveData(addedParentCategory, addedChildCategory);
                         } else {
                             //if baseNode is Child
@@ -205,19 +214,18 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         }).show();
     }
 
-
     //Edit Dialog
     private void showEditDialog(ChildCategory childCategory, ParentCategory parentCategory, int childIndex, int position) {
         //Save oldChildCategory Name
         String oldChildCategoryName = childCategory.getChildCategory();
         //Edit Text
-        TextInputEditText editText = getFrameLayout().findViewById(R.id.editText_dialog);
+        setEditText(oldChildCategoryName);
         //Builder
-        MaterialAlertDialogBuilder builder = getDialogBuilder(getFrameLayout()).setTitle("Edit");
+        MaterialAlertDialogBuilder builder = getDialogBuilder().setTitle("Edit");
         //DONE Clicked
         builder.setPositiveButton("DONE", (dialog, which) -> {
             //childCategory = In Adapter
-            childCategory.setChildCategory(editText.getText().toString());
+            childCategory.setChildCategory(mDialogEditText.editTextDialog.getText().toString());
             if (getLastPosition() == position) {
                 //if ChildCategory is Last
                 //Refresh
@@ -295,11 +303,6 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
         builder.show();
     }
 
-    //Edit Text
-    private FrameLayout getFrameLayout() {
-        return (FrameLayout) View.inflate(requireContext(), R.layout.item_dialog_edit_text, null);
-    }
-
     //Last Position
     private int getLastPosition() {
         return mAdapter.getData().size() - 1;
@@ -321,11 +324,18 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
 
     //Get MaterialAlertDialogBuilder
     @NotNull
-    private MaterialAlertDialogBuilder getDialogBuilder(FrameLayout frameLayout) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog);
-        builder.setView(frameLayout);
-        builder.setNegativeButton("CANCEL", null);
-        return builder;
+    private MaterialAlertDialogBuilder getDialogBuilder() {
+        return new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+                .setView(mDialogEditText.getRoot())
+                .setNegativeButton("CANCEL", null)
+                .setOnDismissListener(dialog -> ((ViewGroup) mDialogEditText.getRoot().getParent()).removeAllViews());
+    }
+
+    //Set Edit Text
+    private void setEditText(String setText) {
+        mDialogEditText.setHint("Category");
+        mDialogEditText.setSetText(setText);
+        mDialogEditText.setPlaceHolder("ex)Short Sleeve");
     }
 
     //Undo Confirmed
