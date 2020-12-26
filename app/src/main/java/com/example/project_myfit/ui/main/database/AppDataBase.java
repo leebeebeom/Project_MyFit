@@ -3,13 +3,13 @@ package com.example.project_myfit.ui.main.database;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.adapters.Converters;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.project_myfit.ui.main.listfragment.database.Converters;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolderDao;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Database(entities = {ChildCategory.class, Size.class, ListFolder.class}, version = 2 , exportSchema = false)
-@TypeConverters(Converters.class)
 public abstract class AppDataBase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
 

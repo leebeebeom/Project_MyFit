@@ -17,7 +17,7 @@ import java.util.List;
 public class ListViewModel extends AndroidViewModel {
     private final SizeDao mSizeDao;
     private final ListFolderDao mListFolderDao;
-    private int mLargestOrder;
+    private int mFolderLargestOrder;
 
 
     public ListViewModel(@NonNull Application application) {
@@ -25,12 +25,11 @@ public class ListViewModel extends AndroidViewModel {
         //Dao
         mSizeDao = AppDataBase.getsInstance(application).sizeDao();
         mListFolderDao = AppDataBase.getsInstance(application).listFolderDao();
-        //어댑터
     }
 
     //get Folder List
-    public LiveData<List<ListFolder>> getAllFolderList(int folderId) {
-        return mListFolderDao.getAllListFolder(folderId);
+    public LiveData<List<ListFolder>> getFolderList(int folderId) {
+        return mListFolderDao.getListFolder(folderId);
     }
 
     //Folder Insert
@@ -52,11 +51,11 @@ public class ListViewModel extends AndroidViewModel {
         return mSizeDao.getAllSize(folderId);
     }
 
-    public void setLargestOrder(int folderId) {
-        new Thread(() -> mLargestOrder = mListFolderDao.getLargestOrder(folderId)).start();
+    public void setFolderLargestOrder(int folderId) {
+        new Thread(() -> mFolderLargestOrder = mListFolderDao.getLargestOrder(folderId)).start();
     }
 
     public int getLargestOrder() {
-        return mLargestOrder;
+        return mFolderLargestOrder;
     }
 }

@@ -15,6 +15,8 @@
     <color name="childCategory_drag_background_night">#FF282828</color>
     <color name="fabColor">#FFF9F9F9</color>
     <color name="fabColor_night">#FF282828</color>
+    <color name="fab_tint">#FF454545</color>
+    <color name="fab_tint_night">#FFDCDCDC</color>
     <color name="fabChild_tint_color">#FFDCDCDC</color>
     <color name="fabChild_tint_color_night">#FF454545</color>
     <color name="fabChild_background_color">#FF202020</color>

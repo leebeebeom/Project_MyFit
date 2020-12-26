@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface SizeDao {
     @Query("SELECT * FROM Size WHERE folderId = :id")
-    List<Size> getAllSizeByFolder(int id);
+    List<Size> getAllSizeByFolderNotLive(int id);
     //Use at Main Fragment Delete
 
     @Query("SELECT * FROM Size WHERE folderId = :id ORDER BY orderNumberSize")

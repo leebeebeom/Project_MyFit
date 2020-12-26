@@ -42,6 +42,7 @@
         <item name="fabColor">@color/fabColor</item>
         <item name="fabChildTintColor">@color/fabChild_tint_color</item>
         <item name="fabChildBackgroundColor">@color/fabChild_background_color</item>
+        <item name="fabTint">@color/fab_tint</item>
     </style>
     <!--    Tool Bar Title Style-->
     <!--    In Activity_main.xml-->
@@ -76,10 +77,6 @@
     <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/black</item>
     </style>
-    <!--    List Fragment Brand Colors-->
-    <style name="myItemBrandColor" parent="Theme.AppCompat.DayNight">
-        <item name="android:textColor">@color/deep_gray</item>
-    </style>
     <!--    Snack Bar Text Style-->
     <style name="mySnackBarText" parent="Widget.MaterialComponents.Snackbar.TextView">
         <item name="android:textSize">@dimen/_9sdp</item>
@@ -101,6 +98,7 @@
     <attr name="childCategoryBackground" format="color" />
     <attr name="childCategoryDragBackground" format="color" />
     <attr name="fabColor" format="color" />
+    <attr name="fabTint" format="color" />
     <attr name="fabChildTintColor" format="color" />
     <attr name="fabChildBackgroundColor" format="color" />
 </resources>

@@ -41,6 +41,7 @@
         <item name="fabChildTintColor">@color/fabChild_tint_color_night</item>
         <item name="fabChildBackgroundColor">@color/fabChild_background_color_night</item>
         <item name="childCategoryDragBackground">@color/childCategory_drag_background_night</item>
+        <item name="fabTint">@color/fab_tint_night</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -56,9 +57,5 @@
     <!--    In fragment_input.xml-->
     <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/white</item>
-    </style>
-    <!--    List Fragment Brand Colors-->
-    <style name="myItemBrandColor" parent="Theme.AppCompat.DayNight">
-        <item name="android:textColor">@color/gainsboro_gray</item>
     </style>
 </resources>

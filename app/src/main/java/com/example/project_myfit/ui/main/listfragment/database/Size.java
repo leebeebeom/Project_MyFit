@@ -15,7 +15,7 @@ import java.util.Map;
 //카테고리 별 필요한 사이즈 정리
 
 @Entity
-public class Size extends BaseNode {
+public class Size {
     @Ignore
     public static final String LENGTH = "length";
     @Ignore
@@ -194,12 +194,6 @@ public class Size extends BaseNode {
                 ", folderId=" + folderId +
                 ", isFavorite=" + isFavorite +
                 '}';
-    }
-
-    @Nullable
-    @Override
-    public List<BaseNode> getChildNode() {
-        return null;
     }
 }
 

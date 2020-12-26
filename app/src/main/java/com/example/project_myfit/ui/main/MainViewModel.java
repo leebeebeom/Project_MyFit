@@ -73,7 +73,7 @@ public class MainViewModel extends AndroidViewModel {
 
     //Get Size List By Folder Id
     public void getAllSizeByFolder(int id) {
-        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolder(id)).start();
+        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolderNotLive(id)).start();
     }
 
     //Delete Size List By Folder Id

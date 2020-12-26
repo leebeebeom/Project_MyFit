@@ -11,19 +11,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @Entity
-public class ListFolder extends BaseExpandNode {
+public class ListFolder {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String folderName;
     private int folderId;
     private int orderNumberFolder;
-    private List<BaseNode> sizeList;
+    private int itemCount;
 
-    public ListFolder(String folderName, int folderId, int orderNumberFolder) {
+    public ListFolder(String folderName, int folderId, int orderNumberFolder, int itemCount) {
         this.folderName = folderName;
         this.folderId = folderId;
         this.orderNumberFolder = orderNumberFolder;
-        setExpanded(false);
+        this.itemCount = itemCount;
     }
 
     public int getId() {
@@ -42,13 +42,6 @@ public class ListFolder extends BaseExpandNode {
         this.folderName = folderName;
     }
 
-    public List<BaseNode> getSizeList() {
-        return sizeList;
-    }
-
-    public void setSizeList(List<BaseNode> sizeList) {
-        this.sizeList = sizeList;
-    }
 
     public int getFolderId() {
         return folderId;
@@ -66,18 +59,22 @@ public class ListFolder extends BaseExpandNode {
         this.orderNumberFolder = orderNumberFolder;
     }
 
+    public int getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
+
     @Override
     public String toString() {
         return "ListFolder{" +
                 "id=" + id +
                 ", folderName='" + folderName + '\'' +
+                ", folderId=" + folderId +
+                ", orderNumberFolder=" + orderNumberFolder +
+                ", itemCount=" + itemCount +
                 '}';
-    }
-
-
-    @Nullable
-    @Override
-    public List<BaseNode> getChildNode() {
-        return getSizeList();
     }
 }

@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout>
 
-    <com.google.android.material.card.MaterialCardView
+    <data>
+
+        <variable
+            name="size"
+            type="com.example.project_myfit.ui.main.listfragment.database.Size" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_4sdp"
-        android:layout_marginBottom="4dp"
-        app:cardElevation="@dimen/_4sdp">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_44sdp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            app:cardElevation="@dimen/_4sdp">
 
-            <TextView
-                android:id="@+id/list_brand"
-                style="@style/myItemBrandColor"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:includeFontPadding="false"
-                android:textSize="@dimen/_12sdp"
-                tools:text="앤더슨벨" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/list_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="-4dp"
-                android:layout_marginBottom="@dimen/_2sdp"
-                android:includeFontPadding="false"
-                android:textSize="@dimen/_16sdp"
-                tools:text="다 찢어진 니트;;" />
+                <TextView
+                    android:id="@+id/list_brand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:alpha="0.8"
+                    android:includeFontPadding="false"
+                    android:text="@{size.brand}"
+                    android:textSize="@dimen/_10sdp"
+                    tools:text="Anderson Bell" />
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+                <TextView
+                    android:id="@+id/list_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="-4dp"
+                    android:includeFontPadding="false"
+                    android:text="@{size.name}"
+                    android:textSize="@dimen/_14sdp"
+                    tools:text="DAMAGED CREW NECK SWEATER" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</layout>

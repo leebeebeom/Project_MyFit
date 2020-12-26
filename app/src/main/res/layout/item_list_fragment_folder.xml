@@ -3,14 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="listFolder"
+            type="com.example.project_myfit.ui.main.listfragment.database.ListFolder" />
+    </data>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
+            android:layout_width="@dimen/_64sdp"
+            android:layout_height="@dimen/_64sdp"
             android:layout_margin="@dimen/_4sdp"
             app:cardCornerRadius="@dimen/_8sdp"
             app:cardElevation="@dimen/_4sdp">
@@ -23,17 +30,32 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:maxLines="4"
+                android:text="@{listFolder.folderName}"
                 android:textSize="@dimen/_10sdp"
-                tools:text="comde" />
+                tools:text="comme \n des garcons" />
 
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:includeFontPadding="false"
-            android:textSize="@dimen/_8sdp"
-            tools:text="2 items" />
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@{Integer.toString(listFolder.itemCount)}"
+                android:textSize="@dimen/_8sdp"
+                tools:text="2" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text=" items"
+                android:textSize="@dimen/_8sdp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
