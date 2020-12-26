@@ -43,7 +43,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/icon_add_image"
-                        app:tint="@color/dart_mode_image" />
+                        app:tint="@color/light_gray" />
 
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/checkbox_favorite"

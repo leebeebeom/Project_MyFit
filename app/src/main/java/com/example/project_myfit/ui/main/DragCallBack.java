@@ -10,11 +10,11 @@ import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback;
 import com.chad.library.adapter.base.module.BaseDraggableModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.example.project_myfit.ui.main.adapter.MainFragmentAdapter;
-import com.example.project_myfit.ui.main.database.ChildCategory;
 import com.example.project_myfit.ui.main.database.ParentCategory;
 
 public class DragCallBack extends DragAndSwipeCallback {
     private final MainFragmentAdapter mAdapter;
+    private RecyclerView.ViewHolder mViewHolder;
 
 
     public DragCallBack(BaseDraggableModule draggableModule, MainFragmentAdapter mAdapter) {
@@ -24,6 +24,7 @@ public class DragCallBack extends DragAndSwipeCallback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        mViewHolder = viewHolder;
         return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
     }
 
@@ -45,7 +46,8 @@ public class DragCallBack extends DragAndSwipeCallback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return false;
+        //Parent Category Long Press Disable
+        return mViewHolder.getItemViewType() != 1;
     }
 
     @Override
@@ -70,9 +72,9 @@ public class DragCallBack extends DragAndSwipeCallback {
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, newDy, actionState, isCurrentlyActive);
     }
-
-    public interface DragListener {
-        void onStartDrag(BaseViewHolder holder);
+    //start Drag
+    public interface DragStartListener {
+        void startDrag(BaseViewHolder viewHolder);
     }
 }
 

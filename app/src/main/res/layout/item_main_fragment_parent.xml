@@ -3,35 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/parent_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/_8sdp"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:includeFontPadding="false"
-        android:textSize="@dimen/_18sdp"
-        tools:text="Top" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/add_icon"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
-        app:srcCompat="@drawable/icon_add"
-        app:tint="?attr/colorControlNormal" />
-
-    <View
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_gravity="bottom"
-        android:background="@color/dark_gray2" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginVertical="@dimen/_4sdp"
+        app:rippleColor="@android:color/transparent"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_2sdp">
+
+        <TextView
+            android:id="@+id/parent_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_3sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:includeFontPadding="false"
+            android:textSize="@dimen/_17sdp"
+            tools:text="Top" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/add_icon"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icon_add"
+            app:tint="?attr/colorControlNormal" />
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
 

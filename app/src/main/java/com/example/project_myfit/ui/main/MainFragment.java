@@ -5,7 +5,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,24 +31,24 @@ import com.example.project_myfit.ui.main.database.ParentCategory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
-public class MainFragment extends Fragment implements DragCallBack.DragListener {
+public class MainFragment extends Fragment implements DragCallBack.DragStartListener {
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
     private boolean mRefreshOn;
     private boolean mAddRenewOn;
-    private ItemTouchHelper mItemTouchHelper;
     private MainFragmentAdapter mAdapter;
     private ParentCategory addedParentCategory;
     private List<ChildCategory> mCurrentChildList;
     private ItemDialogEditTextBinding mDialogEditText;
+    private boolean isLastPosition;
+    private ItemTouchHelper mItemTouchHelper;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -152,6 +151,9 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 ChildCategory childCategory = (ChildCategory) mAdapter.getItem(position);
                 mActivityModel.setChildCategory(childCategory);
                 Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_listFragment);
+            } else if (view.getId() == R.id.cardView) {
+                //Card View clickable disable
+                mAdapter.expandOrCollapse(position, true, true);
             }
         });
     }
@@ -230,13 +232,14 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 //if ChildCategory is Last
                 //Refresh
                 mRefreshOn = true;
-                //Update
-                mModel.update(childCategory);
+                isLastPosition = true;
             } else {
                 //if Not
-                mModel.update(childCategory);
                 mAdapter.nodeSetData(parentCategory, childIndex, childCategory);
+                isLastPosition = false;
             }
+            //Update
+            mModel.update(childCategory);
             //Snack Bar
             Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
                     .setAnchorView(R.id.bottom_nav)
@@ -244,7 +247,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                     .setAction("Undo", v -> {
                         //Old Child Category Name
                         childCategory.setChildCategory(oldChildCategoryName);
-                        if (getLastPosition() == position) {
+                        if (isLastPosition) {
                             //if ChildCategory is Last
                             //Refresh
                             mRefreshOn = true;
@@ -274,9 +277,11 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                         //if ChildCategory is Last
                         //Refresh
                         mRefreshOn = true;
+                        isLastPosition = true;
                     } else {
                         //if Not
                         mAdapter.nodeRemoveData(parentCategory, childCategory);
+                        isLastPosition = false;
                     }
                     //Delete
                     mModel.delete(childCategory);
@@ -286,7 +291,7 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                             .setAnchorView(R.id.bottom_nav)
                             //Undo
                             .setAction("Undo", v -> {
-                                if (getLastPosition() == position) {
+                                if (isLastPosition) {
                                     //if ChildCategory is Last
                                     mRefreshOn = true;
                                 } else {
@@ -345,23 +350,16 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 .show();
     }
 
-    //Start Drag
-    @Override
-    public void onStartDrag(BaseViewHolder holder) {
-        mItemTouchHelper.startDrag(holder);
-    }
-
     //Drag Listener
     private final OnItemDragListener onItemDragListener = new OnItemDragListener() {
         @Override
         public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
+            //Set Child Category background color
             BaseViewHolder holder = (BaseViewHolder) viewHolder;
             TypedValue typedValue = new TypedValue();
-            requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-            int colorPrimary = typedValue.data;
-            holder.itemView.findViewById(R.id.divider_top1).setVisibility(View.VISIBLE);
-            holder.itemView.findViewById(R.id.divider_top2).setVisibility(View.VISIBLE);
-            holder.itemView.setBackgroundColor(colorPrimary);
+            requireContext().getTheme().resolveAttribute(R.attr.childCategoryDragBackground, typedValue, true);
+            holder.getView(R.id.item_child_root).setBackgroundColor(typedValue.data);
+
         }
 
         @Override
@@ -378,11 +376,13 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
 
         @Override
         public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-            mModel.updateOrder(mCurrentChildList);
+            //Clear Child Category background color
             BaseViewHolder holder = (BaseViewHolder) viewHolder;
-            holder.itemView.findViewById(R.id.divider_top1).setVisibility(View.GONE);
-            holder.itemView.findViewById(R.id.divider_top2).setVisibility(View.GONE);
-            holder.itemView.setBackgroundColor(0);
+            TypedValue typedValue = new TypedValue();
+            requireContext().getTheme().resolveAttribute(R.attr.childCategoryBackground, typedValue, true);
+            holder.getView(R.id.item_child_root).setBackgroundColor(typedValue.data);
+            //Order Update
+            mModel.updateOrder(mCurrentChildList);
         }
     };
 
@@ -419,5 +419,11 @@ public class MainFragment extends Fragment implements DragCallBack.DragListener 
                 mCurrentChildList.get(i - 1).setOrderNumber(targetOrder);
             }
         }
+    }
+
+    //start Drag
+    @Override
+    public void startDrag(BaseViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

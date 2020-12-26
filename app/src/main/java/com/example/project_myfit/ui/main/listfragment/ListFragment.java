@@ -257,7 +257,10 @@ public class ListFragment extends Fragment {
         return new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setView(mDialogEditText.getRoot())
                 .setNegativeButton("CANCEL", null)
-                .setOnDismissListener(dialog -> ((ViewGroup) mDialogEditText.getRoot().getParent()).removeAllViews());
+                .setOnDismissListener(dialog -> ((ViewGroup) mDialogEditText.getRoot().getParent()).removeAllViews())
+                .setOnDismissListener(dialog -> {
+                    ((ViewGroup)mDialogEditText.getRoot().getParent()).removeAllViews();
+                });
     }
 
     //Set Edit Text

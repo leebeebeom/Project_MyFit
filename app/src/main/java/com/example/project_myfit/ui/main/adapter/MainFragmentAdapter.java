@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class MainFragmentAdapter extends BaseNodeAdapter {
-    public MainFragmentAdapter(DragCallBack.DragListener listener) {
+    public MainFragmentAdapter(DragCallBack.DragStartListener mListener) {
         super();
         //Click Listener
-        addChildClickViewIds(R.id.add_icon, R.id.delete_icon, R.id.edit_icon, R.id.item_child_root);
+        addChildClickViewIds(R.id.cardView, R.id.add_icon, R.id.delete_icon, R.id.edit_icon, R.id.item_child_root);
         addNodeProvider(new ProviderParent());
-        addNodeProvider(new ProviderChild(listener));
+        addNodeProvider(new ProviderChild(mListener));
     }
 
     @Override

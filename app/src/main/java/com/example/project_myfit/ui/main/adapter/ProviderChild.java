@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.project_myfit.R;
 import com.example.project_myfit.ui.main.DragCallBack;
@@ -15,11 +14,11 @@ import com.example.project_myfit.ui.main.database.ChildCategory;
 import org.jetbrains.annotations.NotNull;
 
 public class ProviderChild extends BaseNodeProvider {
-    ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    DragCallBack.DragListener listener;
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+    private final DragCallBack.DragStartListener mListener;
 
-    public ProviderChild(DragCallBack.DragListener listener) {
-        this.listener = listener;
+    public ProviderChild(DragCallBack.DragStartListener mListener) {
+        this.mListener = mListener;
     }
 
     @Override
@@ -42,10 +41,9 @@ public class ProviderChild extends BaseNodeProvider {
         //Swipe
         viewBinderHelper.setOpenOnlyOne(true);
         viewBinderHelper.bind(baseViewHolder.getView(R.id.swipeLayout), String.valueOf(((ChildCategory) baseNode).getId()));
-        //Start Drag Listener
-        baseViewHolder.itemView.findViewById(R.id.drag_handle).setOnTouchListener((v, event) -> {
+        baseViewHolder.getView(R.id.child_category_drag_handle).setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                listener.onStartDrag(baseViewHolder);
+                mListener.startDrag(baseViewHolder);
             }
             return false;
         });

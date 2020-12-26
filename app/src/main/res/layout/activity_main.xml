@@ -11,13 +11,16 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_36sdp">
+            android:layout_height="@dimen/_36sdp"
+            app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:titleTextAppearance="@style/myToolbarTitleStyle" />
+                app:layout_scrollFlags="scroll"
+                app:titleTextAppearance="@style/myToolbarTitleStyle"
+                tools:title='MyFit' />
         </com.google.android.material.appbar.AppBarLayout>
         <!--behavior 정의하면 앱바랑 분리됨-->
         <fragment
@@ -25,10 +28,10 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_38sdp"
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:navGraph="@navigation/nav_graph" />
+            app:navGraph="@navigation/nav_graph"
+            tools:layout="@layout/fragment_list" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
@@ -37,7 +40,8 @@
             android:layout_gravity="bottom"
             android:theme="@style/myBottomNav"
             app:elevation="@dimen/_8sdp"
-            app:labelVisibilityMode="unlabeled"
+            app:itemRippleColor="@android:color/transparent"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:menu="@menu/bottom_nav_menu" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

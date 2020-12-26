@@ -16,7 +16,7 @@
         <item name="colorOnError">#000000</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#FF121212</item>
         <!-- Customize your theme here. -->
         <!--        Font-->
         <item name="fontFamily">@font/font_ibm_plex_sans</item>
@@ -34,7 +34,13 @@
         <item name="snackbarButtonStyle">@style/mySnackBarButton</item>
         <!--        Snack Bar Style-->
         <item name="snackbarStyle">@style/mySnackBar</item>
-
+        <!--        Child Category Text color-->
+<!--        <item name="childCategoryText">@color/childCategory_text_color_night</item>-->
+        <item name="childCategoryBackground">@color/childCategory_background_night</item>
+        <item name="fabColor">@color/fabColor_night</item>
+        <item name="fabChildTintColor">@color/fabChild_tint_color_night</item>
+        <item name="fabChildBackgroundColor">@color/fabChild_background_color_night</item>
+        <item name="childCategoryDragBackground">@color/childCategory_drag_background_night</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">

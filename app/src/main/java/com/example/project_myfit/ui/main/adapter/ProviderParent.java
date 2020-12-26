@@ -1,7 +1,5 @@
 package com.example.project_myfit.ui.main.adapter;
 
-import android.view.View;
-
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -27,11 +25,5 @@ public class ProviderParent extends BaseNodeProvider {
         //Bind
         ParentCategory parentCategory = (ParentCategory) data;
         helper.setText(R.id.parent_text, parentCategory.getParentCategory());
-    }
-
-    @Override
-    public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
-        //Click
-        getAdapter().expandOrCollapse(position, true, true);
     }
 }
