@@ -80,8 +80,8 @@
                     android:layout_marginStart="@dimen/_22sdp"
                     android:alpha="0.8"
                     android:text="@{category.Category}"
-                    android:textSize="@dimen/_12sdp"
-                    app:fontFamily="@font/sc_dream4"
+                    android:textSize="@dimen/_11sdp"
+                    app:fontFamily="@font/sc_dream5"
                     tools:text="Short Sleeve" />
 
                 <androidx.appcompat.widget.AppCompatImageView

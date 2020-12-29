@@ -28,6 +28,12 @@ import com.example.project_myfit.ui.main.listfragment.adapter.ListFolderAdapter;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListSizeAdapter;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 public class ListFragment extends Fragment implements MainDragCallBack.StartDragListener {
@@ -35,14 +41,16 @@ public class ListFragment extends Fragment implements MainDragCallBack.StartDrag
     private ListViewModel mModel;
     private FragmentListBinding mBinding;
     private MainActivityViewModel mActivityModel;
-    private Animation rotateOpen, rotateClose, fromBottomAdd, toBottomAdd, fromBottomFolder, toBottomAddFolder;
+    private Animation rotateOpen, rotateClose, fromBottom, toBottom;
     private boolean isFabOpened;
     private ListFolderAdapter mFolderAdapter;
     private ListSizeAdapter mSizeAdapter;
     private ItemDialogEditTextBinding mEditTextBinding;
     private ItemTouchHelper mTouchHelperFolder;
     private boolean mFolderRefresh;
+    private List<ListFolder> mCurrentFolderList;
 
+    //TODO FAB IN OUT ANIMATION, FOLDER LONG CLICK
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -61,31 +69,42 @@ public class ListFragment extends Fragment implements MainDragCallBack.StartDrag
         //Initialize
         init();
         //Fab Animation
-//        mBinding.fabMain.setOnClickListener(v -> {
-//            setVisibility(isFabOpened);
-//            setAnimation(isFabOpened);
-//            setClickable(isFabOpened);
-//            isFabOpened = !isFabOpened;
-//        });
+        mBinding.listFabMain.setOnClickListener(v -> {
+            setVisibility(isFabOpened);
+            setAnimation(isFabOpened);
+            setClickable(isFabOpened);
+            isFabOpened = !isFabOpened;
+        });
         //Add Fab Clicked
-        mBinding.fabAdd.setOnClickListener(v -> Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputFragment));
+        mBinding.listFabAdd.setOnClickListener(v -> Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputFragment)); // TODO CIRCLE REVEAL
         //Add Folder Fab Clicked
-        mBinding.fabFolder.setOnClickListener(v -> showAddFolderDialog());
-        //Renew
+        mBinding.listFabFolder.setOnClickListener(v -> {
+            mBinding.listFabMain.performClick();
+            showAddFolderDialog();
+        });
+        //Folder Renew
         mModel.getFolderList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), listFolders -> {
+            mCurrentFolderList = listFolders;
             mModel.setFolderLargestOrder(mActivityModel.getCategory().getId());
             if (mFolderRefresh) {
-                mFolderAdapter.setItem(listFolders, this, requireContext(), mModel);
+                mFolderAdapter.setItem(listFolders, this, mModel);
                 mBinding.recyclerFolder.setAdapter(mFolderAdapter);
                 mFolderRefresh = false;
             } else {
                 mFolderAdapter.updateDiffUtils(listFolders);
             }
+            if (listFolders.size() == 0) {
+                mBinding.listTextFolders.setVisibility(View.GONE);
+            } else {
+                mBinding.listTextFolders.setVisibility(View.VISIBLE);
+            }
         });
+        //Content Renew
         mModel.getSizeList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), sizeList -> {
             mSizeAdapter.setItem(sizeList);
             mBinding.recyclerContent.setAdapter(mSizeAdapter);
         });
+        //Folder Touch Helper
         mTouchHelperFolder = new ItemTouchHelper(new ListDragCallBack(mFolderAdapter));
         mTouchHelperFolder.attachToRecyclerView(mBinding.recyclerFolder);
         mFolderAdapter.setOnFolderClickListener(new ListFolderAdapter.OnFolderClickListener() {
@@ -94,13 +113,33 @@ public class ListFragment extends Fragment implements MainDragCallBack.StartDrag
             }
 
             @Override
-            public void onEditClicked() {
+            public void onEditClicked(ListFolder listFolder, int position) {
+                showEditFolderDialog(listFolder, position);
             }
 
             @Override
-            public void onDeleteClicked() {
+            public void onDeleteClicked(ListFolder listFolder) {
+                showDeleteFolderDialog(listFolder);
             }
+
         });
+    }
+
+    private void showDeleteFolderDialog(ListFolder listFolder) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+                .setTitle("확인")
+                .setMessage("폴더를 삭제하시겠습니까?")
+                .setNegativeButton("CANCEL", null)
+                .setPositiveButton("DONE", (dialog, which) -> {
+                    mModel.deleteFolder(listFolder);
+                    Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "폴더 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
+                            .setAnchorView(R.id.list_fab_main)
+                            .setAction("Undo", v -> {
+                                mModel.insertFolder(listFolder);
+                                showUndoConfirmSnackBar();
+                            }).show();
+                });
+        builder.show();
     }
 
     //Initialize
@@ -115,57 +154,52 @@ public class ListFragment extends Fragment implements MainDragCallBack.StartDrag
         mEditTextBinding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
         //Recycler View, Adapter
         mFolderAdapter = new ListFolderAdapter();
-        mSizeAdapter = new ListSizeAdapter();
+        mSizeAdapter = new ListSizeAdapter(); // TODO
         mBinding.recyclerFolder.setHasFixedSize(true);
-        mBinding.recyclerContent.setHasFixedSize(true);
+        mBinding.recyclerContent.setHasFixedSize(true); //TODO
         //Fab Animation
-//        rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
-//        rotateClose = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close);
-//        fromBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_from_bottom);
-//        toBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_to_bottom);
-//        fromBottomFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_from_bottom);
-//        toBottomAddFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_to_bottom);
-
+        rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
+        rotateClose = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close);
+        fromBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_from_bottom);
+        toBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_to_bottom);
     }
 
     //Fab Animation
     private void setAnimation(boolean isFabOpened) {
         if (!isFabOpened) {
-            mBinding.fabMain.startAnimation(rotateOpen);
-            mBinding.fabAdd.startAnimation(fromBottomAdd);
-            mBinding.fabFolder.startAnimation(fromBottomFolder);
+            mBinding.listFabMain.startAnimation(rotateOpen);
+            mBinding.listFabAdd.startAnimation(fromBottom);
+            mBinding.listFabFolder.startAnimation(fromBottom);
         } else {
-            mBinding.fabMain.startAnimation(rotateClose);
-            mBinding.fabAdd.startAnimation(toBottomAdd);
-            mBinding.fabFolder.startAnimation(toBottomAddFolder);
+            mBinding.listFabMain.startAnimation(rotateClose);
+            mBinding.listFabAdd.startAnimation(toBottom);
+            mBinding.listFabFolder.startAnimation(toBottom);
         }
     }
 
     //Fab Visibility
     private void setVisibility(boolean isFabOpened) {
         if (!isFabOpened) {
-            mBinding.fabAdd.setVisibility(View.VISIBLE);
-            mBinding.fabFolder.setVisibility(View.VISIBLE);
+            mBinding.listFabAdd.setVisibility(View.VISIBLE);
+            mBinding.listFabFolder.setVisibility(View.VISIBLE);
         } else {
-            mBinding.fabAdd.setVisibility(View.INVISIBLE);
-            mBinding.fabFolder.setVisibility(View.INVISIBLE);
+            mBinding.listFabAdd.setVisibility(View.INVISIBLE);
+            mBinding.listFabFolder.setVisibility(View.INVISIBLE);
         }
     }
 
     //Fab Clickable
     private void setClickable(boolean isFabOpened) {
-        mBinding.fabAdd.setClickable(!isFabOpened);
-        mBinding.fabFolder.setClickable(!isFabOpened);
+        mBinding.listFabAdd.setClickable(!isFabOpened);
+        mBinding.listFabFolder.setClickable(!isFabOpened);
     }
 
     //Add Folder Dialog
     private void showAddFolderDialog() {
         //Set Edit Text
         setEditText("");
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("Add Folder")
-                .setView(mEditTextBinding.getRoot())
-                .setNegativeButton("CANCEL", null)
+        MaterialAlertDialogBuilder builder = getDialogBuilder();
+        builder.setTitle("Add Folder")
                 .setPositiveButton("DONE", (dialog, which) -> {
                     int largestOrder = mModel.getLargestOrder();
                     largestOrder++;
@@ -173,11 +207,48 @@ public class ListFragment extends Fragment implements MainDragCallBack.StartDrag
                             mActivityModel.getCategory().getId(),
                             largestOrder,
                             0));
-                })
-                .setOnDismissListener(dialog -> {
-                    ((ViewGroup) mEditTextBinding.getRoot().getParent()).removeAllViews();
+                    Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "폴더 추가됨", BaseTransientBottomBar.LENGTH_LONG)
+                            .setAnchorView(R.id.list_fab_main)
+                            .setAction("Undo", v -> {
+                                ListFolder addedListFolder = mCurrentFolderList.get(mCurrentFolderList.size() - 1);
+                                mModel.deleteFolder(addedListFolder);
+                                showUndoConfirmSnackBar();
+                            }).show();
                 });
         builder.show();
+    }
+
+    private void showEditFolderDialog(ListFolder listFolder, int position) {
+        String oldFolderName = listFolder.getFolderName();
+        setEditText(listFolder.getFolderName());
+        getDialogBuilder()
+                .setTitle("Edit Folder")
+                .setPositiveButton("DONE", (dialog, which) -> {
+                    listFolder.setFolderName(mEditTextBinding.editTextDialog.getText().toString());
+                    mFolderAdapter.notifyItemChanged(position);
+                    mModel.updateFolder(listFolder);
+                    Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
+                            .setAnchorView(R.id.list_fab_main)
+                            .setAction("Undo", v -> {
+                                listFolder.setFolderName(oldFolderName);
+                                mFolderAdapter.notifyItemChanged(position);
+                                mModel.updateFolder(listFolder);
+                                showUndoConfirmSnackBar();
+                            }).show();
+                }).show();
+    }
+
+    private void showUndoConfirmSnackBar() {
+        Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "취소됨", BaseTransientBottomBar.LENGTH_LONG)
+                .setAnchorView(R.id.list_fab_main).show();
+    }
+
+    @NotNull
+    private MaterialAlertDialogBuilder getDialogBuilder() {
+        return new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+                .setView(mEditTextBinding.getRoot())
+                .setNegativeButton("CANCEL", null)
+                .setOnDismissListener(dialog -> ((ViewGroup) mEditTextBinding.getRoot().getParent()).removeAllViews());
     }
 
     private void setEditText(String setText) {

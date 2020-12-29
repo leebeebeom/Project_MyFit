@@ -14,6 +14,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/list_text_folders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
@@ -33,7 +34,7 @@
                 android:paddingHorizontal="@dimen/_8sdp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 tools:itemCount="5"
-                tools:listitem="@layout/item_list_folder" />
+                tools:listitem="@layout/item_list_recycler_folder" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_content"
@@ -45,11 +46,11 @@
                 android:overScrollMode="never"
                 android:paddingTop="@dimen/_8sdp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_list_fragment" />
+                tools:listitem="@layout/item_list_recycler" />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_main"
+            android:id="@+id/list_fab_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_16sdp"
@@ -62,31 +63,34 @@
             app:tint="?colorPrimary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_folder"
+            android:id="@+id/list_fab_folder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_52sdp"
+            android:layout_marginBottom="@dimen/_44sdp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:contentDescription="@string/add_folder"
             android:src="@drawable/icon_folder_add"
             app:backgroundTint="?colorControlNormal"
-            app:elevation="@dimen/_4sdp"
             app:fabSize="mini"
-            app:layout_anchor="@id/fab_main"
-            app:layout_anchorGravity="start"
+            android:visibility="invisible"
+            app:layout_anchor="@id/recycler_content"
+            app:layout_anchorGravity="start|bottom"
             app:tint="?colorPrimary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add"
+            android:id="@+id/list_fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_52sdp"
+            android:layout_marginBottom="@dimen/_44sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
             android:contentDescription="@string/add_content"
             android:src="@drawable/icon_add"
             app:backgroundTint="?colorControlNormal"
-            app:elevation="@dimen/_4sdp"
+            app:fabCustomSize="@dimen/_32sdp"
             app:fabSize="mini"
-            app:layout_anchor="@id/fab_main"
-            app:layout_anchorGravity="end"
+            android:visibility="invisible"
+            app:layout_anchor="@id/recycler_content"
+            app:layout_anchorGravity="end|bottom"
             app:tint="?colorPrimary" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

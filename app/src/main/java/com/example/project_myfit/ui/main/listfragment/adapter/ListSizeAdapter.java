@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.databinding.ItemListFragmentBinding;
+import com.example.project_myfit.databinding.ItemListRecyclerBinding;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class ListSizeAdapter extends RecyclerView.Adapter<ListSizeAdapter.SizeVH
     @NonNull
     @Override
     public SizeVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemListFragmentBinding binding = ItemListFragmentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemListRecyclerBinding binding = ItemListRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeVH(binding);
     }
 
@@ -37,9 +37,9 @@ public class ListSizeAdapter extends RecyclerView.Adapter<ListSizeAdapter.SizeVH
     }
 
     public static class SizeVH extends RecyclerView.ViewHolder {
-        ItemListFragmentBinding binding;
+        ItemListRecyclerBinding binding;
 
-        public SizeVH(ItemListFragmentBinding binding) {
+        public SizeVH(ItemListRecyclerBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

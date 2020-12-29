@@ -33,7 +33,9 @@ public class FolderDiffUtil extends DiffUtil.Callback {
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         ListFolder oldFolder = mOldFolderList.get(oldItemPosition);
-        ListFolder newFolder = mNewFolderList.get(oldItemPosition);
-        return oldFolder.getFolderName().equals(newFolder.getFolderName());
+        ListFolder newFolder = mNewFolderList.get(newItemPosition);
+        return oldFolder.getFolderName().equals(newFolder.getFolderName())
+                && oldFolder.getOrderNumberFolder() == newFolder.getOrderNumberFolder()
+                && oldFolder.getItemCount() == newFolder.getItemCount();
     }
 }

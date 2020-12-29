@@ -215,7 +215,7 @@ public class MainFragment extends Fragment {
                         Category addedCategory = mCurrentCategoryList.get(mCurrentCategoryList.size() - 1);
                         //Delete
                         mModel.delete(addedCategory);
-                        snackBarUndoConfirmed();
+                        showUndoConfirmSnackBar();
                     }).show();
         }).show();
     }
@@ -241,9 +241,10 @@ public class MainFragment extends Fragment {
                         category.setCategory(oldCategoryName);
                         mAdapter.notifyItemChanged(position);
                         mModel.update(category);
-                        snackBarUndoConfirmed();
+                        showUndoConfirmSnackBar();
                     }).show();
         }).show();
+
     }
 
     //Delete Dialog
@@ -264,7 +265,7 @@ public class MainFragment extends Fragment {
                             .setAction("Undo", v -> {
                                 mModel.insert(category);
                                 mModel.restoreDeletedSize();
-                                snackBarUndoConfirmed();
+                                showUndoConfirmSnackBar();
                             }).show();
                 });
         builder.show();
@@ -286,9 +287,8 @@ public class MainFragment extends Fragment {
         mDialogEditText.setPlaceHolder("ex)Short Sleeve");
     }
 
-
     //Undo Confirmed
-    private void snackBarUndoConfirmed() {
+    private void showUndoConfirmSnackBar() {
         Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "취소됨", BaseTransientBottomBar.LENGTH_SHORT)
                 .setAnchorView(R.id.main_fragment_fab)
                 .show();

@@ -1,7 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.example.project_myfit.databinding.ItemListFolderBinding;
+import com.example.project_myfit.databinding.ItemListRecyclerFolderBinding;
 import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
@@ -22,35 +21,32 @@ import java.util.List;
 public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> implements MainDragCallBack.DragFolderListener {
     private List<ListFolder> mFolderList;
     private MainDragCallBack.StartDragListener mListener;
-    private Context mContext;
     private ListViewModel mModel;
-    private static int mDefaultColor;
     private final ViewBinderHelper mBinderHelper = new ViewBinderHelper();
     private OnFolderClickListener mFolderListener;
 
     public interface OnFolderClickListener {
         void onItemClicked();
 
-        void onEditClicked();
+        void onEditClicked(ListFolder listFolder, int position);
 
-        void onDeleteClicked();
+        void onDeleteClicked(ListFolder listFolder);
     }
 
     public void setOnFolderClickListener(OnFolderClickListener listener) {
         mFolderListener = listener;
     }
 
-    public void setItem(List<ListFolder> listFolders, MainDragCallBack.StartDragListener listener, Context context, ListViewModel model) {
+    public void setItem(List<ListFolder> listFolders, MainDragCallBack.StartDragListener listener, ListViewModel model) {
         mFolderList = listFolders;
         mListener = listener;
-        mContext = context;
         mModel = model;
     }
 
     @NonNull
     @Override
     public ListFolderVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemListFolderBinding binding = ItemListFolderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemListRecyclerFolderBinding binding = ItemListRecyclerFolderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ListFolderVH(binding);
     }
 
@@ -68,8 +64,14 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
             return false;
         });
         holder.binding.cardView.setOnClickListener(v -> mFolderListener.onItemClicked());
-        holder.binding.editFolder.setOnClickListener(v -> mFolderListener.onEditClicked());
-        holder.binding.deleteFolder.setOnClickListener(v -> mFolderListener.onDeleteClicked());
+        holder.binding.editFolder.setOnClickListener(v -> {
+            mFolderListener.onEditClicked(mFolderList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+            holder.binding.listSwipeLayout.close(true);
+        });
+        holder.binding.deleteFolder.setOnClickListener(v -> {
+            mFolderListener.onDeleteClicked(mFolderList.get(holder.getAdapterPosition()));
+            holder.binding.listSwipeLayout.close(true);
+        });
     }
 
     @Override
@@ -115,12 +117,11 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
     }
 
     public static class ListFolderVH extends RecyclerView.ViewHolder {
-        ItemListFolderBinding binding;
+        ItemListRecyclerFolderBinding binding;
 
-        public ListFolderVH(ItemListFolderBinding binding) {
+        public ListFolderVH(ItemListRecyclerFolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            mDefaultColor = binding.cardView.getCardBackgroundColor().getDefaultColor();
         }
     }
 }
