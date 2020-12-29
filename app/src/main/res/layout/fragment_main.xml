@@ -7,13 +7,89 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="4"
-            tools:listitem="@layout/item_main_fragment_parent" />
+            android:orientation="vertical">
 
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/category"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold"
+                app:fontFamily="@font/sc_dream7" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_top"
+                    style="?materialButtonOutlinedStyle"
+                    android:layout_width="@dimen/_72sdp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/top"
+                    app:rippleColor="@android:color/transparent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_bottom"
+                    style="?materialButtonOutlinedStyle"
+                    android:layout_width="@dimen/_72sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="@string/bottom"
+                    app:rippleColor="@android:color/transparent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_outer"
+                    style="?materialButtonOutlinedStyle"
+                    android:layout_width="@dimen/_72sdp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/outer"
+                    app:rippleColor="@android:color/transparent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_etc"
+                    style="?materialButtonOutlinedStyle"
+                    android:layout_width="@dimen/_72sdp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/etc"
+                    app:rippleColor="@android:color/transparent" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/recycler_background"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_60sdp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_main_recycler" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/main_fragment_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:contentDescription="@string/floating_action_button"
+            android:src="@drawable/icon_add"
+            app:backgroundTint="?colorControlNormal"
+            app:elevation="@dimen/_4sdp"
+            app:layout_anchor="@id/recyclerView"
+            app:layout_anchorGravity="bottom|center"
+            app:tint="?colorPrimary" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

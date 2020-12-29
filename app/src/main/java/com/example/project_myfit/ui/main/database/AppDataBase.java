@@ -3,11 +3,9 @@ package com.example.project_myfit.ui.main.database;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.adapters.Converters;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
@@ -18,14 +16,8 @@ import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {ChildCategory.class, Size.class, ListFolder.class}, version = 2 , exportSchema = false)
+@Database(entities = {Category.class, Size.class, ListFolder.class}, version = 1, exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
-    public abstract CategoryDao categoryDao();
-
-    public abstract SizeDao sizeDao();
-
-    public abstract ListFolderDao listFolderDao();
-
     private static AppDataBase sInstance;
 
     public synchronized static AppDataBase getsInstance(Context context) {
@@ -35,28 +27,28 @@ public abstract class AppDataBase extends RoomDatabase {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
-                            List<ChildCategory> childCategoryList = new ArrayList<>();
-                            childCategoryList.add(new ChildCategory("Short Sleeve", "Top", 1));
-                            childCategoryList.add(new ChildCategory("Long Sleeve", "Top", 2));
-                            childCategoryList.add(new ChildCategory("Knit", "Top", 3));
-                            childCategoryList.add(new ChildCategory("Hood", "Top", 4));
-                            childCategoryList.add(new ChildCategory("Shirt", "Top", 5));
-                            childCategoryList.add(new ChildCategory("Jean", "Bottom", 6));
-                            childCategoryList.add(new ChildCategory("Slacks", "Bottom", 7));
-                            childCategoryList.add(new ChildCategory("Short Pant", "Bottom", 8));
-                            childCategoryList.add(new ChildCategory("Track Pant", "Bottom", 9));
-                            childCategoryList.add(new ChildCategory("Ma-1", "Outer", 10));
-                            childCategoryList.add(new ChildCategory("Shall Parka", "Outer", 11));
-                            childCategoryList.add(new ChildCategory("M65", "Outer", 12));
-                            childCategoryList.add(new ChildCategory("Hood Zip-Up", "Outer", 13));
-                            childCategoryList.add(new ChildCategory("Shoes", "ETC", 14));
-                            childCategoryList.add(new ChildCategory("Glass", "ETC", 15));
-                            childCategoryList.add(new ChildCategory("Necklace", "ETC", 16));
-                            childCategoryList.add(new ChildCategory("Ring", "ETC", 17));
+                            List<Category> categoryList = new ArrayList<>();
+                            categoryList.add(new Category("Short Sleeve", "TOP", 1));
+                            categoryList.add(new Category("Long Sleeve", "TOP", 2));
+                            categoryList.add(new Category("Knit", "TOP", 3));
+                            categoryList.add(new Category("Hood", "TOP", 4));
+                            categoryList.add(new Category("Shirt", "TOP", 5));
+                            categoryList.add(new Category("Jean", "BOTTOM", 1));
+                            categoryList.add(new Category("Slacks", "BOTTOM", 2));
+                            categoryList.add(new Category("Short Pant", "BOTTOM", 3));
+                            categoryList.add(new Category("Track Pant", "BOTTOM", 4));
+                            categoryList.add(new Category("Ma-1", "OUTER", 1));
+                            categoryList.add(new Category("Shall Parka", "OUTER", 2));
+                            categoryList.add(new Category("M65", "OUTER", 3));
+                            categoryList.add(new Category("Hood Zip-Up", "OUTER", 4));
+                            categoryList.add(new Category("Shoes", "ETC", 1));
+                            categoryList.add(new Category("Glass", "ETC", 2));
+                            categoryList.add(new Category("Necklace", "ETC", 3));
+                            categoryList.add(new Category("Ring", "ETC", 4));
                             //insert
                             new Thread(() -> {
-                                for (ChildCategory childCategory : childCategoryList) {
-                                    getsInstance(context).categoryDao().insert(childCategory);
+                                for (Category category : categoryList) {
+                                    getsInstance(context).categoryDao().insert(category);
                                 }
                             }).start();
                         }
@@ -66,4 +58,10 @@ public abstract class AppDataBase extends RoomDatabase {
         }
         return sInstance;
     }
+
+    public abstract CategoryDao categoryDao();
+
+    public abstract SizeDao sizeDao();
+
+    public abstract ListFolderDao listFolderDao();
 }

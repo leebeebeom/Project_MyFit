@@ -3,24 +3,19 @@ package com.example.project_myfit.ui.main.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.chad.library.adapter.base.entity.node.BaseNode;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 @Entity
-public class ChildCategory extends BaseNode {
+public class Category {
+    private final String parentCategory;
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int orderNumber;
-    private String childCategory;
-    private String parentCategory;
+    private String category;
 
 
-    public ChildCategory(@Nullable String childCategory, String parentCategory, int orderNumber) {
-        this.childCategory = childCategory;
+    public Category(String category, String parentCategory, int orderNumber) {
+        this.category = category;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
     }
@@ -33,12 +28,12 @@ public class ChildCategory extends BaseNode {
         this.id = id;
     }
 
-    public String getChildCategory() {
-        return childCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setChildCategory(String childCategory) {
-        this.childCategory = childCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getParentCategory() {
@@ -59,15 +54,8 @@ public class ChildCategory extends BaseNode {
         return "ChildCategory{" +
                 "id=" + id +
                 ", order=" + orderNumber +
-                ", childCategory='" + childCategory + '\'' +
+                ", childCategory='" + category + '\'' +
                 ", parentCategory='" + parentCategory + '\'' +
                 '}';
     }
-
-    @Nullable
-    @Override
-    public List<BaseNode> getChildNode() {
-        return null;
-    }
-
 }

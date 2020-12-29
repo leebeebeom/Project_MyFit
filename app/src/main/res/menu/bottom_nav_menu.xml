@@ -6,6 +6,13 @@
         android:icon="@drawable/icon_home"
         android:title="@string/main" />
     <item
+        android:id="@+id/allListFragment"
+        android:icon="@drawable/icon_all_list"
+        android:title="@string/all_list" />
+    <item
+        android:id="@+id/dummy_menu"
+        android:title="" />
+    <item
         android:id="@+id/favoriteFragment"
         android:icon="@drawable/icon_favorite"
         android:title="@string/favorite" />

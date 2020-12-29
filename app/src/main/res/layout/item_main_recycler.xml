@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="category"
+            type="com.example.project_myfit.ui.main.database.Category" />
+    </data>
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/main_swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dragEdge="right"
+        app:mode="normal">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/edit_icon"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:background="#008000"
+                android:scaleType="center"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:src="@drawable/icon_edit"
+                android:tint="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/delete_icon"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:background="#B00020"
+                android:scaleType="center"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:src="@drawable/icon_delete"
+                android:tint="@color/white" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/main_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginVertical="@dimen/_6sdp"
+                app:cardBackgroundColor="?colorPrimary"
+                app:cardCornerRadius="@dimen/_4sdp"
+                app:cardElevation="@dimen/_2sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:alpha="0.7"
+                    android:scaleX="0.3"
+                    android:scaleY="0.3"
+                    app:srcCompat="@drawable/icon_dot" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_22sdp"
+                    android:alpha="0.8"
+                    android:text="@{category.Category}"
+                    android:textSize="@dimen/_12sdp"
+                    app:fontFamily="@font/sc_dream4"
+                    tools:text="Short Sleeve" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:alpha="0.7"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    app:srcCompat="@drawable/icon_arrow" />
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+</layout>

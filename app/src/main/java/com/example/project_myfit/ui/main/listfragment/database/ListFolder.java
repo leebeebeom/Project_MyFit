@@ -3,13 +3,6 @@ package com.example.project_myfit.ui.main.listfragment.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.chad.library.adapter.base.entity.node.BaseExpandNode;
-import com.chad.library.adapter.base.entity.node.BaseNode;
-
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
 @Entity
 public class ListFolder {
     @PrimaryKey(autoGenerate = true)

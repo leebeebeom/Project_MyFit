@@ -1,5 +1,7 @@
 package com.example.project_myfit.ui.main;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -8,57 +10,47 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.entity.node.BaseNode;
-import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.module.BaseDraggableModule;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentMainBinding;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.ui.main.adapter.MainFragmentAdapter;
-import com.example.project_myfit.ui.main.database.ChildCategory;
-import com.example.project_myfit.ui.main.database.ParentCategory;
+import com.example.project_myfit.ui.main.adapter.CategoryAdapter;
+import com.example.project_myfit.ui.main.adapter.DragCallBack;
+import com.example.project_myfit.ui.main.database.Category;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
-public class MainFragment extends Fragment implements DragCallBack.DragStartListener {
+public class MainFragment extends Fragment {
+    public static final String TOP = "TOP";
+    public static final String BOTTOM = "BOTTOM";
+    public static final String OUTER = "OUTER";
+    public static final String ETC = "ETC";
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
-    private boolean mRefreshOn;
-    private boolean mAddRenewOn;
-    private MainFragmentAdapter mAdapter;
-    private ParentCategory addedParentCategory;
-    private List<ChildCategory> mCurrentChildList;
     private ItemDialogEditTextBinding mDialogEditText;
-    private boolean isLastPosition;
-    private ItemTouchHelper mItemTouchHelper;
+    private CategoryAdapter mAdapter;
+    private List<Category> mCurrentCategoryList;
+    private boolean mRefresh;
+    private String checkedCategory;
+    private LiveData<List<Category>> mLiveData;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //Binding
         mBinding = FragmentMainBinding.inflate(inflater);
         mDialogEditText = ItemDialogEditTextBinding.inflate(inflater);
-        //Set Custom View to ActionBar title
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        actionBar.setCustomView(R.layout.title_main);
         return mBinding.getRoot();
     }
 
@@ -67,36 +59,16 @@ public class MainFragment extends Fragment implements DragCallBack.DragStartList
         super.onActivityCreated(savedInstanceState);
         //Initialize
         init();
-        //Renew
-        mModel.getAllChild().observe(getViewLifecycleOwner(), childCategoryList -> {
-            //Set Current Child List
-            mCurrentChildList = childCategoryList;
-            //Set Largest Order
-            mModel.setLargestOrder();
-            //Refresh
-            if (mRefreshOn) {
-                mAdapter.setList(mModel.generateParent(childCategoryList));
-                mRefreshOn = false;
-            }
-            if (mAddRenewOn) {
-                //Add Renew
-                mAdapter.nodeAddData(addedParentCategory, childCategoryList.get(childCategoryList.size() - 1));
-                mAddRenewOn = false;
-            }
-            //for First Run
-            if (mModel.isFirstRun()) {
-                mAdapter.setList(mModel.generateParent(childCategoryList));
-            }
-            //if load is done
-            if (childCategoryList.size() == 17) {
-                mModel.setFirstRun(false);
-                mModel.setPreferences();
-            }
-        });
+        //Get Category
+        getCategory();
+        //Toggle View Setting
+        ColorStateList textOriginColor = mBinding.btnEtc.getTextColors();
+        setToggleGroup(textOriginColor);
+        if (checkedCategory == null) {
+            mBinding.btnTop.setChecked(true);
+        }
         //Click Listener
         setClickListener();
-        //Drag
-        setDrag();
     }
 
     //Initialize
@@ -105,226 +77,197 @@ public class MainFragment extends Fragment implements DragCallBack.DragStartList
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         //Activity View Model
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        //List Refresh On
-        mRefreshOn = true;
+        //RefreshOn
+        mRefresh = true;
         //Adapter
-        mAdapter = new MainFragmentAdapter(this);
+        mAdapter = new CategoryAdapter();
         //Recycler View
         mBinding.recyclerView.setHasFixedSize(true);
-        mBinding.recyclerView.setAdapter(mAdapter);
+        //ItemTouchHelper
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new DragCallBack(mAdapter));
+        touchHelper.attachToRecyclerView(mBinding.recyclerView);
     }
 
-    //Click Listener
-    private void setClickListener() {
-        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            // Add
-            if (view.getId() == R.id.add_icon) {
-                //Save Clicked Parent Category
-                //*Use at Renew
-                addedParentCategory = (ParentCategory) adapter.getItem(position);
-                //Show Add Dialog
-                showAddDialog(addedParentCategory);
-            }// Edit
-            else if (view.getId() == R.id.edit_icon) {
-                closeLayout(position);
-                //Casting
-                ChildCategory childCategory = (ChildCategory) adapter.getItem(position);
-                //Get Parent Category
-                ParentCategory parentCategory = (ParentCategory) mAdapter.getItem(mAdapter.findParentNode(position));
-                //Get Child Index
-                int childIndex = getChildIndex(childCategory, parentCategory);
-                //Show Edit Dialog
-                showEditDialog(childCategory, parentCategory, childIndex, position);
-            }// Delete
-            else if (view.getId() == R.id.delete_icon) {
-                closeLayout(position);
-                //Casting
-                ChildCategory childCategory = (ChildCategory) adapter.getItem(position);
-                //Get Parent Category
-                ParentCategory parentCategory = (ParentCategory) mAdapter.getItem(mAdapter.findParentNode(position));
-                //Get Child Index
-                int childIndex = getChildIndex(childCategory, parentCategory);
-                //Show Delete Dialog
-                showDeleteDialog(childCategory, parentCategory, childIndex, position);
-            } else if (view.getId() == R.id.item_child_root) {
-                //Clicked Child
-                ChildCategory childCategory = (ChildCategory) mAdapter.getItem(position);
-                mActivityModel.setChildCategory(childCategory);
-                Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_listFragment);
-            } else if (view.getId() == R.id.cardView) {
-                //Card View clickable disable
-                mAdapter.expandOrCollapse(position, true, true);
+    //Get Category
+    private void getCategory() {
+        mLiveData = mModel.getAllChild(checkedCategory);
+        mLiveData.observe(getViewLifecycleOwner(), categoryList -> {
+            mCurrentCategoryList = categoryList;
+            mModel.setLargestOrder(checkedCategory);
+            if (mRefresh) {
+                mAdapter.setItem(categoryList, mModel);
+                mBinding.recyclerView.setAdapter(mAdapter);
+                mRefresh = false;
+            } else {
+                mAdapter.updateDiffUtils(categoryList);
             }
         });
     }
 
-    private void closeLayout(int position) {
-        ((SwipeRevealLayout) mAdapter.getViewByPosition(position, R.id.swipeLayout)).close(true);
+    //Toggle Group Setting
+    private void setToggleGroup(ColorStateList textOriginColor) {
+        mBinding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            TypedValue typedValue = new TypedValue();
+            requireContext().getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+            int colorControl = typedValue.data;
+            requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            int colorPrimary = typedValue.data;
+            if (checkedId == mBinding.btnTop.getId()) {
+                checkedCategory = TOP;
+
+                mBinding.btnTop.setBackgroundColor(colorControl);
+                mBinding.btnTop.setTextColor(colorPrimary);
+
+                mBinding.btnBottom.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnBottom.setTextColor(textOriginColor);
+                mBinding.btnOuter.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnOuter.setTextColor(textOriginColor);
+                mBinding.btnEtc.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnEtc.setTextColor(textOriginColor);
+            } else if (checkedId == mBinding.btnBottom.getId()) {
+                checkedCategory = BOTTOM;
+
+                mBinding.btnBottom.setBackgroundColor(colorControl);
+                mBinding.btnBottom.setTextColor(colorPrimary);
+
+                mBinding.btnTop.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnTop.setTextColor(textOriginColor);
+                mBinding.btnOuter.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnOuter.setTextColor(textOriginColor);
+                mBinding.btnEtc.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnEtc.setTextColor(textOriginColor);
+            } else if (checkedId == mBinding.btnOuter.getId()) {
+                checkedCategory = OUTER;
+
+                mBinding.btnOuter.setBackgroundColor(colorControl);
+                mBinding.btnOuter.setTextColor(colorPrimary);
+
+                mBinding.btnTop.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnTop.setTextColor(textOriginColor);
+                mBinding.btnBottom.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnBottom.setTextColor(textOriginColor);
+                mBinding.btnEtc.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnEtc.setTextColor(textOriginColor);
+            } else if (checkedId == mBinding.btnEtc.getId()) {
+                checkedCategory = ETC;
+
+                mBinding.btnEtc.setBackgroundColor(colorControl);
+                mBinding.btnEtc.setTextColor(colorPrimary);
+
+                mBinding.btnTop.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnTop.setTextColor(textOriginColor);
+                mBinding.btnBottom.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnBottom.setTextColor(textOriginColor);
+                mBinding.btnOuter.setBackgroundColor(Color.TRANSPARENT);
+                mBinding.btnOuter.setTextColor(textOriginColor);
+
+            }
+            mRefresh = true;
+            if (mLiveData.hasObservers()) {
+                mLiveData.removeObservers(getViewLifecycleOwner());
+            }
+            getCategory();
+        });
     }
 
-    //Drag
-    private void setDrag() {
-        BaseDraggableModule draggableModule = new BaseDraggableModule(mAdapter);
-        draggableModule.setOnItemDragListener(onItemDragListener);
-        mItemTouchHelper = new ItemTouchHelper(new DragCallBack(draggableModule, mAdapter));
-        mItemTouchHelper.attachToRecyclerView(mBinding.recyclerView);
+    //Click Listener
+    private void setClickListener() {
+        mBinding.mainFragmentFab.setOnClickListener(v -> showAddDialog());
+        mAdapter.setOnCategoryClickListener(new CategoryAdapter.OnCategoryClickListener() {
+            @Override
+            public void onItemClick(Category category) {
+                mActivityModel.setCategory(category);
+                Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_listFragment);
+            }
+
+            @Override
+            public void onEditClick(Category category, int position) {
+                showEditDialog(category, position);
+            }
+
+            @Override
+            public void onDeleteClick(Category category) {
+                showDeleteDialog(category);
+            }
+        });
     }
 
     //Add Dialog
-    private void showAddDialog(ParentCategory addedParentCategory) {
+    private void showAddDialog() {
         setEditText("");
         //builder
-        MaterialAlertDialogBuilder builder = getDialogBuilder().setTitle("Add");
+        MaterialAlertDialogBuilder builder = getDialogBuilder().setTitle("Add Category");
         //DONE Clicked
         builder.setPositiveButton("DONE", (dialog, which) -> {
             //Get Largest Order
             int largestOrder = mModel.getLargestOrder();
             largestOrder++;
             //Create new ChildCategory
-            ChildCategory newChildCategory;
-            newChildCategory = new ChildCategory(mDialogEditText.editTextDialog.getText().toString(), addedParentCategory.getParentCategory(), largestOrder);
-            //insert
-            mAddRenewOn = true; // -> Renew
-            mModel.insert(newChildCategory);
+            Category newCategory = new Category(mDialogEditText.editTextDialog.getText().toString(), checkedCategory, largestOrder);
+            //Insert
+            mModel.insert(newCategory);
             //Snack Bar
             Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 추가됨", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAnchorView(R.id.bottom_nav)
+                    .setAnchorView(R.id.main_fragment_fab)
                     //Undo Clicked
                     .setAction("Undo", v -> {
                         //Last Added Data
-                        ChildCategory addedChildCategory = mCurrentChildList.get(mCurrentChildList.size() - 1);
-                        //Adapter Last Item(Parent or Child)
-                        BaseNode baseNode = mAdapter.getData().get(getLastPosition());
-                        if (baseNode instanceof ParentCategory) {
-                            //if baseNode is Parent
-                            mAdapter.nodeRemoveData(addedParentCategory, addedChildCategory);
-                        } else {
-                            //if baseNode is Child
-                            ChildCategory lastItem = (ChildCategory) baseNode;
-                            if (lastItem.getId() == addedChildCategory.getId()) {
-                                //if addedChildCategory is last item
-                                mRefreshOn = true; // Refresh
-                            } else {
-                                //if addedChildCategory is not last item
-                                mAdapter.nodeRemoveData(addedParentCategory, addedChildCategory);
-                            }
-                        }
-                        //delete
-                        mModel.delete(addedChildCategory);
-                        snackBarUndoConFirmed();
+                        Category addedCategory = mCurrentCategoryList.get(mCurrentCategoryList.size() - 1);
+                        //Delete
+                        mModel.delete(addedCategory);
+                        snackBarUndoConfirmed();
                     }).show();
         }).show();
     }
 
     //Edit Dialog
-    private void showEditDialog(ChildCategory childCategory, ParentCategory parentCategory, int childIndex, int position) {
+    private void showEditDialog(Category category, int position) {
         //Save oldChildCategory Name
-        String oldChildCategoryName = childCategory.getChildCategory();
-        //Edit Text
-        setEditText(oldChildCategoryName);
+        String oldCategoryName = category.getCategory();
+        //Edit Text Setting
+        setEditText(oldCategoryName);
         //Builder
-        MaterialAlertDialogBuilder builder = getDialogBuilder().setTitle("Edit");
+        MaterialAlertDialogBuilder builder = getDialogBuilder().setTitle("Edit Category");
         //DONE Clicked
         builder.setPositiveButton("DONE", (dialog, which) -> {
-            //childCategory = In Adapter
-            childCategory.setChildCategory(mDialogEditText.editTextDialog.getText().toString());
-            if (getLastPosition() == position) {
-                //if ChildCategory is Last
-                //Refresh
-                mRefreshOn = true;
-                isLastPosition = true;
-            } else {
-                //if Not
-                mAdapter.nodeSetData(parentCategory, childIndex, childCategory);
-                isLastPosition = false;
-            }
+            category.setCategory(mDialogEditText.editTextDialog.getText().toString());
+            mAdapter.notifyItemChanged(position);
             //Update
-            mModel.update(childCategory);
+            mModel.update(category);
             //Snack Bar
             Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAnchorView(R.id.bottom_nav)
-                    //Undo
+                    .setAnchorView(R.id.main_fragment_fab)
                     .setAction("Undo", v -> {
-                        //Old Child Category Name
-                        childCategory.setChildCategory(oldChildCategoryName);
-                        if (isLastPosition) {
-                            //if ChildCategory is Last
-                            //Refresh
-                            mRefreshOn = true;
-                        } else {
-                            //if Not
-                            mAdapter.nodeSetData(parentCategory, childIndex, childCategory);
-                        }
-                        //Update
-                        mModel.update(childCategory);
-                        //Undo Confirmed
-                        snackBarUndoConFirmed();
+                        category.setCategory(oldCategoryName);
+                        mAdapter.notifyItemChanged(position);
+                        mModel.update(category);
+                        snackBarUndoConfirmed();
                     }).show();
         }).show();
     }
 
     //Delete Dialog
-    private void showDeleteDialog(ChildCategory childCategory, ParentCategory parentCategory, int childIndex, int position) {
+    private void showDeleteDialog(Category category) {
         //To be Deleted SizeList
-        mModel.getAllSizeByFolder(childCategory.getId());
+        mModel.getAllSizeByFolder(category.getId());
         //Builder
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setTitle("Warning")
                 .setMessage("카테고리 안 모든 아이템이 삭제됩니다.\n삭제하시겠습니까?")
                 .setNegativeButton("CANCEL", null)
                 .setPositiveButton("DONE", (dialog, which) -> {
-                    if (getLastPosition() == position) {
-                        //if ChildCategory is Last
-                        //Refresh
-                        mRefreshOn = true;
-                        isLastPosition = true;
-                    } else {
-                        //if Not
-                        mAdapter.nodeRemoveData(parentCategory, childCategory);
-                        isLastPosition = false;
-                    }
-                    //Delete
-                    mModel.delete(childCategory);
-                    mModel.deleteSizeByFolder(childCategory.getId());
+                    mModel.delete(category);
+                    mModel.deleteSizeByFolder(category.getId());
                     //Snack Bar
                     Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
-                            .setAnchorView(R.id.bottom_nav)
-                            //Undo
+                            .setAnchorView(R.id.main_fragment_fab)
                             .setAction("Undo", v -> {
-                                if (isLastPosition) {
-                                    //if ChildCategory is Last
-                                    mRefreshOn = true;
-                                } else {
-                                    //if Not
-                                    mAdapter.nodeAddData(parentCategory, childIndex, childCategory);
-                                }
-                                //insert
-                                mModel.insert(childCategory);
+                                mModel.insert(category);
                                 mModel.restoreDeletedSize();
-                                //Undo ConFirmed
-                                snackBarUndoConFirmed();
+                                snackBarUndoConfirmed();
                             }).show();
                 });
         builder.show();
-    }
-
-    //Last Position
-    private int getLastPosition() {
-        return mAdapter.getData().size() - 1;
-    }
-
-
-    //getChildIndex
-    private int getChildIndex(ChildCategory childCategory, ParentCategory parentCategory) {
-        int childIndex = 0;
-        for (BaseNode child : parentCategory.getChildNode()) {
-            ChildCategory c = (ChildCategory) child;
-            if (c.getId() == childCategory.getId()) {
-                break;
-            }
-            childIndex++;
-        }
-        return childIndex;
     }
 
     //Get MaterialAlertDialogBuilder
@@ -336,94 +279,18 @@ public class MainFragment extends Fragment implements DragCallBack.DragStartList
                 .setOnDismissListener(dialog -> ((ViewGroup) mDialogEditText.getRoot().getParent()).removeAllViews());
     }
 
-    //Set Edit Text
+    //Edit Text Setting
     private void setEditText(String setText) {
         mDialogEditText.setHint("Category");
         mDialogEditText.setSetText(setText);
         mDialogEditText.setPlaceHolder("ex)Short Sleeve");
     }
 
+
     //Undo Confirmed
-    private void snackBarUndoConFirmed() {
+    private void snackBarUndoConfirmed() {
         Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "취소됨", BaseTransientBottomBar.LENGTH_SHORT)
-                .setAnchorView(R.id.bottom_nav)
+                .setAnchorView(R.id.main_fragment_fab)
                 .show();
-    }
-
-    //Drag Listener
-    private final OnItemDragListener onItemDragListener = new OnItemDragListener() {
-        @Override
-        public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
-            //Set Child Category background color
-            BaseViewHolder holder = (BaseViewHolder) viewHolder;
-            TypedValue typedValue = new TypedValue();
-            requireContext().getTheme().resolveAttribute(R.attr.childCategoryDragBackground, typedValue, true);
-            holder.getView(R.id.item_child_root).setBackgroundColor(typedValue.data);
-
-        }
-
-        @Override
-        public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
-            //If target is not parent
-            if (target.getItemViewType() != -1) {
-                ChildCategory sourceItem = (ChildCategory) mAdapter.getItem(to);
-                ChildCategory targetItem = (ChildCategory) mAdapter.getItem(from);
-                int sourceIndex = getIndex(sourceItem);
-                int targetIndex = getIndex(targetItem);
-                orderChange(sourceIndex, targetIndex);
-            }
-        }
-
-        @Override
-        public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-            //Clear Child Category background color
-            BaseViewHolder holder = (BaseViewHolder) viewHolder;
-            TypedValue typedValue = new TypedValue();
-            requireContext().getTheme().resolveAttribute(R.attr.childCategoryBackground, typedValue, true);
-            holder.getView(R.id.item_child_root).setBackgroundColor(typedValue.data);
-            //Order Update
-            mModel.updateOrder(mCurrentChildList);
-        }
-    };
-
-    //get Index
-    private int getIndex(ChildCategory childCategory) {
-        int index = 0;
-        for (ChildCategory c : mCurrentChildList) {
-            if (c.getId() == childCategory.getId()) {
-                break;
-            }
-            index++;
-        }
-        return index;
-    }
-
-    //Order Change
-    private void orderChange(int from, int to) {
-        //Dragging Down
-        if (from < to) {
-            for (int i = from; i < to; i++) {
-                Collections.swap(mCurrentChildList, i, i + 1);
-                int targetOrder = mCurrentChildList.get(i).getOrderNumber();
-                int sourceOrder = mCurrentChildList.get(i + 1).getOrderNumber();
-                mCurrentChildList.get(i).setOrderNumber(sourceOrder);
-                mCurrentChildList.get(i + 1).setOrderNumber(targetOrder);
-            }
-        }//Dragging Up
-        else {
-            for (int i = from; i > to; i--) {
-                Collections.swap(mCurrentChildList, i, i - 1);
-                int targetOrder = mCurrentChildList.get(i).getOrderNumber();
-                int sourceOrder = mCurrentChildList.get(i - 1).getOrderNumber();
-                mCurrentChildList.get(i).setOrderNumber(sourceOrder);
-                mCurrentChildList.get(i - 1).setOrderNumber(targetOrder);
-            }
-        }
-    }
-
-    //start Drag
-    @Override
-    public void startDrag(BaseViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
     }
 }

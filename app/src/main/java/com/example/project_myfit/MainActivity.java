@@ -24,13 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         //ToolBar
         setSupportActionBar(binding.toolbar);
-        //Title disable
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            //CustomView enable
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
-        }
-
 
         //Top Level Destination
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -44,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Connect Bottom Navigation with NavController
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
+
+        //Bottom Nav Setting
+        binding.bottomNav.setBackgroundTintList(null);
+        binding.bottomNav.getMenu().getItem(2).setEnabled(false);
     }
 
     //Up Button

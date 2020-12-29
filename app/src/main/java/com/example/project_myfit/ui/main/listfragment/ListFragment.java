@@ -1,41 +1,44 @@
 package com.example.project_myfit.ui.main.listfragment;
 
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentListBinding;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.databinding.TitleListBinding;
+import com.example.project_myfit.ui.main.adapter.DragCallBack;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListFolderAdapter;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListSizeAdapter;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements DragCallBack.StartDragListener {
 
     private ListViewModel mModel;
     private FragmentListBinding mBinding;
     private MainActivityViewModel mActivityModel;
     private Animation rotateOpen, rotateClose, fromBottomAdd, toBottomAdd, fromBottomFolder, toBottomAddFolder;
-    private boolean isFabOpened = false;
+    private boolean isFabOpened;
     private ListFolderAdapter mFolderAdapter;
     private ListSizeAdapter mSizeAdapter;
     private ItemDialogEditTextBinding mEditTextBinding;
+    private ItemTouchHelper mTouchHelperFolder;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,8 +47,6 @@ public class ListFragment extends Fragment {
         mBinding = FragmentListBinding.inflate(getLayoutInflater());
         //Activity View Model
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        //Set Title
-        setTitle();
         return mBinding.getRoot();
     }
 
@@ -66,28 +67,43 @@ public class ListFragment extends Fragment {
         //Add Folder Fab Clicked
         mBinding.fabFolder.setOnClickListener(v -> showAddFolderDialog());
         //Renew
-        mModel.getFolderList(mActivityModel.getChildCategory().getId()).observe(getViewLifecycleOwner(), listFolders -> {
-            mFolderAdapter.setItem(listFolders);
-            mBinding.recyclerViewFolder.setAdapter(mFolderAdapter);
-            mModel.setFolderLargestOrder(mActivityModel.getChildCategory().getId());
+        mModel.getFolderList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), listFolders -> {
+            mModel.setFolderLargestOrder(mActivityModel.getCategory().getId());
+            if (mModel.isFolderRefreshOn()) {
+                mFolderAdapter.setItem(listFolders, this, requireContext(), mModel);
+                mBinding.recyclerViewFolder.setAdapter(mFolderAdapter);
+                mModel.setFolderRefreshOn(false);
+            } else {
+                mFolderAdapter.updateDiffUtils(listFolders);
+            }
         });
-        mModel.getSizeList(mActivityModel.getChildCategory().getId()).observe(getViewLifecycleOwner(), sizeList -> {
+        mModel.getSizeList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), sizeList -> {
             mSizeAdapter.setItem(sizeList);
             mBinding.recyclerViewContent.setAdapter(mSizeAdapter);
         });
-    }
+//        mTouchHelperFolder = new ItemTouchHelper(new DragCallBack(mFolderAdapter));
+        mTouchHelperFolder.attachToRecyclerView(mBinding.recyclerViewFolder);
+        mFolderAdapter.setOnFolderClickListener(new ListFolderAdapter.OnFolderClickListener() {
+            @Override
+            public void onItemClicked() {
+            }
 
-    //Set Title
-    private void setTitle() {
-        TitleListBinding titleBinding = TitleListBinding.inflate(getLayoutInflater());
-        titleBinding.setChildCategory(mActivityModel.getChildCategory().getChildCategory());
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setCustomView(titleBinding.getRoot());
+            @Override
+            public void onEditClicked() {
+            }
+
+            @Override
+            public void onDeleteClicked() {
+            }
+        });
     }
 
     //Initialize
     private void init() {
         //View Model
         mModel = new ViewModelProvider(this).get(ListViewModel.class);
+        mModel.setFolderRefreshOn(true);
+        isFabOpened = false;
         //Edit Text
         mEditTextBinding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
         //Recycler View, Adapter
@@ -144,13 +160,15 @@ public class ListFragment extends Fragment {
                 .setView(mEditTextBinding.getRoot())
                 .setNegativeButton("CANCEL", null)
                 .setPositiveButton("DONE", (dialog, which) -> {
+                    int largestOrder = mModel.getLargestOrder();
+                    largestOrder++;
                     mModel.insertFolder(new ListFolder(mEditTextBinding.editTextDialog.getText().toString(),
-                            mActivityModel.getChildCategory().getId(),
-                            mModel.getLargestOrder(),
+                            mActivityModel.getCategory().getId(),
+                            largestOrder,
                             0));
                 })
                 .setOnDismissListener(dialog -> {
-                    ((ViewGroup)mEditTextBinding.getRoot().getParent()).removeAllViews();
+                    ((ViewGroup) mEditTextBinding.getRoot().getParent()).removeAllViews();
                 });
         builder.show();
     }
@@ -159,5 +177,14 @@ public class ListFragment extends Fragment {
         mEditTextBinding.setHint("Folder Name");
         mEditTextBinding.setPlaceHolder("ex)Nike, Adidas");
         mEditTextBinding.setSetText(setText);
+        mEditTextBinding.editTextDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEditTextBinding.editTextDialog.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+        mEditTextBinding.editTextDialog.setMaxLines(3);
+        mEditTextBinding.editTextLayoutDialog.setCounterMaxLength(30);
+    }
+
+    @Override
+    public void startDrag(RecyclerView.ViewHolder viewHolder) {
+        mTouchHelperFolder.startDrag(viewHolder);
     }
 }

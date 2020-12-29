@@ -11,17 +11,27 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_36sdp"
-            app:liftOnScroll="true">
+            android:layout_height="@dimen/_40sdp">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll"
-                app:titleTextAppearance="@style/myToolbarTitleStyle"
-                tools:title='MyFit' />
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textSize="@dimen/_26sdp"
+                    app:fontFamily="@font/ballet_harmony" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
+
+
         <!--behavior 정의하면 앱바랑 분리됨-->
         <fragment
             android:id="@+id/host_fragment"
@@ -31,18 +41,37 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph"
-            tools:layout="@layout/fragment_list" />
+            tools:layout="@layout/fragment_main" />
+
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_38sdp"
+            android:layout_gravity="bottom"
+            app:fabCradleMargin="@dimen/_6sdp" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
             android:layout_gravity="bottom"
+            android:background="@android:color/transparent"
             android:theme="@style/myBottomNav"
-            app:elevation="@dimen/_8sdp"
+            app:elevation="0dp"
             app:itemRippleColor="@android:color/transparent"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+            app:labelVisibilityMode="unlabeled"
             app:menu="@menu/bottom_nav_menu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:contentDescription="@string/floating_action_button"
+            app:backgroundTint="@android:color/transparent"
+            app:elevation="0dp"
+            app:layout_anchor="@id/bottom_app_bar" />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

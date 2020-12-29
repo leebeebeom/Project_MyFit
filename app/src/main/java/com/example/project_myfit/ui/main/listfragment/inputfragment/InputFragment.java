@@ -60,7 +60,7 @@ public class InputFragment extends Fragment {
         //타이틀 설정
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
         if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setTitle(mActivityModel.getChildCategory().getChildCategory());
+            activity.getSupportActionBar().setTitle(mActivityModel.getCategory().getCategory());
         } else {
             Log.d(TAG, "onViewCreated: 액션바 null");
         }
@@ -207,7 +207,7 @@ public class InputFragment extends Fragment {
             isFavorite = true;
         }
         //인서트
-        mModel.SizeInsert(new Size(dataMap, sizeMap, etcMap, isFavorite, mActivityModel.getChildCategory().getId(), 1));
+        mModel.SizeInsert(new Size(dataMap, sizeMap, etcMap, isFavorite, mActivityModel.getCategory().getId(), 1));
     }
 
     //다이얼로그

@@ -16,10 +16,8 @@
         <item name="colorOnError">#000000</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">#FF121212</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#FF282828</item>
         <!-- Customize your theme here. -->
-        <!--        Font-->
-        <item name="fontFamily">@font/font_ibm_plex_sans</item>
         <!--        Phone Navigation Bar Color-->
         <item name="android:navigationBarColor">@color/black</item>
         <!--        Menu Text Color-->
@@ -31,17 +29,14 @@
         <!--        Snack Bar Text Style-->
         <item name="snackbarTextViewStyle">@style/mySnackBarText</item>
         <!--        Snack Bar Action Style-->
-        <item name="snackbarButtonStyle">@style/mySnackBarButton</item>
+        <item name="snackbarButtonStyle">@style/mySnackBarAction</item>
         <!--        Snack Bar Style-->
         <item name="snackbarStyle">@style/mySnackBar</item>
         <!--        Child Category Text color-->
-<!--        <item name="childCategoryText">@color/childCategory_text_color_night</item>-->
-        <item name="childCategoryBackground">@color/childCategory_background_night</item>
-        <item name="fabColor">@color/fabColor_night</item>
-        <item name="fabChildTintColor">@color/fabChild_tint_color_night</item>
-        <item name="fabChildBackgroundColor">@color/fabChild_background_color_night</item>
-        <item name="childCategoryDragBackground">@color/childCategory_drag_background_night</item>
-        <item name="fabTint">@color/fab_tint_night</item>
+        <!--        <item name="childCategoryText">@color/childCategory_text_color_night</item>-->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="fontFamily">@font/sc_dream</item>
+        <item name="recyclerBackground">@color/recycler_background_night</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">

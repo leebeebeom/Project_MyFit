@@ -4,12 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.chad.library.adapter.base.entity.node.BaseNode;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Map;
 //TODO
 //카테고리 별 필요한 사이즈 정리

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -12,22 +11,22 @@ import java.util.List;
 
 @Dao
 public interface CategoryDao {
-    @Query("SELECT * FROM ChildCategory ORDER BY orderNumber")
-    LiveData<List<ChildCategory>> getAllChild();
+    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory ORDER BY orderNumber")
+    LiveData<List<Category>> getAllChild(String parentCategory);
 
-    @Query("SELECT max(orderNumber) FROM ChildCategory")
-    int getLargestOrder();
+    @Query("SELECT max(orderNumber) FROM Category WHERE parentCategory = :parentCategory")
+    int getLargestOrder(String parentCategory);
 
     @Insert
-    void insert(ChildCategory childCategory);
+    void insert(Category category);
 
     @Update
-    void update(ChildCategory childCategory);
+    void update(Category category);
 
     @Update
-    void updateOrder(List<ChildCategory> childCategoryList);
+    void updateOrder(List<Category> categoryList);
 
     @Delete
-    void delete(ChildCategory childCategory);
+    void delete(Category category);
 
 }

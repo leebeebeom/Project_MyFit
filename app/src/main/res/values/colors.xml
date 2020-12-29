@@ -4,21 +4,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gainsboro_gray">#FFDCDCDC</color>
-    <color name="dark_gray2">#FFA9A9A9</color>
-    <color name="deep_gray">#FF424242</color>
     <color name="light_gray">#FFCFCFCF</color>
     <color name="dark_gray">#FF222222</color>
-    <color name="black_olive">#FF3D3D3D</color>
-    <color name="childCategory_background">#FFF0F0F0</color>
-    <color name="childCategory_background_night">#FF191919</color>
-    <color name="childCategory_drag_background">#FFE0E0E0</color>
-    <color name="childCategory_drag_background_night">#FF282828</color>
-    <color name="fabColor">#FFF9F9F9</color>
-    <color name="fabColor_night">#FF282828</color>
-    <color name="fab_tint">#FF454545</color>
-    <color name="fab_tint_night">#FFDCDCDC</color>
-    <color name="fabChild_tint_color">#FFDCDCDC</color>
-    <color name="fabChild_tint_color_night">#FF454545</color>
-    <color name="fabChild_background_color">#FF202020</color>
-    <color name="fabChild_background_color_night">#FFF5F5F5</color>
+    <color name="recycler_background">#FFF0F0F0</color>
+    <color name="recycler_background_night">#FF282828</color>
 </resources>

@@ -27,4 +27,7 @@ public interface ListFolderDao {
     @Delete
     void Delete(ListFolder listFolder);
 
+    @Update
+    void updateOrder(List<ListFolder> folderList);
+
 }
