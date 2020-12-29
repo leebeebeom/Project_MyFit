@@ -1,32 +1,30 @@
-package com.example.project_myfit.ui.main.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.ui.main.listfragment.adapter.ListFolderAdapter;
+public class ListDragCallBack extends ItemTouchHelper.Callback {
+    private final ListFolderAdapter mListFolderAdapter;
 
-public class DragCallBack extends ItemTouchHelper.Callback {
-    private final CategoryAdapter mCategoryAdapter;
-
-    public DragCallBack(CategoryAdapter categoryAdapter) {
-        mCategoryAdapter = categoryAdapter;
+    public ListDragCallBack(ListFolderAdapter listFolderAdapter) {
+        mListFolderAdapter = listFolderAdapter;
     }
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+        return makeMovementFlags(ItemTouchHelper.START | ItemTouchHelper.END, 0);
     }
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        mCategoryAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        mListFolderAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
@@ -38,7 +36,7 @@ public class DragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        mCategoryAdapter.onItemDrop();
+        mListFolderAdapter.onItemDrop();
     }
 
     public interface DragFolderListener {

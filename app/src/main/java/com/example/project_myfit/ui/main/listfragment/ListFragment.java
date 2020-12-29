@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -21,14 +22,15 @@ import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentListBinding;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.ui.main.adapter.DragCallBack;
+import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
+import com.example.project_myfit.ui.main.listfragment.adapter.ListDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListFolderAdapter;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListSizeAdapter;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
-public class ListFragment extends Fragment implements DragCallBack.StartDragListener {
+public class ListFragment extends Fragment implements MainDragCallBack.StartDragListener {
 
     private ListViewModel mModel;
     private FragmentListBinding mBinding;
@@ -39,14 +41,17 @@ public class ListFragment extends Fragment implements DragCallBack.StartDragList
     private ListSizeAdapter mSizeAdapter;
     private ItemDialogEditTextBinding mEditTextBinding;
     private ItemTouchHelper mTouchHelperFolder;
+    private boolean mFolderRefresh;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //Binding
-        mBinding = FragmentListBinding.inflate(getLayoutInflater());
+        mBinding = FragmentListBinding.inflate(inflater);
         //Activity View Model
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        //Up Button Disable
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         return mBinding.getRoot();
     }
 
@@ -56,12 +61,12 @@ public class ListFragment extends Fragment implements DragCallBack.StartDragList
         //Initialize
         init();
         //Fab Animation
-        mBinding.fabMain.setOnClickListener(v -> {
-            setVisibility(isFabOpened);
-            setAnimation(isFabOpened);
-            setClickable(isFabOpened);
-            isFabOpened = !isFabOpened;
-        });
+//        mBinding.fabMain.setOnClickListener(v -> {
+//            setVisibility(isFabOpened);
+//            setAnimation(isFabOpened);
+//            setClickable(isFabOpened);
+//            isFabOpened = !isFabOpened;
+//        });
         //Add Fab Clicked
         mBinding.fabAdd.setOnClickListener(v -> Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputFragment));
         //Add Folder Fab Clicked
@@ -69,20 +74,20 @@ public class ListFragment extends Fragment implements DragCallBack.StartDragList
         //Renew
         mModel.getFolderList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), listFolders -> {
             mModel.setFolderLargestOrder(mActivityModel.getCategory().getId());
-            if (mModel.isFolderRefreshOn()) {
+            if (mFolderRefresh) {
                 mFolderAdapter.setItem(listFolders, this, requireContext(), mModel);
-                mBinding.recyclerViewFolder.setAdapter(mFolderAdapter);
-                mModel.setFolderRefreshOn(false);
+                mBinding.recyclerFolder.setAdapter(mFolderAdapter);
+                mFolderRefresh = false;
             } else {
                 mFolderAdapter.updateDiffUtils(listFolders);
             }
         });
         mModel.getSizeList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), sizeList -> {
             mSizeAdapter.setItem(sizeList);
-            mBinding.recyclerViewContent.setAdapter(mSizeAdapter);
+            mBinding.recyclerContent.setAdapter(mSizeAdapter);
         });
-//        mTouchHelperFolder = new ItemTouchHelper(new DragCallBack(mFolderAdapter));
-        mTouchHelperFolder.attachToRecyclerView(mBinding.recyclerViewFolder);
+        mTouchHelperFolder = new ItemTouchHelper(new ListDragCallBack(mFolderAdapter));
+        mTouchHelperFolder.attachToRecyclerView(mBinding.recyclerFolder);
         mFolderAdapter.setOnFolderClickListener(new ListFolderAdapter.OnFolderClickListener() {
             @Override
             public void onItemClicked() {
@@ -102,22 +107,24 @@ public class ListFragment extends Fragment implements DragCallBack.StartDragList
     private void init() {
         //View Model
         mModel = new ViewModelProvider(this).get(ListViewModel.class);
-        mModel.setFolderRefreshOn(true);
+        //Set Refresh
+        mFolderRefresh = true;
+        //Set Fab Open
         isFabOpened = false;
         //Edit Text
         mEditTextBinding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
         //Recycler View, Adapter
         mFolderAdapter = new ListFolderAdapter();
         mSizeAdapter = new ListSizeAdapter();
-        mBinding.recyclerViewFolder.setHasFixedSize(true);
-        mBinding.recyclerViewContent.setHasFixedSize(true);
+        mBinding.recyclerFolder.setHasFixedSize(true);
+        mBinding.recyclerContent.setHasFixedSize(true);
         //Fab Animation
-        rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
-        rotateClose = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close);
-        fromBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_from_bottom);
-        toBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_to_bottom);
-        fromBottomFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_from_bottom);
-        toBottomAddFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_to_bottom);
+//        rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
+//        rotateClose = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close);
+//        fromBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_from_bottom);
+//        toBottomAdd = AnimationUtils.loadAnimation(requireContext(), R.anim.add_to_bottom);
+//        fromBottomFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_from_bottom);
+//        toBottomAddFolder = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_to_bottom);
 
     }
 

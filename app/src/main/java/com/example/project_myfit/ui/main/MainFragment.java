@@ -21,7 +21,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentMainBinding;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.ui.main.adapter.CategoryAdapter;
-import com.example.project_myfit.ui.main.adapter.DragCallBack;
+import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
 import com.example.project_myfit.ui.main.database.Category;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -84,7 +84,7 @@ public class MainFragment extends Fragment {
         //Recycler View
         mBinding.recyclerView.setHasFixedSize(true);
         //ItemTouchHelper
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new DragCallBack(mAdapter));
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new MainDragCallBack(mAdapter));
         touchHelper.attachToRecyclerView(mBinding.recyclerView);
     }
 

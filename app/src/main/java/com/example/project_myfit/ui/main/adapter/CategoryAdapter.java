@@ -15,7 +15,7 @@ import com.example.project_myfit.ui.main.database.Category;
 import java.util.Collections;
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MainRecyclerVH> implements DragCallBack.DragFolderListener {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MainRecyclerVH> implements MainDragCallBack.DragFolderListener {
     private List<Category> mCategoryList;
     private OnCategoryClickListener mListener;
     private final ViewBinderHelper mViewBinderHelper = new ViewBinderHelper();

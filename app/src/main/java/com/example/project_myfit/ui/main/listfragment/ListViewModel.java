@@ -18,7 +18,6 @@ public class ListViewModel extends AndroidViewModel {
     private final SizeDao mSizeDao;
     private final ListFolderDao mListFolderDao;
     private int mFolderLargestOrder;
-    private boolean mFolderRefreshOn;
 
 
     public ListViewModel(@NonNull Application application) {
@@ -63,13 +62,5 @@ public class ListViewModel extends AndroidViewModel {
 
     public int getLargestOrder() {
         return mFolderLargestOrder;
-    }
-
-    public boolean isFolderRefreshOn() {
-        return mFolderRefreshOn;
-    }
-
-    public void setFolderRefreshOn(boolean mRefreshOn) {
-        this.mFolderRefreshOn = mRefreshOn;
     }
 }

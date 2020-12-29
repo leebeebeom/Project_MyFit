@@ -6,7 +6,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/_4sdp"
         tools:context=".ui.main.listfragment.ListFragment">
 
         <LinearLayout
@@ -14,22 +13,37 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_folder"
-                android:layout_width="match_parent"
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:itemCount="5"
-                tools:listitem="@layout/item_list_fragment_folder" />
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/folders"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold"
+                app:fontFamily="@font/sc_dream7" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_content"
+                android:id="@+id/recycler_folder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/_8sdp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_list_folder" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/recycler_background"
+                android:clipToPadding="false"
                 android:overScrollMode="never"
+                android:paddingTop="@dimen/_8sdp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_list_fragment" />
         </LinearLayout>
@@ -38,47 +52,41 @@
             android:id="@+id/fab_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
             android:contentDescription="@string/floating_action_button"
             android:src="@drawable/icon_add"
+            app:backgroundTint="?colorControlNormal"
             app:elevation="@dimen/_4sdp"
-            app:fabSize="normal"
-            app:layout_anchor="@id/recyclerView_content"
-            app:layout_anchorGravity="bottom|end"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-            app:rippleColor="@android:color/transparent" />
+            app:layout_anchor="@id/recycler_content"
+            app:layout_anchorGravity="center|bottom"
+            app:tint="?colorPrimary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_folder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/_50sdp"
-            android:layout_marginBottom="@dimen/_46sdp"
+            android:layout_marginBottom="@dimen/_52sdp"
             android:contentDescription="@string/add_folder"
             android:src="@drawable/icon_folder_add"
-            android:visibility="invisible"
-            app:elevation="@dimen/_2sdp"
+            app:backgroundTint="?colorControlNormal"
+            app:elevation="@dimen/_4sdp"
             app:fabSize="mini"
-            app:layout_anchor="@id/recyclerView_content"
-            app:layout_anchorGravity="bottom|end"
-            app:rippleColor="@android:color/transparent" />
+            app:layout_anchor="@id/fab_main"
+            app:layout_anchorGravity="start"
+            app:tint="?colorPrimary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_60sdp"
+            android:layout_marginBottom="@dimen/_52sdp"
             android:contentDescription="@string/add_content"
             android:src="@drawable/icon_add"
-            android:visibility="invisible"
-            app:elevation="@dimen/_2sdp"
+            app:backgroundTint="?colorControlNormal"
+            app:elevation="@dimen/_4sdp"
             app:fabSize="mini"
-            app:layout_anchor="@id/recyclerView_content"
-            app:layout_anchorGravity="bottom|end"
-            app:rippleColor="@android:color/transparent" />
-
+            app:layout_anchor="@id/fab_main"
+            app:layout_anchorGravity="end"
+            app:tint="?colorPrimary" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

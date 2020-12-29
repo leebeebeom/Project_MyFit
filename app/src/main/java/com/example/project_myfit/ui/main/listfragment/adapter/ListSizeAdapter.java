@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.databinding.ItemListFragmentBinding;
-import com.example.project_myfit.databinding.ItemListFragmentFolderBinding;
-import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
 import java.util.List;

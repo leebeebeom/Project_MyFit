@@ -19,33 +19,34 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_64sdp"
-            android:background="?android:colorBackground">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/edit_folder"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:layout_weight="1"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
+                android:background="#008000"
                 android:scaleType="center"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:tint="@color/white"
                 app:srcCompat="@drawable/icon_edit" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/delete_folder"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center|top"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
                 android:layout_weight="1"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
+                android:background="#B00020"
                 android:scaleType="center"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:tint="@color/white"
                 app:srcCompat="@drawable/icon_delete" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -56,7 +57,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView"
-                android:clickable="true"
                 android:layout_width="@dimen/_64sdp"
                 android:layout_height="@dimen/_64sdp"
                 android:layout_margin="@dimen/_4sdp"
@@ -64,7 +64,7 @@
                 app:cardElevation="@dimen/_4sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/drag_handle_folder"
+                    android:id="@+id/folder_drag_handle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|end"

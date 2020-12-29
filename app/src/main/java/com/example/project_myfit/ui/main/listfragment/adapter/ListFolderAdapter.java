@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.example.project_myfit.databinding.ItemListFragmentFolderBinding;
-import com.example.project_myfit.ui.main.adapter.DragCallBack;
+import com.example.project_myfit.databinding.ItemListFolderBinding;
+import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> implements DragCallBack.DragFolderListener {
+public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> implements MainDragCallBack.DragFolderListener {
     private List<ListFolder> mFolderList;
-    private DragCallBack.StartDragListener mListener;
+    private MainDragCallBack.StartDragListener mListener;
     private Context mContext;
     private ListViewModel mModel;
     private static int mDefaultColor;
@@ -40,7 +40,7 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
         mFolderListener = listener;
     }
 
-    public void setItem(List<ListFolder> listFolders, DragCallBack.StartDragListener listener, Context context, ListViewModel model) {
+    public void setItem(List<ListFolder> listFolders, MainDragCallBack.StartDragListener listener, Context context, ListViewModel model) {
         mFolderList = listFolders;
         mListener = listener;
         mContext = context;
@@ -50,7 +50,7 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
     @NonNull
     @Override
     public ListFolderVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemListFragmentFolderBinding binding = ItemListFragmentFolderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemListFolderBinding binding = ItemListFolderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ListFolderVH(binding);
     }
 
@@ -61,7 +61,7 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
         holder.binding.setListFolder(listFolder);
         mBinderHelper.bind(holder.binding.listSwipeLayout, String.valueOf(listFolder.getId()));
         mBinderHelper.setOpenOnlyOne(true);
-        holder.binding.dragHandleFolder.setOnTouchListener((v, event) -> {
+        holder.binding.folderDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mListener.startDrag(holder);
             }
@@ -111,14 +111,13 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
 
     @Override
     public void onItemDrop() {
-        mModel.setFolderRefreshOn(false);
         mModel.updateFolderOrder(mFolderList);
     }
 
     public static class ListFolderVH extends RecyclerView.ViewHolder {
-        ItemListFragmentFolderBinding binding;
+        ItemListFolderBinding binding;
 
-        public ListFolderVH(ItemListFragmentFolderBinding binding) {
+        public ListFolderVH(ItemListFolderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             mDefaultColor = binding.cardView.getCardBackgroundColor().getDefaultColor();
