@@ -6,71 +6,59 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/_100sdp"
         tools:context=".ui.main.listfragment.inputfragment.InputFragment">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_16sdp">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_280sdp"
+                android:layout_height="@dimen/_280sdp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_12sdp"
                 app:cardElevation="@dimen/_2sdp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/image"
-                        android:layout_width="@dimen/_280sdp"
-                        android:layout_height="@dimen/_280sdp"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/add_image_icon"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_gravity="center"
+                    android:alpha="0.2"
+                    android:clickable="false"
+                    android:src="@drawable/icon_add_image" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/add_icon"
-                        android:layout_width="@dimen/_280sdp"
-                        android:layout_height="@dimen/_280sdp"
-                        android:paddingHorizontal="@dimen/_100sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/icon_add_image"
-                        app:tint="@color/light_gray" />
-
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/checkbox_favorite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_4sdp"
-                        android:layout_marginEnd="5dp"
-                        android:button="@drawable/checkbox_star"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:scaleX="1.2"
-                        android:scaleY="1.2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkbox_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:alpha="0.8"
+                android:button="@drawable/checkbox_heart"
+                android:minWidth="0dp"
+                android:minHeight="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
                 android:theme="@style/myEditText"
-                app:shapeAppearance="@style/editTextCornerRounded">
+                app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/brand"
@@ -82,22 +70,19 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_4sdp"
                     android:layout_weight="3"
-                    android:paddingStart="@dimen/_16sdp"
-                    android:paddingEnd="@dimen/_4sdp"
-
                     android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded">
+                    app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name"
@@ -114,11 +99,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="@dimen/_4sdp"
-
-                    android:paddingEnd="@dimen/_16sdp"
                     android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded">
+                    app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/size"
@@ -126,149 +108,75 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/size"
                         android:imeOptions="actionNext"
-                        android:inputType="textCapCharacters"
-                        android:maxLength="1"
+                        android:inputType="text"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <LinearLayout
+            <ViewFlipper
+                android:id="@+id/input_view_flipper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/input_top_outer"
+                    layout="@layout/input_top_outer" />
+
+            </ViewFlipper>
+
+            <ViewFlipper
+                android:id="@+id/input_view_flipper_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/_12sdp"
-                android:paddingEnd="@dimen/_12sdp">
+                android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_4sdp"
-                    android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded"
-                    app:suffixText="cm">
+                <include
+                    android:id="@+id/input_bottom"
+                    layout="@layout/input_bottom" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/length"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/length"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <include
+                    android:id="@+id/input_etc"
+                    layout="@layout/input_etc" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_4sdp"
-                    android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded"
-                    app:suffixText="cm">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/shoulder"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/shoulder"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_4sdp"
-                    android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded"
-
-                    app:suffixText="cm">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/chest"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/chest"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_4sdp"
-                    android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded"
-
-                    app:suffixText="cm">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/sleeve"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/sleeve"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            </ViewFlipper>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/_16sdp"
                     android:theme="@style/myEditText"
-                    app:shapeAppearance="@style/editTextCornerRounded">
+                    app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/link"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoLink="web"
-                        android:textColorLink="?attr/colorControlNormal"
-                        android:linksClickable="true"
                         android:hint="@string/http"
                         android:imeOptions="actionNext"
                         android:inputType="textUri"
-                        android:maxLines="1" />
+                        android:linksClickable="true"
+                        android:maxLines="1"
+                        android:textColorLink="?attr/colorControlNormal" />
                 </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
                 android:theme="@style/myEditText"
-
-                app:shapeAppearance="@style/editTextCornerRounded">
+                app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/memo"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_320sdp"
+                    android:layout_height="@dimen/_420sdp"
                     android:gravity="top"
                     android:hint="@string/memo"
-                    android:imeOptions="actionDone" />
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine" />
 
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>
 </layout>

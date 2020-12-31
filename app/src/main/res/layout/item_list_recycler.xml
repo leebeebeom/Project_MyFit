@@ -67,7 +67,6 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/list_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
@@ -78,7 +77,6 @@
                         tools:text="Anderson Bell" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/list_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
@@ -88,8 +86,16 @@
                         android:textSize="@dimen/_11sdp"
                         app:fontFamily="@font/sc_dream5"
                         tools:text="DAMAGED CREW NECK SWEATER" />
-
                 </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/list_drag_handle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:alpha="0.8"
+                    app:srcCompat="@drawable/icon_drag_handle" />
             </com.google.android.material.card.MaterialCardView>
         </FrameLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>

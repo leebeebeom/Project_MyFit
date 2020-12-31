@@ -2,7 +2,6 @@ package com.example.project_myfit.ui.main.listfragment.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,19 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.project_myfit.databinding.ItemListRecyclerFolderBinding;
-import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> implements MainDragCallBack.DragFolderListener {
+public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> implements ListDragCallBack.DragFolderListener {
     private List<ListFolder> mFolderList;
-    private MainDragCallBack.StartDragListener mListener;
     private ListViewModel mModel;
     private final ViewBinderHelper mBinderHelper = new ViewBinderHelper();
-    private OnFolderClickListener mFolderListener;
+    private OnFolderClickListener mListener;
 
     public interface OnFolderClickListener {
         void onItemClicked();
@@ -34,12 +31,11 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
     }
 
     public void setOnFolderClickListener(OnFolderClickListener listener) {
-        mFolderListener = listener;
+        mListener = listener;
     }
 
-    public void setItem(List<ListFolder> listFolders, MainDragCallBack.StartDragListener listener, ListViewModel model) {
+    public void setItem(List<ListFolder> listFolders, ListViewModel model) {
         mFolderList = listFolders;
-        mListener = listener;
         mModel = model;
     }
 
@@ -57,19 +53,13 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
         holder.binding.setListFolder(listFolder);
         mBinderHelper.bind(holder.binding.listSwipeLayout, String.valueOf(listFolder.getId()));
         mBinderHelper.setOpenOnlyOne(true);
-        holder.binding.folderDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mListener.startDrag(holder);
-            }
-            return false;
-        });
-        holder.binding.cardView.setOnClickListener(v -> mFolderListener.onItemClicked());
+        holder.binding.cardView.setOnClickListener(v -> mListener.onItemClicked());
         holder.binding.editFolder.setOnClickListener(v -> {
-            mFolderListener.onEditClicked(mFolderList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+            mListener.onEditClicked(mFolderList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             holder.binding.listSwipeLayout.close(true);
         });
         holder.binding.deleteFolder.setOnClickListener(v -> {
-            mFolderListener.onDeleteClicked(mFolderList.get(holder.getAdapterPosition()));
+            mListener.onDeleteClicked(mFolderList.get(holder.getAdapterPosition()));
             holder.binding.listSwipeLayout.close(true);
         });
     }

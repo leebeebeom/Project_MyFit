@@ -3,26 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="category"
+            type="com.example.project_myfit.ui.main.database.Category" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.listfragment.ListFragment">
 
-        <LinearLayout
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/list_text_folders"
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/list_icon_home"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="@string/folders"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold"
-                app:fontFamily="@font/sc_dream7" />
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.8"
+                    app:srcCompat="@drawable/icon_home"
+                    app:tint="?colorControlNormal" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    app:srcCompat="@drawable/icon_arrow_forward"
+                    app:tint="?colorControlNormal" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/list_text_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:alpha="0.8"
+                    android:text="@{category.category}"
+                    android:textSize="@dimen/_10sdp"
+                    tools:text="Short Sleeve" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_folder"
@@ -47,32 +80,19 @@
                 android:paddingTop="@dimen/_8sdp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_list_recycler" />
-        </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/list_fab_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_16sdp"
-            android:contentDescription="@string/floating_action_button"
-            android:src="@drawable/icon_add"
-            app:backgroundTint="?colorControlNormal"
-            app:elevation="@dimen/_4sdp"
-            app:layout_anchor="@id/recycler_content"
-            app:layout_anchorGravity="center|bottom"
-            app:tint="?colorPrimary" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/list_fab_folder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_44sdp"
             android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_44sdp"
             android:contentDescription="@string/add_folder"
             android:src="@drawable/icon_folder_add"
+            android:visibility="invisible"
             app:backgroundTint="?colorControlNormal"
             app:fabSize="mini"
-            android:visibility="invisible"
             app:layout_anchor="@id/recycler_content"
             app:layout_anchorGravity="start|bottom"
             app:tint="?colorPrimary" />
@@ -81,14 +101,13 @@
             android:id="@+id/list_fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_44sdp"
             android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_44sdp"
             android:contentDescription="@string/add_content"
             android:src="@drawable/icon_add"
-            app:backgroundTint="?colorControlNormal"
-            app:fabCustomSize="@dimen/_32sdp"
-            app:fabSize="mini"
             android:visibility="invisible"
+            app:backgroundTint="?colorControlNormal"
+            app:fabSize="mini"
             app:layout_anchor="@id/recycler_content"
             app:layout_anchorGravity="end|bottom"
             app:tint="?colorPrimary" />

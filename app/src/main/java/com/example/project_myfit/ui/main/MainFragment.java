@@ -7,6 +7,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +47,7 @@ public class MainFragment extends Fragment {
     private boolean mRefresh;
     private String checkedCategory;
     private LiveData<List<Category>> mLiveData;
+    private Animation fabIn, fabOut;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -172,7 +175,8 @@ public class MainFragment extends Fragment {
 
     //Click Listener
     private void setClickListener() {
-        mBinding.mainFragmentFab.setOnClickListener(v -> showAddDialog());
+        requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> showAddDialog());
+//        mBinding.mainFragmentFab.setOnClickListener(v -> showAddDialog());
         mAdapter.setOnCategoryClickListener(new CategoryAdapter.OnCategoryClickListener() {
             @Override
             public void onItemClick(Category category) {
@@ -208,7 +212,7 @@ public class MainFragment extends Fragment {
             mModel.insert(newCategory);
             //Snack Bar
             Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 추가됨", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAnchorView(R.id.main_fragment_fab)
+                    .setAnchorView(R.id.activity_fab)
                     //Undo Clicked
                     .setAction("Undo", v -> {
                         //Last Added Data
@@ -236,7 +240,7 @@ public class MainFragment extends Fragment {
             mModel.update(category);
             //Snack Bar
             Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAnchorView(R.id.main_fragment_fab)
+                    .setAnchorView(R.id.activity_fab)
                     .setAction("Undo", v -> {
                         category.setCategory(oldCategoryName);
                         mAdapter.notifyItemChanged(position);
@@ -261,7 +265,7 @@ public class MainFragment extends Fragment {
                     mModel.deleteSizeByFolder(category.getId());
                     //Snack Bar
                     Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
-                            .setAnchorView(R.id.main_fragment_fab)
+                            .setAnchorView(R.id.activity_fab)
                             .setAction("Undo", v -> {
                                 mModel.insert(category);
                                 mModel.restoreDeletedSize();
@@ -290,7 +294,7 @@ public class MainFragment extends Fragment {
     //Undo Confirmed
     private void showUndoConfirmSnackBar() {
         Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "취소됨", BaseTransientBottomBar.LENGTH_SHORT)
-                .setAnchorView(R.id.main_fragment_fab)
+                .setAnchorView(R.id.activity_fab)
                 .show();
     }
 }

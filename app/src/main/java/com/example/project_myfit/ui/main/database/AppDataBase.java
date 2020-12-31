@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.project_myfit.ui.main.listfragment.database.Converters;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolderDao;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Database(entities = {Category.class, Size.class, ListFolder.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase sInstance;
 

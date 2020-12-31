@@ -1,10 +1,7 @@
 package com.example.project_myfit.ui.main.listfragment.database;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 //TODO
@@ -12,61 +9,32 @@ import java.util.Map;
 
 @Entity
 public class Size {
-    @Ignore
-    public static final String LENGTH = "length";
-    @Ignore
-    public static final String SHOULDER = "shoulder";
-    @Ignore
-    public static final String CHEST = "chest";
-    @Ignore
-    public static final String SLEEVE = "sleeve";
-    @Ignore
-    public static final String BRAND = "brand";
-    @Ignore
-    public static final String NAME = "name";
-    @Ignore
-    public static final String SIZE = "size";
-    @Ignore
-    public static final String LINK = "link";
-    @Ignore
-    public static final String MEMO = "memo";
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int orderNumberSize;
+    private String imageUri;
     private String brand;
     private String name;
     private String size;
-    private String length;
-    private String shoulder;
-    private String chest;
-    private String sleeve;
     private String link;
     private String memo;
     private int folderId;
+    private int inFolderId;
     private boolean isFavorite;
+    private Map<String, String> sizeMap;
 
-    public Size() {
-
-    }
-
-    public Size(Map<String, String> dataMap, Map<String, String> sizeMap, Map<String, String> etcMap, boolean isFavorite, int folderId, int orderNumberSize) {
-        this.brand = dataMap.getOrDefault(BRAND, "");
-        this.name = dataMap.getOrDefault(NAME, "");
-        this.size = dataMap.getOrDefault(SIZE, "");
-
-        this.length = sizeMap.getOrDefault(LENGTH, "");
-        this.shoulder = sizeMap.getOrDefault(CHEST, "");
-        this.chest = sizeMap.getOrDefault(SHOULDER, "");
-        this.sleeve = sizeMap.getOrDefault(SLEEVE, "");
-
-        this.link = etcMap.getOrDefault(LINK, "");
-        this.memo = etcMap.getOrDefault(MEMO, "");
-
-        this.isFavorite = isFavorite;
-        this.folderId = folderId;
-
+    public Size(int orderNumberSize, String imageUri, String brand, String name, String size, String link, String memo, int folderId, int inFolderId, boolean isFavorite, Map<String, String> sizeMap) {
         this.orderNumberSize = orderNumberSize;
-
+        this.imageUri = imageUri;
+        this.brand = brand;
+        this.name = name;
+        this.size = size;
+        this.link = link;
+        this.memo = memo;
+        this.folderId = folderId;
+        this.inFolderId = inFolderId;
+        this.isFavorite = isFavorite;
+        this.sizeMap = sizeMap;
     }
 
     public int getId() {
@@ -75,6 +43,22 @@ public class Size {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getOrderNumberSize() {
+        return orderNumberSize;
+    }
+
+    public void setOrderNumberSize(int orderNumberSize) {
+        this.orderNumberSize = orderNumberSize;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public String getBrand() {
@@ -101,46 +85,6 @@ public class Size {
         this.size = size;
     }
 
-    public String getLength() {
-        return length;
-    }
-
-    public void setLength(String length) {
-        this.length = length;
-    }
-
-    public String getShoulder() {
-        return shoulder;
-    }
-
-    public void setShoulder(String shoulder) {
-        this.shoulder = shoulder;
-    }
-
-    public String getChest() {
-        return chest;
-    }
-
-    public void setChest(String chest) {
-        this.chest = chest;
-    }
-
-    public String getSleeve() {
-        return sleeve;
-    }
-
-    public void setSleeve(String sleeve) {
-        this.sleeve = sleeve;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
-
     public String getLink() {
         return link;
     }
@@ -165,31 +109,28 @@ public class Size {
         this.folderId = folderId;
     }
 
-    public int getOrderNumberSize() {
-        return orderNumberSize;
+    public int getInFolderId() {
+        return inFolderId;
     }
 
-    public void setOrderNumberSize(int orderNumberSize) {
-        this.orderNumberSize = orderNumberSize;
+    public void setInFolderId(int inFolderId) {
+        this.inFolderId = inFolderId;
     }
 
-    @NotNull
-    @Override
-    public String toString() {
-        return "TopSize{" +
-                "id=" + id +
-                ", brandName='" + brand + '\'' +
-                ", name='" + name + '\'' +
-                ", size='" + size + '\'' +
-                ", length='" + length + '\'' +
-                ", shoulder='" + shoulder + '\'' +
-                ", chest='" + chest + '\'' +
-                ", sleeve='" + sleeve + '\'' +
-                ", link='" + link + '\'' +
-                ", memo='" + memo + '\'' +
-                ", folderId=" + folderId +
-                ", isFavorite=" + isFavorite +
-                '}';
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public Map<String, String> getSizeMap() {
+        return sizeMap;
+    }
+
+    public void setSizeMap(Map<String, String> sizeMap) {
+        this.sizeMap = sizeMap;
     }
 }
 

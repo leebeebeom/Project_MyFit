@@ -18,7 +18,7 @@ public class ListDragCallBack extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return false;
+        return true;
     }
 
     @Override
@@ -43,9 +43,5 @@ public class ListDragCallBack extends ItemTouchHelper.Callback {
         void onItemMove(int from, int to);
 
         void onItemDrop();
-    }
-
-    public interface StartDragListener {
-        void startDrag(RecyclerView.ViewHolder viewHolder);
     }
 }

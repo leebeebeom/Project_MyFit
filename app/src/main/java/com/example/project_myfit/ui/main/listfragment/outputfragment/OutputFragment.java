@@ -1,16 +1,15 @@
 package com.example.project_myfit.ui.main.listfragment.outputfragment;
 
-import androidx.lifecycle.ViewModelProvider;
-
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.databinding.FragmentInputBinding;
@@ -35,13 +34,10 @@ public class OutputFragment extends Fragment {
         MainActivityViewModel mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         //데이터 셋팅
         Size size = mActivityModel.getSize();
+        mBinding.image.setImageURI(Uri.parse(mActivityModel.getSize().getImageUri()));
         mBinding.brand.setText(size.getBrand());
         mBinding.name.setText(size.getName());
         mBinding.size.setText(size.getSize());
-        mBinding.length.setText(size.getLength());
-        mBinding.shoulder.setText(size.getShoulder());
-        mBinding.chest.setText(size.getShoulder());
-        mBinding.sleeve.setText(size.getSleeve());
         mBinding.link.setText(size.getLink());
         mBinding.memo.setText(size.getMemo());
     }

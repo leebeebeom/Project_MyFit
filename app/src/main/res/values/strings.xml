@@ -24,4 +24,14 @@
     <string name="all_list">All List</string>
     <string name="floating_action_button">Floating Action Button</string>
     <string name="folders">Folders</string>
+    <string name="waist">Waist</string>
+    <string name="thigh">Thigh</string>
+    <string name="rise">Rise</string>
+    <string name="hem">Hem</string>
+    <string name="option_1">Option 1</string>
+    <string name="option_2">Option 2</string>
+    <string name="option_3">Option 3</string>
+    <string name="option_4">Option 4</string>
+    <string name="option_5">Option 5</string>
+    <string name="option_6">Option 6</string>
 </resources>

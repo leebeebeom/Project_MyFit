@@ -5,15 +5,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
-    private NavController mNavController;
-    private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,33 +17,37 @@ public class MainActivity extends AppCompatActivity {
         //Binding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         //ToolBar
         setSupportActionBar(binding.toolbar);
 
-        //Top Level Destination
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
-
         //NavController
-        mNavController = Navigation.findNavController(this, R.id.host_fragment);
+        NavController navController = Navigation.findNavController(this, R.id.host_fragment);
 
-        //Action Bar Share
-        NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
+        //Top Level Destination
+//        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment)
+//                .build();
+//
+//        //Action Bar Share
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
         //Connect Bottom Navigation with NavController
-        NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
+        NavigationUI.setupWithNavController(binding.bottomNav, navController);
 
         //Bottom Nav Setting
         binding.bottomNav.setBackgroundTintList(null);
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
-    }
 
-    //Up Button
-    @Override
-    public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) ||
-                super.onSupportNavigateUp();
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.inputFragment) {
+                binding.activityFab.hide();
+                binding.activityFab.setImageResource(R.drawable.icon_check);
+                binding.activityFab.show();
+            } else {
+                binding.activityFab.hide();
+                binding.activityFab.setImageResource(R.drawable.icon_add);
+                binding.activityFab.show();
+            }
+        });
     }
-
 }

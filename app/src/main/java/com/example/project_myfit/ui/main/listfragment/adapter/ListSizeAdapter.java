@@ -12,10 +12,23 @@ import com.example.project_myfit.ui.main.listfragment.database.Size;
 import java.util.List;
 
 public class ListSizeAdapter extends RecyclerView.Adapter<ListSizeAdapter.SizeVH> {
-    List<Size> mItem;
+    private List<Size> mSizeList;
+    private OnSizeClickListener mListener;
 
     public void setItem(List<Size> sizeList) {
-        mItem = sizeList;
+        mSizeList = sizeList;
+    }
+
+    public interface OnSizeClickListener {
+        void onItemClick(Size size);
+
+        void onEditClick(Size size, int position);
+
+        void onDeleteClick(Size size);
+    }
+
+    public void setOnSizeClickListener(OnSizeClickListener listener) {
+        mListener = listener;
     }
 
     @NonNull
@@ -27,13 +40,16 @@ public class ListSizeAdapter extends RecyclerView.Adapter<ListSizeAdapter.SizeVH
 
     @Override
     public void onBindViewHolder(@NonNull SizeVH holder, int position) {
-        Size size = mItem.get(position);
+        Size size = mSizeList.get(position);
         holder.binding.setSize(size);
+        holder.binding.listCardView.setOnClickListener(v -> mListener.onItemClick(mSizeList.get(holder.getAdapterPosition())));
+        holder.binding.listEditIcon.setOnClickListener(v -> mListener.onEditClick(mSizeList.get(holder.getAdapterPosition()), position));
+        holder.binding.listDeleteIcon.setOnClickListener(v -> mListener.onDeleteClick(mSizeList.get(holder.getAdapterPosition())));
     }
 
     @Override
     public int getItemCount() {
-        return mItem.size();
+        return mSizeList.size();
     }
 
     public static class SizeVH extends RecyclerView.ViewHolder {

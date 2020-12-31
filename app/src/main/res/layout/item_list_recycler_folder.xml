@@ -63,15 +63,6 @@
                 app:cardCornerRadius="@dimen/_8sdp"
                 app:cardElevation="@dimen/_4sdp">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/folder_drag_handle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|end"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    app:srcCompat="@drawable/icon_drag_handle" />
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

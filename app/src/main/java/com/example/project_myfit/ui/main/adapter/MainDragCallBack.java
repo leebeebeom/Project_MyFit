@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.ui.main.listfragment.adapter.ListFolderAdapter;
-
 public class MainDragCallBack extends ItemTouchHelper.Callback {
     private final CategoryAdapter mCategoryAdapter;
 
@@ -45,9 +43,5 @@ public class MainDragCallBack extends ItemTouchHelper.Callback {
         void onItemMove(int from, int to);
 
         void onItemDrop();
-    }
-
-    public interface StartDragListener {
-        void startDrag(RecyclerView.ViewHolder viewHolder);
     }
 }

@@ -54,7 +54,7 @@
     </style>
     <!--    Edit Text Corner-->
     <!--    In fragment_input.xml-->
-    <style name="editTextCornerRounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+    <style name="myEditTextCorner" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>

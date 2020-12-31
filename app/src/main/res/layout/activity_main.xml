@@ -7,6 +7,7 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -31,8 +32,6 @@
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <!--behavior 정의하면 앱바랑 분리됨-->
         <fragment
             android:id="@+id/host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -41,7 +40,8 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph"
-            tools:layout="@layout/fragment_list" />
+            tools:layout="@layout/fragment_input" />
+        <!--behavior 정의하면 앱바랑 분리됨-->
 
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -49,6 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
             android:layout_gravity="bottom"
+            app:fabAlignmentMode="center"
+            app:fabAnimationMode="scale"
             app:fabCradleMargin="@dimen/_6sdp" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -64,13 +66,13 @@
             app:menu="@menu/bottom_nav_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/activity_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false"
             android:contentDescription="@string/floating_action_button"
-            app:backgroundTint="@android:color/transparent"
-            app:elevation="0dp"
-            app:layout_anchor="@id/bottom_app_bar" />
+            android:src="@drawable/icon_add"
+            app:layout_anchor="@id/bottom_app_bar"
+            app:tint="?colorPrimary" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
