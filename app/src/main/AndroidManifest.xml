@@ -28,4 +28,5 @@
             <action android:name="com.android.camera.action.CROP" />
         </intent>
     </queries>
+
 </manifest>

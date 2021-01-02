@@ -107,7 +107,7 @@ public class ListFragment extends Fragment {
             @Override
             public void onItemClick(Size size) {
                 mActivityModel.setSize(size);
-                Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_outputFragment);
+                Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputOutputFragment);
             }
 
             @Override
@@ -133,7 +133,7 @@ public class ListFragment extends Fragment {
         //Add Fab Clicked
         mBinding.listFabAdd.setOnClickListener(v -> {
             mActivityFab.performClick();
-            Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputFragment);
+            Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputOutputFragment);
         }); // TODO CIRCLE REVEAL
         //Add Folder Fab Clicked
         mBinding.listFabFolder.setOnClickListener(v -> {
@@ -165,6 +165,8 @@ public class ListFragment extends Fragment {
     private void init() {
         //Activity View Model ListFolder Initialize
         mActivityModel.setListFolder(null);
+        //Activity View Model Size Initialize
+        mActivityModel.setSize(null);
         //View Model
         mModel = new ViewModelProvider(this).get(ListViewModel.class);
         //Set Refresh

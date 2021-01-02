@@ -40,7 +40,7 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph"
-            tools:layout="@layout/fragment_input" />
+            tools:layout="@layout/fragment_input_output'" />
         <!--behavior 정의하면 앱바랑 분리됨-->
 
 

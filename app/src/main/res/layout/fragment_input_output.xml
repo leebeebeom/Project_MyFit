@@ -9,7 +9,7 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/_100sdp"
-        tools:context=".ui.main.listfragment.inputfragment.InputFragment">
+        tools:context=".ui.main.listfragment.inputoutputfragment.InputOutputFragment">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

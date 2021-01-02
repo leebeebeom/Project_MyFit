@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.inputFragment) {
+            if (destination.getId() == R.id.inputOutputFragment) {
                 binding.activityFab.hide();
                 binding.activityFab.setImageResource(R.drawable.icon_check);
                 binding.activityFab.show();
