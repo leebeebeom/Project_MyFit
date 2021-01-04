@@ -15,14 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentListBinding;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.ui.main.listfragment.adapter.ListDragCallBack;
+import com.example.project_myfit.ui.main.DragStartListener;
+import com.example.project_myfit.ui.main.listfragment.adapter.FolderDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListFolderAdapter;
 import com.example.project_myfit.ui.main.listfragment.adapter.ListSizeAdapter;
+import com.example.project_myfit.ui.main.listfragment.adapter.SizeDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -35,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements DragStartListener {
 
     private ListViewModel mModel;
     private FragmentListBinding mBinding;
@@ -48,6 +51,9 @@ public class ListFragment extends Fragment {
     private boolean mFolderRefresh;
     private List<ListFolder> mCurrentFolderList;
     private FloatingActionButton mActivityFab;
+    private ItemTouchHelper mTouchHelperSize;
+    private List<Size> mCurrentSizeList;
+    private boolean mSizeRefresh;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -79,14 +85,23 @@ public class ListFragment extends Fragment {
                 mFolderAdapter.updateDiffUtils(listFolders);
             }
         });
-        //Content Renew
+        //Size Renew
         mModel.getSizeList(mActivityModel.getCategory().getId()).observe(getViewLifecycleOwner(), sizeList -> {
-            mSizeAdapter.setItem(sizeList);
-            mBinding.recyclerContent.setAdapter(mSizeAdapter);
+            mCurrentSizeList = sizeList;
+            mModel.setSizeLargestOrder();
+            if (mSizeRefresh) {
+                mSizeAdapter.setItem(sizeList, mModel, this);
+                mBinding.recyclerSize.setAdapter(mSizeAdapter);
+                mSizeRefresh = false;
+            } else {
+                mSizeAdapter.updateDiffUtils(sizeList);
+            }
         });
         //Folder Touch Helper
-        ItemTouchHelper mTouchHelperFolder = new ItemTouchHelper(new ListDragCallBack(mFolderAdapter));
+        ItemTouchHelper mTouchHelperFolder = new ItemTouchHelper(new FolderDragCallBack(mFolderAdapter));
         mTouchHelperFolder.attachToRecyclerView(mBinding.recyclerFolder);
+        mTouchHelperSize = new ItemTouchHelper(new SizeDragCallBack(mSizeAdapter));
+        mTouchHelperSize.attachToRecyclerView(mBinding.recyclerSize);
         mFolderAdapter.setOnFolderClickListener(new ListFolderAdapter.OnFolderClickListener() {
             @Override
             public void onItemClicked() {
@@ -111,15 +126,18 @@ public class ListFragment extends Fragment {
             }
 
             @Override
-            public void onEditClick(Size size, int position) {
-
-            }
-
-            @Override
             public void onDeleteClick(Size size) {
-
+                showDeleteSizeDialog(size);
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (isFabOpened) {
+            mActivityFab.startAnimation(rotateClose);
+        }
     }
 
     private void setClickListener() {
@@ -134,7 +152,7 @@ public class ListFragment extends Fragment {
         mBinding.listFabAdd.setOnClickListener(v -> {
             mActivityFab.performClick();
             Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputOutputFragment);
-        }); // TODO CIRCLE REVEAL
+        });
         //Add Folder Fab Clicked
         mBinding.listFabFolder.setOnClickListener(v -> {
             mActivityFab.performClick();
@@ -161,6 +179,20 @@ public class ListFragment extends Fragment {
         builder.show();
     }
 
+    private void showDeleteSizeDialog(Size size) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+                .setTitle("확인")
+                .setMessage("삭제하시겠습니까?\n삭제 후 복구할 수 없습니다.")
+                .setNegativeButton("CANCEL", null)
+                .setPositiveButton("DONE", (dialog, which) -> {
+                    mModel.deleteSize(size);
+                    Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "삭제됨", BaseTransientBottomBar.LENGTH_LONG)
+                            .setAnchorView(mActivityFab)
+                            .show();
+                });
+        builder.show();
+    }
+
     //Initialize
     private void init() {
         //Activity View Model ListFolder Initialize
@@ -171,15 +203,16 @@ public class ListFragment extends Fragment {
         mModel = new ViewModelProvider(this).get(ListViewModel.class);
         //Set Refresh
         mFolderRefresh = true;
+        mSizeRefresh = true;
         //Set Fab Open
         isFabOpened = false;
         //Edit Text
         mEditTextBinding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
         //Recycler View, Adapter
         mFolderAdapter = new ListFolderAdapter();
-        mSizeAdapter = new ListSizeAdapter(); // TODO
+        mSizeAdapter = new ListSizeAdapter();
         mBinding.recyclerFolder.setHasFixedSize(true);
-        mBinding.recyclerContent.setHasFixedSize(true); //TODO
+        mBinding.recyclerSize.setHasFixedSize(true);
         //Fab Animation
         mActivityFab = requireActivity().findViewById(R.id.activity_fab);
         rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
@@ -227,7 +260,7 @@ public class ListFragment extends Fragment {
                 .setPositiveButton("DONE", (dialog, which) -> {
                     int largestOrder = mModel.getLargestOrder();
                     largestOrder++;
-                    mModel.insertFolder(new ListFolder(mEditTextBinding.editTextDialog.getText().toString(),
+                    mModel.insertFolder(new ListFolder(String.valueOf(mEditTextBinding.editTextDialog.getText()),
                             mActivityModel.getCategory().getId(),
                             largestOrder,
                             0));
@@ -248,7 +281,7 @@ public class ListFragment extends Fragment {
         getDialogBuilder()
                 .setTitle("Edit Folder")
                 .setPositiveButton("DONE", (dialog, which) -> {
-                    listFolder.setFolderName(mEditTextBinding.editTextDialog.getText().toString());
+                    listFolder.setFolderName(String.valueOf(mEditTextBinding.editTextDialog.getText()));
                     mFolderAdapter.notifyItemChanged(position);
                     mModel.updateFolder(listFolder);
                     Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
@@ -285,4 +318,8 @@ public class ListFragment extends Fragment {
         mEditTextBinding.editTextLayoutDialog.setCounterMaxLength(30);
     }
 
+    @Override
+    public void startDrag(RecyclerView.ViewHolder viewHolder) {
+        mTouchHelperSize.startDrag(viewHolder);
+    }
 }

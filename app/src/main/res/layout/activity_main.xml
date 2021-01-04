@@ -40,15 +40,17 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph"
-            tools:layout="@layout/fragment_input_output'" />
+            tools:layout="@layout/fragment_input_output" />
         <!--behavior 정의하면 앱바랑 분리됨-->
 
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_38sdp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_gravity="bottom"
+            app:backgroundTint="?colorPrimary"
+            app:elevation="@dimen/_4sdp"
             app:fabAlignmentMode="center"
             app:fabAnimationMode="scale"
             app:fabCradleMargin="@dimen/_6sdp" />
@@ -56,11 +58,12 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_38sdp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             android:theme="@style/myBottomNav"
             app:elevation="0dp"
+            app:itemIconSize="@dimen/_22sdp"
             app:itemRippleColor="@android:color/transparent"
             app:labelVisibilityMode="unlabeled"
             app:menu="@menu/bottom_nav_menu" />
@@ -71,6 +74,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/floating_action_button"
             android:src="@drawable/icon_add"
+            app:elevation="0dp"
             app:layout_anchor="@id/bottom_app_bar"
             app:tint="?colorPrimary" />
 

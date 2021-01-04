@@ -20,7 +20,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <!--        Phone Navigation Bar Color-->
-        <item name="android:navigationBarColor">@color/gainsboro_gray</item>
+        <item name="android:navigationBarColor">@color/white</item>
         <!--        Menu Text Color-->
         <item name="android:textColorSecondary">@android:color/black</item>
         <!--        Menu Text Style-->
@@ -38,6 +38,7 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="fontFamily">@font/sc_dream</item>
         <item name="recyclerBackground">@color/recycler_background</item>
+        <item name="go_button_color">@color/go_button_color</item>
     </style>
     )
     <!--    Tool Bar Title Style-->
@@ -92,4 +93,5 @@
     </style>
 
     <attr name="recyclerBackground" format="color" />
+    <attr name="go_button_color" format="color" />
 </resources>

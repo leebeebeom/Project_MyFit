@@ -70,7 +70,7 @@
                 tools:listitem="@layout/item_list_recycler_folder" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_content"
+                android:id="@+id/recycler_size"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_8sdp"
@@ -93,7 +93,7 @@
             android:visibility="invisible"
             app:backgroundTint="?colorControlNormal"
             app:fabSize="mini"
-            app:layout_anchor="@id/recycler_content"
+            app:layout_anchor="@id/recycler_size"
             app:layout_anchorGravity="start|bottom"
             app:tint="?colorPrimary" />
 
@@ -108,7 +108,7 @@
             android:visibility="invisible"
             app:backgroundTint="?colorControlNormal"
             app:fabSize="mini"
-            app:layout_anchor="@id/recycler_content"
+            app:layout_anchor="@id/recycler_size"
             app:layout_anchorGravity="end|bottom"
             app:tint="?colorPrimary" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,7 +16,7 @@ import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
 import java.util.Collections;
 import java.util.List;
 
-public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> implements ListDragCallBack.DragFolderListener {
+public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.ListFolderVH> {
     private List<ListFolder> mFolderList;
     private ListViewModel mModel;
     private final ViewBinderHelper mBinderHelper = new ViewBinderHelper();
@@ -69,7 +69,6 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
         return mFolderList.size();
     }
 
-    @Override
     public void onItemMove(int from, int to) {
         if (from < to) {
             for (int i = from; i < to; i++) {
@@ -101,7 +100,6 @@ public class ListFolderAdapter extends RecyclerView.Adapter<ListFolderAdapter.Li
         diffResult.dispatchUpdatesTo(this);
     }
 
-    @Override
     public void onItemDrop() {
         mModel.updateFolderOrder(mFolderList);
     }

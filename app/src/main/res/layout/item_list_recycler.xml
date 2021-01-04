@@ -11,6 +11,7 @@
     </data>
 
     <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/list_swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:dragEdge="right"
@@ -22,23 +23,12 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/list_edit_icon"
-                android:layout_width="@dimen/_28sdp"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:background="#008000"
-                android:scaleType="center"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                android:src="@drawable/icon_edit"
-                android:tint="@color/white" />
-
-            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/list_delete_icon"
-                android:layout_width="@dimen/_28sdp"
+                android:layout_width="@dimen/_22sdp"
                 android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
+
+                android:layout_marginVertical="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_22sdp"
                 android:background="#B00020"
                 android:scaleType="center"
                 android:scaleX="0.9"
@@ -57,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_12sdp"
-                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginVertical="@dimen/_2sdp"
                 app:cardBackgroundColor="?colorPrimary"
                 app:cardElevation="@dimen/_2sdp">
 

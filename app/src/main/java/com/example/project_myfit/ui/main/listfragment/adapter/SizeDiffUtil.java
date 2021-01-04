@@ -32,8 +32,6 @@ public class SizeDiffUtil extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        Size oldSize = mOldSizeList.get(oldItemPosition);
-        Size newSize = mOldSizeList.get(newItemPosition);
-        return false;
+        return true;
     }
 }

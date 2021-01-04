@@ -18,7 +18,7 @@ public interface SizeDao {
     @Query("SELECT * FROM Size WHERE folderId = :id ORDER BY orderNumberSize")
     LiveData<List<Size>> getAllSize(int id);
 
-    @Query("SELECT MAX(orderNumberFolder, orderNumberSize) FROM ListFolder, Size")
+    @Query("SELECT MAX(orderNumberSize) FROM Size")
     int getLargestOrder();
 
     @Insert
@@ -26,6 +26,9 @@ public interface SizeDao {
 
     @Update
     void update(Size size);
+
+    @Update
+    void updateOrder(List<Size> sizeList);
 
     @Delete
     void delete(Size size);
@@ -35,4 +38,7 @@ public interface SizeDao {
 
     @Insert
     void restoreDeletedSize(List<Size> sizes);
+
+    @Query("SELECT * FROM Size WHERE id = :id")
+    Size getSizeById(int id);
 }

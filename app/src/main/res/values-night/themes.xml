@@ -37,6 +37,7 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="fontFamily">@font/sc_dream</item>
         <item name="recyclerBackground">@color/recycler_background_night</item>
+        <item name="go_button_color">@color/go_button_color_night</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">

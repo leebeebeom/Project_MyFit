@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ListDragCallBack extends ItemTouchHelper.Callback {
+public class FolderDragCallBack extends ItemTouchHelper.Callback {
     private final ListFolderAdapter mListFolderAdapter;
 
-    public ListDragCallBack(ListFolderAdapter listFolderAdapter) {
+    public FolderDragCallBack(ListFolderAdapter listFolderAdapter) {
         mListFolderAdapter = listFolderAdapter;
     }
 
@@ -37,11 +37,5 @@ public class ListDragCallBack extends ItemTouchHelper.Callback {
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
         mListFolderAdapter.onItemDrop();
-    }
-
-    public interface DragFolderListener {
-        void onItemMove(int from, int to);
-
-        void onItemDrop();
     }
 }

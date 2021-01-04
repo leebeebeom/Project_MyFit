@@ -6,6 +6,7 @@ public class MyFitConstant {
     public static final String OUTER = "OUTER";
     public static final String ETC = "ETC";
     public static final String LENGTH = "length";
+    public static final String BOTTOM_LENGTH = "bottom_length";
     public static final String SHOULDER = "shoulder";
     public static final String CHEST = "chest";
     public static final String SLEEVE = "sleeve";

@@ -3,15 +3,16 @@ package com.example.project_myfit.ui.main.listfragment.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.HashMap;
 import java.util.Map;
-//TODO
-//카테고리 별 필요한 사이즈 정리
 
 @Entity
 public class Size {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int orderNumberSize;
+    private String createdTime;
+    private String modifiedTime;
     private String imageUri;
     private String brand;
     private String name;
@@ -23,8 +24,14 @@ public class Size {
     private boolean isFavorite;
     private Map<String, String> sizeMap;
 
-    public Size(int orderNumberSize, String imageUri, String brand, String name, String size, String link, String memo, int folderId, int inFolderId, boolean isFavorite, Map<String, String> sizeMap) {
+    public Size() {
+        sizeMap = new HashMap<>();
+    }
+
+    public Size(int orderNumberSize, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, int folderId, int inFolderId, boolean isFavorite, Map<String, String> sizeMap) {
         this.orderNumberSize = orderNumberSize;
+        this.createdTime = createdTime;
+        this.modifiedTime = modifiedTime;
         this.imageUri = imageUri;
         this.brand = brand;
         this.name = name;
@@ -131,6 +138,22 @@ public class Size {
 
     public void setSizeMap(Map<String, String> sizeMap) {
         this.sizeMap = sizeMap;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 }
 
