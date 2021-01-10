@@ -19,7 +19,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">#FF282828</item>
         <!-- Customize your theme here. -->
         <!--        Phone Navigation Bar Color-->
-        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:navigationBarColor">#FF2D2D2D</item>
         <!--        Menu Text Color-->
         <item name="android:textColorSecondary">@android:color/white</item>
         <!--        Menu Text Style-->
@@ -32,12 +32,16 @@
         <item name="snackbarButtonStyle">@style/mySnackBarAction</item>
         <!--        Snack Bar Style-->
         <item name="snackbarStyle">@style/mySnackBar</item>
-        <!--        Child Category Text color-->
-        <!--        <item name="childCategoryText">@color/childCategory_text_color_night</item>-->
+        <!--        ActionMode Close Button Gone-->
+        <item name="actionModeCloseButtonStyle">@style/myActionBarCloseButton</item>
+
         <item name="windowActionModeOverlay">true</item>
         <item name="fontFamily">@font/sc_dream</item>
         <item name="recyclerBackground">@color/recycler_background_night</item>
         <item name="go_button_color">@color/go_button_color_night</item>
+        <!--        ripple color remove-->
+        <item name="colorControlHighlight">@android:color/transparent</item>
+        <item name="myColorControl">@color/white</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">

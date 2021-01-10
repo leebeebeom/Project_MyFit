@@ -1,6 +1,7 @@
 package com.example.project_myfit.ui.main.listfragment.database;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.Map;
 public class Size {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private int orderNumberSize;
+    private int orderNumber;
     private String createdTime;
     private String modifiedTime;
     private String imageUri;
@@ -20,16 +21,17 @@ public class Size {
     private String link;
     private String memo;
     private int folderId;
-    private int inFolderId;
+    private long inFolderId;
     private boolean isFavorite;
     private Map<String, String> sizeMap;
 
+    @Ignore
     public Size() {
         sizeMap = new HashMap<>();
     }
 
-    public Size(int orderNumberSize, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, int folderId, int inFolderId, boolean isFavorite, Map<String, String> sizeMap) {
-        this.orderNumberSize = orderNumberSize;
+    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, int folderId, long inFolderId, boolean isFavorite, Map<String, String> sizeMap) {
+        this.orderNumber = orderNumber;
         this.createdTime = createdTime;
         this.modifiedTime = modifiedTime;
         this.imageUri = imageUri;
@@ -52,12 +54,28 @@ public class Size {
         this.id = id;
     }
 
-    public int getOrderNumberSize() {
-        return orderNumberSize;
+    public int getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrderNumberSize(int orderNumberSize) {
-        this.orderNumberSize = orderNumberSize;
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public String getImageUri() {
@@ -116,11 +134,11 @@ public class Size {
         this.folderId = folderId;
     }
 
-    public int getInFolderId() {
+    public long getInFolderId() {
         return inFolderId;
     }
 
-    public void setInFolderId(int inFolderId) {
+    public void setInFolderId(long inFolderId) {
         this.inFolderId = inFolderId;
     }
 
@@ -138,22 +156,6 @@ public class Size {
 
     public void setSizeMap(Map<String, String> sizeMap) {
         this.sizeMap = sizeMap;
-    }
-
-    public String getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(String modifiedTime) {
-        this.modifiedTime = modifiedTime;
     }
 }
 

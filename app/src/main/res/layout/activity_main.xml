@@ -11,25 +11,38 @@
         tools:context=".MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:contentInsetEnd="0dp"
-                app:contentInsetStart="0dp">
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:titleTextAppearance="@style/myActionBarTitleStyle">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/toolbar_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:text="Short Sleeve" />
+                </com.google.android.material.appbar.MaterialToolbar>
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:text="@string/app_name"
+                    android:textColor="?colorControlNormal"
                     android:textSize="@dimen/_26sdp"
                     app:fontFamily="@font/ballet_harmony" />
-
-            </com.google.android.material.appbar.MaterialToolbar>
+            </FrameLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <fragment
@@ -40,17 +53,14 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph"
-            tools:layout="@layout/fragment_input_output" />
-        <!--behavior 정의하면 앱바랑 분리됨-->
-
+            tools:layout="@layout/fragment_list" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_36sdp"
             android:layout_gravity="bottom"
-            app:backgroundTint="?colorPrimary"
-            app:elevation="@dimen/_4sdp"
+            app:elevation="@dimen/_6sdp"
             app:fabAlignmentMode="center"
             app:fabAnimationMode="scale"
             app:fabCradleMargin="@dimen/_6sdp" />

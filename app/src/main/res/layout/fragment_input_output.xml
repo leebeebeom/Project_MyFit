@@ -17,9 +17,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="@dimen/_68sdp"
+        android:background="?android:colorBackground"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="@dimen/_100sdp"
         tools:context=".ui.main.listfragment.inputoutputfragment.InputOutputFragment">
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -37,7 +38,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image"
-                    setUri="@{size.imageUri}"
+                    setUriOutput="@{size.imageUri}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -57,11 +58,11 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/time"
-                    android:visibility="gone"
+                    android:id="@+id/time_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
@@ -75,7 +76,7 @@
                             android:layout_marginTop="@dimen/_2sdp"
                             android:alpha="0.7"
                             android:text="@string/created_time"
-                            android:textSize="@dimen/_8sdp" />
+                            android:textSize="@dimen/_7sdp" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
@@ -84,7 +85,7 @@
                             android:layout_marginTop="@dimen/_2sdp"
                             android:alpha="0.7"
                             android:text="@{size.createdTime}"
-                            android:textSize="@dimen/_8sdp"
+                            android:textSize="@dimen/_7sdp"
                             tools:text=" 2021년 10월 14일 10:40:10" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -99,7 +100,7 @@
                             android:layout_marginStart="@dimen/_2sdp"
                             android:alpha="0.7"
                             android:text="@string/modified_time"
-                            android:textSize="@dimen/_8sdp" />
+                            android:textSize="@dimen/_7sdp" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
@@ -107,7 +108,7 @@
                             android:layout_gravity="start|top"
                             android:alpha="0.7"
                             android:text="@{size.modifiedTime}"
-                            android:textSize="@dimen/_8sdp"
+                            android:textSize="@dimen/_7sdp"
                             tools:text=" 2021년 10월 14일 10:40:10" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -141,7 +142,6 @@
                     android:hint="@string/brand"
                     android:imeOptions="actionNext"
                     android:inputType="text"
-                    android:maxLines="1"
                     android:text="@={size.brand}" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,7 +166,6 @@
                         android:hint="@string/name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:maxLines="1"
                         android:text="@={size.name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -185,7 +184,6 @@
                         android:hint="@string/size"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:maxLines="1"
                         android:text="@={size.size}" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -218,8 +216,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/length"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.LENGTH]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -238,8 +235,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/shoulder"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.SHOULDER]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -266,8 +262,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/chest"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.CHEST]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -286,8 +281,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/sleeve"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.SLEEVE]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -321,8 +315,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/length"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.BOTTOM_LENGTH]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -355,8 +348,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/waist"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.WAIST]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -375,8 +367,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/thigh"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.THIGH]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -403,8 +394,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/rise"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.RISE]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -423,8 +413,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/hem"
                             android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLines="1"
+                            android:inputType="numberDecimal"
                             android:text='@={size.sizeMap[constant.HEM]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -460,7 +449,6 @@
                             android:hint="@string/option_1"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1"
                             android:text='@={size.sizeMap[constant.OPTION1]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -479,7 +467,6 @@
                             android:hint="@string/option_2"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1"
                             android:text='@={size.sizeMap[constant.OPTION2]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -507,7 +494,6 @@
                             android:hint="@string/option_3"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1"
                             android:text='@={size.sizeMap[constant.OPTION3]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -526,7 +512,6 @@
                             android:hint="@string/option_4"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1"
                             android:text='@={size.sizeMap[constant.OPTION4]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -553,7 +538,6 @@
                             android:hint="@string/option_5"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1"
                             android:text='@={size.sizeMap[constant.OPTION5]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -572,7 +556,6 @@
                             android:hint="@string/option_6"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:maxLines="1"
                             android:text='@={size.sizeMap[constant.OPTION6]}' />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -602,7 +585,6 @@
                         android:imeOptions="actionNext"
                         android:inputType="textUri"
                         android:linksClickable="true"
-                        android:maxLines="1"
                         android:text="@={size.link}"
                         android:textColorLink="?attr/colorControlNormal" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -630,7 +612,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/memo"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_420sdp"
+                    android:layout_height="wrap_content"
                     android:gravity="top"
                     android:hint="@string/memo"
                     android:imeOptions="actionDone"

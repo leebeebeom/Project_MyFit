@@ -21,6 +21,7 @@
         <!-- Customize your theme here. -->
         <!--        Phone Navigation Bar Color-->
         <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
         <!--        Menu Text Color-->
         <item name="android:textColorSecondary">@android:color/black</item>
         <!--        Menu Text Style-->
@@ -33,12 +34,16 @@
         <item name="snackbarButtonStyle">@style/mySnackBarAction</item>
         <!--        Snack Bar Style-->
         <item name="snackbarStyle">@style/mySnackBar</item>
-        <!--        Child Category Text color-->
-        <!--        <item name="childCategoryText">@color/childCategory_text_color</item>-->
+        <!--        ActionMode Close Button Gone-->
+        <item name="actionModeCloseButtonStyle">@style/myActionBarCloseButton</item>
+
         <item name="windowActionModeOverlay">true</item>
         <item name="fontFamily">@font/sc_dream</item>
         <item name="recyclerBackground">@color/recycler_background</item>
         <item name="go_button_color">@color/go_button_color</item>
+        <!--        ripple color remove-->
+        <item name="colorControlHighlight">@android:color/transparent</item>
+        <item name="myColorControl">@color/black</item>
     </style>
     )
     <!--    Tool Bar Title Style-->
@@ -91,7 +96,16 @@
         <item name="android:paddingHorizontal">@dimen/_8sdp</item>
         <item name="actionTextColorAlpha">1</item>
     </style>
+    <!--    Action Bar Title Style-->
+    <style name="myActionBarTitleStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+    <!--    Action Mode Close Button-->
+    <style name="myActionBarCloseButton">
+        <item name="android:visibility">gone</item>
+    </style>
 
     <attr name="recyclerBackground" format="color" />
     <attr name="go_button_color" format="color" />
+    <attr name="myColorControl" format="color" />
 </resources>

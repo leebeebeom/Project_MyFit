@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/list_action_mode_move"
+        android:title="@string/move_korean"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/list_action_mode_del"
+        android:title="@string/delete_korean"
+        android:icon="@drawable/icon_delete"
+        app:showAsAction="ifRoom" />
+
+</menu>

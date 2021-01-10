@@ -15,10 +15,10 @@ public interface SizeDao {
     List<Size> getAllSizeByFolderNotLive(int id);
     //Use at Main Fragment Delete
 
-    @Query("SELECT * FROM Size WHERE folderId = :id ORDER BY orderNumberSize")
+    @Query("SELECT * FROM Size WHERE folderId = :id ORDER BY orderNumber")
     LiveData<List<Size>> getAllSize(int id);
 
-    @Query("SELECT MAX(orderNumberSize) FROM Size")
+    @Query("SELECT MAX(orderNumber) FROM Size")
     int getLargestOrder();
 
     @Insert
@@ -32,6 +32,9 @@ public interface SizeDao {
 
     @Delete
     void delete(Size size);
+
+    @Delete
+    void delete(List<Size> sizeList);
 
     @Query("DELETE FROM Size WHERE folderId = :id")
     void deleteSizeByFolder(int id);

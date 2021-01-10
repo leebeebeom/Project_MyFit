@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SizeDragCallBack extends ItemTouchHelper.Callback {
-    private ListSizeAdapter mAdapter;
+public class SizeDragCallBackGrid extends ItemTouchHelper.Callback {
+    private final SizeAdapterGrid mAdapter;
 
-    public SizeDragCallBack(ListSizeAdapter mAdapter) {
+    public SizeDragCallBackGrid(SizeAdapterGrid mAdapter) {
         this.mAdapter = mAdapter;
     }
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+        return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0);
     }
 
     @Override

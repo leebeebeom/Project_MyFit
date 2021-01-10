@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="size"
+            type="com.example.project_myfit.ui.main.listfragment.database.Size" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/grid_card_view"
+            android:layout_width="@dimen/_140sdp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_4sdp"
+            app:cardBackgroundColor="?colorPrimary"
+            app:cardCornerRadius="@dimen/_4sdp"
+            app:cardElevation="@dimen/_2sdp"
+            app:rippleColor="@android:color/transparent">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/grid_image"
+                        setUri="@{size.imageUri}"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_140sdp"
+                        android:layout_gravity="top"
+                        android:layout_marginTop="@dimen/_16sdp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/add_image_icon"
+                        setAddIcon="@{size.size}"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_gravity="center"
+                        android:alpha="0.2"
+                        android:clickable="false" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/grid_drag_handle"
+                        setDragHandle="@{size.size}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|top"
+                        android:layout_marginTop="-2dp"
+                        android:alpha="0.8"
+                        android:scaleX="0.7" />
+                </FrameLayout>
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start|bottom"
+                            android:layout_marginHorizontal="@dimen/_4sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:alpha="0.7"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{size.brand}"
+                            android:textSize="@dimen/_8sdp"
+                            tools:text="앤더슨벨" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginHorizontal="@dimen/_4sdp"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:alpha="0.8"
+                            android:text="@{size.name}"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/sc_dream5"
+                            tools:text="오버핏 반팔" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/grid_check_box"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="top|center"
+            android:layout_marginStart="-4dp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_60sdp"
+            android:alpha="0.8"
+            android:buttonTint="?colorControlNormal"
+            android:clickable="false"
+            android:elevation="@dimen/_3sdp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:visibility="gone" />
+    </FrameLayout>
+</layout>

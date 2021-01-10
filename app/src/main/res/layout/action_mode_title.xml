@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/action_mode_select_all"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:alpha="0.8"
+            android:buttonTint="?colorControlNormal"
+            android:scaleX="0.9"
+            android:scaleY="0.9" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/action_mode_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:textSize="@dimen/_12sdp"
+            tools:text="1개 선택됨" />
+    </LinearLayout>
+</layout>

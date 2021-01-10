@@ -1,37 +1,22 @@
 package com.example.project_myfit.ui.main.listfragment.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-public class SizeDiffUtil extends DiffUtil.Callback {
-    private List<Size> mOldSizeList;
-    private List<Size> mNewSizeList;
+public class SizeDiffUtil extends DiffUtil.ItemCallback<Size> {
+    @Override
+    public boolean areItemsTheSame(@NonNull @NotNull Size oldItem, @NonNull @NotNull Size newItem) {
+        return oldItem.getId() == newItem.getId();
 
-    public SizeDiffUtil(List<Size> oldSizeList, List<Size> newSizeList) {
-        mOldSizeList = oldSizeList;
-        mNewSizeList = newSizeList;
     }
 
     @Override
-    public int getOldListSize() {
-        return mOldSizeList.size();
-    }
-
-    @Override
-    public int getNewListSize() {
-        return mNewSizeList.size();
-    }
-
-    @Override
-    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return mOldSizeList.get(oldItemPosition).getId() == mNewSizeList.get(newItemPosition).getId();
-    }
-
-    @Override
-    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return true;
+    public boolean areContentsTheSame(@NonNull @NotNull Size oldItem, @NonNull @NotNull Size newItem) {
+        return String.valueOf(oldItem.getBrand()).equals(String.valueOf(newItem.getBrand())) &&
+                String.valueOf(oldItem.getName()).equals(String.valueOf(newItem.getName()));
     }
 }

@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FolderDragCallBack extends ItemTouchHelper.Callback {
-    private final ListFolderAdapter mListFolderAdapter;
+    private final FolderAdapter mFolderAdapter;
 
-    public FolderDragCallBack(ListFolderAdapter listFolderAdapter) {
-        mListFolderAdapter = listFolderAdapter;
+    public FolderDragCallBack(FolderAdapter listFolderAdapter) {
+        mFolderAdapter = listFolderAdapter;
     }
 
     @Override
@@ -18,13 +18,13 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        mListFolderAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        mFolderAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
@@ -36,6 +36,6 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        mListFolderAdapter.onItemDrop();
+        mFolderAdapter.onItemDrop();
     }
 }

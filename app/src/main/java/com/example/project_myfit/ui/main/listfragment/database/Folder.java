@@ -4,26 +4,27 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class ListFolder {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+public class Folder {
+    @PrimaryKey
+    private long id;
     private String folderName;
     private int folderId;
-    private int orderNumberFolder;
-    private int itemCount;
+    private int orderNumber;
+    private String itemAmount;
 
-    public ListFolder(String folderName, int folderId, int orderNumberFolder, int itemCount) {
+    public Folder(long id, String folderName, int folderId, int orderNumber, String itemAmount) {
+        this.id = id;
         this.folderName = folderName;
         this.folderId = folderId;
-        this.orderNumberFolder = orderNumberFolder;
-        this.itemCount = itemCount;
+        this.orderNumber = orderNumber;
+        this.itemAmount = itemAmount;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -44,20 +45,20 @@ public class ListFolder {
         this.folderId = folderId;
     }
 
-    public int getOrderNumberFolder() {
-        return orderNumberFolder;
+    public int getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrderNumberFolder(int orderNumberFolder) {
-        this.orderNumberFolder = orderNumberFolder;
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
-    public int getItemCount() {
-        return itemCount;
+    public String getItemAmount() {
+        return itemAmount;
     }
 
-    public void setItemCount(int itemCount) {
-        this.itemCount = itemCount;
+    public void setItemAmount(String itemAmount) {
+        this.itemAmount = itemAmount;
     }
 
     @Override
@@ -66,8 +67,8 @@ public class ListFolder {
                 "id=" + id +
                 ", folderName='" + folderName + '\'' +
                 ", folderId=" + folderId +
-                ", orderNumberFolder=" + orderNumberFolder +
-                ", itemCount=" + itemCount +
+                ", orderNumberFolder=" + orderNumber +
+                ", itemCount=" + itemAmount +
                 '}';
     }
 }

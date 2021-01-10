@@ -3,14 +3,14 @@ package com.example.project_myfit;
 import androidx.lifecycle.ViewModel;
 
 import com.example.project_myfit.ui.main.database.Category;
-import com.example.project_myfit.ui.main.listfragment.database.ListFolder;
+import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
 public class MainActivityViewModel extends ViewModel {
     //From MainFragment Clicked Item
     private Category category;
     //From ListFragment Clicked Item
-    private ListFolder listFolder;
+    private Folder folder;
     //From ListFragment Clicked Item
     private Size size;
 
@@ -30,11 +30,11 @@ public class MainActivityViewModel extends ViewModel {
         this.size = size;
     }
 
-    public ListFolder getListFolder() {
-        return listFolder;
+    public Folder getListFolder() {
+        return folder;
     }
 
-    public void setListFolder(ListFolder listFolder) {
-        this.listFolder = listFolder;
+    public void setListFolder(Folder folder) {
+        this.folder = folder;
     }
 }
