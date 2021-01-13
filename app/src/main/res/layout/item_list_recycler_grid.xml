@@ -58,7 +58,8 @@
                         android:layout_gravity="end|top"
                         android:layout_marginTop="-2dp"
                         android:alpha="0.8"
-                        android:scaleX="0.7" />
+                        android:scaleX="0.7"
+                        tools:src="@drawable/icon_drag_handle" />
                 </FrameLayout>
 
 

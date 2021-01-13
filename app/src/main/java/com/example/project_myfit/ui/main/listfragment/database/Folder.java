@@ -8,11 +8,12 @@ public class Folder {
     @PrimaryKey
     private long id;
     private String folderName;
-    private int folderId;
+    private long folderId;
     private int orderNumber;
     private String itemAmount;
+    private boolean isDeleted;
 
-    public Folder(long id, String folderName, int folderId, int orderNumber, String itemAmount) {
+    public Folder(long id, String folderName, long folderId, int orderNumber, String itemAmount) {
         this.id = id;
         this.folderName = folderName;
         this.folderId = folderId;
@@ -37,11 +38,11 @@ public class Folder {
     }
 
 
-    public int getFolderId() {
+    public long getFolderId() {
         return folderId;
     }
 
-    public void setFolderId(int folderId) {
+    public void setFolderId(long folderId) {
         this.folderId = folderId;
     }
 
@@ -61,14 +62,23 @@ public class Folder {
         this.itemAmount = itemAmount;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
-        return "ListFolder{" +
+        return "Folder{" +
                 "id=" + id +
                 ", folderName='" + folderName + '\'' +
                 ", folderId=" + folderId +
-                ", orderNumberFolder=" + orderNumber +
-                ", itemCount=" + itemAmount +
+                ", orderNumber=" + orderNumber +
+                ", itemAmount='" + itemAmount + '\'' +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

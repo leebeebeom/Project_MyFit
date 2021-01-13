@@ -50,13 +50,13 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     //Get Size List By Folder Id
-    public void getAllSizeByFolder(int id) {
-        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolderNotLive(id)).start();
+    public void getAllSizeByFolder(long folderId) {
+        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolderNotLive(folderId)).start();
     }
 
     //Delete Size List By Folder Id
-    public void deleteSizeByFolder(int id) {
-        new Thread(() -> mSizeDao.deleteSizeByFolder(id)).start();
+    public void deleteSizeByFolder(long folderId) {
+        new Thread(() -> mSizeDao.deleteSizeByFolder(folderId)).start();
     }
 
     //Restore Deleted Size List
@@ -66,7 +66,7 @@ public class MainViewModel extends AndroidViewModel {
 
     //Get All Category
     public LiveData<List<Category>> getAllChild(String parentCategory) {
-        return mCategoryDao.getAllChild(parentCategory);
+        return mCategoryDao.getAllCategory(parentCategory);
     }
 
     //Get Largest Order Number

@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -11,7 +11,6 @@ public class SizeDiffUtil extends DiffUtil.ItemCallback<Size> {
     @Override
     public boolean areItemsTheSame(@NonNull @NotNull Size oldItem, @NonNull @NotNull Size newItem) {
         return oldItem.getId() == newItem.getId();
-
     }
 
     @Override

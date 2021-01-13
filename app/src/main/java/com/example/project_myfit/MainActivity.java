@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
+    private MainActivityViewModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         //Binding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         //ToolBar
         setSupportActionBar(binding.toolbar);
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.activityFab.show();
                 binding.toolbarTitle.setVisibility(View.VISIBLE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
+                if (mModel.getFolderList().size() != 0)
+                    mModel.getFolderList().clear();
             }
         });
     }
@@ -73,5 +79,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mModel.getFolderList().size() != 0)
+            mModel.getFolderList().remove(mModel.getFolderList().size() - 1);
+        super.onBackPressed();
     }
 }

@@ -31,7 +31,7 @@
         <!--        Snack Bar Action Style-->
         <item name="snackbarButtonStyle">@style/mySnackBarAction</item>
         <!--        Snack Bar Style-->
-        <item name="snackbarStyle">@style/mySnackBar</item>
+        <item name="snackbarStyle">@style/mySnackBarNight</item>
         <!--        ActionMode Close Button Gone-->
         <item name="actionModeCloseButtonStyle">@style/myActionBarCloseButton</item>
 
@@ -42,13 +42,13 @@
         <!--        ripple color remove-->
         <item name="colorControlHighlight">@android:color/transparent</item>
         <item name="myColorControl">@color/white</item>
+        <item name="treeViewBackgroundColor">#FF424242</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
     </style>
     <!--    Alert Dialog Style-->
-    <!--    In MainFragment.java-->
     <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/white</item>
         <item name="android:textColor">@color/white</item>
@@ -57,5 +57,11 @@
     <!--    In fragment_input.xml-->
     <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/white</item>
+    </style>
+    <!--    Snack Bar Style-->
+    <style name="mySnackBarNight" parent="Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">#FF484848</item>
+        <item name="android:paddingHorizontal">@dimen/_8sdp</item>
+        <item name="actionTextColorAlpha">1</item>
     </style>
 </resources>

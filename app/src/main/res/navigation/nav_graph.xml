@@ -47,10 +47,10 @@
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_listFragment_to_inFolderFragment"
-            app:destination="@id/inFolderFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fragment_fade_exit"
+            android:id="@+id/action_listFragment_refresh"
+            app:destination="@id/listFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/slide_out"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/slide_out" />
     </fragment>
@@ -72,18 +72,4 @@
         android:id="@+id/mainActivity"
         android:name="com.example.project_myfit.MainActivity"
         android:label="MainActivity" />
-    <fragment
-        android:id="@+id/inFolderFragment"
-        android:name="com.example.project_myfit.ui.main.listfragment.infolderfragment.inFolderFragment"
-        tools:layout="@layout/fragment_list">
-        <action
-            android:id="@+id/action_inFolderFragment_to_listFragment"
-            app:destination="@id/listFragment"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/slide_out"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/slide_out"
-            app:popUpTo="@id/listFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
 </navigation>

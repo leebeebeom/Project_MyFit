@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class Category {
     private final String parentCategory;
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private int orderNumber;
     private String category;
 
@@ -20,11 +20,11 @@ public class Category {
         this.orderNumber = orderNumber;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

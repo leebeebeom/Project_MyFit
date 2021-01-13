@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 

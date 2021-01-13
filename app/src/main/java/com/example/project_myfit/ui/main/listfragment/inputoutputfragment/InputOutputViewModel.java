@@ -2,6 +2,8 @@ package com.example.project_myfit.ui.main.listfragment.inputoutputfragment;
 
 import android.app.Application;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -9,9 +11,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.project_myfit.BuildConfig;
 import com.example.project_myfit.ui.main.database.AppDataBase;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
@@ -20,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
@@ -50,12 +55,21 @@ public class InputOutputViewModel extends AndroidViewModel {
         mCacheFile = new File(getApplication().getExternalCacheDir(), mFileName);
 
         //intent
-        Uri uri = Uri.fromFile(mCacheFile);
+//        Uri uri = Uri.fromFile(mCacheFile); <- No
+        Uri uri = FileProvider.getUriForFile(getApplication().getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", mCacheFile);
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(data, "image/*")
+                .setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 .putExtra("aspectX", 1)
                 .putExtra("aspectY", 1)
                 .putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        List<ResolveInfo> resolveInfoList = getApplication().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            getApplication().grantUriPermission(packageName, uri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
         return intent;
     }
 
@@ -80,6 +94,7 @@ public class InputOutputViewModel extends AndroidViewModel {
             else Log.d(TAG, "outputFabClick: file delete fail");
         } else if (mCacheFileUri != null) {
             //user replaces with a new image
+            //file move cache folder to picture folder
             File pictureFolderPath = new File(getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), mFileName);
             mSavedFileUri = Uri.fromFile(pictureFolderPath);
             if (mCacheFile.renameTo(pictureFolderPath))
@@ -111,8 +126,9 @@ public class InputOutputViewModel extends AndroidViewModel {
         new Thread(() -> mSizeDao.update(size)).start();
     }
 
-    public void delete(Size size) {
-        new Thread(() -> mSizeDao.delete(size)).start();
+    public void delete() {
+        mSize.setDeleted(true);
+        new Thread(() -> mSizeDao.update(mSize)).start();
     }
     //----------------------------------------------------------------------------------------------
 

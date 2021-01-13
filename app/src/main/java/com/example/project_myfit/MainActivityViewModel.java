@@ -6,12 +6,12 @@ import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivityViewModel extends ViewModel {
-    //From MainFragment Clicked Item
     private Category category;
-    //From ListFragment Clicked Item
-    private Folder folder;
-    //From ListFragment Clicked Item
+    private final List<Folder> folderList = new ArrayList<>();
     private Size size;
 
     public Category getCategory() {
@@ -30,11 +30,11 @@ public class MainActivityViewModel extends ViewModel {
         this.size = size;
     }
 
-    public Folder getListFolder() {
-        return folder;
+    public List<Folder> getFolderList() {
+        return folderList;
     }
 
     public void setListFolder(Folder folder) {
-        this.folder = folder;
+        folderList.add(folder);
     }
 }

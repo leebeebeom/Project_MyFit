@@ -20,17 +20,17 @@ public class Size {
     private String size;
     private String link;
     private String memo;
-    private int folderId;
-    private long inFolderId;
+    private long folderId;
     private boolean isFavorite;
     private Map<String, String> sizeMap;
+    boolean isDeleted;
 
     @Ignore
     public Size() {
         sizeMap = new HashMap<>();
     }
 
-    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, int folderId, long inFolderId, boolean isFavorite, Map<String, String> sizeMap) {
+    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long folderId, boolean isFavorite, Map<String, String> sizeMap) {
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
         this.modifiedTime = modifiedTime;
@@ -41,7 +41,6 @@ public class Size {
         this.link = link;
         this.memo = memo;
         this.folderId = folderId;
-        this.inFolderId = inFolderId;
         this.isFavorite = isFavorite;
         this.sizeMap = sizeMap;
     }
@@ -126,20 +125,12 @@ public class Size {
         this.memo = memo;
     }
 
-    public int getFolderId() {
+    public long getFolderId() {
         return folderId;
     }
 
-    public void setFolderId(int folderId) {
+    public void setFolderId(long folderId) {
         this.folderId = folderId;
-    }
-
-    public long getInFolderId() {
-        return inFolderId;
-    }
-
-    public void setInFolderId(long inFolderId) {
-        this.inFolderId = inFolderId;
     }
 
     public boolean isFavorite() {
@@ -156,6 +147,14 @@ public class Size {
 
     public void setSizeMap(Map<String, String> sizeMap) {
         this.sizeMap = sizeMap;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }
 

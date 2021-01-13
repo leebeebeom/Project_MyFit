@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -55,10 +55,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
-        //bind item
         holder.mBinding.setFolder(getCurrentList().get(holder.getLayoutPosition()));
 
-        //click listener
+        //click-------------------------------------------------------------------------------------
         holder.mBinding.folderCardView.setOnClickListener(v -> mListener.onCardViewClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.folderCheckBox, holder.getLayoutPosition()));
         holder.mBinding.folderCardView.setOnLongClickListener(v -> {
             mListener.onCardViewLongClick(getCurrentList().get(holder.getLayoutPosition()), holder, holder.mBinding.folderCheckBox, holder.getLayoutPosition());
@@ -70,8 +69,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             }
             return false;
         });
+        //------------------------------------------------------------------------------------------
 
-        //check box visibility
+        //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON)
             holder.mBinding.folderCheckBox.setVisibility(View.VISIBLE);
         else {
@@ -79,6 +79,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             holder.mBinding.folderCheckBox.setChecked(false);
             mSelectedPosition.clear();
         }
+        //------------------------------------------------------------------------------------------
         holder.mBinding.folderCheckBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
     }
 
@@ -87,6 +88,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         return getCurrentList().get(position).getId();
     }
 
+    //drag------------------------------------------------------------------------------------------
     public void onItemMove(int from, int to) {
         if (from < to) {
             for (int i = from; i < to; i++) {
@@ -113,7 +115,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     public void onItemDrop() {
         mModel.updateFolderOrder(mFolderList);
     }
+    //----------------------------------------------------------------------------------------------
 
+    //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
         mActionModeState = actionModeState;
         notifyDataSetChanged();
@@ -123,13 +127,12 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         return mActionModeState;
     }
 
-    //set selectedPosition
+    //drag select-----------------------------------------------------------------------------------
     public void setSelectedPosition(int position) {
         if (!mSelectedPosition.contains(position)) mSelectedPosition.add(position);
         else mSelectedPosition.remove(position);
     }
 
-    //select all
     public void selectAll() {
         for (int i = 0; i < getCurrentList().size(); i++) {
             mSelectedPosition.add(i);
@@ -137,11 +140,11 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    //deselect all
     public void deselectAll() {
         mSelectedPosition.clear();
         notifyDataSetChanged();
     }
+    //----------------------------------------------------------------------------------------------
 
     public static class FolderVH extends RecyclerView.ViewHolder {
         ItemListRecyclerFolderBinding mBinding;

@@ -1,14 +1,14 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FolderDragCallBack extends ItemTouchHelper.Callback {
-    private final FolderAdapter mFolderAdapter;
+    private final FolderAdapter mAdapter;
 
     public FolderDragCallBack(FolderAdapter listFolderAdapter) {
-        mFolderAdapter = listFolderAdapter;
+        mAdapter = listFolderAdapter;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        mFolderAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
@@ -36,6 +36,6 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        mFolderAdapter.onItemDrop();
+        mAdapter.onItemDrop();
     }
 }

@@ -22,41 +22,48 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_4sdp"
-                android:orientation="horizontal">
+                android:clipToPadding="false"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:scrollbars="none">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/list_icon_home"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/list_navigation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    app:srcCompat="@drawable/icon_home"
-                    app:tint="?colorControlNormal" />
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.7"
-                    android:scaleX="0.5"
-                    android:scaleY="0.5"
-                    app:srcCompat="@drawable/icon_arrow_forward"
-                    app:tint="?colorControlNormal" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/list_icon_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.8"
+                        app:srcCompat="@drawable/icon_home"
+                        app:tint="?colorControlNormal" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/list_text_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:alpha="0.8"
-                    android:text="@{category.category}"
-                    android:textSize="@dimen/_11sdp"
-                    tools:text="Short Sleeve" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/list_icon_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        app:srcCompat="@drawable/icon_arrow_forward"
+                        app:tint="?colorControlNormal" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/list_text_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.8"
+                        android:text="@{category.category}"
+                        android:textSize="@dimen/_11sdp"
+                        tools:text="Short Sleeve" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_folder"

@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -40,7 +40,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         mListener = listener;
     }
 
-    //For Drag and Drop
     public void setItem(List<Size> sizeList) {
         mSizeList = sizeList;
         submitList(sizeList);
@@ -57,12 +56,11 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
-        //item Bind
         holder.mBinding.setSize(getItem(holder.getLayoutPosition()));
         if (getItem(holder.getLayoutPosition()).getImageUri() != null)
             holder.mBinding.addImageIcon.setVisibility(View.GONE);
 
-        //click listener
+        //click-------------------------------------------------------------------------------------
         holder.mBinding.gridCardView.setOnClickListener(v -> mListener.onCardViewClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.gridCheckBox, holder.getLayoutPosition()));
         holder.mBinding.gridCardView.setOnLongClickListener(v -> {
             mListener.onCardViewLongClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.gridCheckBox, holder.getLayoutPosition());
@@ -73,8 +71,9 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             return false;
         });
         holder.mBinding.gridCheckBox.setOnClickListener(v -> mListener.onCheckBoxClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.gridCheckBox, holder.getLayoutPosition()));
+        //------------------------------------------------------------------------------------------
 
-        //check box visibility
+        //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON)
             holder.mBinding.gridCheckBox.setVisibility(View.VISIBLE);
         else {
@@ -82,6 +81,8 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             holder.mBinding.gridCheckBox.setChecked(false);
             mSelectedPosition.clear();
         }
+        //------------------------------------------------------------------------------------------
+
         holder.mBinding.gridCheckBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
     }
 
@@ -90,6 +91,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         return getCurrentList().get(position).getId();
     }
 
+    //drag------------------------------------------------------------------------------------------
     public void onItemMove(int from, int to) {
         if (from < to) {
             for (int i = from; i < to; i++) {
@@ -115,9 +117,10 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     public void onItemDrop() {
         mModel.updateSizeOrder(mSizeList);
-        notifyDataSetChanged();
     }
+    //----------------------------------------------------------------------------------------------
 
+    //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
         mActionModeState = actionModeState;
         notifyDataSetChanged();
@@ -127,13 +130,12 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         return mActionModeState;
     }
 
-    //set selectedPosition
+    //drag select-----------------------------------------------------------------------------------
     public void setSelectedPosition(int position) {
         if (!mSelectedPosition.contains(position)) mSelectedPosition.add(position);
         else mSelectedPosition.remove(position);
     }
 
-    //select all
     public void selectAll() {
         for (int i = 0; i < getCurrentList().size(); i++) {
             mSelectedPosition.add(i);
@@ -141,11 +143,10 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyDataSetChanged();
     }
 
-    //deselect all
     public void deselectAll() {
         mSelectedPosition.clear();
     }
-
+    //----------------------------------------------------------------------------------------------
 
     public static class SizeGridVH extends RecyclerView.ViewHolder {
         ItemListRecyclerGridBinding mBinding;

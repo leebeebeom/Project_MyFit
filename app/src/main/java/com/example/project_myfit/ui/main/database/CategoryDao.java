@@ -12,7 +12,10 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory ORDER BY orderNumber")
-    LiveData<List<Category>> getAllChild(String parentCategory);
+    LiveData<List<Category>> getAllCategory(String parentCategory);
+
+    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory ORDER BY orderNumber")
+    List<Category> getAllCategory2(String parentCategory);
 
     @Query("SELECT max(orderNumber) FROM Category WHERE parentCategory = :parentCategory")
     int getLargestOrder(String parentCategory);

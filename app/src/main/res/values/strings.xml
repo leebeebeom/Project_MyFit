@@ -23,7 +23,6 @@
     <string name="etc">ETC</string>
     <string name="all_list">All List</string>
     <string name="floating_action_button">Floating Action Button</string>
-    <string name="folders">Folders</string>
     <string name="waist">Waist</string>
     <string name="thigh">Thigh</string>
     <string name="rise">Rise</string>
@@ -37,11 +36,10 @@
     <string name="go">GO</string>
     <string name="created_time">생성일 : </string>
     <string name="modified_time">수정일 : </string>
-    <string name="list_view">List View</string>
-    <string name="grid_view">Grid View</string>
     <string name="view_type">View Type</string>
     <string name="delete_korean">삭제</string>
     <string name="move_korean">이동</string>
     <string name="item_selected">개 선택됨.</string>
     <string name="delete">Delete</string>
+    <string name="edit">수정</string>
 </resources>

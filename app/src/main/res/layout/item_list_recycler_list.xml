@@ -76,7 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="@dimen/_8sdp"
-                    android:alpha="0.8" />
+                    android:alpha="0.8"
+                    tools:src="@drawable/icon_drag_handle" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>

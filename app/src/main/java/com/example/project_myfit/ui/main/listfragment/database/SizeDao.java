@@ -11,12 +11,12 @@ import java.util.List;
 
 @Dao
 public interface SizeDao {
-    @Query("SELECT * FROM Size WHERE folderId = :id")
-    List<Size> getAllSizeByFolderNotLive(int id);
+    @Query("SELECT * FROM Size WHERE folderId = :folderId")
+    List<Size> getAllSizeByFolderNotLive(long folderId);
     //Use at Main Fragment Delete
 
-    @Query("SELECT * FROM Size WHERE folderId = :id ORDER BY orderNumber")
-    LiveData<List<Size>> getAllSize(int id);
+    @Query("SELECT * FROM Size WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
+    LiveData<List<Size>> getAllSize(long folderId, boolean isDeleted);
 
     @Query("SELECT MAX(orderNumber) FROM Size")
     int getLargestOrder();
@@ -28,6 +28,9 @@ public interface SizeDao {
     void update(Size size);
 
     @Update
+    void update(List<Size> sizeList);
+
+    @Update
     void updateOrder(List<Size> sizeList);
 
     @Delete
@@ -36,8 +39,8 @@ public interface SizeDao {
     @Delete
     void delete(List<Size> sizeList);
 
-    @Query("DELETE FROM Size WHERE folderId = :id")
-    void deleteSizeByFolder(int id);
+    @Query("DELETE FROM Size WHERE folderId = :folderId")
+    void deleteSizeByFolder(long folderId);
 
     @Insert
     void restoreDeletedSize(List<Size> sizes);

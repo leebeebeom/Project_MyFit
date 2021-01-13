@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -49,7 +49,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         mListener = listener;
     }
 
-    //For Drag and Drop
     public void setItem(List<Size> sizeList) {
         mSizeList = sizeList;
         submitList(sizeList);
@@ -66,31 +65,35 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int posi1tion) {
-        //item Bind
+    public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
         holder.mBinding.setSize(getItem(holder.getLayoutPosition()));
 
-        //click listener
+        //click-------------------------------------------------------------------------------------
         holder.mBinding.listCardView.setOnClickListener(v -> mListener.onCardViewClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.listCheckBox, holder.getLayoutPosition()));
         holder.mBinding.listCardView.setOnLongClickListener(v -> {
             mListener.onCardViewLongClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.listCheckBox, holder.getLayoutPosition());
             return true;
         });
+
         holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onDragHandTouch(holder);
             return false;
         });
         holder.mBinding.listCheckBox.setOnClickListener(v -> mListener.onCheckBoxClick(getCurrentList().get(holder.getLayoutPosition()), (MaterialCheckBox) v, holder.getLayoutPosition()));
+        holder.mBinding.listCheckBox.setOnLongClickListener(v -> {
+            mListener.onCheckBoxLongCLick(holder.getLayoutPosition());
+            return true;
+        });
+        //------------------------------------------------------------------------------------------
 
-
-        //animation
+        //animation---------------------------------------------------------------------------------
         MaterialCardView cardView = holder.mBinding.listCardView;
         if (mActionModeState != 0) {
             MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) cardView.getLayoutParams();
             int startMargin = (int) mContext.getResources().getDimension(R.dimen._12sdp);
             int endMargin = (int) mContext.getResources().getDimension(R.dimen._32sdp);
-            //if actionModeON
+            //actionModeON
             if (mActionModeState == ACTION_MODE_ON && mAnimOn) {
                 checkBoxOpenAnim(cardView, params, startMargin, endMargin);
                 setAnimOnFalse();
@@ -110,6 +113,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             }
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         }
+        //------------------------------------------------------------------------------------------
     }
 
     @Override
@@ -117,9 +121,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         return getCurrentList().get(position).getId();
     }
 
-    //check box open anim
+    //animation-------------------------------------------------------------------------------------
     private void checkBoxOpenAnim(MaterialCardView cardView, FrameLayout.LayoutParams params, int startMargin, int endMargin) {
-        //Card View Left Margin Animation
         ValueAnimator leftAnimator = ValueAnimator.ofInt(startMargin, endMargin);
         leftAnimator.setDuration(300);
         leftAnimator.addUpdateListener(animation -> {
@@ -127,7 +130,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             cardView.setLayoutParams(params);
         });
         leftAnimator.start();
-        //Card View Right Margin Animation
         ValueAnimator rightAnimator = ValueAnimator.ofInt(startMargin, 0);
         rightAnimator.setDuration(300);
         rightAnimator.addUpdateListener(animation -> {
@@ -137,9 +139,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         rightAnimator.start();
     }
 
-    //check box close anim
     private void checkBoxCloseAnim(MaterialCardView cardView, FrameLayout.LayoutParams params, int startMargin, int endMargin) {
-        //Card View Left Margin Animation
         ValueAnimator leftAnimator = ValueAnimator.ofInt(endMargin, startMargin);
         leftAnimator.setDuration(300);
         leftAnimator.addUpdateListener(animation -> {
@@ -147,7 +147,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             cardView.setLayoutParams(params);
         });
         leftAnimator.start();
-        //Card View right Margin Animation
         ValueAnimator rightAnimator = ValueAnimator.ofInt(0, startMargin);
         rightAnimator.setDuration(300);
         rightAnimator.addUpdateListener(animation -> {
@@ -157,12 +156,12 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         rightAnimator.start();
     }
 
-    //set AnimOn = false
     private void setAnimOnFalse() {
         new Handler().postDelayed(() -> mAnimOn = false, 310);
     }
+    //----------------------------------------------------------------------------------------------
 
-    //onItemMove
+    //drag------------------------------------------------------------------------------------------
     public void onItemMove(int from, int to) {
         if (from < to) {
             for (int i = from; i < to; i++) {
@@ -186,30 +185,28 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         notifyItemMoved(from, to);
     }
 
-    //onItemDrop
     public void onItemDrop() {
         mModel.updateSizeOrder(mSizeList);
     }
+    //----------------------------------------------------------------------------------------------
 
-    //set actionModeState
+    //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
         mActionModeState = actionModeState;
         mAnimOn = true;
         notifyDataSetChanged();
     }
 
-    //get actionModeState
     public int getActionModeState() {
         return mActionModeState;
     }
 
-    //set selectedPosition
+    //drag select-----------------------------------------------------------------------------------
     public void setSelectedPosition(int position) {
         if (!mSelectedPosition.contains(position)) mSelectedPosition.add(position);
         else mSelectedPosition.remove(position);
     }
 
-    //select all
     public void selectAll() {
         for (int i = 0; i < getCurrentList().size(); i++) {
             mSelectedPosition.add(i);
@@ -221,6 +218,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         mSelectedPosition.clear();
         notifyDataSetChanged();
     }
+    //----------------------------------------------------------------------------------------------
 
     public static class SizeListVH extends RecyclerView.ViewHolder {
         private final ItemListRecyclerListBinding mBinding;

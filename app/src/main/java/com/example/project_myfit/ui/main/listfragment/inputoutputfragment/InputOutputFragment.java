@@ -1,5 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment.inputoutputfragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -269,15 +269,14 @@ public class InputOutputFragment extends Fragment {
         int orderNumber = mModel.getLargestOrder() + 1;
         //check added image
         String imageUri = mModel.getCacheFileUri() == null ? null : String.valueOf(mModel.getSavedFileUri());
-        int folderId = mActivityModel.getCategory().getId();
-        long inFolderId = mActivityModel.getListFolder() != null ? mActivityModel.getListFolder().getId() : 0;
+        long folderId = mActivityModel.getFolderList().size() == 0 ?
+                mActivityModel.getCategory().getId() : mActivityModel.getFolderList().get(mActivityModel.getFolderList().size() - 1).getId();
         mModel.getNewSize().setOrderNumber(orderNumber);
         String pattern = " yyyy년 MM월 dd일 HH:mm:ss";
         mModel.getNewSize().setCreatedTime(mModel.getCurrentTime(pattern));
         mModel.getNewSize().setModifiedTime("");
         mModel.getNewSize().setImageUri(imageUri);
         mModel.getNewSize().setFolderId(folderId);
-        mModel.getNewSize().setInFolderId(inFolderId);
         return mModel.getNewSize();
     }
 
@@ -323,6 +322,7 @@ public class InputOutputFragment extends Fragment {
         });
     }
 
+    @SuppressLint("ShowToast")
     private void fabClick() {
         mActivityFab.setOnClickListener(v -> {
             if (!mModel.isOutput()) {
@@ -332,13 +332,13 @@ public class InputOutputFragment extends Fragment {
                 mModel.outputFabClick();
                 mModel.update(getUpdatedSize());
             }
-            Toast.makeText(requireContext(), "저장됨", Toast.LENGTH_SHORT).show();
             goListFragment();
         });
     }
 
     private void cropImage(Uri data) {
         Intent intent = mModel.getCropIntent(data);
+
         if (intent.resolveActivity(requireActivity().getPackageManager()) != null)
             startActivityForResult(intent, CROP_REQUEST_CODE);
     }
@@ -364,14 +364,14 @@ public class InputOutputFragment extends Fragment {
         builder.show();
     }
 
+    @SuppressLint("ShowToast")
     private void showDeleteConfirmDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setTitle("확인")
-                .setMessage("삭제하시겠습니까?\n삭제 후 복구할 수 없습니다")
+                .setMessage("휴지통으로 이동하시겠습니까?")
                 .setNegativeButton("취소", null)
                 .setPositiveButton("확인", (dialog, which) -> {
-                    mModel.delete(mActivityModel.getSize());
-                    Toast.makeText(requireContext(), "삭제됨", Toast.LENGTH_SHORT).show();
+                    mModel.delete();
                     goListFragment();
                 });
         builder.show();

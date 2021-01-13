@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter;
+package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,4 +13,6 @@ public interface SizeAdapterListener {
     void onDragHandTouch(RecyclerView.ViewHolder viewHolder);
 
     void onCheckBoxClick(Size size, MaterialCheckBox checkBox, int position);
+
+    void onCheckBoxLongCLick(int position);
 }
