@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 binding.activityFab.show();
                 binding.toolbarTitle.setVisibility(View.VISIBLE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
-                if (mModel.getFolderList().size() != 0)
-                    mModel.getFolderList().clear();
             }
         });
     }
@@ -79,12 +77,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mModel.getFolderList().size() != 0)
-            mModel.getFolderList().remove(mModel.getFolderList().size() - 1);
-        super.onBackPressed();
     }
 }

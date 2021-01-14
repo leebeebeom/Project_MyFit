@@ -3,9 +3,14 @@ package com.example.project_myfit.ui.main.listfragment.inputoutputfragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,10 +21,11 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
+import com.example.project_myfit.BuildConfig;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.MyFitConstant;
 import com.example.project_myfit.R;
@@ -30,8 +36,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
 import static com.example.project_myfit.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.MyFitConstant.GET_IMAGE_REQUEST_CODE;
 
@@ -40,30 +52,44 @@ public class InputOutputFragment extends Fragment {
     private InputOutputViewModel mModel;
     private FragmentInputOutputBinding mBinding;
     private FloatingActionButton mActivityFab;
-    private OnBackPressedCallback mCallBack;
+    private OnBackPressedCallback mOnBackPressedCallBack;
+    private Uri mCacheFileUri, mSavedFileUri, mOriginFileUri;
+    private String mFileName;
+    private File mCacheFile;
+    private Size mSize, mOldSize, mNewSize;
+    private boolean isOutput;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(InputOutputViewModel.class);
-        setHasOptionsMenu(true);
+        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
 
-        onBackPressedCallBackInit();
-    }
+        checkInputOutput();
 
-    //onBackPressedCallBack-------------------------------------------------------------------------
-    private void onBackPressedCallBackInit() {
-        mCallBack = new OnBackPressedCallback(true) {
+        mOnBackPressedCallBack = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (!mModel.isOutput()) setOnBackPressedCallBackInput();
+                if (!isOutput) setOnBackPressedCallBackInput();
                 else setOnBackPressedCallBackOutput();
             }
         };
+
+        setHasOptionsMenu(true);
     }
 
+    private void checkInputOutput() {
+        if (mActivityModel.getSize() != null) {//if is output
+            isOutput = true;
+            mSize = mActivityModel.getSize();
+            mOldSize = mModel.getOldSize(mActivityModel.getSize().getId());
+            mOriginFileUri = mSize.getImageUri() != null ? Uri.parse(mSize.getImageUri()) : null;
+        } else mNewSize = new Size(); // is not output
+    }
+
+    //onBackPressedCallBack-------------------------------------------------------------------------
     private void setOnBackPressedCallBackInput() {
-        if (mModel.getCacheFileUri() != null ||
+        if (mCacheFileUri != null ||//there's no added image
                 mBinding.checkboxFavorite.isChecked() ||
                 !TextUtils.isEmpty(mBinding.brand.getText()) ||
                 !TextUtils.isEmpty(mBinding.name.getText()) ||
@@ -92,13 +118,13 @@ public class InputOutputFragment extends Fragment {
 
     private void setOnBackPressedCallBackOutput() {
         //String.valueOf = "null"
-        String brand = mModel.getOldSize().getBrand() != null ? mModel.getOldSize().getBrand() : "";
-        String name = mModel.getOldSize().getName() != null ? mModel.getOldSize().getName() : "";
-        String size = mModel.getOldSize().getSize() != null ? mModel.getOldSize().getSize() : "";
-        String link = mModel.getOldSize().getLink() != null ? mModel.getOldSize().getLink() : "";
-        String memo = mModel.getOldSize().getMemo() != null ? mModel.getOldSize().getMemo() : "";
+        String brand = mOldSize.getBrand() != null ? mOldSize.getBrand() : "";
+        String name = mOldSize.getName() != null ? mOldSize.getName() : "";
+        String size = mOldSize.getSize() != null ? mOldSize.getSize() : "";
+        String link = mOldSize.getLink() != null ? mOldSize.getLink() : "";
+        String memo = mOldSize.getMemo() != null ? mOldSize.getMemo() : "";
 
-        Map<String, String> oldSizeMap = mModel.getOldSize().getSizeMap();
+        Map<String, String> oldSizeMap = mOldSize.getSizeMap();
         String length = oldSizeMap.getOrDefault(MyFitConstant.LENGTH, "");
         String shoulder = oldSizeMap.getOrDefault(MyFitConstant.SHOULDER, "");
         String chest = oldSizeMap.getOrDefault(MyFitConstant.CHEST, "");
@@ -115,9 +141,9 @@ public class InputOutputFragment extends Fragment {
         String option5 = oldSizeMap.getOrDefault(MyFitConstant.OPTION5, "");
         String option6 = oldSizeMap.getOrDefault(MyFitConstant.OPTION6, "");
 
-        if (!String.valueOf(mModel.getSize().getImageUri()).equals(String.valueOf(mModel.getOriginFileUri())) || //origin image change check
-                mModel.getCacheFileUri() != null ||//image add check
-                !mModel.getOldSize().isFavorite() == mBinding.checkboxFavorite.isChecked() ||
+        if (!String.valueOf(mSize.getImageUri()).equals(String.valueOf(mOriginFileUri)) || //origin image change check
+                mCacheFileUri != null ||//image add check
+                !mOldSize.isFavorite() == mBinding.checkboxFavorite.isChecked() ||
                 !brand.equals(String.valueOf(mBinding.brand.getText())) ||
                 !name.equals(String.valueOf(mBinding.name.getText())) ||
                 !size.equals(String.valueOf(mBinding.size.getText())) ||
@@ -148,10 +174,37 @@ public class InputOutputFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = FragmentInputOutputBinding.inflate(getLayoutInflater());
+        mActivityFab = requireActivity().findViewById(R.id.activity_fab);
 
+        setLayout();
+        setData();
         setSelection();
 
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), mOnBackPressedCallBack);
         return mBinding.getRoot();
+    }
+
+    private void setLayout() {
+        //TOP or OUTER
+        if (mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.TOP) || mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.OUTER))
+            mBinding.inputTopOutput.setVisibility(View.VISIBLE);
+            //BOTTOM
+        else if (mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.BOTTOM))
+            mBinding.inputBottom.setVisibility(View.VISIBLE);
+            //ETC
+        else mBinding.inputEtc.setVisibility(View.VISIBLE);
+    }
+
+    private void setData() {
+        if (isOutput) {
+            mBinding.setSize(mSize);
+            mBinding.timeLayout.setVisibility(View.VISIBLE);
+            //if there's a saved image
+            //addImageIcon GONE
+            if (mOriginFileUri != null) mBinding.addIcon.setVisibility(View.GONE);
+        }
+        //two way data biding
+        else mBinding.setSize(mNewSize);
     }
 
     private void setSelection() {
@@ -178,57 +231,6 @@ public class InputOutputFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        mActivityFab = requireActivity().findViewById(R.id.activity_fab);
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), mCallBack);
-
-        setLayout();
-
-        checkInputOutput();
-
-        setData();
-    }
-
-    private void setLayout() {
-        //TOP or OUTER
-        if (mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.TOP) || mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.OUTER))
-            mBinding.inputTopOutput.setVisibility(View.VISIBLE);
-            //BOTTOM
-        else if (mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.BOTTOM))
-            mBinding.inputBottom.setVisibility(View.VISIBLE);
-            //ETC
-        else mBinding.inputEtc.setVisibility(View.VISIBLE);
-    }
-
-    private void checkInputOutput() {
-        if (mActivityModel.getSize() != null) {
-            mModel.setIsOutput(true);
-            mModel.setSize(mActivityModel.getSize());
-            mModel.setOldSize(mActivityModel.getSize().getId());
-        }
-        //if is input
-        else {
-            mModel.setNewSize(new Size());
-            mModel.setLargestOrder();
-        }
-    }
-
-    private void setData() {
-        if (mModel.isOutput()) {
-            mBinding.setSize(mModel.getSize());
-            mBinding.timeLayout.setVisibility(View.VISIBLE);
-            //if there's a saved image
-            //addImageIcon GONE
-            if (mModel.getOriginFileUri() != null) mBinding.addImageIcon.setVisibility(View.GONE);
-        }
-        //two way data biding
-        else mBinding.setSize(mModel.getNewSize());
-    }
-
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setClickListener();
@@ -244,62 +246,6 @@ public class InputOutputFragment extends Fragment {
         goButtonClick();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallBack.remove();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            //get image result
-            if (requestCode == GET_IMAGE_REQUEST_CODE) cropImage(data.getData());
-                //cropImage result
-            else {
-                mModel.setCacheFileUri(data.getData());
-                mBinding.image.setImageURI(mModel.getCacheFileUri());
-                mBinding.addImageIcon.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private Size getNewSize() {
-        int orderNumber = mModel.getLargestOrder() + 1;
-        //check added image
-        String imageUri = mModel.getCacheFileUri() == null ? null : String.valueOf(mModel.getSavedFileUri());
-        long folderId = mActivityModel.getFolderList().size() == 0 ?
-                mActivityModel.getCategory().getId() : mActivityModel.getFolderList().get(mActivityModel.getFolderList().size() - 1).getId();
-        mModel.getNewSize().setOrderNumber(orderNumber);
-        String pattern = " yyyy년 MM월 dd일 HH:mm:ss";
-        mModel.getNewSize().setCreatedTime(mModel.getCurrentTime(pattern));
-        mModel.getNewSize().setModifiedTime("");
-        mModel.getNewSize().setImageUri(imageUri);
-        mModel.getNewSize().setFolderId(folderId);
-        return mModel.getNewSize();
-    }
-
-    private Size getUpdatedSize() {
-        String imageUri;
-        //no saved images and no added images or
-        //saved image is deleted
-        if (mModel.getOriginFileUri() == null && mModel.getCacheFileUri() == null)
-            mModel.getSize().setImageUri(null);
-            //there's a added image
-        else if (mModel.getCacheFileUri() != null) {
-            imageUri = String.valueOf(mModel.getSavedFileUri());
-            mModel.getSize().setImageUri(imageUri);
-        }
-        String pattern = " yyyy년 MM월 dd일 HH:mm:ss";
-        mModel.getSize().setModifiedTime(mModel.getCurrentTime(pattern));
-        return mModel.getSize();
-    }
-
-    private void goListFragment() {
-        Navigation.findNavController(requireView()).navigate(R.id.action_inputOutputFragment_to_listFragment);
-    }
-
     //click-----------------------------------------------------------------------------------------
     private void imageClick() {
         mBinding.image.setOnClickListener(v -> {
@@ -313,34 +259,63 @@ public class InputOutputFragment extends Fragment {
     private void imageLongClick() {
         mBinding.image.setOnLongClickListener(v -> {
             //input & there's a added image
-            if (!mModel.isOutput() && mModel.getCacheFileUri() != null)
+            if (!isOutput && mCacheFileUri != null)
                 showImageClearDialog();
                 //output & there's a saved image or added image
-            else if (mModel.isOutput() && mModel.getOriginFileUri() != null || mModel.getCacheFileUri() != null)
+            else if (isOutput && mOriginFileUri != null || mCacheFileUri != null)
                 showImageClearDialog();
             return true;
         });
     }
 
-    @SuppressLint("ShowToast")
     private void fabClick() {
         mActivityFab.setOnClickListener(v -> {
-            if (!mModel.isOutput()) {
-                mModel.inputFabClick();
+            if (!isOutput) {
+                inputFileSave();
                 mModel.insert(getNewSize());
             } else {
-                mModel.outputFabClick();
+                outputFileSave();
                 mModel.update(getUpdatedSize());
             }
             goListFragment();
         });
     }
 
-    private void cropImage(Uri data) {
-        Intent intent = mModel.getCropIntent(data);
+    public void inputFileSave() {
+        //if there's a added image
+        if (mCacheFileUri != null) {
+            //file move cache folder to picture folder
+            File pictureFolderPath = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), mFileName);
+            mSavedFileUri = Uri.fromFile(pictureFolderPath);
+            if (mCacheFile.renameTo(pictureFolderPath))
+                Log.d(TAG, "inputFabClick: file rename success");
+            else Log.d(TAG, "inputFabClick: file rename fail");
+        }
+    }
 
-        if (intent.resolveActivity(requireActivity().getPackageManager()) != null)
-            startActivityForResult(intent, CROP_REQUEST_CODE);
+    public void outputFileSave() {
+        //there was a saved image, but user deleted it
+        if (mSize.getImageUri() != null && mOriginFileUri == null && mCacheFileUri == null) {
+            //delete origin image file
+            File OriginImageFile = new File(Uri.parse(mSize.getImageUri()).getPath());
+            if (OriginImageFile.delete()) Log.d(TAG, "outputFabClick: file delete success");
+            else Log.d(TAG, "outputFabClick: file delete fail");
+        } else if (mCacheFileUri != null) {
+            //user replaces with a new image
+            //file move cache folder to picture folder
+            File pictureFolderPath = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), mFileName);
+            mSavedFileUri = Uri.fromFile(pictureFolderPath);
+            if (mCacheFile.renameTo(pictureFolderPath))
+                Log.d(TAG, "outputFabClick: file rename success");
+            else Log.d(TAG, "outputFabClick: file rename fail");
+
+            //delete origin image file
+            if (mSize.getImageUri() != null) {
+                File originFile = new File(Uri.parse(mSize.getImageUri()).getPath());
+                if (originFile.delete()) Log.d(TAG, "outputFabClick: file delete success");
+                else Log.d(TAG, "outputFabClick: file delete fail");
+            }
+        }
     }
 
     private void goButtonClick() {
@@ -352,6 +327,90 @@ public class InputOutputFragment extends Fragment {
         });
     }
     //----------------------------------------------------------------------------------------------
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            //get image result
+            if (requestCode == GET_IMAGE_REQUEST_CODE) cropImage(data.getData());
+                //cropImage result
+            else {
+                mCacheFileUri = data.getData();
+                mBinding.image.setImageURI(mCacheFileUri);
+                mBinding.addIcon.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void cropImage(Uri data) {
+        //file name
+        mFileName = "MyFit_" + getCurrentTime("yyyyMMddHHmmss") + ".jpg";
+
+        //make file
+        mCacheFile = new File(requireContext().getExternalCacheDir(), mFileName);
+
+        //intent
+//        Uri uri = Uri.fromFile(mCacheFile); <- No
+        Uri uri = FileProvider.getUriForFile(requireContext().getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", mCacheFile);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(data, "image/*")
+                .setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .putExtra("aspectX", 1)
+                .putExtra("aspectY", 1)
+                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        List<ResolveInfo> resolveInfoList = requireActivity().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            requireActivity().grantUriPermission(packageName, uri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null)
+            startActivityForResult(intent, CROP_REQUEST_CODE);
+    }
+
+    private Size getNewSize() {
+        int orderNumber = mModel.getLargestOrder() + 1;
+        //check added image
+        String imageUri = mCacheFileUri == null ? null : String.valueOf(mSavedFileUri);
+        long folderId = mActivityModel.getFolder() == null ?
+                mActivityModel.getCategory().getId() : mActivityModel.getFolder().getId();
+        mNewSize.setOrderNumber(orderNumber);
+        mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
+        mNewSize.setModifiedTime("");
+        mNewSize.setImageUri(imageUri);
+        mNewSize.setFolderId(folderId);
+        return mNewSize;
+    }
+
+    private Size getUpdatedSize() {
+        String imageUri;
+        //there's no saved images and no added images or
+        //saved image is deleted
+        if (mOriginFileUri == null && mCacheFileUri == null)
+            mSize.setImageUri(null);
+            //there's a added image
+        else if (mCacheFileUri != null) {
+            imageUri = String.valueOf(mSavedFileUri);
+            mSize.setImageUri(imageUri);
+        }
+        String pattern = " yyyy년 MM월 dd일 HH:mm:ss";
+        mSize.setModifiedTime(getCurrentTime(pattern));
+        return mSize;
+    }
+
+    private void goListFragment() {
+        mOnBackPressedCallBack.remove();
+        requireActivity().onBackPressed();
+    }
+
+    public String getCurrentTime(String pattern) {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+        return dateFormat.format(date);
+    }
 
 
     //dialog----------------------------------------------------------------------------------------
@@ -371,7 +430,7 @@ public class InputOutputFragment extends Fragment {
                 .setMessage("휴지통으로 이동하시겠습니까?")
                 .setNegativeButton("취소", null)
                 .setPositiveButton("확인", (dialog, which) -> {
-                    mModel.delete();
+                    mModel.delete(mSize);
                     goListFragment();
                 });
         builder.show();
@@ -383,10 +442,10 @@ public class InputOutputFragment extends Fragment {
                 .setMessage("이미지를 삭제하시겠습니까?")
                 .setNegativeButton("취소", null)
                 .setPositiveButton("확인", (dialog, which) -> {
-                    mModel.setOriginFileUri(null);
-                    mModel.setCacheFileUri(null);
+                    mOriginFileUri = null;
+                    mCacheFileUri = null;
                     mBinding.image.setImageURI(null);
-                    mBinding.addImageIcon.setVisibility(View.VISIBLE);
+                    mBinding.addIcon.setVisibility(View.VISIBLE);
                 });
         builder.show();
     }
@@ -396,7 +455,7 @@ public class InputOutputFragment extends Fragment {
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        if (!mModel.isOutput()) menu.getItem(1).setVisible(false);
+        if (!isOutput) menu.getItem(1).setVisible(false);
     }
 
     @Override
@@ -415,5 +474,6 @@ public class InputOutputFragment extends Fragment {
         }
         return false;
     }
+
     //----------------------------------------------------------------------------------------------
 }

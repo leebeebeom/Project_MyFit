@@ -16,7 +16,7 @@ public interface SizeDao {
     //Use at Main Fragment Delete
 
     @Query("SELECT * FROM Size WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
-    LiveData<List<Size>> getAllSize(long folderId, boolean isDeleted);
+    LiveData<List<Size>> getAllSizeLive(long folderId, boolean isDeleted);
 
     @Query("SELECT MAX(orderNumber) FROM Size")
     int getLargestOrder();

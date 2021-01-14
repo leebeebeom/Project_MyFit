@@ -12,14 +12,11 @@ import java.util.List;
 @Dao
 public interface FolderDao {
 
-    @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :idDeleted ORDER BY orderNumber ASC")
-    LiveData<List<Folder>> getAllFolder(long folderId, boolean idDeleted);
+    @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber ASC")
+    LiveData<List<Folder>> getFolderListLive(long folderId, boolean isDeleted);
 
     @Query("SELECT * FROM Folder")
     List<Folder> getAllFolder();
-
-    @Query("SELECT * FROM folder")
-    LiveData<List<Folder>> getAllFolderLive();
 
     @Query("SELECT MAX(orderNumber) FROM Folder")
     int getLargestOrder();

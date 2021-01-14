@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class Converters {
     @TypeConverter
-    public static Map<String, String> fromStringMap(String value) {
+    public static Map<String, String> fromString(String value) {
         Type mapType = new TypeToken<Map<String, String>>() {
         }.getType();
         return new Gson().fromJson(value, mapType);
     }
 
     @TypeConverter
-    public static String fromStringMap(Map<String, String> map) {
+    public static String fromString(Map<String, String> map) {
         Gson gson = new Gson();
         return gson.toJson(map);
     }

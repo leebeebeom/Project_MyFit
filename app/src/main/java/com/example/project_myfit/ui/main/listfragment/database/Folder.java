@@ -70,15 +70,4 @@ public class Folder {
         isDeleted = deleted;
     }
 
-    @Override
-    public String toString() {
-        return "Folder{" +
-                "id=" + id +
-                ", folderName='" + folderName + '\'' +
-                ", folderId=" + folderId +
-                ", orderNumber=" + orderNumber +
-                ", itemAmount='" + itemAmount + '\'' +
-                ", isDeleted=" + isDeleted +
-                '}';
-    }
 }

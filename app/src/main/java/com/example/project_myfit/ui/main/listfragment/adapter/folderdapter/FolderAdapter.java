@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.databinding.ItemListRecyclerFolderBinding;
 import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,12 +30,18 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private FolderAdapterListener mListener;
     private List<Folder> mFolderList;
     private int mActionModeState;
-    private final HashSet<Integer> mSelectedPosition = new HashSet<>();
+    private final HashSet<Integer> mSelectedPosition;
 
     public FolderAdapter(ListViewModel model) {
         super(new FolderDiffUtil());
         mModel = model;
         setHasStableIds(true);
+        mSelectedPosition = new HashSet<>();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getCurrentList().get(position).getId();
     }
 
     public void setOnFolderAdapterListener(FolderAdapterListener listener) {
@@ -55,17 +64,23 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
-        holder.mBinding.setFolder(getCurrentList().get(holder.getLayoutPosition()));
+        int realPosition = holder.getLayoutPosition();
+        Folder folder = getItem(realPosition);
+        MaterialCardView cardView = holder.mBinding.folderCardView;
+        MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
+        AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
+
+        holder.mBinding.setFolder(folder);
 
         //click-------------------------------------------------------------------------------------
-        holder.mBinding.folderCardView.setOnClickListener(v -> mListener.onCardViewClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.folderCheckBox, holder.getLayoutPosition()));
-        holder.mBinding.folderCardView.setOnLongClickListener(v -> {
-            mListener.onCardViewLongClick(getCurrentList().get(holder.getLayoutPosition()), holder, holder.mBinding.folderCheckBox, holder.getLayoutPosition());
+        cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, realPosition));
+        cardView.setOnLongClickListener(v -> {
+            mListener.onFolderCardViewLongClick(folder, holder, checkBox, realPosition);
             return true;
         });
-        holder.mBinding.folderDragHandle.setOnTouchListener((v, event) -> {
+        dragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mListener.onDragHandTouch(holder);
+                mListener.onFolderDragHandTouch(holder);
             }
             return false;
         });
@@ -73,19 +88,14 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON)
-            holder.mBinding.folderCheckBox.setVisibility(View.VISIBLE);
+            checkBox.setVisibility(View.VISIBLE);
         else {
-            holder.mBinding.folderCheckBox.setVisibility(View.GONE);
-            holder.mBinding.folderCheckBox.setChecked(false);
+            checkBox.setVisibility(View.GONE);
+            checkBox.setChecked(false);
             mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-        holder.mBinding.folderCheckBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getCurrentList().get(position).getId();
+        checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
     }
 
     //drag------------------------------------------------------------------------------------------

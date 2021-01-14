@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
 import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,12 +31,18 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     private SizeAdapterListener mListener;
     private List<Size> mSizeList;
     private int mActionModeState;
-    private final HashSet<Integer> mSelectedPosition = new HashSet<>();
+    private final HashSet<Integer> mSelectedPosition;
 
     public SizeAdapterGrid(ListViewModel model) {
         super(new SizeDiffUtil());
         mModel = model;
         setHasStableIds(true);
+        mSelectedPosition = new HashSet<>();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getCurrentList().get(position).getId();
     }
 
     public void setOnSizeAdapterListener(SizeAdapterListener listener) {
@@ -56,39 +65,41 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
-        holder.mBinding.setSize(getItem(holder.getLayoutPosition()));
-        if (getItem(holder.getLayoutPosition()).getImageUri() != null)
+        int realPosition = holder.getLayoutPosition();
+        Size size = getItem(realPosition);
+        MaterialCardView cardView = holder.mBinding.gridCardView;
+        MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
+        AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
+
+        holder.mBinding.setSize(size);
+
+        if (size.getImageUri() != null)
             holder.mBinding.addImageIcon.setVisibility(View.GONE);
 
         //click-------------------------------------------------------------------------------------
-        holder.mBinding.gridCardView.setOnClickListener(v -> mListener.onCardViewClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.gridCheckBox, holder.getLayoutPosition()));
-        holder.mBinding.gridCardView.setOnLongClickListener(v -> {
-            mListener.onCardViewLongClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.gridCheckBox, holder.getLayoutPosition());
+        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, realPosition));
+        cardView.setOnLongClickListener(v -> {
+            mListener.onListCardViewLongClick(size, checkBox, realPosition);
             return true;
         });
-        holder.mBinding.gridDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onDragHandTouch(holder);
+        dragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onListDragHandTouch(holder);
             return false;
         });
-        holder.mBinding.gridCheckBox.setOnClickListener(v -> mListener.onCheckBoxClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.gridCheckBox, holder.getLayoutPosition()));
+        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, realPosition));
         //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON)
-            holder.mBinding.gridCheckBox.setVisibility(View.VISIBLE);
+            checkBox.setVisibility(View.VISIBLE);
         else {
-            holder.mBinding.gridCheckBox.setVisibility(View.GONE);
-            holder.mBinding.gridCheckBox.setChecked(false);
+            checkBox.setVisibility(View.GONE);
+            checkBox.setChecked(false);
             mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
 
-        holder.mBinding.gridCheckBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getCurrentList().get(position).getId();
+        checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
     }
 
     //drag------------------------------------------------------------------------------------------

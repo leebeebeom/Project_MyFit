@@ -6,13 +6,13 @@ import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 public interface SizeAdapterListener {
-    void onCardViewClick(Size size, MaterialCheckBox checkBox, int position);
+    void onListCardViewClick(Size size, MaterialCheckBox checkBox, int position);
 
-    void onCardViewLongClick(Size size, MaterialCheckBox checkBox, int position);
+    void onListCardViewLongClick(Size size, MaterialCheckBox checkBox, int position);
 
-    void onDragHandTouch(RecyclerView.ViewHolder viewHolder);
+    void onListDragHandTouch(RecyclerView.ViewHolder viewHolder);
 
-    void onCheckBoxClick(Size size, MaterialCheckBox checkBox, int position);
+    void onListCheckBoxClick(Size size, MaterialCheckBox checkBox, int position);
 
-    void onCheckBoxLongCLick(int position);
+    void onListCheckBoxLongCLick(int position);
 }

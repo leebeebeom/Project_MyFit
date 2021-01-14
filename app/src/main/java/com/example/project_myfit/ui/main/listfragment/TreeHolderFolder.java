@@ -25,7 +25,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         binding.text.setText(value.text);
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) binding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
-        List<Folder> folderList = value.model.getAllFolderList();
+        List<Folder> folderList = value.model.getAllFolder();
         for (Folder folder : folderList) {
             if (value.folder.getId() == folder.getFolderId()) {
                 TreeNode treeNode = new TreeNode(new IconTreeHolder(folder.getFolderName(), folder, value.model, value.margin + 20)).setViewHolder(new TreeHolderFolder(context));

@@ -20,7 +20,6 @@ import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +31,7 @@ public class ListViewModel extends AndroidViewModel {
     private List<Category> mAllCategoryList;
     private List<Folder> mAllFolderList;
     private int mFolderLargestOrder;
+    private Folder mThisFolder;
 
     public ListViewModel(@NonNull Application application) {
         super(application);
@@ -47,13 +47,31 @@ public class ListViewModel extends AndroidViewModel {
         return Long.parseLong(dateFormat.format(date));
     }
 
-    public List<Folder> getActivityModelFolderList(List<Folder> activityModelFolderList) {
-        return new ArrayList<>(activityModelFolderList);
+    //folderDao-------------------------------------------------------------------------------------
+    public LiveData<List<Folder>> getFolderListLive(long folderId) {
+        return mFolderDao.getFolderListLive(folderId, false);
     }
 
-    //folderDao-------------------------------------------------------------------------------------
-    public LiveData<List<Folder>> getAllFolder(long folderId) {
-        return mFolderDao.getAllFolder(folderId, false);
+    public List<Folder> getAllFolder() {
+        Thread thread = new Thread(() -> mAllFolderList = mFolderDao.getAllFolder());
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return mAllFolderList;
+    }
+
+    public int getFolderLargestOrder() {
+        Thread thread = new Thread(() -> mFolderLargestOrder = mFolderDao.getLargestOrder());
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return mFolderLargestOrder;
     }
 
     public void insertFolder(Folder folder) {
@@ -72,15 +90,11 @@ public class ListViewModel extends AndroidViewModel {
         for (Folder f : folderList) f.setDeleted(true);
         new Thread(() -> mFolderDao.delete(folderList)).start();
     }
-
-    public LiveData<List<Folder>> getAllFolderLive() {
-        return mFolderDao.getAllFolderLive();
-    }
     //----------------------------------------------------------------------------------------------
 
     //sizeDao---------------------------------------------------------------------------------------
     public LiveData<List<Size>> getAllSize(long folderId) {
-        return mSizeDao.getAllSize(folderId, false);
+        return mSizeDao.getAllSizeLive(folderId, false);
     }
 
     public void deleteSize(List<Size> sizeList) {
@@ -93,31 +107,27 @@ public class ListViewModel extends AndroidViewModel {
     }
     //----------------------------------------------------------------------------------------------
 
-    //getter & setter-------------------------------------------------------------------------------
-    public void setFolderLargestOrder() {
-        new Thread(() -> mFolderLargestOrder = mFolderDao.getLargestOrder()).start();
-    }
-
-    public int getFolderLargestOrder() {
-        return mFolderLargestOrder;
-    }
-
-    public void setAllCategoryList(String parentCategory) {
-        new Thread(() -> mAllCategoryList = mCategoryDao.getAllCategory2(parentCategory)).start();
-    }
-
-    public List<Category> getAllCategoryList() {
+    //categoryDao-----------------------------------------------------------------------------------
+    public List<Category> getAllCategoryList(String parentCategory) {
+        Thread thread = new Thread(() -> mAllCategoryList = mCategoryDao.getAllCategory2(parentCategory));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return mAllCategoryList;
     }
+    //----------------------------------------------------------------------------------------------
 
-    public List<Folder> getAllFolderList() {
-        return mAllFolderList;
+
+    public Folder getThisFolder() {
+        return mThisFolder;
     }
 
-    public void setAllFolderList() {
-        new Thread(() -> mAllFolderList = mFolderDao.getAllFolder()).start();
+    public void setThisFolder(Folder mThisFolder) {
+        this.mThisFolder = mThisFolder;
     }
-//----------------------------------------------------------------------------------------------
 
     //bindingAdapter--------------------------------------------------------------------------------
     @BindingAdapter("setUri")
@@ -130,14 +140,12 @@ public class ListViewModel extends AndroidViewModel {
 
     @BindingAdapter("setDragHandle")
     public static void setDragHandle(ImageView imageView, String dummy) {
-        dummy = null;
-        Glide.with(imageView.getContext()).load(dummy).fallback(R.drawable.icon_drag_handle).into(imageView);
+        Glide.with(imageView.getContext()).load("").fallback(R.drawable.icon_drag_handle).into(imageView);
     }
 
     @BindingAdapter("setAddIcon")
     public static void setAddIcon(ImageView imageView, String dummy) {
-        dummy = null;
-        Glide.with(imageView.getContext()).load(dummy).fallback(R.drawable.icon_add_image).into(imageView);
+        Glide.with(imageView.getContext()).load("").fallback(R.drawable.icon_add_image).into(imageView);
     }
     //----------------------------------------------------------------------------------------------
 }

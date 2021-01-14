@@ -10,6 +10,7 @@
     <item
         android:id="@+id/list_action_mode_move"
         android:title="@string/move_korean"
+        android:icon="@drawable/icon_move"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/list_action_mode_del"

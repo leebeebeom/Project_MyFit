@@ -45,6 +45,11 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         setHasStableIds(true);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return getCurrentList().get(position).getId();
+    }
+
     public void setOnSizeAdapterListener(SizeAdapterListener listener) {
         mListener = listener;
     }
@@ -66,30 +71,33 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
-        holder.mBinding.setSize(getItem(holder.getLayoutPosition()));
+        int realPosition = holder.getLayoutPosition();
+        Size size = getItem(realPosition);
+        MaterialCardView cardView = holder.mBinding.listCardView;
+        MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
+
+        holder.mBinding.setSize(size);
 
         //click-------------------------------------------------------------------------------------
-        holder.mBinding.listCardView.setOnClickListener(v -> mListener.onCardViewClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.listCheckBox, holder.getLayoutPosition()));
-        holder.mBinding.listCardView.setOnLongClickListener(v -> {
-            mListener.onCardViewLongClick(getCurrentList().get(holder.getLayoutPosition()), holder.mBinding.listCheckBox, holder.getLayoutPosition());
+        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, realPosition));
+        cardView.setOnLongClickListener(v -> {
+            mListener.onListCardViewLongClick(size, checkBox, realPosition);
             return true;
         });
 
         holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onDragHandTouch(holder);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onListDragHandTouch(holder);
             return false;
         });
-        holder.mBinding.listCheckBox.setOnClickListener(v -> mListener.onCheckBoxClick(getCurrentList().get(holder.getLayoutPosition()), (MaterialCheckBox) v, holder.getLayoutPosition()));
-        holder.mBinding.listCheckBox.setOnLongClickListener(v -> {
-            mListener.onCheckBoxLongCLick(holder.getLayoutPosition());
+        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, realPosition));
+        checkBox.setOnLongClickListener(v -> {
+            mListener.onListCheckBoxLongCLick(realPosition);
             return true;
         });
         //------------------------------------------------------------------------------------------
 
         //animation---------------------------------------------------------------------------------
-        MaterialCardView cardView = holder.mBinding.listCardView;
         if (mActionModeState != 0) {
-            MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) cardView.getLayoutParams();
             int startMargin = (int) mContext.getResources().getDimension(R.dimen._12sdp);
             int endMargin = (int) mContext.getResources().getDimension(R.dimen._32sdp);
@@ -111,14 +119,9 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
                 params.setMarginEnd(startMargin);
                 cardView.setLayoutParams(params);
             }
-            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+            checkBox.setChecked(mSelectedPosition.contains(realPosition));
         }
         //------------------------------------------------------------------------------------------
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getCurrentList().get(position).getId();
     }
 
     //animation-------------------------------------------------------------------------------------
@@ -130,6 +133,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             cardView.setLayoutParams(params);
         });
         leftAnimator.start();
+
         ValueAnimator rightAnimator = ValueAnimator.ofInt(startMargin, 0);
         rightAnimator.setDuration(300);
         rightAnimator.addUpdateListener(animation -> {
@@ -147,6 +151,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             cardView.setLayoutParams(params);
         });
         leftAnimator.start();
+
         ValueAnimator rightAnimator = ValueAnimator.ofInt(0, startMargin);
         rightAnimator.setDuration(300);
         rightAnimator.addUpdateListener(animation -> {
