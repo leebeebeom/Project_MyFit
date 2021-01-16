@@ -71,17 +71,16 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
-        int realPosition = holder.getLayoutPosition();
-        Size size = getItem(realPosition);
+        Size size = getItem(holder.getLayoutPosition());
         MaterialCardView cardView = holder.mBinding.listCardView;
         MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
 
         holder.mBinding.setSize(size);
 
         //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, realPosition));
+        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onListCardViewLongClick(size, checkBox, realPosition);
+            mListener.onListCardViewLongClick(size, checkBox, holder.getLayoutPosition());
             return true;
         });
 
@@ -89,9 +88,9 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onListDragHandTouch(holder);
             return false;
         });
-        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, realPosition));
+        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
         checkBox.setOnLongClickListener(v -> {
-            mListener.onListCheckBoxLongCLick(realPosition);
+            mListener.onListCheckBoxLongCLick(holder.getLayoutPosition());
             return true;
         });
         //------------------------------------------------------------------------------------------
@@ -119,7 +118,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
                 params.setMarginEnd(startMargin);
                 cardView.setLayoutParams(params);
             }
-            checkBox.setChecked(mSelectedPosition.contains(realPosition));
+            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         }
         //------------------------------------------------------------------------------------------
     }
@@ -191,7 +190,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void onItemDrop() {
-        mModel.updateSizeOrder(mSizeList);
+        mModel.updateSizeList(mSizeList);
     }
     //----------------------------------------------------------------------------------------------
 

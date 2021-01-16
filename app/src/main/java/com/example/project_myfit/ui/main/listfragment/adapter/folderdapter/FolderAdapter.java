@@ -64,8 +64,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
-        int realPosition = holder.getLayoutPosition();
-        Folder folder = getItem(realPosition);
+        Folder folder = getItem(holder.getLayoutPosition());
         MaterialCardView cardView = holder.mBinding.folderCardView;
         MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
@@ -73,9 +72,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         holder.mBinding.setFolder(folder);
 
         //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, realPosition));
+        cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onFolderCardViewLongClick(folder, holder, checkBox, realPosition);
+            mListener.onFolderCardViewLongClick(folder, holder, checkBox, holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
@@ -123,7 +122,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     public void onItemDrop() {
-        mModel.updateFolderOrder(mFolderList);
+        mModel.updateFolderList(mFolderList);
     }
     //----------------------------------------------------------------------------------------------
 

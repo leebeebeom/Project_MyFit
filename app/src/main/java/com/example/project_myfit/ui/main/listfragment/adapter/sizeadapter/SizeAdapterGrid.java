@@ -65,8 +65,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
-        int realPosition = holder.getLayoutPosition();
-        Size size = getItem(realPosition);
+        Size size = getItem(holder.getLayoutPosition());
         MaterialCardView cardView = holder.mBinding.gridCardView;
         MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
@@ -77,16 +76,20 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             holder.mBinding.addImageIcon.setVisibility(View.GONE);
 
         //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, realPosition));
+        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onListCardViewLongClick(size, checkBox, realPosition);
+            mListener.onListCardViewLongClick(size, checkBox, holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onListDragHandTouch(holder);
             return false;
         });
-        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, realPosition));
+        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
+        cardView.setOnTouchListener((v, event) -> {
+            mListener.onCardViewTouch(holder.getLayoutPosition());
+            return false;
+        });
         //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
@@ -127,7 +130,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void onItemDrop() {
-        mModel.updateSizeOrder(mSizeList);
+        mModel.updateSizeList(mSizeList);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -156,6 +159,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     public void deselectAll() {
         mSelectedPosition.clear();
+        notifyDataSetChanged();
     }
     //----------------------------------------------------------------------------------------------
 

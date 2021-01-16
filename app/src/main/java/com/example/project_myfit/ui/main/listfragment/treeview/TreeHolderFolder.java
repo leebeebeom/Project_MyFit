@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment;
+package com.example.project_myfit.ui.main.listfragment.treeview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,13 +22,12 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     @Override
     public View createNodeView(TreeNode node, IconTreeHolder value) {
         ItemTreeFolderBinding binding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        binding.text.setText(value.text);
+        binding.text.setText(value.folder.getFolderName());
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) binding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
-        List<Folder> folderList = value.model.getAllFolder();
-        for (Folder folder : folderList) {
+        for (Folder folder : value.allFolderList) {
             if (value.folder.getId() == folder.getFolderId()) {
-                TreeNode treeNode = new TreeNode(new IconTreeHolder(folder.getFolderName(), folder, value.model, value.margin + 20)).setViewHolder(new TreeHolderFolder(context));
+                TreeNode treeNode = new TreeNode(new IconTreeHolder(folder, value.allFolderList, value.margin + 20, value.listener)).setViewHolder(new TreeHolderFolder(context));
                 node.addChild(treeNode);
             }
         }
@@ -45,22 +44,22 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
                 }
             });
         } else binding.arrowIcon.setVisibility(View.INVISIBLE);
-
+        binding.addIcon.setOnClickListener(v -> value.listener.onAddClick(node, value.folder.getId()));
 
         return binding.getRoot();
     }
 
     public static class IconTreeHolder {
-        public String text;
         public Folder folder;
-        public ListViewModel model;
+        public List<Folder> allFolderList;
         public int margin;
+        public TreeViewAddClickListener listener;
 
-        public IconTreeHolder(String text, Folder folder, ListViewModel model, int margin) {
-            this.text = text;
+        public IconTreeHolder(Folder folder, List<Folder> allFolderList, int margin, TreeViewAddClickListener listener) {
             this.folder = folder;
-            this.model = model;
+            this.allFolderList = allFolderList;
             this.margin = margin;
+            this.listener = listener;
         }
     }
 }

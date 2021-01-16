@@ -82,7 +82,7 @@ public class ListViewModel extends AndroidViewModel {
         new Thread(() -> mFolderDao.update(folder)).start();
     }
 
-    public void updateFolderOrder(List<Folder> folderList) {
+    public void updateFolderList(List<Folder> folderList) {
         new Thread(() -> mFolderDao.updateOrder(folderList)).start();
     }
 
@@ -102,7 +102,7 @@ public class ListViewModel extends AndroidViewModel {
         new Thread(() -> mSizeDao.update(sizeList)).start();
     }
 
-    public void updateSizeOrder(List<Size> sizeList) {
+    public void updateSizeList(List<Size> sizeList) {
         new Thread(() -> mSizeDao.updateOrder(sizeList)).start();
     }
     //----------------------------------------------------------------------------------------------
@@ -140,12 +140,14 @@ public class ListViewModel extends AndroidViewModel {
 
     @BindingAdapter("setDragHandle")
     public static void setDragHandle(ImageView imageView, String dummy) {
-        Glide.with(imageView.getContext()).load("").fallback(R.drawable.icon_drag_handle).into(imageView);
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).fallback(R.drawable.icon_drag_handle).into(imageView);
     }
 
     @BindingAdapter("setAddIcon")
     public static void setAddIcon(ImageView imageView, String dummy) {
-        Glide.with(imageView.getContext()).load("").fallback(R.drawable.icon_add_image).into(imageView);
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).fallback(R.drawable.icon_add_image).into(imageView);
     }
     //----------------------------------------------------------------------------------------------
 }

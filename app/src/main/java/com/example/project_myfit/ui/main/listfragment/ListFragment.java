@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -52,6 +54,9 @@ import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeDr
 import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeDragCallBackList;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
+import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategory;
+import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderFolder;
+import com.example.project_myfit.ui.main.listfragment.treeview.TreeViewAddClickListener;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -73,9 +78,8 @@ import static com.example.project_myfit.MyFitConstant.GRIDVIEW;
 import static com.example.project_myfit.MyFitConstant.LISTVIEW;
 import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
 
-//TODO 트리뷰 클릭 리스너
-
-public class ListFragment extends Fragment implements SizeAdapterListener {
+@SuppressLint("ClickableViewAccessibility")
+public class ListFragment extends Fragment implements SizeAdapterListener, TreeViewAddClickListener {
     private MainActivityViewModel mActivityModel;
     private ListViewModel mModel;
     private FragmentListBinding mBinding;
@@ -87,9 +91,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private SharedPreferences mPreference;
     private int mViewType;
     private ItemTouchHelper mTouchHelperList, mTouchHelperGrid, mTouchHelperFolder;
-    private FloatingActionButton mActivityFab;
+    private FloatingActionButton mActivityFab, mActivityFabAdd, mActivityFabAddFolder;
     private Animation rotateOpen, rotateClose, fromBottom, toBottom;
-    private boolean isFabOpened;
+    private boolean isFabOpened, isFolderDragSelectEnable, isSizeDragSelectEnable, mScrollEnable;
     private List<Size> mSelectedItemSize;
     private List<Folder> mSelectedItemFolder;
     private ActionMode mActionMode;
@@ -97,6 +101,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private long mFolderId;
     private ActionMode.Callback mActionModeCallback;
     private DragSelectTouchListener mSelectListenerSize, mSelectListenerFolder;
+    private AlertDialog mTreeViewDialog;
 
     @Override
 
@@ -213,17 +218,46 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void dragSelectListenerInit() {
-        DragSelectTouchListener.OnDragSelectListener dragSelectListenerSize = (i, i1, b) -> {
-            if (mViewType == LISTVIEW) cardViewCallOnClick(i);
-            else cardViewCallOnClick(i, i1);
-        };
+        DragSelectTouchListener.OnAdvancedDragSelectListener dragSelectListenerSize = new DragSelectTouchListener.OnAdvancedDragSelectListener() {
+            @Override
+            public void onSelectionStarted(int i) {
+                isSizeDragSelectEnable = true;
+                mBinding.listScrollView.setScrollable(false);
+            }
 
-        DragSelectTouchListener.OnDragSelectListener dragSelectListenerFolder = (i, i1, b) -> {
-            RecyclerView.ViewHolder viewHolder = mBinding.recyclerFolder.findViewHolderForLayoutPosition(i);
-            if (viewHolder != null)
-                viewHolder.itemView.findViewById(R.id.folder_card_view).callOnClick();
-        };
+            @Override
+            public void onSelectionFinished(int i) {
+                isSizeDragSelectEnable = false;
+                mBinding.listScrollView.setScrollable(true);
+            }
 
+            @Override
+            public void onSelectChange(int i, int i1, boolean b) {
+                cardViewCallOnClick(i, i1);
+            }
+        };
+        DragSelectTouchListener.OnAdvancedDragSelectListener dragSelectListenerFolder = new DragSelectTouchListener.OnAdvancedDragSelectListener() {
+            @Override
+            public void onSelectionStarted(int i) {
+                isFolderDragSelectEnable = true;
+                mBinding.listScrollView.setScrollable(false);
+            }
+
+            @Override
+            public void onSelectionFinished(int i) {
+                isFolderDragSelectEnable = false;
+                mBinding.listScrollView.setScrollable(true);
+            }
+
+            @Override
+            public void onSelectChange(int i, int i1, boolean b) {
+                for (int j = i; j <= i1; j++) {
+                    RecyclerView.ViewHolder viewHolder = mBinding.recyclerFolder.findViewHolderForLayoutPosition(j);
+                    if (viewHolder != null)
+                        viewHolder.itemView.findViewById(R.id.folder_card_view).callOnClick();
+                }
+            }
+        };
         mSelectListenerSize = new DragSelectTouchListener().withSelectListener(dragSelectListenerSize);
         mSelectListenerFolder = new DragSelectTouchListener().withSelectListener(dragSelectListenerFolder);
     }
@@ -263,7 +297,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             folderNameView.setText(f.getFolderName());
             folderNameView.setOnClickListener(v -> {
                 mActivityModel.setFolder(f);
-                Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_refresh);
+                Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_refresh);
             });
 
             mBinding.listNavigation.addView(arrowIcon);
@@ -314,6 +348,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         super.onActivityCreated(savedInstanceState);
         recyclerViewInit();
 
+        autoScroll();
+
         itemTouchHelperInit();
 
         fabInit();
@@ -337,11 +373,41 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void recyclerViewInit() {
-        mBinding.recyclerFolder.setHasFixedSize(true);
         mBinding.recyclerFolder.setAdapter(mFolderAdapter);
         mBinding.recyclerFolder.addOnItemTouchListener(mSelectListenerFolder);
-        mBinding.recyclerSize.setHasFixedSize(true);
         mBinding.recyclerSize.addOnItemTouchListener(mSelectListenerSize);
+    }
+
+    private void autoScroll() {
+        mBinding.recyclerSize.setOnTouchListener((v, event) -> {
+            if (isSizeDragSelectEnable && event.getRawY() > 2000) {
+                mBinding.listScrollView.scrollBy(0, 1);
+                mScrollEnable = true;
+            } else if (isSizeDragSelectEnable && event.getRawY() < 250) {
+                mBinding.listScrollView.scrollBy(0, -1);
+                mScrollEnable = true;
+            } else mScrollEnable = false;
+            return false;
+        });
+
+        mBinding.recyclerFolder.setOnTouchListener((v, event) -> {
+            if (isFolderDragSelectEnable && event.getRawY() > 2000) {
+                mBinding.listScrollView.scrollBy(0, 1);
+                mScrollEnable = true;
+            } else if (isFolderDragSelectEnable && event.getRawY() < 250) {
+                mBinding.listScrollView.scrollBy(0, -1);
+                mScrollEnable = true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) mScrollEnable = false;
+            else mScrollEnable = false;
+            return false;
+        });
+
+        mBinding.listScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if ((isSizeDragSelectEnable || isFolderDragSelectEnable) && mScrollEnable && scrollY > oldScrollY)
+                v.postDelayed(() -> v.scrollBy(0, 1), 50);
+            else if ((isSizeDragSelectEnable || isFolderDragSelectEnable) && mScrollEnable && scrollY < oldScrollY)
+                v.postDelayed(() -> v.scrollBy(0, -1), 50);
+        });
     }
 
     private void itemTouchHelperInit() {
@@ -353,6 +419,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
 
     private void fabInit() {
         mActivityFab = requireActivity().findViewById(R.id.activity_fab);
+        mActivityFabAdd = requireActivity().findViewById(R.id.activity_fab_add);
+        mActivityFabAddFolder = requireActivity().findViewById(R.id.activity_fab_add_folder);
         rotateOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open);
         rotateClose = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close);
         fromBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.folder_from_bottom);
@@ -363,7 +431,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         int paddingTop = (int) getResources().getDimension(R.dimen._8sdp);
         int paddingBottom = (int) getResources().getDimension(R.dimen._60sdp);
         mBinding.recyclerSize.setPadding(0, paddingTop, 0, paddingBottom);
-        mBinding.recyclerSize.setLayoutManager(new LinearLayoutManager(requireContext()));
+        mBinding.recyclerSize.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         mBinding.recyclerSize.setAdapter(mSizeAdapterList);
         mTouchHelperList.attachToRecyclerView(mBinding.recyclerSize);
     }
@@ -372,7 +440,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         int padding = (int) getResources().getDimension(R.dimen._8sdp);
         int paddingBottom = (int) getResources().getDimension(R.dimen._60sdp);
         mBinding.recyclerSize.setPadding(padding, padding, padding, paddingBottom);
-        mBinding.recyclerSize.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        mBinding.recyclerSize.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false));
         mBinding.recyclerSize.setAdapter(mSizeAdapterGrid);
         mTouchHelperGrid.attachToRecyclerView(mBinding.recyclerSize);
     }
@@ -380,7 +448,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (isFabOpened) mActivityFab.startAnimation(rotateClose);
+        if (isFabOpened) {
+            isFabOpened = false;
+            setVisibility(isFabOpened);
+            setAnimation(isFabOpened);
+            setClickable(isFabOpened);
+        }
         if (mActionMode != null) mActionMode.finish();
     }
 
@@ -400,11 +473,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void categoryTextClick() {
-        mBinding.listTextCategory.setOnClickListener(v -> Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_refresh));
+        mBinding.listTextCategory.setOnClickListener(v -> Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_refresh));
     }
 
     private void homeIconClick() {
-        mBinding.listIconHome.setOnClickListener(v -> Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_mainFragment));
+        mBinding.listIconHome.setOnClickListener(v -> Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_to_mainFragment));
     }
 
     //fab click-------------------------------------------------------------------------------------
@@ -418,46 +491,46 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void addFabClick() {
-        mBinding.listFabAdd.setOnClickListener(v -> {
-            mActivityFab.performClick();
+        mActivityFabAdd.setOnClickListener(v -> {
+            mActivityFab.callOnClick();
             mActivityModel.setFolder(mModel.getThisFolder());
             mActivityModel.setSize(null);
-            Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputOutputFragment);
+            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_to_inputOutputFragment);
         });
     }
 
     private void addFolderFabClick() {
-        mBinding.listFabAddFolder.setOnClickListener(v -> {
-            mActivityFab.performClick();
-            showAddFolderDialog();
+        mActivityFabAddFolder.setOnClickListener(v -> {
+            mActivityFab.callOnClick();
+            showAddFolderDialog(mFolderId);
         });
     }
 
     private void setVisibility(boolean isFabOpened) {
         if (isFabOpened) {
-            mBinding.listFabAdd.setVisibility(View.VISIBLE);
-            mBinding.listFabAddFolder.setVisibility(View.VISIBLE);
+            mActivityFabAdd.setVisibility(View.VISIBLE);
+            mActivityFabAddFolder.setVisibility(View.VISIBLE);
         } else {
-            mBinding.listFabAdd.setVisibility(View.INVISIBLE);
-            mBinding.listFabAddFolder.setVisibility(View.INVISIBLE);
+            mActivityFabAdd.setVisibility(View.INVISIBLE);
+            mActivityFabAddFolder.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setAnimation(boolean isFabOpened) {
         if (isFabOpened) {
             mActivityFab.startAnimation(rotateOpen);
-            mBinding.listFabAdd.startAnimation(fromBottom);
-            mBinding.listFabAddFolder.startAnimation(fromBottom);
+            mActivityFabAdd.startAnimation(fromBottom);
+            mActivityFabAddFolder.startAnimation(fromBottom);
         } else {
             mActivityFab.startAnimation(rotateClose);
-            mBinding.listFabAdd.startAnimation(toBottom);
-            mBinding.listFabAddFolder.startAnimation(toBottom);
+            mActivityFabAdd.startAnimation(toBottom);
+            mActivityFabAddFolder.startAnimation(toBottom);
         }
     }
 
     private void setClickable(boolean isFabOpened) {
-        mBinding.listFabAdd.setClickable(isFabOpened);
-        mBinding.listFabAddFolder.setClickable(isFabOpened);
+        mActivityFabAdd.setClickable(isFabOpened);
+        mActivityFabAddFolder.setClickable(isFabOpened);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -468,7 +541,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             public void onFolderCardViewClick(Folder folder, MaterialCheckBox checkBox, int position) {
                 if (mFolderAdapter.getActionModeState() == ACTION_MODE_NONE || mFolderAdapter.getActionModeState() == ACTION_MODE_OFF) {
                     mActivityModel.setFolder(folder);
-                    Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_refresh);
+                    Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_refresh);
                 } else actionModeOnClickFolder(folder, position, checkBox);
             }
 
@@ -513,7 +586,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         if (mViewType == LISTVIEW && (mSizeAdapterList.getActionModeState() == ACTION_MODE_NONE || mSizeAdapterList.getActionModeState() == ACTION_MODE_OFF) ||
                 mViewType == GRIDVIEW && (mSizeAdapterGrid.getActionModeState() == ACTION_MODE_NONE || mSizeAdapterGrid.getActionModeState() == ACTION_MODE_OFF)) {
             mActivityModel.setSize(size);
-            Navigation.findNavController(requireView()).navigate(R.id.action_listFragment_to_inputOutputFragment);
+            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_to_inputOutputFragment);
         } else actionModeOnClickSize(size, checkBox, position, false);
     }
 
@@ -549,8 +622,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private void cardViewCallOnClick(int position, int position2) {
         for (int i = position; i <= position2; i++) {
             RecyclerView.ViewHolder viewHolder = mBinding.recyclerSize.findViewHolderForLayoutPosition(i);
-            if (viewHolder != null)
-                viewHolder.itemView.findViewById(R.id.grid_card_view).callOnClick();
+            if (viewHolder != null) {
+                if (mViewType == LISTVIEW)
+                    viewHolder.itemView.findViewById(R.id.list_card_view).callOnClick();
+                else viewHolder.itemView.findViewById(R.id.grid_card_view).callOnClick();
+            }
         }
     }
 
@@ -572,11 +648,19 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         cardViewCallOnClick(position);
         mSelectListenerSize.startDragSelection(position);
     }
+
+    @Override
+    public void onCardViewTouch(int position) {
+        if (isFolderDragSelectEnable) {
+            mSelectListenerSize.startDragSelection(position);
+            cardViewCallOnClick(position);
+        }
+    }
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
     //dialog----------------------------------------------------------------------------------------
     @SuppressLint("ShowToast")
-    private void showAddFolderDialog() {
+    private void showAddFolderDialog(long folderId) {
         setDialogEditText("");
         MaterialAlertDialogBuilder builder = getDialogBuilder();
         builder.setTitle("폴더 생성")
@@ -584,9 +668,27 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
                     int largestOrder = mModel.getFolderLargestOrder();
                     largestOrder++;
                     mModel.insertFolder(new Folder(mModel.getCurrentTime(), String.valueOf(mDialogEditTextBinding.editTextDialog.getText()),
-                            mFolderId,
+                            folderId,
                             largestOrder,
                             "0"));
+                });
+        builder.show();
+    }
+
+    private void showAddFolderDialog(TreeNode node, long folderId) {
+        setDialogEditText("");
+        MaterialAlertDialogBuilder builder = getDialogBuilder();
+        builder.setTitle("폴더 생성")
+                .setPositiveButton("확인", (dialog, which) -> {
+                    int largestOrder = mModel.getFolderLargestOrder();
+                    largestOrder++;
+                    Folder folder = new Folder(mModel.getCurrentTime(), String.valueOf(mDialogEditTextBinding.editTextDialog.getText()),
+                            folderId,
+                            largestOrder,
+                            "0");
+                    mModel.insertFolder(folder);
+                    node.addChild(new TreeNode(new TreeHolderFolder.IconTreeHolder(folder, mModel.getAllFolder(), 0, this))).setViewHolder(new TreeHolderFolder(requireContext()));
+                    //TODO 안됨 씨발
                 });
         builder.show();
     }
@@ -619,15 +721,30 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
 
     private void showTreeDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setMessage("아이템 이동")
+                .setMessage(mActivityModel.getCategory().getParentCategory())
                 .setView(getTreeView());
-        AlertDialog dialogs = builder.show();
-        TextView textView = dialogs.findViewById(android.R.id.message);
+        mTreeViewDialog = builder.show();
+        TextView textView = mTreeViewDialog.findViewById(android.R.id.message);
         if (textView != null)
             textView.setTextSize(requireContext().getResources().getDimension(R.dimen._6sdp));
-        Window window = dialogs.getWindow();
+        Window window = mTreeViewDialog.getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawableResource(R.drawable.tree_view_dialog_background);
+    }
+
+    private void showItemMoveDialog(long folderId) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+                .setTitle("확인")
+                .setMessage(getSelectedAmount() + "개의 아이템을 이동하시겠습니까?")
+                .setPositiveButton("확인", (dialog, which) -> {
+                    for (Folder f : mSelectedItemFolder) f.setFolderId(folderId);
+                    for (Size s : mSelectedItemSize) s.setFolderId(folderId);
+                    mModel.updateFolderList(mSelectedItemFolder);
+                    mModel.updateSizeList(mSelectedItemSize);
+                    mTreeViewDialog.dismiss();
+                    mActionMode.finish();
+                });
+        builder.show();
     }
 
     private View getTreeView() {
@@ -636,11 +753,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         List<Folder> allFolderList = mModel.getAllFolder();
         for (Category category : categoryList) {
             if (mActivityModel.getCategory().getParentCategory().equals(category.getParentCategory())) {
-                TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.IconTreeHolder(category.getCategory())).setViewHolder(new TreeHolderCategory(requireContext()));
+                TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.IconTreeHolder(category, this)).setViewHolder(new TreeHolderCategory(requireContext()));
                 root.addChild(categoryTreeNode);
                 for (Folder folder : allFolderList) {
                     if (category.getId() == folder.getFolderId()) {
-                        TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.IconTreeHolder(folder.getFolderName(), folder, mModel, 40)).setViewHolder(new TreeHolderFolder(requireContext()));
+                        TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.IconTreeHolder(folder, mModel.getAllFolder(), 40, this)).setViewHolder(new TreeHolderFolder(requireContext()));
                         categoryTreeNode.addChild(folderTreeNode);
                     }
                 }
@@ -650,7 +767,15 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         treeView.setDefaultAnimation(false);
         treeView.setUseAutoToggle(false);
         treeView.setDefaultNodeClickListener((node, value) -> {
-            Toast.makeText(requireContext(), "노드 클릭됨", Toast.LENGTH_SHORT).show();
+            if (value instanceof TreeHolderCategory.IconTreeHolder) {
+                TreeHolderCategory.IconTreeHolder categoryHolder = (TreeHolderCategory.IconTreeHolder) value;
+                showItemMoveDialog(categoryHolder.category.getId());
+                Toast.makeText(requireContext(), "카테고리 노드", Toast.LENGTH_SHORT).show();
+            } else {
+                TreeHolderFolder.IconTreeHolder folderHolder = (TreeHolderFolder.IconTreeHolder) value;
+                showItemMoveDialog(folderHolder.folder.getId());
+                Toast.makeText(requireContext(), "폴더 노드", Toast.LENGTH_SHORT).show();
+            }
         });
         return treeView.getView();
     }
@@ -705,6 +830,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onAddClick(TreeNode node, long folderId) {
+        showAddFolderDialog(folderId);
     }
 }
 

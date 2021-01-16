@@ -13,7 +13,7 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(ItemTouchHelper.START | ItemTouchHelper.END, 0);
+        return makeMovementFlags(ItemTouchHelper.START | ItemTouchHelper.END | ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
     }
 
     @Override
