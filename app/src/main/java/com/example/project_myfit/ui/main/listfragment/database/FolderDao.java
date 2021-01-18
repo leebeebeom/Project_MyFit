@@ -13,10 +13,10 @@ import java.util.List;
 public interface FolderDao {
 
     @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber ASC")
-    LiveData<List<Folder>> getFolderListLive(long folderId, boolean isDeleted);
+    LiveData<List<Folder>> getFolderLive(long folderId, boolean isDeleted);
 
-    @Query("SELECT * FROM Folder")
-    List<Folder> getAllFolder();
+    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted")
+    List<Folder> getFolderList(boolean isDeleted);
 
     @Query("SELECT MAX(orderNumber) FROM Folder")
     int getLargestOrder();
@@ -27,10 +27,9 @@ public interface FolderDao {
     @Update
     void update(Folder folder);
 
+    @Update
+    void update(List<Folder> folderList);
+
     @Delete
     void delete(List<Folder> folderList);
-
-    @Update
-    void updateOrder(List<Folder> folderList);
-
 }

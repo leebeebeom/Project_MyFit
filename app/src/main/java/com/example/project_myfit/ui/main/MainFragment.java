@@ -95,7 +95,7 @@ public class MainFragment extends Fragment {
         mLiveData = mModel.getAllChild(checkedCategory);
         mLiveData.observe(getViewLifecycleOwner(), categoryList -> {
             mCurrentCategoryList = categoryList;
-            mModel.setLargestOrder(checkedCategory);
+            mModel.setLargestOrder();
             if (mRefresh) {
                 mAdapter.setItem(categoryList, mModel);
                 mBinding.recyclerView.setAdapter(mAdapter);
@@ -260,13 +260,11 @@ public class MainFragment extends Fragment {
                 .setNegativeButton("CANCEL", null)
                 .setPositiveButton("DONE", (dialog, which) -> {
                     mModel.delete(category);
-                    mModel.deleteSizeByFolder(category.getId());
                     //Snack Bar
                     Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
                             .setAnchorView(R.id.activity_fab)
                             .setAction("Undo", v -> {
                                 mModel.insert(category);
-                                mModel.restoreDeletedSize();
                                 showUndoConfirmSnackBar();
                             }).show();
                 });

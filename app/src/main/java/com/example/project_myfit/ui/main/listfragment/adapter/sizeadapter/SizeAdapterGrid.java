@@ -86,10 +86,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             return false;
         });
         checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
-        cardView.setOnTouchListener((v, event) -> {
-            mListener.onCardViewTouch(holder.getLayoutPosition());
-            return false;
-        });
         //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------

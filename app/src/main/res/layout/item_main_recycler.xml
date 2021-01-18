@@ -63,26 +63,53 @@
                 app:cardCornerRadius="@dimen/_4sdp"
                 app:cardElevation="@dimen/_2sdp">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:alpha="0.7"
-                    android:scaleX="0.3"
-                    android:scaleY="0.3"
-                    app:srcCompat="@drawable/icon_dot" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_22sdp"
-                    android:alpha="0.8"
-                    android:text="@{category.Category}"
-                    android:textSize="@dimen/_11sdp"
-                    app:fontFamily="@font/sc_dream5"
-                    tools:text="Short Sleeve" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:alpha="0.7"
+                        android:scaleX="0.3"
+                        android:scaleY="0.3"
+                        app:srcCompat="@drawable/icon_dot" />
+
+                    <com.google.android.material.textview.MaterialTextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/_8sdp"
+                        android:alpha="0.8"
+                        android:ellipsize="end"
+                        android:maxWidth="@dimen/_220sdp"
+                        android:maxLines="1"
+                        android:text="@{category.category}"
+                        android:textSize="@dimen/_11sdp"
+                        app:fontFamily="@font/sc_dream5"
+                        tools:text="반팔" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:background="@drawable/item_amound_background">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="@dimen/_6sdp"
+                            android:layout_marginVertical="@dimen/_2sdp"
+                            android:alpha="0.6"
+                            android:text="@{category.itemAmount}"
+                            android:textSize="@dimen/_8sdp"
+                            tools:text="20" />
+                    </FrameLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"

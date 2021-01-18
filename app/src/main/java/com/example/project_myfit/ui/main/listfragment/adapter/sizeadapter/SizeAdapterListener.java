@@ -15,6 +15,4 @@ public interface SizeAdapterListener {
     void onListCheckBoxClick(Size size, MaterialCheckBox checkBox, int position);
 
     void onListCheckBoxLongCLick(int position);
-
-    void onCardViewTouch(int position);
 }

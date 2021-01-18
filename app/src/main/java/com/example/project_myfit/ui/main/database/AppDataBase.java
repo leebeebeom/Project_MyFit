@@ -19,7 +19,7 @@ import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class}, version = 2, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase sInstance;
@@ -37,18 +37,18 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category("Knit", MyFitConstant.TOP, 3));
                             categoryList.add(new Category("Hood", MyFitConstant.TOP, 4));
                             categoryList.add(new Category("Shirt", MyFitConstant.TOP, 5));
-                            categoryList.add(new Category("Jean", MyFitConstant.BOTTOM, 1));
-                            categoryList.add(new Category("Slacks", MyFitConstant.BOTTOM, 2));
-                            categoryList.add(new Category("Short Pant", MyFitConstant.BOTTOM, 3));
-                            categoryList.add(new Category("Track Pant", MyFitConstant.BOTTOM, 4));
-                            categoryList.add(new Category("Ma-1", MyFitConstant.OUTER, 1));
-                            categoryList.add(new Category("Shall Parka", MyFitConstant.OUTER, 2));
-                            categoryList.add(new Category("M65", MyFitConstant.OUTER, 3));
-                            categoryList.add(new Category("Hood Zip-Up", MyFitConstant.OUTER, 4));
-                            categoryList.add(new Category("Shoes", MyFitConstant.ETC, 1));
-                            categoryList.add(new Category("Glass", MyFitConstant.ETC, 2));
-                            categoryList.add(new Category("Necklace", MyFitConstant.ETC, 3));
-                            categoryList.add(new Category("Ring", MyFitConstant.ETC, 4));
+                            categoryList.add(new Category("Jean", MyFitConstant.BOTTOM, 6));
+                            categoryList.add(new Category("Slacks", MyFitConstant.BOTTOM, 7));
+                            categoryList.add(new Category("Short Pant", MyFitConstant.BOTTOM, 8));
+                            categoryList.add(new Category("Track Pant", MyFitConstant.BOTTOM, 9));
+                            categoryList.add(new Category("Ma-1", MyFitConstant.OUTER, 10));
+                            categoryList.add(new Category("Shall Parka", MyFitConstant.OUTER, 11));
+                            categoryList.add(new Category("M65", MyFitConstant.OUTER, 12));
+                            categoryList.add(new Category("Hood Zip-Up", MyFitConstant.OUTER, 13));
+                            categoryList.add(new Category("Shoes", MyFitConstant.ETC, 14));
+                            categoryList.add(new Category("Glass", MyFitConstant.ETC, 15));
+                            categoryList.add(new Category("Necklace", MyFitConstant.ETC, 16));
+                            categoryList.add(new Category("Ring", MyFitConstant.ETC, 17));
                             //insert
                             new Thread(() -> {
                                 for (Category category : categoryList) {
@@ -67,5 +67,5 @@ public abstract class AppDataBase extends RoomDatabase {
 
     public abstract SizeDao sizeDao();
 
-    public abstract FolderDao listFolderDao();
+    public abstract FolderDao folderDao();
 }

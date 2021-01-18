@@ -46,32 +46,23 @@ public class MainViewModel extends AndroidViewModel {
 
     //Order Update
     public void updateOrder(List<Category> categoryList) {
-        new Thread(() -> mCategoryDao.updateOrder(categoryList)).start();
+        new Thread(() -> mCategoryDao.update(categoryList)).start();
     }
 
     //Get Size List By Folder Id
     public void getAllSizeByFolder(long folderId) {
-        new Thread(() -> mCurrentSizeList = mSizeDao.getAllSizeByFolderNotLive(folderId)).start();
+        new Thread(() -> mCurrentSizeList = mSizeDao.getSizeList(folderId, false)).start();
     }
 
-    //Delete Size List By Folder Id
-    public void deleteSizeByFolder(long folderId) {
-        new Thread(() -> mSizeDao.deleteSizeByFolder(folderId)).start();
-    }
-
-    //Restore Deleted Size List
-    public void restoreDeletedSize() {
-        new Thread(() -> mSizeDao.restoreDeletedSize(mCurrentSizeList)).start();
-    }
 
     //Get All Category
     public LiveData<List<Category>> getAllChild(String parentCategory) {
-        return mCategoryDao.getAllCategory(parentCategory);
+        return mCategoryDao.getCategoryLive(parentCategory);
     }
 
     //Get Largest Order Number
-    public void setLargestOrder(String parentCategory) {
-        new Thread(() -> mLargestOrder = mCategoryDao.getLargestOrder(parentCategory)).start();
+    public void setLargestOrder() {
+        new Thread(() -> mLargestOrder = mCategoryDao.getLargestOrder()).start();
     }
 
     public int getLargestOrder() {

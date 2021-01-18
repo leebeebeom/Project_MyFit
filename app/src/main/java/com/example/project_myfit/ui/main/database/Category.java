@@ -3,8 +3,6 @@ package com.example.project_myfit.ui.main.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
-
 @Entity
 public class Category {
     private final String parentCategory;
@@ -12,12 +10,14 @@ public class Category {
     private long id;
     private int orderNumber;
     private String category;
+    private String itemAmount;
 
 
     public Category(String category, String parentCategory, int orderNumber) {
         this.category = category;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
+        this.itemAmount = "0";
     }
 
     public long getId() {
@@ -48,14 +48,11 @@ public class Category {
         this.orderNumber = orderNumber;
     }
 
-    @NotNull
-    @Override
-    public String toString() {
-        return "ChildCategory{" +
-                "id=" + id +
-                ", order=" + orderNumber +
-                ", childCategory='" + category + '\'' +
-                ", parentCategory='" + parentCategory + '\'' +
-                '}';
+    public String getItemAmount() {
+        return itemAmount;
+    }
+
+    public void setItemAmount(String itemAmount) {
+        this.itemAmount = itemAmount;
     }
 }

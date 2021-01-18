@@ -15,51 +15,87 @@ import java.util.List;
 
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.IconTreeHolder> {
 
+    private ItemTreeFolderBinding mBinding;
+    private boolean isSelected;
+
     public TreeHolderFolder(Context context) {
         super(context);
     }
 
     @Override
     public View createNodeView(TreeNode node, IconTreeHolder value) {
-        ItemTreeFolderBinding binding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        binding.text.setText(value.folder.getFolderName());
-        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) binding.arrowIcon.getLayoutParams();
+        mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
+        mBinding.text.setText(value.folder.getFolderName());
+        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
+        for (Folder f : value.selectedFolderList) {
+            if (f.getId() == value.folder.getId()) {
+                mBinding.getRoot().setAlpha(0.5f);
+                isSelected = true;
+                break;
+            }
+        }
+        if (node.getParent().getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getParent().getViewHolder()).isSelected) {
+            mBinding.getRoot().setAlpha(0.5f);
+            isSelected = true;
+        }
         for (Folder folder : value.allFolderList) {
             if (value.folder.getId() == folder.getFolderId()) {
-                TreeNode treeNode = new TreeNode(new IconTreeHolder(folder, value.allFolderList, value.margin + 20, value.listener)).setViewHolder(new TreeHolderFolder(context));
+                TreeNode treeNode = new TreeNode(new IconTreeHolder(folder, value.allFolderList, value.margin + 20, value.listener, value.selectedFolderList)).setViewHolder(new TreeHolderFolder(context));
                 node.addChild(treeNode);
             }
         }
         if (node.getChildren().size() != 0) {
-            binding.arrowIcon.setVisibility(View.VISIBLE);
-            binding.iconLayout.setOnClickListener(v -> {
+            mBinding.arrowIcon.setVisibility(View.VISIBLE);
+            mBinding.iconLayout.setOnClickListener(v -> {
                 getTreeView().toggleNode(node);
                 if (node.isExpanded()) {
-                    binding.arrowIcon.setImageResource(R.drawable.icon_triangle_down);
-                    binding.folderIcon.setImageResource(R.drawable.icon_folder_open);
+                    mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_down);
+                    mBinding.folderIcon.setImageResource(R.drawable.icon_folder_open);
                 } else {
-                    binding.arrowIcon.setImageResource(R.drawable.icon_triangle_right);
-                    binding.folderIcon.setImageResource(R.drawable.icon_folder);
+                    mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_right);
+                    mBinding.folderIcon.setImageResource(R.drawable.icon_folder);
                 }
             });
-        } else binding.arrowIcon.setVisibility(View.INVISIBLE);
-        binding.addIcon.setOnClickListener(v -> value.listener.onAddClick(node, value.folder.getId()));
+        } else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
+        mBinding.addIcon.setOnClickListener(v -> {
+            value.listener.OnFolderAddClick(node, value);
+        });
 
-        return binding.getRoot();
+        return mBinding.getRoot();
+    }
+
+    public void setClickListener() {
+        mBinding.arrowIcon.setVisibility(View.VISIBLE);
+        mBinding.iconLayout.setOnClickListener(v -> {
+            getTreeView().toggleNode(mNode);
+            if (mNode.isExpanded()) {
+                mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_down);
+                mBinding.folderIcon.setImageResource(R.drawable.icon_folder_open);
+            } else {
+                mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_right);
+                mBinding.folderIcon.setImageResource(R.drawable.icon_folder);
+            }
+        });
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 
     public static class IconTreeHolder {
         public Folder folder;
         public List<Folder> allFolderList;
         public int margin;
-        public TreeViewAddClickListener listener;
+        public TreeViewAddClick listener;
+        public List<Folder> selectedFolderList;
 
-        public IconTreeHolder(Folder folder, List<Folder> allFolderList, int margin, TreeViewAddClickListener listener) {
+        public IconTreeHolder(Folder folder, List<Folder> allFolderList, int margin, TreeViewAddClick listener, List<Folder> selectedFolderList) {
             this.folder = folder;
             this.allFolderList = allFolderList;
             this.margin = margin;
             this.listener = listener;
+            this.selectedFolderList = selectedFolderList;
         }
     }
 }

@@ -12,13 +12,13 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory ORDER BY orderNumber")
-    LiveData<List<Category>> getAllCategory(String parentCategory);
+    LiveData<List<Category>> getCategoryLive(String parentCategory);
 
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory ORDER BY orderNumber")
-    List<Category> getAllCategory2(String parentCategory);
+    List<Category> getCategoryList(String parentCategory);
 
-    @Query("SELECT max(orderNumber) FROM Category WHERE parentCategory = :parentCategory")
-    int getLargestOrder(String parentCategory);
+    @Query("SELECT max(orderNumber) FROM Category")
+    int getLargestOrder();
 
     @Insert
     void insert(Category category);
@@ -27,7 +27,7 @@ public interface CategoryDao {
     void update(Category category);
 
     @Update
-    void updateOrder(List<Category> categoryList);
+    void update(List<Category> categoryList);
 
     @Delete
     void delete(Category category);

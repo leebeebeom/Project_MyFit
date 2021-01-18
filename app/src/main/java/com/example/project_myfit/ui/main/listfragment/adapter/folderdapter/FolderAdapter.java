@@ -74,7 +74,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         //click-------------------------------------------------------------------------------------
         cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onFolderCardViewLongClick(folder, holder, checkBox, holder.getLayoutPosition());
+            mListener.onFolderCardViewLongClick(folder, holder.mBinding.folderCardView, checkBox, holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
@@ -122,7 +122,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     public void onItemDrop() {
-        mModel.updateFolderList(mFolderList);
+        mModel.updateFolder(mFolderList);
     }
     //----------------------------------------------------------------------------------------------
 
