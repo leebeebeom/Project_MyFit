@@ -55,34 +55,6 @@
             app:navGraph="@navigation/nav_graph"
             tools:layout="@layout/fragment_list" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/activity_fab_add_folder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_44sdp"
-            android:contentDescription="@string/add_folder"
-            android:src="@drawable/icon_folder_add"
-            android:visibility="invisible"
-            app:backgroundTint="?colorControlNormal"
-            app:fabSize="mini"
-            android:layout_gravity="bottom|start"
-            app:tint="?colorPrimary" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/activity_fab_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_44sdp"
-            android:contentDescription="@string/add_content"
-            android:src="@drawable/icon_add"
-            android:visibility="invisible"
-            app:backgroundTint="?colorControlNormal"
-            app:fabSize="mini"
-            android:layout_gravity="bottom|end"
-            app:tint="?colorPrimary" />
-
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"

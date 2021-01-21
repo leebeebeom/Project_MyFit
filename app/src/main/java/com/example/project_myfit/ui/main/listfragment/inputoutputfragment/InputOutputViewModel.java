@@ -91,8 +91,10 @@ public class InputOutputViewModel extends AndroidViewModel {
         if (mActivityModel == null) mActivityModel = activityModel;
         if (mActivityModel.getSize() != null) {
             mCompareSize = mRepository.getSize(mActivityModel.getSize().getId());
-            mImageUri = new MutableLiveData<>();
-            mImageUri.setValue(mActivityModel.getSize().getImageUri() != null ? Uri.parse(mActivityModel.getSize().getImageUri()) : null);
+            if (mImageUri == null) {
+                mImageUri = new MutableLiveData<>();
+                mImageUri.setValue(mActivityModel.getSize().getImageUri() != null ? Uri.parse(mActivityModel.getSize().getImageUri()) : null);
+            }
         }
     }
 

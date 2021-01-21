@@ -37,12 +37,13 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     private int mActionModeState;
     private boolean mAnimOn;
     private Context mContext;
-    private final HashSet<Integer> mSelectedPosition = new HashSet<>();
+    private HashSet<Integer> mSelectedPosition;
 
     public SizeAdapterList(ListViewModel model) {
         super(new SizeDiffUtil());
         mModel = model;
         setHasStableIds(true);
+        mSelectedPosition = new HashSet<>();
     }
 
     @Override
@@ -78,19 +79,19 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         holder.mBinding.setSize(size);
 
         //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, holder.getLayoutPosition()));
+        cardView.setOnClickListener(v -> mListener.onSizeCardViewClick(size, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onListCardViewLongClick(size, checkBox, holder.getLayoutPosition());
+            mListener.onSizeCardViewLongClick(holder.getLayoutPosition());
             return true;
         });
 
         holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onListDragHandTouch(holder);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandTouch(holder);
             return false;
         });
-        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
+        checkBox.setOnClickListener(v -> mListener.onSizeCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
         checkBox.setOnLongClickListener(v -> {
-            mListener.onListCheckBoxLongCLick(holder.getLayoutPosition());
+            mListener.onSizeCheckBoxLongCLick(holder.getLayoutPosition());
             return true;
         });
         //------------------------------------------------------------------------------------------
@@ -203,6 +204,15 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     public int getActionModeState() {
         return mActionModeState;
+    }
+
+    public HashSet<Integer> getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
+    public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
+        this.mSelectedPosition = mSelectedPosition;
+        notifyDataSetChanged();
     }
 
     //drag select-----------------------------------------------------------------------------------

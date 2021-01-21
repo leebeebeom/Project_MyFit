@@ -45,6 +45,7 @@
         <item name="colorControlHighlight">@android:color/transparent</item>
         <item name="myColorControl">@color/black</item>
         <item name="treeViewBackgroundColor">@color/white</item>
+        <item name="actionButtonStyle">@style/myMenuPadding</item>
     </style>
     )
     <!--    Tool Bar Title Style-->
@@ -98,6 +99,10 @@
     <!--    Action Mode Close Button-->
     <style name="myActionBarCloseButton">
         <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="myMenuPadding" parent="Theme.Project_MyFit">
+        <item name="android:paddingHorizontal">@dimen/_6sdp</item>
     </style>
 
     <attr name="recyclerBackground" format="color" />

@@ -30,7 +30,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private FolderAdapterListener mListener;
     private List<Folder> mFolderList;
     private int mActionModeState;
-    private final HashSet<Integer> mSelectedPosition;
+    private HashSet<Integer> mSelectedPosition;
 
     public FolderAdapter(ListViewModel model) {
         super(new FolderDiffUtil());
@@ -74,7 +74,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         //click-------------------------------------------------------------------------------------
         cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onFolderCardViewLongClick(folder, holder.mBinding.folderCardView, checkBox, holder.getLayoutPosition());
+            mListener.onFolderCardViewLongClick(holder.mBinding.folderCardView, holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
@@ -134,6 +134,15 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
     public int getActionModeState() {
         return mActionModeState;
+    }
+
+    public HashSet<Integer> getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
+    public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
+        this.mSelectedPosition = mSelectedPosition;
+        notifyDataSetChanged();
     }
 
     //drag select-----------------------------------------------------------------------------------

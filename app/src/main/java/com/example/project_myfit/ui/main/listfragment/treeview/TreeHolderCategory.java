@@ -6,10 +6,11 @@ import android.view.View;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemTreeCategoryBinding;
+import com.example.project_myfit.dialog.TreeViewDialog;
 import com.example.project_myfit.ui.main.database.Category;
 import com.unnamed.b.atv.model.TreeNode;
 
-public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.IconTreeHolder> {
+public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
 
     private ItemTreeCategoryBinding mBinding;
 
@@ -18,38 +19,39 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     @Override
-    public View createNodeView(TreeNode node, IconTreeHolder value) {
+    public View createNodeView(TreeNode node, CategoryTreeHolder value) {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.text.setText(value.category.getCategory());
+
+        if (node.isExpanded()) {
+            mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_down);
+            mBinding.folderIcon.setImageResource(R.drawable.icon_folder_open);
+        }
+
         if (node.getChildren().size() != 0) {
-            setClickListener();
+            mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
         } else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
-        mBinding.addIcon.setOnClickListener(v -> {
-            value.listener.OnCategoryAddClick(node, value);
-        });
+        mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewCategoryAddClick(node, value));
 
         return mBinding.getRoot();
     }
 
-    public void setClickListener() {
+    public void setIconClickable() {
         mBinding.arrowIcon.setVisibility(View.VISIBLE);
-        mBinding.iconLayout.setOnClickListener(v -> {
-            getTreeView().toggleNode(mNode);
-            if (mNode.isExpanded()) {
-                mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_down);
-                mBinding.folderIcon.setImageResource(R.drawable.icon_folder_open);
-            } else {
-                mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_right);
-                mBinding.folderIcon.setImageResource(R.drawable.icon_folder);
-            }
-        });
+        mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
-    public static class IconTreeHolder {
-        public Category category;
-        public TreeViewAddClick listener;
+    @Override
+    public void toggle(boolean active) {
+        mBinding.arrowIcon.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
+        mBinding.folderIcon.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
+    }
 
-        public IconTreeHolder(Category category, TreeViewAddClick listener) {
+    public static class CategoryTreeHolder {
+        public Category category;
+        public TreeViewDialog.TreeViewAddClick listener;
+
+        public CategoryTreeHolder(Category category, TreeViewDialog.TreeViewAddClick listener) {
             this.category = category;
             this.listener = listener;
         }

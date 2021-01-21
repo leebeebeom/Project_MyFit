@@ -24,7 +24,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/_10sdp"
                     android:layout_marginStart="@dimen/_4sdp"
-                    android:alpha="0.8"
                     app:srcCompat="@drawable/icon_triangle_right" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -32,7 +31,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:alpha="0.8"
                     app:srcCompat="@drawable/icon_folder" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -42,8 +40,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_weight="1"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_10sdp"
+                android:maxLines="1"
+                android:textSize="@dimen/_12sdp"
                 tools:text="Short Sleeve" />
 
             <androidx.appcompat.widget.AppCompatImageView

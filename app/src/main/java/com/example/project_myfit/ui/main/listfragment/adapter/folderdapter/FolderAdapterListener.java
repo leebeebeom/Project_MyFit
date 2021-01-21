@@ -9,7 +9,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 public interface FolderAdapterListener {
     void onFolderCardViewClick(Folder folder, MaterialCheckBox checkBox, int position);
 
-    void onFolderCardViewLongClick(Folder folder, MaterialCardView cardView, MaterialCheckBox checkBox, int position);
+    void onFolderCardViewLongClick(MaterialCardView cardView, int position);
 
     void onFolderDragHandTouch(RecyclerView.ViewHolder holder);
 }

@@ -31,7 +31,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     private SizeAdapterListener mListener;
     private List<Size> mSizeList;
     private int mActionModeState;
-    private final HashSet<Integer> mSelectedPosition;
+    private HashSet<Integer> mSelectedPosition;
 
     public SizeAdapterGrid(ListViewModel model) {
         super(new SizeDiffUtil());
@@ -76,16 +76,16 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             holder.mBinding.addImageIcon.setVisibility(View.GONE);
 
         //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onListCardViewClick(size, checkBox, holder.getLayoutPosition()));
+        cardView.setOnClickListener(v -> mListener.onSizeCardViewClick(size, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onListCardViewLongClick(size, checkBox, holder.getLayoutPosition());
+            mListener.onSizeCardViewLongClick(holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onListDragHandTouch(holder);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandTouch(holder);
             return false;
         });
-        checkBox.setOnClickListener(v -> mListener.onListCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
+        checkBox.setOnClickListener(v -> mListener.onSizeCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
         //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
@@ -138,6 +138,15 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     public int getActionModeState() {
         return mActionModeState;
+    }
+
+    public HashSet<Integer> getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
+    public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
+        this.mSelectedPosition = mSelectedPosition;
+        notifyDataSetChanged();
     }
 
     //drag select-----------------------------------------------------------------------------------

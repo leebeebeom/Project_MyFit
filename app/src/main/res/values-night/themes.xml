@@ -43,6 +43,7 @@
         <item name="colorControlHighlight">@android:color/transparent</item>
         <item name="myColorControl">@color/white</item>
         <item name="treeViewBackgroundColor">#FF424242</item>
+        <item name="actionButtonStyle">@style/myMenuPadding</item>
     </style>
     <!--    Bottom Navigation Active Color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">

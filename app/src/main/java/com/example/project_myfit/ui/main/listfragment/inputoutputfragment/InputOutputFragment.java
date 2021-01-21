@@ -1,6 +1,5 @@
 package com.example.project_myfit.ui.main.listfragment.inputoutputfragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,14 +15,17 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.MyFitConstant;
-import com.example.project_myfit.MyFitDialog;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentInputOutputBinding;
+import com.example.project_myfit.dialog.DeleteConFirmDialog;
+import com.example.project_myfit.dialog.GoBackConfirmDialog;
+import com.example.project_myfit.dialog.ImageClearDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.MyFitConstant.GET_IMAGE_REQUEST_CODE;
 
-public class InputOutputFragment extends Fragment {
+public class InputOutputFragment extends Fragment implements GoBackConfirmDialog.GoBackConfirmClick, DeleteConFirmDialog.DeleteConfirmClick, ImageClearDialog.ImageClearConfirmClick {
     private InputOutputViewModel mModel;
     private MainActivityViewModel mActivityModel;
     private FragmentInputOutputBinding mBinding;
@@ -82,12 +84,12 @@ public class InputOutputFragment extends Fragment {
                 !TextUtils.isEmpty(mBinding.option4.getText()) ||
                 !TextUtils.isEmpty(mBinding.option5.getText()) ||
                 !TextUtils.isEmpty(mBinding.option6.getText())) {
-            showGoBackConfirmDialog();
+            showDialog(new GoBackConfirmDialog());
         } else goListFragment();
     }
 
     private void setOnBackPressedCallBackOutput() {
-        if (mModel.getCompareResult()) showGoBackConfirmDialog();
+        if (mModel.getCompareResult()) showDialog(new GoBackConfirmDialog());
         else goListFragment();
     }
     //----------------------------------------------------------------------------------------------
@@ -102,7 +104,6 @@ public class InputOutputFragment extends Fragment {
         setData();
         setSelection();
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), mOnBackPressedCallBack);
         return mBinding.getRoot();
     }
 
@@ -148,6 +149,7 @@ public class InputOutputFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), mOnBackPressedCallBack);
 
         mModel.getImageUri().observe(getViewLifecycleOwner(), uri -> {
             mBinding.image.setImageURI(uri);
@@ -179,8 +181,7 @@ public class InputOutputFragment extends Fragment {
 
     private void imageLongClick() {
         mBinding.image.setOnLongClickListener(v -> {
-            if (mModel.getImageUri().getValue() != null)
-                showImageClearDialog();
+            if (mModel.getImageUri().getValue() != null) showDialog(new ImageClearDialog());
             return true;
         });
     }
@@ -232,34 +233,6 @@ public class InputOutputFragment extends Fragment {
         requireActivity().onBackPressed();
     }
 
-    //dialog----------------------------------------------------------------------------------------
-    private void showGoBackConfirmDialog() {
-        MyFitDialog.getGoBackConfirmDialog(requireContext())
-                .setPositiveButton("확인", (dialog, which) -> {
-                    mOnBackPressedCallBack.remove();
-                    goListFragment();
-                }).show();
-    }
-
-    @SuppressLint("ShowToast")
-    private void showDeleteConfirmDialog() {
-        MyFitDialog.getDeleteConfirmDialog(requireContext())
-                .setPositiveButton("확인", (dialog, which) -> {
-                    mModel.delete();
-                    goListFragment();
-                }).show();
-    }
-
-    private void showImageClearDialog() {
-        MyFitDialog.getImageClearDialog(requireContext())
-                .setPositiveButton("확인", (dialog, which) -> {
-                    mModel.getImageUri().setValue(null);
-                    mBinding.addIcon.setVisibility(View.VISIBLE);
-                }).show();
-    }
-    //----------------------------------------------------------------------------------------------
-
-
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
@@ -277,11 +250,33 @@ public class InputOutputFragment extends Fragment {
             mActivityFab.callOnClick();
             return true;
         } else if (item.getItemId() == R.id.input_output_delete) {
-            showDeleteConfirmDialog();
+            showDialog(new DeleteConFirmDialog());
             return true;
         }
         return false;
     }
 
+    //dialog click----------------------------------------------------------------------------------
+    private void showDialog(DialogFragment dialog) {
+        dialog.setTargetFragment(this, 0);
+        dialog.show(getParentFragmentManager(), null);
+    }
+
+    @Override
+    public void goBackConfirmClick() {
+        goListFragment();
+    }
+
+    @Override
+    public void deleteConfirmClick() {
+        mModel.delete();
+        goListFragment();
+    }
+
+    @Override
+    public void imageClearConfirmClick() {
+        mModel.getImageUri().setValue(null);
+        mBinding.addIcon.setVisibility(View.VISIBLE);
+    }
     //----------------------------------------------------------------------------------------------
 }

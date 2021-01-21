@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_list_add_folder"
+        android:icon="@drawable/icon_folder_add"
+        android:title="@string/add_folder"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_list_list_grid"
+        android:icon="@drawable/icon_list"
         android:title="@string/view_type"
         app:showAsAction="ifRoom" />
+
 </menu>

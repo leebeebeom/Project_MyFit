@@ -7,7 +7,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +45,6 @@ public class MainFragment extends Fragment {
     private boolean mRefresh;
     private String checkedCategory;
     private LiveData<List<Category>> mLiveData;
-    private Animation fabIn, fabOut;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

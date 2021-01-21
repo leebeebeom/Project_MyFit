@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
-    private MainActivityViewModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        MainActivityViewModel mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         //ToolBar
         setSupportActionBar(binding.toolbar);
