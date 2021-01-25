@@ -81,6 +81,7 @@ public class TreeViewDialog extends DialogFragment {
     }
 
     private AndroidTreeView getTreeView() {
+        int margin = (int) getResources().getDimension(R.dimen._12sdp);
         List<Folder> folderList = mActivityModel.getAllFolder();
         mCategoryTreeNodeList = new ArrayList<>();
         for (Category category : mActivityModel.getCategoryList()) {
@@ -89,7 +90,7 @@ public class TreeViewDialog extends DialogFragment {
             for (Folder folder : folderList) {
                 if (category.getId() == folder.getFolderId()) {
                     TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, folderList,
-                            40, (TreeViewAddClick) mListener, mActivityModel.getSelectedFolder())).setViewHolder(new TreeHolderFolder(requireContext()));
+                            margin, (TreeViewAddClick) mListener, mActivityModel.getSelectedFolder())).setViewHolder(new TreeHolderFolder(requireContext()));
                     categoryTreeNode.addChild(folderTreeNode);
                 }
             }

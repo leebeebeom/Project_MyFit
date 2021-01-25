@@ -81,7 +81,6 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         dragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 holder.itemView.setTranslationZ(10);
-                holder.itemView.setAlpha(0.6f);
                 holder.mBinding.folderAmountLayout.setVisibility(View.INVISIBLE);
                 mListener.onFolderDragHandTouch(holder);
             }
@@ -133,7 +132,6 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
         ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout.setVisibility(View.VISIBLE);
         viewHolder.itemView.setTranslationZ(0);
-        viewHolder.itemView.setAlpha(1);
         mModel.updateFolder(mFolderList);
         notifyDataSetChanged();
     }

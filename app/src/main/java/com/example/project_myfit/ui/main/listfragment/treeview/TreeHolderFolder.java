@@ -31,8 +31,12 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
 
+        //if this node is selected folder
         for (Folder f : value.selectedFolderList) {
             if (f.getId() == value.folder.getId()) {
+                mBinding.getRoot().setAlpha(0.5f);
+                isSelected = true;
+                //parent node alpha
                 TreeNode parent = node.getParent();
                 if (parent.getViewHolder() instanceof TreeHolderCategory) {
                     TreeHolderCategory holder = (TreeHolderCategory) parent.getViewHolder();
@@ -41,21 +45,20 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
                     TreeHolderFolder holder = (TreeHolderFolder) parent.getViewHolder();
                     holder.getBinding().getRoot().setAlpha(0.5f);
                 }
-                mBinding.getRoot().setAlpha(0.5f);
-                isSelected = true;
                 break;
             }
         }
 
-        //if parent folder is selected folder
+        //if parent node is selected folder
         if (node.getParent().getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getParent().getViewHolder()).isSelected) {
             mBinding.getRoot().setAlpha(0.5f);
             isSelected = true;
         }
 
+        int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
         for (Folder folder : value.allFolderList) {
             if (value.folder.getId() == folder.getFolderId()) {
-                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.allFolderList, value.margin + 20, value.listener, value.selectedFolderList)).setViewHolder(new TreeHolderFolder(context));
+                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.allFolderList, value.margin + margin, value.listener, value.selectedFolderList)).setViewHolder(new TreeHolderFolder(context));
                 node.addChild(treeNode);
             }
         }
