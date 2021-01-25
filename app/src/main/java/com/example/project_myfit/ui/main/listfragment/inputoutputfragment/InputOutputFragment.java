@@ -191,92 +191,57 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     }
 
     private void fabClick() {
-
         mActivityFab.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mBinding.brand.getText()) && TextUtils.isEmpty(mBinding.name.getText())) {
-                mBinding.brandLayout.setError("브랜드는 필수 입력 항목입니다.");
-                mBinding.brand.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setError(null);
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                mBinding.nameLayout.setError("이름은 필수 입력 항목입니다.");
-                mBinding.name.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setError(null);
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-            } else if (TextUtils.isEmpty(mBinding.brand.getText()) || TextUtils.isEmpty(mBinding.name.getText())) {
-                if (TextUtils.isEmpty(mBinding.brand.getText())) {
-                    mBinding.brandLayout.setError("브랜드는 필수 입력 항목입니다.");
-                    mBinding.brand.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setError(null);
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
-                } else {
-                    mBinding.nameLayout.setError("이름은 필수 입력 항목입니다.");
-                    mBinding.name.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setError(null);
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
-                }
+            if (TextUtils.isEmpty(mBinding.brand.getText()) || TextUtils.isEmpty(mBinding.name.getText())) {
+                if (TextUtils.isEmpty(mBinding.brand.getText())) brandSetWatcher();
+                if (TextUtils.isEmpty(mBinding.name.getText())) nameSetWatcher();
             } else {
-                if (mActivityModel.getSize() == null) {
-                    mModel.sizeInsert();
-                } else {
-                    mModel.update();
-                }
+                if (mActivityModel.getSize() == null) mModel.sizeInsert();
+                else mModel.update();
                 goListFragment();
             }
         });
     }
 
+    private void brandSetWatcher() {
+        mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
+        mBinding.brand.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void nameSetWatcher() {
+        mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
+        mBinding.name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
 
     private void goButtonClick() {
         mBinding.goButton.setOnClickListener(v -> {
@@ -299,12 +264,6 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
                 //cropImage result
             else mModel.getImageUri().setValue(data.getData());
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mActivityModel.setFolder(null);
     }
 
     private void cropImage(Uri data) {
@@ -372,4 +331,6 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         mBinding.addIcon.setVisibility(View.VISIBLE);
     }
     //----------------------------------------------------------------------------------------------
+
+    //TODO 이동 후 아이템 갯수 수정
 }

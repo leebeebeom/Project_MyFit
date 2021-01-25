@@ -17,8 +17,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.project_myfit.BuildConfig;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.Repository;
-import com.example.project_myfit.ui.main.database.Category;
-import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
 import java.io.File;
@@ -59,10 +57,6 @@ public class InputOutputViewModel extends AndroidViewModel {
     }
 
     //dao-------------------------------------------------------------------------------------------
-    private int getSizeLargestOrder() {
-        return mRepository.getSizeLargestOrder();
-    }
-
     public void sizeInsert() {
         mRepository.sizeInsert(getNewSize());
         increaseItemAmount();
@@ -76,14 +70,6 @@ public class InputOutputViewModel extends AndroidViewModel {
         mActivityModel.getSize().setDeleted(true);
         mRepository.sizeUpdate(mActivityModel.getSize());
         decreaseItemAmount();
-    }
-
-    private void updateFolder(Folder folder) {
-        mRepository.folderUpdate(folder);
-    }
-
-    private void updateCategory(Category category) {
-        mRepository.categoryUpdate(category);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -128,8 +114,8 @@ public class InputOutputViewModel extends AndroidViewModel {
 
     public Size getSize() {
         if (mActivityModel.getSize() == null) {
-            if (mNewSize == null) return mNewSize = new Size();
-            else return mNewSize;
+            if (mNewSize == null) mNewSize = new Size();
+            return mNewSize;
         } else return mActivityModel.getSize();
     }
 
@@ -168,7 +154,7 @@ public class InputOutputViewModel extends AndroidViewModel {
     }
 
     private Size getNewSize() {
-        mNewSize.setOrderNumber(getSizeLargestOrder() + 1);
+        mNewSize.setOrderNumber(mRepository.getSizeLargestOrder() + 1);
         mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
         mNewSize.setModifiedTime("");
         mNewSize.setImageUri(mImageUri.getValue() != null ? getRenameUri() : null);
@@ -183,12 +169,9 @@ public class InputOutputViewModel extends AndroidViewModel {
     }
 
     private String getCurrentTime(String pattern) {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
-        return dateFormat.format(date);
+        return dateFormat.format(new Date(System.currentTimeMillis()));
     }
-
 
     private String getOutputFileSavedUri() {
         //there was a saved image, but user deleted it
@@ -208,37 +191,37 @@ public class InputOutputViewModel extends AndroidViewModel {
         if (mActivityModel.getSize().getImageUri() != null) {
             File originImageFile = new File(Uri.parse(mActivityModel.getSize().getImageUri()).getPath());
             if (originImageFile.delete())
-                Log.d(TAG, "originFileDelete" + originImageFile.getPath() + "삭제 성공");
-            else Log.d(TAG, "originFileDelete" + originImageFile.getPath() + "삭제 실패");
+                Log.d(TAG, "inputOutputViewModel : originFileDelete_" + originImageFile.getPath() + "삭제 성공");
+            else
+                Log.d(TAG, "inputOutputViewModel : originFileDelete_" + originImageFile.getPath() + "삭제 실패");
         }
     }
 
     private String getRenameUri() {
         File pictureFolderPath = new File(getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), mFileName);
         if (mCacheFile.renameTo(pictureFolderPath))
-            Log.d(TAG, "getRenameUri" + mCacheFile.getPath() + "이동 성동");
-        else Log.d(TAG, "getRenameUri" + mCacheFile.getPath() + "이동 실패");
+            Log.d(TAG, "inputOutputViewModel : getRenameUri_" + mCacheFile.getPath() + "이동 성동");
+        else Log.d(TAG, "inputOutputViewModel : getRenameUri_" + mCacheFile.getPath() + "이동 실패");
         return String.valueOf(Uri.fromFile(pictureFolderPath));
     }
-
 
     private void increaseItemAmount() {
         if (mActivityModel.getFolder() == null) {
             mActivityModel.getCategory().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1));
-            updateCategory(mActivityModel.getCategory());
+            mRepository.categoryUpdate(mActivityModel.getCategory());
         } else {
             mActivityModel.getFolder().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getFolder().getItemAmount()) + 1));
-            updateFolder(mActivityModel.getFolder());
+            mRepository.folderUpdate(mActivityModel.getFolder());
         }
     }
 
     private void decreaseItemAmount() {
         if (mActivityModel.getFolder() == null) {
             mActivityModel.getCategory().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - 1));
-            updateCategory(mActivityModel.getCategory());
+            mRepository.categoryUpdate(mActivityModel.getCategory());
         } else {
             mActivityModel.getFolder().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getFolder().getItemAmount()) - 1));
-            updateFolder(mActivityModel.getFolder());
+            mRepository.folderUpdate(mActivityModel.getFolder());
         }
     }
 }

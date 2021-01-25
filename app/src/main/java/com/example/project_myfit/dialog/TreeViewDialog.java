@@ -39,12 +39,6 @@ public class TreeViewDialog extends DialogFragment {
     private TreeNode.TreeNodeClickListener mListener;
     private List<TreeNode> mCategoryTreeNodeList;
 
-    public interface TreeViewAddClick {
-        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
-
-        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
-    }
-
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
@@ -148,6 +142,12 @@ public class TreeViewDialog extends DialogFragment {
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("state", mTreeView.getSaveState());
+    }
+
+    public interface TreeViewAddClick {
+        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
+
+        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
     }
 
 }

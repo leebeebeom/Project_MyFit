@@ -19,10 +19,6 @@ import com.google.android.material.textview.MaterialTextView;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteConFirmDialog extends DialogFragment {
-    public interface DeleteConfirmClick {
-        void deleteConfirmClick();
-    }
-
     private DeleteConfirmClick mListener;
 
     @Override
@@ -61,5 +57,9 @@ public class DeleteConFirmDialog extends DialogFragment {
 
 
         return dialog;
+    }
+
+    public interface DeleteConfirmClick {
+        void deleteConfirmClick();
     }
 }

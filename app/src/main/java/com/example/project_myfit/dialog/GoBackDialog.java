@@ -19,10 +19,6 @@ import com.google.android.material.textview.MaterialTextView;
 import org.jetbrains.annotations.NotNull;
 
 public class GoBackDialog extends DialogFragment {
-    public interface GoBackConfirmClick {
-        void goBackConfirmClick();
-    }
-
     private GoBackConfirmClick mListener;
 
     @Override
@@ -62,5 +58,9 @@ public class GoBackDialog extends DialogFragment {
             message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
         }
         return dialog;
+    }
+
+    public interface GoBackConfirmClick {
+        void goBackConfirmClick();
     }
 }

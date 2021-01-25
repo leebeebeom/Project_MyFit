@@ -19,10 +19,6 @@ import com.google.android.material.textview.MaterialTextView;
 import org.jetbrains.annotations.NotNull;
 
 public class ImageClearDialog extends DialogFragment {
-    public interface ImageClearConfirmClick {
-        void imageClearConfirmClick();
-    }
-
     private ImageClearConfirmClick mListener;
 
     @Override
@@ -63,5 +59,9 @@ public class ImageClearDialog extends DialogFragment {
         }
 
         return dialog;
+    }
+
+    public interface ImageClearConfirmClick {
+        void imageClearConfirmClick();
     }
 }

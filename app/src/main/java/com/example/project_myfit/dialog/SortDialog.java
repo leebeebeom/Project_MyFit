@@ -26,11 +26,6 @@ import static com.example.project_myfit.MyFitConstant.SORT_LATEST_REVERSE;
 public class SortDialog extends DialogFragment {
 
     private AtomicInteger mCheckedItem;
-
-    public interface SortConfirmClick {
-        void sortConfirmClick(int which);
-    }
-
     private SortConfirmClick mListener;
 
     public SortDialog() {
@@ -90,5 +85,9 @@ public class SortDialog extends DialogFragment {
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("sort", mCheckedItem.get());
+    }
+
+    public interface SortConfirmClick {
+        void sortConfirmClick(int which);
     }
 }

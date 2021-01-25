@@ -27,11 +27,6 @@ import org.jetbrains.annotations.NotNull;
 public class FolderNameEditDialog extends DialogFragment {
 
     private ItemDialogEditTextBinding mBinding;
-
-    public interface FolderNameEditConfirmClick {
-        void folderNameEditConfirmClick(String folderName);
-    }
-
     private FolderNameEditConfirmClick mListener;
 
     public FolderNameEditDialog() {
@@ -112,5 +107,9 @@ public class FolderNameEditDialog extends DialogFragment {
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("folder name", String.valueOf(mBinding.editTextDialog.getText()));
+    }
+
+    public interface FolderNameEditConfirmClick {
+        void folderNameEditConfirmClick(String folderName);
     }
 }

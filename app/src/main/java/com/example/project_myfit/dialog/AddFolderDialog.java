@@ -25,10 +25,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.jetbrains.annotations.NotNull;
 
 public class AddFolderDialog extends DialogFragment {
-    public interface AddFolderConfirmClick {
-        void addFolderConfirmClick(String folderName);
-    }
-
     private AddFolderConfirmClick mListener;
 
     @Override
@@ -88,5 +84,9 @@ public class AddFolderDialog extends DialogFragment {
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
         return dialog;
+    }
+
+    public interface AddFolderConfirmClick {
+        void addFolderConfirmClick(String folderName);
     }
 }

@@ -19,10 +19,6 @@ import com.google.android.material.textview.MaterialTextView;
 import org.jetbrains.annotations.NotNull;
 
 public class SelectedItemDeleteDialog extends DialogFragment {
-    public interface SelectedItemDeleteConfirmClick {
-        void selectedItemDeleteConfirmClick();
-    }
-
     private SelectedItemDeleteConfirmClick mListener;
 
     public SelectedItemDeleteDialog() {
@@ -76,5 +72,9 @@ public class SelectedItemDeleteDialog extends DialogFragment {
             message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
         }
         return dialog;
+    }
+
+    public interface SelectedItemDeleteConfirmClick {
+        void selectedItemDeleteConfirmClick();
     }
 }
