@@ -43,27 +43,29 @@ public class AddFolderDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(requireContext()));
 
-        binding.setHint("Folder Name");
+        binding.setHint(getString(R.string.folder_name));
         binding.editTextDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         binding.editTextDialog.requestFocus();
         binding.editTextDialog.setMaxLines(3);
-        binding.editTextLayoutDialog.setHelperText("폴더 이름은 최대 3줄까지 표현 가능합니다.");
-        binding.editTextLayoutDialog.setPlaceholderText("폴더 이름");
+        binding.editTextLayoutDialog.setHelperText(getString(R.string.folder_name_helper));
+        binding.editTextLayoutDialog.setPlaceholderText(getString(R.string.folder_name_korean));
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("폴더 생성")
+                .setTitle(R.string.add_folder)
                 .setView(binding.getRoot())
-                .setNegativeButton("취소", null)
-                .setPositiveButton("확인", (dialog1, which) -> mListener.addFolderConfirmClick(String.valueOf(binding.editTextDialog.getText())))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.addFolderConfirmClick(String.valueOf(binding.editTextDialog.getText())))
                 .create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
 
         float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
         float titleSize = getResources().getDimension(R.dimen._5sdp);
+
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
         positive.setEnabled(false);
+
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 

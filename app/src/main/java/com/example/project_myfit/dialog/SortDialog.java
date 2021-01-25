@@ -19,7 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.example.project_myfit.MyFitConstant.SORT;
+import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.MyFitConstant.SORT_LATEST;
+import static com.example.project_myfit.MyFitConstant.SORT_LATEST_REVERSE;
 
 public class SortDialog extends DialogFragment {
 
@@ -37,7 +39,7 @@ public class SortDialog extends DialogFragment {
     public static SortDialog getInstance(int sort) {
         SortDialog sortDialog = new SortDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt(SORT, sort);
+        bundle.putInt("sort", sort);
         sortDialog.setArguments(bundle);
         return sortDialog;
     }
@@ -53,31 +55,33 @@ public class SortDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         mCheckedItem = new AtomicInteger();
-        if (getArguments() != null) mCheckedItem.set(getArguments().getInt(SORT));
-        if (savedInstanceState != null) mCheckedItem.set(savedInstanceState.getInt(SORT));
+        if (getArguments() != null) mCheckedItem.set(getArguments().getInt("sort"));
+        if (savedInstanceState != null) mCheckedItem.set(savedInstanceState.getInt("sort"));
 
-        String[] items = new String[]{"사용자 정의", "최근 생성 순", "최근 생성 역순"};
+        String[] items = new String[]{getString(R.string.sort_custom), getString(R.string.sort_latest), getString(R.string.sort_latest_reverse)};
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("정렬 순서")
+                .setTitle(R.string.sort)
                 .setSingleChoiceItems(items, mCheckedItem.get(), (dialog1, which) -> {
-                    if (which == 0) mCheckedItem.set(0);
-                    else if (which == 1) mCheckedItem.set(1);
-                    else mCheckedItem.set(2);
+                    if (which == SORT_CUSTOM) mCheckedItem.set(SORT_CUSTOM);
+                    else if (which == SORT_LATEST) mCheckedItem.set(SORT_LATEST);
+                    else mCheckedItem.set(SORT_LATEST_REVERSE);
                 })
-                .setNegativeButton(" 취소", null)
-                .setPositiveButton("확인", (dialog1, which) -> mListener.sortConfirmClick(mCheckedItem.get()))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.sortConfirmClick(mCheckedItem.get()))
                 .show();
 
+        float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
         float titleSize = getResources().getDimension(R.dimen._5sdp);
+
+        Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
+        Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
         int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
-
-        float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
-        Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
-        Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-        negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
         return dialog;
     }
@@ -85,6 +89,6 @@ public class SortDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(SORT, mCheckedItem.get());
+        outState.putInt("sort", mCheckedItem.get());
     }
 }

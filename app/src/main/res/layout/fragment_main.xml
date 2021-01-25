@@ -36,6 +36,7 @@
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="wrap_content"
                     android:text="@string/top"
+                    android:textSize="@dimen/_11sdp"
                     app:rippleColor="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
@@ -45,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:padding="0dp"
                     android:text="@string/bottom"
+                    android:textSize="@dimen/_11sdp"
                     app:rippleColor="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
@@ -53,6 +55,7 @@
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="wrap_content"
                     android:text="@string/outer"
+                    android:textSize="@dimen/_11sdp"
                     app:rippleColor="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
@@ -61,6 +64,7 @@
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="wrap_content"
                     android:text="@string/etc"
+                    android:textSize="@dimen/_11sdp"
                     app:rippleColor="@android:color/transparent" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 

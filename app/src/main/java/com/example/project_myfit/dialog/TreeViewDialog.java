@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ import java.util.List;
 
 public class TreeViewDialog extends DialogFragment {
     private AndroidTreeView mTreeView;
-    private MainActivityViewModel mModel;
+    private MainActivityViewModel mActivityModel;
     private TreeNode.TreeNodeClickListener mListener;
     private List<TreeNode> mCategoryTreeNodeList;
 
@@ -56,15 +55,11 @@ public class TreeViewDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         mTreeView = getTreeView();
 
-        if (savedInstanceState != null) {
-            String state = savedInstanceState.getString("state");
-            if (!TextUtils.isEmpty(state)) {
-                mTreeView.restoreState(savedInstanceState.getString("state"));
-            }
-        }
+        if (savedInstanceState != null)
+            mTreeView.restoreState(savedInstanceState.getString("state"));
 
         View view = mTreeView.getView();
         int padding = (int) requireContext().getResources().getDimension(R.dimen._8sdp);
@@ -72,15 +67,14 @@ public class TreeViewDialog extends DialogFragment {
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setView(view)
-                .setTitle("이동할 위치를 선택하세요.")
+                .setTitle(R.string.tree_view_dialog_title)
                 .show();
 
         Window window = dialog.getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawableResource(R.drawable.tree_view_dialog_background);
-        Drawable drawable = ContextCompat.getDrawable(requireContext(), R.drawable.tree_view_dialog_background);
 
         int margin = (int) requireContext().getResources().getDimension(R.dimen._20sdp);
+        Drawable drawable = ContextCompat.getDrawable(requireContext(), R.drawable.tree_view_dialog_background);
         InsetDrawable inset = new InsetDrawable(drawable, margin);
         window.setBackgroundDrawable(inset);
 
@@ -93,19 +87,19 @@ public class TreeViewDialog extends DialogFragment {
     }
 
     private AndroidTreeView getTreeView() {
-        List<Folder> folderList = mModel.getAllFolder();
+        List<Folder> folderList = mActivityModel.getAllFolder();
         mCategoryTreeNodeList = new ArrayList<>();
-        for (Category category : mModel.getCategoryList()) {
+        for (Category category : mActivityModel.getCategoryList()) {
             TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener))
                     .setViewHolder(new TreeHolderCategory(requireContext()));
             for (Folder folder : folderList) {
                 if (category.getId() == folder.getFolderId()) {
                     TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, folderList,
-                            40, (TreeViewAddClick) mListener, mModel.getSelectedFolder())).setViewHolder(new TreeHolderFolder(requireContext()));
+                            40, (TreeViewAddClick) mListener, mActivityModel.getSelectedFolder())).setViewHolder(new TreeHolderFolder(requireContext()));
                     categoryTreeNode.addChild(folderTreeNode);
                 }
             }
-            if (mModel.getCategory().getId() == category.getId() && categoryTreeNode.getChildren().size() != 0)
+            if (mActivityModel.getCategory().getId() == category.getId() && categoryTreeNode.getChildren().size() != 0)
                 categoryTreeNode.setExpanded(true);
             mCategoryTreeNodeList.add(categoryTreeNode);
         }
@@ -116,7 +110,7 @@ public class TreeViewDialog extends DialogFragment {
         treeView.setDefaultAnimation(false);
         treeView.setUseAutoToggle(false);
         treeView.setDefaultNodeClickListener(mListener);
-        mModel.setRootTreeNode(root);
+        mActivityModel.setRootTreeNode(root);
 
         return treeView;
     }
@@ -133,18 +127,19 @@ public class TreeViewDialog extends DialogFragment {
     }
 
     private void expandingNode(List<TreeNode> topFolderList) {
-        if (mModel.getFolderHistory() != null) {
+        if (mActivityModel.getFolderHistory() != null) {//if current position is not category
             for (TreeNode folderNode : topFolderList) {
-                if (mModel.getFolderHistory().get(mModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId())
+                //visible current position text
+                if (mActivityModel.getFolderHistory().get(mActivityModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId())
                     ((TreeHolderFolder) folderNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
-                for (Folder folder : mModel.getFolderHistory())
+                for (Folder folder : mActivityModel.getFolderHistory())
                     if (((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId() == folder.getId() && folderNode.getChildren().size() != 0)
                         mTreeView.expandNode(folderNode);
                 if (folderNode.getChildren().size() != 0) expandingNode(folderNode.getChildren());
             }
-        } else {
+        } else {//current position is category
             for (TreeNode categoryNode : mCategoryTreeNodeList)
-                if (mModel.getCategory().getId() == ((TreeHolderCategory.CategoryTreeHolder) categoryNode.getValue()).category.getId())
+                if (mActivityModel.getCategory().getId() == ((TreeHolderCategory.CategoryTreeHolder) categoryNode.getValue()).category.getId())
                     ((TreeHolderCategory) categoryNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
         }
     }

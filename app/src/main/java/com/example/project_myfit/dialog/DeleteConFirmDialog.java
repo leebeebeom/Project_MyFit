@@ -36,10 +36,10 @@ public class DeleteConFirmDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("확인")
-                .setMessage("휴지통으로 이동하시겠습니까?")
-                .setNegativeButton("취소", null)
-                .setPositiveButton("확인", (dialog1, which) -> mListener.deleteConfirmClick())
+                .setTitle(R.string.confirm)
+                .setMessage(R.string.delete_check)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.deleteConfirmClick())
                 .show();
 
         float size = getResources().getDimensionPixelSize(R.dimen._4sdp);

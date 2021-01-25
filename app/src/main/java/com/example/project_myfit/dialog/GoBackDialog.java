@@ -18,7 +18,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class GoBackConfirmDialog extends DialogFragment {
+public class GoBackDialog extends DialogFragment {
     public interface GoBackConfirmClick {
         void goBackConfirmClick();
     }
@@ -36,22 +36,25 @@ public class GoBackConfirmDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("확인")
-                .setMessage("저장되지 않았습니다.\n종료하시겠습니까?")
-                .setNegativeButton("취소", null)
-                .setPositiveButton("확인", (dialog1, which) -> mListener.goBackConfirmClick())
+                .setTitle(R.string.confirm)
+                .setMessage(R.string.go_back_check)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.goBackConfirmClick())
                 .show();
 
         float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
         float titleSize = getResources().getDimension(R.dimen._5sdp);
+
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
         int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+
         MaterialTextView message = dialog.findViewById(android.R.id.message);
         if (message != null) {
             int padding = (int) getResources().getDimension(R.dimen._4sdp);

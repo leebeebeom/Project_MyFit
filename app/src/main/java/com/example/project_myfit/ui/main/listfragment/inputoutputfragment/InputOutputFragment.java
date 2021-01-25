@@ -26,7 +26,7 @@ import com.example.project_myfit.MyFitConstant;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentInputOutputBinding;
 import com.example.project_myfit.dialog.DeleteConFirmDialog;
-import com.example.project_myfit.dialog.GoBackConfirmDialog;
+import com.example.project_myfit.dialog.GoBackDialog;
 import com.example.project_myfit.dialog.ImageClearDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.MyFitConstant.GET_IMAGE_REQUEST_CODE;
 
-public class InputOutputFragment extends Fragment implements GoBackConfirmDialog.GoBackConfirmClick, DeleteConFirmDialog.DeleteConfirmClick, ImageClearDialog.ImageClearConfirmClick {
+public class InputOutputFragment extends Fragment implements GoBackDialog.GoBackConfirmClick, DeleteConFirmDialog.DeleteConfirmClick, ImageClearDialog.ImageClearConfirmClick {
     private InputOutputViewModel mModel;
     private MainActivityViewModel mActivityModel;
     private FragmentInputOutputBinding mBinding;
@@ -86,12 +86,12 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
                 !TextUtils.isEmpty(mBinding.option4.getText()) ||
                 !TextUtils.isEmpty(mBinding.option5.getText()) ||
                 !TextUtils.isEmpty(mBinding.option6.getText())) {
-            showDialog(new GoBackConfirmDialog());
+            showDialog(new GoBackDialog());
         } else goListFragment();
     }
 
     private void setOnBackPressedCallBackOutput() {
-        if (mModel.getCompareResult()) showDialog(new GoBackConfirmDialog());
+        if (mModel.getCompareResult()) showDialog(new GoBackDialog());
         else goListFragment();
     }
     //----------------------------------------------------------------------------------------------

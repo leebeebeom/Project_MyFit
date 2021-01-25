@@ -36,22 +36,25 @@ public class ImageClearDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("확인")
-                .setMessage("이미지를 삭제하시겠습니까?")
-                .setNegativeButton("취소", null)
-                .setPositiveButton("확인", (dialog1, which) -> mListener.imageClearConfirmClick())
+                .setTitle(R.string.confirm)
+                .setMessage(R.string.image_delete_check)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.imageClearConfirmClick())
                 .show();
 
         float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
         float titleSize = getResources().getDimension(R.dimen._5sdp);
+
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
         int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+
         MaterialTextView message = dialog.findViewById(android.R.id.message);
         if (message != null) {
             int padding = (int) getResources().getDimension(R.dimen._8sdp);

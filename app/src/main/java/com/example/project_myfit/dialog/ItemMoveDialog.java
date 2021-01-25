@@ -28,10 +28,10 @@ public class ItemMoveDialog extends DialogFragment {
     public ItemMoveDialog() {
     }
 
-    public static ItemMoveDialog getInstance(int itemAmount, long id) {
+    public static ItemMoveDialog getInstance(int selectedItemAmount, long id) {
         ItemMoveDialog itemMoveDialog = new ItemMoveDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt("amount", itemAmount);
+        bundle.putInt("amount", selectedItemAmount);
         bundle.putLong("id", id);
         itemMoveDialog.setArguments(bundle);
         return itemMoveDialog;
@@ -55,22 +55,25 @@ public class ItemMoveDialog extends DialogFragment {
         }
         long folderId = id;
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("확인")
-                .setMessage(amount + "개의 아이템을 이동하시겠습니까?")
-                .setNegativeButton("취소", null)
-                .setPositiveButton("확인", (dialog1, which) -> mListener.itemMoveConfirmClick(folderId))
+                .setTitle(R.string.confirm)
+                .setMessage(amount + getString(R.string.item_move_check))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.itemMoveConfirmClick(folderId))
                 .show();
 
         float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
         float titleSize = getResources().getDimension(R.dimen._5sdp);
+
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
         int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+
         MaterialTextView message = dialog.findViewById(android.R.id.message);
         if (message != null) {
             int padding = (int) getResources().getDimension(R.dimen._8sdp);
