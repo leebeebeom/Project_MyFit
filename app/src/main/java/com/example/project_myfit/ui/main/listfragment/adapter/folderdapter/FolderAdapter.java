@@ -96,7 +96,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
-            mSelectedPosition.clear();
+            if (mSelectedPosition.size() != 0)
+                mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
 

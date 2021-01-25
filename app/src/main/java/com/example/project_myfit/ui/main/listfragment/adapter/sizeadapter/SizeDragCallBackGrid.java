@@ -38,8 +38,7 @@ public class SizeDragCallBackGrid extends ItemTouchHelper.Callback {
 
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        viewHolder.itemView.setTranslationZ(0);
-        mAdapter.onItemDrop();
+        mAdapter.onItemDrop(viewHolder);
     }
 
     @Override

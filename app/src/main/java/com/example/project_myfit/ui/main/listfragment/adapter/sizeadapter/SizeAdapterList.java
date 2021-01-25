@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
@@ -32,7 +33,6 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListVH> {
-
     private final ListViewModel mModel;
     private List<Size> mSizeList;
     private SizeAdapterListener mListener;
@@ -75,10 +75,12 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
         Size size = getItem(holder.getLayoutPosition());
+        holder.mBinding.setSize(size);
+
         MaterialCardView cardView = holder.mBinding.listCardView;
         MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
+        ImageView dragHandle = holder.mBinding.listDragHandle;
 
-        holder.mBinding.setSize(size);
 
         //click-------------------------------------------------------------------------------------
         cardView.setOnClickListener(v -> mListener.onSizeCardViewClick(size, checkBox, holder.getLayoutPosition()));
@@ -86,8 +88,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             mListener.onSizeCardViewLongClick(holder.getLayoutPosition());
             return true;
         });
-
-        holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
+        dragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 holder.itemView.setTranslationZ(10);
                 mListener.onSizeDragHandTouch(holder);
@@ -119,7 +120,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             } else if (mActionModeState == ACTION_MODE_OFF && mAnimOn) {
                 checkBoxCloseAnim(cardView, params, startMargin, endMargin);
                 checkBox.setChecked(false);
-                mSelectedPosition.clear();
+                if (mSelectedPosition.size() != 0)
+                    mSelectedPosition.clear();
                 setAnimOnFalse();
             } else if (mActionModeState == ACTION_MODE_OFF) {
                 params.setMarginStart(startMargin);
@@ -130,8 +132,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         //------------------------------------------------------------------------------------------
 
         if (mSort == SORT_CUSTOM)
-            holder.mBinding.listDragHandle.setVisibility(View.VISIBLE);
-        else holder.mBinding.listDragHandle.setVisibility(View.GONE);
+            dragHandle.setVisibility(View.VISIBLE);
+        else dragHandle.setVisibility(View.GONE);
     }
 
     //animation-------------------------------------------------------------------------------------
@@ -172,7 +174,10 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     private void setAnimOnFalse() {
-        new Handler().postDelayed(() -> mAnimOn = false, 310);
+        new Handler().postDelayed(() -> {
+            mAnimOn = false;
+            mActionModeState = 0;
+        }, 310);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -200,7 +205,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop() {
+    public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+        viewHolder.itemView.setTranslationZ(0);
         mModel.updateSizeList(mSizeList);
     }
     //----------------------------------------------------------------------------------------------

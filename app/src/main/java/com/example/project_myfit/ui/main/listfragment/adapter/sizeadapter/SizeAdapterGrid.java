@@ -27,7 +27,6 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
-
     private final ListViewModel mModel;
     private SizeAdapterListener mListener;
     private List<Size> mSizeList;
@@ -67,11 +66,11 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
         Size size = getItem(holder.getLayoutPosition());
+        holder.mBinding.setSize(size);
+
         MaterialCardView cardView = holder.mBinding.gridCardView;
         MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
-
-        holder.mBinding.setSize(size);
 
         if (size.getImageUri() != null)
             holder.mBinding.addImageIcon.setVisibility(View.GONE);
@@ -99,7 +98,8 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
-            mSelectedPosition.clear();
+            if (mSelectedPosition.size() != 0)
+                mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
 
@@ -132,7 +132,8 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop() {
+    public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+        viewHolder.itemView.setTranslationZ(0);
         mModel.updateSizeList(mSizeList);
     }
     //----------------------------------------------------------------------------------------------
