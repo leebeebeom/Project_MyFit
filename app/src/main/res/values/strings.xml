@@ -2,7 +2,7 @@
     <string name="app_name">MyFit</string>
     <string name="main">Main</string>
     <string name="setting">Setting</string>
-    <string name="http">http//:</string>
+    <string name="http">https://</string>
     <string name="memo">memo</string>
     <string name="brand">Brand</string>
     <string name="name">Name</string>

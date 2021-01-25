@@ -245,12 +245,15 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
     private void goButtonClick() {
         mBinding.goButton.setOnClickListener(v -> {
-            Uri link = Uri.parse(String.valueOf(mBinding.link.getText()));
-            if (!String.valueOf(link).startsWith(getString(R.string.http))) {
-                link = Uri.parse(getString(R.string.http) + link);
+            String link = String.valueOf(mBinding.link.getText());
+            if (!link.startsWith(getString(R.string.http))) {
+                link = getString(R.string.http) + link;
             }
-            Intent intent = new Intent(Intent.ACTION_VIEW, link);
-            startActivity(intent);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                intent.setData(Uri.parse(link));
+                startActivity(intent);
+            }
         });
     }
     //----------------------------------------------------------------------------------------------
@@ -331,6 +334,4 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         mBinding.addIcon.setVisibility(View.VISIBLE);
     }
     //----------------------------------------------------------------------------------------------
-
-    //TODO 이동 후 아이템 갯수 수정
 }
