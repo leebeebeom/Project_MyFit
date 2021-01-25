@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -16,13 +15,13 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/icon_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_4sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/arrow_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginVertical="@dimen/_6sdp"
                     android:layout_marginStart="@dimen/_16sdp"
                     android:alpha="0.8"
                     app:srcCompat="@drawable/icon_triangle_right" />
@@ -31,7 +30,6 @@
                     android:id="@+id/folder_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginVertical="@dimen/_4sdp"
                     app:srcCompat="@drawable/icon_folder" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -47,13 +45,24 @@
                 android:textSize="@dimen/_10sdp"
                 tools:text="폴더 1" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/current_position"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:alpha=".7"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/current_position"
+                android:textSize="@dimen/_6sdp"
+                android:visibility="visible" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/add_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:tint="?myColorControl"
+                android:layout_height="match_parent"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/_16sdp"
                 app:srcCompat="@drawable/icon_add" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

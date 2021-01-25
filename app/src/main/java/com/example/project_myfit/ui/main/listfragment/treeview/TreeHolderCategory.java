@@ -23,14 +23,10 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.text.setText(value.category.getCategory());
 
-        if (node.isExpanded()) {
-            mBinding.arrowIcon.setImageResource(R.drawable.icon_triangle_down);
-            mBinding.folderIcon.setImageResource(R.drawable.icon_folder_open);
-        }
-
         if (node.getChildren().size() != 0) {
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
         } else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
+
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewCategoryAddClick(node, value));
 
         return mBinding.getRoot();
@@ -39,6 +35,10 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     public void setIconClickable() {
         mBinding.arrowIcon.setVisibility(View.VISIBLE);
         mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
+    }
+
+    public ItemTreeCategoryBinding getBinding() {
+        return mBinding;
     }
 
     @Override

@@ -24,8 +24,6 @@ import com.example.project_myfit.ui.main.adapter.CategoryAdapter;
 import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
 import com.example.project_myfit.ui.main.database.Category;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -207,16 +205,16 @@ public class MainFragment extends Fragment {
             //Insert
             mModel.insert(newCategory);
             //Snack Bar
-            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 추가됨", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAnchorView(R.id.activity_fab)
-                    //Undo Clicked
-                    .setAction("Undo", v -> {
-                        //Last Added Data
-                        Category addedCategory = mCurrentCategoryList.get(mCurrentCategoryList.size() - 1);
-                        //Delete
-                        mModel.delete(addedCategory);
-                        showUndoConfirmSnackBar();
-                    }).show();
+//            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 추가됨", BaseTransientBottomBar.LENGTH_LONG)
+//                    .setAnchorView(R.id.activity_fab)
+//                    Undo Clicked
+//                    .setAction("Undo", v -> {
+//                        Last Added Data
+//                        Category addedCategory = mCurrentCategoryList.get(mCurrentCategoryList.size() - 1);
+//                        Delete
+//                        mModel.delete(addedCategory);
+//                        showUndoConfirmSnackBar();
+//                    }).show();
         }).show();
     }
 
@@ -235,14 +233,14 @@ public class MainFragment extends Fragment {
             //Update
             mModel.update(category);
             //Snack Bar
-            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
-                    .setAnchorView(R.id.activity_fab)
-                    .setAction("Undo", v -> {
-                        category.setCategory(oldCategoryName);
-                        mAdapter.notifyItemChanged(position);
-                        mModel.update(category);
-                        showUndoConfirmSnackBar();
-                    }).show();
+//            Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 수정됨", BaseTransientBottomBar.LENGTH_LONG)
+//                    .setAnchorView(R.id.activity_fab)
+//                    .setAction("Undo", v -> {
+//                        category.setCategory(oldCategoryName);
+//                        mAdapter.notifyItemChanged(position);
+//                        mModel.update(category);
+//                        showUndoConfirmSnackBar();
+//                    }).show();
         }).show();
 
     }
@@ -259,12 +257,12 @@ public class MainFragment extends Fragment {
                 .setPositiveButton("DONE", (dialog, which) -> {
                     mModel.delete(category);
                     //Snack Bar
-                    Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
-                            .setAnchorView(R.id.activity_fab)
-                            .setAction("Undo", v -> {
-                                mModel.insert(category);
-                                showUndoConfirmSnackBar();
-                            }).show();
+//                    Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "카테고리 삭제됨", BaseTransientBottomBar.LENGTH_LONG)
+//                            .setAnchorView(R.id.activity_fab)
+//                            .setAction("Undo", v -> {
+//                                mModel.insert(category);
+//                                showUndoConfirmSnackBar();
+//                            }).show();
                 });
         builder.show();
     }
@@ -286,9 +284,9 @@ public class MainFragment extends Fragment {
     }
 
     //Undo Confirmed
-    private void showUndoConfirmSnackBar() {
-        Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "취소됨", BaseTransientBottomBar.LENGTH_SHORT)
-                .setAnchorView(R.id.activity_fab)
-                .show();
-    }
+//    private void showUndoConfirmSnackBar() {
+//        Snackbar.make(requireActivity().findViewById(R.id.coordinator_layout), "취소됨", BaseTransientBottomBar.LENGTH_SHORT)
+//                .setAnchorView(R.id.activity_fab)
+//                .show();
+//    }
 }

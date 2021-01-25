@@ -4,14 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp">
 
@@ -23,18 +20,10 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:titleTextAppearance="@style/myActionBarTitleStyle">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/toolbar_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        tools:text="Short Sleeve" />
-                </com.google.android.material.appbar.MaterialToolbar>
+                    app:titleTextAppearance="@style/myActionBarTitleStyle" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/toolbar_title"
+                    android:id="@+id/toolbar_main_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -53,7 +42,7 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph"
-            tools:layout="@layout/fragment_list" />
+            tools:layout="@layout/fragment_main" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
@@ -86,7 +75,6 @@
             android:src="@drawable/icon_add"
             app:elevation="0dp"
             app:layout_anchor="@id/bottom_app_bar"
-            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
             app:tint="?colorPrimary" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

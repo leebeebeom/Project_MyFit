@@ -19,12 +19,10 @@
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.project_myfit.ui.favorite.FavoriteFragment"
-        android:label="Favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.example.project_myfit.ui.Average.AverageFragment"
-        android:label="Setting"
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/listFragment"

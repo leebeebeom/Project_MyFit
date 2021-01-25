@@ -53,21 +53,21 @@ public class MainActivity extends AppCompatActivity {
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.inputOutputFragment) {
                 binding.activityFab.hide();
-                binding.activityFab.setImageResource(R.drawable.icon_check);
+                binding.activityFab.setImageResource(R.drawable.icon_save);
                 binding.activityFab.show();
-                binding.toolbarTitle.setVisibility(View.GONE);
+                binding.toolbarMainTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
             } else if (destination.getId() == R.id.listFragment) {
                 binding.activityFab.hide();
                 binding.activityFab.setImageResource(R.drawable.icon_add);
                 binding.activityFab.show();
-                binding.toolbarTitle.setVisibility(View.GONE);
+                binding.toolbarMainTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);
             } else if (destination.getId() == R.id.mainFragment) {
                 binding.activityFab.hide();
                 binding.activityFab.setImageResource(R.drawable.icon_add);
                 binding.activityFab.show();
-                binding.toolbarTitle.setVisibility(View.VISIBLE);
+                binding.toolbarMainTitle.setVisibility(View.VISIBLE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
             }
         });

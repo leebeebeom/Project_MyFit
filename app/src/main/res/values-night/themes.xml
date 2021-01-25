@@ -17,52 +17,46 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#FF282828</item>
-        <!-- Customize your theme here. -->
-        <!--        Phone Navigation Bar Color-->
-        <item name="android:navigationBarColor">#FF2D2D2D</item>
-        <!--        Menu Text Color-->
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <!--        Menu Text Style-->
-        <item name="actionMenuTextAppearance">@style/menuTextStyle</item>
-        <!--        Text Color-->
-        <item name="android:textColor">@color/white</item>
-        <!--        Snack Bar Text Style-->
-        <item name="snackbarTextViewStyle">@style/mySnackBarText</item>
-        <!--        Snack Bar Action Style-->
-        <item name="snackbarButtonStyle">@style/mySnackBarAction</item>
-        <!--        Snack Bar Style-->
-        <item name="snackbarStyle">@style/mySnackBarNight</item>
-        <!--        ActionMode Close Button Gone-->
-        <item name="actionModeCloseButtonStyle">@style/myActionBarCloseButton</item>
 
+        <!-- Customize your theme here. -->
+        <!--        phone navigation bar color-->
+        <item name="android:navigationBarColor">#FF2D2D2D</item>
+        <!--        menu color-->
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <!--        text color-->
+        <item name="android:textColor">@color/white</item>
+        <!--        actionMode close button gone-->
+        <item name="actionModeCloseButtonStyle">@style/myActionBarCloseButton</item>
+        <!--        actionMode cover actionBar-->
         <item name="windowActionModeOverlay">true</item>
+        <!--        font-->
         <item name="fontFamily">@font/sc_dream</item>
+        <!--        recycler view background color-->
         <item name="recyclerBackground">@color/recycler_background_night</item>
+        <!--        input output go button color-->
         <item name="go_button_color">@color/go_button_color_night</item>
         <!--        ripple color remove-->
         <item name="colorControlHighlight">@android:color/transparent</item>
+        <!--        my color control-->
         <item name="myColorControl">@color/white</item>
-        <item name="treeViewBackgroundColor">#FF424242</item>
+        <!--        tree view background color-->
+        <item name="treeViewBackgroundColor">#FF292929</item>
+        <!--        menu icon padding-->
         <item name="actionButtonStyle">@style/myMenuPadding</item>
     </style>
-    <!--    Bottom Navigation Active Color-->
+    <!--    bottom navigation active color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
     </style>
-    <!--    Alert Dialog Style-->
+    <!--    alert dialog style-->
     <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/white</item>
-        <item name="android:textColor">@color/white</item>
+        <!--        single choice item text color-->
+        <item name="android:textColorAlertDialogListItem">@color/white</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
     </style>
-    <!--    Edit Text Focused Outline-->
-    <!--    In fragment_input.xml-->
+    <!--    edit text focused outline-->
     <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/white</item>
-    </style>
-    <!--    Snack Bar Style-->
-    <style name="mySnackBarNight" parent="Widget.MaterialComponents.Snackbar">
-        <item name="backgroundTint">#FF484848</item>
-        <item name="android:paddingHorizontal">@dimen/_8sdp</item>
-        <item name="actionTextColorAlpha">1</item>
     </style>
 </resources>

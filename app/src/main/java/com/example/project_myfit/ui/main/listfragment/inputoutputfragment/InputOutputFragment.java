@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,7 +65,7 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
     //onBackPressedCallBack-------------------------------------------------------------------------
     private void setOnBackPressedCallBackInput() {
         if (mModel.getImageUri().getValue() != null ||
-                mBinding.checkboxFavorite.isChecked() ||
+                mModel.getSize().isFavorite() ||
                 !TextUtils.isEmpty(mBinding.brand.getText()) ||
                 !TextUtils.isEmpty(mBinding.name.getText()) ||
                 !TextUtils.isEmpty(mBinding.size.getText()) ||
@@ -108,11 +110,12 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
     }
 
     private void setLayout() {
+        String parentCategory = mActivityModel.getCategory().getParentCategory();
         //TOP or OUTER
-        if (mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.TOP) || mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.OUTER))
-            mBinding.inputTopOutput.setVisibility(View.VISIBLE);
+        if (parentCategory.equals(MyFitConstant.TOP) || parentCategory.equals(MyFitConstant.OUTER))
+            mBinding.inputTopOuter.setVisibility(View.VISIBLE);
             //BOTTOM
-        else if (mActivityModel.getCategory().getParentCategory().equals(MyFitConstant.BOTTOM))
+        else if (parentCategory.equals(MyFitConstant.BOTTOM))
             mBinding.inputBottom.setVisibility(View.VISIBLE);
             //ETC
         else mBinding.inputEtc.setVisibility(View.VISIBLE);
@@ -149,6 +152,7 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), mOnBackPressedCallBack);
 
         mModel.getImageUri().observe(getViewLifecycleOwner(), uri -> {
@@ -187,13 +191,89 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
     }
 
     private void fabClick() {
+
         mActivityFab.setOnClickListener(v -> {
-            if (mActivityModel.getSize() == null) {
-                mModel.sizeInsert();
+            if (TextUtils.isEmpty(mBinding.brand.getText()) && TextUtils.isEmpty(mBinding.name.getText())) {
+                mBinding.brandLayout.setError("브랜드는 필수 입력 항목입니다.");
+                mBinding.brand.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setError(null);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                mBinding.nameLayout.setError("이름은 필수 입력 항목입니다.");
+                mBinding.name.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setError(null);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            } else if (TextUtils.isEmpty(mBinding.brand.getText()) || TextUtils.isEmpty(mBinding.name.getText())) {
+                if (TextUtils.isEmpty(mBinding.brand.getText())) {
+                    mBinding.brandLayout.setError("브랜드는 필수 입력 항목입니다.");
+                    mBinding.brand.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+                } else {
+                    mBinding.nameLayout.setError("이름은 필수 입력 항목입니다.");
+                    mBinding.name.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+                }
             } else {
-                mModel.update();
+                if (mActivityModel.getSize() == null) {
+                    mModel.sizeInsert();
+                } else {
+                    mModel.update();
+                }
+                goListFragment();
             }
-            goListFragment();
         });
     }
 
@@ -201,9 +281,11 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
     private void goButtonClick() {
         mBinding.goButton.setOnClickListener(v -> {
             Uri link = Uri.parse(String.valueOf(mBinding.link.getText()));
+            if (!String.valueOf(link).startsWith(getString(R.string.http))) {
+                link = Uri.parse(getString(R.string.http) + link);
+            }
             Intent intent = new Intent(Intent.ACTION_VIEW, link);
-            if (intent.resolveActivity(requireActivity().getPackageManager()) != null)
-                startActivity(intent);
+            startActivity(intent);
         });
     }
     //----------------------------------------------------------------------------------------------
@@ -215,11 +297,14 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
             //get image result
             if (requestCode == GET_IMAGE_REQUEST_CODE) cropImage(data.getData());
                 //cropImage result
-            else {
-                mModel.getImageUri().setValue(data.getData());
-                mBinding.addIcon.setVisibility(View.GONE);
-            }
+            else mModel.getImageUri().setValue(data.getData());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mActivityModel.setFolder(null);
     }
 
     private void cropImage(Uri data) {
@@ -237,23 +322,31 @@ public class InputOutputFragment extends Fragment implements GoBackConfirmDialog
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
         if (mActivityModel.getSize() == null) menu.getItem(1).setVisible(false);
+        if (mModel.getSize().isFavorite()) menu.getItem(0).setIcon(R.drawable.icon_favorite);
+        else menu.getItem(0).setIcon(R.drawable.icon_favorite_border);
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater
+            inflater) {
         inflater.inflate(R.menu.input_output_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
-        if (item.getItemId() == R.id.input_output_save) {
-            mActivityFab.callOnClick();
-            return true;
-        } else if (item.getItemId() == R.id.input_output_delete) {
+        if (item.getItemId() == R.id.input_output_delete) {
             showDialog(new DeleteConFirmDialog());
             return true;
+        } else if (item.getItemId() == R.id.input_output_favorite) {
+            mModel.getSize().setFavorite(!mModel.getSize().isFavorite());
+            if (mModel.getSize().isFavorite()) item.setIcon(R.drawable.icon_favorite);
+            else item.setIcon(R.drawable.icon_favorite_border);
+            return true;
+        } else {
+            if (mActivityModel.getSize() == null) setOnBackPressedCallBackInput();
+            else setOnBackPressedCallBackOutput();
+            return true;
         }
-        return false;
     }
 
     //dialog click----------------------------------------------------------------------------------

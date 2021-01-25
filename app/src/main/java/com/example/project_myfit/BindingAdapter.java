@@ -26,12 +26,12 @@ public class BindingAdapter {
     @androidx.databinding.BindingAdapter("setDragHandle")
     public static void setDragHandle(ImageView imageView, String dummy) {
         dummy = null;
-        Glide.with(imageView.getContext()).load(dummy).fallback(R.drawable.icon_drag_handle).into(imageView);
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_drag_handle).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setAddIcon")
     public static void setAddIcon(ImageView imageView, String dummy) {
         dummy = null;
-        Glide.with(imageView.getContext()).load(dummy).fallback(R.drawable.icon_add_image).into(imageView);
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_add_image).into(imageView);
     }
 }

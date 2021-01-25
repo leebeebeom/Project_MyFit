@@ -17,6 +17,11 @@ public class SizeDiffUtil extends DiffUtil.ItemCallback<Size> {
     public boolean areContentsTheSame(@NonNull @NotNull Size oldItem, @NonNull @NotNull Size newItem) {
         return String.valueOf(oldItem.getBrand()).equals(String.valueOf(newItem.getBrand())) &&
                 String.valueOf(oldItem.getName()).equals(String.valueOf(newItem.getName())) &&
-                String.valueOf(oldItem.getImageUri()).equals(String.valueOf(newItem.getImageUri()));
+                String.valueOf(oldItem.getImageUri()).equals(String.valueOf(newItem.getImageUri())) &&
+                String.valueOf(oldItem.getModifiedTime()).equals(String.valueOf(newItem.getModifiedTime())) &&
+                String.valueOf(oldItem.getSize()).equals(String.valueOf(newItem.getSize())) &&
+                String.valueOf(oldItem.getLink()).equals(String.valueOf(newItem.getLink())) &&
+                String.valueOf(oldItem.getMemo()).equals(String.valueOf(newItem.getMemo())) &&
+                oldItem.isFavorite() == newItem.isFavorite();
     }
 }

@@ -3,12 +3,19 @@ package com.example.project_myfit.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
@@ -30,7 +37,7 @@ public class FolderNameEditDialog extends DialogFragment {
     public FolderNameEditDialog() {
     }
 
-    public static FolderNameEditDialog newInstance(String folderName) {
+    public static FolderNameEditDialog getInstance(String folderName) {
         FolderNameEditDialog folderNameEditDialog = new FolderNameEditDialog();
         Bundle bundle = new Bundle();
         bundle.putString("name", folderName);
@@ -59,14 +66,43 @@ public class FolderNameEditDialog extends DialogFragment {
         mBinding.editTextDialog.requestFocus();
         mBinding.editTextDialog.setMaxLines(3);
         mBinding.editTextLayoutDialog.setHelperText("폴더 이름은 최대 3줄까지 표현 가능합니다.");
+        mBinding.editTextLayoutDialog.setPlaceholderText("폴더 이름");
 
-        Dialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setTitle("폴더 이름 변경")
                 .setView(mBinding.getRoot())
                 .setNegativeButton("취소", null)
                 .setPositiveButton("확인", (dialog1, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.editTextDialog.getText())))
                 .create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+
+        float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
+        float titleSize = getResources().getDimension(R.dimen._5sdp);
+        Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+        Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
+        mBinding.editTextDialog.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                positive.setEnabled(!TextUtils.isEmpty(s));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        TextView title = dialog.findViewById(titleId);
+        if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
         return dialog;
     }
 

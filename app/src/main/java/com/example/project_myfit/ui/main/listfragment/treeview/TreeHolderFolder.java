@@ -29,9 +29,8 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         mBinding.text.setText(value.folder.getFolderName());
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
-        params.leftMargin = value.margin;//앞 마진 설정
+        params.leftMargin = value.margin;
 
-        //선택된 폴더일 경우 알파 0.5
         for (Folder f : value.selectedFolderList) {
             if (f.getId() == value.folder.getId()) {
                 mBinding.getRoot().setAlpha(0.5f);
@@ -39,7 +38,8 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
                 break;
             }
         }
-        //선택된 폴더 하위 폴더 알파 0.5
+
+        //if parent folder is selected folder
         if (node.getParent().getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getParent().getViewHolder()).isSelected) {
             mBinding.getRoot().setAlpha(0.5f);
             isSelected = true;
@@ -51,12 +51,11 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
                 node.addChild(treeNode);
             }
         }
-        //하위 폴더가 있을 경우 화살표 아이콘 VISIBLE, 클릭 리스너
+
         if (node.getChildren().size() != 0)
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
         else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
 
-        //폴더 추가 아이콘 클릭
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewFolderAddClick(mNode, value));
 
         return mBinding.getRoot();
@@ -64,14 +63,17 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
     public void setIconClickable() {
         mBinding.arrowIcon.setVisibility(View.VISIBLE);
-        mBinding.iconLayout.setOnClickListener(v -> {
-            tView.toggleNode(mNode);
-        });
+        mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
     public boolean isSelected() {
         return isSelected;
     }
+
+    public ItemTreeFolderBinding getBinding() {
+        return mBinding;
+    }
+
 
     @Override
     public void toggle(boolean active) {
@@ -93,7 +95,6 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
             this.margin = margin;
             this.listener = listener;
             this.selectedFolderList = selectedFolderList;
-
         }
     }
 }

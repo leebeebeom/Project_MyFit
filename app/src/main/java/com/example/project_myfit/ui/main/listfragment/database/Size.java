@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Entity
 public class Size {
+    boolean isDeleted;
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int orderNumber;
@@ -23,7 +24,6 @@ public class Size {
     private long folderId;
     private boolean isFavorite;
     private Map<String, String> sizeMap;
-    boolean isDeleted;
 
     @Ignore
     public Size() {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -28,13 +29,14 @@ import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListVH> {
 
     private final ListViewModel mModel;
     private List<Size> mSizeList;
     private SizeAdapterListener mListener;
-    private int mActionModeState;
+    private int mActionModeState, mSort;
     private boolean mAnimOn;
     private Context mContext;
     private HashSet<Integer> mSelectedPosition;
@@ -86,7 +88,10 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         });
 
         holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandTouch(holder);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                holder.itemView.setTranslationZ(10);
+                mListener.onSizeDragHandTouch(holder);
+            }
             return false;
         });
         checkBox.setOnClickListener(v -> mListener.onSizeCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
@@ -105,10 +110,12 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             if (mActionModeState == ACTION_MODE_ON && mAnimOn) {
                 checkBoxOpenAnim(cardView, params, startMargin, endMargin);
                 setAnimOnFalse();
+                checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
             } else if (mActionModeState == ACTION_MODE_ON) {
                 params.setMarginStart(endMargin);
                 params.setMarginEnd(0);
                 cardView.setLayoutParams(params);
+                checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
             } else if (mActionModeState == ACTION_MODE_OFF && mAnimOn) {
                 checkBoxCloseAnim(cardView, params, startMargin, endMargin);
                 checkBox.setChecked(false);
@@ -119,9 +126,12 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
                 params.setMarginEnd(startMargin);
                 cardView.setLayoutParams(params);
             }
-            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         }
         //------------------------------------------------------------------------------------------
+
+        if (mSort == SORT_CUSTOM)
+            holder.mBinding.listDragHandle.setVisibility(View.VISIBLE);
+        else holder.mBinding.listDragHandle.setVisibility(View.GONE);
     }
 
     //animation-------------------------------------------------------------------------------------
@@ -202,10 +212,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         notifyDataSetChanged();
     }
 
-    public int getActionModeState() {
-        return mActionModeState;
-    }
-
     public HashSet<Integer> getSelectedPosition() {
         return mSelectedPosition;
     }
@@ -233,6 +239,11 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         notifyDataSetChanged();
     }
     //----------------------------------------------------------------------------------------------
+
+    public void setSort(int mSort) {
+        this.mSort = mSort;
+        notifyDataSetChanged();
+    }
 
     public static class SizeListVH extends RecyclerView.ViewHolder {
         private final ItemListRecyclerListBinding mBinding;

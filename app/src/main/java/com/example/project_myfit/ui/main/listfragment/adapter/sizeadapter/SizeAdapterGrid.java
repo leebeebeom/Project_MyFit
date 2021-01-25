@@ -24,13 +24,14 @@ import java.util.HashSet;
 import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
 
     private final ListViewModel mModel;
     private SizeAdapterListener mListener;
     private List<Size> mSizeList;
-    private int mActionModeState;
+    private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
 
     public SizeAdapterGrid(ListViewModel model) {
@@ -82,23 +83,29 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandTouch(holder);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                holder.itemView.setTranslationZ(10);
+                mListener.onSizeDragHandTouch(holder);
+            }
             return false;
         });
         checkBox.setOnClickListener(v -> mListener.onSizeCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
         //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
-        if (mActionModeState == ACTION_MODE_ON)
+        if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
-        else {
+            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+        } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
             mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
 
-        checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+        if (mSort == SORT_CUSTOM)
+            dragHandle.setVisibility(View.VISIBLE);
+        else dragHandle.setVisibility(View.GONE);
     }
 
     //drag------------------------------------------------------------------------------------------
@@ -136,10 +143,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyDataSetChanged();
     }
 
-    public int getActionModeState() {
-        return mActionModeState;
-    }
-
     public HashSet<Integer> getSelectedPosition() {
         return mSelectedPosition;
     }
@@ -167,6 +170,11 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyDataSetChanged();
     }
     //----------------------------------------------------------------------------------------------
+
+    public void setSort(int mSort) {
+        this.mSort = mSort;
+        notifyDataSetChanged();
+    }
 
     public static class SizeGridVH extends RecyclerView.ViewHolder {
         ItemListRecyclerGridBinding mBinding;

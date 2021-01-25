@@ -1,14 +1,17 @@
 package com.example.project_myfit.ui.main.listfragment;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.Repository;
+import com.example.project_myfit.ui.main.listfragment.adapter.folderdapter.FolderAdapter;
+import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeAdapterGrid;
+import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategory;
@@ -23,8 +26,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.project_myfit.MyFitConstant.LISTVIEW;
+
 public class ListViewModel extends AndroidViewModel {
     private final Repository mRepository;
+    private final MutableLiveData<Integer> mSelectedAmount;
+    private final FolderAdapter mFolderAdapter;
+    private final SizeAdapterList mSizeAdapterList;
+    private final SizeAdapterGrid mSizeAdapterGrid;
     private Folder mThisFolder;
     private long mFolderId;
     private List<Folder> mFolderHistory;
@@ -34,14 +43,36 @@ public class ListViewModel extends AndroidViewModel {
     private TreeHolderCategory.CategoryTreeHolder mCategoryAddValue;
     private TreeHolderFolder.FolderTreeHolder mFolderAddValue;
     private HashSet<Integer> mSelectedPositionFolder, mSelectedPositionSize;
-    private final MutableLiveData<Integer> mSelectedAmount;
+    private MainActivityViewModel mActivityModel;
+    private String mActionBarTitle;
+    private boolean mFavoriteView;
 
 
     public ListViewModel(@NonNull Application application) {
         super(application);
         mRepository = new Repository(application);
         mSelectedAmount = new MutableLiveData<>();
+
+        mFolderAdapter = new FolderAdapter(this);
+        mSizeAdapterList = new SizeAdapterList(this);
+        mSizeAdapterGrid = new SizeAdapterGrid(this);
     }
+
+    //category--------------------------------------------------------------------------------------
+    public void categoryAmountUpdate() {
+        String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1);
+        mActivityModel.getCategory().setItemAmount(amount);
+        mRepository.categoryUpdate(mActivityModel.getCategory());
+    }
+
+    public void categoryAmountUpdate2() {
+        if (mSelectedAmount.getValue() != null) {
+            String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - mSelectedAmount.getValue());
+            mActivityModel.getCategory().setItemAmount(amount);
+            mRepository.categoryUpdate(mActivityModel.getCategory());
+        }
+    }
+    //----------------------------------------------------------------------------------------------
 
     //folder----------------------------------------------------------------------------------------
     public LiveData<List<Folder>> getFolderLive() {
@@ -85,9 +116,28 @@ public class ListViewModel extends AndroidViewModel {
         deleteSize(mSelectedItemSize);
     }
 
+    public void folderAmountUpdate() {
+        String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) + 1);
+        mThisFolder.setItemAmount(amount);
+        updateFolder(mThisFolder);
+    }
+
+    public void folderAmountUpdate2() {
+        if (mSelectedAmount.getValue() != null) {
+            String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) - mSelectedAmount.getValue());
+            mThisFolder.setItemAmount(amount);
+            updateFolder(mThisFolder);
+        }
+    }
+    //----------------------------------------------------------------------------------------------
+
     //size------------------------------------------------------------------------------------------
     public LiveData<List<Size>> getSizeLive() {
         return mRepository.getSizeLive(mFolderId);
+    }
+
+    public void updateSize(Size size) {
+        mRepository.sizeUpdate(size);
     }
 
     public void deleteSize(List<Size> sizeList) {
@@ -98,27 +148,12 @@ public class ListViewModel extends AndroidViewModel {
     public void updateSizeList(List<Size> sizeList) {
         mRepository.sizeUpdate(sizeList);
     }
+    //----------------------------------------------------------------------------------------------
 
-    public void setThisFolder(Folder thisFolder, long folderId) {
-        if (thisFolder != null) {
-            mThisFolder = thisFolder;
-        }
-        mFolderId = folderId;
-    }
-
-    public Folder getThisFolder() {
-        return mThisFolder;
-    }
-
-    public long getFolderId() {
-        return mFolderId;
-    }
-
-    public long getCurrentTime() {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        return Long.parseLong(dateFormat.format(date));
+    public String getActionBarTitle() {
+        if (mActionBarTitle == null)
+            mActionBarTitle = mThisFolder == null ? mActivityModel.getCategory().getCategory() : mThisFolder.getFolderName();
+        return mActionBarTitle;
     }
 
     public List<Folder> getFolderHistory() {
@@ -142,47 +177,73 @@ public class ListViewModel extends AndroidViewModel {
         return folderHistory;
     }
 
-    //선택된 아이템---------------------------------------------------------------------------------
+    public void setAdapterActionModeState(int actionModeState) {
+        mFolderAdapter.setActionModeState(actionModeState);
+        mSizeAdapterList.setActionModeState(actionModeState);
+        mSizeAdapterGrid.setActionModeState(actionModeState);
+    }
+
+    public void selectAllClick(boolean isChecked) {
+        mSelectedItemSize.clear();
+        mSelectedItemFolder.clear();
+        if (isChecked) {
+            mSelectedItemFolder.addAll(mFolderAdapter.getCurrentList());
+            mSelectedItemSize.addAll(mSizeAdapterList.getCurrentList());
+            mFolderAdapter.selectAll();
+            mSizeAdapterList.selectAll();
+            mSizeAdapterGrid.selectAll();
+        } else {
+            mFolderAdapter.deselectAll();
+            mSizeAdapterList.deselectAll();
+            mSizeAdapterGrid.deselectAll();
+        }
+        setSelectedAmount();
+    }
+
+    public void setSelectedPosition(int viewType) {
+        mSelectedPositionFolder = mFolderAdapter.getSelectedPosition();
+        mSelectedPositionSize = viewType == LISTVIEW ?
+                mSizeAdapterList.getSelectedPosition() : mSizeAdapterGrid.getSelectedPosition();
+    }
+
+    public void restoreAdapterSelectedPosition() {
+        mFolderAdapter.setSelectedPosition(mSelectedPositionFolder);
+        mSizeAdapterList.setSelectedPosition(mSelectedPositionSize);
+        mSizeAdapterGrid.setSelectedPosition(mSelectedPositionSize);
+    }
+
+    public void folderSelected(Folder folder, boolean isChecked, int position) {
+        if (isChecked) mSelectedItemFolder.add(folder);
+        else mSelectedItemFolder.remove(folder);
+        mFolderAdapter.setSelectedPosition(position);
+        setSelectedAmount();
+    }
+
+    public void sizeSelected(Size size, boolean isChecked, int position) {
+        if (isChecked) mSelectedItemSize.add(size);
+        else mSelectedItemSize.remove(size);
+        mSizeAdapterList.setSelectedPosition(position);
+        mSizeAdapterGrid.setSelectedPosition(position);
+        setSelectedAmount();
+    }
+
+    public void setSelectedAmount() {
+        mSelectedAmount.setValue(mSelectedItemSize.size() + mSelectedItemFolder.size());
+    }
+
     public void selectedItemListInit() {
         mSelectedItemFolder = new ArrayList<>();
         mSelectedItemSize = new ArrayList<>();
     }
 
-    public List<Size> getSelectedItemSize() {
-        return mSelectedItemSize;
+    public long getCurrentTime() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+        return Long.parseLong(dateFormat.format(date));
     }
 
-    public List<Folder> getSelectedItemFolder() {
-        return mSelectedItemFolder;
-    }
-
-    public void sizeSelected(Size size, boolean isChecked) {
-        if (isChecked) mSelectedItemSize.add(size);
-        else mSelectedItemSize.remove(size);
-        setSelectedAmount();
-    }
-
-    public void folderSelected(Folder folder, boolean isChecked) {
-        if (isChecked) mSelectedItemFolder.add(folder);
-        else {
-            Toast.makeText(getApplication(), mSelectedItemFolder.contains(folder) + "", Toast.LENGTH_SHORT).show();
-            mSelectedItemFolder.remove(folder);
-        }
-        setSelectedAmount();
-    }
-
-    public void selectAllClick(boolean isChecked, List<Folder> folderCurrentItem, List<Size> sizeCurrentItem) {
-        mSelectedItemSize.clear();
-        mSelectedItemFolder.clear();
-        if (isChecked) {
-            mSelectedItemFolder.addAll(folderCurrentItem);
-            mSelectedItemSize.addAll(sizeCurrentItem);
-        }
-        setSelectedAmount();
-    }
-    //----------------------------------------------------------------------------------------------
-
-
+    //node------------------------------------------------------------------------------------------
     public void nodeAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value) {
         mAddNode = node;
         mCategoryAddValue = value;
@@ -207,27 +268,51 @@ public class ListViewModel extends AndroidViewModel {
         return mFolderAddValue;
     }
 
-    public HashSet<Integer> getSelectedPositionFolder() {
-        return mSelectedPositionFolder;
+    //getter----------------------------------------------------------------------------------------
+    public Folder getThisFolder() {
+        return mThisFolder;
     }
 
-    public void setSelectedPositionFolder(HashSet<Integer> mSelectedPositionFolder) {
-        this.mSelectedPositionFolder = mSelectedPositionFolder;
+    public void setThisFolder(MainActivityViewModel activityViewModel) {
+        mActivityModel = activityViewModel;
+        if (mThisFolder == null)
+            mThisFolder = mActivityModel.getFolder() == null ? null : mActivityModel.getFolder();
+        mFolderId = mActivityModel.getFolder() == null ? mActivityModel.getCategory().getId() : mActivityModel.getFolder().getId();
     }
 
-    public HashSet<Integer> getSelectedPositionSize() {
-        return mSelectedPositionSize;
-    }
-
-    public void setSelectedPositionSize(HashSet<Integer> mSelectedPositionSize) {
-        this.mSelectedPositionSize = mSelectedPositionSize;
+    public long getFolderId() {
+        return mFolderId;
     }
 
     public MutableLiveData<Integer> getSelectedAmount() {
         return mSelectedAmount;
     }
 
-    public void setSelectedAmount() {
-        mSelectedAmount.setValue(mSelectedItemSize.size() + mSelectedItemFolder.size());
+    public List<Folder> getSelectedItemFolder() {
+        return mSelectedItemFolder;
+    }
+
+    public FolderAdapter getFolderAdapter() {
+        return mFolderAdapter;
+    }
+
+    public SizeAdapterList getSizeAdapterList() {
+        return mSizeAdapterList;
+    }
+
+    public SizeAdapterGrid getSizeAdapterGrid() {
+        return mSizeAdapterGrid;
+    }
+
+    public List<Size> getSelectedItemSize() {
+        return mSelectedItemSize;
+    }
+
+    public boolean isFavoriteView() {
+        return mFavoriteView;
+    }
+
+    public void setFavoriteView(boolean mFavoriteView) {
+        this.mFavoriteView = mFavoriteView;
     }
 }

@@ -16,22 +16,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MainRecyclerVH> implements MainDragCallBack.DragFolderListener {
+    private final ViewBinderHelper mViewBinderHelper = new ViewBinderHelper();
     private List<Category> mCategoryList;
     private OnCategoryClickListener mListener;
-    private final ViewBinderHelper mViewBinderHelper = new ViewBinderHelper();
     private MainViewModel mModel;
 
     public void setItem(List<Category> categoryList, MainViewModel model) {
         mCategoryList = categoryList;
         mModel = model;
-    }
-
-    public interface OnCategoryClickListener {
-        void onItemClick(Category category);
-
-        void onEditClick(Category category, int position);
-
-        void onDeleteClick(Category category);
     }
 
     public void setOnCategoryClickListener(OnCategoryClickListener listener) {
@@ -69,7 +61,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MainRe
         return mCategoryList.size();
     }
 
-
     public void updateDiffUtils(List<Category> newCategoryList) {
         CategoryDiffUtil diffUtil = new CategoryDiffUtil(mCategoryList, newCategoryList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtil, true);
@@ -102,10 +93,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MainRe
         notifyItemMoved(from, to);
     }
 
-
     @Override
     public void onItemDrop() {
         mModel.updateOrder(mCategoryList);
+    }
+
+
+    public interface OnCategoryClickListener {
+        void onItemClick(Category category);
+
+        void onEditClick(Category category, int position);
+
+        void onDeleteClick(Category category);
     }
 
     public static class MainRecyclerVH extends RecyclerView.ViewHolder {

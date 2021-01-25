@@ -25,10 +25,14 @@ public class MyFitConstant {
     public static final int GRIDVIEW = 1;
     public static final String VIEW_TYPE = "view type";
 
-    public static final int ACTION_MODE_NONE = 0;
     public static final int ACTION_MODE_ON = 1;
     public static final int ACTION_MODE_OFF = 2;
 
     public static final int GET_IMAGE_REQUEST_CODE = 1000;
     public static final int CROP_REQUEST_CODE = 2000;
+
+    public static final int SORT_CUSTOM = 0;
+    public static final int SORT_LATEST = 1;
+    public static final int SORT_LATEST_REVERSE = 2;
+    public static final String SORT = "sort";
 }

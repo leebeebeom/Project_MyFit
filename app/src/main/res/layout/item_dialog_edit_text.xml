@@ -19,6 +19,8 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingTop="@dimen/_12sdp"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -26,20 +28,21 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_12sdp"
             android:hint="@{hint}"
             android:theme="@style/myEditText"
             app:endIconMode="clear_text"
-            app:errorEnabled="true">
+            app:placeholderTextAppearance="@style/mySuffixSize"
+            app:helperTextTextAppearance="@style/myHintSize"
+            app:hintTextAppearance="@style/myHintSize">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_dialog"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_36sdp"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:text="@{setText}" />
+                android:text="@{setText}"
+                android:textSize="@dimen/_11sdp" />
         </com.google.android.material.textfield.TextInputLayout>
     </FrameLayout>
 </layout>

@@ -24,12 +24,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private final ListViewModel mModel;
     private FolderAdapterListener mListener;
     private List<Folder> mFolderList;
-    private int mActionModeState;
+    private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
 
     public FolderAdapter(ListViewModel model) {
@@ -79,6 +80,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         });
         dragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                holder.itemView.setTranslationZ(10);
+                holder.itemView.setAlpha(0.6f);
+                holder.mBinding.folderAmountLayout.setVisibility(View.INVISIBLE);
                 mListener.onFolderDragHandTouch(holder);
             }
             return false;
@@ -86,15 +90,19 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
-        if (mActionModeState == ACTION_MODE_ON)
+        if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
-        else {
+            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+        } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
             mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-        checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+
+        if (mSort == SORT_CUSTOM)
+            dragHandle.setVisibility(View.VISIBLE);
+        else dragHandle.setVisibility(View.GONE);
     }
 
     //drag------------------------------------------------------------------------------------------
@@ -123,6 +131,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
     public void onItemDrop() {
         mModel.updateFolder(mFolderList);
+        notifyDataSetChanged();
     }
     //----------------------------------------------------------------------------------------------
 
@@ -132,17 +141,12 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    public int getActionModeState() {
-        return mActionModeState;
-    }
-
     public HashSet<Integer> getSelectedPosition() {
         return mSelectedPosition;
     }
 
     public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
         this.mSelectedPosition = mSelectedPosition;
-        notifyDataSetChanged();
     }
 
     //drag select-----------------------------------------------------------------------------------
@@ -162,7 +166,12 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         mSelectedPosition.clear();
         notifyDataSetChanged();
     }
+
     //----------------------------------------------------------------------------------------------
+    public void setSort(int mSort) {
+        this.mSort = mSort;
+        notifyDataSetChanged();
+    }
 
     public static class FolderVH extends RecyclerView.ViewHolder {
         ItemListRecyclerFolderBinding mBinding;

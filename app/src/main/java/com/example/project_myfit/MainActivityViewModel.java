@@ -23,6 +23,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private final Repository mRepository;
     private TreeNode rootTreeNode;
+    private List<Folder> folderHistory;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
@@ -75,5 +76,13 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public TreeNode getRootTreeNode() {
         return rootTreeNode;
+    }
+
+    public List<Folder> getFolderHistory() {
+        return folderHistory;
+    }
+
+    public void setFolderHistory(List<Folder> folderHistory) {
+        this.folderHistory = folderHistory;
     }
 }

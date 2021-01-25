@@ -2,7 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_gray">#FF222222</color>
     <color name="recycler_background">#FFF0F0F0</color>
     <color name="recycler_background_night">#FF282828</color>
     <color name="go_button_color">#FFF8F8F8 </color>

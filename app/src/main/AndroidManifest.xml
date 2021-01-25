@@ -36,6 +36,9 @@
         <intent>
             <action android:name="com.android.camera.action.CROP" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+        </intent>
     </queries>
 
 </manifest>
