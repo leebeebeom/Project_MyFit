@@ -20,6 +20,9 @@ public interface CategoryDao {
     @Query("SELECT max(orderNumber) FROM Category")
     int getLargestOrder();
 
+    @Query("SELECT * FROM Category WHERE id = :id")
+    Category getCategory(long id);
+
     @Insert
     void insert(Category category);
 

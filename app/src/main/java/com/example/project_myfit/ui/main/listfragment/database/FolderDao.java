@@ -21,6 +21,9 @@ public interface FolderDao {
     @Query("SELECT MAX(orderNumber) FROM Folder")
     int getLargestOrder();
 
+    @Query("SELECT * FROM Folder WHERE id = :id")
+    Folder getFolder(long id);
+
     @Insert
     void insert(Folder folder);
 

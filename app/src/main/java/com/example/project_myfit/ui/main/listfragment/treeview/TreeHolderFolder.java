@@ -33,6 +33,14 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         for (Folder f : value.selectedFolderList) {
             if (f.getId() == value.folder.getId()) {
+                TreeNode parent = node.getParent();
+                if (parent.getViewHolder() instanceof TreeHolderCategory) {
+                    TreeHolderCategory holder = (TreeHolderCategory) parent.getViewHolder();
+                    holder.getBinding().getRoot().setAlpha(0.5f);
+                } else {
+                    TreeHolderFolder holder = (TreeHolderFolder) parent.getViewHolder();
+                    holder.getBinding().getRoot().setAlpha(0.5f);
+                }
                 mBinding.getRoot().setAlpha(0.5f);
                 isSelected = true;
                 break;

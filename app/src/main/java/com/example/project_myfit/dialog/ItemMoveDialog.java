@@ -19,6 +19,10 @@ import com.google.android.material.textview.MaterialTextView;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemMoveDialog extends DialogFragment {
+    public interface ItemMoveConfirmClick {
+        void itemMoveConfirmClick(long folderId);
+    }
+
     private ItemMoveConfirmClick mListener;
 
     public ItemMoveDialog() {
@@ -77,9 +81,5 @@ public class ItemMoveDialog extends DialogFragment {
             message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
         }
         return dialog;
-    }
-
-    public interface ItemMoveConfirmClick {
-        void itemMoveConfirmClick(long folderId);
     }
 }

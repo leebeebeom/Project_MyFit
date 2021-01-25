@@ -1,6 +1,7 @@
 package com.example.project_myfit.ui.main.listfragment;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.Repository;
+import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.adapter.folderdapter.FolderAdapter;
 import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeAdapterGrid;
 import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeAdapterList;
@@ -243,6 +245,39 @@ public class ListViewModel extends AndroidViewModel {
         return Long.parseLong(dateFormat.format(date));
     }
 
+    public void increaseItemAmount(long id) {
+        Category category = mRepository.getCategory(id);
+        Folder folder = mRepository.getFolder(id);
+        int amount = 0;
+        if (category != null) {
+            if (mSelectedAmount.getValue() != null)
+                amount = Integer.parseInt(category.getItemAmount()) + mSelectedAmount.getValue();
+            category.setItemAmount(String.valueOf(amount));
+            mRepository.categoryUpdate(category);
+            Toast.makeText(getApplication(), "호출", Toast.LENGTH_SHORT).show();
+        } else {
+            if (mSelectedAmount.getValue() != null)
+                amount = Integer.parseInt(folder.getItemAmount()) + mSelectedAmount.getValue();
+            folder.setItemAmount(String.valueOf(amount));
+            mRepository.folderUpdate(folder);
+        }
+    }
+
+    public void decreaseItemAmount() {
+        int amount = 0;
+        if (mThisFolder == null) {
+            if (mSelectedAmount.getValue() != null)
+                amount = Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - mSelectedAmount.getValue();
+            mActivityModel.getCategory().setItemAmount(String.valueOf(amount));
+            mRepository.categoryUpdate(mActivityModel.getCategory());
+        } else {
+            if (mSelectedAmount.getValue() != null)
+                amount = Integer.parseInt(mThisFolder.getItemAmount()) - mSelectedAmount.getValue();
+            mThisFolder.setItemAmount(String.valueOf(amount));
+            mRepository.folderUpdate(mThisFolder);
+        }
+    }
+
     //node------------------------------------------------------------------------------------------
     public void nodeAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value) {
         mAddNode = node;
@@ -277,7 +312,7 @@ public class ListViewModel extends AndroidViewModel {
         mActivityModel = activityViewModel;
         if (mThisFolder == null)
             mThisFolder = mActivityModel.getFolder() == null ? null : mActivityModel.getFolder();
-        mFolderId = mActivityModel.getFolder() == null ? mActivityModel.getCategory().getId() : mActivityModel.getFolder().getId();
+        mFolderId = mThisFolder == null ? mActivityModel.getCategory().getId() : mThisFolder.getId();
     }
 
     public long getFolderId() {

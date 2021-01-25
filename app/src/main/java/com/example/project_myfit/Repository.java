@@ -57,6 +57,18 @@ public class Repository {
         return largestOrder.get();
     }
 
+    public Category getCategory(long id) {
+        AtomicReference<Category> category = new AtomicReference<>();
+        Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(id)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return category.get();
+    }
+
     public void categoryInsert(Category category) {
         new Thread(() -> mCategoryDao.insert(category)).start();
     }
@@ -101,6 +113,18 @@ public class Repository {
             e.printStackTrace();
         }
         return largestOrder.get();
+    }
+
+    public Folder getFolder(long id) {
+        AtomicReference<Folder> folder = new AtomicReference<>();
+        Thread thread = new Thread(() -> folder.set(mFolderDao.getFolder(id)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return folder.get();
     }
 
     public void folderInsert(Folder folder) {

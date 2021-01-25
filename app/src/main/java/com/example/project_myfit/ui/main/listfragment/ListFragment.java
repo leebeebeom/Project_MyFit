@@ -700,25 +700,48 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override//node click
     public void onClick(TreeNode node, Object value) {
-        if (value instanceof TreeHolderCategory.CategoryTreeHolder && ((TreeHolderCategory.CategoryTreeHolder) value).category.getId() != mActivityModel.getCategory().getId()) {
-            TreeHolderCategory.CategoryTreeHolder categoryHolder = (TreeHolderCategory.CategoryTreeHolder) value;
-            if (mModel.getSelectedAmount().getValue() != null)
+        if (value instanceof TreeHolderCategory.CategoryTreeHolder && mModel.getSelectedAmount().getValue() != null) {//category node click
+            TreeHolderCategory.CategoryTreeHolder categoryHolder = (TreeHolderCategory.CategoryTreeHolder) node.getValue();
+            //current position is category & clicked category is not this category
+            if (mModel.getThisFolder() == null && categoryHolder.category.getId() != mActivityModel.getCategory().getId())
                 showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), categoryHolder.category.getId()), "move");
-        } else if (value instanceof TreeHolderFolder.FolderTreeHolder && !((TreeHolderFolder) node.getViewHolder()).isSelected()) {
-            if (mModel.getThisFolder() == null) {
-                TreeHolderFolder.FolderTreeHolder folderHolder = (TreeHolderFolder.FolderTreeHolder) value;
-                if (mModel.getSelectedAmount().getValue() != null)
-                    showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), folderHolder.folder.getId()), "move");
-            } else if (mModel.getThisFolder() != null && ((TreeHolderFolder.FolderTreeHolder) value).folder.getId() != mModel.getThisFolder().getId()) {
-                TreeHolderFolder.FolderTreeHolder folderHolder = (TreeHolderFolder.FolderTreeHolder) value;
-                if (mModel.getSelectedAmount().getValue() != null)
-                    showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), folderHolder.folder.getId()), "move");
-            }
+                //current position is folder
+            else if (mModel.getThisFolder() != null)
+                showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), categoryHolder.category.getId()), "move");
+        } else if (value instanceof TreeHolderFolder.FolderTreeHolder && !((TreeHolderFolder) node.getViewHolder()).isSelected() && mModel.getSelectedAmount().getValue() != null) {
+            TreeHolderFolder.FolderTreeHolder folderHolder = (TreeHolderFolder.FolderTreeHolder) node.getValue();
+            //current position is category
+            if (mModel.getThisFolder() == null)
+                showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), folderHolder.folder.getId()), "move");
+                //current position is folder & clicked folder is not this folder
+            else if (mModel.getThisFolder() != null && folderHolder.folder.getId() != mModel.getThisFolder().getId())
+                showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), folderHolder.folder.getId()), "move");
         }
+
+
+//        if (value instanceof TreeHolderCategory.CategoryTreeHolder &&
+//                mModel.getThisFolder() != null && (mModel.getThisFolder() == null &&
+//                ((TreeHolderCategory.CategoryTreeHolder) node.getValue()).category.getId() != mActivityModel.getCategory().getId())) {
+//            TreeHolderCategory.CategoryTreeHolder categoryHolder = (TreeHolderCategory.CategoryTreeHolder) value;
+//            if (mModel.getSelectedAmount().getValue() != null)
+//                showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), categoryHolder.category.getId()), "move");
+//        } else if (value instanceof TreeHolderFolder.FolderTreeHolder && !((TreeHolderFolder) node.getViewHolder()).isSelected()) {
+//            if (mModel.getThisFolder() == null) {
+//                TreeHolderFolder.FolderTreeHolder folderHolder = (TreeHolderFolder.FolderTreeHolder) value;
+//                if (mModel.getSelectedAmount().getValue() != null)
+//                    showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), folderHolder.folder.getId()), "move");
+//            } else if (mModel.getThisFolder() != null && ((TreeHolderFolder.FolderTreeHolder) value).folder.getId() != mModel.getThisFolder().getId()) {
+//                TreeHolderFolder.FolderTreeHolder folderHolder = (TreeHolderFolder.FolderTreeHolder) value;
+//                if (mModel.getSelectedAmount().getValue() != null)
+//                    showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), folderHolder.folder.getId()), "move");
+//            }
+//        }
     }
 
     @Override//item move confirm click
     public void itemMoveConfirmClick(long folderId) {
+        mModel.increaseItemAmount(folderId);
+        mModel.decreaseItemAmount();
         mModel.selectedItemMove(folderId);
         TreeViewDialog treeViewDialog = ((TreeViewDialog) getParentFragmentManager().findFragmentByTag("tree"));
         if (treeViewDialog != null) treeViewDialog.dismiss();
