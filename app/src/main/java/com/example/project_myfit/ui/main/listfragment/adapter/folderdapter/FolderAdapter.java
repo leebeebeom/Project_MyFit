@@ -66,11 +66,11 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
         Folder folder = getItem(holder.getLayoutPosition());
+        holder.mBinding.setFolder(folder);
+
         MaterialCardView cardView = holder.mBinding.folderCardView;
         MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
-
-        holder.mBinding.setFolder(folder);
 
         //click-------------------------------------------------------------------------------------
         cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, holder.getLayoutPosition()));
@@ -129,7 +129,10 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop() {
+    public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+        ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout.setVisibility(View.VISIBLE);
+        viewHolder.itemView.setTranslationZ(0);
+        viewHolder.itemView.setAlpha(1);
         mModel.updateFolder(mFolderList);
         notifyDataSetChanged();
     }

@@ -77,8 +77,6 @@ import static com.example.project_myfit.MyFitConstant.SORT_LATEST;
 import static com.example.project_myfit.MyFitConstant.SORT_LATEST_REVERSE;
 import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
 
-//TODO 이동 후 아이템 갯수 수정
-
 @SuppressLint("ClickableViewAccessibility")
 public class ListFragment extends Fragment implements SizeAdapterListener,
         AddFolderDialog.AddFolderConfirmClick, TreeAddFolderDialog.TreeAddFolderConfirmClick,

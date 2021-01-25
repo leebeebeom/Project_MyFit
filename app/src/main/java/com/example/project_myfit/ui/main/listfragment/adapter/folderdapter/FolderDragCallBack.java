@@ -1,7 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
 
 import android.graphics.Canvas;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -41,29 +40,32 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout.setVisibility(View.VISIBLE);
-        viewHolder.itemView.setTranslationZ(0);
-        viewHolder.itemView.setAlpha(1);
-        mAdapter.onItemDrop();
+        mAdapter.onItemDrop(viewHolder);
     }
 
     @Override
     public void onChildDraw(@NonNull @NotNull Canvas c, @NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         boolean isDraggingUp = dY < 0;
         boolean isDraggingDown = dY > 0;
-        if (recyclerView.getAdapter() != null && isDraggingDown) {
-            if (recyclerView.getAdapter().getItemCount() % 4 == 0 && recyclerView.getAdapter().getItemCount() - 5 < viewHolder.getLayoutPosition())
+
+        int itemCount = 0;
+        if (recyclerView.getAdapter() != null) itemCount = recyclerView.getAdapter().getItemCount();
+        int position = viewHolder.getLayoutPosition();
+
+        if (isDraggingDown) {
+            if (itemCount % 4 == 0 && itemCount - 5 < position)
                 dY = 0;
-            else if (recyclerView.getAdapter().getItemCount() % 4 == 1 && recyclerView.getAdapter().getItemCount() - 1 == viewHolder.getLayoutPosition())
+            else if (itemCount % 4 == 1 && itemCount - 1 == position)
                 dY = 0;
-            else if (recyclerView.getAdapter().getItemCount() % 4 == 2 && recyclerView.getAdapter().getItemCount() - 3 < viewHolder.getLayoutPosition())
+            else if (itemCount % 4 == 2 && itemCount - 3 < position)
                 dY = 0;
-            else if (recyclerView.getAdapter().getItemCount() % 4 == 3 && recyclerView.getAdapter().getItemCount() - 4 < viewHolder.getLayoutPosition())
+            else if (itemCount % 4 == 3 && itemCount - 4 < position)
                 dY = 0;
             else if (viewHolder.itemView.getY() > recyclerView.getBottom() - 380)
                 dY = 0;
-        } else if (recyclerView.getAdapter() != null && isDraggingUp && viewHolder.getLayoutPosition() < 4)
+        } else if (isDraggingUp && position < 4)
             dY = 0;
+
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 }
