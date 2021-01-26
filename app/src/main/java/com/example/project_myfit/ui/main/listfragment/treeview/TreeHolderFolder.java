@@ -10,6 +10,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
 import com.example.project_myfit.dialog.TreeViewDialog;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
+import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.unnamed.b.atv.model.TreeNode;
 
 import java.util.List;
@@ -55,10 +56,17 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
             isSelected = true;
         }
 
+        //if selected item position is this node
+        if (value.selectedSizeList.size() != 0) {
+            Size size = value.selectedSizeList.get(0);
+            if (size.getFolderId() == value.folder.getId()) mBinding.getRoot().setAlpha(0.5f);
+        }
+
+
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
         for (Folder folder : value.allFolderList) {
             if (value.folder.getId() == folder.getFolderId()) {
-                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.allFolderList, value.margin + margin, value.listener, value.selectedFolderList)).setViewHolder(new TreeHolderFolder(context));
+                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.allFolderList, value.margin + margin, value.listener, value.selectedFolderList, value.selectedSizeList)).setViewHolder(new TreeHolderFolder(context));
                 node.addChild(treeNode);
             }
         }
@@ -98,14 +106,15 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         public int margin;
         public TreeViewDialog.TreeViewAddClick listener;
         public List<Folder> selectedFolderList;
+        public List<Size> selectedSizeList;
 
-
-        public FolderTreeHolder(Folder folder, List<Folder> allFolderList, int margin, TreeViewDialog.TreeViewAddClick listener, List<Folder> selectedFolderList) {
+        public FolderTreeHolder(Folder folder, List<Folder> allFolderList, int margin, TreeViewDialog.TreeViewAddClick listener, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
             this.folder = folder;
             this.allFolderList = allFolderList;
             this.margin = margin;
             this.listener = listener;
             this.selectedFolderList = selectedFolderList;
+            this.selectedSizeList = selectedSizeList;
         }
     }
 }

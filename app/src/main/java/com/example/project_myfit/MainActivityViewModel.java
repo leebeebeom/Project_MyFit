@@ -20,6 +20,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Folder folder;
 
     private List<Folder> selectedFolder;
+    private List<Size> selectedSize;
 
     private final Repository mRepository;
     private TreeNode rootTreeNode;
@@ -84,5 +85,13 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void setFolderHistory(List<Folder> folderHistory) {
         this.folderHistory = folderHistory;
+    }
+
+    public List<Size> getSelectedSize() {
+        return selectedSize;
+    }
+
+    public void setSelectedSize(List<Size> selectedSize) {
+        this.selectedSize = selectedSize;
     }
 }

@@ -8,7 +8,10 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemTreeCategoryBinding;
 import com.example.project_myfit.dialog.TreeViewDialog;
 import com.example.project_myfit.ui.main.database.Category;
+import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.unnamed.b.atv.model.TreeNode;
+
+import java.util.List;
 
 public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
 
@@ -23,9 +26,15 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.text.setText(value.category.getCategory());
 
-        if (node.getChildren().size() != 0) {
+        //if selected item position is this node
+        if (value.selectedSizeList.size() != 0) {
+            Size size = value.selectedSizeList.get(0);
+            if (size.getFolderId() == value.category.getId()) mBinding.getRoot().setAlpha(0.5f);
+        }
+
+        if (node.getChildren().size() != 0)
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
-        } else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
+        else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
 
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewCategoryAddClick(node, value));
 
@@ -50,10 +59,12 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     public static class CategoryTreeHolder {
         public Category category;
         public TreeViewDialog.TreeViewAddClick listener;
+        public List<Size> selectedSizeList;
 
-        public CategoryTreeHolder(Category category, TreeViewDialog.TreeViewAddClick listener) {
+        public CategoryTreeHolder(Category category, TreeViewDialog.TreeViewAddClick listener, List<Size> selectedSizeList) {
             this.category = category;
             this.listener = listener;
+            this.selectedSizeList = selectedSizeList;
         }
     }
 }

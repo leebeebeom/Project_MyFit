@@ -3,6 +3,8 @@ package com.example.project_myfit.ui.main.listfragment.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity
 public class Folder {
     @PrimaryKey
@@ -70,4 +72,16 @@ public class Folder {
         isDeleted = deleted;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Folder)) return false;
+        Folder folder = (Folder) o;
+        return getId() == folder.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

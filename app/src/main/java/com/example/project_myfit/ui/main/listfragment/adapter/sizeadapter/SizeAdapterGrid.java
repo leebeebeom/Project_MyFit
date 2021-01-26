@@ -148,8 +148,8 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         return mSelectedPosition;
     }
 
-    public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
-        this.mSelectedPosition = mSelectedPosition;
+    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
+        this.mSelectedPosition = selectedPosition;
         notifyDataSetChanged();
     }
 

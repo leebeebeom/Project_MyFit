@@ -28,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.project_myfit.MyFitConstant.LISTVIEW;
-
 public class ListViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private final MutableLiveData<Integer> mSelectedAmount;
@@ -44,7 +42,7 @@ public class ListViewModel extends AndroidViewModel {
     private TreeNode mAddNode;
     private TreeHolderCategory.CategoryTreeHolder mCategoryAddValue;
     private TreeHolderFolder.FolderTreeHolder mFolderAddValue;
-    private HashSet<Integer> mSelectedPositionFolder, mSelectedPositionSize;
+    private HashSet<Integer> mSelectedPositionFolder, mSelectedPositionSizeList, mSelectedPositionSizeGrid;
     private MainActivityViewModel mActivityModel;
     private String mActionBarTitle;
     private boolean mFavoriteView;
@@ -67,12 +65,8 @@ public class ListViewModel extends AndroidViewModel {
         mRepository.categoryUpdate(mActivityModel.getCategory());
     }
 
-    public void categoryAmountUpdate2() {
-        if (mSelectedAmount.getValue() != null) {
-            String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - mSelectedAmount.getValue());
-            mActivityModel.getCategory().setItemAmount(amount);
-            mRepository.categoryUpdate(mActivityModel.getCategory());
-        }
+    public void updateCategory(Category category) {
+        mRepository.categoryUpdate(category);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -123,23 +117,11 @@ public class ListViewModel extends AndroidViewModel {
         mThisFolder.setItemAmount(amount);
         updateFolder(mThisFolder);
     }
-
-    public void folderAmountUpdate2() {
-        if (mSelectedAmount.getValue() != null) {
-            String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) - mSelectedAmount.getValue());
-            mThisFolder.setItemAmount(amount);
-            updateFolder(mThisFolder);
-        }
-    }
     //----------------------------------------------------------------------------------------------
 
     //size------------------------------------------------------------------------------------------
     public LiveData<List<Size>> getSizeLive() {
         return mRepository.getSizeLive(mFolderId);
-    }
-
-    public void updateSize(Size size) {
-        mRepository.sizeUpdate(size);
     }
 
     public void deleteSize(List<Size> sizeList) {
@@ -202,16 +184,16 @@ public class ListViewModel extends AndroidViewModel {
         setSelectedAmount();
     }
 
-    public void setSelectedPosition(int viewType) {
+    public void setSelectedPosition() {
         mSelectedPositionFolder = mFolderAdapter.getSelectedPosition();
-        mSelectedPositionSize = viewType == LISTVIEW ?
-                mSizeAdapterList.getSelectedPosition() : mSizeAdapterGrid.getSelectedPosition();
+        mSelectedPositionSizeList = mSizeAdapterList.getSelectedPosition();
+        mSelectedPositionSizeGrid = mSizeAdapterGrid.getSelectedPosition();
     }
 
     public void restoreAdapterSelectedPosition() {
         mFolderAdapter.setSelectedPosition(mSelectedPositionFolder);
-        mSizeAdapterList.setSelectedPosition(mSelectedPositionSize);
-        mSizeAdapterGrid.setSelectedPosition(mSelectedPositionSize);
+        mSizeAdapterList.setSelectedPosition(mSelectedPositionSizeList);
+        mSizeAdapterGrid.setSelectedPosition(mSelectedPositionSizeGrid);
     }
 
     public void folderSelected(Folder folder, boolean isChecked, int position) {
@@ -264,17 +246,17 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void decreaseItemAmount() {
-        int amount = 0;
-        if (mThisFolder == null) {
-            if (mSelectedAmount.getValue() != null)
+        int amount;
+        if (mSelectedAmount.getValue() != null) {
+            if (mThisFolder == null) {
                 amount = Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - mSelectedAmount.getValue();
-            mActivityModel.getCategory().setItemAmount(String.valueOf(amount));
-            mRepository.categoryUpdate(mActivityModel.getCategory());
-        } else {
-            if (mSelectedAmount.getValue() != null)
+                mActivityModel.getCategory().setItemAmount(String.valueOf(amount));
+                mRepository.categoryUpdate(mActivityModel.getCategory());
+            } else {
                 amount = Integer.parseInt(mThisFolder.getItemAmount()) - mSelectedAmount.getValue();
-            mThisFolder.setItemAmount(String.valueOf(amount));
-            mRepository.folderUpdate(mThisFolder);
+                mThisFolder.setItemAmount(String.valueOf(amount));
+                mRepository.folderUpdate(mThisFolder);
+            }
         }
     }
 

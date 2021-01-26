@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 public class Size {
@@ -155,6 +156,19 @@ public class Size {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Size)) return false;
+        Size size1 = (Size) o;
+        return getId() == size1.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
 

@@ -222,8 +222,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         return mSelectedPosition;
     }
 
-    public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
-        this.mSelectedPosition = mSelectedPosition;
+    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
+        this.mSelectedPosition = selectedPosition;
         notifyDataSetChanged();
     }
 

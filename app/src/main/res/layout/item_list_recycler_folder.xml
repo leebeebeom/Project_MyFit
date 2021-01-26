@@ -70,7 +70,8 @@
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/folder_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
@@ -78,7 +79,7 @@
                 android:textSize="@dimen/_8sdp"
                 tools:text="2" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_2sdp"

@@ -269,6 +269,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                         showDialog(SelectedItemDeleteDialog.getInstance(mModel.getSelectedAmount().getValue()), "delete");
                 } else if (item.getItemId() == R.id.list_action_mode_move) {
                     mActivityModel.setSelectedFolder(mModel.getSelectedItemFolder());
+                    mActivityModel.setSelectedSize(mModel.getSelectedItemSize());
                     mActivityModel.setFolderHistory(mModel.getThisFolder() == null ? null : mModel.getFolderHistory());
                     showDialog(new TreeViewDialog(), "tree");
                 } else if (item.getItemId() == R.id.list_action_mode_edit)
@@ -281,7 +282,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 mActionModeOn = false;
                 mActionMode = null;
 
-                mModel.setSelectedPosition(mViewType);
+                mModel.setSelectedPosition();
                 mModel.setAdapterActionModeState(ACTION_MODE_OFF);
 
                 mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
@@ -329,7 +330,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             else if (mSort == SORT_LATEST_REVERSE)
                 folderList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
             mModel.getFolderAdapter().setSort(mSort);
-            if (mActionMode == null) mModel.getFolderAdapter().setItem(folderList);
+
+            mModel.getFolderAdapter().setItem(folderList);
             if (folderList.size() == 0) mBinding.recyclerFolder.setVisibility(View.GONE);
             else mBinding.recyclerFolder.setVisibility(View.VISIBLE);
         });
@@ -350,10 +352,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 sizeList = favoriteList;
             }
 
-            if (mActionMode == null) {
-                mModel.getSizeAdapterList().setItem(sizeList);
-                mModel.getSizeAdapterGrid().setItem(sizeList);
-            }
+            mModel.getSizeAdapterList().setItem(sizeList);
+            mModel.getSizeAdapterGrid().setItem(sizeList);
         });
     }
 
@@ -627,6 +627,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     @Override//node add folder confirm click
     public void treeAddFolderConfirmClick(String folderName) {
         TreeNode oldNode = mModel.getAddNode();
+
         if (mModel.getCategoryAddValue() != null) {//category node
             TreeHolderCategory.CategoryTreeHolder oldViewHolder = mModel.getCategoryAddValue();
 
@@ -636,6 +637,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             //find node(recreate)
             List<TreeNode> categoryNodeList = mActivityModel.getRootTreeNode().getChildren();
+
             for (TreeNode newNode : categoryNodeList) {
                 TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) newNode.getValue();
                 if (oldViewHolder.category.getId() == newViewHolder.category.getId()) {
@@ -645,10 +647,15 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             }
 
             TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, mModel.getAllFolder(),
-                    40, this, mModel.getSelectedItemFolder())).setViewHolder(new TreeHolderFolder(requireContext()));
+                    40, this, mModel.getSelectedItemFolder(), mModel.getSelectedItemSize())).setViewHolder(new TreeHolderFolder(requireContext()));
             oldNode.getViewHolder().getTreeView().addNode(oldNode, treeNode);
             oldNode.getViewHolder().getTreeView().expandNode(oldNode);
             ((TreeHolderCategory) oldNode.getViewHolder()).setIconClickable();
+
+            TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) oldNode.getValue();
+            int amount = Integer.parseInt(newViewHolder.category.getItemAmount() + 1);
+            newViewHolder.category.setItemAmount(String.valueOf(amount));
+            mModel.updateCategory(newViewHolder.category);
         } else {//folder node
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
@@ -667,12 +674,16 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             int margin = (int) getResources().getDimension(R.dimen._8sdp);
             TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, mModel.getAllFolder(),
-                    oldViewHolder.margin + margin, this, mModel.getSelectedItemFolder())).setViewHolder(new TreeHolderFolder(requireContext()));
+                    oldViewHolder.margin + margin, this, mModel.getSelectedItemFolder(), mModel.getSelectedItemSize())).setViewHolder(new TreeHolderFolder(requireContext()));
             oldNode.getViewHolder().getTreeView().addNode(oldNode, treeNode);
             oldNode.getViewHolder().getTreeView().expandNode(oldNode);
             ((TreeHolderFolder) oldNode.getViewHolder()).setIconClickable();
-        }
 
+            TreeHolderFolder.FolderTreeHolder newViewHolder = (TreeHolderFolder.FolderTreeHolder) oldNode.getValue();
+            int amount = Integer.parseInt(newViewHolder.folder.getItemAmount()) + 1;
+            newViewHolder.folder.setItemAmount(String.valueOf(amount));
+            mModel.updateFolder(newViewHolder.folder);
+        }
     }
 
     @NotNull
@@ -730,9 +741,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override//selected item delete confirm click
     public void selectedItemDeleteConfirmClick() {
-        if (mModel.getThisFolder() == null && mModel.getSelectedAmount().getValue() != null)
-            mModel.categoryAmountUpdate2();
-        else mModel.folderAmountUpdate2();
+        mModel.decreaseItemAmount();
         mModel.selectedItemDelete();
         mActionMode.finish();
     }
@@ -762,10 +771,4 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         super.onSaveInstanceState(outState);
         outState.putBoolean("action mode", mActionModeOn);
     }
-
 }
-/*
-TODO
-리스트, 그리드에 하트 추가
-숫자로 된거 sdp로 변경
- */
