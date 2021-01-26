@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
+import com.example.project_myfit.databinding.TreeViewRootBinding;
 import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategory;
@@ -33,7 +34,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreeViewDialog extends DialogFragment {
+public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
+
+    private TreeNode mNodeRoot;
+
+    public interface TreeViewAddClick {
+        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
+
+        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
+    }
+
     private AndroidTreeView mTreeView;
     private MainActivityViewModel mActivityModel;
     private TreeNode.TreeNodeClickListener mListener;
@@ -59,8 +69,16 @@ public class TreeViewDialog extends DialogFragment {
         int padding = (int) requireContext().getResources().getDimension(R.dimen._8sdp);
         view.setPadding(0, padding, 0, 0);
 
+        TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
+        binding.treeViewRoot.addView(view, 0);
+        binding.treeViewRoot.setOnClickListener(v -> {
+            DialogFragment dialog = new AddCategoryDialog();
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getParentFragmentManager(), null);
+        });
+
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setView(view)
+                .setView(binding.getRoot())
                 .setTitle(R.string.tree_view_dialog_title)
                 .show();
 
@@ -99,13 +117,13 @@ public class TreeViewDialog extends DialogFragment {
             mCategoryTreeNodeList.add(categoryTreeNode);
         }
 
-        TreeNode root = TreeNode.root();
-        root.addChildren(mCategoryTreeNodeList);
-        AndroidTreeView treeView = new AndroidTreeView(requireContext(), root);
+        mNodeRoot = TreeNode.root();
+        mNodeRoot.addChildren(mCategoryTreeNodeList);
+        AndroidTreeView treeView = new AndroidTreeView(requireContext(), mNodeRoot);
         treeView.setDefaultAnimation(false);
         treeView.setUseAutoToggle(false);
         treeView.setDefaultNodeClickListener(mListener);
-        mActivityModel.setRootTreeNode(root);
+        mActivityModel.setRootTreeNode(mNodeRoot);
 
         return treeView;
     }
@@ -140,15 +158,23 @@ public class TreeViewDialog extends DialogFragment {
     }
 
     @Override
+    public void addCategoryConfirmClick(String categoryName) {
+        int orderNumber = mActivityModel.getCategoryLargestOrder() + 1;
+        Category category = new Category(categoryName, mActivityModel.getCategory().getParentCategory(), orderNumber);
+        mActivityModel.categoryInsert(category);
+
+        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(mActivityModel.getLatestCategory(), (TreeViewAddClick) mListener, mActivityModel.getSelectedSize()))
+                .setViewHolder(new TreeHolderCategory(requireContext()));
+        mTreeView.addNode(mNodeRoot, categoryNode);
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("state", mTreeView.getSaveState());
     }
-
-    public interface TreeViewAddClick {
-        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
-
-        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
-    }
-
 }
+/*
+TODO
+mSort 전달해서 트리뷰 생성시 사용자가 설정한 순서대로
+ */

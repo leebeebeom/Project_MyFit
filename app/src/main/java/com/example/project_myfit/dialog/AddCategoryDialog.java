@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -23,13 +22,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
-public class AddFolderDialog extends DialogFragment {
-    private AddFolderConfirmClick mListener;
+public class AddCategoryDialog extends DialogFragment {
+    public interface AddCategoryConfirmClick {
+        void addCategoryConfirmClick(String categoryName);
+    }
+
+    private AddCategoryConfirmClick mListener;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
-        mListener = (AddFolderConfirmClick) getTargetFragment();
+        mListener = (AddCategoryConfirmClick) getTargetFragment();
     }
 
     @NonNull
@@ -38,18 +41,15 @@ public class AddFolderDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
 
-        binding.setHint(getString(R.string.folder_name));
-        binding.editTextDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        binding.setHint("Category Name");
         binding.editTextDialog.requestFocus();
-        binding.editTextDialog.setMaxLines(3);
-        binding.editTextLayoutDialog.setHelperText(getString(R.string.folder_name_helper));
-        binding.editTextLayoutDialog.setPlaceholderText(getString(R.string.folder_name_korean));
+        binding.editTextLayoutDialog.setPlaceholderText("카테고리 이름");
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle(R.string.add_folder)
+                .setTitle("카테고리 추가")
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.addFolderConfirmClick(String.valueOf(binding.editTextDialog.getText())))
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.editTextDialog.getText())))
                 .create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
@@ -82,10 +82,8 @@ public class AddFolderDialog extends DialogFragment {
         int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
-        return dialog;
-    }
 
-    public interface AddFolderConfirmClick {
-        void addFolderConfirmClick(String folderName);
+        return dialog;
+
     }
 }

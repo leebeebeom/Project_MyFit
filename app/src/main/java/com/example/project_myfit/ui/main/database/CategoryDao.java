@@ -17,6 +17,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory ORDER BY orderNumber")
     List<Category> getCategoryList(String parentCategory);
 
+    @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
+    Category getLatestCategory();
+
     @Query("SELECT max(orderNumber) FROM Category")
     int getLargestOrder();
 

@@ -1,7 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -236,7 +235,6 @@ public class ListViewModel extends AndroidViewModel {
                 amount = Integer.parseInt(category.getItemAmount()) + mSelectedAmount.getValue();
             category.setItemAmount(String.valueOf(amount));
             mRepository.categoryUpdate(category);
-            Toast.makeText(getApplication(), "호출", Toast.LENGTH_SHORT).show();
         } else {
             if (mSelectedAmount.getValue() != null)
                 amount = Integer.parseInt(folder.getItemAmount()) + mSelectedAmount.getValue();

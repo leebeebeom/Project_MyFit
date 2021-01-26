@@ -94,4 +94,16 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void setSelectedSize(List<Size> selectedSize) {
         this.selectedSize = selectedSize;
     }
+
+    public int getCategoryLargestOrder() {
+        return mRepository.getCategoryLargestOrder();
+    }
+
+    public void categoryInsert(Category category) {
+        mRepository.categoryInsert(category);
+    }
+
+    public Category getLatestCategory(){
+        return mRepository.getLatestCategory();
+    }
 }
