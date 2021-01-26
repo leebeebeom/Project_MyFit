@@ -27,6 +27,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.project_myfit.MyFitConstant.SORT_LATEST;
+import static com.example.project_myfit.MyFitConstant.SORT_LATEST_REVERSE;
+
 public class ListViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private final MutableLiveData<Integer> mSelectedAmount;
@@ -45,7 +48,8 @@ public class ListViewModel extends AndroidViewModel {
     private MainActivityViewModel mActivityModel;
     private String mActionBarTitle;
     private boolean mFavoriteView;
-
+    private int mSort;
+    private TreeNode mTreeNodeRoot;
 
     public ListViewModel(@NonNull Application application) {
         super(application);
@@ -67,6 +71,22 @@ public class ListViewModel extends AndroidViewModel {
     public void updateCategory(Category category) {
         mRepository.categoryUpdate(category);
     }
+
+    public List<Category> getCategoryList() {
+        return mRepository.getCategoryList(mActivityModel.getCategory().getParentCategory());
+    }
+
+    public int getCategoryLargestOrder() {
+        return mRepository.getCategoryLargestOrder();
+    }
+
+    public void insertCategory(Category category) {
+        mRepository.categoryInsert(category);
+    }
+
+    public Category getLatestCategory() {
+        return mRepository.getLatestCategory();
+    }
     //----------------------------------------------------------------------------------------------
 
     //folder----------------------------------------------------------------------------------------
@@ -75,7 +95,12 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getAllFolder() {
-        return mRepository.getAllFolder();
+        List<Folder> allFolderList = new ArrayList<>(mRepository.getAllFolder());
+        if (mSort == SORT_LATEST)
+            allFolderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
+        else if (mSort == SORT_LATEST_REVERSE)
+            allFolderList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
+        return allFolderList;
     }
 
     public int getFolderLargestOrder() {
@@ -327,7 +352,27 @@ public class ListViewModel extends AndroidViewModel {
         return mFavoriteView;
     }
 
-    public void setFavoriteView(boolean mFavoriteView) {
-        this.mFavoriteView = mFavoriteView;
+    public void setFavoriteView(boolean favoriteView) {
+        this.mFavoriteView = favoriteView;
+    }
+
+    public int getSort() {
+        return mSort;
+    }
+
+    public void setSort(int sort) {
+        this.mSort = sort;
+    }
+
+    public Category getThisCategory() {
+        return mActivityModel.getCategory();
+    }
+
+    public TreeNode getTreeNodeRoot() {
+        return mTreeNodeRoot;
+    }
+
+    public void setTreeNodeRoot(TreeNode treeNodeRoot) {
+        this.mTreeNodeRoot = treeNodeRoot;
     }
 }

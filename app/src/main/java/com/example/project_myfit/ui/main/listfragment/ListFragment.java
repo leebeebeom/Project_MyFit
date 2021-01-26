@@ -180,6 +180,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         mViewType = mViewTypePreference.getInt(VIEW_TYPE, LISTVIEW);
         mSortPreference = requireActivity().getSharedPreferences(SORT, Context.MODE_PRIVATE);
         mSort = mSortPreference.getInt(SORT, SORT_CUSTOM);
+        mModel.setSort(mSort);
 
 
         //actionBar title
@@ -267,12 +268,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 if (item.getItemId() == R.id.list_action_mode_del) {
                     if (mModel.getSelectedAmount().getValue() != null)
                         showDialog(SelectedItemDeleteDialog.getInstance(mModel.getSelectedAmount().getValue()), "delete");
-                } else if (item.getItemId() == R.id.list_action_mode_move) {
-                    mActivityModel.setSelectedFolder(mModel.getSelectedItemFolder());
-                    mActivityModel.setSelectedSize(mModel.getSelectedItemSize());
-                    mActivityModel.setFolderHistory(mModel.getThisFolder() == null ? null : mModel.getFolderHistory());
+                } else if (item.getItemId() == R.id.list_action_mode_move)
                     showDialog(new TreeViewDialog(), "tree");
-                } else if (item.getItemId() == R.id.list_action_mode_edit)
+                else if (item.getItemId() == R.id.list_action_mode_edit)
                     showDialog(FolderNameEditDialog.getInstance(mModel.getSelectedItemFolder().get(0).getFolderName()), "edit");
                 return true;
             }
@@ -636,7 +634,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             mModel.insertFolder(folder);
 
             //find node(recreate)
-            List<TreeNode> categoryNodeList = mActivityModel.getRootTreeNode().getChildren();
+            List<TreeNode> categoryNodeList = mModel.getTreeNodeRoot().getChildren();
 
             for (TreeNode newNode : categoryNodeList) {
                 TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) newNode.getValue();
@@ -688,7 +686,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @NotNull
     private List<TreeNode> getAllFolderNode() {
-        List<TreeNode> categoryNodeList = mActivityModel.getRootTreeNode().getChildren();
+        List<TreeNode> categoryNodeList = mModel.getTreeNodeRoot().getChildren();
         List<TreeNode> folderNodeList = new ArrayList<>();
         for (TreeNode categoryNode : categoryNodeList) {
             if (categoryNode.getChildren().size() != 0)
@@ -759,7 +757,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         if (sort == SORT_CUSTOM) mSort = SORT_CUSTOM;
         else if (sort == SORT_LATEST) mSort = SORT_LATEST;
         else mSort = SORT_LATEST_REVERSE;
-
+        mModel.setSort(mSort);
         setLiveData();
         SharedPreferences.Editor editor = mSortPreference.edit();
         editor.putInt(SORT, mSort);

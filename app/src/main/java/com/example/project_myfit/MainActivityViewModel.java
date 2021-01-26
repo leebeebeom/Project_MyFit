@@ -1,35 +1,15 @@
 package com.example.project_myfit;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
-import com.unnamed.b.atv.model.TreeNode;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
-public class MainActivityViewModel extends AndroidViewModel {
+public class MainActivityViewModel extends ViewModel {
     private Category category;
     private Size size;
     private Folder folder;
-
-    private List<Folder> selectedFolder;
-    private List<Size> selectedSize;
-
-    private final Repository mRepository;
-    private TreeNode rootTreeNode;
-    private List<Folder> folderHistory;
-
-    public MainActivityViewModel(@NonNull @NotNull Application application) {
-        super(application);
-        mRepository = new Repository(application);
-    }
 
     public Category getCategory() {
         return category;
@@ -53,57 +33,5 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void setFolder(Folder folder) {
         this.folder = folder;
-    }
-
-    public void setSelectedFolder(List<Folder> selectedFolder) {
-        this.selectedFolder = selectedFolder;
-    }
-
-    public List<Folder> getSelectedFolder() {
-        return selectedFolder;
-    }
-
-    public List<Folder> getAllFolder() {
-        return mRepository.getAllFolder();
-    }
-
-    public List<Category> getCategoryList() {
-        return mRepository.getCategoryList(category.getParentCategory());
-    }
-
-    public void setRootTreeNode(TreeNode rootTreeNode) {
-        this.rootTreeNode = rootTreeNode;
-    }
-
-    public TreeNode getRootTreeNode() {
-        return rootTreeNode;
-    }
-
-    public List<Folder> getFolderHistory() {
-        return folderHistory;
-    }
-
-    public void setFolderHistory(List<Folder> folderHistory) {
-        this.folderHistory = folderHistory;
-    }
-
-    public List<Size> getSelectedSize() {
-        return selectedSize;
-    }
-
-    public void setSelectedSize(List<Size> selectedSize) {
-        this.selectedSize = selectedSize;
-    }
-
-    public int getCategoryLargestOrder() {
-        return mRepository.getCategoryLargestOrder();
-    }
-
-    public void categoryInsert(Category category) {
-        mRepository.categoryInsert(category);
-    }
-
-    public Category getLatestCategory(){
-        return mRepository.getLatestCategory();
     }
 }

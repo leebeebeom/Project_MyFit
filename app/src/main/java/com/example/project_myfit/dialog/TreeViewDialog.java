@@ -18,10 +18,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.TreeViewRootBinding;
 import com.example.project_myfit.ui.main.database.Category;
+import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategory;
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderFolder;
@@ -33,10 +33,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
 
     private TreeNode mNodeRoot;
+    private ListViewModel mModel;
 
     public interface TreeViewAddClick {
         void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
@@ -45,7 +47,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     }
 
     private AndroidTreeView mTreeView;
-    private MainActivityViewModel mActivityModel;
     private TreeNode.TreeNodeClickListener mListener;
     private List<TreeNode> mCategoryTreeNodeList;
 
@@ -59,7 +60,7 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        mModel = new ViewModelProvider(Objects.requireNonNull(getTargetFragment())).get(ListViewModel.class);
         mTreeView = getTreeView();
 
         if (savedInstanceState != null)
@@ -100,19 +101,19 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
 
     private AndroidTreeView getTreeView() {
         int margin = (int) getResources().getDimension(R.dimen._12sdp);
-        List<Folder> folderList = mActivityModel.getAllFolder();
+        List<Folder> folderList = mModel.getAllFolder();
         mCategoryTreeNodeList = new ArrayList<>();
-        for (Category category : mActivityModel.getCategoryList()) {
-            TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener, mActivityModel.getSelectedSize()))
+        for (Category category : mModel.getCategoryList()) {
+            TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                     .setViewHolder(new TreeHolderCategory(requireContext()));
             for (Folder folder : folderList) {
                 if (category.getId() == folder.getFolderId()) {
                     TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, folderList,
-                            margin, (TreeViewAddClick) mListener, mActivityModel.getSelectedFolder(), mActivityModel.getSelectedSize())).setViewHolder(new TreeHolderFolder(requireContext()));
+                            margin, (TreeViewAddClick) mListener, mModel.getSelectedItemFolder(), mModel.getSelectedItemSize())).setViewHolder(new TreeHolderFolder(requireContext()));
                     categoryTreeNode.addChild(folderTreeNode);
                 }
             }
-            if (mActivityModel.getCategory().getId() == category.getId() && categoryTreeNode.getChildren().size() != 0)
+            if (mModel.getThisCategory().getId() == category.getId() && categoryTreeNode.getChildren().size() != 0)
                 categoryTreeNode.setExpanded(true);
             mCategoryTreeNodeList.add(categoryTreeNode);
         }
@@ -123,7 +124,7 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         treeView.setDefaultAnimation(false);
         treeView.setUseAutoToggle(false);
         treeView.setDefaultNodeClickListener(mListener);
-        mActivityModel.setRootTreeNode(mNodeRoot);
+        mModel.setTreeNodeRoot(mNodeRoot);
 
         return treeView;
     }
@@ -140,30 +141,30 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     }
 
     private void expandingNode(List<TreeNode> topFolderList) {
-        if (mActivityModel.getFolderHistory() != null) {//if current position is not category
+        if (mModel.getThisFolder() != null) {//if current position is not category
             for (TreeNode folderNode : topFolderList) {
                 //visible current position text
-                if (mActivityModel.getFolderHistory().get(mActivityModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId())
+                if (mModel.getFolderHistory().get(mModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId())
                     ((TreeHolderFolder) folderNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
-                for (Folder folder : mActivityModel.getFolderHistory())
+                for (Folder folder : mModel.getFolderHistory())
                     if (((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId() == folder.getId() && folderNode.getChildren().size() != 0)
                         mTreeView.expandNode(folderNode);
                 if (folderNode.getChildren().size() != 0) expandingNode(folderNode.getChildren());
             }
         } else {//current position is category
             for (TreeNode categoryNode : mCategoryTreeNodeList)
-                if (mActivityModel.getCategory().getId() == ((TreeHolderCategory.CategoryTreeHolder) categoryNode.getValue()).category.getId())
+                if (mModel.getThisCategory().getId() == ((TreeHolderCategory.CategoryTreeHolder) categoryNode.getValue()).category.getId())
                     ((TreeHolderCategory) categoryNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void addCategoryConfirmClick(String categoryName) {
-        int orderNumber = mActivityModel.getCategoryLargestOrder() + 1;
-        Category category = new Category(categoryName, mActivityModel.getCategory().getParentCategory(), orderNumber);
-        mActivityModel.categoryInsert(category);
+        int orderNumber = mModel.getCategoryLargestOrder() + 1;
+        Category category = new Category(categoryName, mModel.getThisCategory().getParentCategory(), orderNumber);
+        mModel.insertCategory(category);
 
-        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(mActivityModel.getLatestCategory(), (TreeViewAddClick) mListener, mActivityModel.getSelectedSize()))
+        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(mModel.getLatestCategory(), (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                 .setViewHolder(new TreeHolderCategory(requireContext()));
         mTreeView.addNode(mNodeRoot, categoryNode);
     }
@@ -174,7 +175,3 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         outState.putString("state", mTreeView.getSaveState());
     }
 }
-/*
-TODO
-mSort 전달해서 트리뷰 생성시 사용자가 설정한 순서대로
- */

@@ -15,7 +15,7 @@ public interface FolderDao {
     @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
     LiveData<List<Folder>> getFolderLive(long folderId, boolean isDeleted);
 
-    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted ORDER BY orderNumber ASC")
+    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted ORDER BY orderNumber DESC")
     List<Folder> getFolderList(boolean isDeleted);
 
     @Query("SELECT MAX(orderNumber) FROM Folder")
