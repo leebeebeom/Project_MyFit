@@ -78,7 +78,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         //click-------------------------------------------------------------------------------------
         cardView.setOnClickListener(v -> mListener.onSizeCardViewClick(size, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onSizeCardViewLongClick(holder.getLayoutPosition());
+            mListener.onSizeCardViewLongClick(cardView, holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {

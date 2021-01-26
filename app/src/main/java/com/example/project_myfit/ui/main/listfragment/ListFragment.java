@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,6 +64,7 @@ import com.unnamed.b.atv.model.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
@@ -76,6 +76,11 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 import static com.example.project_myfit.MyFitConstant.SORT_LATEST;
 import static com.example.project_myfit.MyFitConstant.SORT_LATEST_REVERSE;
 import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
+
+//TODO 써치바
+//TODO 드래그 리스너..
+//TODO 인풋 브랜드 리퀘스트
+//TODO 폴더 접기 열기
 
 @SuppressLint("ClickableViewAccessibility")
 public class ListFragment extends Fragment implements SizeAdapterListener,
@@ -132,7 +137,14 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
-                cardViewCallOnClick(i, i1);
+                for (int j = i; j <= i1; j++) {
+                    RecyclerView.ViewHolder viewHolder = mBinding.recyclerSize.findViewHolderForLayoutPosition(j);
+                    if (viewHolder != null) {
+                        if (mViewType == LISTVIEW)
+                            viewHolder.itemView.findViewById(R.id.list_card_view).callOnClick();
+                        else viewHolder.itemView.findViewById(R.id.grid_card_view).callOnClick();
+                    }
+                }
             }
         };
 
@@ -167,25 +179,27 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                              @Nullable Bundle savedInstanceState) {
         mActivityModel.setSize(null);
         mActivityModel.setFolder(null);
-        mActivityFab = requireActivity().findViewById(R.id.activity_fab);
 
         mBinding = FragmentListBinding.inflate(inflater);
         mBinding.setCategory(mActivityModel.getCategory());
+
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
         mPopupMenuBinding = ListPopupMenuBinding.inflate(inflater);
+
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 
         mViewTypePreference = requireActivity().getSharedPreferences(VIEW_TYPE, Context.MODE_PRIVATE);
         mViewType = mViewTypePreference.getInt(VIEW_TYPE, LISTVIEW);
+
         mSortPreference = requireActivity().getSharedPreferences(SORT, Context.MODE_PRIVATE);
         mSort = mSortPreference.getInt(SORT, SORT_CUSTOM);
         mModel.setSort(mSort);
 
-
         //actionBar title
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) actionBar.setTitle(mModel.getActionBarTitle());
+        String title = mModel.getThisFolder() == null ? mActivityModel.getCategory().getCategory() : mModel.getThisFolder().getFolderName();
+        if (actionBar != null) actionBar.setTitle(title);
 
         //home icon click
         mBinding.listIconHome.setOnClickListener(v -> Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_to_mainFragment));
@@ -215,6 +229,15 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     @NotNull
+    public ImageView getArrowIcon() {
+        Drawable arrowIcon = ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.icon_arrow_forward, requireActivity().getTheme());
+        ImageView imageView = new ImageView(requireContext());
+        imageView.setImageDrawable(arrowIcon);
+        imageView.setAlpha(0.7f);
+        return imageView;
+    }
+
+    @NotNull
     public MaterialTextView getFolderNameView(Folder folder) {
         MaterialTextView textView = new MaterialTextView(requireContext());
         textView.setAlpha(0.8f);
@@ -226,20 +249,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_refresh);
         });
         textView.setMaxLines(1);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
         return textView;
-    }
-
-    @NotNull
-    public ImageView getArrowIcon() {
-        Drawable arrowIcon = ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.icon_arrow_forward, requireActivity().getTheme());
-        ImageView imageView = new ImageView(requireContext());
-        imageView.setImageDrawable(arrowIcon);
-        imageView.setAlpha(0.7f);
-        return imageView;
     }
     //----------------------------------------------------------------------------------------------
 
+    //action mode-----------------------------------------------------------------------------------
     private void actionModeCallBackInit() {
         mActionModeCallback = new ActionMode.Callback() {
             @Override
@@ -270,25 +284,25 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                         showDialog(SelectedItemDeleteDialog.getInstance(mModel.getSelectedAmount().getValue()), "delete");
                 } else if (item.getItemId() == R.id.list_action_mode_move)
                     showDialog(new TreeViewDialog(), "tree");
-                else if (item.getItemId() == R.id.list_action_mode_edit)
+                else
                     showDialog(FolderNameEditDialog.getInstance(mModel.getSelectedItemFolder().get(0).getFolderName()), "edit");
                 return true;
             }
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                mActionModeOn = false;
                 mActionMode = null;
+                mActionModeOn = false;
 
                 mModel.setSelectedPosition();
                 mModel.setAdapterActionModeState(ACTION_MODE_OFF);
 
                 mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
                 ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
-
             }
         };
     }
+    //----------------------------------------------------------------------------------------------
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -301,57 +315,22 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
         autoScroll();
 
-        setClickListener();
-
         setLiveData();
+
+        setClickListener();
 
         mModel.getSelectedAmount().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.item_selected);
             mActionModeTitleBinding.actionModeTitle.setText(title);
+
             if (mActionMode != null) {
                 mEditMenu.setVisible(integer == 1 && mModel.getSelectedItemSize().size() == 0);
                 mMoveMenu.setVisible(integer > 0);
                 mDeletedMenu.setVisible(integer > 0);
             }
+
             mActionModeTitleBinding.actionModeSelectAll.setChecked(
                     mModel.getSizeAdapterList().getCurrentList().size() + mModel.getFolderAdapter().getCurrentList().size() == integer);
-        });
-    }
-
-    private void setLiveData() {
-        if (mFolderLive != null && mFolderLive.hasObservers())
-            mFolderLive.removeObservers(getViewLifecycleOwner());
-        mFolderLive = mModel.getFolderLive();
-        mFolderLive.observe(getViewLifecycleOwner(), folderList -> {
-            if (mSort == SORT_LATEST)
-                folderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
-            else if (mSort == SORT_LATEST_REVERSE)
-                folderList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
-            mModel.getFolderAdapter().setSort(mSort);
-
-            mModel.getFolderAdapter().setItem(folderList);
-            if (folderList.size() == 0) mBinding.recyclerFolder.setVisibility(View.GONE);
-            else mBinding.recyclerFolder.setVisibility(View.VISIBLE);
-        });
-
-        if (mSizeLive != null && mSizeLive.hasObservers())
-            mSizeLive.removeObservers(getViewLifecycleOwner());
-        mSizeLive = mModel.getSizeLive();
-        mSizeLive.observe(getViewLifecycleOwner(), sizeList -> {
-            if (mSort == SORT_LATEST)
-                sizeList.sort((o1, o2) -> Integer.compare(o2.getId(), o1.getId()));
-            else if (mSort == SORT_LATEST_REVERSE)
-                sizeList.sort((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
-            mModel.getSizeAdapterGrid().setSort(mSort);
-            mModel.getSizeAdapterList().setSort(mSort);
-            if (mModel.isFavoriteView()) {
-                List<Size> favoriteList = new ArrayList<>();
-                for (Size size : sizeList) if (size.isFavorite()) favoriteList.add(size);
-                sizeList = favoriteList;
-            }
-
-            mModel.getSizeAdapterList().setItem(sizeList);
-            mModel.getSizeAdapterGrid().setItem(sizeList);
         });
     }
 
@@ -416,6 +395,49 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         });
     }
 
+    private void setLiveData() {
+        //folder
+        if (mFolderLive != null && mFolderLive.hasObservers())
+            mFolderLive.removeObservers(getViewLifecycleOwner());
+
+        mFolderLive = mModel.getFolderLive();
+        mFolderLive.observe(getViewLifecycleOwner(), folderList -> {
+            if (mSort == SORT_LATEST)
+                folderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
+            else if (mSort == SORT_LATEST_REVERSE)
+                folderList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
+
+            mModel.getFolderAdapter().setItem(folderList);
+            mModel.getFolderAdapter().setSort(mSort);
+
+            if (folderList.size() == 0) mBinding.recyclerFolder.setVisibility(View.GONE);
+            else mBinding.recyclerFolder.setVisibility(View.VISIBLE);
+        });
+
+        //size
+        if (mSizeLive != null && mSizeLive.hasObservers())
+            mSizeLive.removeObservers(getViewLifecycleOwner());
+
+        mSizeLive = mModel.getSizeLive();
+        mSizeLive.observe(getViewLifecycleOwner(), sizeList -> {
+            if (mSort == SORT_LATEST)
+                sizeList.sort((o1, o2) -> Integer.compare(o2.getId(), o1.getId()));
+            else if (mSort == SORT_LATEST_REVERSE)
+                sizeList.sort((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
+
+            if (mModel.isFavoriteView()) {
+                List<Size> favoriteList = new ArrayList<>();
+                for (Size size : sizeList) if (size.isFavorite()) favoriteList.add(size);
+                sizeList = favoriteList;
+            }
+
+            mModel.getSizeAdapterList().setItem(sizeList);
+            mModel.getSizeAdapterList().setSort(mSort);
+
+            mModel.getSizeAdapterGrid().setItem(sizeList);
+            mModel.getSizeAdapterGrid().setSort(mSort);
+        });
+    }
 
     @Override
     public void onDestroyView() {
@@ -427,6 +449,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     private void setClickListener() {
         popupMenuClick();
 
+        mActivityFab = requireActivity().findViewById(R.id.activity_fab);
         fabClick();
 
         folderAdapterClick();
@@ -440,12 +463,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             showDialog(new AddFolderDialog(), "add");
             mPopupWindow.dismiss();
         });
+
         mPopupMenuBinding.sort.setOnClickListener(v -> {
             showDialog(SortDialog.getInstance(mSort), "sort");
             mPopupWindow.dismiss();
         });
     }
-
 
     private void fabClick() {
         mActivityFab.setOnClickListener(v -> {
@@ -462,12 +485,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 if (mActionMode == null) {
                     mActivityModel.setFolder(folder);
                     Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_refresh);
-                } else actionModeOnClickFolder(folder, position, checkBox);
-            }
-
-            private void actionModeOnClickFolder(Folder folder, int position, MaterialCheckBox checkBox) {
-                checkBox.setChecked(!checkBox.isChecked());
-                mModel.folderSelected(folder, checkBox.isChecked(), position);
+                } else {
+                    checkBox.setChecked(!checkBox.isChecked());
+                    mModel.folderSelected(folder, checkBox.isChecked(), position);
+                }
             }
 
             @Override
@@ -493,42 +514,20 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         if (mActionMode == null) {
             mActivityModel.setSize(size);
             Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_to_inputOutputFragment);
-        } else actionModeOnClickSize(size, checkBox, position, false);
-    }
-
-    private void actionModeOnClickSize(Size size, MaterialCheckBox checkBox, int position, boolean areYouCheckBox) {
-        if (!areYouCheckBox) checkBox.setChecked(!checkBox.isChecked());
-        mModel.sizeSelected(size, checkBox.isChecked(), position);
+        } else {
+            checkBox.setChecked(!checkBox.isChecked());
+            mModel.sizeSelected(size, checkBox.isChecked(), position);
+        }
     }
 
     @Override
-    public void onSizeCardViewLongClick(int position) {
+    public void onSizeCardViewLongClick(MaterialCardView cardView, int position) {
         if (mActionMode == null) {
             mModel.selectedItemListInit();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
-        cardViewCallOnClick(position);
+        cardView.callOnClick();
         mSelectListenerSize.startDragSelection(position);
-    }
-
-    private void cardViewCallOnClick(int position) {
-        RecyclerView.ViewHolder viewHolder = mBinding.recyclerSize.findViewHolderForLayoutPosition(position);
-        if (viewHolder != null) {
-            if (mViewType == LISTVIEW)
-                viewHolder.itemView.findViewById(R.id.list_card_view).callOnClick();
-            else viewHolder.itemView.findViewById(R.id.grid_card_view).callOnClick();
-        }
-    }
-
-    private void cardViewCallOnClick(int position, int position2) {
-        for (int i = position; i <= position2; i++) {
-            RecyclerView.ViewHolder viewHolder = mBinding.recyclerSize.findViewHolderForLayoutPosition(i);
-            if (viewHolder != null) {
-                if (mViewType == LISTVIEW)
-                    viewHolder.itemView.findViewById(R.id.list_card_view).callOnClick();
-                else viewHolder.itemView.findViewById(R.id.grid_card_view).callOnClick();
-            }
-        }
     }
 
     @Override
@@ -541,12 +540,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override
     public void onSizeCheckBoxClick(Size size, MaterialCheckBox checkBox, int position) {
-        actionModeOnClickSize(size, checkBox, position, true);
+        mModel.sizeSelected(size, checkBox.isChecked(), position);
     }
 
     @Override
-    public void onSizeCheckBoxLongCLick(int position) {
-        cardViewCallOnClick(position);
+    public void onSizeCheckBoxLongCLick(MaterialCardView cardView, int position) {
+        cardView.callOnClick();
         mSelectListenerSize.startDragSelection(position);
     }
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -574,6 +573,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 item.setIcon(R.drawable.icon_grid);
                 mViewType = GRIDVIEW;
             } else {
+                mModel.getSizeAdapterList().setSelectedPosition(new HashSet<>());
                 mModel.getSizeAdapterList().setActionModeState(0);
                 item.setIcon(R.drawable.icon_list);
                 mViewType = LISTVIEW;
@@ -604,10 +604,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override//add folder confirm click
     public void addFolderConfirmClick(String folderName) {
-        int largestOrder = mModel.getFolderLargestOrder() + 1;
-        mModel.insertFolder(new Folder(mModel.getCurrentTime(), folderName, mModel.getFolderId(), largestOrder, "0"));
-        if (mModel.getThisFolder() == null) mModel.categoryAmountUpdate();
-        else mModel.folderAmountUpdate();
+        mModel.addFolder(folderName);
     }
 
     @Override//category node add folder icon click
@@ -635,7 +632,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             //find node(recreate)
             List<TreeNode> categoryNodeList = mModel.getTreeNodeRoot().getChildren();
-
             for (TreeNode newNode : categoryNodeList) {
                 TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) newNode.getValue();
                 if (oldViewHolder.category.getId() == newViewHolder.category.getId()) {
@@ -729,8 +725,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override//item move confirm click
     public void itemMoveConfirmClick(long folderId) {
-        mModel.increaseItemAmount(folderId);
-        mModel.decreaseItemAmount();
         mModel.selectedItemMove(folderId);
         TreeViewDialog treeViewDialog = ((TreeViewDialog) getParentFragmentManager().findFragmentByTag("tree"));
         if (treeViewDialog != null) treeViewDialog.dismiss();
@@ -739,7 +733,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override//selected item delete confirm click
     public void selectedItemDeleteConfirmClick() {
-        mModel.decreaseItemAmount();
         mModel.selectedItemDelete();
         mActionMode.finish();
     }

@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
-
     private TreeNode mNodeRoot;
     private ListViewModel mModel;
 
@@ -62,9 +61,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         mModel = new ViewModelProvider(Objects.requireNonNull(getTargetFragment())).get(ListViewModel.class);
         mTreeView = getTreeView();
-
-        if (savedInstanceState != null)
-            mTreeView.restoreState(savedInstanceState.getString("state"));
 
         View view = mTreeView.getView();
         int padding = (int) requireContext().getResources().getDimension(R.dimen._8sdp);
@@ -138,6 +134,9 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
                 topFolderList.addAll(categoryNode.getChildren());
         }
         expandingNode(topFolderList);
+
+        if (savedInstanceState != null)
+            mTreeView.restoreState(savedInstanceState.getString("state"));
     }
 
     private void expandingNode(List<TreeNode> topFolderList) {
@@ -162,9 +161,9 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     public void addCategoryConfirmClick(String categoryName) {
         int orderNumber = mModel.getCategoryLargestOrder() + 1;
         Category category = new Category(categoryName, mModel.getThisCategory().getParentCategory(), orderNumber);
-        mModel.insertCategory(category);
+        Category addedCategory = mModel.treeViewAddCategory(category);
 
-        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(mModel.getLatestCategory(), (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
+        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(addedCategory, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                 .setViewHolder(new TreeHolderCategory(requireContext()));
         mTreeView.addNode(mNodeRoot, categoryNode);
     }

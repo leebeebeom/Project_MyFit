@@ -85,7 +85,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         //click-------------------------------------------------------------------------------------
         cardView.setOnClickListener(v -> mListener.onSizeCardViewClick(size, checkBox, holder.getLayoutPosition()));
         cardView.setOnLongClickListener(v -> {
-            mListener.onSizeCardViewLongClick(holder.getLayoutPosition());
+            mListener.onSizeCardViewLongClick(cardView, holder.getLayoutPosition());
             return true;
         });
         dragHandle.setOnTouchListener((v, event) -> {
@@ -97,7 +97,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         });
         checkBox.setOnClickListener(v -> mListener.onSizeCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
         checkBox.setOnLongClickListener(v -> {
-            mListener.onSizeCheckBoxLongCLick(holder.getLayoutPosition());
+            mListener.onSizeCheckBoxLongCLick(cardView,holder.getLayoutPosition());
             return true;
         });
         //------------------------------------------------------------------------------------------
@@ -111,12 +111,11 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             if (mActionModeState == ACTION_MODE_ON && mAnimOn) {
                 checkBoxOpenAnim(cardView, params, startMargin, endMargin);
                 setAnimOnFalse();
-                checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+//                checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
             } else if (mActionModeState == ACTION_MODE_ON) {
                 params.setMarginStart(endMargin);
                 params.setMarginEnd(0);
                 cardView.setLayoutParams(params);
-                checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
             } else if (mActionModeState == ACTION_MODE_OFF && mAnimOn) {
                 checkBoxCloseAnim(cardView, params, startMargin, endMargin);
                 checkBox.setChecked(false);
@@ -129,6 +128,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
                 cardView.setLayoutParams(params);
             }
         }
+        checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         //------------------------------------------------------------------------------------------
 
         if (mSort == SORT_CUSTOM)

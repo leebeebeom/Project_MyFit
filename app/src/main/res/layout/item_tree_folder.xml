@@ -49,10 +49,10 @@
                 android:id="@+id/current_position"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginHorizontal="@dimen/_4sdp"
                 android:gravity="bottom"
                 android:maxLines="1"
-                android:paddingBottom="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_8sdp"
                 android:text="@string/current_position"
                 android:textSize="@dimen/_6sdp"
                 android:visibility="gone" />

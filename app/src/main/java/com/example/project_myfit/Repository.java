@@ -1,7 +1,6 @@
 package com.example.project_myfit;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -70,6 +69,21 @@ public class Repository {
         return category.get();
     }
 
+    public Category treeViewAddCategory(Category category) {
+        AtomicReference<Category> addedCategory = new AtomicReference<>();
+        Thread thread = new Thread(() -> {
+            mCategoryDao.insert(category);
+            addedCategory.set(mCategoryDao.getLatestCategory());
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return addedCategory.get();
+    }
+
     public Category getLatestCategory() {
         AtomicReference<Category> category = new AtomicReference<>();
         Thread thread = new Thread(() -> category.set(mCategoryDao.getLatestCategory()));
@@ -88,10 +102,9 @@ public class Repository {
 
     public void categoryUpdate(Category category) {
         new Thread(() -> mCategoryDao.update(category)).start();
-        Log.d("머냐고", "categoryUpdate: 머ㅑㅑ");
     }
 
-    public void ctegoryUpdate(List<Category> categoryList) {
+    public void categoryUpdate(List<Category> categoryList) {
         new Thread(() -> mCategoryDao.update(categoryList)).start();
     }
 

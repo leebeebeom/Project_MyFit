@@ -46,7 +46,6 @@ public class ListViewModel extends AndroidViewModel {
     private TreeHolderFolder.FolderTreeHolder mFolderAddValue;
     private HashSet<Integer> mSelectedPositionFolder, mSelectedPositionSizeList, mSelectedPositionSizeGrid;
     private MainActivityViewModel mActivityModel;
-    private String mActionBarTitle;
     private boolean mFavoriteView;
     private int mSort;
     private TreeNode mTreeNodeRoot;
@@ -62,12 +61,6 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     //category--------------------------------------------------------------------------------------
-    public void categoryAmountUpdate() {
-        String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1);
-        mActivityModel.getCategory().setItemAmount(amount);
-        mRepository.categoryUpdate(mActivityModel.getCategory());
-    }
-
     public void updateCategory(Category category) {
         mRepository.categoryUpdate(category);
     }
@@ -80,12 +73,8 @@ public class ListViewModel extends AndroidViewModel {
         return mRepository.getCategoryLargestOrder();
     }
 
-    public void insertCategory(Category category) {
-        mRepository.categoryInsert(category);
-    }
-
-    public Category getLatestCategory() {
-        return mRepository.getLatestCategory();
+    public Category treeViewAddCategory(Category category) {
+        return mRepository.treeViewAddCategory(category);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -129,17 +118,15 @@ public class ListViewModel extends AndroidViewModel {
         for (Size s : mSelectedItemSize) s.setFolderId(folderId);
         updateFolder(mSelectedItemFolder);
         updateSizeList(mSelectedItemSize);
+
+        increaseItemAmount(folderId);
+        decreaseItemAmount();
     }
 
     public void selectedItemDelete() {
         deleteFolder(mSelectedItemFolder);
         deleteSize(mSelectedItemSize);
-    }
-
-    public void folderAmountUpdate() {
-        String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) + 1);
-        mThisFolder.setItemAmount(amount);
-        updateFolder(mThisFolder);
+        decreaseItemAmount();
     }
     //----------------------------------------------------------------------------------------------
 
@@ -158,10 +145,11 @@ public class ListViewModel extends AndroidViewModel {
     }
     //----------------------------------------------------------------------------------------------
 
-    public String getActionBarTitle() {
-        if (mActionBarTitle == null)
-            mActionBarTitle = mThisFolder == null ? mActivityModel.getCategory().getCategory() : mThisFolder.getFolderName();
-        return mActionBarTitle;
+    public void setThisFolder(MainActivityViewModel activityViewModel) {
+        mActivityModel = activityViewModel;
+        if (mThisFolder == null)
+            mThisFolder = mActivityModel.getFolder() == null ? null : mActivityModel.getFolder();
+        mFolderId = mThisFolder == null ? mActivityModel.getCategory().getId() : mThisFolder.getId();
     }
 
     public List<Folder> getFolderHistory() {
@@ -245,26 +233,37 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public long getCurrentTime() {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        return Long.parseLong(dateFormat.format(date));
+        return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
 
-    public void increaseItemAmount(long id) {
+    public void addFolder(String folderName) {
+        insertFolder(new Folder(getCurrentTime(), folderName, mFolderId, getFolderLargestOrder() + 1, "0"));
+        if (mThisFolder == null) {
+            String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1);
+            mActivityModel.getCategory().setItemAmount(amount);
+            mRepository.categoryUpdate(mActivityModel.getCategory());
+        } else {
+            String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) + 1);
+            mThisFolder.setItemAmount(amount);
+            updateFolder(mThisFolder);
+        }
+    }
+
+    private void increaseItemAmount(long id) {
         Category category = mRepository.getCategory(id);
         Folder folder = mRepository.getFolder(id);
-        int amount = 0;
-        if (category != null) {
-            if (mSelectedAmount.getValue() != null)
+        int amount;
+        if (mSelectedAmount.getValue() != null) {
+            if (category != null) {
                 amount = Integer.parseInt(category.getItemAmount()) + mSelectedAmount.getValue();
-            category.setItemAmount(String.valueOf(amount));
-            mRepository.categoryUpdate(category);
-        } else {
-            if (mSelectedAmount.getValue() != null)
+                category.setItemAmount(String.valueOf(amount));
+                mRepository.categoryUpdate(category);
+            } else {
                 amount = Integer.parseInt(folder.getItemAmount()) + mSelectedAmount.getValue();
-            folder.setItemAmount(String.valueOf(amount));
-            mRepository.folderUpdate(folder);
+                folder.setItemAmount(String.valueOf(amount));
+                mRepository.folderUpdate(folder);
+            }
         }
     }
 
@@ -311,13 +310,6 @@ public class ListViewModel extends AndroidViewModel {
     //getter----------------------------------------------------------------------------------------
     public Folder getThisFolder() {
         return mThisFolder;
-    }
-
-    public void setThisFolder(MainActivityViewModel activityViewModel) {
-        mActivityModel = activityViewModel;
-        if (mThisFolder == null)
-            mThisFolder = mActivityModel.getFolder() == null ? null : mActivityModel.getFolder();
-        mFolderId = mThisFolder == null ? mActivityModel.getCategory().getId() : mThisFolder.getId();
     }
 
     public long getFolderId() {
