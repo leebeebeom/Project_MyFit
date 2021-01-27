@@ -69,6 +69,7 @@ import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.MyFitConstant.FOLDER_TOGGLE;
 import static com.example.project_myfit.MyFitConstant.GRIDVIEW;
 import static com.example.project_myfit.MyFitConstant.LISTVIEW;
 import static com.example.project_myfit.MyFitConstant.SORT;
@@ -99,10 +100,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     private MenuItem mEditMenu, mMoveMenu, mDeletedMenu;
     private ActionMode.Callback mActionModeCallback;
     private DragSelectTouchListener mSelectListenerSize, mSelectListenerFolder;
-    private SharedPreferences mViewTypePreference, mSortPreference;
+    private SharedPreferences mViewTypePreference, mSortPreference, mFolderPreference;
     private int mViewType, mSort;
     private ActionMode mActionMode;
-    private boolean mActionModeOn;
+    private boolean mActionModeOn, mFolderToggle;
     private ListPopupMenuBinding mPopupMenuBinding;
     private PopupWindow mPopupWindow;
     private LiveData<List<Folder>> mFolderLive;
@@ -195,6 +196,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         mSortPreference = requireActivity().getSharedPreferences(SORT, Context.MODE_PRIVATE);
         mSort = mSortPreference.getInt(SORT, SORT_CUSTOM);
         mModel.setSort(mSort);
+
+        mFolderPreference = requireActivity().getSharedPreferences(FOLDER_TOGGLE, Context.MODE_PRIVATE);
+        mFolderToggle = mFolderPreference.getBoolean(FOLDER_TOGGLE, true);
 
         //actionBar title
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
@@ -410,8 +414,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             mModel.getFolderAdapter().setItem(folderList);
             mModel.getFolderAdapter().setSort(mSort);
 
-            if (folderList.size() == 0) mBinding.recyclerFolder.setVisibility(View.GONE);
-            else mBinding.recyclerFolder.setVisibility(View.VISIBLE);
+            if (folderList.size() == 0) mBinding.recyclerFolderLayout.setVisibility(View.GONE);
+            else mBinding.recyclerFolderLayout.setVisibility(View.VISIBLE);
         });
 
         //size
@@ -420,6 +424,14 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
         mSizeLive = mModel.getSizeLive();
         mSizeLive.observe(getViewLifecycleOwner(), sizeList -> {
+            if (sizeList.size() == 0) {
+                mBinding.noData.setVisibility(View.VISIBLE);
+                mBinding.recyclerSize.setVisibility(View.GONE);
+            } else {
+                mBinding.noData.setVisibility(View.GONE);
+                mBinding.recyclerSize.setVisibility(View.VISIBLE);
+            }
+
             if (mSort == SORT_LATEST)
                 sizeList.sort((o1, o2) -> Integer.compare(o2.getId(), o1.getId()));
             else if (mSort == SORT_LATEST_REVERSE)
@@ -447,6 +459,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     //click&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     private void setClickListener() {
+        folderToggleClick();
+
         popupMenuClick();
 
         mActivityFab = requireActivity().findViewById(R.id.activity_fab);
@@ -456,6 +470,32 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
         mModel.getSizeAdapterList().setOnSizeAdapterListener(this);
         mModel.getSizeAdapterGrid().setOnSizeAdapterListener(this);
+    }
+
+    private void folderToggleClick() {
+        if (mFolderToggle) {
+            mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_down);
+            mBinding.recyclerFolder.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_left); 
+            mBinding.recyclerFolder.setVisibility(View.GONE);
+        }
+
+        mBinding.folderToggleIcon.setOnClickListener(v -> {
+            if (mBinding.recyclerFolder.getVisibility() == View.VISIBLE) {
+                mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_left);
+                mBinding.recyclerFolder.setVisibility(View.GONE);
+                mFolderToggle = false;
+            } else {
+                mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_down);
+                mBinding.recyclerFolder.setVisibility(View.VISIBLE);
+                mFolderToggle = true;
+            }
+            SharedPreferences.Editor editor = mFolderPreference.edit();
+            editor.putBoolean(FOLDER_TOGGLE, mFolderToggle);
+            editor.apply();
+        });
+
     }
 
     private void popupMenuClick() {

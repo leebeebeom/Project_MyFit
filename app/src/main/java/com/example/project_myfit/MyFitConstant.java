@@ -35,4 +35,6 @@ public class MyFitConstant {
     public static final int SORT_LATEST = 1;
     public static final int SORT_LATEST_REVERSE = 2;
     public static final String SORT = "sort";
+
+    public static final String FOLDER_TOGGLE = "folder toggle";
 }
