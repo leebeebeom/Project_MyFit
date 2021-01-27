@@ -537,17 +537,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         else if (mActionMode == null && mViewType == GRIDVIEW)
             mTouchHelperGrid.startDrag(viewHolder);
     }
-
-    @Override
-    public void onSizeCheckBoxClick(Size size, MaterialCheckBox checkBox, int position) {
-        mModel.sizeSelected(size, checkBox.isChecked(), position);
-    }
-
-    @Override
-    public void onSizeCheckBoxLongCLick(MaterialCardView cardView, int position) {
-        cardView.callOnClick();
-        mSelectListenerSize.startDragSelection(position);
-    }
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
     //menu------------------------------------------------------------------------------------------

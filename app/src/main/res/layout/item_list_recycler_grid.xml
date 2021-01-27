@@ -111,6 +111,7 @@
             android:buttonTint="?colorControlNormal"
             android:clickable="false"
             android:elevation="@dimen/_4sdp"
+            android:enabled="false"
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:visibility="gone" />

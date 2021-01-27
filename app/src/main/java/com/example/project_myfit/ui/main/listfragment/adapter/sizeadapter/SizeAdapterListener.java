@@ -12,8 +12,4 @@ public interface SizeAdapterListener {
     void onSizeCardViewLongClick(MaterialCardView cardView, int position);
 
     void onSizeDragHandTouch(RecyclerView.ViewHolder viewHolder);
-
-    void onSizeCheckBoxClick(Size size, MaterialCheckBox checkBox, int position);
-
-    void onSizeCheckBoxLongCLick(MaterialCardView cardView, int position);
 }

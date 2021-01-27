@@ -26,12 +26,14 @@ import java.util.List;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
+@SuppressLint("ClickableViewAccessibility")
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
     private final ListViewModel mModel;
     private SizeAdapterListener mListener;
     private List<Size> mSizeList;
     private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
+
 
     public SizeAdapterGrid(ListViewModel model) {
         super(new SizeDiffUtil());
@@ -59,37 +61,20 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     @Override
     public SizeGridVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         ItemListRecyclerGridBinding binding = ItemListRecyclerGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new SizeGridVH(binding);
+        return new SizeGridVH(binding, mListener);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
         Size size = getItem(holder.getLayoutPosition());
         holder.mBinding.setSize(size);
+        holder.setSize(size);
 
-        MaterialCardView cardView = holder.mBinding.gridCardView;
         MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
 
         if (size.getImageUri() != null)
             holder.mBinding.addImageIcon.setVisibility(View.GONE);
-
-        //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onSizeCardViewClick(size, checkBox, holder.getLayoutPosition()));
-        cardView.setOnLongClickListener(v -> {
-            mListener.onSizeCardViewLongClick(cardView, holder.getLayoutPosition());
-            return true;
-        });
-        dragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                holder.itemView.setTranslationZ(10);
-                mListener.onSizeDragHandTouch(holder);
-            }
-            return false;
-        });
-        checkBox.setOnClickListener(v -> mListener.onSizeCheckBoxClick(size, checkBox, holder.getLayoutPosition()));
-        //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
@@ -102,7 +87,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
                 mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-
         if (mSort == SORT_CUSTOM)
             dragHandle.setVisibility(View.VISIBLE);
         else dragHandle.setVisibility(View.GONE);
@@ -177,12 +161,47 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyDataSetChanged();
     }
 
-    public static class SizeGridVH extends RecyclerView.ViewHolder {
-        ItemListRecyclerGridBinding mBinding;
+    public static class SizeGridVH extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener, View.OnTouchListener {
+        private final ItemListRecyclerGridBinding mBinding;
+        private final SizeAdapterListener mListener;
+        private Size mSize;
 
-        public SizeGridVH(ItemListRecyclerGridBinding binding) {
+        public SizeGridVH(ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
             super(binding.getRoot());
             mBinding = binding;
+            mListener = listener;
+
+            MaterialCardView cardView = mBinding.gridCardView;
+            AppCompatImageView dragHandle = mBinding.gridDragHandle;
+
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
+            dragHandle.setOnTouchListener(this);
+        }
+
+        public void setSize(Size size) {
+            mSize = size;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onSizeCardViewClick(mSize, mBinding.gridCheckBox, getLayoutPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mListener.onSizeCardViewLongClick(mBinding.gridCardView, getLayoutPosition());
+            return true;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                itemView.setTranslationZ(10);
+                mListener.onSizeDragHandTouch(this);
+            }
+            return false;
         }
     }
 }

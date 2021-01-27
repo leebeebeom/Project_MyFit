@@ -26,6 +26,7 @@ import java.util.List;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
+@SuppressLint("ClickableViewAccessibility")
 public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private final ListViewModel mModel;
     private FolderAdapterListener mListener;
@@ -59,34 +60,17 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @Override
     public FolderVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         ItemListRecyclerFolderBinding binding = ItemListRecyclerFolderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new FolderVH(binding);
+        return new FolderVH(binding, mListener);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
         Folder folder = getItem(holder.getLayoutPosition());
         holder.mBinding.setFolder(folder);
+        holder.setFolder(folder);
 
-        MaterialCardView cardView = holder.mBinding.folderCardView;
         MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
-
-        //click-------------------------------------------------------------------------------------
-        cardView.setOnClickListener(v -> mListener.onFolderCardViewClick(folder, checkBox, holder.getLayoutPosition()));
-        cardView.setOnLongClickListener(v -> {
-            mListener.onFolderCardViewLongClick(holder.mBinding.folderCardView, holder.getLayoutPosition());
-            return true;
-        });
-        dragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                holder.itemView.setTranslationZ(10);
-                holder.mBinding.folderAmountLayout.setVisibility(View.INVISIBLE);
-                mListener.onFolderDragHandTouch(holder);
-            }
-            return false;
-        });
-        //------------------------------------------------------------------------------------------
 
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
@@ -175,12 +159,48 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    public static class FolderVH extends RecyclerView.ViewHolder {
-        ItemListRecyclerFolderBinding mBinding;
+    public static class FolderVH extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener, View.OnTouchListener {
+        private final ItemListRecyclerFolderBinding mBinding;
+        private final FolderAdapterListener mListener;
+        private Folder mFolder;
 
-        public FolderVH(ItemListRecyclerFolderBinding binding) {
+        public FolderVH(ItemListRecyclerFolderBinding binding, FolderAdapterListener listener) {
             super(binding.getRoot());
             mBinding = binding;
+            mListener = listener;
+
+            MaterialCardView cardView = mBinding.folderCardView;
+            AppCompatImageView dragHandle = mBinding.folderDragHandle;
+
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
+            dragHandle.setOnTouchListener(this);
+        }
+
+        public void setFolder(Folder folder) {
+            mFolder = folder;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onFolderCardViewClick(mFolder, mBinding.folderCheckBox, getLayoutPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mListener.onFolderCardViewLongClick(mBinding.folderCardView, getLayoutPosition());
+            return true;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                itemView.setTranslationZ(10);
+                mBinding.folderAmountLayout.setVisibility(View.INVISIBLE);
+                mListener.onFolderDragHandTouch(this);
+            }
+            return false;
         }
     }
 }

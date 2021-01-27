@@ -34,11 +34,11 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 @SuppressLint("ClickableViewAccessibility")
 public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListVH> {
     private final ListViewModel mModel;
-    private List<Size> mSizeList;
     private SizeAdapterListener mListener;
+    private List<Size> mSizeList;
     private int mActionModeState, mSort;
-    private Context mContext;
     private HashSet<Integer> mSelectedPosition;
+    private Context mContext;
 
     public SizeAdapterList(ListViewModel model) {
         super(new SizeDiffUtil());
@@ -188,15 +188,13 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             cardView.setOnLongClickListener(this);
             dragHandle.setOnTouchListener(this);
 
-            checkBox.setOnClickListener(v -> listener.onSizeCheckBoxClick(mSize, checkBox, getLayoutPosition()));
-            checkBox.setOnLongClickListener(v -> {
-                listener.onSizeCheckBoxLongCLick(cardView, getLayoutPosition());
-                return true;
-            });
+            checkBox.setEnabled(false);
+            checkBox.setOnClickListener(v -> cardView.callOnClick());
+            checkBox.setOnLongClickListener(v -> cardView.performLongClick());
         }
 
         public void setSize(Size size) {
-            this.mSize = size;
+            mSize = size;
         }
 
         @Override
