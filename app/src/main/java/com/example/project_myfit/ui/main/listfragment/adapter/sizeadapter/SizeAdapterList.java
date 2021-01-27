@@ -212,8 +212,9 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
-                mListener.onSizeDragHandTouch(this);
-            }
+                mListener.onSizeDragHandleTouch(this, event);
+            } else if (event.getAction() == MotionEvent.ACTION_UP)
+                mListener.onSizeDragHandleTouch(this, event);
             return false;
         }
     }

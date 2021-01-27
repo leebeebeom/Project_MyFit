@@ -198,8 +198,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
                 mBinding.folderAmountLayout.setVisibility(View.INVISIBLE);
-                mListener.onFolderDragHandTouch(this);
-            }
+                mListener.onFolderDragHandleTouch(this, event);
+            } else if (event.getAction() == MotionEvent.ACTION_UP)
+                mListener.onFolderDragHandleTouch(this, event);
             return false;
         }
     }

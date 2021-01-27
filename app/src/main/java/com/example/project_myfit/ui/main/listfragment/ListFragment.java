@@ -108,6 +108,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     private PopupWindow mPopupWindow;
     private LiveData<List<Folder>> mFolderLive;
     private LiveData<List<Size>> mSizeLive;
+    private boolean isDragging;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -369,10 +370,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     private void autoScroll() {
         mBinding.recyclerFolder.setOnTouchListener((v, event) -> {
-            if (isFolderDragSelectEnable && event.getRawY() > 2000) {
+            if ((isFolderDragSelectEnable || isDragging) && event.getRawY() > 2000) {
                 mBinding.listScrollView.scrollBy(0, 1);
                 mScrollEnable = true;
-            } else if (isFolderDragSelectEnable && event.getRawY() < 250) {
+            } else if ((isFolderDragSelectEnable || isDragging) && event.getRawY() < 250) {
                 mBinding.listScrollView.scrollBy(0, -1);
                 mScrollEnable = true;
             } else if (event.getAction() == MotionEvent.ACTION_UP) mScrollEnable = false;
@@ -381,10 +382,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         });
 
         mBinding.recyclerSize.setOnTouchListener((v, event) -> {
-            if (isSizeDragSelectEnable && event.getRawY() > 2000) {
+            if ((isSizeDragSelectEnable || isDragging) && event.getRawY() > 2000) {
                 mBinding.listScrollView.scrollBy(0, 1);
                 mScrollEnable = true;
-            } else if (isSizeDragSelectEnable && event.getRawY() < 250) {
+            } else if ((isSizeDragSelectEnable || isDragging) && event.getRawY() < 250) {
                 mBinding.listScrollView.scrollBy(0, -1);
                 mScrollEnable = true;
             } else mScrollEnable = false;
@@ -392,9 +393,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         });
 
         mBinding.listScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if ((isSizeDragSelectEnable || isFolderDragSelectEnable) && mScrollEnable && scrollY > oldScrollY)
+            if ((isSizeDragSelectEnable || isFolderDragSelectEnable || isDragging) && mScrollEnable && scrollY > oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
-            else if ((isSizeDragSelectEnable || isFolderDragSelectEnable) && mScrollEnable && scrollY < oldScrollY)
+            else if ((isSizeDragSelectEnable || isFolderDragSelectEnable || isDragging) && mScrollEnable && scrollY < oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, -1), 50);
         });
     }
@@ -477,7 +478,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_down);
             mBinding.recyclerFolder.setVisibility(View.VISIBLE);
         } else {
-            mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_left); 
+            mBinding.folderToggleIcon.setImageResource(R.drawable.icon_triangle_left);
             mBinding.recyclerFolder.setVisibility(View.GONE);
         }
 
@@ -542,8 +543,13 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             }
 
             @Override
-            public void onFolderDragHandTouch(RecyclerView.ViewHolder holder) {
-                if (mActionMode == null) mTouchHelperFolder.startDrag(holder);
+            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, MotionEvent event) {
+                if (mActionMode == null) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        isDragging = true;
+                        mTouchHelperFolder.startDrag(holder);
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) isDragging = false;
+                }
             }
         });
     }
@@ -571,11 +577,14 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     @Override
-    public void onSizeDragHandTouch(RecyclerView.ViewHolder viewHolder) {
-        if (mActionMode == null && mViewType == LISTVIEW)
-            mTouchHelperList.startDrag(viewHolder);
-        else if (mActionMode == null && mViewType == GRIDVIEW)
-            mTouchHelperGrid.startDrag(viewHolder);
+    public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder, MotionEvent event) {
+        if (mActionMode == null) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                isDragging = true;
+                if (mViewType == LISTVIEW) mTouchHelperList.startDrag(viewHolder);
+                else mTouchHelperGrid.startDrag(viewHolder);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) isDragging = false;
+        }
     }
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
