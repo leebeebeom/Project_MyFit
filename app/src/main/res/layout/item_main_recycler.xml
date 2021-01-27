@@ -96,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_4sdp"
-                        android:background="@drawable/item_amound_background">
+                        android:background="@drawable/item_amount_background">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"

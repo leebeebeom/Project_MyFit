@@ -10,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -81,7 +81,6 @@ import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
 //TODO 써치바
 //TODO 드래그 리스너..
 //TODO 인풋 브랜드 리퀘스트
-//TODO 폴더 접기 열기
 
 @SuppressLint("ClickableViewAccessibility")
 public class ListFragment extends Fragment implements SizeAdapterListener,
@@ -340,6 +339,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     private void recyclerViewInit() {
+        mBinding.recyclerFolder.setHasFixedSize(true);
+        mBinding.recyclerSize.setHasFixedSize(true);
         mBinding.recyclerFolder.setAdapter(mModel.getFolderAdapter());
         mBinding.recyclerFolder.addOnItemTouchListener(mSelectListenerFolder);
         mBinding.recyclerSize.addOnItemTouchListener(mSelectListenerSize);
@@ -376,8 +377,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             } else if ((isFolderDragSelectEnable || isDragging) && event.getRawY() < 250) {
                 mBinding.listScrollView.scrollBy(0, -1);
                 mScrollEnable = true;
-            } else if (event.getAction() == MotionEvent.ACTION_UP) mScrollEnable = false;
-            else mScrollEnable = false;
+            } else mScrollEnable = false;
             return false;
         });
 
@@ -397,6 +397,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
             else if ((isSizeDragSelectEnable || isFolderDragSelectEnable || isDragging) && mScrollEnable && scrollY < oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, -1), 50);
+            if (oldScrollY < scrollY) {
+                mBinding.listFab.show();
+            } else if (scrollY == 0) mBinding.listFab.hide();
         });
     }
 
@@ -460,6 +463,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     //click&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     private void setClickListener() {
+        goTopFabClick();
+
         folderToggleClick();
 
         popupMenuClick();
@@ -471,6 +476,13 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
         mModel.getSizeAdapterList().setOnSizeAdapterListener(this);
         mModel.getSizeAdapterGrid().setOnSizeAdapterListener(this);
+    }
+
+    private void goTopFabClick() {
+        mBinding.listFab.setOnClickListener(v -> {
+            mBinding.listScrollView.smoothScrollBy(0, 0);
+            mBinding.listScrollView.scrollTo(0, 0);
+        });
     }
 
     private void folderToggleClick() {
@@ -543,12 +555,13 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             }
 
             @Override
-            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, MotionEvent event) {
-                if (mActionMode == null) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        isDragging = true;
-                        mTouchHelperFolder.startDrag(holder);
-                    } else if (event.getAction() == MotionEvent.ACTION_UP) isDragging = false;
+            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder) {
+                if (mActionMode == null && !isDragging) {
+                    isDragging = true;
+                    mTouchHelperFolder.startDrag(holder);
+                } else if (isDragging) {
+                    Toast.makeText(requireContext(), "호출", Toast.LENGTH_SHORT).show();
+                    isDragging = false;
                 }
             }
         });
@@ -577,14 +590,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     @Override
-    public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder, MotionEvent event) {
-        if (mActionMode == null) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                isDragging = true;
-                if (mViewType == LISTVIEW) mTouchHelperList.startDrag(viewHolder);
-                else mTouchHelperGrid.startDrag(viewHolder);
-            } else if (event.getAction() == MotionEvent.ACTION_UP) isDragging = false;
-        }
+    public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
+        if (mActionMode == null && !isDragging) {
+            isDragging = true;
+            if (mViewType == LISTVIEW) mTouchHelperList.startDrag(viewHolder);
+            else mTouchHelperGrid.startDrag(viewHolder);
+        } else if (isDragging) isDragging = false;
     }
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
@@ -688,6 +699,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             int amount = Integer.parseInt(newViewHolder.category.getItemAmount() + 1);
             newViewHolder.category.setItemAmount(String.valueOf(amount));
             mModel.updateCategory(newViewHolder.category);
+
+            TreeHolderCategory newViewHolder2 = (TreeHolderCategory) oldNode.getViewHolder();
+            String string = String.valueOf(Integer.parseInt(newViewHolder2.getBinding().amount.getText().toString()) + 1);
+            newViewHolder2.getBinding().amount.setText(string);
         } else {//folder node
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
@@ -715,6 +730,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             int amount = Integer.parseInt(newViewHolder.folder.getItemAmount()) + 1;
             newViewHolder.folder.setItemAmount(String.valueOf(amount));
             mModel.updateFolder(newViewHolder.folder);
+
+            TreeHolderFolder newViewHolder2 = (TreeHolderFolder) oldNode.getViewHolder();
+            String string = String.valueOf(Integer.parseInt(newViewHolder2.getBinding().amount.getText().toString()) + 1);
+            newViewHolder2.getBinding().amount.setText(string);
         }
     }
 

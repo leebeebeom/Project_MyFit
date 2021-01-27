@@ -126,6 +126,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
+        mListener.onSizeDragHandleTouch(viewHolder);
         mModel.updateSizeList(mSizeList);
     }
     //----------------------------------------------------------------------------------------------
@@ -212,10 +213,9 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
-                mListener.onSizeDragHandleTouch(this, event);
-            } else if (event.getAction() == MotionEvent.ACTION_UP)
-                mListener.onSizeDragHandleTouch(this, event);
-            return false;
+                mListener.onSizeDragHandleTouch(this);
+            }
+            return true;
         }
     }
 }

@@ -10,17 +10,18 @@
             type="com.example.project_myfit.ui.main.database.Category" />
     </data>
 
-    <com.example.project_myfit.ui.main.listfragment.LockableScrollView
-        android:id="@+id/list_scroll_view"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/list_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
+        tools:context=".ui.main.listfragment.ListFragment">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <com.example.project_myfit.ui.main.listfragment.LockableScrollView
+            android:id="@+id/list_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:colorBackground"
-            tools:context=".ui.main.listfragment.ListFragment">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -80,9 +81,9 @@
                         android:id="@+id/folder_toggle_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:alpha="0.8"
                         android:layout_gravity="end"
                         android:layout_marginEnd="@dimen/_4sdp"
+                        android:alpha="0.8"
                         android:src="@drawable/icon_triangle_down" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -107,9 +108,9 @@
                     android:alpha="0.5"
                     android:background="@drawable/recycler_background"
                     android:gravity="center"
+                    android:paddingTop="@dimen/_8sdp"
                     android:text="@string/no_data"
                     android:textSize="@dimen/_20sdp"
-                    android:paddingTop="@dimen/_8sdp"
                     android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -124,9 +125,24 @@
                     android:paddingTop="@dimen/_8sdp"
                     android:paddingBottom="@dimen/_60sdp"
                     android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_list_recycler_list" />
+                    app:spanCount="2"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_list_recycler_grid" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </com.example.project_myfit.ui.main.listfragment.LockableScrollView>
+        </com.example.project_myfit.ui.main.listfragment.LockableScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/list_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_44sdp"
+            android:contentDescription="@string/floating_action_button"
+            android:src="@drawable/icon_arrow_up"
+            android:visibility="visible"
+            app:fabCustomSize="@dimen/_24sdp"
+            app:backgroundTint="@color/white"
+            app:fabSize="mini" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

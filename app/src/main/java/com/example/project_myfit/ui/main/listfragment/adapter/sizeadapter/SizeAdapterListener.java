@@ -1,7 +1,5 @@
 package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
 
-import android.view.MotionEvent;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.ui.main.listfragment.database.Size;
@@ -13,5 +11,5 @@ public interface SizeAdapterListener {
 
     void onSizeCardViewLongClick(MaterialCardView cardView, int position);
 
-    void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder, MotionEvent event);
+    void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder);
 }

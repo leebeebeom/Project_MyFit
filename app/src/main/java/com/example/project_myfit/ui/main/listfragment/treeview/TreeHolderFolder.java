@@ -28,6 +28,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     public View createNodeView(TreeNode node, FolderTreeHolder value) {
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.text.setText(value.folder.getFolderName());
+        mBinding.amount.setText(value.folder.getItemAmount());
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;

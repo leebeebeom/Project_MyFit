@@ -25,6 +25,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     public View createNodeView(TreeNode node, CategoryTreeHolder value) {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.text.setText(value.category.getCategory());
+        mBinding.amount.setText(value.category.getItemAmount());
 
         //if selected item position is this node
         if (value.selectedSizeList.size() != 0) {

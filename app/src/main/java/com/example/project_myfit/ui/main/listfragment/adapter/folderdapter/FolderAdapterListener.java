@@ -1,7 +1,5 @@
 package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
 
-import android.view.MotionEvent;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
@@ -13,5 +11,5 @@ public interface FolderAdapterListener {
 
     void onFolderCardViewLongClick(MaterialCardView cardView, int position);
 
-    void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, MotionEvent event);
+    void onFolderDragHandleTouch(RecyclerView.ViewHolder holder);
 }
