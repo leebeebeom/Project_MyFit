@@ -206,7 +206,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         @Override
         public boolean onLongClick(View v) {
             mListener.onSizeCardViewLongClick(this.mBinding.listCardView, getLayoutPosition());
-            return true;
+            return false;
         }
 
         @Override

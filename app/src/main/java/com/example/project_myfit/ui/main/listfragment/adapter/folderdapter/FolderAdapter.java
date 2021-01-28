@@ -191,7 +191,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         @Override
         public boolean onLongClick(View v) {
             mListener.onFolderCardViewLongClick(mBinding.folderCardView, getLayoutPosition());
-            return true;
+            return false;
         }
 
         @Override

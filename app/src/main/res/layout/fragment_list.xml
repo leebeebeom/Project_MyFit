@@ -92,7 +92,6 @@
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
-                        android:orientation="vertical"
                         android:overScrollMode="never"
                         android:paddingHorizontal="@dimen/_8sdp"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -108,7 +107,7 @@
                     android:alpha="0.5"
                     android:background="@drawable/recycler_background"
                     android:gravity="center"
-                    android:paddingTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:text="@string/no_data"
                     android:textSize="@dimen/_20sdp"
                     android:visibility="gone" />
@@ -125,8 +124,8 @@
                     android:paddingTop="@dimen/_8sdp"
                     android:paddingBottom="@dimen/_60sdp"
                     android:visibility="visible"
-                    app:spanCount="2"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
                     tools:listitem="@layout/item_list_recycler_grid" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.example.project_myfit.ui.main.listfragment.LockableScrollView>
@@ -140,9 +139,9 @@
             android:layout_marginBottom="@dimen/_44sdp"
             android:contentDescription="@string/floating_action_button"
             android:src="@drawable/icon_arrow_up"
-            android:visibility="visible"
-            app:fabCustomSize="@dimen/_24sdp"
+            android:visibility="gone"
             app:backgroundTint="@color/white"
+            app:fabCustomSize="@dimen/_24sdp"
             app:fabSize="mini" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

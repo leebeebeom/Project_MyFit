@@ -38,6 +38,6 @@ public class LockableScrollView extends NestedScrollView {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        return super.onTouchEvent(ev);
+        return mScrollable && super.onTouchEvent(ev);
     }
 }

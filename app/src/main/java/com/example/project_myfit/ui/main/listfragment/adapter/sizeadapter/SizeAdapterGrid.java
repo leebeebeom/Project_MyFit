@@ -193,7 +193,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         @Override
         public boolean onLongClick(View v) {
             mListener.onSizeCardViewLongClick(mBinding.gridCardView, getLayoutPosition());
-            return true;
+            return false;
         }
 
         @Override
