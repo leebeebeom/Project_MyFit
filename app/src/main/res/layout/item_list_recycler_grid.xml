@@ -33,20 +33,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/grid_image"
-                            setUri="@{size.imageUri}"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/_140sdp"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            app:layout_constraintDimensionRatio="1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/grid_image"
+                        setUri="@{size.imageUri}"
+                        android:layout_width="@dimen/_140sdp"
+                        android:layout_height="@dimen/_140sdp"
+                        android:layout_marginTop="@dimen/_16sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/add_image_icon"
@@ -107,13 +99,13 @@
             android:layout_marginStart="-4dp"
             android:layout_marginTop="@dimen/_3sdp"
             android:layout_marginEnd="@dimen/_60sdp"
-            android:alpha="0.8"
+            android:alpha="0.7"
             android:buttonTint="?colorControlNormal"
             android:clickable="false"
             android:elevation="@dimen/_4sdp"
             android:enabled="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:visibility="gone" />
     </FrameLayout>
 </layout>

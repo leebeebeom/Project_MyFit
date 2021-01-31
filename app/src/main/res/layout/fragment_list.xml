@@ -123,7 +123,6 @@
                     android:overScrollMode="never"
                     android:paddingTop="@dimen/_8sdp"
                     android:paddingBottom="@dimen/_60sdp"
-                    android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
                     tools:listitem="@layout/item_list_recycler_grid" />

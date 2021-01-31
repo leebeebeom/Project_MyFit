@@ -33,7 +33,7 @@
                 android:maxLines="3"
                 android:text="@{folder.folderName}"
                 android:textSize="@dimen/_10sdp"
-                tools:text="comme \n des garcons" />
+                tools:text="comme \n des \n garcons" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/folder_drag_handle"
@@ -52,14 +52,14 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="start"
-                android:layout_marginStart="-4dp"
-                android:layout_marginTop="-4dp"
+                android:layout_marginStart="-2dp"
+                android:layout_marginTop="-2dp"
                 android:alpha="0.8"
                 android:buttonTint="?colorControlNormal"
                 android:clickable="false"
                 android:enabled="false"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
                 android:visibility="gone" />
 
         </com.google.android.material.card.MaterialCardView>

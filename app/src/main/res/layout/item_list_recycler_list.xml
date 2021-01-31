@@ -21,8 +21,8 @@
             android:layout_marginStart="@dimen/_8sdp"
             android:alpha="0.8"
             android:buttonTint="?colorControlNormal"
-            android:enabled="false"
             android:clickable="false"
+            android:enabled="false"
             android:scaleX="0.7"
             android:scaleY="0.7" />
 

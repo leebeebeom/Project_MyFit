@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MyFit</string>
-    <string name="main">Main</string>
-    <string name="setting">Setting</string>
+    <string name="main">메인 메뉴</string>
+    <string name="setting">설정</string>
     <string name="http">https://</string>
     <string name="memo">memo</string>
     <string name="brand">Brand</string>
@@ -17,7 +17,7 @@
     <string name="bottom">BOTTOM</string>
     <string name="outer">OUTER</string>
     <string name="etc">ETC</string>
-    <string name="all_list">All List</string>
+    <string name="all_list">모든 목록</string>
     <string name="floating_action_button">Floating Action Button</string>
     <string name="waist">Waist</string>
     <string name="thigh">Thigh</string>
@@ -61,4 +61,5 @@
     <string name="necessary_field_name">이름은 필수 입력 항목입니다.</string>
     <string name="add_category">카테고리 추가</string>
     <string name="no_data">No Data</string>
+    <string name="recycle_bin">휴지통</string>
 </resources>

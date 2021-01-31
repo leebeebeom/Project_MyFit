@@ -33,7 +33,6 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/materialCardView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginHorizontal="@dimen/_16sdp"
@@ -646,8 +645,7 @@
                         android:text="@string/go"
                         android:textColor="?colorControlNormal"
                         android:textSize="@dimen/_10sdp"
-                        app:backgroundTint="?go_button_color"
-                        app:strokeColor="?colorControlNormal" />
+                        app:backgroundTint="?go_button_color" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -667,7 +665,6 @@
                         android:inputType="textMultiLine"
                         android:text="@={size.memo}"
                         android:textSize="@dimen/_10sdp" />
-
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>

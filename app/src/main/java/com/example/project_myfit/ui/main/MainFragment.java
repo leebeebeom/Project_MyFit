@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//TODO 레이아웃 정리
+
 public class MainFragment extends Fragment {
     public static final String TOP = "TOP";
     public static final String BOTTOM = "BOTTOM";

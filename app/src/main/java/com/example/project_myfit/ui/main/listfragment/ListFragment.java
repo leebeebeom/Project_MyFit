@@ -81,6 +81,8 @@ import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
 
 //TODO 써치바
 //TODO 전체적으로 글씨 줄이기
+//TODO 트리뷰 에드 버튼 알파 조정
+//TODO 휴지통 클릭
 
 @SuppressLint("ClickableViewAccessibility")
 public class ListFragment extends Fragment implements SizeAdapterListener,
