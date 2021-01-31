@@ -181,17 +181,11 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             mBinding = binding;
             mListener = listener;
 
-            MaterialCardView cardView = mBinding.listCardView;
-            MaterialCheckBox checkBox = mBinding.listCheckBox;
             ImageView dragHandle = mBinding.listDragHandle;
 
-            cardView.setOnClickListener(this);
-            cardView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             dragHandle.setOnTouchListener(this);
-
-            checkBox.setEnabled(false);
-            checkBox.setOnClickListener(v -> cardView.callOnClick());
-            checkBox.setOnLongClickListener(v -> cardView.performLongClick());
         }
 
         public void setSize(Size size) {

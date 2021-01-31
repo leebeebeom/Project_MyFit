@@ -209,10 +209,12 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void folderSelected(Folder folder, boolean isChecked, int position) {
-        if (isChecked) mSelectedItemFolder.add(folder);
-        else mSelectedItemFolder.remove(folder);
-        mFolderAdapter.setSelectedPosition(position);
-        setSelectedAmount();
+        if (!folder.getFolderName().equals("dummy")) {
+            if (isChecked) mSelectedItemFolder.add(folder);
+            else mSelectedItemFolder.remove(folder);
+            mFolderAdapter.setSelectedPosition(position);
+            setSelectedAmount();
+        }
     }
 
     public void sizeSelected(Size size, boolean isChecked, int position) {

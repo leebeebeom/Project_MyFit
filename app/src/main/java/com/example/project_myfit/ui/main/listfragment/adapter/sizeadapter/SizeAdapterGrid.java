@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
 import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -173,11 +172,10 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             mBinding = binding;
             mListener = listener;
 
-            MaterialCardView cardView = mBinding.gridCardView;
             AppCompatImageView dragHandle = mBinding.gridDragHandle;
 
-            cardView.setOnClickListener(this);
-            cardView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             dragHandle.setOnTouchListener(this);
         }
 

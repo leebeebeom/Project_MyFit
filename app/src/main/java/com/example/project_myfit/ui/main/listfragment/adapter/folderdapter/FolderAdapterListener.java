@@ -7,9 +7,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 public interface FolderAdapterListener {
-    void onFolderCardViewClick(Folder folder, MaterialCheckBox checkBox, int position);
+    void onFolderItemViewClick(Folder folder, MaterialCheckBox checkBox, int position);
 
-    void onFolderCardViewLongClick(MaterialCardView cardView, int position);
+    void onFolderItemViewLongClick(MaterialCardView cardView, int position);
 
     void onFolderDragHandleTouch(RecyclerView.ViewHolder holder);
 }

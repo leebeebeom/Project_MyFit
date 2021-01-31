@@ -21,6 +21,8 @@
             android:layout_marginStart="@dimen/_8sdp"
             android:alpha="0.8"
             android:buttonTint="?colorControlNormal"
+            android:enabled="false"
+            android:clickable="false"
             android:scaleX="0.7"
             android:scaleY="0.7" />
 
@@ -41,9 +43,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:paddingHorizontal="@dimen/_8sdp"
-                    android:paddingVertical="@dimen/_2sdp"
-                    android:orientation="vertical">
+                    android:paddingVertical="@dimen/_2sdp">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
