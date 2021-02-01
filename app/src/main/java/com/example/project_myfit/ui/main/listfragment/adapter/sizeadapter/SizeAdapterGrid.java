@@ -36,9 +36,9 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     public SizeAdapterGrid(ListViewModel model) {
         super(new SizeDiffUtil());
-        mModel = model;
-        setHasStableIds(true);
-        mSelectedPosition = new HashSet<>();
+        this.mModel = model;
+        this.setHasStableIds(true);
+        this.mSelectedPosition = new HashSet<>();
     }
 
     @Override
@@ -47,11 +47,11 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void setOnSizeAdapterListener(SizeAdapterListener listener) {
-        mListener = listener;
+        this.mListener = listener;
     }
 
     public void setItem(List<Size> sizeList) {
-        mSizeList = sizeList;
+        this.mSizeList = sizeList;
         submitList(sizeList);
     }
 
@@ -124,7 +124,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
-        mActionModeState = actionModeState;
+        this.mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
 
@@ -144,9 +144,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void selectAll() {
-        for (int i = 0; i < getCurrentList().size(); i++) {
-            mSelectedPosition.add(i);
-        }
+        for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
         notifyDataSetChanged();
     }
 
@@ -169,18 +167,16 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
         public SizeGridVH(ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
             super(binding.getRoot());
-            mBinding = binding;
-            mListener = listener;
-
-            AppCompatImageView dragHandle = mBinding.gridDragHandle;
+            this.mBinding = binding;
+            this.mListener = listener;
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            dragHandle.setOnTouchListener(this);
+            mBinding.gridDragHandle.setOnTouchListener(this);
         }
 
         public void setSize(Size size) {
-            mSize = size;
+            this.mSize = size;
         }
 
         @Override

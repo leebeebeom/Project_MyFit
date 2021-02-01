@@ -42,9 +42,9 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     public SizeAdapterList(ListViewModel model) {
         super(new SizeDiffUtil());
-        mModel = model;
-        setHasStableIds(true);
-        mSelectedPosition = new HashSet<>();
+        this.mModel = model;
+        this.setHasStableIds(true);
+        this.mSelectedPosition = new HashSet<>();
     }
 
     @Override
@@ -53,11 +53,11 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void setOnSizeAdapterListener(SizeAdapterListener listener) {
-        mListener = listener;
+        this.mListener = listener;
     }
 
     public void setItem(List<Size> sizeList) {
-        mSizeList = sizeList;
+        this.mSizeList = sizeList;
         submitList(sizeList);
     }
 
