@@ -5,7 +5,6 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,29 +20,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Binding
+        //binding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        MainActivityViewModel mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-
-        //ToolBar
+        //toolbar
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        //NavController
+        //navController
         mNavController = Navigation.findNavController(this, R.id.host_fragment);
 
-        //Top Level Destination
+        //top level destination
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment)
                 .build();
 
-        //Action Bar Share
+        //action bar share
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
 
-        //Connect Bottom Navigation with NavController
+        //connect bottom navigation with navController
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
 
         //Bottom Nav Setting

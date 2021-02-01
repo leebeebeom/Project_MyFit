@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
@@ -753,9 +754,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             }
 
             @Override
-            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder) {
+            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, LinearLayoutCompat folderAmountLayout) {
                 if (mActionMode == null && !isDragging) {
                     isDragging = true;
+                    folderAmountLayout.setVisibility(View.GONE);
                     mTouchHelperFolder.startDrag(holder);
                 } else if (isDragging) isDragging = false;
             }

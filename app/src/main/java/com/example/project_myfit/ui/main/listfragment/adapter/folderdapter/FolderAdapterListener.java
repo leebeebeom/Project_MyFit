@@ -1,5 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
 
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
@@ -11,5 +12,5 @@ public interface FolderAdapterListener {
 
     void onFolderItemViewLongClick(MaterialCardView cardView, int position);
 
-    void onFolderDragHandleTouch(RecyclerView.ViewHolder holder);
+    void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, LinearLayoutCompat folderAmountLayout);
 }

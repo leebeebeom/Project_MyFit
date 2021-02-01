@@ -35,9 +35,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
     public FolderAdapter(ListViewModel model) {
         super(new FolderDiffUtil());
-        mModel = model;
-        setHasStableIds(true);
-        mSelectedPosition = new HashSet<>();
+        this.mModel = model;
+        this.setHasStableIds(true);
+        this.mSelectedPosition = new HashSet<>();
     }
 
     @Override
@@ -46,11 +46,11 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     public void setOnFolderAdapterListener(FolderAdapterListener listener) {
-        mListener = listener;
+        this.mListener = listener;
     }
 
     public void setItem(List<Folder> folderList) {
-        mFolderList = folderList;
+        this.mFolderList = folderList;
         submitList(folderList);
     }
 
@@ -82,38 +82,14 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
                 mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-
         if (mSort == SORT_CUSTOM)
             dragHandle.setVisibility(View.VISIBLE);
         else dragHandle.setVisibility(View.GONE);
-        //dummy data for drag select----------------------------------------------------------------
-//        int size = getCurrentList().size();
-//        if (size % 4 == 1) {
-//            for (int i = 0; i < 3; i++) {
-//                Folder dummy = new Folder(-1, "dummy", 0, -1, "");
-//                mFolderList.add(dummy);
-//            }
-//            setItem(mFolderList);
-//            return;
-//        } else if (size % 4 == 2) {
-//            for (int i = 0; i < 2; i++) {
-//                Folder dummy = new Folder(-1, "dummy", 0, -1, "");
-//                mFolderList.add(dummy);
-//            }
-//            setItem(mFolderList);
-//            return;
-//        } else if (size % 4 == 3) {
-//            Folder dummy = new Folder(-1, "dummy", 0, -1, "");
-//            mFolderList.add(dummy);
-//            setItem(mFolderList);
-//            return;
-//        }
 
         if (folder.getId() == -1)
             holder.itemView.setVisibility(View.INVISIBLE);
         else holder.itemView.setVisibility(View.VISIBLE);
         //------------------------------------------------------------------------------------------
-
     }
 
     //drag------------------------------------------------------------------------------------------
@@ -143,15 +119,14 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
         ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout.setVisibility(View.VISIBLE);
         viewHolder.itemView.setTranslationZ(0);
-        mListener.onFolderDragHandleTouch(viewHolder);
+        mListener.onFolderDragHandleTouch(viewHolder, ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout);
         mModel.updateFolder(mFolderList);
-        notifyDataSetChanged();
     }
     //----------------------------------------------------------------------------------------------
 
     //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
-        mActionModeState = actionModeState;
+        this.mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
 
@@ -159,8 +134,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         return mSelectedPosition;
     }
 
-    public void setSelectedPosition(HashSet<Integer> mSelectedPosition) {
-        this.mSelectedPosition = mSelectedPosition;
+    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
+        this.mSelectedPosition = selectedPosition;
     }
 
     //drag select-----------------------------------------------------------------------------------
@@ -170,9 +145,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     public void selectAll() {
-        for (int i = 0; i < getCurrentList().size(); i++) {
-            mSelectedPosition.add(i);
-        }
+        for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
         notifyDataSetChanged();
     }
 
@@ -195,18 +168,16 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         public FolderVH(ItemListRecyclerFolderBinding binding, FolderAdapterListener listener) {
             super(binding.getRoot());
-            mBinding = binding;
-            mListener = listener;
-
-            AppCompatImageView dragHandle = mBinding.folderDragHandle;
+            this.mBinding = binding;
+            this.mListener = listener;
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            dragHandle.setOnTouchListener(this);
+            mBinding.folderDragHandle.setOnTouchListener(this);
         }
 
         public void setFolder(Folder folder) {
-            mFolder = folder;
+            this.mFolder = folder;
         }
 
         @Override
@@ -224,12 +195,10 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (!mFolder.getFolderName().equals("dummy"))
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    itemView.setTranslationZ(10);
-                    mBinding.folderAmountLayout.setVisibility(View.INVISIBLE);
-                    mListener.onFolderDragHandleTouch(this);
-                }
+            if (!mFolder.getFolderName().equals("dummy") && event.getAction() == MotionEvent.ACTION_DOWN) {
+                itemView.setTranslationZ(10);
+                mListener.onFolderDragHandleTouch(this, mBinding.folderAmountLayout);
+            }
             return false;
         }
     }

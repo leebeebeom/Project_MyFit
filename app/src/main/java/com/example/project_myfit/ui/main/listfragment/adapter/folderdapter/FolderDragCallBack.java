@@ -12,7 +12,7 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     private final FolderAdapter mAdapter;
 
     public FolderDragCallBack(FolderAdapter listFolderAdapter) {
-        mAdapter = listFolderAdapter;
+        this.mAdapter = listFolderAdapter;
     }
 
     @Override
@@ -34,7 +34,6 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
     }
 
     @Override
@@ -52,19 +51,8 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
         if (recyclerView.getAdapter() != null) itemCount = recyclerView.getAdapter().getItemCount();
         int position = viewHolder.getLayoutPosition();
 
-        if (isDraggingDown) {
-            if (itemCount % 4 == 0 && itemCount - 5 < position)
-                dY = 0;
-            else if (itemCount % 4 == 1 && itemCount - 1 == position)
-                dY = 0;
-            else if (itemCount % 4 == 2 && itemCount - 3 < position)
-                dY = 0;
-            else if (itemCount % 4 == 3 && itemCount - 4 < position)
-                dY = 0;
-            else if (viewHolder.itemView.getY() > recyclerView.getBottom() - 380)
-                dY = 0;
-        } else if (isDraggingUp && position < 4)
-            dY = 0;
+        if (isDraggingDown && itemCount - 5 < position) dY = 0;
+        else if (isDraggingUp && position < 4) dY = 0;
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
