@@ -1,7 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment.inputoutputfragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -103,6 +101,47 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
                              @Nullable Bundle savedInstanceState) {
         mBinding = FragmentInputOutputBinding.inflate(getLayoutInflater());
         mActivityFab = requireActivity().findViewById(R.id.activity_fab);
+        mBinding.brand.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    mBinding.brandLayout.setError(null);
+                    mBinding.brandLayout.setErrorEnabled(false);
+                } else {
+                    mBinding.brandLayout.setErrorEnabled(true);
+                    mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        mBinding.name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    mBinding.nameLayout.setError(null);
+                    mBinding.nameLayout.setErrorEnabled(false);
+                } else {
+                    mBinding.nameLayout.setErrorEnabled(true);
+                    mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         setLayout();
         setData();
@@ -157,12 +196,6 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), mOnBackPressedCallBack);
 
-        if (mActivityModel.getSize() == null) {
-            mBinding.brand.requestFocus();
-            InputMethodManager manager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.showSoftInput(mBinding.brand, InputMethodManager.SHOW_FORCED);
-        }
-
         mModel.getImageUri().observe(getViewLifecycleOwner(), uri -> {
             mBinding.image.setImageURI(uri);
             if (uri != null) mBinding.addIcon.setVisibility(View.GONE);
@@ -201,52 +234,18 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     private void fabClick() {
         mActivityFab.setOnClickListener(v -> {
             if (TextUtils.isEmpty(mBinding.brand.getText()) || TextUtils.isEmpty(mBinding.name.getText())) {
-                if (TextUtils.isEmpty(mBinding.brand.getText())) brandSetWatcher();
-                if (TextUtils.isEmpty(mBinding.name.getText())) nameSetWatcher();
+                if (TextUtils.isEmpty(mBinding.brand.getText())) {
+                    mBinding.brandLayout.setErrorEnabled(true);
+                    mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
+                }
+                if (TextUtils.isEmpty(mBinding.name.getText())) {
+                    mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
+                    mBinding.nameLayout.setErrorEnabled(true);
+                }
             } else {
                 if (mActivityModel.getSize() == null) mModel.sizeInsert();
                 else mModel.update();
                 goListFragment();
-            }
-        });
-    }
-
-    private void brandSetWatcher() {
-        mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
-        mBinding.brand.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setError(null);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
-    private void nameSetWatcher() {
-        mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
-        mBinding.name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setError(null);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
     }
