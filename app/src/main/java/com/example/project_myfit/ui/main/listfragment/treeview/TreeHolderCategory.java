@@ -24,13 +24,15 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     @Override
     public View createNodeView(TreeNode node, CategoryTreeHolder value) {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
-        mBinding.text.setText(value.category.getCategory());
-        mBinding.amount.setText(value.category.getItemAmount());
+        mBinding.setCategory(value.category);
 
         //if selected item position is this node
         if (value.selectedSizeList.size() != 0) {
             Size size = value.selectedSizeList.get(0);
-            if (size.getFolderId() == value.category.getId()) mBinding.getRoot().setAlpha(0.5f);
+            if (size.getFolderId() == value.category.getId()) {
+                mBinding.iconLayout.setAlpha(0.5f);
+                mBinding.text.setAlpha(0.5f);
+            }
         }
 
         if (node.getChildren().size() != 0)

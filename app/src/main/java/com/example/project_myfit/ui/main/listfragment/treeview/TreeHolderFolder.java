@@ -27,8 +27,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     @Override
     public View createNodeView(TreeNode node, FolderTreeHolder value) {
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        mBinding.text.setText(value.folder.getFolderName());
-        mBinding.amount.setText(value.folder.getItemAmount());
+        mBinding.setFolder(value.folder);
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
@@ -36,16 +35,19 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         //if this node is selected folder
         for (Folder f : value.selectedFolderList) {
             if (f.getId() == value.folder.getId()) {
-                mBinding.getRoot().setAlpha(0.5f);
+                mBinding.iconLayout.setAlpha(0.5f);
+                mBinding.text.setAlpha(0.5f);
                 isSelected = true;
                 //parent node alpha
                 TreeNode parent = node.getParent();
                 if (parent.getViewHolder() instanceof TreeHolderCategory) {
                     TreeHolderCategory holder = (TreeHolderCategory) parent.getViewHolder();
-                    holder.getBinding().getRoot().setAlpha(0.5f);
+                    holder.getBinding().iconLayout.setAlpha(0.5f);
+                    holder.getBinding().text.setAlpha(0.5f);
                 } else {
                     TreeHolderFolder holder = (TreeHolderFolder) parent.getViewHolder();
-                    holder.getBinding().getRoot().setAlpha(0.5f);
+                    holder.getBinding().iconLayout.setAlpha(0.5f);
+                    holder.getBinding().text.setAlpha(0.5f);
                 }
                 break;
             }
@@ -53,14 +55,18 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         //if parent node is selected folder
         if (node.getParent().getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getParent().getViewHolder()).isSelected) {
-            mBinding.getRoot().setAlpha(0.5f);
+            mBinding.iconLayout.setAlpha(0.5f);
+            mBinding.text.setAlpha(0.5f);
             isSelected = true;
         }
 
         //if selected item position is this node
         if (value.selectedSizeList.size() != 0) {
             Size size = value.selectedSizeList.get(0);
-            if (size.getFolderId() == value.folder.getId()) mBinding.getRoot().setAlpha(0.5f);
+            if (size.getFolderId() == value.folder.getId()) {
+                mBinding.folderIcon.setAlpha(0.5f);
+                mBinding.text.setAlpha(0.5f);
+            }
         }
 
 

@@ -64,6 +64,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
     //onBackPressedCallBack-------------------------------------------------------------------------
     private void setOnBackPressedCallBackInput() {
+
         if (mModel.getImageUri().getValue() != null ||
                 mModel.getSize().isFavorite() ||
                 !TextUtils.isEmpty(mBinding.brand.getText()) ||

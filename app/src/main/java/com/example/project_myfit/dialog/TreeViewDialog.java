@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
     private TreeNode mNodeRoot;
@@ -59,7 +58,8 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mModel = new ViewModelProvider(Objects.requireNonNull(getTargetFragment())).get(ListViewModel.class);
+        if (getTargetFragment() != null)
+            mModel = new ViewModelProvider(getTargetFragment()).get(ListViewModel.class);
         mTreeView = getTreeView();
 
         View view = mTreeView.getView();
@@ -109,8 +109,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
                     categoryTreeNode.addChild(folderTreeNode);
                 }
             }
-            if (mModel.getThisCategory().getId() == category.getId() && categoryTreeNode.getChildren().size() != 0)
-                categoryTreeNode.setExpanded(true);
             mCategoryTreeNodeList.add(categoryTreeNode);
         }
 
@@ -155,7 +153,13 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
                 if (mModel.getThisCategory().getId() == ((TreeHolderCategory.CategoryTreeHolder) categoryNode.getValue()).category.getId())
                     ((TreeHolderCategory) categoryNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
         }
+        for (TreeNode categoryTreeNode : mCategoryTreeNodeList) {
+            TreeHolderCategory.CategoryTreeHolder holder = (TreeHolderCategory.CategoryTreeHolder) categoryTreeNode.getValue();
+            if (mModel.getThisCategory().getId() == holder.category.getId() && categoryTreeNode.getChildren().size() != 0)
+                mTreeView.expandNode(categoryTreeNode);
+        }
     }
+
 
     @Override
     public void addCategoryConfirmClick(String categoryName) {

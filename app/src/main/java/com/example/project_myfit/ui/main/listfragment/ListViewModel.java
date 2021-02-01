@@ -184,6 +184,7 @@ public class ListViewModel extends AndroidViewModel {
         mSelectedItemFolder.clear();
         if (isChecked) {
             mSelectedItemFolder.addAll(mFolderAdapter.getCurrentList());
+            mSelectedItemFolder.removeIf(folder -> folder.getId() == -1);
             mSelectedItemSize.addAll(mSizeAdapterList.getCurrentList());
             mFolderAdapter.selectAll();
             mSizeAdapterList.selectAll();

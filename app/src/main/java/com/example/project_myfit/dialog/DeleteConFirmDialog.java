@@ -42,12 +42,14 @@ public class DeleteConFirmDialog extends DialogFragment {
         float titleSize = getResources().getDimension(R.dimen._5sdp);
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
         int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+
         MaterialTextView message = dialog.findViewById(android.R.id.message);
         if (message != null) {
             int padding = (int) getResources().getDimension(R.dimen._8sdp);

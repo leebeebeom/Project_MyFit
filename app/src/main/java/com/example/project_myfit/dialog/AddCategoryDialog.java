@@ -41,12 +41,12 @@ public class AddCategoryDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
 
-        binding.setHint("Category Name");
+        binding.setHint(getString(R.string.category_name));
         binding.editTextDialog.requestFocus();
-        binding.editTextLayoutDialog.setPlaceholderText("카테고리 이름");
+        binding.editTextLayoutDialog.setPlaceholderText(getString(R.string.category_name_korean));
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle("카테고리 추가")
+                .setTitle(R.string.add_category)
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.editTextDialog.getText())))
@@ -84,6 +84,5 @@ public class AddCategoryDialog extends DialogFragment {
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
 
         return dialog;
-
     }
 }

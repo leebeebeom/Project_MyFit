@@ -149,6 +149,10 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
+    public List<Folder> getFolderList() {
+        return mFolderList;
+    }
+
     public void deselectAll() {
         mSelectedPosition.clear();
         notifyDataSetChanged();

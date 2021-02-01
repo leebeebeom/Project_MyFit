@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="folder"
+            type="com.example.project_myfit.ui.main.listfragment.database.Folder" />
+    </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -38,6 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_8sdp"
+                android:text="@{folder.folderName}"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
@@ -63,6 +69,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="@dimen/_6sdp"
                 android:layout_marginVertical="@dimen/_2sdp"
+                android:text="@{folder.itemAmount}"
                 android:alpha="0.6"
                 android:textSize="@dimen/_6sdp"
                 tools:text="20" />

@@ -352,8 +352,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 mDeletedMenu.setVisible(integer > 0);
             }
 
-            mActionModeTitleBinding.actionModeSelectAll.setChecked(
-                    mModel.getSizeAdapterList().getCurrentList().size() + mModel.getFolderAdapter().getCurrentList().size() == integer);
+            int sizeSize = mModel.getSizeAdapterList().getCurrentList().size();
+            List<Folder> folderList = mModel.getFolderAdapter().getFolderList();
+            folderList.removeIf(folder -> folder.getId() == -1);
+            int folderSize = folderList.size();
+            mActionModeTitleBinding.actionModeSelectAll.setChecked(sizeSize + folderSize == integer);
         });
     }
 
@@ -894,7 +897,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             ((TreeHolderCategory) oldNode.getViewHolder()).setIconClickable();
 
             TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) oldNode.getValue();
-            int amount = Integer.parseInt(newViewHolder.category.getItemAmount() + 1);
+            int amount = Integer.parseInt(newViewHolder.category.getItemAmount()) + 1;
             newViewHolder.category.setItemAmount(String.valueOf(amount));
             mModel.updateCategory(newViewHolder.category);
 
