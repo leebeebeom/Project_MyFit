@@ -351,10 +351,6 @@ public class ListViewModel extends AndroidViewModel {
         this.mFavoriteView = favoriteView;
     }
 
-    public int getSort() {
-        return mSort;
-    }
-
     public void setSort(int sort) {
         this.mSort = sort;
     }

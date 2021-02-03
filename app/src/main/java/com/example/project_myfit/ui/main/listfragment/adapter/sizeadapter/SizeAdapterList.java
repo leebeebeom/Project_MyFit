@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
@@ -39,6 +40,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
     private Context mContext;
+    private Animation mAnimation;
 
     public SizeAdapterList(ListViewModel model) {
         super(new SizeDiffUtil());
@@ -81,9 +83,12 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         ImageView dragHandle = holder.mBinding.listDragHandle;
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
-            cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right));
+            if (mAnimation == null)
+                mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right);
+            if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         } else if (mActionModeState == ACTION_MODE_OFF) {
+            mAnimation = null;
             cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
             checkBox.setChecked(false);
             setActionModeStateNone();
@@ -143,6 +148,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     public void setSelectedPosition(HashSet<Integer> selectedPosition) {
         this.mSelectedPosition = selectedPosition;
+        mAnimation = null;
         notifyDataSetChanged();
     }
 
