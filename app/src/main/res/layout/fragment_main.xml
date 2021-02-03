@@ -68,7 +68,6 @@
                     app:rippleColor="@android:color/transparent" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"

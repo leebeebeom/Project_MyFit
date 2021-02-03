@@ -83,7 +83,6 @@ import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
 //TODO 써치바
 //TODO 전체적으로 글씨 줄이기
 //TODO 휴지통 클릭
-//TODO 오토 스크를 액션 업 스크롤 정지
 
 @SuppressLint("ClickableViewAccessibility")
 public class ListFragment extends Fragment implements SizeAdapterListener,
@@ -197,8 +196,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         mBinding.setCategory(mActivityModel.getCategory());
 
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
-        mPopupMenuBinding = ListPopupMenuBinding.inflate(inflater);
 
+        mPopupMenuBinding = ListPopupMenuBinding.inflate(inflater);
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 

@@ -3,6 +3,8 @@ package com.example.project_myfit.ui.main.database;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity
 public class Category {
     private final String parentCategory;
@@ -11,6 +13,7 @@ public class Category {
     private int orderNumber;
     private String category;
     private String itemAmount;
+    boolean isDeleted;
 
 
     public Category(String category, String parentCategory, int orderNumber) {
@@ -18,6 +21,7 @@ public class Category {
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
         this.itemAmount = "0";
+        this.isDeleted = false;
     }
 
     public long getId() {
@@ -54,5 +58,18 @@ public class Category {
 
     public void setItemAmount(String itemAmount) {
         this.itemAmount = itemAmount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        Category category = (Category) o;
+        return getId() == category.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -32,23 +32,23 @@ public abstract class AppDataBase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             List<Category> categoryList = new ArrayList<>();
-                            categoryList.add(new Category("Short Sleeve", MyFitConstant.TOP, 1));
-                            categoryList.add(new Category("Long Sleeve", MyFitConstant.TOP, 2));
-                            categoryList.add(new Category("Knit", MyFitConstant.TOP, 3));
-                            categoryList.add(new Category("Hood", MyFitConstant.TOP, 4));
-                            categoryList.add(new Category("Shirt", MyFitConstant.TOP, 5));
-                            categoryList.add(new Category("Jean", MyFitConstant.BOTTOM, 6));
-                            categoryList.add(new Category("Slacks", MyFitConstant.BOTTOM, 7));
-                            categoryList.add(new Category("Short Pant", MyFitConstant.BOTTOM, 8));
-                            categoryList.add(new Category("Track Pant", MyFitConstant.BOTTOM, 9));
+                            categoryList.add(new Category("반팔", MyFitConstant.TOP, 1));
+                            categoryList.add(new Category("긴팔", MyFitConstant.TOP, 2));
+                            categoryList.add(new Category("니트", MyFitConstant.TOP, 3));
+                            categoryList.add(new Category("후드", MyFitConstant.TOP, 4));
+                            categoryList.add(new Category("셔츠", MyFitConstant.TOP, 5));
+                            categoryList.add(new Category("청바지", MyFitConstant.BOTTOM, 6));
+                            categoryList.add(new Category("슬랙스", MyFitConstant.BOTTOM, 7));
+                            categoryList.add(new Category("반바지", MyFitConstant.BOTTOM, 8));
+                            categoryList.add(new Category("트랙 팬츠", MyFitConstant.BOTTOM, 9));
                             categoryList.add(new Category("Ma-1", MyFitConstant.OUTER, 10));
-                            categoryList.add(new Category("Shall Parka", MyFitConstant.OUTER, 11));
-                            categoryList.add(new Category("M65", MyFitConstant.OUTER, 12));
-                            categoryList.add(new Category("Hood Zip-Up", MyFitConstant.OUTER, 13));
-                            categoryList.add(new Category("Shoes", MyFitConstant.ETC, 14));
-                            categoryList.add(new Category("Glass", MyFitConstant.ETC, 15));
-                            categoryList.add(new Category("Necklace", MyFitConstant.ETC, 16));
-                            categoryList.add(new Category("Ring", MyFitConstant.ETC, 17));
+                            categoryList.add(new Category("패딩", MyFitConstant.OUTER, 11));
+                            categoryList.add(new Category("야상", MyFitConstant.OUTER, 12));
+                            categoryList.add(new Category("후드 집업", MyFitConstant.OUTER, 13));
+                            categoryList.add(new Category("신발", MyFitConstant.ETC, 14));
+                            categoryList.add(new Category("안경", MyFitConstant.ETC, 15));
+                            categoryList.add(new Category("목걸이", MyFitConstant.ETC, 16));
+                            categoryList.add(new Category("기타", MyFitConstant.ETC, 17));
                             //insert
                             new Thread(() -> {
                                 for (Category category : categoryList) {

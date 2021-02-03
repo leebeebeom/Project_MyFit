@@ -184,8 +184,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
         public SizeListVH(ItemListRecyclerListBinding binding, SizeAdapterListener listener) {
             super(binding.getRoot());
-            mBinding = binding;
-            mListener = listener;
+            this.mBinding = binding;
+            this.mListener = listener;
 
             ImageView dragHandle = mBinding.listDragHandle;
 

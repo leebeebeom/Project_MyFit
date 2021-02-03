@@ -1,14 +1,18 @@
 package com.example.project_myfit.ui.main.adapter;
 
+import android.graphics.Canvas;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainDragCallBack extends ItemTouchHelper.Callback {
     private final CategoryAdapter mCategoryAdapter;
 
     public MainDragCallBack(CategoryAdapter categoryAdapter) {
-        mCategoryAdapter = categoryAdapter;
+        this.mCategoryAdapter = categoryAdapter;
     }
 
     @Override
@@ -18,7 +22,7 @@ public class MainDragCallBack extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return false;
     }
 
     @Override
@@ -36,12 +40,15 @@ public class MainDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        mCategoryAdapter.onItemDrop();
+        mCategoryAdapter.onItemDrop(viewHolder);
     }
 
-    public interface DragFolderListener {
-        void onItemMove(int from, int to);
+    @Override
+    public void onChildDraw(@NonNull @NotNull Canvas c, @NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        RecyclerView.ViewHolder previousViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAdapterPosition() - 1);
+        boolean isDraggingUp = dY < 0;
+        if (isDraggingUp && previousViewHolder == null) dY = 0;
 
-        void onItemDrop();
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 }
