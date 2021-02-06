@@ -17,16 +17,16 @@ import java.util.List;
 
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.FolderTreeHolder> {
 
-    private ItemTreeFolderBinding mBinding;
+    private final ItemTreeFolderBinding mBinding;
     private boolean isSelected;
 
     public TreeHolderFolder(Context context) {
         super(context);
+        mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
     }
 
     @Override
     public View createNodeView(TreeNode node, FolderTreeHolder value) {
-        mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolder(value.folder);
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();

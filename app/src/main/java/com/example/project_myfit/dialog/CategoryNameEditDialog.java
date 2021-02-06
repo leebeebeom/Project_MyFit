@@ -24,8 +24,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CategoryNameEditDialog extends DialogFragment {
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.CATEGORY_NAME;
+import static com.example.project_myfit.MyFitConstant.ID;
 
+public class CategoryNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
     private CategoryNameEditConfirmClick mListener;
 
@@ -35,7 +38,7 @@ public class CategoryNameEditDialog extends DialogFragment {
     public static CategoryNameEditDialog getInstance(String categoryName) {
         CategoryNameEditDialog categoryNameEditDialog = new CategoryNameEditDialog();
         Bundle bundle = new Bundle();
-        bundle.putString("category name", categoryName);
+        bundle.putString(CATEGORY_NAME, categoryName);
         categoryNameEditDialog.setArguments(bundle);
         return categoryNameEditDialog;
     }
@@ -50,9 +53,9 @@ public class CategoryNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String folderName = null;
-        if (getArguments() != null) folderName = getArguments().getString("category name");
-        if (savedInstanceState != null) folderName = savedInstanceState.getString("category name");
+        String folderName = "";
+        if (getArguments() != null) folderName = getArguments().getString(CATEGORY_NAME);
+        if (savedInstanceState != null) folderName = savedInstanceState.getString(CATEGORY_NAME);
 
         mBinding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(requireContext()));
         mBinding.setHint(getString(R.string.category_name));
@@ -95,7 +98,7 @@ public class CategoryNameEditDialog extends DialogFragment {
             }
         });
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
         return dialog;
@@ -104,7 +107,7 @@ public class CategoryNameEditDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("folder name", String.valueOf(mBinding.editTextDialog.getText()));
+        outState.putString(CATEGORY_NAME, String.valueOf(mBinding.editTextDialog.getText()));
     }
 
     public interface CategoryNameEditConfirmClick {

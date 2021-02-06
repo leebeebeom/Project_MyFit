@@ -31,6 +31,9 @@ public class MyFitConstant {
     public static final int GET_IMAGE_REQUEST_CODE = 1000;
     public static final int CROP_REQUEST_CODE = 2000;
 
+    public static final String SORT = "sort";
+    public static final String SORT_LIST = "sort list";
+    public static final String SORT_MAIN = "sort main";
     public static final int SORT_CUSTOM = 0;
     public static final int SORT_CREATE = 1;
     public static final int SORT_CREATE_REVERSE = 2;
@@ -39,9 +42,15 @@ public class MyFitConstant {
     public static final int SORT_NAME = 5;
     public static final int SORT_NAME_REVERSE = 6;
 
-
-    public static final String SORT_LIST = "sort list";
-    public static final String SORT_MAIN = "sort main";
-
     public static final String FOLDER_TOGGLE = "folder toggle";
+
+    public static final String ALERT_TITLE = "alertTitle";
+    public static final String ID = "id";
+
+    public static final String CATEGORY_NAME = "category name";
+    public static final String FOLDER_NAME = "folder name";
+
+    public static final String AMOUNT = "amount";
+
+    public static final String TREE_VIEW_STATE = "state";
 }

@@ -23,7 +23,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
-//TODO 합치기
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.ID;
 
 public class AddFolderDialog extends DialogFragment {
     private AddFolderConfirmClick mListener;
@@ -81,7 +82,7 @@ public class AddFolderDialog extends DialogFragment {
             }
         });
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
         return dialog;

@@ -22,6 +22,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.ID;
+
 public class AddCategoryDialog extends DialogFragment {
     public interface AddCategoryConfirmClick {
         void addCategoryConfirmClick(String categoryName);
@@ -79,7 +82,7 @@ public class AddCategoryDialog extends DialogFragment {
             }
         });
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
 

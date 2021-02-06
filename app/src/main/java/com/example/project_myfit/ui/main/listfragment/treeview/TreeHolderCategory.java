@@ -15,15 +15,15 @@ import java.util.List;
 
 public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
 
-    private ItemTreeCategoryBinding mBinding;
+    private final ItemTreeCategoryBinding mBinding;
 
     public TreeHolderCategory(Context context) {
         super(context);
+        mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
     }
 
     @Override
     public View createNodeView(TreeNode node, CategoryTreeHolder value) {
-        mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
         //if selected item position is this node

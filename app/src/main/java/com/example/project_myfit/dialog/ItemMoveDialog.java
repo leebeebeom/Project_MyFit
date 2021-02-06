@@ -18,6 +18,10 @@ import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.AMOUNT;
+import static com.example.project_myfit.MyFitConstant.ID;
+
 public class ItemMoveDialog extends DialogFragment {
     public interface ItemMoveConfirmClick {
         void itemMoveConfirmClick(long folderId);
@@ -31,8 +35,8 @@ public class ItemMoveDialog extends DialogFragment {
     public static ItemMoveDialog getInstance(int selectedItemAmount, long id) {
         ItemMoveDialog itemMoveDialog = new ItemMoveDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt("amount", selectedItemAmount);
-        bundle.putLong("id", id);
+        bundle.putInt(AMOUNT, selectedItemAmount);
+        bundle.putLong(ID, id);
         itemMoveDialog.setArguments(bundle);
         return itemMoveDialog;
     }
@@ -50,8 +54,8 @@ public class ItemMoveDialog extends DialogFragment {
         int amount = 0;
         long id = 0;
         if (getArguments() != null) {
-            amount = getArguments().getInt("amount");
-            id = getArguments().getLong("id");
+            amount = getArguments().getInt(AMOUNT);
+            id = getArguments().getLong(ID);
         }
         long folderId = id;
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
@@ -70,7 +74,7 @@ public class ItemMoveDialog extends DialogFragment {
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
 

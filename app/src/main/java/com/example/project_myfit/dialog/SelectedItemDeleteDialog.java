@@ -18,6 +18,10 @@ import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.AMOUNT;
+import static com.example.project_myfit.MyFitConstant.ID;
+
 public class SelectedItemDeleteDialog extends DialogFragment {
     private SelectedItemDeleteConfirmClick mListener;
 
@@ -27,7 +31,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     public static SelectedItemDeleteDialog getInstance(int selectedItemAmount) {
         SelectedItemDeleteDialog selectedItemDeleteDialog = new SelectedItemDeleteDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt("amount", selectedItemAmount);
+        bundle.putInt(AMOUNT, selectedItemAmount);
         selectedItemDeleteDialog.setArguments(bundle);
         return selectedItemDeleteDialog;
     }
@@ -43,7 +47,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         int amount = 0;
-        if (getArguments() != null) amount = getArguments().getInt("amount");
+        if (getArguments() != null) amount = getArguments().getInt(AMOUNT);
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setTitle(R.string.confirm)
@@ -61,7 +65,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
 

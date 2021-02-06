@@ -22,6 +22,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.ID;
+import static com.example.project_myfit.MyFitConstant.SORT;
 import static com.example.project_myfit.MyFitConstant.SORT_BRAND;
 import static com.example.project_myfit.MyFitConstant.SORT_BRAND_REVERSE;
 import static com.example.project_myfit.MyFitConstant.SORT_CREATE;
@@ -31,7 +34,6 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
-
     private AtomicInteger mCheckedItem;
     private SortConfirmClick mListener;
 
@@ -41,7 +43,7 @@ public class SortDialog extends DialogFragment {
     public static SortDialog getInstance(int sort) {
         SortDialog sortDialog = new SortDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt("sort", sort);
+        bundle.putInt(SORT, sort);
         sortDialog.setArguments(bundle);
         return sortDialog;
     }
@@ -57,8 +59,8 @@ public class SortDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         mCheckedItem = new AtomicInteger();
-        if (getArguments() != null) mCheckedItem.set(getArguments().getInt("sort"));
-        if (savedInstanceState != null) mCheckedItem.set(savedInstanceState.getInt("sort"));
+        if (getArguments() != null) mCheckedItem.set(getArguments().getInt(SORT));
+        if (savedInstanceState != null) mCheckedItem.set(savedInstanceState.getInt(SORT));
 
         SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
 
@@ -172,7 +174,7 @@ public class SortDialog extends DialogFragment {
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
 
@@ -182,7 +184,7 @@ public class SortDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("sort", mCheckedItem.get());
+        outState.putInt(SORT, mCheckedItem.get());
     }
 
     public interface SortConfirmClick {

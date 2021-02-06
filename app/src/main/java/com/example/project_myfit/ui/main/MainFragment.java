@@ -62,9 +62,6 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 import static com.example.project_myfit.MyFitConstant.TOP;
 
-//TODO 액션모드 리크리에이트
-//TODO 액션모드 클릭, 롱클릭
-//TODO 드래그 리스너
 //FAB 서치
 //휴지통 하면 끝
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, ViewPagerAdapter.MainDragAutoScroll,

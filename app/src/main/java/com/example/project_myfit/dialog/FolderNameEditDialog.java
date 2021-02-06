@@ -24,6 +24,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.FOLDER_NAME;
+import static com.example.project_myfit.MyFitConstant.ID;
+
 public class FolderNameEditDialog extends DialogFragment {
 
     private ItemDialogEditTextBinding mBinding;
@@ -35,7 +39,7 @@ public class FolderNameEditDialog extends DialogFragment {
     public static FolderNameEditDialog getInstance(String folderName) {
         FolderNameEditDialog folderNameEditDialog = new FolderNameEditDialog();
         Bundle bundle = new Bundle();
-        bundle.putString("folder name", folderName);
+        bundle.putString(FOLDER_NAME, folderName);
         folderNameEditDialog.setArguments(bundle);
         return folderNameEditDialog;
     }
@@ -51,8 +55,8 @@ public class FolderNameEditDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         String folderName = null;
-        if (getArguments() != null) folderName = getArguments().getString("folder name");
-        if (savedInstanceState != null) folderName = savedInstanceState.getString("folder name");
+        if (getArguments() != null) folderName = getArguments().getString(FOLDER_NAME);
+        if (savedInstanceState != null) folderName = savedInstanceState.getString(FOLDER_NAME);
 
         mBinding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(requireContext()));
         mBinding.setHint(getString(R.string.folder_name));
@@ -97,7 +101,7 @@ public class FolderNameEditDialog extends DialogFragment {
             }
         });
 
-        int titleId = getResources().getIdentifier("alertTitle", "id", requireContext().getPackageName());
+        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
         return dialog;
@@ -106,7 +110,7 @@ public class FolderNameEditDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("folder name", String.valueOf(mBinding.editTextDialog.getText()));
+        outState.putString(FOLDER_NAME, String.valueOf(mBinding.editTextDialog.getText()));
     }
 
     public interface FolderNameEditConfirmClick {
