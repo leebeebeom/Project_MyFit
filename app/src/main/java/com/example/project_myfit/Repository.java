@@ -107,10 +107,6 @@ public class Repository {
     public void categoryUpdate(List<Category> categoryList) {
         new Thread(() -> mCategoryDao.update(categoryList)).start();
     }
-
-    public void categoryDelete(Category category) {
-        new Thread(() -> mCategoryDao.delete(category)).start();
-    }
     //----------------------------------------------------------------------------------------------
 
     //Folder----------------------------------------------------------------------------------------
@@ -174,18 +170,6 @@ public class Repository {
     //Size------------------------------------------------------------------------------------------
     public LiveData<List<Size>> getSizeLive(long folderId) {
         return mSizeDao.getSizeLive(folderId, false);
-    }
-
-    public List<Size> getSizeList(long folderId) {
-        List<Size> sizeList = new ArrayList<>();
-        Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList(folderId, false)));
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return sizeList;
     }
 
     public Size getSize(int id) {

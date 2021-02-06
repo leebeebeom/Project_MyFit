@@ -14,9 +14,6 @@ public interface SizeDao {
     @Query("SELECT * FROM Size WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
     LiveData<List<Size>> getSizeLive(long folderId, boolean isDeleted);
 
-    @Query("SELECT * FROM Size WHERE folderId = :folderId AND isDeleted = :isDeleted")
-    List<Size> getSizeList(long folderId, boolean isDeleted);
-
     @Query("SELECT * FROM Size WHERE id = :id")
     Size getSize(int id);
 

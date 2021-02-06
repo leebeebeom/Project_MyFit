@@ -2,7 +2,6 @@ package com.example.project_myfit.ui.main.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -34,8 +33,5 @@ public interface CategoryDao {
 
     @Update
     void update(List<Category> categoryList);
-
-    @Delete
-    void delete(Category category);
 
 }

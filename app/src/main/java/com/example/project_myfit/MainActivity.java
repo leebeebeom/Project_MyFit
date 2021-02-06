@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         //connect bottom navigation with navController
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
 
-        //Bottom Nav Setting
+        //bottom bav setting
         binding.bottomNav.setBackgroundTintList(null);
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 

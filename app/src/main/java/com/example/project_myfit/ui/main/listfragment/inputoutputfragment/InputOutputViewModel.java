@@ -147,8 +147,7 @@ public class InputOutputViewModel extends AndroidViewModel {
         List<ResolveInfo> resolveInfoList = getApplication().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         for (ResolveInfo resolveInfo : resolveInfoList) {
             String packageName = resolveInfo.activityInfo.packageName;
-            getApplication().grantUriPermission(packageName, uri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            getApplication().grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         }
         return intent;
     }
@@ -157,7 +156,7 @@ public class InputOutputViewModel extends AndroidViewModel {
         mNewSize.setOrderNumber(mRepository.getSizeLargestOrder() + 1);
         mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
         mNewSize.setModifiedTime("");
-        mNewSize.setImageUri(mImageUri.getValue() != null ? getRenameUri() : null);
+        mNewSize.setImageUri(mImageUri.getValue() == null ? null : getRenameUri());
         mNewSize.setFolderId(mFolderId);
         return mNewSize;
     }
