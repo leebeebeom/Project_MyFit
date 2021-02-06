@@ -19,7 +19,7 @@ import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase sInstance;

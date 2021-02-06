@@ -43,7 +43,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     @Override
     public long getItemId(int position) {
-        return getCurrentList().get(position).getId();
+        return getItem(position).getId();
     }
 
     public void setOnSizeAdapterListener(SizeAdapterListener listener) {
@@ -154,9 +154,11 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
     //----------------------------------------------------------------------------------------------
 
-    public void setSort(int mSort) {
-        this.mSort = mSort;
-        notifyDataSetChanged();
+    public void setSort(int sort) {
+        if (mSort != sort) {
+            this.mSort = sort;
+            notifyDataSetChanged();
+        }
     }
 
     public static class SizeGridVH extends RecyclerView.ViewHolder implements View.OnClickListener,

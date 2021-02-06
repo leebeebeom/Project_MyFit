@@ -3,6 +3,7 @@ package com.example.project_myfit.ui.main.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,27 +38,26 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private List<Category> mCategoryList;
     private final MainViewModel mModel;
     private HashSet<Integer> mSelectedPosition;
-    private CategoryAdapterListener mListener;
+    private final CategoryAdapterListener mListener;
     private Context mContext;
     private int mActionModeState;
     private Animation mAnimation;
     private int mSort;
+    private final int mViewPagerPosition;
 
 
-    public CategoryAdapter(MainViewModel model) {
+    public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener, int viewPagerPosition) {
         super(new CategoryDiffUtil());
         this.mModel = model;
         setHasStableIds(true);
         mSelectedPosition = new HashSet<>();
+        this.mListener = listener;
+        this.mViewPagerPosition = viewPagerPosition;
     }
 
     @Override
     public long getItemId(int position) {
         return getItem(position).getId();
-    }
-
-    public void setOnSizeAdapterListener(CategoryAdapterListener listener) {
-        this.mListener = listener;
     }
 
     public void setItem(List<Category> categoryList) {
@@ -71,11 +71,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     public CategoryVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         ItemMainRecyclerBinding binding = ItemMainRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()));
-        return new CategoryVH(binding, mListener);
+        return new CategoryVH(binding, mListener, mViewPagerPosition);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
+        Log.d("로그", "onBindViewHolder: 호출");
         Category category = getItem(holder.getLayoutPosition());
         holder.mBinding.setCategory(category);
         holder.setCategory(category);
@@ -133,8 +134,8 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
-        mListener.onCategoryDragHandleTouch(viewHolder);
         mModel.updateCategoryList(mCategoryList);
+        mListener.onCategoryDragHandleTouch(viewHolder, mViewPagerPosition);
     }
 
     public void setActionModeState(int actionModeState) {
@@ -177,13 +178,15 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public static class CategoryVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
         private final ItemMainRecyclerBinding mBinding;
-        private CategoryAdapterListener mListener;
+        private final CategoryAdapterListener mListener;
         private Category mCategory;
+        int mViewPagerPosition;
 
-        public CategoryVH(ItemMainRecyclerBinding binding, CategoryAdapterListener listener) {
+        public CategoryVH(ItemMainRecyclerBinding binding, CategoryAdapterListener listener, int viewPagerPosition) {
             super(binding.getRoot());
             this.mBinding = binding;
             this.mListener = listener;
+            this.mViewPagerPosition = viewPagerPosition;
 
             ImageView dragHandle = mBinding.mainDragHandle;
 
@@ -198,7 +201,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         @Override
         public void onClick(View v) {
-            mListener.onCategoryCardViewClick(mCategory, this.mBinding.mainCheckBox, getLayoutPosition());
+            mListener.onCategoryCardViewClick(mCategory, this.mBinding.mainCheckBox, getLayoutPosition(), mViewPagerPosition);
 
         }
 
@@ -213,7 +216,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
-                mListener.onCategoryDragHandleTouch(this);
+                mListener.onCategoryDragHandleTouch(this, mViewPagerPosition);
             }
             return false;
         }

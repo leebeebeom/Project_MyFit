@@ -7,9 +7,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 public interface CategoryAdapterListener {
-    void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox, int position);
+    void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox, int position, int viewPagerPosition);
 
     void onCategoryCardViewLongClick(MaterialCardView cardView, int position);
 
-    void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder);
+    void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder, int viewPagerPosition);
 }

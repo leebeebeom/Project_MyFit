@@ -60,6 +60,10 @@ public class Category {
         this.itemAmount = itemAmount;
     }
 
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -27,15 +27,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.project_myfit.MyFitConstant.SORT_LATEST;
-import static com.example.project_myfit.MyFitConstant.SORT_LATEST_REVERSE;
+import static com.example.project_myfit.MyFitConstant.SORT_BRAND;
+import static com.example.project_myfit.MyFitConstant.SORT_BRAND_REVERSE;
+import static com.example.project_myfit.MyFitConstant.SORT_CREATE;
+import static com.example.project_myfit.MyFitConstant.SORT_CREATE_REVERSE;
+import static com.example.project_myfit.MyFitConstant.SORT_NAME;
+import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 
 public class ListViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private final MutableLiveData<Integer> mSelectedAmount;
-    private final FolderAdapter mFolderAdapter;
-    private final SizeAdapterList mSizeAdapterList;
-    private final SizeAdapterGrid mSizeAdapterGrid;
     private Folder mThisFolder;
     private long mFolderId;
     private List<Folder> mFolderHistory;
@@ -54,10 +55,6 @@ public class ListViewModel extends AndroidViewModel {
         super(application);
         mRepository = new Repository(application);
         mSelectedAmount = new MutableLiveData<>();
-
-        mFolderAdapter = new FolderAdapter(this);
-        mSizeAdapterList = new SizeAdapterList(this);
-        mSizeAdapterGrid = new SizeAdapterGrid(this);
     }
 
     //category--------------------------------------------------------------------------------------
@@ -85,10 +82,14 @@ public class ListViewModel extends AndroidViewModel {
 
     public List<Folder> getAllFolder() {
         List<Folder> allFolderList = new ArrayList<>(mRepository.getAllFolder());
-        if (mSort == SORT_LATEST)
+        if (mSort == SORT_CREATE)
             allFolderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
-        else if (mSort == SORT_LATEST_REVERSE)
+        else if (mSort == SORT_CREATE_REVERSE)
             allFolderList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
+        else if (mSort == SORT_BRAND || mSort == SORT_NAME)
+            allFolderList.sort((o1, o2) -> o1.getFolderName().compareTo(o2.getFolderName()));
+        else if (mSort == SORT_BRAND_REVERSE || mSort == SORT_NAME_REVERSE)
+            allFolderList.sort((o1, o2) -> o2.getFolderName().compareTo(o1.getFolderName()));
         return allFolderList;
     }
 
@@ -173,56 +174,20 @@ public class ListViewModel extends AndroidViewModel {
         return folderHistory;
     }
 
-    public void setAdapterActionModeState(int actionModeState) {
-        mFolderAdapter.setActionModeState(actionModeState);
-        mSizeAdapterList.setActionModeState(actionModeState);
-        mSizeAdapterGrid.setActionModeState(actionModeState);
-    }
-
-    public void selectAllClick(boolean isChecked) {
-        mSelectedItemSize.clear();
-        mSelectedItemFolder.clear();
-        if (isChecked) {
-            mSelectedItemFolder.addAll(mFolderAdapter.getCurrentList());
-            mSelectedItemFolder.removeIf(folder -> folder.getId() == -1);
-            mSelectedItemSize.addAll(mSizeAdapterList.getCurrentList());
-            mFolderAdapter.selectAll();
-            mSizeAdapterList.selectAll();
-            mSizeAdapterGrid.selectAll();
-        } else {
-            mFolderAdapter.deselectAll();
-            mSizeAdapterList.deselectAll();
-            mSizeAdapterGrid.deselectAll();
-        }
-        setSelectedAmount();
-    }
-
-    public void setSelectedPosition() {
-        mSelectedPositionFolder = mFolderAdapter.getSelectedPosition();
-        mSelectedPositionSizeList = mSizeAdapterList.getSelectedPosition();
-        mSelectedPositionSizeGrid = mSizeAdapterGrid.getSelectedPosition();
-    }
-
-    public void restoreAdapterSelectedPosition() {
-        mFolderAdapter.setSelectedPosition(mSelectedPositionFolder);
-        mSizeAdapterList.setSelectedPosition(mSelectedPositionSizeList);
-        mSizeAdapterGrid.setSelectedPosition(mSelectedPositionSizeGrid);
-    }
-
-    public void folderSelected(Folder folder, boolean isChecked, int position) {
+    public void folderSelected(Folder folder, boolean isChecked, int position, FolderAdapter folderAdapter) {
         if (!folder.getFolderName().equals("dummy")) {
             if (isChecked) mSelectedItemFolder.add(folder);
             else mSelectedItemFolder.remove(folder);
-            mFolderAdapter.setSelectedPosition(position);
+            folderAdapter.setSelectedPosition(position);
             setSelectedAmount();
         }
     }
 
-    public void sizeSelected(Size size, boolean isChecked, int position) {
+    public void sizeSelected(Size size, boolean isChecked, int position, SizeAdapterList sizeAdapterList, SizeAdapterGrid sizeAdapterGrid) {
         if (isChecked) mSelectedItemSize.add(size);
         else mSelectedItemSize.remove(size);
-        mSizeAdapterList.setSelectedPosition(position);
-        mSizeAdapterGrid.setSelectedPosition(position);
+        sizeAdapterList.setSelectedPosition(position);
+        sizeAdapterGrid.setSelectedPosition(position);
         setSelectedAmount();
     }
 
@@ -327,18 +292,6 @@ public class ListViewModel extends AndroidViewModel {
         return mSelectedItemFolder;
     }
 
-    public FolderAdapter getFolderAdapter() {
-        return mFolderAdapter;
-    }
-
-    public SizeAdapterList getSizeAdapterList() {
-        return mSizeAdapterList;
-    }
-
-    public SizeAdapterGrid getSizeAdapterGrid() {
-        return mSizeAdapterGrid;
-    }
-
     public List<Size> getSelectedItemSize() {
         return mSelectedItemSize;
     }
@@ -365,5 +318,29 @@ public class ListViewModel extends AndroidViewModel {
 
     public void setTreeNodeRoot(TreeNode treeNodeRoot) {
         this.mTreeNodeRoot = treeNodeRoot;
+    }
+
+    public HashSet<Integer> getSelectedPositionFolder() {
+        return mSelectedPositionFolder;
+    }
+
+    public HashSet<Integer> getSelectedPositionSizeList() {
+        return mSelectedPositionSizeList;
+    }
+
+    public HashSet<Integer> getSelectedPositionSizeGrid() {
+        return mSelectedPositionSizeGrid;
+    }
+
+    public void setSelectedPositionFolder(HashSet<Integer> mSelectedPositionFolder) {
+        this.mSelectedPositionFolder = mSelectedPositionFolder;
+    }
+
+    public void setSelectedPositionSizeList(HashSet<Integer> mSelectedPositionSizeList) {
+        this.mSelectedPositionSizeList = mSelectedPositionSizeList;
+    }
+
+    public void setSelectedPositionSizeGrid(HashSet<Integer> mSelectedPositionSizeGrid) {
+        this.mSelectedPositionSizeGrid = mSelectedPositionSizeGrid;
     }
 }

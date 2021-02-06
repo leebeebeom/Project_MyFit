@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,35 +24,49 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
-//TODO 합치기
+public class CategoryNameEditDialog extends DialogFragment {
 
-public class AddFolderDialog extends DialogFragment {
-    private AddFolderConfirmClick mListener;
+    private ItemDialogEditTextBinding mBinding;
+    private CategoryNameEditConfirmClick mListener;
+
+    public CategoryNameEditDialog() {
+    }
+
+    public static CategoryNameEditDialog getInstance(String categoryName) {
+        CategoryNameEditDialog categoryNameEditDialog = new CategoryNameEditDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("category name", categoryName);
+        categoryNameEditDialog.setArguments(bundle);
+        return categoryNameEditDialog;
+    }
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
-        mListener = (AddFolderConfirmClick) getTargetFragment();
+        mListener = (CategoryNameEditConfirmClick) getTargetFragment();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(getLayoutInflater());
+        String folderName = null;
+        if (getArguments() != null) folderName = getArguments().getString("category name");
+        if (savedInstanceState != null) folderName = savedInstanceState.getString("category name");
 
-        binding.setHint(getString(R.string.folder_name));
-        binding.editTextDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        binding.editTextDialog.requestFocus();
-        binding.editTextDialog.setMaxLines(3);
-        binding.editTextLayoutDialog.setHelperText(getString(R.string.folder_name_helper));
-        binding.editTextLayoutDialog.setPlaceholderText(getString(R.string.folder_name_korean));
+        mBinding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(requireContext()));
+        mBinding.setHint(getString(R.string.category_name));
+        mBinding.setSetText(folderName);
+        mBinding.editTextDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mBinding.editTextDialog.requestFocus();
+        mBinding.editTextLayoutDialog.setPlaceholderText(getString(R.string.category_name_korean));
+
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle(R.string.add_folder)
-                .setView(binding.getRoot())
+                .setTitle(R.string.edit_category_name)
+                .setView(mBinding.getRoot())
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.addFolderConfirmClick(String.valueOf(binding.editTextDialog.getText())))
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.categoryNameEditConfirmClick(String.valueOf(mBinding.editTextDialog.getText())))
                 .create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
@@ -61,12 +76,11 @@ public class AddFolderDialog extends DialogFragment {
 
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
-        positive.setEnabled(false);
 
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
 
-        binding.editTextDialog.addTextChangedListener(new TextWatcher() {
+        mBinding.editTextDialog.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -87,7 +101,13 @@ public class AddFolderDialog extends DialogFragment {
         return dialog;
     }
 
-    public interface AddFolderConfirmClick {
-        void addFolderConfirmClick(String folderName);
+    @Override
+    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("folder name", String.valueOf(mBinding.editTextDialog.getText()));
+    }
+
+    public interface CategoryNameEditConfirmClick {
+        void categoryNameEditConfirmClick(String folderName);
     }
 }

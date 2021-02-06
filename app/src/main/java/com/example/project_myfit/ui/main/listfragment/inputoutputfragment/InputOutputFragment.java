@@ -101,6 +101,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = FragmentInputOutputBinding.inflate(getLayoutInflater());
+        View view =  mBinding.getRoot();
         mActivityFab = requireActivity().findViewById(R.id.activity_fab);
         mBinding.brand.addTextChangedListener(new TextWatcher() {
             @Override
@@ -148,7 +149,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         setData();
         setSelection();
 
-        return mBinding.getRoot();
+        return view;
     }
 
     private void setLayout() {
@@ -203,6 +204,12 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         });
 
         setClickListener();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
     }
 
     private void setClickListener() {

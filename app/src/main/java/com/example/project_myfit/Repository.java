@@ -29,13 +29,13 @@ public class Repository {
     }
 
     //Category--------------------------------------------------------------------------------------
-    public LiveData<List<Category>> getCategoryLive(String parentCategory) {
-        return mCategoryDao.getCategoryLive(parentCategory);
+    public LiveData<List<Category>> getCategoryLive() {
+        return mCategoryDao.getCategoryLive(false);
     }
 
     public List<Category> getCategoryList(String parentCategory) {
         List<Category> categoryList = new ArrayList<>();
-        Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory)));
+        Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, false)));
         thread.start();
         try {
             thread.join();

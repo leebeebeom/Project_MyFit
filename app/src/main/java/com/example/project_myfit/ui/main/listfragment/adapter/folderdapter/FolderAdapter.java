@@ -42,7 +42,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
     @Override
     public long getItemId(int position) {
-        return getCurrentList().get(position).getId();
+        return getItem(position).getId();
     }
 
     public void setOnFolderAdapterListener(FolderAdapterListener listener) {
@@ -148,20 +148,18 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
         notifyDataSetChanged();
     }
-
-    public List<Folder> getFolderList() {
-        return mFolderList;
-    }
-
+    
     public void deselectAll() {
         mSelectedPosition.clear();
         notifyDataSetChanged();
     }
 
     //----------------------------------------------------------------------------------------------
-    public void setSort(int mSort) {
-        this.mSort = mSort;
-        notifyDataSetChanged();
+    public void setSort(int sort) {
+        if (mSort != sort) {
+            this.mSort = sort;
+            notifyDataSetChanged();
+        }
     }
 
     public static class FolderVH extends RecyclerView.ViewHolder implements View.OnClickListener,

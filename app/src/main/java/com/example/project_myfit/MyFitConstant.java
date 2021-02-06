@@ -32,9 +32,16 @@ public class MyFitConstant {
     public static final int CROP_REQUEST_CODE = 2000;
 
     public static final int SORT_CUSTOM = 0;
-    public static final int SORT_LATEST = 1;
-    public static final int SORT_LATEST_REVERSE = 2;
-    public static final String SORT = "sort";
+    public static final int SORT_CREATE = 1;
+    public static final int SORT_CREATE_REVERSE = 2;
+    public static final int SORT_BRAND = 3;
+    public static final int SORT_BRAND_REVERSE = 4;
+    public static final int SORT_NAME = 5;
+    public static final int SORT_NAME_REVERSE = 6;
+
+
+    public static final String SORT_LIST = "sort list";
+    public static final String SORT_MAIN = "sort main";
 
     public static final String FOLDER_TOGGLE = "folder toggle";
 }
