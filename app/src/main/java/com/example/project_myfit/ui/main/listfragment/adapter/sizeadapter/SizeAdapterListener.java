@@ -7,9 +7,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 public interface SizeAdapterListener {
-    void onSizeCardViewClick(Size size, MaterialCheckBox checkBox, int position);
+    void onSizeItemViewClick(Size size, MaterialCheckBox checkBox, int position);
 
-    void onSizeCardViewLongClick(MaterialCardView cardView, int position);
+    void onSizeItemViewLongClick(MaterialCardView cardView, int position);
 
     void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder);
 }

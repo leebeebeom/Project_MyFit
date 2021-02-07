@@ -28,6 +28,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     public SelectedItemDeleteDialog() {
     }
 
+    @NotNull
     public static SelectedItemDeleteDialog getInstance(int selectedItemAmount) {
         SelectedItemDeleteDialog selectedItemDeleteDialog = new SelectedItemDeleteDialog();
         Bundle bundle = new Bundle();

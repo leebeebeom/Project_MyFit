@@ -9,10 +9,9 @@ import java.util.Objects;
 public class Folder {
     @PrimaryKey
     private long id;
-    private String folderName;
     private long folderId;
+    private String folderName, itemAmount;
     private int orderNumber;
-    private String itemAmount;
     private boolean isDeleted;
 
     public Folder(long id, String folderName, long folderId, int orderNumber, String itemAmount) {

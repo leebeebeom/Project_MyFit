@@ -32,6 +32,7 @@ public class ItemMoveDialog extends DialogFragment {
     public ItemMoveDialog() {
     }
 
+    @NotNull
     public static ItemMoveDialog getInstance(int selectedItemAmount, long id) {
         ItemMoveDialog itemMoveDialog = new ItemMoveDialog();
         Bundle bundle = new Bundle();

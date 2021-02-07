@@ -219,9 +219,8 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     private void goButtonClick() {
         mBinding.goButton.setOnClickListener(v -> {
             String link = String.valueOf(mBinding.link.getText());
-            if (!link.startsWith(getString(R.string.http))) {
-                link = getString(R.string.http) + link;
-            }
+            if (!link.startsWith(getString(R.string.http))) link = getString(R.string.http) + link;
+
             Intent intent = new Intent(Intent.ACTION_VIEW);
             if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
                 intent.setData(Uri.parse(link));
@@ -298,10 +297,8 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        if (mActivityModel.getSize() == null) menu.getItem(1).setVisible(false);
-
-        if (mModel.getSize().isFavorite()) menu.getItem(0).setIcon(R.drawable.icon_favorite);
-        else menu.getItem(0).setIcon(R.drawable.icon_favorite_border);
+        menu.getItem(1).setVisible(!(mActivityModel.getSize() == null));
+        menu.getItem(0).setIcon(mModel.getSize().isFavorite() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
     }
 
     @Override
@@ -327,7 +324,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     }
 
     //dialog click----------------------------------------------------------------------------------
-    private void showDialog(DialogFragment dialog) {
+    private void showDialog(@NotNull DialogFragment dialog) {
         dialog.setTargetFragment(this, 0);
         dialog.show(getParentFragmentManager(), null);
     }

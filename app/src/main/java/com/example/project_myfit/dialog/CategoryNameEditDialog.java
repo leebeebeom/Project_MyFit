@@ -35,6 +35,7 @@ public class CategoryNameEditDialog extends DialogFragment {
     public CategoryNameEditDialog() {
     }
 
+    @NotNull
     public static CategoryNameEditDialog getInstance(String categoryName) {
         CategoryNameEditDialog categoryNameEditDialog = new CategoryNameEditDialog();
         Bundle bundle = new Bundle();

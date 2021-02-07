@@ -14,14 +14,7 @@ public class Size {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int orderNumber;
-    private String createdTime;
-    private String modifiedTime;
-    private String imageUri;
-    private String brand;
-    private String name;
-    private String size;
-    private String link;
-    private String memo;
+    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
     private long folderId;
     private boolean isFavorite;
     private Map<String, String> sizeMap;

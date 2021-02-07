@@ -36,6 +36,7 @@ public class FolderNameEditDialog extends DialogFragment {
     public FolderNameEditDialog() {
     }
 
+    @NotNull
     public static FolderNameEditDialog getInstance(String folderName) {
         FolderNameEditDialog folderNameEditDialog = new FolderNameEditDialog();
         Bundle bundle = new Bundle();

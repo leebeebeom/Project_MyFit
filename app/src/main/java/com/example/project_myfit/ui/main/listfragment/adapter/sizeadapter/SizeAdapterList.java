@@ -1,7 +1,6 @@
 package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,14 +38,13 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     private List<Size> mSizeList;
     private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
-    private Context mContext;
     private Animation mAnimation;
 
     public SizeAdapterList(ListViewModel model) {
         super(new SizeDiffUtil());
         this.mModel = model;
-        this.setHasStableIds(true);
         this.mSelectedPosition = new HashSet<>();
+        setHasStableIds(true);
     }
 
     @Override
@@ -67,7 +65,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     @NotNull
     @Override
     public SizeListVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        mContext = parent.getContext();
         ItemListRecyclerListBinding binding = ItemListRecyclerListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeListVH(binding, mListener);
     }
@@ -84,21 +81,18 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             if (mAnimation == null)
-                mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right);
+                mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
             if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         } else if (mActionModeState == ACTION_MODE_OFF) {
             mAnimation = null;
-            cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
+            cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
             checkBox.setChecked(false);
             setActionModeStateNone();
             if (mSelectedPosition.size() != 0) mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-
-        if (mSort == SORT_CUSTOM)
-            dragHandle.setVisibility(View.VISIBLE);
-        else dragHandle.setVisibility(View.GONE);
+        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
     }
 
     private void setActionModeStateNone() {
@@ -129,7 +123,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+    public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
         mListener.onSizeDragHandleTouch(viewHolder);
         mModel.updateSizeList(mSizeList);
@@ -148,7 +142,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     public void setSelectedPosition(HashSet<Integer> selectedPosition) {
         this.mSelectedPosition = selectedPosition;
-        mAnimation = null;
         notifyDataSetChanged();
     }
 
@@ -184,16 +177,14 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         private final SizeAdapterListener mListener;
         private Size mSize;
 
-        public SizeListVH(ItemListRecyclerListBinding binding, SizeAdapterListener listener) {
+        public SizeListVH(@NotNull ItemListRecyclerListBinding binding, SizeAdapterListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
             this.mListener = listener;
 
-            ImageView dragHandle = mBinding.listDragHandle;
-
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            dragHandle.setOnTouchListener(this);
+            mBinding.listDragHandle.setOnTouchListener(this);
         }
 
         public void setSize(Size size) {
@@ -202,17 +193,17 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
         @Override
         public void onClick(View v) {
-            mListener.onSizeCardViewClick(mSize, this.mBinding.listCheckBox, getLayoutPosition());
+            mListener.onSizeItemViewClick(mSize, this.mBinding.listCheckBox, getLayoutPosition());
         }
 
         @Override
         public boolean onLongClick(View v) {
-            mListener.onSizeCardViewLongClick(this.mBinding.listCardView, getLayoutPosition());
+            mListener.onSizeItemViewLongClick(this.mBinding.listCardView, getLayoutPosition());
             return false;
         }
 
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        public boolean onTouch(View v, @NotNull MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
                 mListener.onSizeDragHandleTouch(this);

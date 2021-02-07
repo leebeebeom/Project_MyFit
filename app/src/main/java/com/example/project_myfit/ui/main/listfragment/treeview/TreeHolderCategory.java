@@ -11,19 +11,21 @@ import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.unnamed.b.atv.model.TreeNode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
 
-    private final ItemTreeCategoryBinding mBinding;
+    private ItemTreeCategoryBinding mBinding;
 
     public TreeHolderCategory(Context context) {
         super(context);
-        mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
     }
 
     @Override
-    public View createNodeView(TreeNode node, CategoryTreeHolder value) {
+    public View createNodeView(TreeNode node, @NotNull CategoryTreeHolder value) {
+        mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
         //if selected item position is this node

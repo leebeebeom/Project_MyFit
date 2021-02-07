@@ -40,6 +40,7 @@ public class SortDialog extends DialogFragment {
     public SortDialog() {
     }
 
+    @NotNull
     public static SortDialog getInstance(int sort) {
         SortDialog sortDialog = new SortDialog();
         Bundle bundle = new Bundle();

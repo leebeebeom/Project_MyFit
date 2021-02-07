@@ -46,8 +46,8 @@ public class SizeDragCallBackGrid extends ItemTouchHelper.Callback {
         RecyclerView.ViewHolder previousViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAdapterPosition() - 1);
         boolean isDraggingUp = dY < 0;
 
-        if (isDraggingUp && previousViewHolder == null) dY = 0;
-        else if (isDraggingUp && previousViewHolder.getAdapterPosition() == 0) dY = 0;
+        if (isDraggingUp && (previousViewHolder == null || previousViewHolder.getAdapterPosition() == 0))
+            dY = 0;
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }

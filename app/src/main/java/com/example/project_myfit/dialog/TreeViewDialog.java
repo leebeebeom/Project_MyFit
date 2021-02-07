@@ -99,18 +99,17 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         return dialog;
     }
 
+    @NotNull
     private AndroidTreeView getTreeView() {
         int margin = (int) getResources().getDimension(R.dimen._12sdp);
-        List<Folder> folderList = mModel.getAllFolder();
         mCategoryTreeNodeList = new ArrayList<>();
 
         for (Category category : mModel.getCategoryList()) {
             TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                     .setViewHolder(new TreeHolderCategory(requireContext()));
-            for (Folder folder : folderList) {
+            for (Folder folder : mModel.getAllFolder()) {
                 if (category.getId() == folder.getFolderId()) {
-                    TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, folderList,
-                            margin, (TreeViewAddClick) mListener, mModel.getSelectedItemFolder(), mModel.getSelectedItemSize())).setViewHolder(new TreeHolderFolder(requireContext()));
+                    TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, margin, (TreeViewAddClick) mListener, mModel)).setViewHolder(new TreeHolderFolder(requireContext()));
                     categoryTreeNode.addChild(folderTreeNode);
                 }
             }
@@ -158,10 +157,10 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         if (mModel.getThisFolder() != null) {//if current position is not category
             for (TreeNode folderNode : topFolderList) {
                 //visible current position text
-                if (mModel.getFolderHistory().get(mModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId())
+                if (mModel.getFolderHistory().get(mModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).getFolder().getId())
                     ((TreeHolderFolder) folderNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
                 for (Folder folder : mModel.getFolderHistory())
-                    if (((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).folder.getId() == folder.getId() && folderNode.getChildren().size() != 0)
+                    if (((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).getFolder().getId() == folder.getId() && folderNode.getChildren().size() != 0)
                         mTreeView.expandNode(folderNode);
                 if (folderNode.getChildren().size() != 0) expandingNode(folderNode.getChildren());
             }

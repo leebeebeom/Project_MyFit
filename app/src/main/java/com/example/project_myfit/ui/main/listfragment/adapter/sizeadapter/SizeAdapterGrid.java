@@ -115,7 +115,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+    public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
         mListener.onSizeDragHandleTouch(viewHolder);
         mModel.updateSizeList(mSizeList);
@@ -167,7 +167,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         private final SizeAdapterListener mListener;
         private Size mSize;
 
-        public SizeGridVH(ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
+        public SizeGridVH(@NotNull ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
             this.mListener = listener;
@@ -183,17 +183,17 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
         @Override
         public void onClick(View v) {
-            mListener.onSizeCardViewClick(mSize, mBinding.gridCheckBox, getLayoutPosition());
+            mListener.onSizeItemViewClick(mSize, mBinding.gridCheckBox, getLayoutPosition());
         }
 
         @Override
         public boolean onLongClick(View v) {
-            mListener.onSizeCardViewLongClick(mBinding.gridCardView, getLayoutPosition());
+            mListener.onSizeItemViewLongClick(mBinding.gridCardView, getLayoutPosition());
             return false;
         }
 
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        public boolean onTouch(View v, @NotNull MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
                 mListener.onSizeDragHandleTouch(this);

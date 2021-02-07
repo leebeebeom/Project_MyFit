@@ -39,7 +39,6 @@ public class ListViewModel extends AndroidViewModel {
     private final MutableLiveData<Integer> mSelectedAmount;
     private Folder mThisFolder;
     private long mFolderId;
-    private List<Folder> mFolderHistory;
     private List<Folder> mSelectedItemFolder;
     private List<Size> mSelectedItemSize;
     private TreeNode mAddNode;
@@ -154,13 +153,12 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getFolderHistory() {
-        if (mFolderHistory != null) return mFolderHistory;
         List<Folder> allFolderList = getAllFolder();
         List<Folder> folderHistory = new ArrayList<>();
         folderHistory.add(mThisFolder);
-        mFolderHistory = getFolderHistory2(allFolderList, folderHistory, mThisFolder);
-        Collections.reverse(mFolderHistory);
-        return mFolderHistory;
+        List<Folder> folderHistory2 = getFolderHistory2(allFolderList, folderHistory, mThisFolder);
+        Collections.reverse(folderHistory2);
+        return folderHistory2;
     }
 
     private List<Folder> getFolderHistory2(List<Folder> allFolderList, List<Folder> folderHistory, Folder thisFolder) {

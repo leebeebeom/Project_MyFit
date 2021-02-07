@@ -19,6 +19,9 @@ import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.Repository;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -167,11 +170,13 @@ public class InputOutputViewModel extends AndroidViewModel {
         return mActivityModel.getSize();
     }
 
+    @NotNull
     private String getCurrentTime(String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         return dateFormat.format(new Date(System.currentTimeMillis()));
     }
 
+    @Nullable
     private String getOutputFileSavedUri() {
         //there was a saved image, but user deleted it
         if (mActivityModel.getSize().getImageUri() != null && mImageUri.getValue() == null) {
@@ -196,6 +201,7 @@ public class InputOutputViewModel extends AndroidViewModel {
         }
     }
 
+    @NotNull
     private String getRenameUri() {
         File pictureFolderPath = new File(getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), mFileName);
         if (mCacheFile.renameTo(pictureFolderPath))
