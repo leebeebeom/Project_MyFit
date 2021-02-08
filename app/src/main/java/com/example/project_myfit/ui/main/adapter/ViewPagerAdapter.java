@@ -29,7 +29,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
     int mSort;
     private ItemTouchHelper mTopTouchHelper, mBottomTouchHelper, mOuterTouchHelper, mETCTouchHelper;
     private MainDragAutoScroll mListener2;
-    private DragSelectTouchListener mDragSelectListener;
+    private final DragSelectTouchListener mDragSelectListener;
 
     public ViewPagerAdapter(List<CategoryAdapter> adapterList, DragSelectTouchListener dragSelectListenerList) {
         this.mAdapterList = adapterList;
@@ -42,7 +42,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         return position;
     }
 
-    public void setOnCategoryAdapterListener(CategoryAdapterListener listener) {
+    public void setOnCategoryAdapterListener(CategoryAdapter.CategoryAdapterListener listener) {
         this.mListener2 = (MainDragAutoScroll) listener;
     }
 
@@ -75,7 +75,6 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(TOP)) newCategory.add(category);
                 topAdapter.setItem(newCategory);
-                topAdapter.setSort(mSort);
             } else if (holder.getLayoutPosition() == 1) {
                 CategoryAdapter bottomAdapter = mAdapterList.get(1);
                 if (mBottomTouchHelper == null) {
@@ -88,7 +87,6 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(BOTTOM)) newCategory.add(category);
                 bottomAdapter.setItem(newCategory);
-                bottomAdapter.setSort(mSort);
             } else if (holder.getLayoutPosition() == 2) {
                 CategoryAdapter outerAdapter = mAdapterList.get(2);
                 if (mOuterTouchHelper == null) {
@@ -102,7 +100,6 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(OUTER)) newCategory.add(category);
                 outerAdapter.setItem(newCategory);
-                outerAdapter.setSort(mSort);
             } else if (holder.getLayoutPosition() == 3) {
                 CategoryAdapter etcAdapter = mAdapterList.get(3);
                 if (mETCTouchHelper == null) {
@@ -116,7 +113,6 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(ETC)) newCategory.add(category);
                 etcAdapter.setItem(newCategory);
-                etcAdapter.setSort(mSort);
             }
         }
     }
@@ -129,7 +125,10 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
     public void setSort(int sort) {
         if (mSort != sort) {
             this.mSort = sort;
-            notifyDataSetChanged();
+            mAdapterList.get(0).setSort(mSort);
+            mAdapterList.get(1).setSort(mSort);
+            mAdapterList.get(2).setSort(mSort);
+            mAdapterList.get(3).setSort(mSort);
         }
     }
 
@@ -142,7 +141,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         return touchHelperList;
     }
 
-    public void setActionModeState(int actionModeState, String parentCategory) {
+    public void setActionModeState(int actionModeState, @NotNull String parentCategory) {
         switch (parentCategory) {
             case TOP:
                 mAdapterList.get(0).setActionModeState(actionModeState);
@@ -175,7 +174,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         return mAdapterList.get(3);
     }
 
-    public void selectAll(String parentCategory) {
+    public void selectAll(@NotNull String parentCategory) {
         switch (parentCategory) {
             case TOP:
                 mAdapterList.get(0).selectAll();
@@ -192,7 +191,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         }
     }
 
-    public void deSelectAll(String parentCategory) {
+    public void deSelectAll(@NotNull String parentCategory) {
         switch (parentCategory) {
             case TOP:
                 mAdapterList.get(0).deselectAll();
@@ -209,19 +208,19 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         }
     }
 
-    public void setSelectedPosition(List<HashSet<Integer>> selectedPositionList, String parentCategory) {
+    public void setSelectedPosition(HashSet<Integer> selectedPosition, @NotNull String parentCategory) {
         switch (parentCategory) {
             case TOP:
-                mAdapterList.get(0).setSelectedPosition(selectedPositionList.get(0));
+                mAdapterList.get(0).setSelectedPosition(selectedPosition);
                 break;
             case BOTTOM:
-                mAdapterList.get(1).setSelectedPosition(selectedPositionList.get(1));
+                mAdapterList.get(1).setSelectedPosition(selectedPosition);
                 break;
             case OUTER:
-                mAdapterList.get(2).setSelectedPosition(selectedPositionList.get(2));
+                mAdapterList.get(2).setSelectedPosition(selectedPosition);
                 break;
             case ETC:
-                mAdapterList.get(3).setSelectedPosition(selectedPositionList.get(3));
+                mAdapterList.get(3).setSelectedPosition(selectedPosition);
                 break;
         }
     }
@@ -230,7 +229,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         private final ItemMainRecyclerViewBinding mBinding;
 
         @SuppressLint("ClickableViewAccessibility")
-        public ViewPagerVH(ItemMainRecyclerViewBinding binding, MainDragAutoScroll listener2) {
+        public ViewPagerVH(@NotNull ItemMainRecyclerViewBinding binding, MainDragAutoScroll listener2) {
             super(binding.getRoot());
             this.mBinding = binding;
 

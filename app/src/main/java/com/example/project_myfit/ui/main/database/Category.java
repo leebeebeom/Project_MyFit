@@ -11,8 +11,7 @@ public class Category {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private int orderNumber;
-    private String category;
-    private String itemAmount;
+    private String category, itemAmount;
     boolean isDeleted;
 
 

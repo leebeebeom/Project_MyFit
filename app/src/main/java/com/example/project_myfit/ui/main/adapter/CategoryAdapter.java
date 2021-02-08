@@ -1,9 +1,7 @@
 package com.example.project_myfit.ui.main.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,12 +37,10 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private final MainViewModel mModel;
     private HashSet<Integer> mSelectedPosition;
     private final CategoryAdapterListener mListener;
-    private Context mContext;
     private int mActionModeState;
     private Animation mAnimation;
     private int mSort;
     private final int mViewPagerPosition;
-
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener, int viewPagerPosition) {
         super(new CategoryDiffUtil());
@@ -69,14 +65,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     @NotNull
     @Override
     public CategoryVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        mContext = parent.getContext();
-        ItemMainRecyclerBinding binding = ItemMainRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()));
+        ItemMainRecyclerBinding binding = ItemMainRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new CategoryVH(binding, mListener, mViewPagerPosition);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
-        Log.d("로그", "onBindViewHolder: 호출");
         Category category = getItem(holder.getLayoutPosition());
         holder.mBinding.setCategory(category);
         holder.setCategory(category);
@@ -88,21 +82,18 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             if (mAnimation == null)
-                mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right);
+                mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
             if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
         } else if (mActionModeState == ACTION_MODE_OFF) {
             mAnimation = null;
-            cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
+            cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
             checkBox.setChecked(false);
             setActionModeStateNone();
             if (mSelectedPosition.size() != 0) mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-
-        if (mSort == SORT_CUSTOM)
-            dragHandle.setVisibility(View.VISIBLE);
-        else dragHandle.setVisibility(View.GONE);
+        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
     }
 
     private void setActionModeStateNone() {
@@ -132,7 +123,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+    public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
         mModel.updateCategoryList(mCategoryList);
         mListener.onCategoryDragHandleTouch(viewHolder, mViewPagerPosition);
@@ -149,7 +140,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public void setSelectedPosition(HashSet<Integer> selectedPosition) {
         this.mSelectedPosition = selectedPosition;
-        mAnimation = null;
         notifyDataSetChanged();
     }
 
@@ -182,17 +172,15 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         private Category mCategory;
         int mViewPagerPosition;
 
-        public CategoryVH(ItemMainRecyclerBinding binding, CategoryAdapterListener listener, int viewPagerPosition) {
+        public CategoryVH(@NotNull ItemMainRecyclerBinding binding, CategoryAdapterListener listener, int viewPagerPosition) {
             super(binding.getRoot());
             this.mBinding = binding;
             this.mListener = listener;
             this.mViewPagerPosition = viewPagerPosition;
 
-            ImageView dragHandle = mBinding.mainDragHandle;
-
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            dragHandle.setOnTouchListener(this);
+            mBinding.mainDragHandle.setOnTouchListener(this);
         }
 
         public void setCategory(Category category) {
@@ -208,17 +196,24 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         @Override
         public boolean onLongClick(View v) {
             mListener.onCategoryCardViewLongClick(this.mBinding.mainCardView, getLayoutPosition());
-
             return false;
         }
 
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        public boolean onTouch(View v, @NotNull MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
                 mListener.onCategoryDragHandleTouch(this, mViewPagerPosition);
             }
             return false;
         }
+    }
+
+    public interface CategoryAdapterListener {
+        void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox, int position, int viewPagerPosition);
+
+        void onCategoryCardViewLongClick(MaterialCardView cardView, int position);
+
+        void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder, int viewPagerPosition);
     }
 }

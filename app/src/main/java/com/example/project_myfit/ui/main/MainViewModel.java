@@ -11,6 +11,8 @@ import com.example.project_myfit.Repository;
 import com.example.project_myfit.ui.main.adapter.ViewPagerAdapter;
 import com.example.project_myfit.ui.main.database.Category;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -23,8 +25,8 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 public class MainViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private int mSort;
-    private List<Category> mSelectedItemTop, mSelectedItemBottom, mSelectedItemOuter, mSelectedItemETC;
-    private HashSet<Integer> mTopSelectedPosition, mBottomSelectedPosition, mOuterSelectedPosition, mETCSelectedPosition;
+    private List<Category> mSelectedItem;
+    private HashSet<Integer> mSelectedPosition;
     private final MutableLiveData<Integer> mSelectedAmount;
 
     public MainViewModel(@NonNull Application application) {
@@ -46,35 +48,12 @@ public class MainViewModel extends AndroidViewModel {
         mRepository.categoryUpdate(categoryList);
     }
 
-    public void selectedItemClear() {
-        mSelectedItemTop.clear();
-        mSelectedItemBottom.clear();
-        mSelectedItemOuter.clear();
-        mSelectedItemETC.clear();
-    }
-
     public void setSelectedAmount() {
-        mSelectedAmount.setValue(mSelectedItemTop.size() + mSelectedItemBottom.size() + mSelectedItemOuter.size() + mSelectedItemETC.size());
+        mSelectedAmount.setValue(mSelectedItem.size());
     }
 
     public MutableLiveData<Integer> getSelectedAmount() {
         return mSelectedAmount;
-    }
-
-    public List<Category> getSelectedItemTop() {
-        return mSelectedItemTop;
-    }
-
-    public List<Category> getSelectedItemBottom() {
-        return mSelectedItemBottom;
-    }
-
-    public List<Category> getSelectedItemOuter() {
-        return mSelectedItemOuter;
-    }
-
-    public List<Category> getSelectedItemETC() {
-        return mSelectedItemETC;
     }
 
     public int getSort() {
@@ -85,101 +64,56 @@ public class MainViewModel extends AndroidViewModel {
         this.mSort = mSort;
     }
 
-    public void setSelectedPosition(ViewPagerAdapter mViewPagerAdapter, String parentCategory) {
+    public void setSelectedPosition(ViewPagerAdapter mViewPagerAdapter, @NotNull String parentCategory) {
         switch (parentCategory) {
             case TOP:
-                mTopSelectedPosition = mViewPagerAdapter.getTopAdapter().getSelectedPosition();
+                mSelectedPosition = mViewPagerAdapter.getTopAdapter().getSelectedPosition();
                 break;
             case BOTTOM:
-                mBottomSelectedPosition = mViewPagerAdapter.getBottomAdapter().getSelectedPosition();
+                mSelectedPosition = mViewPagerAdapter.getBottomAdapter().getSelectedPosition();
                 break;
             case OUTER:
-                mOuterSelectedPosition = mViewPagerAdapter.getOuterAdapter().getSelectedPosition();
+                mSelectedPosition = mViewPagerAdapter.getOuterAdapter().getSelectedPosition();
                 break;
             case ETC:
-                mETCSelectedPosition = mViewPagerAdapter.getETCAdapter().getSelectedPosition();
+                mSelectedPosition = mViewPagerAdapter.getETCAdapter().getSelectedPosition();
                 break;
         }
     }
 
-    public List<HashSet<Integer>> getSelectedPositionList() {
-        List<HashSet<Integer>> selectedPositionList = new ArrayList<>();
-        selectedPositionList.add(mTopSelectedPosition);
-        selectedPositionList.add(mBottomSelectedPosition);
-        selectedPositionList.add(mOuterSelectedPosition);
-        selectedPositionList.add(mETCSelectedPosition);
-        return selectedPositionList;
+    public HashSet<Integer> getSelectedPosition() {
+        return mSelectedPosition;
     }
 
     public void selectedItemListInit() {
-        mSelectedItemTop = new ArrayList<>();
-        mSelectedItemBottom = new ArrayList<>();
-        mSelectedItemOuter = new ArrayList<>();
-        mSelectedItemETC = new ArrayList<>();
+        mSelectedItem = new ArrayList<>();
     }
 
     public void categorySelected(Category category, boolean isChecked, int position, int viewPagerPosition, ViewPagerAdapter mViewPagerAdapter) {
-        if (viewPagerPosition == 0) {
-            if (isChecked) mSelectedItemTop.add(category);
-            else mSelectedItemTop.remove(category);
-            mViewPagerAdapter.getTopAdapter().setSelectedPosition(position);
-        } else if (viewPagerPosition == 1) {
-            if (isChecked) mSelectedItemBottom.add(category);
-            else mSelectedItemBottom.remove(category);
+        if (viewPagerPosition == 0) mViewPagerAdapter.getTopAdapter().setSelectedPosition(position);
+        else if (viewPagerPosition == 1)
             mViewPagerAdapter.getBottomAdapter().setSelectedPosition(position);
-        } else if (viewPagerPosition == 2) {
-            if (isChecked) mSelectedItemOuter.add(category);
-            else mSelectedItemOuter.remove(category);
+        else if (viewPagerPosition == 2)
             mViewPagerAdapter.getOuterAdapter().setSelectedPosition(position);
-        } else if (viewPagerPosition == 3) {
-            if (isChecked) mSelectedItemETC.add(category);
-            else mSelectedItemETC.remove(category);
+        else if (viewPagerPosition == 3)
             mViewPagerAdapter.getETCAdapter().setSelectedPosition(position);
-        }
+
+        if (isChecked) mSelectedItem.add(category);
+        else mSelectedItem.remove(category);
         setSelectedAmount();
     }
 
-    public void categoryNameEdit(String categoryName, String parentCategory) {
-        switch (parentCategory) {
-            case TOP:
-                mSelectedItemTop.get(0).setCategory(categoryName);
-                mRepository.categoryUpdate(mSelectedItemTop.get(0));
-                break;
-            case BOTTOM:
-                mSelectedItemBottom.get(0).setCategory(categoryName);
-                mRepository.categoryUpdate(mSelectedItemBottom.get(0));
-                break;
-            case OUTER:
-                mSelectedItemOuter.get(0).setCategory(categoryName);
-                mRepository.categoryUpdate(mSelectedItemOuter.get(0));
-                break;
-            case ETC:
-                mSelectedItemETC.get(0).setCategory(categoryName);
-                mRepository.categoryUpdate(mSelectedItemETC.get(0));
-                break;
-
-        }
+    public void categoryNameEdit(String categoryName) {
+        mSelectedItem.get(0).setCategory(categoryName);
+        mRepository.categoryUpdate(mSelectedItem.get(0));
     }
 
-    public void selectedItemDelete(String parentCategory) {
-        switch (parentCategory) {
-            case TOP:
-                for (Category category : mSelectedItemTop) category.setDeleted(true);
-                mRepository.categoryUpdate(mSelectedItemTop);
-                break;
-            case BOTTOM:
-                for (Category category : mSelectedItemBottom) category.setDeleted(true);
-                mRepository.categoryUpdate(mSelectedItemBottom);
-                break;
-            case OUTER:
-                for (Category category : mSelectedItemOuter) category.setDeleted(true);
-                mRepository.categoryUpdate(mSelectedItemOuter);
-                break;
-            case ETC:
-                for (Category category : mSelectedItemETC) category.setDeleted(true);
-                mRepository.categoryUpdate(mSelectedItemETC);
-                break;
+    public void selectedItemDelete() {
+        for (Category category : mSelectedItem) category.setDeleted(true);
+        mRepository.categoryUpdate(mSelectedItem);
+    }
 
-        }
+    public List<Category> getSelectedItem() {
+        return mSelectedItem;
     }
 }

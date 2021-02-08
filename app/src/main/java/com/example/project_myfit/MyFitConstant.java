@@ -58,9 +58,10 @@ public class MyFitConstant {
     public static final String TREE_DIALOG = "tree dialog";
     public static final String FOLDER_EDIT_DIALOG = "folder edit dialog";
     public static final String FOLDER_ADD_DIALOG = "folder add dialog";
+    public static final String CATEGORY_ADD_DIALOG = "category add dialog";
     public static final String SORT_DIALOG = "sort dialog";
     public static final String TREE_ADD_FOLDER = "tree add folder";
 
     public static final String ACTION_MODE = "action mode";
-
+    public static final String CHECKED_CATEGORY = "checked category";
 }
