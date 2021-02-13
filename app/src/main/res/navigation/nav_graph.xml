@@ -15,6 +15,12 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_mainFragment_to_searchActivity"
+            app:destination="@id/searchActivity" />
+        <action
+            android:id="@+id/action_mainFragment_to_inputOutputFragment"
+            app:destination="@id/inputOutputFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -26,6 +32,7 @@
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/listFragment"
+        android:label=""
         android:name="com.example.project_myfit.ui.main.listfragment.ListFragment"
         tools:layout="@layout/fragment_list">
         <action
@@ -51,13 +58,21 @@
             app:exitAnim="@anim/slide_out"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_listFragment_to_searchActivity"
+            app:destination="@id/searchActivity" />
     </fragment>
     <fragment
         android:id="@+id/inputOutputFragment"
+        android:label=""
         android:name="com.example.project_myfit.ui.main.listfragment.inputoutputfragment.InputOutputFragment"
         tools:layout="@layout/fragment_input_output"/>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.project_myfit.MainActivity"
         android:label="MainActivity" />
+    <activity
+        android:id="@+id/searchActivity"
+        android:name="com.example.project_myfit.searchActivity.SearchActivity"
+        android:label="SearchActivity" />
 </navigation>

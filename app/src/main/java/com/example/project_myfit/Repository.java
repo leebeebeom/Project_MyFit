@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.project_myfit.searchActivity.database.RecentSearch;
+import com.example.project_myfit.searchActivity.database.RecentSearchDao;
 import com.example.project_myfit.ui.main.database.AppDataBase;
 import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.database.CategoryDao;
@@ -21,21 +23,23 @@ public class Repository {
     private final CategoryDao mCategoryDao;
     private final FolderDao mFolderDao;
     private final SizeDao mSizeDao;
+    private final RecentSearchDao mRecentSearchDao;
 
     public Repository(Context context) {
         mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
         mFolderDao = AppDataBase.getsInstance(context).folderDao();
         mSizeDao = AppDataBase.getsInstance(context).sizeDao();
+        mRecentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
     }
 
     //Category--------------------------------------------------------------------------------------
     public LiveData<List<Category>> getCategoryLive() {
-        return mCategoryDao.getCategoryLive(false);
+        return mCategoryDao.getCategoryLive(0);
     }
 
     public List<Category> getCategoryList(String parentCategory) {
         List<Category> categoryList = new ArrayList<>();
-        Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, false)));
+        Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, 0)));
         thread.start();
         try {
             thread.join();
@@ -111,12 +115,12 @@ public class Repository {
 
     //Folder----------------------------------------------------------------------------------------
     public LiveData<List<Folder>> getFolderLive(long folderId) {
-        return mFolderDao.getFolderLive(folderId, false);
+        return mFolderDao.getFolderLive(folderId, 0);
     }
 
-    public List<Folder> getAllFolder() {
+    public List<Folder> getAllFolderList() {
         List<Folder> folderList = new ArrayList<>();
-        Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(false)));
+        Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getAllFolderList(0)));
         thread.start();
         try {
             thread.join();
@@ -124,6 +128,30 @@ public class Repository {
             e.printStackTrace();
         }
         return folderList;
+    }
+
+    public List<Folder> getAllFolderList2(String parentCategory) {
+        List<Folder> folderList = new ArrayList<>();
+        Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getAllFolderList2(parentCategory, 0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return folderList;
+    }
+
+    public List<String> getFolderNameList() {
+        List<String> folderNameList = new ArrayList<>();
+        Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameList(0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return folderNameList;
     }
 
     public int getFolderLargestOrder() {
@@ -169,7 +197,19 @@ public class Repository {
 
     //Size------------------------------------------------------------------------------------------
     public LiveData<List<Size>> getSizeLive(long folderId) {
-        return mSizeDao.getSizeLive(folderId, false);
+        return mSizeDao.getSizeLive(folderId, 0);
+    }
+
+    public List<Size> getAllSizeList(String parentCategory) {
+        List<Size> sizeList = new ArrayList<>();
+        Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getAllSizeList(parentCategory, 0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sizeList;
     }
 
     public Size getSize(int id) {
@@ -182,6 +222,30 @@ public class Repository {
             e.printStackTrace();
         }
         return size.get();
+    }
+
+    public List<String> getBrandList() {
+        List<String> brandList = new ArrayList<>();
+        Thread thread = new Thread(() -> brandList.addAll(mSizeDao.getBrandList(0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return brandList;
+    }
+
+    public List<String> getNameList() {
+        List<String> nameList = new ArrayList<>();
+        Thread thread = new Thread(() -> nameList.addAll(mSizeDao.getNameList(0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return nameList;
     }
 
     public int getSizeLargestOrder() {
@@ -216,4 +280,16 @@ public class Repository {
         new Thread(() -> mSizeDao.delete(sizeList)).start();
     }
     //----------------------------------------------------------------------------------------------
+
+    public LiveData<List<RecentSearch>> getRecentSearchLive() {
+        return mRecentSearchDao.getRecentSearchList();
+    }
+
+    public void insertRecentSearch(RecentSearch recentSearch) {
+        new Thread(() -> mRecentSearchDao.insertRecentSearch(recentSearch)).start();
+    }
+
+    public void deleteRecentSearch(RecentSearch recentSearch) {
+        new Thread(() -> mRecentSearchDao.deleteRecentSearch(recentSearch)).start();
+    }
 }

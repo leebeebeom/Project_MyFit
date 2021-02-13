@@ -2,14 +2,18 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
@@ -40,6 +44,12 @@ public class GoBackDialog extends DialogFragment {
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.goBackConfirmClick())
                 .show();
+
+        Window window = dialog.getWindow();
+        int margin = (int) requireContext().getResources().getDimension(R.dimen._20sdp);
+        Drawable drawable = ContextCompat.getDrawable(requireContext(), R.drawable.tree_view_dialog_background);
+        InsetDrawable inset = new InsetDrawable(drawable, margin);
+        window.setBackgroundDrawable(inset);
 
         float size = getResources().getDimensionPixelSize(R.dimen._4sdp);
         float titleSize = getResources().getDimension(R.dimen._5sdp);

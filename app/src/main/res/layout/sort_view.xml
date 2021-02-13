@@ -18,12 +18,12 @@
             android:id="@+id/sort_custom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_12sdp"
             android:button="@drawable/radio_button"
             android:paddingStart="@dimen/_4sdp"
             android:paddingEnd="0dp"
             android:text="@string/sort_custom"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_11sdp" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -33,25 +33,25 @@
                 android:id="@+id/sort_create"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:button="@drawable/radio_button"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="0dp"
                 android:text="@string/sort_create"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/sort_create_reverse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:button="@drawable/radio_button"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="0dp"
                 android:text="@string/sort_create_reverse"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_11sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -62,25 +62,25 @@
                 android:id="@+id/sort_brand"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:button="@drawable/radio_button"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="0dp"
                 android:text="@string/sort_brand"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/sort_brand_reverse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:button="@drawable/radio_button"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="0dp"
                 android:text="@string/sort_brand_reverse"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_11sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -91,25 +91,25 @@
                 android:id="@+id/sort_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:button="@drawable/radio_button"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="0dp"
                 android:text="@string/sort_name"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/sort_name_reverse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:button="@drawable/radio_button"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="0dp"
                 android:text="@string/sort_name_reverse"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_11sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

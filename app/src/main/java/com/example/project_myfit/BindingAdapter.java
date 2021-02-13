@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.jetbrains.annotations.NotNull;
+
 public class BindingAdapter {
     @androidx.databinding.BindingAdapter("android:text")
     public static void setSelection(TextInputEditText editText, String text) {
@@ -24,14 +26,39 @@ public class BindingAdapter {
     }
 
     @androidx.databinding.BindingAdapter("setDragHandle")
-    public static void setDragHandle(ImageView imageView, String dummy) {
+    public static void setDragHandle(@NotNull ImageView imageView, String dummy) {
         dummy = null;
         Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_drag_handle).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setAddIcon")
-    public static void setAddIcon(ImageView imageView, String dummy) {
+    public static void setAddIcon(@NotNull ImageView imageView, String dummy) {
         dummy = null;
         Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_add_image).into(imageView);
     }
+
+    @androidx.databinding.BindingAdapter("setRecentSearchIcon")
+    public static void setRecentSearchIcon(@NotNull ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_recent_search).into(imageView);
+    }
+
+    @androidx.databinding.BindingAdapter("setCloseIcon")
+    public static void setCloseIcon(@NotNull ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_close).into(imageView);
+    }
+
+    @androidx.databinding.BindingAdapter("setFolderIcon")
+    public static void setFolderIcon(@NotNull ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_folder).into(imageView);
+    }
+
+    @androidx.databinding.BindingAdapter("setClothIcon")
+    public static void setClothIcon(@NotNull ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_cloth).into(imageView);
+    }
+
 }

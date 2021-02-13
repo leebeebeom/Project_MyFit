@@ -42,6 +42,7 @@ import com.example.project_myfit.ui.main.adapter.ViewPagerAdapter;
 import com.example.project_myfit.ui.main.database.Category;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -65,8 +66,12 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 import static com.example.project_myfit.MyFitConstant.TOP;
 
-//FAB 서치
-//휴지통 하면 끝
+//TODO 휴지통
+//TODO 탑 FAB
+//TODO 써치뷰 탑 FAB
+//TODO 써치뷰 롱 클릭
+//TODO 써치뷰 수정 라이브 데이터
+
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, ViewPagerAdapter.MainDragAutoScroll,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
     private MainViewModel mModel;
@@ -116,6 +121,13 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mModel.setSort(mSort);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FloatingActionButton activityFab = requireActivity().findViewById(R.id.activity_fab);
+        activityFab.setOnClickListener(v -> Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity));
     }
 
     private void dragSelectListenerInit() {
@@ -445,6 +457,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         if (item.getItemId() == R.id.menu_main_popup) {
             mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menu_main_popup));
             return true;
+        } else if (item.getItemId() == R.id.menu_main_search) {
+            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity);
+            return true;
         }
         return false;
     }
@@ -475,7 +490,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox, int position, int viewPagerPosition) {
         if (mActionMode == null) {
             mActivityModel.setCategory(category);
-            Navigation.findNavController(requireView()).navigate(R.id.action_mainFragment_to_listFragment);
+            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_listFragment);
         } else {
             checkBox.setChecked(!checkBox.isChecked());
             mModel.categorySelected(category, checkBox.isChecked(), position, viewPagerPosition, mViewPagerAdapter);

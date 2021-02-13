@@ -10,17 +10,15 @@ public class Category {
     private final String parentCategory;
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private int orderNumber;
+    private int orderNumber, isDeleted;
     private String category, itemAmount;
-    boolean isDeleted;
-
 
     public Category(String category, String parentCategory, int orderNumber) {
         this.category = category;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
         this.itemAmount = "0";
-        this.isDeleted = false;
+        this.isDeleted = 0;
     }
 
     public long getId() {
@@ -59,8 +57,12 @@ public class Category {
         this.itemAmount = itemAmount;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     @Override

@@ -109,7 +109,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void selectedItemDelete() {
-        for (Category category : mSelectedItem) category.setDeleted(true);
+        for (Category category : mSelectedItem) category.setIsDeleted(1);
         mRepository.categoryUpdate(mSelectedItem);
     }
 

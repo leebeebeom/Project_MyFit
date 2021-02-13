@@ -10,16 +10,17 @@ public class Folder {
     @PrimaryKey
     private long id;
     private long folderId;
-    private String folderName, itemAmount;
-    private int orderNumber;
-    private boolean isDeleted;
+    private String folderName, itemAmount, parentCategory;
+    private int orderNumber, isDeleted;
 
-    public Folder(long id, String folderName, long folderId, int orderNumber, String itemAmount) {
+    public Folder(long id, String folderName, long folderId, int orderNumber, String itemAmount, String parentCategory) {
         this.id = id;
         this.folderName = folderName;
         this.folderId = folderId;
         this.orderNumber = orderNumber;
         this.itemAmount = itemAmount;
+        this.parentCategory = parentCategory;
+        this.isDeleted = 0;
     }
 
     public long getId() {
@@ -63,12 +64,20 @@ public class Folder {
         this.itemAmount = itemAmount;
     }
 
-    public boolean isDeleted() {
+    public int getIsDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public String getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(String parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
     @Override

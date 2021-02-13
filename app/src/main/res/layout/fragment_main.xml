@@ -19,9 +19,9 @@
                 android:layout_marginStart="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="@string/category"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_16sdp"
                 android:textStyle="bold"
-                app:fontFamily="@font/sc_dream7" />
+                app:fontFamily="@font/noto_black" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/toggle_group"
@@ -35,37 +35,40 @@
                     android:id="@+id/btn_top"
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_36sdp"
+                    android:includeFontPadding="false"
                     android:text="@string/top"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom"
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
-                    android:layout_height="wrap_content"
-                    android:padding="0dp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:includeFontPadding="false"
                     android:text="@string/bottom"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_outer"
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_36sdp"
+                    android:includeFontPadding="false"
                     android:text="@string/outer"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_etc"
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_36sdp"
+                    android:includeFontPadding="false"
                     android:text="@string/etc"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 

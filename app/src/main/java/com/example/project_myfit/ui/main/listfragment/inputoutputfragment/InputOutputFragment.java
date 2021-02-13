@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.MyFitConstant.GET_IMAGE_REQUEST_CODE;
+import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 
 public class InputOutputFragment extends Fragment implements GoBackDialog.GoBackConfirmClick, DeleteConFirmDialog.DeleteConfirmClick, ImageClearDialog.ImageClearConfirmClick {
     private InputOutputViewModel mModel;
@@ -49,7 +50,9 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         mOnBackPressedCallBack = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (mActivityModel.getSize() == null) onBackPressedInput();
+                if (requireActivity().getIntent().getIntExtra(SIZE_ID, 0) != 0)
+                    requireActivity().finish();
+                else if (mActivityModel.getSize() == null) onBackPressedInput();
                 else onBackPressedOutput();
             }
         };

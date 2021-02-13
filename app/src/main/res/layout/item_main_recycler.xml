@@ -17,7 +17,8 @@
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/main_check_box"
             android:layout_width="@dimen/_20sdp"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_8sdp"
             android:alpha="0.8"
             android:buttonTint="?colorControlNormal"
@@ -53,14 +54,13 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:layout_marginVertical="@dimen/_6sdp"
                     android:alpha="0.8"
                     android:ellipsize="end"
                     android:maxWidth="@dimen/_220sdp"
                     android:maxLines="1"
                     android:text="@{category.category}"
                     android:textSize="@dimen/_12sdp"
-                    app:fontFamily="@font/sc_dream5"
                     tools:text="반팔" />
 
                 <FrameLayout
@@ -68,23 +68,24 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_4sdp"
-                    android:background="@drawable/item_amount_background">
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:background="@drawable/item_amount_background"
+                    android:paddingHorizontal="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_1sdp">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="@dimen/_6sdp"
-                        android:layout_marginVertical="@dimen/_2sdp"
+                        android:layout_height="match_parent"
                         android:alpha="0.6"
                         android:text="@{category.itemAmount}"
                         android:textSize="@dimen/_8sdp"
-                        tools:text="20" />
+                        tools:text="12" />
                 </FrameLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_drag_handle"
+                setDragHandle="@{category.category}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end|center_vertical"
@@ -92,7 +93,7 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_8sdp"
                 android:scaleX="0.9"
-                app:srcCompat="@drawable/icon_drag_handle" />
+                tools:src="@drawable/icon_drag_handle" />
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>

@@ -70,7 +70,7 @@ public class InputOutputViewModel extends AndroidViewModel {
     }
 
     public void delete() {
-        mActivityModel.getSize().setDeleted(true);
+        mActivityModel.getSize().setIsDeleted(1);
         mRepository.sizeUpdate(mActivityModel.getSize());
         decreaseItemAmount();
     }
@@ -161,6 +161,7 @@ public class InputOutputViewModel extends AndroidViewModel {
         mNewSize.setModifiedTime("");
         mNewSize.setImageUri(mImageUri.getValue() == null ? null : getRenameUri());
         mNewSize.setFolderId(mFolderId);
+        mNewSize.setParentCategory(mActivityModel.getCategory().getParentCategory());
         return mNewSize;
     }
 

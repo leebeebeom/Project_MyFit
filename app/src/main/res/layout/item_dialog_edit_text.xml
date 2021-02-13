@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_20sdp"
-        android:paddingTop="@dimen/_12sdp">
+        android:paddingTop="@dimen/_10sdp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editText_layout_dialog"
@@ -31,9 +31,9 @@
             android:hint="@{hint}"
             android:theme="@style/myEditText"
             app:endIconMode="clear_text"
-            app:helperTextTextAppearance="@style/myHintSize"
-            app:hintTextAppearance="@style/myHintSize"
-            app:placeholderTextAppearance="@style/mySuffixSize">
+            app:helperTextTextAppearance="@style/myTextSize8sdp"
+            app:hintTextAppearance="@style/myTextSize8sdp"
+            app:placeholderTextAppearance="@style/myTextSize10sdp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_dialog"

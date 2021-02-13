@@ -19,6 +19,8 @@ import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategor
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderFolder;
 import com.unnamed.b.atv.model.TreeNode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +82,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getAllFolder() {
-        List<Folder> allFolderList = new ArrayList<>(mRepository.getAllFolder());
+        List<Folder> allFolderList = new ArrayList<>(mRepository.getAllFolderList());
         if (mSort == SORT_CREATE)
             allFolderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
         else if (mSort == SORT_CREATE_REVERSE)
@@ -108,8 +110,8 @@ public class ListViewModel extends AndroidViewModel {
         mRepository.folderUpdate(folderList);
     }
 
-    public void deleteFolder(List<Folder> folderList) {
-        for (Folder f : folderList) f.setDeleted(true);
+    public void deleteFolder(@NotNull List<Folder> folderList) {
+        for (Folder f : folderList) f.setIsDeleted(1);
         mRepository.folderDelete(folderList);
     }
 
@@ -135,8 +137,8 @@ public class ListViewModel extends AndroidViewModel {
         return mRepository.getSizeLive(mFolderId);
     }
 
-    public void deleteSize(List<Size> sizeList) {
-        for (Size s : sizeList) s.setDeleted(true);
+    public void deleteSize(@NotNull List<Size> sizeList) {
+        for (Size s : sizeList) s.setIsDeleted(1);
         mRepository.sizeDelete(sizeList);
     }
 
@@ -204,7 +206,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void addFolder(String folderName) {
-        insertFolder(new Folder(getCurrentTime(), folderName, mFolderId, getFolderLargestOrder() + 1, "0"));
+        insertFolder(new Folder(getCurrentTime(), folderName, mFolderId, getFolderLargestOrder() + 1, "0", mActivityModel.getCategory().getParentCategory()));
         if (mThisFolder == null) {
             String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1);
             mActivityModel.getCategory().setItemAmount(amount);

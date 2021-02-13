@@ -77,6 +77,7 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.DELETE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.FOLDER_ADD_DIALOG;
 import static com.example.project_myfit.MyFitConstant.FOLDER_EDIT_DIALOG;
+import static com.example.project_myfit.MyFitConstant.FOLDER_ID;
 import static com.example.project_myfit.MyFitConstant.FOLDER_TOGGLE;
 import static com.example.project_myfit.MyFitConstant.GRIDVIEW;
 import static com.example.project_myfit.MyFitConstant.LISTVIEW;
@@ -94,7 +95,6 @@ import static com.example.project_myfit.MyFitConstant.TREE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.VIEW_TYPE;
 
 //TODO 써치바
-//TODO 전체적으로 글씨 줄이기
 //TODO 휴지통 클릭
 
 @SuppressLint("ClickableViewAccessibility")
@@ -138,7 +138,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         mOnBackPress = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
+                if (requireActivity().getIntent().getLongExtra(FOLDER_ID, 0) != 0 && !mPopupWindow.isShowing())
+                    requireActivity().finish();
+                else if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
                 else {
                     mOnBackPress.remove();
                     requireActivity().onBackPressed();
@@ -236,6 +238,16 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                              @Nullable Bundle savedInstanceState) {
         dragSelectListenerInit();
 
+        mViewTypePreference = requireActivity().getSharedPreferences(VIEW_TYPE, Context.MODE_PRIVATE);
+        mViewType = mViewTypePreference.getInt(VIEW_TYPE, LISTVIEW);
+
+        mSortPreference = requireActivity().getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
+        mSort = mSortPreference.getInt(SORT_LIST, SORT_CUSTOM);
+        mModel.setSort(mSort);
+
+        mFolderPreference = requireActivity().getSharedPreferences(FOLDER_TOGGLE, Context.MODE_PRIVATE);
+        mFolderToggle = mFolderPreference.getBoolean(FOLDER_TOGGLE, true);
+
         mFolderAdapter = new FolderAdapter(mModel);
         mSizeAdapterList = new SizeAdapterList(mModel);
         mSizeAdapterGrid = new SizeAdapterGrid(mModel);
@@ -271,11 +283,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
         popupMenuClick();
-
-        //actionBar title
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        String title = mModel.getThisFolder() == null ? mActivityModel.getCategory().getCategory() : mModel.getThisFolder().getFolderName();
-        if (actionBar != null) actionBar.setTitle(title);
 
         if (mModel.getThisFolder() != null) setNavigation(mModel.getFolderHistory());
 
@@ -459,7 +466,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 mSizeStartPosition = -1;
             }
             //--------------------------------------------------------------------------------------
-
             if (event.getAction() == MotionEvent.ACTION_UP && isFolderStart) {
                 mBinding.recyclerSize.dispatchTouchEvent(event);
                 isFolderStart = false;
@@ -700,6 +706,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        String title = mModel.getThisFolder() == null ? mActivityModel.getCategory().getCategory() : mModel.getThisFolder().getFolderName();
+        if (actionBar != null) actionBar.setTitle(title);
         fabClick();
     }
 
@@ -714,16 +723,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewTypePreference = requireActivity().getSharedPreferences(VIEW_TYPE, Context.MODE_PRIVATE);
-        mViewType = mViewTypePreference.getInt(VIEW_TYPE, LISTVIEW);
-
-        mSortPreference = requireActivity().getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
-        mSort = mSortPreference.getInt(SORT_LIST, SORT_CUSTOM);
-        mModel.setSort(mSort);
-
-        mFolderPreference = requireActivity().getSharedPreferences(FOLDER_TOGGLE, Context.MODE_PRIVATE);
-        mFolderToggle = mFolderPreference.getBoolean(FOLDER_TOGGLE, true);
-
         itemTouchHelperInit();
 
         setSizeRecyclerLayout();
@@ -777,16 +776,16 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             int size = folderList.size();
             if (size % 4 == 1) {
                 for (int i = 0; i < 3; i++) {
-                    Folder dummy = new Folder(-1, "dummy", 0, 0, "");
+                    Folder dummy = new Folder(-1, "dummy", 0, 0, "", mActivityModel.getCategory().getParentCategory());
                     folderList.add(dummy);
                 }
             } else if (size % 4 == 2) {
                 for (int i = 0; i < 2; i++) {
-                    Folder dummy = new Folder(-1, "dummy", 0, 0, "");
+                    Folder dummy = new Folder(-1, "dummy", 0, 0, "", mActivityModel.getCategory().getParentCategory());
                     folderList.add(dummy);
                 }
             } else if (size % 4 == 3) {
-                Folder dummy = new Folder(-1, "dummy", 0, 0, "");
+                Folder dummy = new Folder(-1, "dummy", 0, 0, "", mActivityModel.getCategory().getParentCategory());
                 folderList.add(dummy);
             }
 
@@ -905,8 +904,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        MenuItem favoriteIcon = menu.getItem(0);
-        MenuItem viewTypeIcon = menu.getItem(1);
+        MenuItem favoriteIcon = menu.getItem(1);
+        MenuItem viewTypeIcon = menu.getItem(2);
 
         favoriteIcon.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
         viewTypeIcon.setIcon(mViewType == LISTVIEW ? R.drawable.icon_list : R.drawable.icon_grid);
@@ -942,12 +941,15 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             item.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
             setLiveData();
             return true;
+        } else if (item.getItemId() == R.id.menu_list_search) {
+            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_to_searchActivity);
+            return true;
         }
         return false;
     }
 
     //dialog click----------------------------------------------------------------------------------
-    private void showDialog(DialogFragment dialog, String tag) {
+    private void showDialog(@NotNull DialogFragment dialog, String tag) {
         dialog.setTargetFragment(this, 0);
         dialog.show(getParentFragmentManager(), tag);
     }
@@ -977,7 +979,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             TreeHolderCategory.CategoryTreeHolder oldViewHolder = mModel.getCategoryAddValue();
 
             int largestOrder = mModel.getFolderLargestOrder() + 1;
-            Folder folder = new Folder(mModel.getCurrentTime(), folderName, oldViewHolder.category.getId(), largestOrder, "0");
+            Folder folder = new Folder(mModel.getCurrentTime(), folderName, oldViewHolder.category.getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
             mModel.insertFolder(folder);
 
             //find node(recreate)
@@ -1007,7 +1009,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
             int largestOrder = mModel.getFolderLargestOrder() + 1;
-            Folder folder = new Folder(mModel.getCurrentTime(), folderName, oldViewHolder.getFolder().getId(), largestOrder, "0");
+            Folder folder = new Folder(mModel.getCurrentTime(), folderName, oldViewHolder.getFolder().getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
             mModel.insertFolder(folder);
 
             //find node(recreate)
@@ -1050,7 +1052,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         return newFolderList;
     }
 
-    private void listingFolderNode(List<TreeNode> folderNodeList, List<TreeNode> newFolderList) {
+    private void listingFolderNode(@NotNull List<TreeNode> folderNodeList, List<TreeNode> newFolderList) {
         for (TreeNode folderNode : folderNodeList) {
             if (folderNode.getChildren().size() != 0) {
                 newFolderList.addAll(folderNode.getChildren());

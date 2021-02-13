@@ -12,7 +12,16 @@ import java.util.List;
 @Dao
 public interface SizeDao {
     @Query("SELECT * FROM Size WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
-    LiveData<List<Size>> getSizeLive(long folderId, boolean isDeleted);
+    LiveData<List<Size>> getSizeLive(long folderId, int isDeleted);
+
+    @Query("SELECT * FROM Size WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY name")
+    List<Size> getAllSizeList(String parentCategory, int isDeleted);
+
+    @Query("SELECT brand FROM Size WHERE isDeleted = :isDeleted ORDER BY brand")
+    List<String> getBrandList(int isDeleted);
+
+    @Query("SELECT name FROM Size WHERE isDeleted = :isDeleted ORDER BY brand")
+    List<String> getNameList(int isDeleted);
 
     @Query("SELECT * FROM Size WHERE id = :id")
     Size getSize(int id);

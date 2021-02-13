@@ -34,7 +34,7 @@
         <!--        actionMode cover actionBar-->
         <item name="windowActionModeOverlay">true</item>
         <!--        font-->
-        <item name="fontFamily">@font/sc_dream</item>
+        <item name="fontFamily">@font/noto</item>
         <!--        recycler view background color-->
         <item name="recyclerBackground">@color/recycler_background</item>
         <!--        input output go button color-->
@@ -47,6 +47,7 @@
         <item name="treeViewBackgroundColor">@color/white</item>
         <!--        menu icon padding-->
         <item name="actionButtonStyle">@style/myMenuPadding</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
     <!--    actionMode close button gone-->
     <style name="myActionBarCloseButton">
@@ -77,16 +78,24 @@
         <item name="colorPrimary">@color/black</item>
     </style>
     <!--    action bar title style-->
-    <style name="myActionBarTitleStyle" parent="Widget.MaterialComponents.Toolbar">
+    <style name="myActionBarTitleStyle">
         <item name="android:textSize">@dimen/_12sdp</item>
     </style>
-    <!--    edit text hint focused size-->
-    <style name="myHintSize" parent="Widget.Design.TextInputLayout">
+
+    <style name="myTextSize8sdp" parent="Widget.Design.TextInputLayout">
         <item name="android:textSize">@dimen/_8sdp</item>
     </style>
-    <!--    edit text suffix size-->
-    <style name="mySuffixSize" parent="Widget.Design.TextInputLayout">
+
+    <style name="myTextSize9sdp" parent="Widget.Design.TextInputLayout">
+        <item name="android:textSize">@dimen/_9sdp</item>
+    </style>
+
+    <style name="myTextSize10sdp" parent="Widget.MaterialComponents.TextView">
         <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+
+    <style name="myTextSize11sdp" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/_11sdp</item>
     </style>
 
     <attr name="recyclerBackground" format="color" />

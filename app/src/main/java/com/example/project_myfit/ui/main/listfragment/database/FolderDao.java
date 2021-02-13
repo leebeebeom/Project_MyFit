@@ -13,10 +13,16 @@ import java.util.List;
 public interface FolderDao {
 
     @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
-    LiveData<List<Folder>> getFolderLive(long folderId, boolean isDeleted);
+    LiveData<List<Folder>> getFolderLive(long folderId, int isDeleted);
 
     @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted ORDER BY orderNumber DESC")
-    List<Folder> getFolderList(boolean isDeleted);
+    List<Folder> getAllFolderList(int isDeleted);
+
+    @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY folderName")
+    List<Folder> getAllFolderList2(String parentCategory, int isDeleted);
+
+    @Query("SELECT folderName FROM Folder WHERE isDeleted = :isDeleted ORDER BY folderName")
+    List<String> getFolderNameList(int isDeleted);
 
     @Query("SELECT MAX(orderNumber) FROM Folder")
     int getLargestOrder();

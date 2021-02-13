@@ -2,6 +2,7 @@ package com.example.project_myfit.ui.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -74,6 +75,13 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                     holder.mBinding.mainRecyclerView.setAdapter(topAdapter);
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(TOP)) newCategory.add(category);
+                if (newCategory.size() == 0) {
+                    holder.mBinding.noData.setVisibility(View.VISIBLE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.GONE);
+                } else {
+                    holder.mBinding.noData.setVisibility(View.GONE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.VISIBLE);
+                }
                 topAdapter.setItem(newCategory);
             } else if (holder.getLayoutPosition() == 1) {
                 CategoryAdapter bottomAdapter = mAdapterList.get(1);
@@ -86,6 +94,13 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                     holder.mBinding.mainRecyclerView.setAdapter(bottomAdapter);
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(BOTTOM)) newCategory.add(category);
+                if (newCategory.size() == 0) {
+                    holder.mBinding.noData.setVisibility(View.VISIBLE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.GONE);
+                } else {
+                    holder.mBinding.noData.setVisibility(View.GONE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.VISIBLE);
+                }
                 bottomAdapter.setItem(newCategory);
             } else if (holder.getLayoutPosition() == 2) {
                 CategoryAdapter outerAdapter = mAdapterList.get(2);
@@ -99,6 +114,13 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(OUTER)) newCategory.add(category);
+                if (newCategory.size() == 0) {
+                    holder.mBinding.noData.setVisibility(View.VISIBLE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.GONE);
+                } else {
+                    holder.mBinding.noData.setVisibility(View.GONE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.VISIBLE);
+                }
                 outerAdapter.setItem(newCategory);
             } else if (holder.getLayoutPosition() == 3) {
                 CategoryAdapter etcAdapter = mAdapterList.get(3);
@@ -112,6 +134,13 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
                 for (Category category : mCategoryList)
                     if (category.getParentCategory().equals(ETC)) newCategory.add(category);
+                if (newCategory.size() == 0) {
+                    holder.mBinding.noData.setVisibility(View.VISIBLE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.GONE);
+                } else {
+                    holder.mBinding.noData.setVisibility(View.GONE);
+                    holder.mBinding.mainRecyclerView.setVisibility(View.VISIBLE);
+                }
                 etcAdapter.setItem(newCategory);
             }
         }
@@ -240,10 +269,6 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                     listener2.dragAutoScroll(1);
                 return false;
             });
-        }
-
-        public ItemMainRecyclerViewBinding getBinding() {
-            return mBinding;
         }
     }
 

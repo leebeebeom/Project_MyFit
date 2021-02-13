@@ -9,8 +9,8 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/list_action_mode_move"
-        android:title="@string/move"
         android:icon="@drawable/icon_move"
+        android:title="@string/move"
         app:showAsAction="always" />
     <item
         android:id="@+id/list_action_mode_del"

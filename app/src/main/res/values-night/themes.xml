@@ -30,7 +30,7 @@
         <!--        actionMode cover actionBar-->
         <item name="windowActionModeOverlay">true</item>
         <!--        font-->
-        <item name="fontFamily">@font/sc_dream</item>
+        <item name="fontFamily">@font/noto</item>
         <!--        recycler view background color-->
         <item name="recyclerBackground">@color/recycler_background_night</item>
         <!--        input output go button color-->
@@ -43,6 +43,7 @@
         <item name="treeViewBackgroundColor">#FF292929</item>
         <!--        menu icon padding-->
         <item name="actionButtonStyle">@style/myMenuPadding</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
     <!--    bottom navigation active color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">

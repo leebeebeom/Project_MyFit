@@ -36,7 +36,8 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginHorizontal="@dimen/_16sdp"
-                    android:layout_marginVertical="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_4sdp"
                     app:cardElevation="@dimen/_2sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1"
@@ -130,8 +131,8 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:hint="@string/brand"
                     android:theme="@style/myEditText"
-                    app:errorTextAppearance="@style/myHintSize"
-                    app:hintTextAppearance="@style/myHintSize"
+                    app:errorTextAppearance="@style/myTextSize8sdp"
+                    app:hintTextAppearance="@style/myTextSize8sdp"
                     app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -158,8 +159,8 @@
                         android:layout_weight="3"
                         android:hint="@string/name"
                         android:theme="@style/myEditText"
-                        app:errorTextAppearance="@style/myHintSize"
-                        app:hintTextAppearance="@style/myHintSize"
+                        app:errorTextAppearance="@style/myTextSize8sdp"
+                        app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -179,7 +180,7 @@
                         android:layout_weight="1"
                         android:hint="@string/size"
                         android:theme="@style/myEditText"
-                        app:hintTextAppearance="@style/myHintSize"
+                        app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -213,10 +214,10 @@
                             android:layout_weight="1"
                             android:hint="@string/length"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/length"
@@ -235,10 +236,10 @@
                             android:layout_weight="1"
                             android:hint="@string/shoulder"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/shoulder"
@@ -265,10 +266,10 @@
                             android:layout_weight="1"
                             android:hint="@string/chest"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/chest"
@@ -287,10 +288,10 @@
                             android:layout_weight="1"
                             android:hint="@string/sleeve"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/sleeve"
@@ -324,10 +325,10 @@
                             android:layout_weight="1"
                             android:hint="@string/length"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/bottom_length"
@@ -360,10 +361,10 @@
                             android:layout_weight="1"
                             android:hint="@string/waist"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/waist"
@@ -382,10 +383,10 @@
                             android:layout_weight="1"
                             android:hint="@string/thigh"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/thigh"
@@ -412,10 +413,10 @@
                             android:layout_weight="1"
                             android:hint="@string/rise"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/rise"
@@ -434,10 +435,10 @@
                             android:layout_weight="1"
                             android:hint="@string/hem"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner"
                             app:suffixText="cm"
-                            app:suffixTextAppearance="@style/mySuffixSize">
+                            app:suffixTextAppearance="@style/myTextSize10sdp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/hem"
@@ -473,7 +474,7 @@
                             android:layout_weight="1"
                             android:hint="@string/option_1"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -493,7 +494,7 @@
                             android:layout_weight="1"
                             android:hint="@string/option_2"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -522,7 +523,7 @@
                             android:layout_weight="1"
                             android:hint="@string/option_3"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -542,7 +543,7 @@
                             android:layout_weight="1"
                             android:hint="@string/option_4"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -570,7 +571,7 @@
                             android:layout_weight="1"
                             android:hint="@string/option_5"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -590,7 +591,7 @@
                             android:layout_weight="1"
                             android:hint="@string/option_6"
                             android:theme="@style/myEditText"
-                            app:hintTextAppearance="@style/myHintSize"
+                            app:hintTextAppearance="@style/myTextSize8sdp"
                             app:shapeAppearance="@style/myEditTextCorner">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -619,7 +620,7 @@
                         android:layout_weight="1"
                         android:hint="@string/http"
                         android:theme="@style/myEditText"
-                        app:hintTextAppearance="@style/myHintSize"
+                        app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -654,7 +655,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/memo"
                     android:theme="@style/myEditText"
-                    app:hintTextAppearance="@style/myHintSize"
+                    app:hintTextAppearance="@style/myTextSize8sdp"
                     app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.TextInputEditText

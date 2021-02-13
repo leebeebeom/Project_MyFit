@@ -10,11 +10,10 @@ import java.util.Objects;
 
 @Entity
 public class Size {
-    boolean isDeleted;
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private int orderNumber;
-    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
+    private int orderNumber, isDeleted;
+    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
     private long folderId;
     private boolean isFavorite;
     private Map<String, String> sizeMap;
@@ -24,7 +23,7 @@ public class Size {
         sizeMap = new HashMap<>();
     }
 
-    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long folderId, boolean isFavorite, Map<String, String> sizeMap) {
+    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long folderId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
         this.modifiedTime = modifiedTime;
@@ -37,6 +36,8 @@ public class Size {
         this.folderId = folderId;
         this.isFavorite = isFavorite;
         this.sizeMap = sizeMap;
+        this.parentCategory = parentCategory;
+        this.isDeleted = 0;
     }
 
     public int getId() {
@@ -143,12 +144,20 @@ public class Size {
         this.sizeMap = sizeMap;
     }
 
-    public boolean isDeleted() {
+    public int getIsDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public String getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(String parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
     @Override

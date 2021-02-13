@@ -2,6 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.project_myfit">
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+        </intent>
+        <intent>
+            <action android:name="com.android.camera.action.CROP" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -10,6 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_MyFit">
+        <activity android:name=".searchActivity.SearchActivity" />
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
@@ -19,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -29,16 +43,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.PICK" />
-        </intent>
-        <intent>
-            <action android:name="com.android.camera.action.CROP" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.VIEW"/>
-        </intent>
-    </queries>
 
 </manifest>

@@ -32,15 +32,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingHorizontal="@dimen/_8sdp"
                     android:scrollbars="none">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/list_navigation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -104,10 +103,10 @@
                     android:id="@+id/no_data"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:alpha="0.5"
                     android:background="@drawable/recycler_background"
                     android:gravity="center"
-                    android:layout_marginTop="@dimen/_8sdp"
                     android:text="@string/no_data"
                     android:textSize="@dimen/_20sdp"
                     android:visibility="gone" />

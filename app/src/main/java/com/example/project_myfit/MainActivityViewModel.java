@@ -1,15 +1,26 @@
 package com.example.project_myfit;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 
-public class MainActivityViewModel extends ViewModel {
+import org.jetbrains.annotations.NotNull;
+
+public class MainActivityViewModel extends AndroidViewModel {
     private Category category;
     private Size size;
     private Folder folder;
+    private final Repository repository;
+
+    public MainActivityViewModel(@NonNull @NotNull Application application) {
+        super(application);
+        repository = new Repository(application);
+    }
 
     public Category getCategory() {
         return category;
@@ -33,5 +44,9 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setFolder(Folder folder) {
         this.folder = folder;
+    }
+
+    public Repository getRepository() {
+        return repository;
     }
 }

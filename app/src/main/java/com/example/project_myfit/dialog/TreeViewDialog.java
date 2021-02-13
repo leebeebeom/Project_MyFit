@@ -41,13 +41,6 @@ import static com.example.project_myfit.MyFitConstant.TREE_VIEW_STATE;
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
     private TreeNode mNodeRoot;
     private ListViewModel mModel;
-
-    public interface TreeViewAddClick {
-        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
-
-        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
-    }
-
     private AndroidTreeView mTreeView;
     private TreeNode.TreeNodeClickListener mListener;
     private List<TreeNode> mCategoryTreeNodeList;
@@ -171,7 +164,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         }
     }
 
-
     @Override
     public void addCategoryConfirmClick(String categoryName) {
         int orderNumber = mModel.getCategoryLargestOrder() + 1;
@@ -187,5 +179,11 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(TREE_VIEW_STATE, mTreeView.getSaveState());
+    }
+
+    public interface TreeViewAddClick {
+        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
+
+        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
     }
 }
