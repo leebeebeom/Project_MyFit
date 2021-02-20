@@ -61,4 +61,9 @@ public class BindingAdapter {
         Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_cloth).into(imageView);
     }
 
+    @androidx.databinding.BindingAdapter("setDotIcon")
+    public static void setDotIcon(@NotNull ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_dot).into(imageView);
+    }
 }
