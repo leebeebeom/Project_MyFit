@@ -58,7 +58,7 @@
                 setCloseIcon="@{recentSearch.word}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="end|center_vertical"
+                android:layout_gravity="end"
                 android:alpha="0.6"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_8sdp"
@@ -66,7 +66,5 @@
                 android:scaleY="1.1"
                 tools:src="@drawable/icon_close" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
