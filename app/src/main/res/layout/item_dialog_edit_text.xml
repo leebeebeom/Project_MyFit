@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -16,27 +17,27 @@
             type="String" />
     </data>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_20sdp"
         android:paddingTop="@dimen/_10sdp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editText_layout_dialog"
+            android:id="@+id/dialog_editText_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@{hint}"
             android:theme="@style/myEditText"
+            app:placeholderText="@{placeHolder}"
             app:endIconMode="clear_text"
             app:helperTextTextAppearance="@style/myTextSize8sdp"
             app:hintTextAppearance="@style/myTextSize8sdp"
             app:placeholderTextAppearance="@style/myTextSize10sdp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editText_dialog"
+                android:id="@+id/dialog_editText"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_36sdp"
                 android:imeOptions="actionDone"
