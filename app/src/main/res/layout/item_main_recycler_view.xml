@@ -7,6 +7,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@drawable/recycler_background"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_60sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_main_recycler" />
+
         <FrameLayout
             android:id="@+id/no_data"
             android:layout_width="match_parent"
@@ -24,18 +37,6 @@
                 android:textSize="@dimen/_22sdp" />
         </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:background="@drawable/recycler_background"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingTop="@dimen/_8sdp"
-            android:paddingBottom="@dimen/_60sdp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_main_recycler" />
     </FrameLayout>
 
 </layout>
