@@ -27,14 +27,13 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/_2sdp"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:includeFontPadding="false"
                 android:maxLines="3"
+                android:paddingTop="@dimen/_4sdp"
                 android:text="@{folder.folderName}"
                 android:textSize="@dimen/_9sdp"
-                tools:text="comme \n des \n garcons" />
+                tools:text="일곱글자까지됨세줄까지됨\n세줄까지됨" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/folder_drag_handle"
@@ -76,16 +75,14 @@
                 android:id="@+id/folder_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:includeFontPadding="false"
                 android:text="@{folder.itemAmount}"
                 android:textSize="@dimen/_8sdp"
-                tools:text="2" />
+                tools:text="0" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_2sdp"
-                android:includeFontPadding="false"
                 android:text="@string/items"
                 android:textSize="@dimen/_8sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
