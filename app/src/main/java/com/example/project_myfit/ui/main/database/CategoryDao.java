@@ -11,27 +11,26 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
-    LiveData<List<Category>> getCategoryLive(int isDeleted);
+    LiveData<List<Category>> getAllCategoryLive(int isDeleted);
 
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryList(String parentCategory, int isDeleted);
+    List<Category> getCategoryListByParent(String parentCategory, int isDeleted);
 
     @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
     Category getLatestCategory();
 
     @Query("SELECT max(orderNumber) FROM Category")
-    int getLargestOrder();
+    int getCategoryLargestOrder();
 
     @Query("SELECT * FROM Category WHERE id = :id")
     Category getCategory(long id);
 
     @Insert
-    void insert(Category category);
+    void categoryInsert(Category category);
 
     @Update
-    void update(Category category);
+    void categoryUpdate(Category category);
 
     @Update
-    void update(List<Category> categoryList);
-
+    void categoryUpdate(List<Category> categoryList);
 }

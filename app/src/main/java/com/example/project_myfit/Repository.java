@@ -32,14 +32,14 @@ public class Repository {
         mRecentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
     }
 
-    //Category--------------------------------------------------------------------------------------
+    //category--------------------------------------------------------------------------------------
     public LiveData<List<Category>> getCategoryLive() {
-        return mCategoryDao.getCategoryLive(0);
+        return mCategoryDao.getAllCategoryLive(0);
     }
 
-    public List<Category> getCategoryList(String parentCategory) {
+    public List<Category> getCategoryListByParent(String parentCategory) {
         List<Category> categoryList = new ArrayList<>();
-        Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, 0)));
+        Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryListByParent(parentCategory, 0)));
         thread.start();
         try {
             thread.join();
@@ -51,7 +51,7 @@ public class Repository {
 
     public int getCategoryLargestOrder() {
         AtomicInteger largestOrder = new AtomicInteger();
-        Thread thread = new Thread(() -> largestOrder.set(mCategoryDao.getLargestOrder()));
+        Thread thread = new Thread(() -> largestOrder.set(mCategoryDao.getCategoryLargestOrder()));
         thread.start();
         try {
             thread.join();
@@ -76,7 +76,7 @@ public class Repository {
     public Category treeViewAddCategory(Category category) {
         AtomicReference<Category> addedCategory = new AtomicReference<>();
         Thread thread = new Thread(() -> {
-            mCategoryDao.insert(category);
+            mCategoryDao.categoryInsert(category);
             addedCategory.set(mCategoryDao.getLatestCategory());
         });
         thread.start();
@@ -88,34 +88,26 @@ public class Repository {
         return addedCategory.get();
     }
 
-    public Category getLatestCategory() {
-        AtomicReference<Category> category = new AtomicReference<>();
-        Thread thread = new Thread(() -> category.set(mCategoryDao.getLatestCategory()));
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return category.get();
-    }
-
     public void categoryInsert(Category category) {
-        new Thread(() -> mCategoryDao.insert(category)).start();
+        new Thread(() -> mCategoryDao.categoryInsert(category)).start();
     }
 
     public void categoryUpdate(Category category) {
-        new Thread(() -> mCategoryDao.update(category)).start();
+        new Thread(() -> mCategoryDao.categoryUpdate(category)).start();
     }
 
     public void categoryUpdate(List<Category> categoryList) {
-        new Thread(() -> mCategoryDao.update(categoryList)).start();
+        new Thread(() -> mCategoryDao.categoryUpdate(categoryList)).start();
     }
     //----------------------------------------------------------------------------------------------
 
-    //Folder----------------------------------------------------------------------------------------
-    public LiveData<List<Folder>> getFolderLive(long folderId) {
-        return mFolderDao.getFolderLive(folderId, 0);
+    //folder----------------------------------------------------------------------------------------
+    public LiveData<List<Folder>> getFolderLiveByFolder(long folderId) {
+        return mFolderDao.getFolderLiveByFolder(folderId, 0);
+    }
+
+    public LiveData<List<Folder>> getAllFolderLive() {
+        return mFolderDao.getAllFolderLive(0);
     }
 
     public List<Folder> getAllFolderList() {
@@ -130,9 +122,9 @@ public class Repository {
         return folderList;
     }
 
-    public List<Folder> getAllFolderList2(String parentCategory) {
+    public List<Folder> getAllFolderListByParent(String parentCategory) {
         List<Folder> folderList = new ArrayList<>();
-        Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getAllFolderList2(parentCategory, 0)));
+        Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getAllFolderListByParent(parentCategory, 0)));
         thread.start();
         try {
             thread.join();
@@ -156,7 +148,7 @@ public class Repository {
 
     public int getFolderLargestOrder() {
         AtomicInteger largestOrder = new AtomicInteger();
-        Thread thread = new Thread(() -> largestOrder.set(mFolderDao.getLargestOrder()));
+        Thread thread = new Thread(() -> largestOrder.set(mFolderDao.getFolderLargestOrder()));
         thread.start();
         try {
             thread.join();
@@ -179,30 +171,30 @@ public class Repository {
     }
 
     public void folderInsert(Folder folder) {
-        new Thread(() -> mFolderDao.insert(folder)).start();
+        new Thread(() -> mFolderDao.folderInsert(folder)).start();
     }
 
     public void folderUpdate(Folder folder) {
-        new Thread(() -> mFolderDao.update(folder)).start();
+        new Thread(() -> mFolderDao.folderUpdate(folder)).start();
     }
 
     public void folderUpdate(List<Folder> folderList) {
-        new Thread(() -> mFolderDao.update(folderList)).start();
-    }
-
-    public void folderDelete(List<Folder> folderList) {
-        new Thread(() -> mFolderDao.delete(folderList)).start();
+        new Thread(() -> mFolderDao.folderUpdate(folderList)).start();
     }
     //----------------------------------------------------------------------------------------------
 
-    //Size------------------------------------------------------------------------------------------
-    public LiveData<List<Size>> getSizeLive(long folderId) {
-        return mSizeDao.getSizeLive(folderId, 0);
+    //size------------------------------------------------------------------------------------------
+    public LiveData<List<Size>> getAllSizeLiveByFolder(long folderId) {
+        return mSizeDao.getAllSizeLiveByFolder(folderId, 0);
     }
 
-    public List<Size> getAllSizeList(String parentCategory) {
+    public LiveData<List<Size>> getAllSizeLive() {
+        return mSizeDao.getAllSizeLive(0);
+    }
+
+    public List<Size> getAllSizeListByParent(String parentCategory) {
         List<Size> sizeList = new ArrayList<>();
-        Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getAllSizeList(parentCategory, 0)));
+        Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getAllSizeListByParent(parentCategory, 0)));
         thread.start();
         try {
             thread.join();
@@ -224,9 +216,9 @@ public class Repository {
         return size.get();
     }
 
-    public List<String> getBrandList() {
+    public List<String> getSizeBrandList() {
         List<String> brandList = new ArrayList<>();
-        Thread thread = new Thread(() -> brandList.addAll(mSizeDao.getBrandList(0)));
+        Thread thread = new Thread(() -> brandList.addAll(mSizeDao.getSizeBrandList(0)));
         thread.start();
         try {
             thread.join();
@@ -236,9 +228,9 @@ public class Repository {
         return brandList;
     }
 
-    public List<String> getNameList() {
+    public List<String> getSizeNameList() {
         List<String> nameList = new ArrayList<>();
-        Thread thread = new Thread(() -> nameList.addAll(mSizeDao.getNameList(0)));
+        Thread thread = new Thread(() -> nameList.addAll(mSizeDao.getSizeNameList(0)));
         thread.start();
         try {
             thread.join();
@@ -250,7 +242,7 @@ public class Repository {
 
     public int getSizeLargestOrder() {
         AtomicInteger largestOrder = new AtomicInteger();
-        Thread thread = new Thread(() -> largestOrder.set(mSizeDao.getLargestOrder()));
+        Thread thread = new Thread(() -> largestOrder.set(mSizeDao.getSizeLargestOrder()));
         thread.start();
         try {
             thread.join();
@@ -261,26 +253,19 @@ public class Repository {
     }
 
     public void sizeInsert(Size size) {
-        new Thread(() -> mSizeDao.insert(size)).start();
+        new Thread(() -> mSizeDao.sizeInsert(size)).start();
     }
 
     public void sizeUpdate(Size size) {
-        new Thread(() -> mSizeDao.update(size)).start();
+        new Thread(() -> mSizeDao.sizeUpdate(size)).start();
     }
 
     public void sizeUpdate(List<Size> sizeList) {
-        new Thread(() -> mSizeDao.update(sizeList)).start();
-    }
-
-    public void sizeDelete(Size size) {
-        new Thread(() -> mSizeDao.delete(size)).start();
-    }
-
-    public void sizeDelete(List<Size> sizeList) {
-        new Thread(() -> mSizeDao.delete(sizeList)).start();
+        new Thread(() -> mSizeDao.sizeUpdate(sizeList)).start();
     }
     //----------------------------------------------------------------------------------------------
 
+    //recent search---------------------------------------------------------------------------------
     public LiveData<List<RecentSearch>> getRecentSearchLive() {
         return mRecentSearchDao.getRecentSearchList();
     }
@@ -292,4 +277,5 @@ public class Repository {
     public void deleteRecentSearch(RecentSearch recentSearch) {
         new Thread(() -> mRecentSearchDao.deleteRecentSearch(recentSearch)).start();
     }
+    //----------------------------------------------------------------------------------------------
 }
