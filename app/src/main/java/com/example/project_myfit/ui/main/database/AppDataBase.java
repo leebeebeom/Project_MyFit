@@ -54,7 +54,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             //insert
                             new Thread(() -> {
                                 for (Category category : categoryList) {
-                                    getsInstance(context).categoryDao().insert(category);
+                                    getsInstance(context).categoryDao().categoryInsert(category);
                                 }
                             }).start();
                         }
