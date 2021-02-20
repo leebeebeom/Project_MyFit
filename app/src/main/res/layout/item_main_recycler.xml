@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
-            app:cardBackgroundColor="?colorPrimary"
+            app:cardBackgroundColor="?myCardViewBackground"
             app:cardCornerRadius="@dimen/_4sdp"
             app:cardElevation="@dimen/_2sdp">
 
@@ -49,7 +49,8 @@
                     android:alpha="0.7"
                     android:scaleX="0.3"
                     android:scaleY="0.3"
-                    app:srcCompat="@drawable/icon_dot" />
+                    setDotIcon="@{category.parentCategory}"
+                    tools:src="@drawable/icon_dot" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -88,7 +89,7 @@
                 setDragHandle="@{category.category}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="end|center_vertical"
+                android:layout_gravity="end"
                 android:alpha="0.7"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_8sdp"
