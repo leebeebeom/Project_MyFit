@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_4sdp"
-            app:cardBackgroundColor="?colorPrimary"
+            app:cardBackgroundColor="?myCardViewBackground"
             app:cardCornerRadius="@dimen/_4sdp"
             app:cardElevation="@dimen/_2sdp">
 
@@ -46,6 +46,7 @@
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_gravity="center"
+                        tools:src="@drawable/icon_add_image"
                         android:alpha="0.2" />
 
                     <androidx.appcompat.widget.AppCompatImageView
