@@ -36,7 +36,6 @@
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="@dimen/_36sdp"
-                    android:includeFontPadding="false"
                     android:text="@string/top"
                     android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
@@ -46,7 +45,6 @@
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="@dimen/_36sdp"
-                    android:includeFontPadding="false"
                     android:text="@string/bottom"
                     android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
@@ -56,7 +54,6 @@
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="@dimen/_36sdp"
-                    android:includeFontPadding="false"
                     android:text="@string/outer"
                     android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
@@ -66,7 +63,6 @@
                     style="?materialButtonOutlinedStyle"
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="@dimen/_36sdp"
-                    android:includeFontPadding="false"
                     android:text="@string/etc"
                     android:textSize="@dimen/_9sdp"
                     app:rippleColor="@android:color/transparent" />
