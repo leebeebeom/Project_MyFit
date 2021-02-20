@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
-            app:cardBackgroundColor="?colorPrimary"
+            app:cardBackgroundColor="?myCardViewBackground"
             app:cardElevation="@dimen/_2sdp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -46,7 +46,7 @@
                     android:layout_marginVertical="@dimen/_1sdp"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_8sdp"
+                    android:paddingHorizontal="@dimen/_4sdp"
                     android:paddingVertical="@dimen/_2sdp">
 
                     <com.google.android.material.textview.MaterialTextView
