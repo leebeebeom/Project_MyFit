@@ -10,7 +10,7 @@
             type="com.example.project_myfit.ui.main.listfragment.database.Size" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
-            app:cardBackgroundColor="?colorPrimary"
+            app:cardBackgroundColor="?myCardViewBackground"
             app:cardElevation="@dimen/_2sdp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -51,7 +51,7 @@
                         android:maxLines="1"
                         android:text="@{size.brand}"
                         android:textSize="@dimen/_7sdp"
-                        tools:text="Anderason Bell" />
+                        tools:text="Anderson Bell" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
@@ -68,5 +68,5 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </FrameLayout>
 </layout>
