@@ -12,41 +12,41 @@ import com.example.project_myfit.ui.main.listfragment.database.Size;
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivityViewModel extends AndroidViewModel {
-    private Category category;
-    private Size size;
-    private Folder folder;
-    private final Repository repository;
+    private Category mCategory;
+    private Size mSize;
+    private Folder mFolder;
+    private final Repository mRepository;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
-        repository = new Repository(application);
+        mRepository = new Repository(application);
     }
 
     public Category getCategory() {
-        return category;
+        return mCategory;
     }
 
     public void setCategory(Category category) {
-        this.category = category;
+        this.mCategory = category;
     }
 
     public Size getSize() {
-        return size;
+        return mSize;
     }
 
     public void setSize(Size size) {
-        this.size = size;
+        this.mSize = size;
     }
 
     public Folder getFolder() {
-        return folder;
+        return mFolder;
     }
 
     public void setFolder(Folder folder) {
-        this.folder = folder;
+        this.mFolder = folder;
     }
 
     public Repository getRepository() {
-        return repository;
+        return mRepository;
     }
 }
