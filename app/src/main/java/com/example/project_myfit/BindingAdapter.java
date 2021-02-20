@@ -66,4 +66,11 @@ public class BindingAdapter {
         dummy = null;
         Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_dot).into(imageView);
     }
+
+    @androidx.databinding.BindingAdapter("setTreeTriangleIcon")
+    public static void setTreeTriangleIcon(ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
+    }
+
 }
