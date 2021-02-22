@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.MainActivityViewModel;
@@ -19,6 +18,7 @@ import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategor
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderFolder;
 import com.unnamed.b.atv.model.TreeNode;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.project_myfit.MyFitConstant.LISTVIEW;
 import static com.example.project_myfit.MyFitConstant.SORT_BRAND;
 import static com.example.project_myfit.MyFitConstant.SORT_BRAND_REVERSE;
 import static com.example.project_myfit.MyFitConstant.SORT_CREATE;
@@ -56,29 +57,17 @@ public class ListViewModel extends AndroidViewModel {
         super(application);
         mRepository = new Repository(application);
         mSelectedAmount = new MutableLiveData<>();
+        mSelectedItemFolder = new ArrayList<>();
+        mSelectedItemSize = new ArrayList<>();
     }
 
-    //category--------------------------------------------------------------------------------------
-    public void updateCategory(Category category) {
-        mRepository.categoryUpdate(category);
+    public List<Category> getCategoryListByParent() {
+        return mRepository.getCategoryListByParent(mActivityModel.getCategory().getParentCategory());
     }
 
-    public List<Category> getCategoryList() {
-        return mRepository.getCategoryList(mActivityModel.getCategory().getParentCategory());
-    }
-
-    public int getCategoryLargestOrder() {
-        return mRepository.getCategoryLargestOrder();
-    }
-
-    public Category treeViewAddCategory(Category category) {
-        return mRepository.treeViewAddCategory(category);
-    }
-    //----------------------------------------------------------------------------------------------
-
-    //folder----------------------------------------------------------------------------------------
-    public LiveData<List<Folder>> getFolderLive() {
-        return mRepository.getFolderLive(mFolderId);
+    public void deleteSize(@NotNull List<Size> sizeList) {
+        for (Size s : sizeList) s.setIsDeleted(1);
+        mRepository.sizeUpdate(sizeList);
     }
 
     public List<Folder> getAllFolder() {
@@ -94,32 +83,16 @@ public class ListViewModel extends AndroidViewModel {
         return allFolderList;
     }
 
-    public int getFolderLargestOrder() {
-        return mRepository.getFolderLargestOrder();
-    }
-
-    public void insertFolder(Folder folder) {
-        mRepository.folderInsert(folder);
-    }
-
-    public void updateFolder(Folder folder) {
-        mRepository.folderUpdate(folder);
-    }
-
-    public void updateFolder(List<Folder> folderList) {
-        mRepository.folderUpdate(folderList);
-    }
-
     public void deleteFolder(@NotNull List<Folder> folderList) {
         for (Folder f : folderList) f.setIsDeleted(1);
-        mRepository.folderDelete(folderList);
+        mRepository.folderUpdate(folderList);
     }
 
     public void selectedItemMove(long folderId) {
         for (Folder f : mSelectedItemFolder) f.setFolderId(folderId);
         for (Size s : mSelectedItemSize) s.setFolderId(folderId);
-        updateFolder(mSelectedItemFolder);
-        updateSizeList(mSelectedItemSize);
+        mRepository.folderUpdate(mSelectedItemFolder);
+        mRepository.sizeUpdate(mSelectedItemSize);
 
         increaseItemAmount(folderId);
         decreaseItemAmount();
@@ -130,22 +103,6 @@ public class ListViewModel extends AndroidViewModel {
         deleteSize(mSelectedItemSize);
         decreaseItemAmount();
     }
-    //----------------------------------------------------------------------------------------------
-
-    //size------------------------------------------------------------------------------------------
-    public LiveData<List<Size>> getSizeLive() {
-        return mRepository.getSizeLive(mFolderId);
-    }
-
-    public void deleteSize(@NotNull List<Size> sizeList) {
-        for (Size s : sizeList) s.setIsDeleted(1);
-        mRepository.sizeDelete(sizeList);
-    }
-
-    public void updateSizeList(List<Size> sizeList) {
-        mRepository.sizeUpdate(sizeList);
-    }
-    //----------------------------------------------------------------------------------------------
 
     public void setThisFolder(MainActivityViewModel activityViewModel) {
         mActivityModel = activityViewModel;
@@ -163,7 +120,8 @@ public class ListViewModel extends AndroidViewModel {
         return folderHistory2;
     }
 
-    private List<Folder> getFolderHistory2(List<Folder> allFolderList, List<Folder> folderHistory, Folder thisFolder) {
+    @Contract("_, _, _ -> param2")
+    private List<Folder> getFolderHistory2(@NotNull List<Folder> allFolderList, List<Folder> folderHistory, Folder thisFolder) {
         for (Folder parentFolder : allFolderList) {
             if (parentFolder.getId() == thisFolder.getFolderId()) {
                 folderHistory.add(parentFolder);
@@ -174,7 +132,7 @@ public class ListViewModel extends AndroidViewModel {
         return folderHistory;
     }
 
-    public void folderSelected(Folder folder, boolean isChecked, int position, FolderAdapter folderAdapter) {
+    public void folderSelected(@NotNull Folder folder, boolean isChecked, int position, FolderAdapter folderAdapter) {
         if (!folder.getFolderName().equals("dummy")) {
             if (isChecked) mSelectedItemFolder.add(folder);
             else mSelectedItemFolder.remove(folder);
@@ -183,11 +141,11 @@ public class ListViewModel extends AndroidViewModel {
         }
     }
 
-    public void sizeSelected(Size size, boolean isChecked, int position, SizeAdapterList sizeAdapterList, SizeAdapterGrid sizeAdapterGrid) {
+    public void sizeSelected(Size size, boolean isChecked, int position, SizeAdapterList sizeAdapterList, SizeAdapterGrid sizeAdapterGrid, int viewType) {
         if (isChecked) mSelectedItemSize.add(size);
         else mSelectedItemSize.remove(size);
-        sizeAdapterList.setSelectedPosition(position);
-        sizeAdapterGrid.setSelectedPosition(position);
+        if (viewType == LISTVIEW) sizeAdapterList.setSelectedPosition(position);
+        else sizeAdapterGrid.setSelectedPosition(position);
         setSelectedAmount();
     }
 
@@ -196,8 +154,12 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void selectedItemListInit() {
-        mSelectedItemFolder = new ArrayList<>();
-        mSelectedItemSize = new ArrayList<>();
+        if (mSelectedItemFolder == null)
+            mSelectedItemFolder = new ArrayList<>();
+        else mSelectedItemFolder.clear();
+        if (mSelectedItemSize == null)
+            mSelectedItemSize = new ArrayList<>();
+        else mSelectedItemSize.clear();
     }
 
     public long getCurrentTime() {
@@ -206,7 +168,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void addFolder(String folderName) {
-        insertFolder(new Folder(getCurrentTime(), folderName, mFolderId, getFolderLargestOrder() + 1, "0", mActivityModel.getCategory().getParentCategory()));
+        mRepository.folderInsert(new Folder(getCurrentTime(), folderName, mFolderId, mRepository.getFolderLargestOrder() + 1, "0", mActivityModel.getCategory().getParentCategory()));
         if (mThisFolder == null) {
             String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1);
             mActivityModel.getCategory().setItemAmount(amount);
@@ -214,7 +176,7 @@ public class ListViewModel extends AndroidViewModel {
         } else {
             String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) + 1);
             mThisFolder.setItemAmount(amount);
-            updateFolder(mThisFolder);
+            mRepository.folderUpdate(mThisFolder);
         }
     }
 
@@ -342,5 +304,9 @@ public class ListViewModel extends AndroidViewModel {
 
     public void setSelectedPositionSizeGrid(HashSet<Integer> mSelectedPositionSizeGrid) {
         this.mSelectedPositionSizeGrid = mSelectedPositionSizeGrid;
+    }
+
+    public Repository getRepository() {
+        return mRepository;
     }
 }
