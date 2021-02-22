@@ -16,9 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
-
     private ItemTreeCategoryBinding mBinding;
-
     public TreeHolderCategory(Context context) {
         super(context);
     }
@@ -39,7 +37,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
         if (node.getChildren().size() != 0)
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
-        else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
+        else mBinding.arrowIconCategory.setVisibility(View.INVISIBLE);
 
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewCategoryAddClick(node, value));
 
@@ -47,7 +45,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     public void setIconClickable() {
-        mBinding.arrowIcon.setVisibility(View.VISIBLE);
+        mBinding.arrowIconCategory.setVisibility(View.VISIBLE);
         mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
@@ -57,8 +55,8 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
     @Override
     public void toggle(boolean active) {
-        mBinding.arrowIcon.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
-        mBinding.folderIcon.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
+        mBinding.arrowIconCategory.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
+        mBinding.folderIconCategory.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
     public static class CategoryTreeHolder {

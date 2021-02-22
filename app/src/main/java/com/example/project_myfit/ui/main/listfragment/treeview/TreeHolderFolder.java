@@ -17,7 +17,6 @@ import com.unnamed.b.atv.model.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.FolderTreeHolder> {
-
     private ItemTreeFolderBinding mBinding;
     private boolean isSelected;
 
@@ -70,7 +69,6 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
             }
         }
 
-
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
         for (Folder folder : value.getModel().getAllFolder()) {
             if (value.folder.getId() == folder.getFolderId()) {
@@ -84,7 +82,6 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
 
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewFolderAddClick(mNode, value));
-
         return mBinding.getRoot();
     }
 
@@ -100,7 +97,6 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     public ItemTreeFolderBinding getBinding() {
         return mBinding;
     }
-
 
     @Override
     public void toggle(boolean active) {
