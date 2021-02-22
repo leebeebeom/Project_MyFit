@@ -382,10 +382,10 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                 }
             }
 
-            mAdapterList.get(0).setItem(mTopList);
-            mAdapterList.get(1).setItem(mBottomList);
-            mAdapterList.get(2).setItem(mOuterList);
-            mAdapterList.get(3).setItem(mEtcList);
+            mAdapterList.get(0).submitList(mTopList);
+            mAdapterList.get(1).submitList(mBottomList);
+            mAdapterList.get(2).submitList(mOuterList);
+            mAdapterList.get(3).submitList(mEtcList);
 
             mViewPagerAdapter.setSort(mSort);
             mViewPagerAdapter.notifyDataSetChanged();//for noData
