@@ -60,6 +60,7 @@ public class MyFitConstant {
     public static final String FOLDER_ADD_DIALOG = "folder add dialog";
     public static final String CATEGORY_EDIT_DIALOG = "category edit dialog";
     public static final String CATEGORY_ADD_DIALOG = "category add dialog";
+    public static final String MOVE_DIALOG = "move dialog";
     public static final String SORT_DIALOG = "sort dialog";
     public static final String TREE_ADD_FOLDER = "tree add folder";
 
