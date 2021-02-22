@@ -2,19 +2,13 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,8 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
-import static com.example.project_myfit.MyFitConstant.ID;
 import static com.example.project_myfit.MyFitConstant.TREE_VIEW_STATE;
 
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
@@ -63,6 +55,7 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         int padding = (int) requireContext().getResources().getDimension(R.dimen._8sdp);
         view.setPadding(0, padding, 0, 0);
 
+        //tree view root binding for addCategory
         TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
         binding.treeViewRoot.addView(view, 0);
         binding.addCategoryLayout.setOnClickListener(v -> {
@@ -71,24 +64,15 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
             dialog.show(getParentFragmentManager(), null);
         });
 
+        //create dialog
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setView(binding.getRoot())
                 .setTitle(R.string.tree_view_dialog_title)
                 .create();
 
         Window window = dialog.getWindow();
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        int margin = (int) requireContext().getResources().getDimension(R.dimen._20sdp);
-        Drawable drawable = ContextCompat.getDrawable(requireContext(), R.drawable.tree_view_dialog_background);
-        InsetDrawable inset = new InsetDrawable(drawable, margin);
-        window.setBackgroundDrawable(inset);
-
-        float titleSize = getResources().getDimension(R.dimen._5sdp);
-        int titleId = getResources().getIdentifier(ALERT_TITLE, ID, requireContext().getPackageName());
-        TextView title = dialog.findViewById(titleId);
-        if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
-
+        DialogUtils.setLayout(requireContext(), window);
+        DialogUtils.setTextSize(requireContext(), dialog);
         return dialog;
     }
 
@@ -97,7 +81,7 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         int margin = (int) getResources().getDimension(R.dimen._12sdp);
         mCategoryTreeNodeList = new ArrayList<>();
 
-        for (Category category : mModel.getCategoryList()) {
+        for (Category category : mModel.getCategoryListByParent()) {
             TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                     .setViewHolder(new TreeHolderCategory(requireContext()));
             for (Folder folder : mModel.getAllFolder()) {
@@ -124,10 +108,10 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     public void onActivityCreated(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         List<TreeNode> topFolderList = new ArrayList<>();
-        for (TreeNode categoryNode : mCategoryTreeNodeList) {
+        for (TreeNode categoryNode : mCategoryTreeNodeList)
             if (categoryNode.getChildren().size() != 0)
                 topFolderList.addAll(categoryNode.getChildren());
-        }
+
         expandingNode(topFolderList);
 
         if (savedInstanceState != null)
@@ -146,7 +130,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
             if (mModel.getThisCategory().getId() == holder.category.getId() && categoryTreeNode.getChildren().size() != 0)
                 mTreeView.expandNode(categoryTreeNode);
         }
-
         if (mModel.getThisFolder() != null) {//if current position is not category
             for (TreeNode folderNode : topFolderList) {
                 //visible current position text
