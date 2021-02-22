@@ -80,7 +80,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     private AndroidTreeView getTreeView() {
         int margin = (int) getResources().getDimension(R.dimen._12sdp);
         mCategoryTreeNodeList = new ArrayList<>();
-
         for (Category category : mModel.getCategoryListByParent()) {
             TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                     .setViewHolder(new TreeHolderCategory(requireContext()));
@@ -149,9 +148,9 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
 
     @Override
     public void addCategoryConfirmClick(String categoryName) {
-        int orderNumber = mModel.getCategoryLargestOrder() + 1;
+        int orderNumber = mModel.getRepository().getCategoryLargestOrder() + 1;
         Category category = new Category(categoryName, mModel.getThisCategory().getParentCategory(), orderNumber);
-        Category addedCategory = mModel.treeViewAddCategory(category);
+        Category addedCategory = mModel.getRepository().treeViewAddCategory(category);
 
         TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(addedCategory, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
                 .setViewHolder(new TreeHolderCategory(requireContext()));
