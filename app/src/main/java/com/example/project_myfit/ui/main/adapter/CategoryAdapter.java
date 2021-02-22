@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +45,18 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private final int mViewPagerPosition;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener, int viewPagerPosition) {
-        super(new CategoryDiffUtil());
+        super(new DiffUtil.ItemCallback<Category>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
+                return oldItem.getId() == newItem.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
+                return oldItem.getCategory().equals(newItem.getCategory()) &&
+                        oldItem.getItemAmount().equals(newItem.getItemAmount());
+            }
+        });
         this.mModel = model;
         setHasStableIds(true);
         mSelectedPosition = new HashSet<>();
@@ -56,9 +69,10 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         return getItem(position).getId();
     }
 
-    public void setItem(List<Category> categoryList) {
-        this.mCategoryList = categoryList;
-        submitList(categoryList);
+    @Override
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Category> list) {
+        super.submitList(list);
+        this.mCategoryList = list;
     }
 
     @NonNull
@@ -125,7 +139,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
-        mModel.updateCategoryList(mCategoryList);
+        mModel.getRepository().categoryUpdate(mCategoryList);
         mListener.onCategoryDragHandleTouch(viewHolder, mViewPagerPosition);
     }
 
@@ -149,9 +163,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void selectAll() {
-        for (int i = 0; i < getCurrentList().size(); i++) {
-            mSelectedPosition.add(i);
-        }
+        for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
         notifyDataSetChanged();
     }
 
@@ -160,9 +172,11 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         notifyDataSetChanged();
     }
 
-    public void setSort(int mSort) {
-        this.mSort = mSort;
-        notifyDataSetChanged();
+    public void setSort(int sort) {
+        if (mSort != sort) {
+            this.mSort = sort;
+            notifyDataSetChanged();
+        }
     }
 
 
@@ -190,7 +204,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         @Override
         public void onClick(View v) {
             mListener.onCategoryCardViewClick(mCategory, this.mBinding.mainCheckBox, getLayoutPosition(), mViewPagerPosition);
-
         }
 
         @Override
