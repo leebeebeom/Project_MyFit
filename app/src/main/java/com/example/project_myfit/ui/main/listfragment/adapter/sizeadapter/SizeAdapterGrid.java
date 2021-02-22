@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,9 +51,10 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         this.mListener = listener;
     }
 
-    public void setItem(List<Size> sizeList) {
-        this.mSizeList = sizeList;
-        submitList(sizeList);
+    @Override
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list) {
+        super.submitList(list);
+        this.mSizeList = list;
     }
 
     @NonNull
@@ -72,9 +74,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
 
-        if (size.getImageUri() != null)
-            holder.mBinding.addImageIcon.setVisibility(View.GONE);
-
+        if (size.getImageUri() != null) holder.mBinding.addImageIcon.setVisibility(View.GONE);
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
@@ -82,13 +82,10 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
-            if (mSelectedPosition.size() != 0)
-                mSelectedPosition.clear();
+            if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
-        if (mSort == SORT_CUSTOM)
-            dragHandle.setVisibility(View.VISIBLE);
-        else dragHandle.setVisibility(View.GONE);
+        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
     }
 
     //drag------------------------------------------------------------------------------------------
@@ -118,7 +115,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
         mListener.onSizeDragHandleTouch(viewHolder);
-        mModel.updateSizeList(mSizeList);
+        mModel.getRepository().sizeUpdate(mSizeList);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -134,7 +131,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
     public void setSelectedPosition(HashSet<Integer> selectedPosition) {
         this.mSelectedPosition = selectedPosition;
-        notifyDataSetChanged();
     }
 
     //drag select-----------------------------------------------------------------------------------

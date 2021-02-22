@@ -823,10 +823,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 for (Size size : sizeList) if (size.isFavorite()) favoriteList.add(size);
                 sizeList = favoriteList;
             }
-            mSizeAdapterList.setItem(sizeList);
+            mSizeAdapterList.submitList(sizeList);
             mSizeAdapterList.setSort(mSort);
 
-            mSizeAdapterGrid.setItem(sizeList);
+            mSizeAdapterGrid.submitList(sizeList);
             mSizeAdapterGrid.setSort(mSort);
         });
     }

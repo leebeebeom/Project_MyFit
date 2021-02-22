@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,9 +57,10 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         this.mListener = listener;
     }
 
-    public void setItem(List<Size> sizeList) {
-        this.mSizeList = sizeList;
-        submitList(sizeList);
+    @Override
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list) {
+        super.submitList(list);
+        this.mSizeList = list;
     }
 
     @NonNull
@@ -89,7 +91,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
             checkBox.setChecked(false);
             setActionModeStateNone();
-            if (mSelectedPosition.size() != 0) mSelectedPosition.clear();
+            if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
         dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
@@ -126,7 +128,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setTranslationZ(0);
         mListener.onSizeDragHandleTouch(viewHolder);
-        mModel.updateSizeList(mSizeList);
+        mModel.getRepository().sizeUpdate(mSizeList);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -142,7 +144,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     public void setSelectedPosition(HashSet<Integer> selectedPosition) {
         this.mSelectedPosition = selectedPosition;
-        notifyDataSetChanged();
     }
 
     //drag select-----------------------------------------------------------------------------------
@@ -152,9 +153,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void selectAll() {
-        for (int i = 0; i < getCurrentList().size(); i++) {
-            mSelectedPosition.add(i);
-        }
+        for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
         notifyDataSetChanged();
     }
 
