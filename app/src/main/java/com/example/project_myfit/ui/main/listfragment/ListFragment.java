@@ -785,7 +785,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 folderList.add(dummy);
             }
 
-            mFolderAdapter.setItem(folderList);
+            mFolderAdapter.submitList(folderList);
             mFolderAdapter.setSort(mSort);
 
             mBinding.recyclerFolderLayout.setVisibility(folderList.size() == 0 ? View.GONE : View.VISIBLE);
@@ -795,7 +795,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         if (mSizeLive != null && mSizeLive.hasObservers())
             mSizeLive.removeObservers(getViewLifecycleOwner());
 
-        mSizeLive = mModel.getSizeLive();
         mSizeLive = mModel.getRepository().getAllSizeLiveByFolder(mModel.getFolderId());
         mSizeLive.observe(getViewLifecycleOwner(), sizeList -> {
             if (sizeList.size() == 0) {

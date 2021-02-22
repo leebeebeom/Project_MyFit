@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +38,18 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private HashSet<Integer> mSelectedPosition;
 
     public FolderAdapter(ListViewModel model) {
-        super(new FolderDiffUtil());
+        super(new DiffUtil.ItemCallback<Folder>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull @NotNull Folder oldItem, @NonNull @NotNull Folder newItem) {
+                return oldItem.getId() == newItem.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull @NotNull Folder oldItem, @NonNull @NotNull Folder newItem) {
+                return oldItem.getFolderName().equals(newItem.getFolderName()) &&
+                        oldItem.getItemAmount().equals(newItem.getItemAmount());
+            }
+        });
         this.mModel = model;
         this.mSelectedPosition = new HashSet<>();
         setHasStableIds(true);
@@ -51,9 +64,10 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         this.mListener = listener;
     }
 
-    public void setItem(List<Folder> folderList) {
-        this.mFolderList = folderList;
-        submitList(folderList);
+    @Override
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Folder> list) {
+        super.submitList(list);
+        this.mFolderList = list;
     }
 
     @NonNull
@@ -80,8 +94,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
-            if (mSelectedPosition.size() != 0)
-                mSelectedPosition.clear();
+            if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
         }
         //------------------------------------------------------------------------------------------
         dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
@@ -117,7 +130,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout.setVisibility(View.VISIBLE);
         viewHolder.itemView.setTranslationZ(0);
         mListener.onFolderDragHandleTouch(viewHolder, ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout);
-        mModel.updateFolder(mFolderList);
+        mModel.getRepository().folderUpdate(mFolderList);
     }
     //----------------------------------------------------------------------------------------------
 

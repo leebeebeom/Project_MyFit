@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 public class FolderDragCallBack extends ItemTouchHelper.Callback {
-    private final FolderAdapter mAdapter;
+    private final FolderAdapter mFolderAdapter;
 
     public FolderDragCallBack(FolderAdapter listFolderAdapter) {
-        this.mAdapter = listFolderAdapter;
+        this.mFolderAdapter = listFolderAdapter;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        mFolderAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
@@ -39,7 +39,7 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        mAdapter.onItemDrop(viewHolder);
+        mFolderAdapter.onItemDrop(viewHolder);
     }
 
     @Override
@@ -51,8 +51,7 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
         if (recyclerView.getAdapter() != null) itemCount = recyclerView.getAdapter().getItemCount();
         int position = viewHolder.getLayoutPosition();
 
-        if (isDraggingDown && itemCount - 5 < position) dY = 0;
-        else if (isDraggingUp && position < 4) dY = 0;
+        if ((isDraggingDown && itemCount - 5 < position) || isDraggingUp && position < 4) dY = 0;
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
