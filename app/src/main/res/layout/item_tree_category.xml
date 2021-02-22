@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -27,19 +28,17 @@
                 android:paddingVertical="@dimen/_8sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/arrow_icon"
+                    android:id="@+id/arrow_icon_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_4sdp"
-                    setTreeTriangleIcon="@{category.category}"
-                    tools:srcCompat="@drawable/icon_triangle_right" />
+                    app:srcCompat="@drawable/icon_triangle_right" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/folder_icon"
-                    setFolderIcon="@{category.category}"
+                    android:id="@+id/folder_icon_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:srcCompat="@drawable/icon_folder" />
+                    app:srcCompat="@drawable/icon_folder" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textview.MaterialTextView
@@ -84,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_16sdp"
-                android:src="@drawable/icon_add" />
+                app:srcCompat="@drawable/icon_add" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
