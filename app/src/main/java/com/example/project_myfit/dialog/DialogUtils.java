@@ -152,7 +152,7 @@ public class DialogUtils {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positive.setEnabled(!TextUtils.isEmpty(s));
+                positive.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
             }
 
             @Override
