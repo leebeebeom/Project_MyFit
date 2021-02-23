@@ -65,7 +65,7 @@ public class MyFitConstant {
     public static final String TREE_ADD_FOLDER = "tree add folder";
 
     public static final String ACTION_MODE = "action mode";
-    public static final String CHECKED_CATEGORY = "checked category";
+    public static final String CURRENT_ITEM = "current item";
 
     public static final String SIZE_ID = "size id";
     public static final String FOLDER_ID = "folder id";
