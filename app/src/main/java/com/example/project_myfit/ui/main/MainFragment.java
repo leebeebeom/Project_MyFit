@@ -71,7 +71,6 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
 //TODO 써치뷰 롱 클릭
-//TODO 트림
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -248,6 +247,16 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         popupMenuClick(popupMenuBinding);
         mPopupWindow = new PopupWindow(popupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
+
+        mBinding.mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (oldScrollY < scrollY) mBinding.mainFab.show();
+            else if (scrollY == 0) mBinding.mainFab.hide();
+        });
+
+        mBinding.mainFab.setOnClickListener(v -> {
+            mBinding.mainScrollView.scrollTo(0, 0);
+            mBinding.mainScrollView.smoothScrollTo(0, 0);
+        });
         return view;
     }
 
