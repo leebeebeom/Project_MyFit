@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?colorPrimary"
+        android:orientation="vertical"
         tools:context=".searchActivity.SearchActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -43,10 +44,9 @@
             </com.google.android.material.textfield.TextInputLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.fragment.app.FragmentContainerView
+        <FrameLayout
+            android:id="@+id/search_fragment_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            tools:layout="@layout/fragment_search" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_height="match_parent" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
