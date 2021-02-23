@@ -3,6 +3,7 @@ package com.example.project_myfit.ui.main.listfragment.inputoutputfragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,6 +30,8 @@ import com.example.project_myfit.databinding.FragmentInputOutputBinding;
 import com.example.project_myfit.dialog.DeleteConFirmDialog;
 import com.example.project_myfit.dialog.GoBackDialog;
 import com.example.project_myfit.dialog.ImageClearDialog;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +46,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     private FragmentInputOutputBinding mBinding;
     private FloatingActionButton mActivityFab;
     private OnBackPressedCallback mOnBackPressedCallBack;
+    private boolean isKeyboardShowing = false;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -237,12 +241,33 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mActivityFab = requireActivity().findViewById(R.id.activity_fab);
-        fabClick();
+        BottomAppBar bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
+        FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.activity_fab);
+        fabClick(floatingActionButton);
+        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            view.getWindowVisibleDisplayFrame(r);
+            int screenHeight = view.getRootView().getHeight();
+
+            int keypadHeight = screenHeight - r.bottom;
+
+            if (keypadHeight > screenHeight * 0.15) {
+                if (!isKeyboardShowing) {
+                    isKeyboardShowing = true;
+                    onKeyboardVisibilityChanged(true, bottomAppBar, bottomNavigationView);
+                }
+            } else {
+                if (isKeyboardShowing) {
+                    isKeyboardShowing = false;
+                    onKeyboardVisibilityChanged(false, bottomAppBar, bottomNavigationView);
+                }
+            }
+        });
     }
 
-    private void fabClick() {
-        mActivityFab.setOnClickListener(v -> {
+    private void fabClick(@NotNull FloatingActionButton floatingActionButton) {
+        floatingActionButton.setOnClickListener(v -> {
             if (TextUtils.isEmpty(mBinding.brand.getText()) || TextUtils.isEmpty(mBinding.name.getText())) {
                 if (TextUtils.isEmpty(mBinding.brand.getText())) {
                     mBinding.brandLayout.setErrorEnabled(true);
@@ -260,6 +285,20 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
                 else goListFragment();
             }
         });
+    }
+
+    void onKeyboardVisibilityChanged(boolean opened, BottomAppBar bottomAppBar, BottomNavigationView bottomNavigationView) {
+        if (opened) {
+            bottomAppBar.performHide();
+            mActivityFab.hide();
+            bottomNavigationView.setVisibility(View.GONE);
+        } else {
+            bottomAppBar.performShow();
+            mActivityFab.show();
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            if (mBinding.memo.hasFocus())
+                mBinding.inputOutputScrollView.scrollTo(0, mBinding.inputOutputScrollView.getBottom());
+        }
     }
 
     @Override
