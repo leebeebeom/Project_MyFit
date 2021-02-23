@@ -950,8 +950,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     @Override//add folder confirm click
-    public void addFolderConfirmClick(String folderName) {
-        mModel.addFolder(folderName);
+    public void addFolderConfirmClick(@NotNull String folderName) {
+        mModel.addFolder(folderName.trim());
     }
 
     @Override//category node add folder icon click
@@ -974,7 +974,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             TreeHolderCategory.CategoryTreeHolder oldViewHolder = mModel.getCategoryAddValue();
 
             int largestOrder = mModel.getRepository().getFolderLargestOrder() + 1;
-            Folder folder = new Folder(mModel.getCurrentTime(), folderName, oldViewHolder.category.getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
+            Folder folder = new Folder(mModel.getCurrentTime(), folderName.trim(), oldViewHolder.category.getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
             mModel.getRepository().folderInsert(folder);
 
             //find node(recreate)
@@ -1003,7 +1003,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
             int largestOrder = mModel.getRepository().getFolderLargestOrder() + 1;
-            Folder folder = new Folder(mModel.getCurrentTime(), folderName, oldViewHolder.getFolder().getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
+            Folder folder = new Folder(mModel.getCurrentTime(), folderName.trim(), oldViewHolder.getFolder().getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
             mModel.getRepository().folderInsert(folder);
 
             //find node(recreate)
