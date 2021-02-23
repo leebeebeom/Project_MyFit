@@ -34,7 +34,6 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
         this.mListener = listener;
     }
 
-
     @NonNull
     @NotNull
     @Override

@@ -18,8 +18,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
 
     public AutoCompleteAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<String> objects) {
         super(context, resource, textViewResourceId, objects);
-        mBindList = objects;
-        mOriginList = objects;
+        this.mBindList = objects;
+        this.mOriginList = objects;
     }
 
     @Override
@@ -47,7 +47,6 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
             for (String s : mOriginList)
                 if (s.toLowerCase().trim().contains(filterString))
                     filteredList.add(s);
-
             mBindList = filteredList;
             return null;
         }

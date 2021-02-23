@@ -20,13 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> implements Filterable {
-    private final List<Object> mOriginList;
+    private List<Object> mOriginList;
     private final SearchAdapterListener mListener;
 
-    public SearchAdapter(List<Object> list, SearchAdapterListener listener) {
+    public SearchAdapter(SearchAdapterListener listener) {
         super(new SearchDiffUtil());
-        this.mOriginList = list;
         this.mListener = listener;
+    }
+
+    public void setItem(List<Object> list) {
+        this.mOriginList = list;
         submitList(list);
     }
 
@@ -51,11 +54,11 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == 0) {
+        if (holder instanceof SearchRecyclerFolderVH) {
             Folder folder = (Folder) getCurrentList().get(position);
 
-            ((SearchRecyclerFolderVH) holder).setFolder(folder);
             ((SearchRecyclerFolderVH) holder).mFolderBinding.setFolder(folder);
+            ((SearchRecyclerFolderVH) holder).setFolder(folder);
         } else {
             Size size = (Size) getCurrentList().get(position);
 
@@ -70,7 +73,6 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     }
 
     private class SearchAdapterFilter extends Filter {
-
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
             String filterString = constraint.toString().toLowerCase().trim();
@@ -111,7 +113,12 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         public SearchRecyclerFolderVH(@NotNull ItemSearchFolderBinding folderBinding, SearchAdapterListener listener) {
             super(folderBinding.getRoot());
             this.mFolderBinding = folderBinding;
+
             itemView.setOnClickListener(v -> listener.searchAdapterFolderClick(mFolder));
+            itemView.setOnLongClickListener(v -> {
+                listener.searchAdapterFolderLongClick();
+                return false;
+            });
         }
 
         public void setFolder(Folder folder) {
@@ -126,7 +133,12 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         public SearchRecyclerSizeVH(@NotNull ItemSearchSizeBinding sizeBinding, SearchAdapterListener listener) {
             super(sizeBinding.getRoot());
             this.mSizeBinding = sizeBinding;
+
             itemView.setOnClickListener(v -> listener.searchAdapterSizeClick(mSize));
+            itemView.setOnLongClickListener(v -> {
+                listener.searchAdapterSizeLongClick();
+                return false;
+            });
         }
 
         public void setSize(Size size) {
@@ -137,6 +149,10 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     public interface SearchAdapterListener {
         void searchAdapterSizeClick(Size size);
 
+        void searchAdapterSizeLongClick();
+
         void searchAdapterFolderClick(Folder folder);
+
+        void searchAdapterFolderLongClick();
     }
 }
