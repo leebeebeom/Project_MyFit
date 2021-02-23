@@ -260,7 +260,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         });
 
         //go top fab click
-        mBinding.listFab.setOnClickListener(v -> mBinding.listScrollView.scrollTo(0, 0));
+        mBinding.listFab.setOnClickListener(v -> {
+            mBinding.listScrollView.scrollTo(0, 0);
+            mBinding.listScrollView.smoothScrollBy(0, 0);
+        });
 
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
 
