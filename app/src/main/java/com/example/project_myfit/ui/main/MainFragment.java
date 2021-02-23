@@ -568,8 +568,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     }
 
     @Override
-    public void categoryNameEditConfirmClick(String categoryName) {
-        mModel.categoryNameEdit(categoryName);
+    public void categoryNameEditConfirmClick(@NotNull String categoryName) {
+        mModel.categoryNameEdit(categoryName.trim());
         mActionMode.finish();
     }
 
