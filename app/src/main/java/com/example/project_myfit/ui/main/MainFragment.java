@@ -57,7 +57,7 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.MyFitConstant.CATEGORY_ADD_DIALOG;
 import static com.example.project_myfit.MyFitConstant.CATEGORY_EDIT_DIALOG;
-import static com.example.project_myfit.MyFitConstant.CHECKED_CATEGORY;
+import static com.example.project_myfit.MyFitConstant.CURRENT_ITEM;
 import static com.example.project_myfit.MyFitConstant.DELETE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.ETC;
 import static com.example.project_myfit.MyFitConstant.OUTER;
@@ -77,7 +77,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
-    private String mCheckedCategory;
     private PopupWindow mPopupWindow;
     private SharedPreferences mSortPreference;
     private int mSort;
@@ -104,25 +103,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mBinding.btnBottom.setEnabled(false);
             mBinding.btnOuter.setEnabled(false);
             mBinding.btnEtc.setEnabled(false);
-
-            switch (mCheckedCategory) {
-                case TOP:
-                    mBinding.btnTop.setEnabled(true);
-                    mAdapterList.get(0).setActionModeState(ACTION_MODE_ON);
-                    break;
-                case BOTTOM:
-                    mBinding.btnBottom.setEnabled(true);
-                    mAdapterList.get(1).setActionModeState(ACTION_MODE_ON);
-                    break;
-                case OUTER:
-                    mBinding.btnOuter.setEnabled(true);
-                    mAdapterList.get(2).setActionModeState(ACTION_MODE_ON);
-                    break;
-                case ETC:
-                    mBinding.btnEtc.setEnabled(true);
-                    mAdapterList.get(3).setActionModeState(ACTION_MODE_ON);
-                    break;
-            }
+            mAdapterList.get(mBinding.viewPager.getCurrentItem()).setActionModeState(ACTION_MODE_ON);
             return true;
         }
 
@@ -130,39 +111,10 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
             mActionModeTitleBinding.actionModeSelectAll.setOnClickListener(v -> {
                 mModel.getSelectedItem().clear();
-                if (mActionModeTitleBinding.actionModeSelectAll.isChecked())
-                    switch (mCheckedCategory) {
-                        case TOP:
-                            mModel.getSelectedItem().addAll(mAdapterList.get(0).getCurrentList());
-                            mAdapterList.get(0).selectAll();
-                            break;
-                        case BOTTOM:
-                            mModel.getSelectedItem().addAll(mAdapterList.get(1).getCurrentList());
-                            mAdapterList.get(1).selectAll();
-                            break;
-                        case OUTER:
-                            mModel.getSelectedItem().addAll(mAdapterList.get(2).getCurrentList());
-                            mAdapterList.get(2).selectAll();
-                            break;
-                        default:
-                            mModel.getSelectedItem().addAll(mAdapterList.get(3).getCurrentList());
-                            mAdapterList.get(3).selectAll();
-                            break;
-                    }
-                else switch (mCheckedCategory) {
-                    case TOP:
-                        mAdapterList.get(0).deselectAll();
-                        break;
-                    case BOTTOM:
-                        mAdapterList.get(1).deselectAll();
-                        break;
-                    case OUTER:
-                        mAdapterList.get(2).deselectAll();
-                        break;
-                    default:
-                        mAdapterList.get(3).deselectAll();
-                        break;
-                }
+                if (mActionModeTitleBinding.actionModeSelectAll.isChecked()) {
+                    mModel.getSelectedItem().addAll(mAdapterList.get(mBinding.viewPager.getCurrentItem()).getCurrentList());
+                    mAdapterList.get(mBinding.viewPager.getCurrentItem()).selectAll();
+                } else mAdapterList.get(mBinding.viewPager.getCurrentItem()).deselectAll();
                 mModel.setSelectedAmount();
             });
             mEditMenu = menu.getItem(0);
@@ -189,25 +141,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
             mActionMode = null;
             mActionModeOn = false;
-
-            switch (mCheckedCategory) {
-                case TOP:
-                    mAdapterList.get(0).setActionModeState(ACTION_MODE_OFF);
-                    mModel.setSelectedPosition(mAdapterList.get(0).getSelectedPosition());
-                    break;
-                case BOTTOM:
-                    mAdapterList.get(1).setActionModeState(ACTION_MODE_OFF);
-                    mModel.setSelectedPosition(mAdapterList.get(1).getSelectedPosition());
-                    break;
-                case OUTER:
-                    mAdapterList.get(2).setActionModeState(ACTION_MODE_OFF);
-                    mModel.setSelectedPosition(mAdapterList.get(2).getSelectedPosition());
-                    break;
-                default:
-                    mAdapterList.get(3).setActionModeState(ACTION_MODE_OFF);
-                    mModel.setSelectedPosition(mAdapterList.get(3).getSelectedPosition());
-                    break;
-            }
+            mAdapterList.get(mBinding.viewPager.getCurrentItem()).setActionModeState(ACTION_MODE_OFF);
+            mModel.setSelectedPosition(mAdapterList.get(mBinding.viewPager.getCurrentItem()).getSelectedPosition());
 
             mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
@@ -236,8 +171,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
         View view = mBinding.getRoot();
         mBinding.viewPager.setAdapter(getViewPagerAdapter());
-
-        actionModeRecreate(savedInstanceState);
 
         mSortPreference = requireActivity().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
         mSort = mSortPreference.getInt(SORT_MAIN, 0);
@@ -307,27 +240,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         return mViewPagerAdapter;
     }
 
-    private void actionModeRecreate(@org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE) && savedInstanceState.getString(CHECKED_CATEGORY) != null) {
-            mCheckedCategory = savedInstanceState.getString(CHECKED_CATEGORY);
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
-            switch (mCheckedCategory) {
-                case TOP:
-                    mAdapterList.get(0).setSelectedPosition(mModel.getSelectedPosition());
-                    break;
-                case BOTTOM:
-                    mAdapterList.get(1).setSelectedPosition(mModel.getSelectedPosition());
-                    break;
-                case OUTER:
-                    mAdapterList.get(2).setSelectedPosition(mModel.getSelectedPosition());
-                    break;
-                case ETC:
-                    mAdapterList.get(3).setSelectedPosition(mModel.getSelectedPosition());
-                    break;
-            }
-        }
-    }
-
     private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
         binding.addFolder.setOnClickListener(v -> {
             showDialog(new AddCategoryDialog(), CATEGORY_ADD_DIALOG);
@@ -354,9 +266,10 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         setLiveData();
         setAutoScroll();
         setToggleGroup();
-        if (mCheckedCategory == null) mBinding.btnTop.setChecked(true);
+        if (savedInstanceState == null) mBinding.btnTop.setChecked(true);
         pagerChangeListener();
         selectedItemAmountLive();
+        actionModeRecreate(savedInstanceState);
     }
 
     private void setLiveData() {
@@ -431,22 +344,18 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mBinding.btnEtc.setTextColor(textOriginColor);
 
             if (checkedId == R.id.btn_top && isChecked) {
-                mCheckedCategory = TOP;
                 mBinding.viewPager.setCurrentItem(0, true);
                 mBinding.btnTop.setBackgroundColor(colorControl);
                 mBinding.btnTop.setTextColor(colorPrimary);
             } else if (checkedId == R.id.btn_bottom && isChecked) {
-                mCheckedCategory = BOTTOM;
                 mBinding.viewPager.setCurrentItem(1, true);
                 mBinding.btnBottom.setBackgroundColor(colorControl);
                 mBinding.btnBottom.setTextColor(colorPrimary);
             } else if (checkedId == R.id.btn_outer && isChecked) {
-                mCheckedCategory = OUTER;
                 mBinding.viewPager.setCurrentItem(2, true);
                 mBinding.btnOuter.setBackgroundColor(colorControl);
                 mBinding.btnOuter.setTextColor(colorPrimary);
             } else if (checkedId == R.id.btn_etc && isChecked) {
-                mCheckedCategory = ETC;
                 mBinding.viewPager.setCurrentItem(3, true);
                 mBinding.btnEtc.setBackgroundColor(colorControl);
                 mBinding.btnEtc.setTextColor(colorPrimary);
@@ -475,23 +384,30 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                 mDeletedMenu.setVisible(integer > 0);
             }
 
-            int allItemSize;
-            switch (mCheckedCategory) {
-                case TOP:
-                    allItemSize = mAdapterList.get(0).getCurrentList().size();
-                    break;
-                case BOTTOM:
-                    allItemSize = mAdapterList.get(1).getCurrentList().size();
-                    break;
-                case OUTER:
-                    allItemSize = mAdapterList.get(2).getCurrentList().size();
-                    break;
-                default:
-                    allItemSize = mAdapterList.get(3).getCurrentList().size();
-                    break;
-            }
+            int allItemSize = mAdapterList.get(mBinding.viewPager.getCurrentItem()).getCurrentList().size();
             mActionModeTitleBinding.actionModeSelectAll.setChecked(allItemSize == integer);
         });
+    }
+
+    private void actionModeRecreate(@org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
+            switch (savedInstanceState.getInt(CURRENT_ITEM)) {
+                case 0:
+                    mBinding.btnTop.setChecked(true);
+                    break;
+                case 1:
+                    mBinding.btnBottom.setChecked(true);
+                    break;
+                case 2:
+                    mBinding.btnOuter.setChecked(true);
+                    break;
+                case 3:
+                    mBinding.btnEtc.setChecked(true);
+                    break;
+            }
+            mAdapterList.get(mBinding.viewPager.getCurrentItem()).setSelectedPosition(mModel.getSelectedPosition());
+            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
+        }
     }
 
     @Override
@@ -528,7 +444,23 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @Override
     public void addCategoryConfirmClick(@NotNull String categoryName) {
         int largestOrder = mModel.getRepository().getCategoryLargestOrder() + 1;
-        mModel.getRepository().categoryInsert(new Category(categoryName.trim(), mCheckedCategory, largestOrder));
+        int currentItem = mBinding.viewPager.getCurrentItem();
+        String parentCategory = null;
+        switch (currentItem) {
+            case 0:
+                parentCategory = TOP;
+                break;
+            case 1:
+                parentCategory = BOTTOM;
+                break;
+            case 2:
+                parentCategory = OUTER;
+                break;
+            case 3:
+                parentCategory = ETC;
+                break;
+        }
+        mModel.getRepository().categoryInsert(new Category(categoryName.trim(), parentCategory, largestOrder));
     }
 
     @Override
@@ -545,7 +477,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(ACTION_MODE, mActionModeOn);
-        outState.putString(CHECKED_CATEGORY, mCheckedCategory);
+        outState.putInt(CURRENT_ITEM, mBinding.viewPager.getCurrentItem());
     }
 
     @Override
