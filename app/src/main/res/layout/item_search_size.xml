@@ -16,7 +16,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_32sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
             app:cardBackgroundColor="?myCardViewBackground"
@@ -36,7 +36,8 @@
                     tools:src="@drawable/icon_cloth" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
@@ -66,6 +67,19 @@
                         android:textSize="@dimen/_11sdp"
                         tools:text="DAMAGED CREW NECK SWEATER" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/search_folder_check_box"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:alpha="0.8"
+                    android:buttonTint="?colorControlNormal"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
