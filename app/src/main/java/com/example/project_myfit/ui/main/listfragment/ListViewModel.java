@@ -105,7 +105,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void setThisFolder(MainActivityViewModel activityViewModel) {
-        mActivityModel = activityViewModel;
+        if (mActivityModel == null) mActivityModel = activityViewModel;
         if (mThisFolder == null)
             mThisFolder = mActivityModel.getFolder() == null ? null : mActivityModel.getFolder();
         mFolderId = mThisFolder == null ? mActivityModel.getCategory().getId() : mThisFolder.getId();

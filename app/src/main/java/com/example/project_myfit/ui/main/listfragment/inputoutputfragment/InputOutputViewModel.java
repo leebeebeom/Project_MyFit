@@ -48,7 +48,7 @@ import static com.example.project_myfit.MyFitConstant.WAIST;
 public class InputOutputViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private Size mCompareSize, mNewSize;
-    private MutableLiveData<Uri> mImageUri;
+    private MutableLiveData<Uri> mMutableLiveImageUri;
     private File mCacheFile;
     private String mFileName;
     private MainActivityViewModel mActivityModel;
@@ -61,12 +61,20 @@ public class InputOutputViewModel extends AndroidViewModel {
 
     //dao-------------------------------------------------------------------------------------------
     public void sizeInsert() {
-        mRepository.sizeInsert(getNewSize());
+        mNewSize.setOrderNumber(mRepository.getSizeLargestOrder() + 1);
+        mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
+        mNewSize.setModifiedTime("");
+        mNewSize.setImageUri(mMutableLiveImageUri.getValue() == null ? null : getRenameUri());
+        mNewSize.setFolderId(mFolderId);
+        mNewSize.setParentCategory(mActivityModel.getCategory().getParentCategory());
+        mRepository.sizeInsert(mNewSize);
         increaseItemAmount();
     }
 
     public void update() {
-        mRepository.sizeUpdate(getUpdatedSize());
+        mActivityModel.getSize().setImageUri(getOutputFileSavedUri());
+        mActivityModel.getSize().setModifiedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
+        mRepository.sizeUpdate(mActivityModel.getSize());
     }
 
     public void delete() {
@@ -83,15 +91,15 @@ public class InputOutputViewModel extends AndroidViewModel {
         if (mActivityModel.getSize() != null) {
             if (mCompareSize == null)
                 mCompareSize = mRepository.getSize(mActivityModel.getSize().getId());
-            if (mImageUri == null) {
-                mImageUri = new MutableLiveData<>();
-                mImageUri.setValue(mActivityModel.getSize().getImageUri() != null ? Uri.parse(mActivityModel.getSize().getImageUri()) : null);
+            if (mMutableLiveImageUri == null) {
+                mMutableLiveImageUri = new MutableLiveData<>();
+                mMutableLiveImageUri.setValue(mActivityModel.getSize().getImageUri() != null ? Uri.parse(mActivityModel.getSize().getImageUri()) : null);
             }
         }
     }
 
     public boolean getCompareResult() {
-        return !String.valueOf(mCompareSize.getImageUri()).equals(String.valueOf(mImageUri.getValue())) ||
+        return !String.valueOf(mCompareSize.getImageUri()).equals(String.valueOf(mMutableLiveImageUri.getValue())) ||
                 !mActivityModel.getSize().isFavorite() == mCompareSize.isFavorite() ||
                 !String.valueOf(mActivityModel.getSize().getBrand()).equals(String.valueOf(mCompareSize.getBrand())) ||
                 !String.valueOf(mActivityModel.getSize().getName()).equals(String.valueOf(mCompareSize.getName())) ||
@@ -122,9 +130,9 @@ public class InputOutputViewModel extends AndroidViewModel {
         } else return mActivityModel.getSize();
     }
 
-    public MutableLiveData<Uri> getImageUri() {
-        if (mImageUri == null) mImageUri = new MutableLiveData<>();
-        return mImageUri;
+    public MutableLiveData<Uri> getMutableImageUri() {
+        if (mMutableLiveImageUri == null) mMutableLiveImageUri = new MutableLiveData<>();
+        return mMutableLiveImageUri;
     }
 
     public Intent getCropIntent(Uri data) {
@@ -155,22 +163,6 @@ public class InputOutputViewModel extends AndroidViewModel {
         return intent;
     }
 
-    private Size getNewSize() {
-        mNewSize.setOrderNumber(mRepository.getSizeLargestOrder() + 1);
-        mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
-        mNewSize.setModifiedTime("");
-        mNewSize.setImageUri(mImageUri.getValue() == null ? null : getRenameUri());
-        mNewSize.setFolderId(mFolderId);
-        mNewSize.setParentCategory(mActivityModel.getCategory().getParentCategory());
-        return mNewSize;
-    }
-
-    private Size getUpdatedSize() {
-        mActivityModel.getSize().setImageUri(getOutputFileSavedUri());
-        mActivityModel.getSize().setModifiedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
-        return mActivityModel.getSize();
-    }
-
     @NotNull
     private String getCurrentTime(String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
@@ -180,11 +172,11 @@ public class InputOutputViewModel extends AndroidViewModel {
     @Nullable
     private String getOutputFileSavedUri() {
         //there was a saved image, but user deleted it
-        if (mActivityModel.getSize().getImageUri() != null && mImageUri.getValue() == null) {
+        if (mActivityModel.getSize().getImageUri() != null && mMutableLiveImageUri.getValue() == null) {
             //delete origin image file
             originFileDelete();
             return null;
-        } else if (!String.valueOf(mActivityModel.getSize().getImageUri()).equals(String.valueOf(mImageUri.getValue()))) {
+        } else if (!String.valueOf(mActivityModel.getSize().getImageUri()).equals(String.valueOf(mMutableLiveImageUri.getValue()))) {
             //user replaces with a new image
             //delete origin image file
             originFileDelete();

@@ -71,6 +71,7 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
 //TODO 써치뷰 롱 클릭
+//TODO 트림
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {

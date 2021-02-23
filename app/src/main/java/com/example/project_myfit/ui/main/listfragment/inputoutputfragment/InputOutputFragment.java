@@ -59,21 +59,9 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         requireActivity().getOnBackPressedDispatcher().addCallback(this, mOnBackPressedCallBack);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mModel = new ViewModelProvider(this).get(InputOutputViewModel.class);
-        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-
-        //check input output
-        mModel.checkInputOutput(mActivityModel);
-
-        setHasOptionsMenu(true);
-    }
-
     //onBackPressedCallBack-------------------------------------------------------------------------
     private void onBackPressedInput() {
-        if (mModel.getImageUri().getValue() != null ||
+        if (mModel.getMutableImageUri().getValue() != null ||
                 mModel.getSize().isFavorite() ||
                 !TextUtils.isEmpty(mBinding.brand.getText()) ||
                 !TextUtils.isEmpty(mBinding.name.getText()) ||
@@ -105,6 +93,15 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     //----------------------------------------------------------------------------------------------
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mModel = new ViewModelProvider(this).get(InputOutputViewModel.class);
+        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        mModel.checkInputOutput(mActivityModel);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = FragmentInputOutputBinding.inflate(getLayoutInflater());
@@ -113,47 +110,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         setData();
         setSelection();
 
-        mBinding.brand.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    mBinding.brandLayout.setError(null);
-                    mBinding.brandLayout.setErrorEnabled(false);
-                } else {
-                    mBinding.brandLayout.setErrorEnabled(true);
-                    mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        mBinding.name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    mBinding.nameLayout.setError(null);
-                    mBinding.nameLayout.setErrorEnabled(false);
-                } else {
-                    mBinding.nameLayout.setErrorEnabled(true);
-                    mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        brandNameTextChangeListener();
 
         imageClick();
         imageLongClick();
@@ -202,6 +159,50 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         mBinding.option6.setSelection(mBinding.option6.length());
     }
 
+    private void brandNameTextChangeListener() {
+        mBinding.brand.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    mBinding.brandLayout.setError(null);
+                    mBinding.brandLayout.setErrorEnabled(false);
+                } else {
+                    mBinding.brandLayout.setErrorEnabled(true);
+                    mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        mBinding.name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    mBinding.nameLayout.setError(null);
+                    mBinding.nameLayout.setErrorEnabled(false);
+                } else {
+                    mBinding.nameLayout.setErrorEnabled(true);
+                    mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     //click-----------------------------------------------------------------------------------------
     private void imageClick() {
         mBinding.image.setOnClickListener(v -> {
@@ -214,7 +215,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
     private void imageLongClick() {
         mBinding.image.setOnLongClickListener(v -> {
-            if (mModel.getImageUri().getValue() != null) showDialog(new ImageClearDialog());
+            if (mModel.getMutableImageUri().getValue() != null) showDialog(new ImageClearDialog());
             return true;
         });
     }
@@ -254,7 +255,9 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
             } else {
                 if (mActivityModel.getSize() == null) mModel.sizeInsert();
                 else mModel.update();
-                goListFragment();
+                if (requireActivity().getIntent().getIntExtra(SIZE_ID, 0) != 0)
+                    requireActivity().finish();
+                else goListFragment();
             }
         });
     }
@@ -262,8 +265,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mModel.getImageUri().observe(getViewLifecycleOwner(), uri -> {
+        mModel.getMutableImageUri().observe(getViewLifecycleOwner(), uri -> {
             mBinding.image.setImageURI(uri);
             if (uri != null) mBinding.addIcon.setVisibility(View.GONE);
         });
@@ -282,7 +284,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
             //get image result
             if (requestCode == GET_IMAGE_REQUEST_CODE) cropImage(data.getData());
                 //cropImage result
-            else mModel.getImageUri().setValue(data.getData());
+            else mModel.getMutableImageUri().setValue(data.getData());
         }
     }
 
@@ -300,8 +302,8 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        menu.getItem(1).setVisible(!(mActivityModel.getSize() == null));
         menu.getItem(0).setIcon(mModel.getSize().isFavorite() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
+        menu.getItem(1).setVisible(!(mActivityModel.getSize() == null));
     }
 
     @Override
@@ -319,11 +321,13 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
             mModel.getSize().setFavorite(!mModel.getSize().isFavorite());
             item.setIcon(mModel.getSize().isFavorite() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
             return true;
-        } else {
-            if (mActivityModel.getSize() == null) onBackPressedInput();
-            else onBackPressedOutput();
+        } else if (item.getItemId() == 16908332) {
+            if (requireActivity().getIntent().getIntExtra(SIZE_ID, 0) != 0)
+                requireActivity().finish();
+            else goListFragment();
             return true;
         }
+        return false;
     }
 
     //dialog click----------------------------------------------------------------------------------
@@ -345,7 +349,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
     @Override
     public void imageClearConfirmClick() {
-        mModel.getImageUri().setValue(null);
+        mModel.getMutableImageUri().setValue(null);
         mBinding.addIcon.setVisibility(View.VISIBLE);
     }
     //----------------------------------------------------------------------------------------------
