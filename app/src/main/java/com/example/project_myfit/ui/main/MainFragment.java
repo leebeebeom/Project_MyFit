@@ -517,9 +517,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     }
 
     @Override
-    public void addCategoryConfirmClick(String categoryName) {
+    public void addCategoryConfirmClick(@NotNull String categoryName) {
         int largestOrder = mModel.getRepository().getCategoryLargestOrder() + 1;
-        mModel.getRepository().categoryInsert(new Category(categoryName, mCheckedCategory, largestOrder));
+        mModel.getRepository().categoryInsert(new Category(categoryName.trim(), mCheckedCategory, largestOrder));
     }
 
     @Override
