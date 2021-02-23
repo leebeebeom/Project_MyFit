@@ -149,7 +149,7 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
     @Override
     public void addCategoryConfirmClick(String categoryName) {
         int orderNumber = mModel.getRepository().getCategoryLargestOrder() + 1;
-        Category category = new Category(categoryName, mModel.getThisCategory().getParentCategory(), orderNumber);
+        Category category = new Category(categoryName.trim(), mModel.getThisCategory().getParentCategory(), orderNumber);
         Category addedCategory = mModel.getRepository().treeViewAddCategory(category);
 
         TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(addedCategory, (TreeViewAddClick) mListener, mModel.getSelectedItemSize()))
