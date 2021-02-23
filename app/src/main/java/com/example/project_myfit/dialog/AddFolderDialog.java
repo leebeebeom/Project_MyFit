@@ -24,6 +24,7 @@ public class AddFolderDialog extends DialogFragment {
     public AddFolderDialog() {
     }
 
+    @NotNull
     public static AddFolderDialog getInstance(boolean isTreeView) {
         AddFolderDialog addFolderDialog = new AddFolderDialog();
         Bundle bundle = new Bundle();
