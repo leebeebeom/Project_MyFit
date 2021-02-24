@@ -78,8 +78,8 @@
                     android:buttonTint="?colorControlNormal"
                     android:clickable="false"
                     android:enabled="false"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8" />
+                    android:scaleX="0.7"
+                    android:scaleY="0.7" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
