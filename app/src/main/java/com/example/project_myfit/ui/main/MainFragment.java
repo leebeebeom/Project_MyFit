@@ -127,13 +127,11 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
-            if (item.getItemId() == R.id.list_action_mode_del) {
+            if (item.getItemId() == R.id.action_mode_del) {
                 if (mModel.getSelectedAmount().getValue() != null)
                     showDialog(SelectedItemDeleteDialog.getInstance(mModel.getSelectedAmount().getValue()), DELETE_DIALOG);
-            } else if (item.getItemId() == R.id.list_action_mode_edit) {
-                if (mModel.getSelectedItem().size() != 0)
-                    showDialog(CategoryNameEditDialog.getInstance(mModel.getSelectedItem().get(0).getCategory()), CATEGORY_EDIT_DIALOG);
-            }
+            } else if (item.getItemId() == R.id.action_mode_edit)
+                showDialog(CategoryNameEditDialog.getInstance(mModel.getSelectedItem().get(0).getCategory()), CATEGORY_EDIT_DIALOG);
             return true;
         }
 
