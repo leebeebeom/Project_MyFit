@@ -85,14 +85,15 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
-        Category category = getItem(holder.getLayoutPosition());
-        holder.mBinding.setCategory(category);
-        holder.setCategory(category);
-
         MaterialCardView cardView = holder.mBinding.mainCardView;
         MaterialCheckBox checkBox = holder.mBinding.mainCheckBox;
         ImageView dragHandle = holder.mBinding.mainDragHandle;
 
+        if (mActionModeState != ACTION_MODE_ON) {
+            Category category = getItem(holder.getLayoutPosition());
+            holder.mBinding.setCategory(category);
+            holder.setCategory(category);
+        }
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             if (mAnimation == null)
@@ -154,7 +155,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public void setSelectedPosition(HashSet<Integer> selectedPosition) {
         this.mSelectedPosition = selectedPosition;
-        notifyDataSetChanged();
     }
 
     public void setSelectedPosition(int position) {
