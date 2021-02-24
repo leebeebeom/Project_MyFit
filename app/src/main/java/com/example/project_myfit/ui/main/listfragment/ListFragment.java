@@ -126,7 +126,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         }
 
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
             mActionModeTitleBinding.actionModeSelectAll.setOnClickListener(v -> {
                 mModel.getSelectedItemSize().clear();
                 mModel.getSelectedItemFolder().clear();
@@ -151,11 +151,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         }
 
         @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.list_action_mode_del) {
+        public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
+            if (item.getItemId() == R.id.action_mode_del) {
                 if (mModel.getSelectedAmount().getValue() != null)
                     showDialog(SelectedItemDeleteDialog.getInstance(mModel.getSelectedAmount().getValue()), DELETE_DIALOG);
-            } else if (item.getItemId() == R.id.list_action_mode_move)
+            } else if (item.getItemId() == R.id.action_mode_move)
                 showDialog(new TreeViewDialog(), TREE_DIALOG);
             else
                 showDialog(FolderNameEditDialog.getInstance(mModel.getSelectedItemFolder().get(0).getFolderName()), FOLDER_EDIT_DIALOG);
