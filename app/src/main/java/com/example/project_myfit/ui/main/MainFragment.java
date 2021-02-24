@@ -71,6 +71,8 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
 //TODO 써치뷰 롱 클릭
+//TODO 다른데에서 액션모드 갔다가 메인으로 돌아와서 액션모드 실행하면 위로 스크롤 됨
+//TODO 서치뷰 액션모드
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -477,7 +479,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(ACTION_MODE, mActionModeOn);
-        outState.putInt(CURRENT_ITEM, mBinding.viewPager.getCurrentItem());
+        if (mBinding != null)
+            outState.putInt(CURRENT_ITEM, mBinding.viewPager.getCurrentItem());
     }
 
     @Override
