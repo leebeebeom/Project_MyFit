@@ -44,7 +44,6 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     private InputOutputViewModel mModel;
     private MainActivityViewModel mActivityModel;
     private FragmentInputOutputBinding mBinding;
-    private FloatingActionButton mActivityFab;
     private OnBackPressedCallback mOnBackPressedCallBack;
     private boolean isKeyboardShowing = false;
 
@@ -255,12 +254,12 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
             if (keypadHeight > screenHeight * 0.15) {
                 if (!isKeyboardShowing) {
                     isKeyboardShowing = true;
-                    onKeyboardVisibilityChanged(true, bottomAppBar, bottomNavigationView);
+                    onKeyboardVisibilityChanged(true, bottomAppBar, bottomNavigationView, floatingActionButton);
                 }
             } else {
                 if (isKeyboardShowing) {
                     isKeyboardShowing = false;
-                    onKeyboardVisibilityChanged(false, bottomAppBar, bottomNavigationView);
+                    onKeyboardVisibilityChanged(false, bottomAppBar, bottomNavigationView, floatingActionButton);
                 }
             }
         });
@@ -287,14 +286,14 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         });
     }
 
-    void onKeyboardVisibilityChanged(boolean opened, BottomAppBar bottomAppBar, BottomNavigationView bottomNavigationView) {
+    void onKeyboardVisibilityChanged(boolean opened, BottomAppBar bottomAppBar, BottomNavigationView bottomNavigationView, FloatingActionButton floatingActionButton) {
         if (opened) {
             bottomAppBar.performHide();
-            mActivityFab.hide();
+            floatingActionButton.hide();
             bottomNavigationView.setVisibility(View.GONE);
         } else {
             bottomAppBar.performShow();
-            mActivityFab.show();
+            floatingActionButton.show();
             bottomNavigationView.setVisibility(View.VISIBLE);
             if (mBinding.memo.hasFocus())
                 mBinding.inputOutputScrollView.scrollTo(0, mBinding.inputOutputScrollView.getBottom());
