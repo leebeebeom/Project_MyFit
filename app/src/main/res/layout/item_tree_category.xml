@@ -69,7 +69,6 @@
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{category.itemAmount}"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="@dimen/_6sdp"
                 android:layout_marginVertical="@dimen/_2sdp"
