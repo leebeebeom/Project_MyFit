@@ -16,6 +16,9 @@ public interface SizeDao {
     @Query("SELECT * FROM size WHERE isDeleted = :isDeleted ORDER BY name")
     LiveData<List<Size>> getAllSizeLive(int isDeleted);
 
+    @Query("SELECT folderId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted")
+    List<Long> getSizeFolderIdByParent(String parentCategory, int isDeleted);
+
     @Query("SELECT * FROM Size WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY name")
     List<Size> getAllSizeListByParent(String parentCategory, int isDeleted);
 
