@@ -24,7 +24,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     setClothIcon="@{size.name}"
@@ -79,7 +79,8 @@
                     android:clickable="false"
                     android:enabled="false"
                     android:scaleX="0.7"
-                    android:scaleY="0.7" />
+                    android:scaleY="0.7"
+                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
