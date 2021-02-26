@@ -41,7 +41,6 @@ import com.example.project_myfit.ui.main.adapter.CategoryAdapter;
 import com.example.project_myfit.ui.main.adapter.MainDragCallBack;
 import com.example.project_myfit.ui.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.ui.main.database.Category;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
@@ -71,8 +70,7 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
 //TODO 써치뷰 롱 클릭
-//TODO 다른데에서 액션모드 갔다가 메인으로 돌아와서 액션모드 실행하면 위로 스크롤 됨
-//TODO 서치뷰 액션모드
+//TODO 액션모드 딸깍거리는거 해결좀
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -305,10 +303,10 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                 }
             }
 
-            mAdapterList.get(0).submitList(mTopList);
-            mAdapterList.get(1).submitList(mBottomList);
-            mAdapterList.get(2).submitList(mOuterList);
-            mAdapterList.get(3).submitList(mEtcList);
+            mAdapterList.get(0).submitList(mTopList, mModel.getRepository().getFolderFolderIdByParent(TOP), mModel.getRepository().getSizeFolderIdByParent(TOP));
+            mAdapterList.get(1).submitList(mBottomList, mModel.getRepository().getFolderFolderIdByParent(BOTTOM), mModel.getRepository().getSizeFolderIdByParent(BOTTOM));
+            mAdapterList.get(2).submitList(mOuterList, mModel.getRepository().getFolderFolderIdByParent(OUTER), mModel.getRepository().getSizeFolderIdByParent(OUTER));
+            mAdapterList.get(3).submitList(mEtcList, mModel.getRepository().getFolderFolderIdByParent(ETC), mModel.getRepository().getSizeFolderIdByParent(ETC));
 
             mViewPagerAdapter.setSort(mSort);
             mViewPagerAdapter.notifyDataSetChanged();//for noData
@@ -493,7 +491,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     }
 
     @Override
-    public void onCategoryCardViewLongClick(MaterialCardView cardView, int position) {
+    public void onCategoryCardViewLongClick(int position) {
         if (mActionMode == null) {
             mModel.getSelectedItem().clear();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
