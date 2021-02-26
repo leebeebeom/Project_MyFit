@@ -10,15 +10,15 @@ public class Folder {
     @PrimaryKey
     private long id;
     private long folderId;
-    private String folderName, itemAmount, parentCategory;
-    private int orderNumber, isDeleted;
+    private String folderName, parentCategory;
+    private int orderNumber, isDeleted, dummy;
 
-    public Folder(long id, String folderName, long folderId, int orderNumber, String itemAmount, String parentCategory) {
+    public Folder(long id, String folderName, long folderId, int orderNumber, String parentCategory) {
         this.id = id;
         this.folderName = folderName;
         this.folderId = folderId;
         this.orderNumber = orderNumber;
-        this.itemAmount = itemAmount;
+        this.dummy = 0;
         this.parentCategory = parentCategory;
         this.isDeleted = 0;
     }
@@ -56,12 +56,12 @@ public class Folder {
         this.orderNumber = orderNumber;
     }
 
-    public String getItemAmount() {
-        return itemAmount;
+    public int getDummy() {
+        return dummy;
     }
 
-    public void setItemAmount(String itemAmount) {
-        this.itemAmount = itemAmount;
+    public void setDummy(int dummy) {
+        this.dummy = dummy;
     }
 
     public int getIsDeleted() {
