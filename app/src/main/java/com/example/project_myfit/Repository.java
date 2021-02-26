@@ -134,6 +134,18 @@ public class Repository {
         return folderList;
     }
 
+    public List<Long> getFolderFolderIdByParent(String parentCategory) {
+        List<Long> folderFolderIdList = new ArrayList<>();
+        Thread thread = new Thread(() -> folderFolderIdList.addAll(mFolderDao.getFolderFolderIdByParent(parentCategory, 0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return folderFolderIdList;
+    }
+
     public List<String> getFolderNameList() {
         List<String> folderNameList = new ArrayList<>();
         Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameList(0)));
@@ -186,6 +198,18 @@ public class Repository {
     //size------------------------------------------------------------------------------------------
     public LiveData<List<Size>> getAllSizeLiveByFolder(long folderId) {
         return mSizeDao.getAllSizeLiveByFolder(folderId, 0);
+    }
+
+    public List<Long> getSizeFolderIdByParent(String parentCategory) {
+        List<Long> sizeFolderIdList = new ArrayList<>();
+        Thread thread = new Thread(() -> sizeFolderIdList.addAll(mSizeDao.getSizeFolderIdByParent(parentCategory, 0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sizeFolderIdList;
     }
 
     public LiveData<List<Size>> getAllSizeLive() {
