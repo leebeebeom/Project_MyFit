@@ -46,6 +46,7 @@ import com.example.project_myfit.dialog.ItemMoveDialog;
 import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
 import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.dialog.TreeViewDialog;
+import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.adapter.folderdapter.FolderAdapter;
 import com.example.project_myfit.ui.main.listfragment.adapter.folderdapter.FolderDragCallBack;
 import com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter.SizeAdapterGrid;
@@ -110,6 +111,25 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     private ItemTouchHelper mTouchHelperList, mTouchHelperGrid, mTouchHelperFolder;
     private boolean isFolderDragSelectEnable, isSizeDragSelectEnable, mScrollEnable, mActionModeOn, mFolderToggle, isDragging, isFolderStart, isSizeStart, mSizeLastSelectedState, mFolderSelectedState;
     private MenuItem mEditMenu, mMoveMenu, mDeletedMenu;
+    private DragSelectTouchListener mSelectListenerSize, mSelectListenerFolder;
+    private SharedPreferences mViewTypePreference, mSortPreference, mFolderTogglePreference;
+    private int mViewType, mSort;
+    private ActionMode mActionMode;
+    private ListPopupMenuBinding mPopupMenuBinding;
+    private PopupWindow mPopupWindow;
+    private LiveData<List<Folder>> mFolderLive;
+    private LiveData<List<Size>> mSizeLive;
+    private int mFolderStartPosition = -1;
+    private int mSizeStartPosition = -1;
+    private int mFolderSelectedPosition2 = -1;
+    private int mFolderSelectedPosition1 = -1;
+    private int mSizeSelectedPosition2 = -1;
+    private int mSizeSelectedPosition1 = -1;
+    private OnBackPressedCallback mOnBackPress;
+    private FolderAdapter mFolderAdapter;
+    private SizeAdapterList mSizeAdapterList;
+    private SizeAdapterGrid mSizeAdapterGrid;
+    private FloatingActionButton mActivityFab;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -180,25 +200,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
-    private DragSelectTouchListener mSelectListenerSize, mSelectListenerFolder;
-    private SharedPreferences mViewTypePreference, mSortPreference, mFolderTogglePreference;
-    private int mViewType, mSort;
-    private ActionMode mActionMode;
-    private ListPopupMenuBinding mPopupMenuBinding;
-    private PopupWindow mPopupWindow;
-    private LiveData<List<Folder>> mFolderLive;
-    private LiveData<List<Size>> mSizeLive;
-    private int mFolderStartPosition = -1;
-    private int mSizeStartPosition = -1;
-    private int mFolderSelectedPosition2 = -1;
-    private int mFolderSelectedPosition1 = -1;
-    private int mSizeSelectedPosition2 = -1;
-    private int mSizeSelectedPosition1 = -1;
-    private OnBackPressedCallback mOnBackPress;
-    private FolderAdapter mFolderAdapter;
-    private SizeAdapterList mSizeAdapterList;
-    private SizeAdapterGrid mSizeAdapterGrid;
-    private FloatingActionButton mActivityFab;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -775,20 +776,21 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             int size = folderList.size();
             if (size % 4 == 1) {
                 for (int i = 0; i < 3; i++) {
-                    Folder dummy = new Folder(-1, "dummy", 0, 0, "", mActivityModel.getCategory().getParentCategory());
+                    Folder dummy = new Folder(-1, "dummy", 0, 0, mActivityModel.getCategory().getParentCategory());
                     folderList.add(dummy);
                 }
             } else if (size % 4 == 2) {
                 for (int i = 0; i < 2; i++) {
-                    Folder dummy = new Folder(-1, "dummy", 0, 0, "", mActivityModel.getCategory().getParentCategory());
+                    Folder dummy = new Folder(-1, "dummy", 0, 0, mActivityModel.getCategory().getParentCategory());
                     folderList.add(dummy);
                 }
             } else if (size % 4 == 3) {
-                Folder dummy = new Folder(-1, "dummy", 0, 0, "", mActivityModel.getCategory().getParentCategory());
+                Folder dummy = new Folder(-1, "dummy", 0, 0, mActivityModel.getCategory().getParentCategory());
                 folderList.add(dummy);
             }
 
-            mFolderAdapter.submitList(folderList);
+            mFolderAdapter.submitList(folderList, mModel.getRepository().getFolderFolderIdByParent(mModel.getThisCategory().getParentCategory())
+                    , mModel.getRepository().getSizeFolderIdByParent(mModel.getThisCategory().getParentCategory()));
             mFolderAdapter.setSort(mSort);
 
             mBinding.recyclerFolderLayout.setVisibility(folderList.size() == 0 ? View.GONE : View.VISIBLE);
@@ -954,7 +956,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override//add folder confirm click
     public void addFolderConfirmClick(@NotNull String folderName) {
-        mModel.addFolder(folderName.trim());
+        Folder folder = new Folder(mModel.getCurrentTime(),
+                folderName.trim(),
+                mModel.getFolderId(),
+                mModel.getRepository().getFolderLargestOrder() + 1,
+                mModel.getThisCategory().getParentCategory());
+        mModel.getRepository().folderInsert(folder);
     }
 
     @Override//category node add folder icon click
@@ -977,7 +984,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             TreeHolderCategory.CategoryTreeHolder oldViewHolder = mModel.getCategoryAddValue();
 
             int largestOrder = mModel.getRepository().getFolderLargestOrder() + 1;
-            Folder folder = new Folder(mModel.getCurrentTime(), folderName.trim(), oldViewHolder.category.getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
+            Folder folder = new Folder(mModel.getCurrentTime(), folderName.trim(), oldViewHolder.category.getId(), largestOrder, mActivityModel.getCategory().getParentCategory());
             mModel.getRepository().folderInsert(folder);
 
             //find node(recreate)
@@ -990,23 +997,26 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 }
             }
 
-            TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, 40, this, mModel)).setViewHolder(new TreeHolderFolder(requireContext()));
+            TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, 40, this,
+                    mModel.getSelectedItemFolder(), mModel.getSelectedItemSize(), mModel.getAllFolderByParent(),
+                    mModel.getRepository().getFolderFolderIdByParent(mModel.getThisCategory().getParentCategory()),
+                    mModel.getRepository().getSizeFolderIdByParent(mModel.getThisCategory().getParentCategory())))
+                    .setViewHolder(new TreeHolderFolder(requireContext()));
             oldNode.getViewHolder().getTreeView().addNode(oldNode, treeNode);
             oldNode.getViewHolder().getTreeView().expandNode(oldNode);
             ((TreeHolderCategory) oldNode.getViewHolder()).setIconClickable();
 
-            TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) oldNode.getValue();
-            int amount = Integer.parseInt(newViewHolder.category.getItemAmount()) + 1;
-            newViewHolder.category.setItemAmount(String.valueOf(amount));
-            mModel.getRepository().categoryUpdate(newViewHolder.category);
+            List<Long> folderFolderIdList = mModel.getRepository().getFolderFolderIdByParent(mModel.getThisCategory().getParentCategory());
+            List<Long> sizeFolderIdList = mModel.getRepository().getSizeFolderIdByParent(mModel.getThisCategory().getParentCategory());
 
+            TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) oldNode.getValue();
             TreeHolderCategory newViewHolder2 = (TreeHolderCategory) oldNode.getViewHolder();
-            newViewHolder2.getBinding().amount.setText(String.valueOf(amount));
+            newViewHolder2.getBinding().amount.setText(getItemAmount(newViewHolder.category, folderFolderIdList, sizeFolderIdList));
         } else {//folder node
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
             int largestOrder = mModel.getRepository().getFolderLargestOrder() + 1;
-            Folder folder = new Folder(mModel.getCurrentTime(), folderName.trim(), oldViewHolder.getFolder().getId(), largestOrder, "0", mActivityModel.getCategory().getParentCategory());
+            Folder folder = new Folder(mModel.getCurrentTime(), folderName.trim(), oldViewHolder.getFolder().getId(), largestOrder, mActivityModel.getCategory().getParentCategory());
             mModel.getRepository().folderInsert(folder);
 
             //find node(recreate)
@@ -1020,19 +1030,43 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             int margin = (int) getResources().getDimension(R.dimen._8sdp);
             TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder,
-                    oldViewHolder.getMargin() + margin, this, mModel)).setViewHolder(new TreeHolderFolder(requireContext()));
+                    oldViewHolder.getMargin() + margin, this,
+                    mModel.getSelectedItemFolder(), mModel.getSelectedItemSize(), mModel.getAllFolderByParent(),
+                    mModel.getRepository().getFolderFolderIdByParent(mModel.getThisCategory().getParentCategory()),
+                    mModel.getRepository().getSizeFolderIdByParent(mModel.getThisCategory().getParentCategory())))
+                    .setViewHolder(new TreeHolderFolder(requireContext()));
             oldNode.getViewHolder().getTreeView().addNode(oldNode, treeNode);
             oldNode.getViewHolder().getTreeView().expandNode(oldNode);
             ((TreeHolderFolder) oldNode.getViewHolder()).setIconClickable();
 
-            TreeHolderFolder.FolderTreeHolder newViewHolder = (TreeHolderFolder.FolderTreeHolder) oldNode.getValue();
-            int amount = Integer.parseInt(newViewHolder.getFolder().getItemAmount()) + 1;
-            newViewHolder.getFolder().setItemAmount(String.valueOf(amount));
-            mModel.getRepository().folderUpdate(newViewHolder.getFolder());
+            List<Long> folderFolderIdList = mModel.getRepository().getFolderFolderIdByParent(mModel.getThisCategory().getParentCategory());
+            List<Long> sizeFolderIdList = mModel.getRepository().getSizeFolderIdByParent(mModel.getThisCategory().getParentCategory());
 
+            TreeHolderFolder.FolderTreeHolder newViewHolder = (TreeHolderFolder.FolderTreeHolder) oldNode.getValue();
             TreeHolderFolder newViewHolder2 = (TreeHolderFolder) oldNode.getViewHolder();
-            newViewHolder2.getBinding().amount.setText(String.valueOf(amount));
+            newViewHolder2.getBinding().amount.setText(getItemAmount(newViewHolder.getFolder(), folderFolderIdList, sizeFolderIdList));
+
+            Folder dummy = newViewHolder.getFolder();
+            if (dummy.getDummy() == 0) dummy.setDummy(1);
+            else dummy.setDummy(0);
+            mModel.getRepository().folderUpdate(dummy);
         }
+    }
+
+    @NotNull
+    private String getItemAmount(Category category, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+        int amount = 0;
+        for (Long f : folderFolderIdList) if (f == category.getId()) amount++;
+        for (Long s : sizeFolderIdList) if (s == category.getId()) amount++;
+        return String.valueOf(amount);
+    }
+
+    @NotNull
+    private String getItemAmount(Folder folder, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+        int amount = 0;
+        for (Long f : folderFolderIdList) if (f == folder.getId()) amount++;
+        for (Long s : sizeFolderIdList) if (s == folder.getId()) amount++;
+        return String.valueOf(amount);
     }
 
     @NotNull
