@@ -70,8 +70,8 @@ public class ListViewModel extends AndroidViewModel {
         mRepository.sizeUpdate(sizeList);
     }
 
-    public List<Folder> getAllFolder() {
-        List<Folder> allFolderList = new ArrayList<>(mRepository.getAllFolderList());
+    public List<Folder> getAllFolderByParent() {
+        List<Folder> allFolderList = new ArrayList<>(mRepository.getAllFolderListByParent(mActivityModel.getCategory().getParentCategory()));
         if (mSort == SORT_CREATE)
             allFolderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
         else if (mSort == SORT_CREATE_REVERSE)
@@ -93,15 +93,11 @@ public class ListViewModel extends AndroidViewModel {
         for (Size s : mSelectedItemSize) s.setFolderId(folderId);
         mRepository.folderUpdate(mSelectedItemFolder);
         mRepository.sizeUpdate(mSelectedItemSize);
-
-        increaseItemAmount(folderId);
-        decreaseItemAmount();
     }
 
     public void selectedItemDelete() {
         deleteFolder(mSelectedItemFolder);
         deleteSize(mSelectedItemSize);
-        decreaseItemAmount();
     }
 
     public void setThisFolder(MainActivityViewModel activityViewModel) {
@@ -112,7 +108,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getFolderHistory() {
-        List<Folder> allFolderList = getAllFolder();
+        List<Folder> allFolderList = getAllFolderByParent();
         List<Folder> folderHistory = new ArrayList<>();
         folderHistory.add(mThisFolder);
         List<Folder> folderHistory2 = getFolderHistory2(allFolderList, folderHistory, mThisFolder);
@@ -165,51 +161,6 @@ public class ListViewModel extends AndroidViewModel {
     public long getCurrentTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
         return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
-    }
-
-    public void addFolder(String folderName) {
-        mRepository.folderInsert(new Folder(getCurrentTime(), folderName, mFolderId, mRepository.getFolderLargestOrder() + 1, "0", mActivityModel.getCategory().getParentCategory()));
-        if (mThisFolder == null) {
-            String amount = String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1);
-            mActivityModel.getCategory().setItemAmount(amount);
-            mRepository.categoryUpdate(mActivityModel.getCategory());
-        } else {
-            String amount = String.valueOf(Integer.parseInt(mThisFolder.getItemAmount()) + 1);
-            mThisFolder.setItemAmount(amount);
-            mRepository.folderUpdate(mThisFolder);
-        }
-    }
-
-    private void increaseItemAmount(long id) {
-        Category category = mRepository.getCategory(id);
-        Folder folder = mRepository.getFolder(id);
-        int amount;
-        if (mSelectedAmount.getValue() != null) {
-            if (category != null) {
-                amount = Integer.parseInt(category.getItemAmount()) + mSelectedAmount.getValue();
-                category.setItemAmount(String.valueOf(amount));
-                mRepository.categoryUpdate(category);
-            } else {
-                amount = Integer.parseInt(folder.getItemAmount()) + mSelectedAmount.getValue();
-                folder.setItemAmount(String.valueOf(amount));
-                mRepository.folderUpdate(folder);
-            }
-        }
-    }
-
-    public void decreaseItemAmount() {
-        int amount;
-        if (mSelectedAmount.getValue() != null) {
-            if (mThisFolder == null) {
-                amount = Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - mSelectedAmount.getValue();
-                mActivityModel.getCategory().setItemAmount(String.valueOf(amount));
-                mRepository.categoryUpdate(mActivityModel.getCategory());
-            } else {
-                amount = Integer.parseInt(mThisFolder.getItemAmount()) - mSelectedAmount.getValue();
-                mThisFolder.setItemAmount(String.valueOf(amount));
-                mRepository.folderUpdate(mThisFolder);
-            }
-        }
     }
 
     //node------------------------------------------------------------------------------------------
