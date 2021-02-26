@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".searchActivity.SearchFragment">
 
-        <androidx.core.widget.NestedScrollView
+        <com.example.project_myfit.ui.main.listfragment.LockableScrollView
             android:id="@+id/view_pager_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.core.widget.NestedScrollView>
+        </com.example.project_myfit.ui.main.listfragment.LockableScrollView>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/recent_search_layout"
