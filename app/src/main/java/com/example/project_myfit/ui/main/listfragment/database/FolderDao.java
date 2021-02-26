@@ -23,6 +23,9 @@ public interface FolderDao {
     @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY folderName")
     List<Folder> getAllFolderListByParent(String parentCategory, int isDeleted);
 
+    @Query("SELECT folderId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted")
+    List<Long> getFolderFolderIdByParent(String parentCategory, int isDeleted);
+
     @Query("SELECT folderName FROM Folder WHERE isDeleted = :isDeleted ORDER BY folderName")
     List<String> getFolderNameList(int isDeleted);
 
