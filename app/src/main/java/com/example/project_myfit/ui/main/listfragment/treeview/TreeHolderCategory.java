@@ -26,6 +26,13 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
+        int amount = 0;
+        for (Long l : value.folderFolderIdList)
+            if (l == value.category.getId()) amount++;
+        for (Long l : value.sizeFolderIdList)
+            if (l == value.category.getId()) amount++;
+        mBinding.amount.setText(String.valueOf(amount));
+
         //if selected item position is this node
         if (value.selectedSizeList.size() != 0) {
             Size size = value.selectedSizeList.get(0);
@@ -63,11 +70,15 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         public Category category;
         public TreeViewDialog.TreeViewAddClick listener;
         public List<Size> selectedSizeList;
+        public List<Long> folderFolderIdList, sizeFolderIdList;
 
-        public CategoryTreeHolder(Category category, TreeViewDialog.TreeViewAddClick listener, List<Size> selectedSizeList) {
+        public CategoryTreeHolder(Category category, TreeViewDialog.TreeViewAddClick listener, List<Size> selectedSizeList
+                , List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
             this.category = category;
             this.listener = listener;
             this.selectedSizeList = selectedSizeList;
+            this.folderFolderIdList = folderFolderIdList;
+            this.sizeFolderIdList = sizeFolderIdList;
         }
     }
 }
