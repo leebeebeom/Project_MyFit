@@ -9,12 +9,13 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
 import com.example.project_myfit.dialog.TreeViewDialog;
-import com.example.project_myfit.ui.main.listfragment.ListViewModel;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.unnamed.b.atv.model.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.FolderTreeHolder> {
     private ItemTreeFolderBinding mBinding;
@@ -29,11 +30,18 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolder(value.folder);
 
+        int amount = 0;
+        for (Long l : value.folderFolderIdList)
+            if (l == value.folder.getId()) amount++;
+        for (Long l : value.sizeFolderIdList)
+            if (l == value.folder.getId()) amount++;
+        mBinding.amount.setText(String.valueOf(amount));
+
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
 
         //if this node is selected folder
-        for (Folder f : value.getModel().getSelectedItemFolder()) {
+        for (Folder f : value.selectedItemFolder) {
             if (f.getId() == value.folder.getId()) {
                 mBinding.iconLayout.setAlpha(0.5f);
                 mBinding.text.setAlpha(0.5f);
@@ -61,8 +69,8 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         }
 
         //if selected item position is this node
-        if (value.getModel().getSelectedItemSize().size() != 0) {
-            Size size = value.getModel().getSelectedItemSize().get(0);
+        if (value.selectedItemSize.size() != 0) {
+            Size size = value.selectedItemSize.get(0);
             if (size.getFolderId() == value.folder.getId()) {
                 mBinding.folderIcon.setAlpha(0.5f);
                 mBinding.text.setAlpha(0.5f);
@@ -70,9 +78,11 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         }
 
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
-        for (Folder folder : value.getModel().getAllFolder()) {
+        for (Folder folder : value.allFolderList) {
             if (value.folder.getId() == folder.getFolderId()) {
-                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin, value.listener, value.getModel())).setViewHolder(new TreeHolderFolder(context));
+                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin, value.listener,
+                        value.selectedItemFolder, value.selectedItemSize, value.allFolderList, value.folderFolderIdList, value.sizeFolderIdList))
+                        .setViewHolder(new TreeHolderFolder(context));
                 node.addChild(treeNode);
             }
         }
@@ -90,8 +100,8 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    public boolean isNotSelected() {
+        return !isSelected;
     }
 
     public ItemTreeFolderBinding getBinding() {
@@ -108,13 +118,20 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         private final Folder folder;
         private final int margin;
         private final TreeViewDialog.TreeViewAddClick listener;
-        private final ListViewModel model;
+        private final List<Folder> selectedItemFolder, allFolderList;
+        private final List<Size> selectedItemSize;
+        private final List<Long> folderFolderIdList, sizeFolderIdList;
 
-        public FolderTreeHolder(Folder folder, int margin, TreeViewDialog.TreeViewAddClick listener, ListViewModel model) {
+        public FolderTreeHolder(Folder folder, int margin, TreeViewDialog.TreeViewAddClick listener, List<Folder> selectedItemFolder,
+                                List<Size> selectedItemSize, List<Folder> allFolderList, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
             this.folder = folder;
             this.margin = margin;
             this.listener = listener;
-            this.model = model;
+            this.selectedItemFolder = selectedItemFolder;
+            this.selectedItemSize = selectedItemSize;
+            this.allFolderList = allFolderList;
+            this.folderFolderIdList = folderFolderIdList;
+            this.sizeFolderIdList = sizeFolderIdList;
         }
 
         public Folder getFolder() {
@@ -123,14 +140,6 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         public int getMargin() {
             return margin;
-        }
-
-        public TreeViewDialog.TreeViewAddClick getListener() {
-            return listener;
-        }
-
-        public ListViewModel getModel() {
-            return model;
         }
     }
 }
