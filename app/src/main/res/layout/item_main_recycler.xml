@@ -75,10 +75,10 @@
                     android:paddingBottom="@dimen/_1sdp">
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/main_item_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:alpha="0.6"
-                        android:text="@{category.itemAmount}"
                         android:textSize="@dimen/_8sdp"
                         tools:text="12" />
                 </FrameLayout>
