@@ -68,7 +68,6 @@ public class InputOutputViewModel extends AndroidViewModel {
         mNewSize.setFolderId(mFolderId);
         mNewSize.setParentCategory(mActivityModel.getCategory().getParentCategory());
         mRepository.sizeInsert(mNewSize);
-        increaseItemAmount();
     }
 
     public void update() {
@@ -80,7 +79,6 @@ public class InputOutputViewModel extends AndroidViewModel {
     public void delete() {
         mActivityModel.getSize().setIsDeleted(1);
         mRepository.sizeUpdate(mActivityModel.getSize());
-        decreaseItemAmount();
     }
     //----------------------------------------------------------------------------------------------
 
@@ -201,25 +199,5 @@ public class InputOutputViewModel extends AndroidViewModel {
             Log.d(TAG, "inputOutputViewModel : getRenameUri_" + mCacheFile.getPath() + "이동 성동");
         else Log.d(TAG, "inputOutputViewModel : getRenameUri_" + mCacheFile.getPath() + "이동 실패");
         return String.valueOf(Uri.fromFile(pictureFolderPath));
-    }
-
-    private void increaseItemAmount() {
-        if (mActivityModel.getFolder() == null) {
-            mActivityModel.getCategory().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) + 1));
-            mRepository.categoryUpdate(mActivityModel.getCategory());
-        } else {
-            mActivityModel.getFolder().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getFolder().getItemAmount()) + 1));
-            mRepository.folderUpdate(mActivityModel.getFolder());
-        }
-    }
-
-    private void decreaseItemAmount() {
-        if (mActivityModel.getFolder() == null) {
-            mActivityModel.getCategory().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getCategory().getItemAmount()) - 1));
-            mRepository.categoryUpdate(mActivityModel.getCategory());
-        } else {
-            mActivityModel.getFolder().setItemAmount(String.valueOf(Integer.parseInt(mActivityModel.getFolder().getItemAmount()) - 1));
-            mRepository.folderUpdate(mActivityModel.getFolder());
-        }
     }
 }
