@@ -36,6 +36,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private List<Folder> mFolderList;
     private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
+    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
 
     public FolderAdapter(ListViewModel model) {
         super(new DiffUtil.ItemCallback<Folder>() {
@@ -46,8 +47,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull Folder oldItem, @NonNull @NotNull Folder newItem) {
-                return oldItem.getFolderName().equals(newItem.getFolderName()) &&
-                        oldItem.getItemAmount().equals(newItem.getItemAmount());
+                return oldItem.getFolderName().equals(newItem.getFolderName());
             }
         });
         this.mModel = model;
@@ -64,10 +64,11 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         this.mListener = listener;
     }
 
-    @Override
-    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Folder> list) {
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Folder> list, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
         super.submitList(list);
         this.mFolderList = list;
+        this.mFolderFolderIdList = folderFolderIdList;
+        this.mSizeFolderIdList = sizeFolderIdList;
     }
 
     @NonNull
@@ -81,8 +82,18 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
         Folder folder = getItem(holder.getLayoutPosition());
-        holder.mBinding.setFolder(folder);
-        holder.setFolder(folder);
+
+        if (mActionModeState != ACTION_MODE_ON) {
+            holder.mBinding.setFolder(folder);
+            holder.setFolder(folder);
+        }
+
+        int amount = 0;
+        for (Long l : mFolderFolderIdList)
+            if (l == folder.getId()) amount++;
+        for (Long l : mSizeFolderIdList)
+            if (l == folder.getId()) amount++;
+        holder.mBinding.folderAmount.setText(String.valueOf(amount));
 
         MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
