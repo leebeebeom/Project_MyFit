@@ -7,17 +7,17 @@ import java.util.Objects;
 
 @Entity
 public class Category {
-    private final String parentCategory;
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private int orderNumber, isDeleted;
-    private String category, itemAmount;
+    private final String parentCategory;
+    private int orderNumber, isDeleted, dummy;
+    private String category;
 
     public Category(String category, String parentCategory, int orderNumber) {
         this.category = category;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
-        this.itemAmount = "0";
+        this.dummy = 0;
         this.isDeleted = 0;
     }
 
@@ -49,12 +49,12 @@ public class Category {
         this.orderNumber = orderNumber;
     }
 
-    public String getItemAmount() {
-        return itemAmount;
+    public int getDummy() {
+        return dummy;
     }
 
-    public void setItemAmount(String itemAmount) {
-        this.itemAmount = itemAmount;
+    public void setDummy(int dummy) {
+        this.dummy = dummy;
     }
 
     public int getIsDeleted() {
