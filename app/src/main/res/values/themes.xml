@@ -48,6 +48,7 @@
         <!--        menu icon padding-->
         <item name="actionButtonStyle">@style/myMenuPadding</item>
         <item name="android:includeFontPadding">false</item>
+        <item name="myCardViewBackground">@color/white</item>
     </style>
     <!--    actionMode close button gone-->
     <style name="myActionBarCloseButton">
@@ -102,4 +103,5 @@
     <attr name="go_button_color" format="color" />
     <attr name="myColorControl" format="color" />
     <attr name="treeViewBackgroundColor" format="color" />
+    <attr name="myCardViewBackground" format="color" />
 </resources>
