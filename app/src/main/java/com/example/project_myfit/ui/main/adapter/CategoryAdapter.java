@@ -43,6 +43,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private Animation mAnimation;
     private int mSort;
     private final int mViewPagerPosition;
+    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener, int viewPagerPosition) {
         super(new DiffUtil.ItemCallback<Category>() {
@@ -53,8 +54,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
-                return oldItem.getCategory().equals(newItem.getCategory()) &&
-                        oldItem.getItemAmount().equals(newItem.getItemAmount());
+                return oldItem.getCategory().equals(newItem.getCategory());
             }
         });
         this.mModel = model;
@@ -69,10 +69,11 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         return getItem(position).getId();
     }
 
-    @Override
-    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Category> list) {
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Category> list, List<Long> allFolderFolderId, List<Long> allSizeFolderId) {
         super.submitList(list);
         this.mCategoryList = list;
+        this.mFolderFolderIdList = allFolderFolderId;
+        this.mSizeFolderIdList = allSizeFolderId;
     }
 
     @NonNull
@@ -93,6 +94,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             Category category = getItem(holder.getLayoutPosition());
             holder.mBinding.setCategory(category);
             holder.setCategory(category);
+            int amount = 0;
+            for (Long l : mFolderFolderIdList)
+                if (l == category.getId()) amount++;
+            for (Long l : mSizeFolderIdList)
+                if (l == category.getId()) amount++;
+            holder.mBinding.mainItemAmount.setText(String.valueOf(amount));
         }
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
@@ -208,7 +215,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         @Override
         public boolean onLongClick(View v) {
-            mListener.onCategoryCardViewLongClick(this.mBinding.mainCardView, getLayoutPosition());
+            mListener.onCategoryCardViewLongClick(getLayoutPosition());
             return false;
         }
 
@@ -225,7 +232,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     public interface CategoryAdapterListener {
         void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox, int position, int viewPagerPosition);
 
-        void onCategoryCardViewLongClick(MaterialCardView cardView, int position);
+        void onCategoryCardViewLongClick(int position);
 
         void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder, int viewPagerPosition);
     }
