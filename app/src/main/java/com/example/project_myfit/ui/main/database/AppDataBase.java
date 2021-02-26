@@ -7,6 +7,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.project_myfit.MyFitConstant;
@@ -18,10 +19,12 @@ import com.example.project_myfit.ui.main.listfragment.database.FolderDao;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase sInstance;
@@ -58,12 +61,41 @@ public abstract class AppDataBase extends RoomDatabase {
                                 }
                             }).start();
                         }
-                    })
-                    .fallbackToDestructiveMigration()
+                    }).addMigrations(MIGRATION_2_1)
                     .build();
         }
         return sInstance;
     }
+
+    private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
+        @Override
+        public void migrate(@NonNull @NotNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE Category_new(" +
+                    "id INTEGER PRIMARY KEY NOT NULL, " +
+                    "parentCategory TEXT," +
+                    "orderNumber INTEGER NOT NULL, " +
+                    "isDeleted INTEGER NOT NULL, " +
+                    "category TEXT," +
+                    "dummy INTEGER NOT NULL DEFAULT 0)");
+            database.execSQL("INSERT INTO Category_new(id, parentCategory, orderNumber, isDeleted, category)" +
+                    "SELECT id, parentCategory, orderNumber, isDeleted, category FROM Category");
+            database.execSQL("DROP TABLE Category");
+            database.execSQL("ALTER TABLE Category_new RENAME TO Category");
+
+            database.execSQL("CREATE TABLE Folder_new(" +
+                    "id INTEGER PRIMARY KEY NOT NULL," +
+                    "folderId INTEGER NOT NULL," +
+                    "folderName TEXT," +
+                    "parentCategory TEXT," +
+                    "orderNumber INTEGER NOT NULL," +
+                    "isDeleted INTEGER NOT NULL," +
+                    "dummy INTEGER NOT NULL DEFAULT 0)");
+            database.execSQL("INSERT INTO Folder_new(id, folderId, folderName, parentCategory, orderNumber, isDeleted)" +
+                    "SELECT id, folderId, folderName, parentCategory, orderNumber, isDeleted FROM Folder");
+            database.execSQL("DROP TABLE Folder");
+            database.execSQL("ALTER TABLE Folder_new RENAME TO Folder");
+        }
+    };
 
     public abstract CategoryDao categoryDao();
 
