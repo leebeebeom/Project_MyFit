@@ -35,6 +35,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/grid_image"
+                        android:scaleType="centerCrop"
                         setUri="@{size.imageUri}"
                         android:layout_width="@dimen/_140sdp"
                         android:layout_height="@dimen/_140sdp"

@@ -148,8 +148,8 @@ public class InputOutputViewModel extends AndroidViewModel {
                 .setDataAndType(data, "image/*")
                 .setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .putExtra("aspectX", 1)
-                .putExtra("aspectY", 1)
+                .putExtra("aspectX", 3)
+                .putExtra("aspectY", 4)
                 .putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
         //grant

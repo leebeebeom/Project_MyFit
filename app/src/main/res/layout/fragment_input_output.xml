@@ -41,7 +41,7 @@
                     android:layout_marginBottom="@dimen/_4sdp"
                     app:cardElevation="@dimen/_2sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintDimensionRatio="3:4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -606,7 +606,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="@string/http"
+                        android:hint="@string/https"
                         android:theme="@style/myEditText"
                         app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
