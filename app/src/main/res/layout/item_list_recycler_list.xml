@@ -24,8 +24,8 @@
             android:buttonTint="?colorControlNormal"
             android:clickable="false"
             android:enabled="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            android:scaleX="0.8"
+            android:scaleY="0.8" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/list_card_view"
@@ -103,7 +103,17 @@
                         tools:text="DAMAGED CREW NECK SWEATER" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="bottom"
+                    android:button="@drawable/check_box_heart"
+                    android:checked="@={size.favorite}"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:visibility="gone"
                     android:id="@+id/list_drag_handle"
                     setDragHandle="@{size.size}"
                     android:layout_width="wrap_content"
