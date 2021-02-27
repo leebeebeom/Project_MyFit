@@ -97,12 +97,12 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/grid_favorite_check_box"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_gravity="bottom"
                         android:button="@drawable/check_box_heart"
-                        android:checked="@{size.favorite}"
-                        android:clickable="false"
+                        android:checked="@={size.favorite}"
                         android:scaleX="0.7"
                         android:scaleY="0.7" />
 
