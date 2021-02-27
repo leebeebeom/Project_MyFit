@@ -67,7 +67,7 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
 
         //tree view root binding for addCategory
         TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
-        binding.treeViewRoot.addView(mTreeView.getView(), 1);
+        binding.treeViewRoot.addView(mTreeView.getView(), 2);
         binding.treeViewParentText.setText(parentCategory);
         binding.addCategoryLayout.setOnClickListener(v -> {
             DialogFragment dialog = new AddCategoryDialog();
