@@ -59,15 +59,16 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
             else if (getTargetFragment() instanceof SearchFragment)
                 mSearchModel = new ViewModelProvider(getTargetFragment()).get(SearchViewModel.class);
         }
+        String parentCategory = null;
+        if (mListModel != null)
+            parentCategory = " " + mListModel.getThisCategory().getParentCategory();
+        else if (mSearchModel != null) parentCategory = " " + mSearchModel.getParentCategory();
         mTreeView = getTreeView();
-
-        View view = mTreeView.getView();
-        int padding = (int) requireContext().getResources().getDimension(R.dimen._8sdp);
-        view.setPadding(0, padding, 0, 0);
 
         //tree view root binding for addCategory
         TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
-        binding.treeViewRoot.addView(view, 0);
+        binding.treeViewRoot.addView(mTreeView.getView(), 1);
+        binding.treeViewParentText.setText(parentCategory);
         binding.addCategoryLayout.setOnClickListener(v -> {
             DialogFragment dialog = new AddCategoryDialog();
             dialog.setTargetFragment(this, 0);
