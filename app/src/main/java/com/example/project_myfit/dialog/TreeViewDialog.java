@@ -34,7 +34,6 @@ import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.TREE_VIEW_STATE;
 
-//TODO 트리뷰 패런트 카테고리 텍스트 추가
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
     private TreeNode mNodeRoot;
     private ListViewModel mListModel;
