@@ -25,8 +25,7 @@ public class SearchDiffUtil extends DiffUtil.ItemCallback<Object> {
     @Override
     public boolean areContentsTheSame(@NonNull @NotNull Object oldItem, @NonNull @NotNull Object newItem) {
         if (oldItem instanceof Folder && newItem instanceof Folder)
-            return ((Folder) oldItem).getFolderName().equals(((Folder) newItem).getFolderName()) &&
-                    ((Folder) oldItem).getItemAmount().equals(((Folder) newItem).getItemAmount());
+            return ((Folder) oldItem).getFolderName().equals(((Folder) newItem).getFolderName());
         else if (oldItem instanceof Folder && newItem instanceof Size)
             return false;
         else if (oldItem instanceof Size && newItem instanceof Folder)
