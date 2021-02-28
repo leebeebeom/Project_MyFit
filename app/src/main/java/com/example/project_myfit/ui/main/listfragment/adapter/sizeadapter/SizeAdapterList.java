@@ -88,8 +88,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
                 mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
             if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
             dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
-            if (dragHandle.getVisibility() == View.VISIBLE)
-                holder.mBinding.listFavoriteCheckBox.setVisibility(View.GONE);
+            holder.mBinding.listFavoriteCheckBox.setVisibility(View.GONE);
         } else if (mActionModeState == ACTION_MODE_OFF) {
             mAnimation = null;
             cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
@@ -211,7 +210,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             return false;
         }
 
-        //TODO 나머지도 변경
         @Override
         public boolean onTouch(View v, @NotNull MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
