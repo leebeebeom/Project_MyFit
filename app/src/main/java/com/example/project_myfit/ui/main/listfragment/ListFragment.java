@@ -894,11 +894,16 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
     @Override
     public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
-        if (mActionMode == null && !isDragging) {
+        if (mActionMode != null && !isDragging) {
             isDragging = true;
             if (mViewType == LISTVIEW) mTouchHelperList.startDrag(viewHolder);
             else mTouchHelperGrid.startDrag(viewHolder);
         } else if (isDragging) isDragging = false;
+    }
+
+    @Override
+    public void onSizeFavoriteClick(Size size) {
+        mModel.getRepository().sizeUpdate(size);
     }
 
     //menu------------------------------------------------------------------------------------------
@@ -1101,7 +1106,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 //current position is folder
             else if (mModel.getThisFolder() != null)
                 showDialog(ItemMoveDialog.getInstance(mModel.getSelectedAmount().getValue(), categoryHolder.category.getId()), MOVE_DIALOG);
-        } else if (value instanceof TreeHolderFolder.FolderTreeHolder && !((TreeHolderFolder) node.getViewHolder()).isSelected() && mModel.getSelectedAmount().getValue() != null) {
+        } else if (value instanceof TreeHolderFolder.FolderTreeHolder && ((TreeHolderFolder) node.getViewHolder()).isNotSelected() && mModel.getSelectedAmount().getValue() != null) {
             TreeHolderFolder.FolderTreeHolder folderHolder = (TreeHolderFolder.FolderTreeHolder) node.getValue();
             //current position is category
             if (mModel.getThisFolder() == null)
