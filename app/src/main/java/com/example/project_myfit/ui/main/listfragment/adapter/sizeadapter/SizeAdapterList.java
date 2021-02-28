@@ -87,6 +87,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             if (mAnimation == null)
                 mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
             if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
+            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
             dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
             holder.mBinding.listFavoriteCheckBox.setVisibility(View.GONE);
         } else if (mActionModeState == ACTION_MODE_OFF) {
@@ -98,7 +99,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             dragHandle.setVisibility(View.GONE);
             holder.mBinding.listFavoriteCheckBox.setVisibility(View.VISIBLE);
         }
-        //------------------------------------------------------------------------------------------
     }
 
     private void setActionModeStateNone() {
