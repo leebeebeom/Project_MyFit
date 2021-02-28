@@ -82,6 +82,7 @@
                     android:paddingHorizontal="@dimen/_4sdp">
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/list_brand_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:alpha="0.7"
@@ -92,9 +93,10 @@
                         tools:text="Anderson Bell" />
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/list_name_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-2dp"
+                        android:layout_marginTop="-1dp"
                         android:alpha="0.8"
                         android:ellipsize="end"
                         android:maxLines="1"
@@ -104,8 +106,10 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/list_favorite_check_box"
                     android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
                     android:layout_gravity="bottom"
                     android:button="@drawable/check_box_heart"
                     android:checked="@={size.favorite}"
@@ -121,7 +125,7 @@
                     android:layout_gravity="end|center_vertical"
                     android:alpha="0.8"
                     android:paddingStart="0dp"
-                    android:paddingEnd="@dimen/_8sdp"
+                    android:paddingEnd="@dimen/_12sdp"
                     tools:src="@drawable/icon_drag_handle" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
