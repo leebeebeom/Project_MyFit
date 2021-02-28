@@ -80,21 +80,26 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         MaterialCardView cardView = holder.mBinding.listCardView;
         MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
         ImageView dragHandle = holder.mBinding.listDragHandle;
+
+        if (size.getImageUri() != null) holder.mBinding.listAddIcon.setVisibility(View.GONE);
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             if (mAnimation == null)
                 mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
             if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
-            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+            dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
+            if (dragHandle.getVisibility() == View.VISIBLE)
+                holder.mBinding.listFavoriteCheckBox.setVisibility(View.GONE);
         } else if (mActionModeState == ACTION_MODE_OFF) {
             mAnimation = null;
             cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
             checkBox.setChecked(false);
             setActionModeStateNone();
             if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
+            dragHandle.setVisibility(View.GONE);
+            holder.mBinding.listFavoriteCheckBox.setVisibility(View.VISIBLE);
         }
         //------------------------------------------------------------------------------------------
-        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
     }
 
     private void setActionModeStateNone() {
@@ -126,7 +131,11 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
+        ItemListRecyclerListBinding binding = ((SizeAdapterList.SizeListVH) viewHolder).getBinding();
         viewHolder.itemView.setTranslationZ(0);
+        binding.listCheckBox.setVisibility(View.VISIBLE);
+        binding.listBrandText.setAlpha(0.8f);
+        binding.listNameText.setAlpha(0.8f);
         mListener.onSizeDragHandleTouch(viewHolder);
         mModel.getRepository().sizeUpdate(mSizeList);
     }
@@ -184,6 +193,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
             mBinding.listDragHandle.setOnTouchListener(this);
+            mBinding.listFavoriteCheckBox.setOnClickListener(v -> mListener.onSizeFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {
@@ -201,13 +211,21 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             return false;
         }
 
+        //TODO 나머지도 변경
         @Override
         public boolean onTouch(View v, @NotNull MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 itemView.setTranslationZ(10);
+                mBinding.listCheckBox.setVisibility(View.INVISIBLE);
+                mBinding.listBrandText.setAlpha(0.5f);
+                mBinding.listNameText.setAlpha(0.5f);
                 mListener.onSizeDragHandleTouch(this);
             }
-            return true;
+            return false;
+        }
+
+        public ItemListRecyclerListBinding getBinding() {
+            return mBinding;
         }
     }
 }
