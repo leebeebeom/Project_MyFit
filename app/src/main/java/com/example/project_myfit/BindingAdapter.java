@@ -31,6 +31,12 @@ public class BindingAdapter {
         Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_drag_handle).into(imageView);
     }
 
+    @androidx.databinding.BindingAdapter("setDragHandle2")
+    public static void setDragHandle2(@NotNull ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_drag_handle2).into(imageView);
+    }
+
     @androidx.databinding.BindingAdapter("setAddIcon")
     public static void setAddIcon(@NotNull ImageView imageView, String dummy) {
         dummy = null;
@@ -68,7 +74,7 @@ public class BindingAdapter {
     }
 
     @androidx.databinding.BindingAdapter("setTreeTriangleIcon")
-    public static void setTreeTriangleIcon(ImageView imageView, String dummy) {
+    public static void setTreeTriangleIcon(@NotNull ImageView imageView, String dummy) {
         dummy = null;
         Glide.with(imageView.getContext()).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
     }
