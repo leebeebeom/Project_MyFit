@@ -79,13 +79,15 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+            dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
+            holder.mBinding.gridFavoriteCheckBox.setClickable(false);
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
             if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
+            dragHandle.setVisibility(View.GONE);
+            holder.mBinding.gridFavoriteCheckBox.setClickable(true);
         }
-        //------------------------------------------------------------------------------------------
-        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
     }
 
     //drag------------------------------------------------------------------------------------------
@@ -171,6 +173,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
             mBinding.gridDragHandle.setOnTouchListener(this);
+            mBinding.gridFavoriteCheckBox.setOnClickListener(v -> mListener.onSizeFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {
