@@ -51,15 +51,16 @@
                         android:alpha="0.2" />
 
                     <androidx.appcompat.widget.AppCompatImageView
+                        setDragHandle2="@{size.size}"
                         android:id="@+id/grid_drag_handle"
-                        setDragHandle="@{size.size}"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|top"
                         android:layout_marginTop="-2dp"
                         android:alpha="0.8"
                         android:scaleX="0.7"
-                        tools:src="@drawable/icon_drag_handle" />
+                        tools:src="@drawable/icon_drag_handle2" />
                 </FrameLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -99,12 +100,12 @@
                     <com.google.android.material.checkbox.MaterialCheckBox
                         android:id="@+id/grid_favorite_check_box"
                         android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:button="@drawable/check_box_heart"
                         android:checked="@={size.favorite}"
-                        android:scaleX="0.7"
-                        android:scaleY="0.7" />
+                        android:scaleX="0.8"
+                        android:scaleY="0.8" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
