@@ -68,7 +68,6 @@ import com.unnamed.b.atv.model.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE;
@@ -188,9 +187,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             mActionModeOn = false;
 
             mModel.setSelectedPositionFolder(mFolderAdapter.getSelectedPosition());
-            if (mViewType == LISTVIEW)
-                mModel.setSelectedPositionSizeList(mSizeAdapterList.getSelectedPosition());
-            else mModel.setSelectedPositionSizeGrid(mSizeAdapterGrid.getSelectedPosition());
 
             mFolderAdapter.setActionModeState(ACTION_MODE_OFF);
             if (mViewType == LISTVIEW) mSizeAdapterList.setActionModeState(ACTION_MODE_OFF);
@@ -277,11 +273,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
         //restore actionMode
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
-            mFolderAdapter.setSelectedPosition(mModel.getSelectedPositionFolder());
             if (mViewType == LISTVIEW)
-                mSizeAdapterList.setSelectedPosition(mModel.getSelectedPositionSizeList());
-            else mSizeAdapterGrid.setSelectedPosition(mModel.getSelectedPositionSizeGrid());
+                mSizeAdapterList.setSelectedItem(mModel.getSelectedItemSize());
+            else mSizeAdapterGrid.setSelectedItem(mModel.getSelectedItemSize());
+            mFolderAdapter.setSelectedPosition(mModel.getSelectedPositionFolder());
+            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
 
         return view;
@@ -374,7 +370,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             @Override
             public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, LinearLayoutCompat folderAmountLayout) {
-                if (mActionMode == null && !isDragging) {
+                if (mActionMode != null && !isDragging) {
                     isDragging = true;
                     folderAmountLayout.setVisibility(View.GONE);
                     mTouchHelperFolder.startDrag(holder);
@@ -928,7 +924,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
                 item.setIcon(R.drawable.icon_grid);
                 mViewType = GRIDVIEW;
             } else {
-                mSizeAdapterList.setSelectedPosition(new HashSet<>());
                 mSizeAdapterList.setActionModeState(0);
                 item.setIcon(R.drawable.icon_list);
                 mViewType = LISTVIEW;
