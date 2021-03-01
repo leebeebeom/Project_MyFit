@@ -186,8 +186,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             mActionMode = null;
             mActionModeOn = false;
 
-            mModel.setSelectedPositionFolder(mFolderAdapter.getSelectedPosition());
-
             mFolderAdapter.setActionModeState(ACTION_MODE_OFF);
             if (mViewType == LISTVIEW) mSizeAdapterList.setActionModeState(ACTION_MODE_OFF);
             else mSizeAdapterGrid.setActionModeState(ACTION_MODE_OFF);
@@ -276,7 +274,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             if (mViewType == LISTVIEW)
                 mSizeAdapterList.setSelectedItem(mModel.getSelectedItemSize());
             else mSizeAdapterGrid.setSelectedItem(mModel.getSelectedItemSize());
-            mFolderAdapter.setSelectedPosition(mModel.getSelectedPositionFolder());
+            mFolderAdapter.setSelectedItem(mModel.getSelectedItemFolder());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
 
