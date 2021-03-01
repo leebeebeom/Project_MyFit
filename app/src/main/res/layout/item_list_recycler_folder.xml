@@ -36,8 +36,9 @@
                 tools:text="일곱글자까지됨세줄까지됨\n세줄까지됨" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                setDragHandle2="@{folder.folderName}"
                 android:id="@+id/folder_drag_handle"
-                setDragHandle="@{folder.folderName}"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -45,7 +46,7 @@
                 android:layout_marginEnd="-3dp"
                 android:scaleX="0.5"
                 android:scaleY="0.7"
-                tools:src="@drawable/icon_drag_handle" />
+                tools:src="@drawable/icon_drag_handle2" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/folder_check_box"
