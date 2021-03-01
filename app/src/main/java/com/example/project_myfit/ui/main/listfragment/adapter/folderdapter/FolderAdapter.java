@@ -35,7 +35,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private FolderAdapterListener mListener;
     private List<Folder> mFolderList, mSelectedItem;
     private int mActionModeState, mSort;
-    private HashSet<Integer> mSelectedPosition;
+    private final HashSet<Integer> mSelectedPosition;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
 
     public FolderAdapter(ListViewModel model) {
@@ -157,12 +157,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    public HashSet<Integer> getSelectedPosition() {
-        return mSelectedPosition;
-    }
-
-    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
-        this.mSelectedPosition = selectedPosition;
+    public List<Folder> setSelectedItem(List<Folder> selectedItem) {
+        return mSelectedItem = selectedItem;
     }
 
     //drag select-----------------------------------------------------------------------------------
