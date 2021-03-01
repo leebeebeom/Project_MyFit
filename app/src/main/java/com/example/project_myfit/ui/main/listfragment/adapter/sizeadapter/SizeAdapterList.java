@@ -36,9 +36,9 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListVH> {
     private final ListViewModel mModel;
     private SizeAdapterListener mListener;
-    private List<Size> mSizeList;
+    private List<Size> mSizeList, mSelectedItem;
     private int mActionModeState, mSort;
-    private HashSet<Integer> mSelectedPosition;
+    private final HashSet<Integer> mSelectedPosition;
     private Animation mAnimation;
 
     public SizeAdapterList(ListViewModel model) {
@@ -82,6 +82,15 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         ImageView dragHandle = holder.mBinding.listDragHandle;
 
         if (size.getImageUri() != null) holder.mBinding.listAddIcon.setVisibility(View.GONE);
+
+        if (mSelectedItem != null) {
+            mSelectedPosition.clear();
+            for (Size selectedItem : mSelectedItem) {
+                int selectedPosition = getCurrentList().indexOf(selectedItem);
+                mSelectedPosition.add(selectedPosition);
+            }
+            mSelectedItem = null;
+        }
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             if (mAnimation == null)
@@ -146,12 +155,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         notifyDataSetChanged();
     }
 
-    public HashSet<Integer> getSelectedPosition() {
-        return mSelectedPosition;
-    }
-
-    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
-        this.mSelectedPosition = selectedPosition;
+    public void setSelectedItem(List<Size> selectedItem) {
+        this.mSelectedItem = selectedItem;
     }
 
     //drag select-----------------------------------------------------------------------------------

@@ -30,9 +30,9 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
     private final ListViewModel mModel;
     private SizeAdapterListener mListener;
-    private List<Size> mSizeList;
+    private List<Size> mSizeList, mSelectedItem;
     private int mActionModeState, mSort;
-    private HashSet<Integer> mSelectedPosition;
+    private final HashSet<Integer> mSelectedPosition;
 
 
     public SizeAdapterGrid(ListViewModel model) {
@@ -75,6 +75,15 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
 
         if (size.getImageUri() != null) holder.mBinding.addImageIcon.setVisibility(View.GONE);
+
+        if (mSelectedItem != null) {
+            mSelectedPosition.clear();
+            for (Size selectedItem : mSelectedItem) {
+                int selectedPosition = getCurrentList().indexOf(selectedItem);
+                mSelectedPosition.add(selectedPosition);
+            }
+            mSelectedItem = null;
+        }
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
@@ -127,12 +136,8 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         notifyDataSetChanged();
     }
 
-    public HashSet<Integer> getSelectedPosition() {
-        return mSelectedPosition;
-    }
-
-    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
-        this.mSelectedPosition = selectedPosition;
+    public void setSelectedItem(List<Size> selectedItem) {
+        this.mSelectedItem = selectedItem;
     }
 
     //drag select-----------------------------------------------------------------------------------
