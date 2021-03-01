@@ -103,6 +103,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:button="@drawable/check_box_heart"
+                        android:background="@android:color/transparent"
                         android:checked="@={size.favorite}"
                         android:scaleX="0.8"
                         android:scaleY="0.8" />

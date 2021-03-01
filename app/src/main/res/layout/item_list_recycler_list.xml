@@ -110,6 +110,7 @@
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="match_parent"
                     android:gravity="bottom"
+                    android:background="@android:color/transparent"
                     android:layout_gravity="bottom"
                     android:button="@drawable/check_box_heart"
                     android:checked="@={size.favorite}"
