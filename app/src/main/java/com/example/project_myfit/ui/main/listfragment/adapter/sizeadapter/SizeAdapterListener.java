@@ -12,4 +12,6 @@ public interface SizeAdapterListener {
     void onSizeItemViewLongClick(MaterialCardView cardView, int position);
 
     void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder);
+
+    void onSizeFavoriteClick(Size size);
 }
