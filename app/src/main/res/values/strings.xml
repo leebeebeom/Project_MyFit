@@ -2,7 +2,7 @@
     <string name="app_name">MyFit</string>
     <string name="main">메인 메뉴</string>
     <string name="setting">설정</string>
-    <string name="http">https://</string>
+    <string name="https">https://</string>
     <string name="memo">memo</string>
     <string name="brand">Brand</string>
     <string name="name">Name</string>
@@ -73,4 +73,6 @@
     <string name="recent_search">최근 검색</string>
     <string name="recent_search_all_delete">전체 삭제</string>
     <string name="no_recent_search_list">최근 검색 목록이 없습니다.</string>
+    <string name="tree_view_category">CATEGORY :</string>
+    <string name="http">http://</string>
 </resources>
