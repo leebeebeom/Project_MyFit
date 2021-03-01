@@ -82,11 +82,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
         Folder folder = getItem(holder.getLayoutPosition());
-
-        if (mActionModeState != ACTION_MODE_ON) {
             holder.mBinding.setFolder(folder);
             holder.setFolder(folder);
-        }
 
         int amount = 0;
         for (Long l : mFolderFolderIdList)
