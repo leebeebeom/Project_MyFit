@@ -33,7 +33,7 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private final ListViewModel mModel;
     private FolderAdapterListener mListener;
-    private List<Folder> mFolderList;
+    private List<Folder> mFolderList, mSelectedItem;
     private int mActionModeState, mSort;
     private HashSet<Integer> mSelectedPosition;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
@@ -82,8 +82,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
         Folder folder = getItem(holder.getLayoutPosition());
-            holder.mBinding.setFolder(folder);
-            holder.setFolder(folder);
+        holder.mBinding.setFolder(folder);
+        holder.setFolder(folder);
 
         int amount = 0;
         for (Long l : mFolderFolderIdList)
@@ -95,19 +95,28 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
 
+        if (mSelectedItem != null) {
+            mSelectedPosition.clear();
+            for (Folder selectedItem : mSelectedItem) {
+                int selectedPosition = getCurrentList().indexOf(selectedItem);
+                mSelectedPosition.add(selectedPosition);
+            }
+            mSelectedItem = null;
+        }
+
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+            dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
             if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
+            dragHandle.setVisibility(View.GONE);
         }
         //------------------------------------------------------------------------------------------
-        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
         holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
-        //------------------------------------------------------------------------------------------
     }
 
     //drag------------------------------------------------------------------------------------------
