@@ -154,7 +154,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        viewHolder.itemView.setTranslationZ(0);
         mModel.getRepository().categoryUpdate(mCategoryList);
         mListener.onCategoryDragHandleTouch(viewHolder, mViewPagerPosition);
     }
@@ -225,11 +224,13 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         @Override
         public boolean onTouch(View v, @NotNull MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                itemView.setTranslationZ(10);
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
                 mListener.onCategoryDragHandleTouch(this, mViewPagerPosition);
-            }
             return false;
+        }
+
+        public ItemMainRecyclerBinding getBinding() {
+            return mBinding;
         }
     }
 
