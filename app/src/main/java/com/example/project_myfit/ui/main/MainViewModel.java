@@ -13,14 +13,12 @@ import com.example.project_myfit.ui.main.database.Category;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private int mSort;
     private final List<Category> mSelectedItem;
-    private HashSet<Integer> mSelectedPosition;
     private final MutableLiveData<Integer> mSelectedAmount;
 
     public MainViewModel(@NonNull Application application) {
@@ -44,14 +42,6 @@ public class MainViewModel extends AndroidViewModel {
 
     public void setSort(int mSort) {
         this.mSort = mSort;
-    }
-
-    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
-        this.mSelectedPosition = selectedPosition;
-    }
-
-    public HashSet<Integer> getSelectedPosition() {
-        return mSelectedPosition;
     }
 
     public void categorySelected(Category category, boolean isChecked, int position, int viewPagerPosition, @NotNull List<CategoryAdapter> adapterList) {
