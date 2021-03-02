@@ -70,6 +70,7 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
 //TODO 액션모드 딸깍거리는거 해결좀
+//TODO order number 1부터 다시
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -139,7 +140,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mActionMode = null;
             mActionModeOn = false;
             mAdapterList.get(mBinding.viewPager.getCurrentItem()).setActionModeState(ACTION_MODE_OFF);
-            mModel.setSelectedPosition(mAdapterList.get(mBinding.viewPager.getCurrentItem()).getSelectedPosition());
 
             mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
@@ -186,6 +186,13 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mBinding.mainFab.setOnClickListener(v -> {
             mBinding.mainScrollView.scrollTo(0, 0);
             mBinding.mainScrollView.smoothScrollTo(0, 0);
+        });
+
+        mBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                mBinding.mainScrollView.smoothScrollTo(0, 0);
+            }
         });
         return view;
     }
@@ -402,7 +409,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                     mBinding.btnEtc.setChecked(true);
                     break;
             }
-            mAdapterList.get(mBinding.viewPager.getCurrentItem()).setSelectedPosition(mModel.getSelectedPosition());
+            mAdapterList.get(mBinding.viewPager.getCurrentItem()).setSelectedItem(mModel.getSelectedItem());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
     }
@@ -500,7 +507,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
     @Override
     public void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder, int viewPagerPosition) {
-        if (mActionMode == null && !isDragging) {
+        if (mActionMode != null && !isDragging) {
             isDragging = true;
             mTouchHelperList.get(viewPagerPosition).startDrag(viewHolder);
         } else if (isDragging) isDragging = false;
