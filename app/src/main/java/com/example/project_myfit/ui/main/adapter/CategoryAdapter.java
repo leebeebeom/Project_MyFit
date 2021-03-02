@@ -35,9 +35,9 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryVH> {
-    private List<Category> mCategoryList;
+    private List<Category> mCategoryList, mSelectedItem;
     private final MainViewModel mModel;
-    private HashSet<Integer> mSelectedPosition;
+    private final HashSet<Integer> mSelectedPosition;
     private final CategoryAdapterListener mListener;
     private int mActionModeState;
     private Animation mAnimation;
@@ -90,16 +90,23 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         MaterialCheckBox checkBox = holder.mBinding.mainCheckBox;
         ImageView dragHandle = holder.mBinding.mainDragHandle;
 
-        if (mActionModeState != ACTION_MODE_ON) {
-            Category category = getItem(holder.getLayoutPosition());
-            holder.mBinding.setCategory(category);
-            holder.setCategory(category);
-            int amount = 0;
-            for (Long l : mFolderFolderIdList)
-                if (l == category.getId()) amount++;
-            for (Long l : mSizeFolderIdList)
-                if (l == category.getId()) amount++;
-            holder.mBinding.mainItemAmount.setText(String.valueOf(amount));
+        Category category = getItem(holder.getLayoutPosition());
+        holder.mBinding.setCategory(category);
+        holder.setCategory(category);
+        int amount = 0;
+        for (Long l : mFolderFolderIdList)
+            if (l == category.getId()) amount++;
+        for (Long l : mSizeFolderIdList)
+            if (l == category.getId()) amount++;
+        holder.mBinding.mainItemAmount.setText(String.valueOf(amount));
+
+        if (mSelectedItem != null) {
+            mSelectedPosition.clear();
+            for (Category selectedItem : mSelectedItem) {
+                int selectedPosition = getCurrentList().indexOf(selectedItem);
+                mSelectedPosition.add(selectedPosition);
+            }
+            mSelectedItem = null;
         }
         //animation---------------------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
@@ -107,15 +114,16 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
                 mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
             if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
             checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+            dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
         } else if (mActionModeState == ACTION_MODE_OFF) {
             mAnimation = null;
             cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
             checkBox.setChecked(false);
             setActionModeStateNone();
             if (mSelectedPosition.size() != 0) mSelectedPosition.clear();
+            dragHandle.setVisibility(View.GONE);
         }
         //------------------------------------------------------------------------------------------
-        dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
     }
 
     private void setActionModeStateNone() {
@@ -156,12 +164,8 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         notifyDataSetChanged();
     }
 
-    public HashSet<Integer> getSelectedPosition() {
-        return mSelectedPosition;
-    }
-
-    public void setSelectedPosition(HashSet<Integer> selectedPosition) {
-        this.mSelectedPosition = selectedPosition;
+    public void setSelectedItem(List<Category> mSelectedItem) {
+        this.mSelectedItem = mSelectedItem;
     }
 
     public void setSelectedPosition(int position) {
