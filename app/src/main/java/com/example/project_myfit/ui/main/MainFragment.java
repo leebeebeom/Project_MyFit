@@ -32,6 +32,7 @@ import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentMainBinding;
+import com.example.project_myfit.databinding.ItemMainRecyclerBinding;
 import com.example.project_myfit.databinding.MainPopupMenuBinding;
 import com.example.project_myfit.dialog.AddCategoryDialog;
 import com.example.project_myfit.dialog.CategoryNameEditDialog;
@@ -509,8 +510,20 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder, int viewPagerPosition) {
         if (mActionMode != null && !isDragging) {
             isDragging = true;
+            viewHolder.itemView.setTranslationZ(10);
+            ItemMainRecyclerBinding binding = ((CategoryAdapter.CategoryVH) viewHolder).getBinding();
+            binding.mainCheckBox.setVisibility(View.INVISIBLE);
+            binding.mainCategoryText.setAlpha(0.5f);
+            binding.mainAmountLayout.setAlpha(0.5f);
             mTouchHelperList.get(viewPagerPosition).startDrag(viewHolder);
-        } else if (isDragging) isDragging = false;
+        } else if (isDragging) {
+            isDragging = false;
+            viewHolder.itemView.setTranslationZ(0);
+            ItemMainRecyclerBinding binding = ((CategoryAdapter.CategoryVH) viewHolder).getBinding();
+            binding.mainCheckBox.setVisibility(View.VISIBLE);
+            binding.mainCategoryText.setAlpha(0.8f);
+            binding.mainAmountLayout.setAlpha(0.8f);
+        }
     }
 
     @Override
