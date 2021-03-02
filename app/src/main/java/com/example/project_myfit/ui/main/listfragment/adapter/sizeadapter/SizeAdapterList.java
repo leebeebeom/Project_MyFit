@@ -139,11 +139,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        ItemListRecyclerListBinding binding = ((SizeAdapterList.SizeListVH) viewHolder).getBinding();
-        viewHolder.itemView.setTranslationZ(0);
-        binding.listCheckBox.setVisibility(View.VISIBLE);
-        binding.listBrandText.setAlpha(0.8f);
-        binding.listNameText.setAlpha(0.8f);
         mListener.onSizeDragHandleTouch(viewHolder);
         mModel.getRepository().sizeUpdate(mSizeList);
     }
@@ -217,13 +212,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
         @Override
         public boolean onTouch(View v, @NotNull MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                itemView.setTranslationZ(10);
-                mBinding.listCheckBox.setVisibility(View.INVISIBLE);
-                mBinding.listBrandText.setAlpha(0.5f);
-                mBinding.listNameText.setAlpha(0.5f);
-                mListener.onSizeDragHandleTouch(this);
-            }
+            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandleTouch(this);
             return false;
         }
 
