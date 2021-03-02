@@ -91,6 +91,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:alpha="0.7"
+                android:visibility="gone"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_8sdp"
                 android:scaleX="0.9"
