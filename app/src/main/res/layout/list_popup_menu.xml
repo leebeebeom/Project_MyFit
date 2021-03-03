@@ -29,6 +29,16 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/edit_folder_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_8sdp"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_28sdp"
+                    android:text="@string/edit_name"
+                    android:textSize="@dimen/_11sdp" />
+
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/sort"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
