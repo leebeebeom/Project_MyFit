@@ -105,17 +105,18 @@
                         tools:text="DAMAGED CREW NECK SWEATER" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/list_favorite_check_box"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="match_parent"
+                    android:alpha="0.7"
                     android:gravity="bottom"
                     android:background="@android:color/transparent"
                     android:layout_gravity="bottom"
                     android:button="@drawable/check_box_heart"
                     android:checked="@={size.favorite}"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8" />
+                    android:scaleX="0.7"
+                    android:scaleY="0.7" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:visibility="gone"
