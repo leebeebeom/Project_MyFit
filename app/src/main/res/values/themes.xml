@@ -56,7 +56,7 @@
     </style>
     <!--    menu icon padding-->
     <style name="myMenuPadding" parent="Theme.Project_MyFit">
-        <item name="android:paddingEnd">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_2sdp</item>
     </style>
     <!--    edit text corner-->
     <style name="myEditTextCorner" parent="ShapeAppearance.MaterialComponents.SmallComponent">
