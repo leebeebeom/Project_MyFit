@@ -95,7 +95,7 @@
                 android:alpha="0.7"
                 android:visibility="gone"
                 android:paddingStart="0dp"
-                android:paddingEnd="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_12sdp"
                 android:scaleX="0.9"
                 tools:src="@drawable/icon_drag_handle" />
         </com.google.android.material.card.MaterialCardView>
