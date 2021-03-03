@@ -59,6 +59,10 @@ public class InputOutputViewModel extends AndroidViewModel {
         mRepository = new Repository(application);
     }
 
+    public Repository getRepository() {
+        return mRepository;
+    }
+
     //dao-------------------------------------------------------------------------------------------
     public void sizeInsert() {
         mNewSize.setOrderNumber(mRepository.getSizeLargestOrder() + 1);
