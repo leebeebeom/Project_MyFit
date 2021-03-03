@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -144,9 +143,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout.setVisibility(View.VISIBLE);
-        viewHolder.itemView.setTranslationZ(0);
-        mListener.onFolderDragHandleTouch(viewHolder, ((FolderAdapter.FolderVH) viewHolder).mBinding.folderAmountLayout);
+        mListener.onFolderDragHandleTouch(viewHolder);
         mModel.getRepository().folderUpdate(mFolderList);
     }
     //----------------------------------------------------------------------------------------------
@@ -157,8 +154,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    public List<Folder> setSelectedItem(List<Folder> selectedItem) {
-        return mSelectedItem = selectedItem;
+    public void setSelectedItem(List<Folder> selectedItem) {
+        this.mSelectedItem = selectedItem;
     }
 
     //drag select-----------------------------------------------------------------------------------
@@ -220,11 +217,13 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (!mFolder.getFolderName().equals("dummy") && event.getAction() == MotionEvent.ACTION_DOWN) {
-                itemView.setTranslationZ(10);
-                mListener.onFolderDragHandleTouch(this, mBinding.folderAmountLayout);
-            }
+            if (!mFolder.getFolderName().equals("dummy") && event.getAction() == MotionEvent.ACTION_DOWN)
+                mListener.onFolderDragHandleTouch(this);
             return false;
+        }
+
+        public ItemListRecyclerFolderBinding getBinding() {
+            return mBinding;
         }
     }
 
@@ -233,6 +232,6 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         void onFolderItemViewLongClick(MaterialCardView cardView, int position);
 
-        void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, LinearLayoutCompat folderAmountLayout);
+        void onFolderDragHandleTouch(RecyclerView.ViewHolder holder);
     }
 }
