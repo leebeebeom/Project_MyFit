@@ -58,6 +58,6 @@ public class CategoryNameEditDialog extends DialogFragment {
     }
 
     public interface CategoryNameEditConfirmClick {
-        void categoryNameEditConfirmClick(String folderName);
+        void categoryNameEditConfirmClick(String categoryName);
     }
 }
