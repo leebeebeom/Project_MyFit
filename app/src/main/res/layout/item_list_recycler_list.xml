@@ -88,7 +88,7 @@
                         android:alpha="0.7"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{size.brand}"
+                        android:text="@{size.brand.trim()}"
                         android:textSize="@dimen/_8sdp"
                         tools:text="Anderson Bell" />
 
@@ -100,7 +100,7 @@
                         android:alpha="0.8"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{size.name}"
+                        android:text="@{size.name.trim()}"
                         android:textSize="@dimen/_10sdp"
                         tools:text="DAMAGED CREW NECK SWEATER" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
