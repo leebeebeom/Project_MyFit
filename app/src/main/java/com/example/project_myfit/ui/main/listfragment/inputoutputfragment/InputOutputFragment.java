@@ -30,11 +30,15 @@ import com.example.project_myfit.databinding.FragmentInputOutputBinding;
 import com.example.project_myfit.dialog.DeleteConFirmDialog;
 import com.example.project_myfit.dialog.GoBackDialog;
 import com.example.project_myfit.dialog.ImageClearDialog;
+import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.MyFitConstant.GET_IMAGE_REQUEST_CODE;
@@ -119,6 +123,13 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         imageLongClick();
         goButtonClick();
 
+        List<String> brandList = mModel.getRepository().getSizeBrandList();
+        List<String> newBrandList = new ArrayList<>();
+        for (String s : brandList)
+            if (!newBrandList.contains(s)) newBrandList.add(s);
+
+        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete, R.id.auto_complete_text, newBrandList);
+        mBinding.brand.setAdapter(autoCompleteAdapter);
         return view;
     }
 
@@ -267,12 +278,12 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
     private void fabClick(@NotNull FloatingActionButton floatingActionButton) {
         floatingActionButton.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mBinding.brand.getText()) || TextUtils.isEmpty(mBinding.name.getText())) {
-                if (TextUtils.isEmpty(mBinding.brand.getText())) {
+            if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim()) || TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim())) {
+                if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim())) {
                     mBinding.brandLayout.setErrorEnabled(true);
                     mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
                 }
-                if (TextUtils.isEmpty(mBinding.name.getText())) {
+                if (TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim())) {
                     mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
                     mBinding.nameLayout.setErrorEnabled(true);
                 }
@@ -288,13 +299,11 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
     void onKeyboardVisibilityChanged(boolean opened, BottomAppBar bottomAppBar, BottomNavigationView bottomNavigationView, FloatingActionButton floatingActionButton) {
         if (opened) {
-            bottomAppBar.performHide();
-            floatingActionButton.hide();
-            bottomNavigationView.setVisibility(View.GONE);
+            floatingActionButton.setVisibility(View.INVISIBLE);
+            bottomAppBar.setVisibility(View.INVISIBLE);
         } else {
-            bottomAppBar.performShow();
+            bottomAppBar.setVisibility(View.VISIBLE);
             floatingActionButton.show();
-            bottomNavigationView.setVisibility(View.VISIBLE);
             if (mBinding.memo.hasFocus())
                 mBinding.inputOutputScrollView.scrollTo(0, mBinding.inputOutputScrollView.getBottom());
         }
