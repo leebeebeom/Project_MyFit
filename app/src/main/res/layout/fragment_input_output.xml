@@ -124,22 +124,24 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/brand_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:hint="@string/brand"
+                    app:endIconMode="none"
                     android:theme="@style/myEditText"
                     app:errorTextAppearance="@style/myTextSize8sdp"
                     app:hintTextAppearance="@style/myTextSize8sdp"
                     app:shapeAppearance="@style/myEditTextCorner">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/brand"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_34sdp"
                         android:imeOptions="actionNext"
                         android:inputType="text"
+                        android:completionThreshold="0"
                         android:text="@={size.brand}"
                         android:textSize="@dimen/_10sdp" />
                 </com.google.android.material.textfield.TextInputLayout>
