@@ -70,9 +70,6 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
-//TODO 액션모드 딸깍거리는거 해결좀
-//TODO order number 1부터 다시
-//TODO 써치뷰에 폴더 안에 있던거 나옴
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
