@@ -107,6 +107,10 @@ public class ListViewModel extends AndroidViewModel {
         mFolderId = mThisFolder == null ? mActivityModel.getCategory().getId() : mThisFolder.getId();
     }
 
+    public void setThisFolder2(Folder folder) {
+        this.mThisFolder = folder;
+    }
+
     public List<Folder> getFolderHistory() {
         List<Folder> allFolderList = getAllFolderByParent();
         List<Folder> folderHistory = new ArrayList<>();
