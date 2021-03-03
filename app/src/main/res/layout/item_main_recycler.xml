@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_4sdp"
-                    android:alpha="0.7"
+                    android:alpha="0.8"
                     android:scaleX="0.3"
                     android:scaleY="0.3"
                     setDotIcon="@{category.parentCategory}"
@@ -57,12 +57,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/_6sdp"
-                    android:alpha="0.8"
+                    android:alpha="0.9"
                     android:ellipsize="end"
                     android:maxWidth="@dimen/_220sdp"
                     android:maxLines="1"
                     android:text="@{category.category}"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_11sdp"
                     tools:text="반팔" />
 
                 <FrameLayout
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:alpha="0.7"
+                android:alpha="0.8"
                 android:visibility="gone"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_12sdp"
