@@ -75,4 +75,5 @@
     <string name="no_recent_search_list">최근 검색 목록이 없습니다.</string>
     <string name="tree_view_category">CATEGORY :</string>
     <string name="http">http://</string>
+    <string name="edit_name">이름 변경</string>
 </resources>
