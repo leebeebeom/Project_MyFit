@@ -71,4 +71,5 @@ public class MyFitConstant {
     public static final String FOLDER_ID = "folder id";
 
     public static final String IS_TREE_VIEW = "is tree view";
+    public static final String IS_PARENT_NAME = "is parent name";
 }
