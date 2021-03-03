@@ -701,14 +701,14 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         Drawable arrowIcon = ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.icon_arrow_forward, requireActivity().getTheme());
         ImageView imageView = new ImageView(requireContext());
         imageView.setImageDrawable(arrowIcon);
-        imageView.setAlpha(0.7f);
+        imageView.setAlpha(0.8f);
         return imageView;
     }
 
     @NotNull
     public MaterialTextView getFolderNameTextView(@NotNull Folder folder) {
         MaterialTextView textView = new MaterialTextView(requireContext());
-        textView.setAlpha(0.8f);
+        textView.setAlpha(0.9f);
         float size = getResources().getDimension(R.dimen._4sdp);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
         textView.setText(folder.getFolderName());
