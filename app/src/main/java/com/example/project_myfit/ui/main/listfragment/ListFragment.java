@@ -22,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.DialogFragment;
@@ -39,8 +38,12 @@ import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentListBinding;
+import com.example.project_myfit.databinding.ItemListRecyclerFolderBinding;
+import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
+import com.example.project_myfit.databinding.ItemListRecyclerListBinding;
 import com.example.project_myfit.databinding.ListPopupMenuBinding;
 import com.example.project_myfit.dialog.AddFolderDialog;
+import com.example.project_myfit.dialog.CategoryNameEditDialog;
 import com.example.project_myfit.dialog.FolderNameEditDialog;
 import com.example.project_myfit.dialog.ItemMoveDialog;
 import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
@@ -73,6 +76,7 @@ import java.util.List;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.MyFitConstant.CATEGORY_EDIT_DIALOG;
 import static com.example.project_myfit.MyFitConstant.DELETE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.FOLDER_ADD_DIALOG;
 import static com.example.project_myfit.MyFitConstant.FOLDER_EDIT_DIALOG;
@@ -101,7 +105,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         AddFolderDialog.AddFolderConfirmClick, AddFolderDialog.TreeAddFolderConfirmClick,
         TreeNode.TreeNodeClickListener, TreeViewDialog.TreeViewAddClick,
         SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick, FolderNameEditDialog.FolderNameEditConfirmClick,
-        ItemMoveDialog.ItemMoveConfirmClick, SortDialog.SortConfirmClick {
+        ItemMoveDialog.ItemMoveConfirmClick, SortDialog.SortConfirmClick, CategoryNameEditDialog.CategoryNameEditConfirmClick {
 
     private MainActivityViewModel mActivityModel;
     private ListViewModel mModel;
@@ -177,7 +181,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             } else if (item.getItemId() == R.id.action_mode_move)
                 showDialog(new TreeViewDialog(), TREE_DIALOG);
             else
-                showDialog(FolderNameEditDialog.getInstance(mModel.getSelectedItemFolder().get(0).getFolderName()), FOLDER_EDIT_DIALOG);
+                showDialog(FolderNameEditDialog.getInstance(mModel.getSelectedItemFolder().get(0).getFolderName(), false), FOLDER_EDIT_DIALOG);
             return true;
         }
 
@@ -367,12 +371,23 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
             }
 
             @Override
-            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder, LinearLayoutCompat folderAmountLayout) {
+            public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder) {
                 if (mActionMode != null && !isDragging) {
                     isDragging = true;
-                    folderAmountLayout.setVisibility(View.GONE);
+                    holder.itemView.setTranslationZ(10);
+                    ItemListRecyclerFolderBinding binding = ((FolderAdapter.FolderVH) holder).getBinding();
+                    binding.folderAmountLayout.setVisibility(View.GONE);
+                    binding.folderNameText.setAlpha(0.5f);
+                    binding.folderCheckBox.setVisibility(View.GONE);
                     mTouchHelperFolder.startDrag(holder);
-                } else if (isDragging) isDragging = false;
+                } else if (isDragging) {
+                    isDragging = false;
+                    holder.itemView.setTranslationZ(0);
+                    ItemListRecyclerFolderBinding binding = ((FolderAdapter.FolderVH) holder).getBinding();
+                    binding.folderAmountLayout.setVisibility(View.VISIBLE);
+                    binding.folderNameText.setAlpha(1);
+                    binding.folderCheckBox.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -560,6 +575,15 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     private void popupMenuClick() {
+        mPopupMenuBinding.editFolderName.setOnClickListener(v -> {
+            Folder thisFolder = mModel.getThisFolder();
+            if (thisFolder == null) {
+                showDialog(CategoryNameEditDialog.getInstance(mModel.getThisCategory().getCategory()), CATEGORY_EDIT_DIALOG);
+            } else
+                showDialog(FolderNameEditDialog.getInstance(mModel.getThisFolder().getFolderName(), true), FOLDER_EDIT_DIALOG);
+            mPopupWindow.dismiss();
+        });
+
         mPopupMenuBinding.addFolder.setOnClickListener(v -> {
             showDialog(AddFolderDialog.getInstance(false), FOLDER_ADD_DIALOG);
             mPopupWindow.dismiss();
@@ -688,12 +712,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         float size = getResources().getDimension(R.dimen._4sdp);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
         textView.setText(folder.getFolderName());
-        textView.setOnClickListener(v -> {
-            if (mModel.getThisFolder().getId() != folder.getId()) {
+        if (mModel.getThisFolder().getId() != folder.getId()) {
+            textView.setOnClickListener(v -> {
                 mActivityModel.setFolder(folder);
                 Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_listFragment_refresh);
-            }
-        });
+            });
+        } else textView.setTag("this_folder_text_view");
         textView.setMaxLines(1);
         return textView;
     }
@@ -890,9 +914,38 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
         if (mActionMode != null && !isDragging) {
             isDragging = true;
-            if (mViewType == LISTVIEW) mTouchHelperList.startDrag(viewHolder);
-            else mTouchHelperGrid.startDrag(viewHolder);
-        } else if (isDragging) isDragging = false;
+            viewHolder.itemView.setTranslationZ(10);
+            if (mViewType == LISTVIEW) {
+                ItemListRecyclerListBinding binding = ((SizeAdapterList.SizeListVH) viewHolder).getBinding();
+                binding.listCheckBox.setVisibility(View.INVISIBLE);
+                binding.listBrandText.setAlpha(0.4f);
+                binding.listNameText.setAlpha(0.5f);
+                binding.listImage.setAlpha(0.5f);
+                mTouchHelperList.startDrag(viewHolder);
+            } else {
+                ItemListRecyclerGridBinding binding = ((SizeAdapterGrid.SizeGridVH) viewHolder).getBinding();
+                binding.gridImage.setAlpha(0.5f);
+                binding.gridBrandText.setAlpha(0.4f);
+                binding.gridNameText.setAlpha(0.5f);
+                mTouchHelperGrid.startDrag(viewHolder);
+            }
+        } else if (isDragging) {
+            isDragging = false;
+            if (mViewType == LISTVIEW) {
+                viewHolder.itemView.setTranslationZ(0);
+                ItemListRecyclerListBinding binding = ((SizeAdapterList.SizeListVH) viewHolder).getBinding();
+                binding.listCheckBox.setVisibility(View.VISIBLE);
+                binding.listBrandText.setAlpha(0.7f);
+                binding.listNameText.setAlpha(0.8f);
+                binding.listImage.setAlpha(1f);
+            } else {
+                viewHolder.itemView.setTranslationZ(0);
+                ItemListRecyclerGridBinding binding = ((SizeAdapterGrid.SizeGridVH) viewHolder).getBinding();
+                binding.gridImage.setAlpha(1f);
+                binding.gridBrandText.setAlpha(0.7f);
+                binding.gridNameText.setAlpha(0.8f);
+            }
+        }
     }
 
     @Override
@@ -1125,11 +1178,22 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
     }
 
     @Override//folder name edit confirm click
-    public void folderNameEditConfirmClick(String folderName) {
-        Folder folder = mModel.getSelectedItemFolder().get(0);
-        folder.setFolderName(folderName);
-        mModel.getRepository().folderUpdate(folder);
-        mActionMode.finish();
+    public void folderNameEditConfirmClick(String folderName, boolean isParentName) {
+        if (!isParentName) {
+            Folder folder = mModel.getSelectedItemFolder().get(0);
+            folder.setFolderName(folderName);
+            mModel.getRepository().folderUpdate(folder);
+            mActionMode.finish();
+        } else {
+            Folder folder = mModel.getThisFolder();
+            folder.setFolderName(folderName);
+            mModel.getRepository().folderUpdate(folder);
+            ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+            if (actionBar != null) actionBar.setTitle(folderName);
+            MaterialTextView textView = requireView().findViewWithTag("this_folder_text_view");
+            textView.setText(folderName);
+            mModel.setThisFolder2(folder);
+        }
     }
 
     @Override//sort confirm click
@@ -1140,6 +1204,17 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
         SharedPreferences.Editor editor = mSortPreference.edit();
         editor.putInt(SORT_LIST, mSort);
         editor.apply();
+    }
+
+    @Override
+    public void categoryNameEditConfirmClick(String categoryName) {
+        Category thisCategory = mActivityModel.getCategory();
+        thisCategory.setCategory(categoryName);
+        mModel.getRepository().categoryUpdate(thisCategory);
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) actionBar.setTitle(categoryName);
+        mBinding.listTextCategory.setText(categoryName);
+        mActivityModel.setCategory(thisCategory);
     }
 
     @Override
