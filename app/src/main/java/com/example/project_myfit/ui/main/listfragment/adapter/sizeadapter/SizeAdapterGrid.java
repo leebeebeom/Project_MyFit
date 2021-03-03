@@ -124,7 +124,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        viewHolder.itemView.setTranslationZ(0);
         mListener.onSizeDragHandleTouch(viewHolder);
         mModel.getRepository().sizeUpdate(mSizeList);
     }
@@ -198,11 +197,12 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
         @Override
         public boolean onTouch(View v, @NotNull MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                itemView.setTranslationZ(10);
-                mListener.onSizeDragHandleTouch(this);
-            }
+            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandleTouch(this);
             return false;
+        }
+
+        public ItemListRecyclerGridBinding getBinding() {
+            return mBinding;
         }
     }
 }

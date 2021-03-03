@@ -73,13 +73,13 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
-        Size size = getItem(holder.getLayoutPosition());
-        holder.mBinding.setSize(size);
-        holder.setSize(size);
-
         MaterialCardView cardView = holder.mBinding.listCardView;
         MaterialCheckBox checkBox = holder.mBinding.listCheckBox;
         ImageView dragHandle = holder.mBinding.listDragHandle;
+
+        Size size = getItem(holder.getLayoutPosition());
+        holder.mBinding.setSize(size);
+        holder.setSize(size);
 
         if (size.getImageUri() != null) holder.mBinding.listAddIcon.setVisibility(View.GONE);
 
@@ -139,8 +139,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        mListener.onSizeDragHandleTouch(viewHolder);
         mModel.getRepository().sizeUpdate(mSizeList);
+        mListener.onSizeDragHandleTouch(viewHolder);
     }
     //----------------------------------------------------------------------------------------------
 
