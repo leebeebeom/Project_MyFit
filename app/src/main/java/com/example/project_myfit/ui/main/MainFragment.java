@@ -72,6 +72,7 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 //TODO 휴지통
 //TODO 액션모드 딸깍거리는거 해결좀
 //TODO order number 1부터 다시
+//TODO 써치뷰에 폴더 안에 있던거 나옴
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -187,13 +188,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mBinding.mainFab.setOnClickListener(v -> {
             mBinding.mainScrollView.scrollTo(0, 0);
             mBinding.mainScrollView.smoothScrollTo(0, 0);
-        });
-
-        mBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                mBinding.mainScrollView.smoothScrollTo(0, 0);
-            }
         });
         return view;
     }
@@ -349,29 +343,30 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mBinding.btnEtc.setTextColor(textOriginColor);
 
             if (checkedId == R.id.btn_top && isChecked) {
-                mBinding.viewPager.setCurrentItem(0, true);
                 mBinding.btnTop.setBackgroundColor(colorControl);
                 mBinding.btnTop.setTextColor(colorPrimary);
             } else if (checkedId == R.id.btn_bottom && isChecked) {
-                mBinding.viewPager.setCurrentItem(1, true);
                 mBinding.btnBottom.setBackgroundColor(colorControl);
                 mBinding.btnBottom.setTextColor(colorPrimary);
             } else if (checkedId == R.id.btn_outer && isChecked) {
-                mBinding.viewPager.setCurrentItem(2, true);
                 mBinding.btnOuter.setBackgroundColor(colorControl);
                 mBinding.btnOuter.setTextColor(colorPrimary);
             } else if (checkedId == R.id.btn_etc && isChecked) {
-                mBinding.viewPager.setCurrentItem(3, true);
                 mBinding.btnEtc.setBackgroundColor(colorControl);
                 mBinding.btnEtc.setTextColor(colorPrimary);
             }
         });
+        mBinding.btnTop.setOnClickListener(v -> mBinding.viewPager.setCurrentItem(0, false));
+        mBinding.btnBottom.setOnClickListener(v -> mBinding.viewPager.setCurrentItem(1, false));
+        mBinding.btnOuter.setOnClickListener(v -> mBinding.viewPager.setCurrentItem(2, false));
+        mBinding.btnEtc.setOnClickListener(v -> mBinding.viewPager.setCurrentItem(3, false));
     }
 
     private void pagerChangeListener() {
         mBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                mBinding.mainScrollView.smoothScrollTo(0, 0);
                 if (position == 0) mBinding.btnTop.setChecked(true);
                 else if (position == 1) mBinding.btnBottom.setChecked(true);
                 else if (position == 2) mBinding.btnOuter.setChecked(true);
