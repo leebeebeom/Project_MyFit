@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|top"
                         android:layout_marginTop="-2dp"
-                        android:alpha="0.8"
+                        android:alpha="0.9"
                         android:scaleX="0.7"
                         tools:src="@drawable/icon_drag_handle2" />
                 </FrameLayout>
@@ -91,7 +91,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="-2dp"
-                            android:alpha="0.8"
+                            android:alpha="0.9"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@{size.name.trim()}"
@@ -103,12 +103,12 @@
                         android:id="@+id/grid_favorite_check_box"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="match_parent"
-                        android:layout_gravity="bottom"
+                        android:gravity="bottom"
                         android:button="@drawable/check_box_heart"
                         android:background="@android:color/transparent"
                         android:checked="@={size.favorite}"
-                        android:scaleX="0.8"
-                        android:scaleY="0.8" />
+                        android:scaleX="0.7"
+                        android:scaleY="0.7" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -122,13 +122,13 @@
             android:layout_marginStart="-4dp"
             android:layout_marginTop="@dimen/_3sdp"
             android:layout_marginEnd="@dimen/_60sdp"
-            android:alpha="0.7"
+            android:alpha="0.8"
             android:buttonTint="?colorControlNormal"
             android:clickable="false"
             android:elevation="@dimen/_4sdp"
             android:enabled="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
             android:visibility="gone" />
     </FrameLayout>
 </layout>
