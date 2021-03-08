@@ -46,7 +46,8 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull Folder oldItem, @NonNull @NotNull Folder newItem) {
-                return oldItem.getFolderName().equals(newItem.getFolderName());
+                return oldItem.getFolderName().equals(newItem.getFolderName()) &&
+                        oldItem.getDummy() == newItem.getDummy();
             }
         });
         this.mModel = model;
