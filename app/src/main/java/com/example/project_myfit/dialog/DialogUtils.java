@@ -155,7 +155,7 @@ public class DialogUtils {
         });
         binding.dialogEditText.setOnKeyListener((v, keyCode, event) -> {
             if (String.valueOf(binding.dialogEditText.getText()).length() == 30)
-                binding.dialogEditTextLayout.setError("30글자까지 입력 가능합니다.");
+                binding.dialogEditTextLayout.setError("30자까지 입력 가능합니다.");
             else binding.dialogEditTextLayout.setErrorEnabled(false);
             return false;
         });
