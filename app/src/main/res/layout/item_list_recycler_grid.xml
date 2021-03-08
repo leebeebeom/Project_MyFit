@@ -43,7 +43,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/add_image_icon"
-                        setAddIcon="@{size.size}"
+                        setAddIcon="@{size.imageUri}"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_gravity="center"

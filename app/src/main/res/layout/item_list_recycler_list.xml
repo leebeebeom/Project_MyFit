@@ -58,7 +58,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/list_add_icon"
-                        setAddIcon="@{size.size}"
+                        setAddIcon="@{size.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:alpha="0.2"
