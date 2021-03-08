@@ -528,11 +528,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void selectedItemDeleteConfirmClick() {
         mModel.selectedItemDelete();
         mActionMode.finish();
-        RecyclerView.ViewHolder viewHolder =
-                ((RecyclerView) mBinding.viewPager.getChildAt(0)).findViewHolderForLayoutPosition(mBinding.viewPager.getCurrentItem());
-        boolean isEmpty = mAdapterList.get(mBinding.viewPager.getCurrentItem()).getItemCount() == 0;
-        if (viewHolder != null)
-            ((MainViewPagerAdapter.ViewPagerVH) viewHolder).setNoData(isEmpty);
     }
 
     @Override
