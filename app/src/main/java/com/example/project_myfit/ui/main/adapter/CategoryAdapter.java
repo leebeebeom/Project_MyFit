@@ -44,6 +44,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private int mSort;
     private final int mViewPagerPosition;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
+    private MainViewPagerAdapter.ViewPagerVH mViewPagerVH;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener, int viewPagerPosition) {
         super(new DiffUtil.ItemCallback<Category>() {
@@ -54,7 +55,8 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
-                return oldItem.getCategory().equals(newItem.getCategory());
+                return oldItem.getCategory().equals(newItem.getCategory()) &&
+                        oldItem.getDummy() == newItem.getDummy();
             }
         });
         this.mModel = model;
@@ -74,6 +76,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         this.mCategoryList = list;
         this.mFolderFolderIdList = allFolderFolderId;
         this.mSizeFolderIdList = allSizeFolderId;
+        if (list != null && mViewPagerVH != null)
+            mViewPagerVH.setNoData(list.isEmpty());
+    }
+
+    public void setViewPagerVH(MainViewPagerAdapter.ViewPagerVH viewPagerVH) {
+        this.mViewPagerVH = viewPagerVH;
     }
 
     @NonNull
