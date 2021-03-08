@@ -43,4 +43,7 @@ public interface FolderDao {
 
     @Update
     void folderUpdate(List<Folder> folderList);
+
+    @Query("SELECT * FROM folder WHERE isDeleted = :isDeleted ORDER BY folderName")
+    List<Folder> getAllFolder(int isDeleted);
 }

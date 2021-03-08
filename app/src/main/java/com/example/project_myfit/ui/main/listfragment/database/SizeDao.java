@@ -42,4 +42,7 @@ public interface SizeDao {
 
     @Update
     void sizeUpdate(List<Size> sizeList);
+
+    @Query("SELECT * FROM Size WHERE isDeleted = :isDeleted ORDER BY name")
+    List<Size> getAllSize(int isDeleted);
 }
