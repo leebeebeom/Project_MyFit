@@ -14,7 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/search_folder_check_box"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:alpha="0.8"
+            android:buttonTint="?colorControlNormal"
+            android:clickable="false"
+            android:enabled="false"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:visibility="visible" />
+
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/search_folder_card_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_32sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -71,20 +86,6 @@
                             tools:text="12" />
                     </FrameLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/search_folder_check_box"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="@dimen/_4sdp"
-                    android:alpha="0.8"
-                    android:buttonTint="?colorControlNormal"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
