@@ -70,6 +70,7 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 import static com.example.project_myfit.MyFitConstant.TOP;
 
 //TODO 휴지통
+//키보드, 바텀앱바
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -87,6 +88,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private List<Category> mTopList, mBottomList, mOuterList, mEtcList;
     private List<ItemTouchHelper> mTouchHelperList;
     private List<CategoryAdapter> mAdapterList;
+    private DragSelectTouchListener mSelectListener;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -149,7 +151,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mBinding.btnEtc.setEnabled(true);
         }
     };
-    private DragSelectTouchListener mSelectListener;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -307,7 +308,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mAdapterList.get(3).submitList(mEtcList, mModel.getRepository().getFolderFolderIdByParent(ETC), mModel.getRepository().getSizeFolderIdByParent(ETC));
 
             mViewPagerAdapter.setSort(mSort);
-            mViewPagerAdapter.notifyDataSetChanged();//for noData
         });
     }
 
@@ -528,6 +528,11 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void selectedItemDeleteConfirmClick() {
         mModel.selectedItemDelete();
         mActionMode.finish();
+        RecyclerView.ViewHolder viewHolder =
+                ((RecyclerView) mBinding.viewPager.getChildAt(0)).findViewHolderForLayoutPosition(mBinding.viewPager.getCurrentItem());
+        boolean isEmpty = mAdapterList.get(mBinding.viewPager.getCurrentItem()).getItemCount() == 0;
+        if (viewHolder != null)
+            ((MainViewPagerAdapter.ViewPagerVH) viewHolder).setNoData(isEmpty);
     }
 
     @Override
