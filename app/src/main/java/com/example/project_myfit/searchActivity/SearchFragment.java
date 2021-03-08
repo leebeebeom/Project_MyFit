@@ -42,7 +42,6 @@ import com.example.project_myfit.searchActivity.adapter.RecentSearchAdapter;
 import com.example.project_myfit.searchActivity.adapter.SearchAdapter;
 import com.example.project_myfit.searchActivity.adapter.SearchViewPagerAdapter;
 import com.example.project_myfit.searchActivity.database.RecentSearch;
-import com.example.project_myfit.ui.main.database.Category;
 import com.example.project_myfit.ui.main.listfragment.database.Folder;
 import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategory;
@@ -572,8 +571,6 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
             if (o instanceof Folder) selectedFolder.add((Folder) o);
             else if (o instanceof Size) selectedSize.add((Size) o);
         }
-        List<Long> folderFolderIdList = mModel.getRepository().getFolderFolderIdByParent(mModel.getParentCategory());
-        List<Long> sizeFolderIdList = mModel.getRepository().getSizeFolderIdByParent(mModel.getParentCategory());
 
         if (mModel.getCategoryAddValue() != null) {//category node
             TreeHolderCategory.CategoryTreeHolder oldViewHolder = mModel.getCategoryAddValue();
@@ -592,6 +589,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
                 }
             }
 
+            List<Long> folderFolderIdList = mModel.getRepository().getFolderFolderIdByParent(mModel.getParentCategory());
+            List<Long> sizeFolderIdList = mModel.getRepository().getSizeFolderIdByParent(mModel.getParentCategory());
+
             TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, 40,
                     this, selectedFolder, selectedSize, allFolderList, folderFolderIdList, sizeFolderIdList))
                     .setViewHolder(new TreeHolderFolder(requireContext()));
@@ -601,7 +601,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
             TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) oldNode.getValue();
             TreeHolderCategory newViewHolder2 = (TreeHolderCategory) oldNode.getViewHolder();
-            newViewHolder2.getBinding().amount.setText(getItemAmount(newViewHolder.category, folderFolderIdList, sizeFolderIdList));
+            String amount = String.valueOf(Integer.parseInt(String.valueOf(newViewHolder2.getBinding().amount.getText())) + 1);
+            newViewHolder2.getBinding().amount.setText(amount);
         } else {//folder node
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
@@ -618,6 +619,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
                 }
             }
 
+            List<Long> folderFolderIdList = mModel.getRepository().getFolderFolderIdByParent(mModel.getParentCategory());
+            List<Long> sizeFolderIdList = mModel.getRepository().getSizeFolderIdByParent(mModel.getParentCategory());
+
             int margin = (int) getResources().getDimension(R.dimen._8sdp);
             TreeNode treeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder,
                     oldViewHolder.getMargin() + margin, this, selectedFolder, selectedSize, allFolderList, folderFolderIdList, sizeFolderIdList))
@@ -628,26 +632,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
             TreeHolderFolder.FolderTreeHolder newViewHolder = (TreeHolderFolder.FolderTreeHolder) oldNode.getValue();
             TreeHolderFolder newViewHolder2 = (TreeHolderFolder) oldNode.getViewHolder();
-            newViewHolder2.getBinding().amount.setText(getItemAmount(newViewHolder.getFolder(), folderFolderIdList, sizeFolderIdList));
+            String amount = String.valueOf(Integer.parseInt(String.valueOf(newViewHolder2.getBinding().amount.getText())) + 1);
+            newViewHolder2.getBinding().amount.setText(amount);
         }
-    }
-
-    @NotNull
-    private String getItemAmount(Category
-                                         category, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-        int amount = 0;
-        for (Long f : folderFolderIdList) if (f == category.getId()) amount++;
-        for (Long s : sizeFolderIdList) if (s == category.getId()) amount++;
-        return String.valueOf(amount);
-    }
-
-    @NotNull
-    private String getItemAmount(Folder
-                                         folder, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-        int amount = 0;
-        for (Long f : folderFolderIdList) if (f == folder.getId()) amount++;
-        for (Long s : sizeFolderIdList) if (s == folder.getId()) amount++;
-        return String.valueOf(amount);
     }
 
     @NotNull
