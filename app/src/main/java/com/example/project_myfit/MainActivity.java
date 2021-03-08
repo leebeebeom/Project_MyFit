@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         Size size = model.getRepository().getSize(intent.getIntExtra(SIZE_ID, 0));
         model.setSize(size);
 
-        Category category = model.getRepository().getCategory(size.getId());
-        Folder folder = model.getRepository().getFolder(size.getId());
+        Category category = model.getRepository().getCategory(size.getFolderId());
+        Folder folder = model.getRepository().getFolder(size.getFolderId());
         if (category != null) model.setCategory(category);
         else {
             category = getCategory(folder, model);
