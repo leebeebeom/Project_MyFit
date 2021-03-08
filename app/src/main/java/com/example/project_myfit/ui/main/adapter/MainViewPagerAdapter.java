@@ -48,45 +48,12 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        //top
-        if (holder.getLayoutPosition() == 0) {
-            if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
-                holder.mBinding.mainRecyclerView.setAdapter(mAdapterList.get(0));
-                mTouchHelperList.get(0).attachToRecyclerView(holder.mBinding.mainRecyclerView);
-                holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
-            }
-            if (mAdapterList.get(0).getItemCount() == 0)
-                holder.mBinding.noData.setVisibility(View.VISIBLE);
-            else holder.mBinding.noData.setVisibility(View.GONE);
-        }
-        //bottom
-        else if (holder.getLayoutPosition() == 1) {
-            if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
-                holder.mBinding.mainRecyclerView.setAdapter(mAdapterList.get(1));
-                mTouchHelperList.get(1).attachToRecyclerView(holder.mBinding.mainRecyclerView);
-                holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
-            }
-            if (mAdapterList.get(1).getItemCount() == 0)
-                holder.mBinding.noData.setVisibility(View.VISIBLE);
-            else holder.mBinding.noData.setVisibility(View.GONE);
-        }
-        //outer
-        else if (holder.getLayoutPosition() == 2) {
-            if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
-                holder.mBinding.mainRecyclerView.setAdapter(mAdapterList.get(2));
-                mTouchHelperList.get(2).attachToRecyclerView(holder.mBinding.mainRecyclerView);
-                holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
-            }
-            if (mAdapterList.get(2).getItemCount() == 0)
-                holder.mBinding.noData.setVisibility(View.VISIBLE);
-            else holder.mBinding.noData.setVisibility(View.GONE);
-        } else if (holder.getLayoutPosition() == 3) {
-            if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
-                holder.mBinding.mainRecyclerView.setAdapter(mAdapterList.get(3));
-                mTouchHelperList.get(3).attachToRecyclerView(holder.mBinding.mainRecyclerView);
-                holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
-            }
-            if (mAdapterList.get(3).getItemCount() == 0)
+        if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
+            mAdapterList.get(position).setViewPagerVH(holder);
+            holder.mBinding.mainRecyclerView.setAdapter(mAdapterList.get(position));
+            mTouchHelperList.get(position).attachToRecyclerView(holder.mBinding.mainRecyclerView);
+            holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
+            if (mAdapterList.get(position).getItemCount() == 0)
                 holder.mBinding.noData.setVisibility(View.VISIBLE);
             else holder.mBinding.noData.setVisibility(View.GONE);
         }
@@ -121,6 +88,11 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
                     listener2.dragAutoScroll(2);
                 return false;
             });
+        }
+
+        public void setNoData(boolean isEmpty) {
+            if (isEmpty) mBinding.noData.setVisibility(View.VISIBLE);
+            else mBinding.noData.setVisibility(View.GONE);
         }
     }
 
