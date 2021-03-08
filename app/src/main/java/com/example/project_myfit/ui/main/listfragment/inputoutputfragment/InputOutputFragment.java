@@ -254,12 +254,15 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     private void goButtonClick() {
         mBinding.goButton.setOnClickListener(v -> {
             String link = String.valueOf(mBinding.link.getText());
-            if (!link.startsWith(getString(R.string.https)) && !link.startsWith(getString(R.string.http))) link = getString(R.string.https) + link;
+            if (!TextUtils.isEmpty(link)) {
+                if (!link.startsWith(getString(R.string.https)) && !link.startsWith(getString(R.string.http)))
+                    link = getString(R.string.https) + link;
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-                intent.setData(Uri.parse(link));
-                startActivity(intent);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                    intent.setData(Uri.parse(link));
+                    startActivity(intent);
+                }
             }
         });
     }
