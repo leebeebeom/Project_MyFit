@@ -178,11 +178,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mPopupWindow = new PopupWindow(popupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 
-        mBinding.mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (oldScrollY < scrollY) mBinding.mainFab.show();
-            else if (scrollY == 0) mBinding.mainFab.hide();
-        });
-
         mBinding.mainFab.setOnClickListener(v -> {
             mBinding.mainScrollView.scrollTo(0, 0);
             mBinding.mainScrollView.smoothScrollTo(0, 0);
@@ -314,6 +309,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @SuppressLint("ClickableViewAccessibility")
     private void setAutoScroll() {
         mBinding.mainScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (oldScrollY < scrollY) mBinding.mainFab.show();
+            else if (scrollY == 0) mBinding.mainFab.hide();
+
             if ((isDragSelecting || isDragging) && mScrollEnable && scrollY > oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
             else if ((isDragSelecting || isDragging) && mScrollEnable && scrollY < oldScrollY)
