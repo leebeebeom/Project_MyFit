@@ -193,6 +193,18 @@ public class Repository {
     public void folderUpdate(List<Folder> folderList) {
         new Thread(() -> mFolderDao.folderUpdate(folderList)).start();
     }
+
+    public List<Folder> getAllFolder() {
+        List<Folder> folderList = new ArrayList<>();
+        Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getAllFolder(0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return folderList;
+    }
     //----------------------------------------------------------------------------------------------
 
     //size------------------------------------------------------------------------------------------
@@ -286,6 +298,18 @@ public class Repository {
 
     public void sizeUpdate(List<Size> sizeList) {
         new Thread(() -> mSizeDao.sizeUpdate(sizeList)).start();
+    }
+
+    public List<Size> getAllSize() {
+        List<Size> sizeList = new ArrayList<>();
+        Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getAllSize(0)));
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sizeList;
     }
     //----------------------------------------------------------------------------------------------
 
