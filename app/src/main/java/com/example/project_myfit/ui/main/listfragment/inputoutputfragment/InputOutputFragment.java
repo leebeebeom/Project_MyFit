@@ -31,6 +31,9 @@ import com.example.project_myfit.dialog.DeleteConFirmDialog;
 import com.example.project_myfit.dialog.GoBackDialog;
 import com.example.project_myfit.dialog.ImageClearDialog;
 import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.ui.main.database.Category;
+import com.example.project_myfit.ui.main.listfragment.database.Folder;
+import com.example.project_myfit.ui.main.listfragment.database.Size;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -123,14 +126,40 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
         imageLongClick();
         goButtonClick();
 
-        List<String> brandList = mModel.getRepository().getSizeBrandList();
-        List<String> newBrandList = new ArrayList<>();
-        for (String s : brandList)
-            if (!newBrandList.contains(s)) newBrandList.add(s);
+        List<Size> sizeList = new ArrayList<>();
+        sizeListing(sizeList);
+        List<String> brandList = new ArrayList<>();
+        for (Size s : sizeList)
+            if (!brandList.contains(s.getBrand().trim())) brandList.add(s.getBrand().trim());
 
-        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete, R.id.auto_complete_text, newBrandList);
+        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete, R.id.auto_complete_text, brandList);
         mBinding.brand.setAdapter(autoCompleteAdapter);
         return view;
+    }
+
+    private void sizeListing(List<Size> sizeList) {
+        List<Size> allSizeList = mModel.getRepository().getAllSize();
+        for (Size s : allSizeList) {
+            Category parentCategory = mModel.getRepository().getCategory(s.getFolderId());
+            if (parentCategory != null && parentCategory.getIsDeleted() == 0) sizeList.add(s);
+            else if (parentCategory == null) {
+                Folder parentFolder = mModel.getRepository().getFolder(s.getFolderId());
+                if (parentFolder.getIsDeleted() == 0)
+                    checkParentIsDeleted(parentFolder, s, sizeList);
+            }
+        }
+    }
+
+    private void checkParentIsDeleted(@NotNull Folder parentFolder, Size size, List<Size> sizeList) {
+        Folder parentFolder2 = mModel.getRepository().getFolder(parentFolder.getFolderId());
+        if (parentFolder2 == null) {
+            Category category = mModel.getRepository().getCategory(parentFolder.getFolderId());
+            if (category.getIsDeleted() == 0) sizeList.add(size);
+        } else {
+            if (parentFolder2.getIsDeleted() == 0) {
+                checkParentIsDeleted(parentFolder2, size, sizeList);
+            }
+        }
     }
 
     private void setLayout() {
@@ -181,13 +210,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    mBinding.brandLayout.setError(null);
-                    mBinding.brandLayout.setErrorEnabled(false);
-                } else {
-                    mBinding.brandLayout.setErrorEnabled(true);
-                    mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
-                }
+                if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -201,13 +224,7 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    mBinding.nameLayout.setError(null);
-                    mBinding.nameLayout.setErrorEnabled(false);
-                } else {
-                    mBinding.nameLayout.setErrorEnabled(true);
-                    mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
-                }
+                if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -279,14 +296,10 @@ public class InputOutputFragment extends Fragment implements GoBackDialog.GoBack
     private void fabClick(@NotNull FloatingActionButton floatingActionButton) {
         floatingActionButton.setOnClickListener(v -> {
             if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim()) || TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim())) {
-                if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim())) {
-                    mBinding.brandLayout.setErrorEnabled(true);
+                if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim()))
                     mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
-                }
-                if (TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim())) {
+                if (TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim()))
                     mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
-                    mBinding.nameLayout.setErrorEnabled(true);
-                }
             } else {
                 if (mActivityModel.getSize() == null) mModel.sizeInsert();
                 else mModel.update();
