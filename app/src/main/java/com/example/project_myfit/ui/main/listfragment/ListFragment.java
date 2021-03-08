@@ -1062,7 +1062,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             TreeHolderCategory.CategoryTreeHolder newViewHolder = (TreeHolderCategory.CategoryTreeHolder) oldNode.getValue();
             TreeHolderCategory newViewHolder2 = (TreeHolderCategory) oldNode.getViewHolder();
-            newViewHolder2.getBinding().amount.setText(getItemAmount(newViewHolder.category, folderFolderIdList, sizeFolderIdList));
+            String amount = String.valueOf(Integer.parseInt(String.valueOf(newViewHolder2.getBinding().amount.getText())) + 1);
+            newViewHolder2.getBinding().amount.setText(amount);
         } else {//folder node
             TreeHolderFolder.FolderTreeHolder oldViewHolder = mModel.getFolderAddValue();
 
@@ -1095,29 +1096,14 @@ public class ListFragment extends Fragment implements SizeAdapterListener,
 
             TreeHolderFolder.FolderTreeHolder newViewHolder = (TreeHolderFolder.FolderTreeHolder) oldNode.getValue();
             TreeHolderFolder newViewHolder2 = (TreeHolderFolder) oldNode.getViewHolder();
-            newViewHolder2.getBinding().amount.setText(getItemAmount(newViewHolder.getFolder(), folderFolderIdList, sizeFolderIdList));
+            String amount = String.valueOf(Integer.parseInt(String.valueOf(newViewHolder2.getBinding().amount.getText())) + 1);
+            newViewHolder2.getBinding().amount.setText(amount);
 
             Folder dummy = newViewHolder.getFolder();
             if (dummy.getDummy() == 0) dummy.setDummy(1);
             else dummy.setDummy(0);
             mModel.getRepository().folderUpdate(dummy);
         }
-    }
-
-    @NotNull
-    private String getItemAmount(Category category, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-        int amount = 0;
-        for (Long f : folderFolderIdList) if (f == category.getId()) amount++;
-        for (Long s : sizeFolderIdList) if (s == category.getId()) amount++;
-        return String.valueOf(amount);
-    }
-
-    @NotNull
-    private String getItemAmount(Folder folder, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-        int amount = 0;
-        for (Long f : folderFolderIdList) if (f == folder.getId()) amount++;
-        for (Long s : sizeFolderIdList) if (s == folder.getId()) amount++;
-        return String.valueOf(amount);
     }
 
     @NotNull
