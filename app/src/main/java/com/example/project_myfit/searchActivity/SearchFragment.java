@@ -266,14 +266,14 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         return Arrays.asList(topAdapter, bottomAdapter, outerAdapter, etcAdapter);
     }
 
-    //TODO 합치기
-    private void setSearchAdapterData(List<SearchAdapter> searchAdapterList, @NotNull List<Folder> allFolderList) {
+    private void setSearchAdapterData(List<SearchAdapter> searchAdapterList, @Nullable List<Folder> allFolderList, @Nullable List<Size> allSizeList) {
         List<Object> topList = new ArrayList<>();
         List<Object> bottomList = new ArrayList<>();
         List<Object> outerList = new ArrayList<>();
         List<Object> etcList = new ArrayList<>();
 
-        List<Size> allSizeList = mModel.getRepository().getAllSize();
+        if (allFolderList == null) allFolderList = mModel.getRepository().getAllFolder();
+        if (allSizeList == null) allSizeList = mModel.getRepository().getAllSize();
 
         for (Folder f : allFolderList) {
             switch (f.getParentCategory()) {
@@ -317,58 +317,6 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         searchAdapterList.get(2).getFilter().filter(mAutoCompleteTextView.getText());
         searchAdapterList.get(3).getFilter().filter(mAutoCompleteTextView.getText());
     }
-
-    private void setSearchAdapterData2(List<SearchAdapter> searchAdapterList, List<Size> allSizeList) {
-        List<Object> topList = new ArrayList<>();
-        List<Object> bottomList = new ArrayList<>();
-        List<Object> outerList = new ArrayList<>();
-        List<Object> etcList = new ArrayList<>();
-
-        List<Folder> allFolderList = mModel.getRepository().getAllFolder();
-
-        for (Folder f : allFolderList) {
-            switch (f.getParentCategory()) {
-                case TOP:
-                    topList.add(f);
-                    break;
-                case BOTTOM:
-                    bottomList.add(f);
-                    break;
-                case OUTER:
-                    outerList.add(f);
-                    break;
-                case ETC:
-                    etcList.add(f);
-                    break;
-            }
-        }
-        for (Size s : allSizeList) {
-            switch (s.getParentCategory()) {
-                case TOP:
-                    topList.add(s);
-                    break;
-                case BOTTOM:
-                    bottomList.add(s);
-                    break;
-                case OUTER:
-                    outerList.add(s);
-                    break;
-                case ETC:
-                    etcList.add(s);
-                    break;
-            }
-        }
-
-        searchAdapterList.get(0).setItem(topList, mModel.getRepository().getFolderFolderIdByParent(TOP), mModel.getRepository().getSizeFolderIdByParent(TOP));
-        searchAdapterList.get(1).setItem(bottomList, mModel.getRepository().getFolderFolderIdByParent(BOTTOM), mModel.getRepository().getSizeFolderIdByParent(BOTTOM));
-        searchAdapterList.get(2).setItem(outerList, mModel.getRepository().getFolderFolderIdByParent(OUTER), mModel.getRepository().getSizeFolderIdByParent(OUTER));
-        searchAdapterList.get(3).setItem(etcList, mModel.getRepository().getFolderFolderIdByParent(ETC), mModel.getRepository().getSizeFolderIdByParent(ETC));
-        searchAdapterList.get(0).getFilter().filter(mAutoCompleteTextView.getText());
-        searchAdapterList.get(1).getFilter().filter(mAutoCompleteTextView.getText());
-        searchAdapterList.get(2).getFilter().filter(mAutoCompleteTextView.getText());
-        searchAdapterList.get(3).getFilter().filter(mAutoCompleteTextView.getText());
-    }
-
 
     private void autoCompleteImeListener() {
         mAutoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
@@ -491,8 +439,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
     private void setSearchViewLiveData() {
         List<SearchAdapter> adapterList = mSearchViewPagerAdapter.getSearchAdapterList();
-        mModel.getRepository().getAllFolderLive().observe(getViewLifecycleOwner(), folderList -> setSearchAdapterData(adapterList, folderList));
-        mModel.getRepository().getAllSizeLive().observe(getViewLifecycleOwner(), sizeList -> setSearchAdapterData2(adapterList, sizeList));
+        mModel.getRepository().getAllFolderLive().observe(getViewLifecycleOwner(), folderList -> setSearchAdapterData(adapterList, folderList, null));
+        mModel.getRepository().getAllSizeLive().observe(getViewLifecycleOwner(), sizeList -> setSearchAdapterData(adapterList, null, sizeList));
         MutableLiveData<List<Object>> combineList = new MutableLiveData<>();
 
     }
