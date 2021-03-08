@@ -1,5 +1,6 @@
 package com.example.project_myfit.searchActivity.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import java.util.List;
 public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPagerAdapter.SearchViewPagerVH> {
     private final List<SearchAdapter> mSearchAdapterList;
     private final DragSelectTouchListener mDragSelectListener;
+    private final SearchDragAutoScrollListener mListener;
 
-    public SearchViewPagerAdapter(List<SearchAdapter> searchAdapterList, DragSelectTouchListener dragSelectListener) {
+    public SearchViewPagerAdapter(List<SearchAdapter> searchAdapterList, DragSelectTouchListener dragSelectListener, SearchDragAutoScrollListener listener) {
         this.mSearchAdapterList = searchAdapterList;
         this.mDragSelectListener = dragSelectListener;
+        this.mListener = listener;
         setHasStableIds(true);
     }
 
@@ -30,7 +33,7 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
     @Override
     public SearchViewPagerVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         ItemSearchRecyclerViewBinding binding = ItemSearchRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new SearchViewPagerVH(binding);
+        return new SearchViewPagerVH(binding, mListener);
     }
 
     @Override
@@ -68,10 +71,21 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
     public static class SearchViewPagerVH extends RecyclerView.ViewHolder {
         private final ItemSearchRecyclerViewBinding mBinding;
 
-        public SearchViewPagerVH(@NotNull ItemSearchRecyclerViewBinding binding) {
+        @SuppressLint("ClickableViewAccessibility")
+        public SearchViewPagerVH(@NotNull ItemSearchRecyclerViewBinding binding, SearchDragAutoScrollListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
             mBinding.getRoot().setBackgroundColor(Color.TRANSPARENT);
+
+            mBinding.searchRecyclerView.setOnTouchListener((v, event) -> {
+                if (event.getRawY() > 2000)
+                    listener.dragAutoScroll(0);
+                else if (event.getRawY() < 250)
+                    listener.dragAutoScroll(1);
+                else if (event.getRawY() < 2000 && event.getRawY() > 250)
+                    listener.dragAutoScroll(2);
+                return false;
+            });
         }
 
         public void setNoResult(boolean isEmpty) {
@@ -80,5 +94,9 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
             else mBinding.noData.setVisibility(View.GONE);
 
         }
+    }
+
+    public interface SearchDragAutoScrollListener {
+        void dragAutoScroll(int upDown);
     }
 }
