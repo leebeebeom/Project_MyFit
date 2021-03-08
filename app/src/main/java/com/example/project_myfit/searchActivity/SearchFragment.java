@@ -78,7 +78,6 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 import static com.example.project_myfit.MyFitConstant.TREE_ADD_FOLDER;
 import static com.example.project_myfit.MyFitConstant.TREE_DIALOG;
 
-//TODO 체크박스 애니메이션
 //TODO 아이콘
 //TODO 하트
 //TODO 폴더 아이템 갯수
@@ -93,14 +92,14 @@ import static com.example.project_myfit.MyFitConstant.TREE_DIALOG;
 
 public class SearchFragment extends Fragment implements SearchAdapter.SearchAdapterListener, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick
         , FolderNameEditDialog.FolderNameEditConfirmClick, TreeViewDialog.TreeViewAddClick, AddFolderDialog.TreeAddFolderConfirmClick,
-        TreeNode.TreeNodeClickListener, ItemMoveDialog.ItemMoveConfirmClick {
+        TreeNode.TreeNodeClickListener, ItemMoveDialog.ItemMoveConfirmClick, SearchViewPagerAdapter.SearchDragAutoScrollListener {
     private SearchViewModel mModel;
     private FragmentSearchBinding mBinding;
     private List<String> mRecentSearchStringList;
     private MaterialAutoCompleteTextView mAutoCompleteTextView;
     private TextInputLayout mAutoCompleteTextLayout;
     private ActionMode mActionMode;
-    private boolean mActionModeOn, isDragSelecting;
+    private boolean mActionModeOn, isDragSelecting, mScrollEnable;
     private ActionModeTitleBinding mActionModeTitleBinding;
     private SearchViewPagerAdapter mSearchViewPagerAdapter;
     private MenuItem mEditMenu, mMoveMenu, mDeletedMenu;
@@ -190,7 +189,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         dragSelectInit();
-        mSearchViewPagerAdapter = new SearchViewPagerAdapter(getSearchAdapters(), mDragSelectListener);
+        mSearchViewPagerAdapter = new SearchViewPagerAdapter(getSearchAdapters(), mDragSelectListener, this);
 
         mBinding = FragmentSearchBinding.inflate(inflater);
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
@@ -224,7 +223,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
             @Override
             public void onSelectionFinished(int i) {
-                mBinding.viewPagerLayout.setScrollable(false);
+                mBinding.viewPagerLayout.setScrollable(true);
                 isDragSelecting = false;
             }
 
@@ -242,7 +241,11 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
     private void scrollChangeListener() {
         mBinding.viewPagerLayout.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            //TODO 액션모드 오토스크롤
+            if (isDragSelecting && mScrollEnable && scrollY > oldScrollY)
+                v.postDelayed(() -> v.scrollBy(0, 1), 50);
+            else if (isDragSelecting && mScrollEnable && scrollY < oldScrollY)
+                v.postDelayed(() -> v.scrollBy(0, -1), 50);
+
             if (oldScrollY < scrollY) mBinding.searchFab.show();
             else if (scrollY == 0) mBinding.searchFab.hide();
         });
@@ -525,7 +528,6 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
     @Override
     public void selectedItemDeleteConfirmClick() {
-        //TODO 폴더 이름 여러줄일시 표시 안됨
         TabLayout.Tab currentTab = mBinding.tabLayout.getTabAt(mBinding.viewPager.getCurrentItem());
         if (currentTab != null) {
             int numb = currentTab.getOrCreateBadge().getNumber();
@@ -688,5 +690,20 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         TreeViewDialog treeViewDialog = ((TreeViewDialog) getParentFragmentManager().findFragmentByTag(TREE_DIALOG));
         if (treeViewDialog != null) treeViewDialog.dismiss();
         mActionMode.finish();
+    }
+
+    @Override
+    public void dragAutoScroll(int upDown) {
+        if (isDragSelecting)
+            if (upDown == 0) {
+                mBinding.viewPagerLayout.scrollBy(0, 1);
+                mScrollEnable = true;
+            } else if (upDown == 1) {
+                mBinding.viewPagerLayout.scrollBy(0, -1);
+                mScrollEnable = true;
+            } else if (upDown == 2) {
+                mBinding.viewPagerLayout.scrollBy(0, 0);
+                mScrollEnable = false;
+            }
     }
 }
