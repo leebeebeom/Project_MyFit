@@ -81,8 +81,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         holder.mBinding.setSize(size);
         holder.setSize(size);
 
-        if (size.getImageUri() != null) holder.mBinding.listAddIcon.setVisibility(View.GONE);
-
         if (mSelectedItem != null) {
             mSelectedPosition.clear();
             for (Size selectedItem : mSelectedItem) {

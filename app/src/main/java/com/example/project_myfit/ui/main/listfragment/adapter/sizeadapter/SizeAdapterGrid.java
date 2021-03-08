@@ -74,8 +74,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
 
-        if (size.getImageUri() != null) holder.mBinding.addImageIcon.setVisibility(View.GONE);
-
         if (mSelectedItem != null) {
             mSelectedPosition.clear();
             for (Size selectedItem : mSelectedItem) {
