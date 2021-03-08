@@ -634,6 +634,11 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
             TreeHolderFolder newViewHolder2 = (TreeHolderFolder) oldNode.getViewHolder();
             String amount = String.valueOf(Integer.parseInt(String.valueOf(newViewHolder2.getBinding().amount.getText())) + 1);
             newViewHolder2.getBinding().amount.setText(amount);
+
+            Folder dummy = newViewHolder.getFolder();
+            if (dummy.getDummy() == 0) dummy.setDummy(1);
+            else dummy.setDummy(0);
+            mModel.getRepository().folderUpdate(dummy);
         }
     }
 
