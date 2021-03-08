@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -54,10 +53,7 @@ public class DialogUtils {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
         binding.setHint(context.getString(R.string.folder_name));
         binding.setPlaceHolder(context.getString(R.string.folder_name_korean));
-        binding.dialogEditTextLayout.setHelperText(context.getString(R.string.folder_name_helper));
         binding.dialogEditText.requestFocus();
-        binding.dialogEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        binding.dialogEditText.setMaxLines(3);
         return binding;
     }
 
@@ -66,10 +62,7 @@ public class DialogUtils {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
         binding.setHint(context.getString(R.string.folder_name));
         binding.setPlaceHolder(context.getString(R.string.folder_name_korean));
-        binding.dialogEditTextLayout.setHelperText(context.getString(R.string.folder_name_helper));
         binding.dialogEditText.requestFocus();
-        binding.dialogEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        binding.dialogEditText.setMaxLines(3);
         binding.setSetText(folderName);
         return binding;
     }
@@ -159,6 +152,12 @@ public class DialogUtils {
             public void afterTextChanged(Editable s) {
 
             }
+        });
+        binding.dialogEditText.setOnKeyListener((v, keyCode, event) -> {
+            if (String.valueOf(binding.dialogEditText.getText()).length() == 30)
+                binding.dialogEditTextLayout.setError("30글자까지 입력 가능합니다.");
+            else binding.dialogEditTextLayout.setErrorEnabled(false);
+            return false;
         });
     }
 }
