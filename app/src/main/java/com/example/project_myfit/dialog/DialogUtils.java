@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
@@ -30,40 +31,22 @@ import static com.example.project_myfit.MyFitConstant.ID;
 
 public class DialogUtils {
     @NotNull
-    public static ItemDialogEditTextBinding getCategoryBinding(LayoutInflater inflater, @NotNull Context context) {
+    public static ItemDialogEditTextBinding getCategoryBinding(LayoutInflater inflater, @NotNull Context context, @Nullable String categoryName) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
         binding.setHint(context.getString(R.string.category_name));
         binding.setPlaceHolder(context.getString(R.string.category_name_korean));
         binding.dialogEditText.requestFocus();
+        if (categoryName != null) binding.setSetText(categoryName);
         return binding;
     }
 
     @NotNull
-    public static ItemDialogEditTextBinding getCategoryBinding(LayoutInflater inflater, @NotNull Context context, String categoryName) {
-        ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
-        binding.setHint(context.getString(R.string.category_name));
-        binding.setPlaceHolder(context.getString(R.string.category_name_korean));
-        binding.dialogEditText.requestFocus();
-        binding.setSetText(categoryName);
-        return binding;
-    }
-
-    @NotNull
-    public static ItemDialogEditTextBinding getFolderBinding(LayoutInflater inflater, @NotNull Context context) {
+    public static ItemDialogEditTextBinding getFolderBinding(LayoutInflater inflater, @NotNull Context context, @Nullable String folderName) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
         binding.setHint(context.getString(R.string.folder_name));
         binding.setPlaceHolder(context.getString(R.string.folder_name_korean));
         binding.dialogEditText.requestFocus();
-        return binding;
-    }
-
-    @NotNull
-    public static ItemDialogEditTextBinding getFolderBinding(LayoutInflater inflater, @NotNull Context context, String folderName) {
-        ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
-        binding.setHint(context.getString(R.string.folder_name));
-        binding.setPlaceHolder(context.getString(R.string.folder_name_korean));
-        binding.dialogEditText.requestFocus();
-        binding.setSetText(folderName);
+        if (folderName != null) binding.setSetText(folderName);
         return binding;
     }
 
@@ -75,8 +58,7 @@ public class DialogUtils {
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.confirm, listener)
                 .show();
-        Window window = dialog.getWindow();
-        setLayout(context, window);
+        setLayout(context, dialog.getWindow());
         setTextSize(context, dialog);
         return dialog;
     }
@@ -90,16 +72,12 @@ public class DialogUtils {
                 .setPositiveButton(R.string.confirm, listener)
                 .create();
         Window window = dialog.getWindow();
-        setKeyboard(window);
         setLayout(context, window);
+        setKeyboard(window);
         dialog.show();
         setTextSize(context, dialog);
         addTextChangeListener(binding, dialog);
         return dialog;
-    }
-
-    private static void setKeyboard(@NotNull Window window) {
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     public static void setLayout(@NotNull Context context, @NotNull Window window) {
@@ -116,27 +94,32 @@ public class DialogUtils {
         TextView title = dialog.findViewById(titleId);
         if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
 
-        float size = context.getResources().getDimensionPixelSize(R.dimen._4sdp);
+        float textSize = context.getResources().getDimensionPixelSize(R.dimen._4sdp);
 
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         if (positive != null)
-            positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+            positive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
 
         Button negative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         if (negative != null)
-            negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+            negative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
 
         MaterialTextView message = dialog.findViewById(android.R.id.message);
         if (message != null) {
             int padding = (int) context.getResources().getDimension(R.dimen._8sdp);
             message.setPadding(message.getPaddingLeft(), padding, message.getPaddingRight(), message.getPaddingBottom());
-            message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+            message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         }
+    }
+
+    private static void setKeyboard(@NotNull Window window) {
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     private static void addTextChangeListener(@NotNull ItemDialogEditTextBinding binding, @NotNull AlertDialog dialog) {
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setEnabled(false);
+
         binding.dialogEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -153,6 +136,7 @@ public class DialogUtils {
 
             }
         });
+
         binding.dialogEditText.setOnKeyListener((v, keyCode, event) -> {
             if (String.valueOf(binding.dialogEditText.getText()).length() == 30)
                 binding.dialogEditTextLayout.setError("30자까지 입력 가능합니다.");

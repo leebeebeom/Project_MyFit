@@ -18,8 +18,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static com.example.project_myfit.MyFitConstant.SORT;
 import static com.example.project_myfit.MyFitConstant.SORT_BRAND;
 import static com.example.project_myfit.MyFitConstant.SORT_BRAND_REVERSE;
@@ -30,7 +28,7 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
-    private AtomicInteger mCheckedItem;
+    private int mCheckedItem;
     private SortConfirmClick mListener;
 
     public SortDialog() {
@@ -55,9 +53,8 @@ public class SortDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mCheckedItem = new AtomicInteger();
-        if (getArguments() != null) mCheckedItem.set(getArguments().getInt(SORT));
-        if (savedInstanceState != null) mCheckedItem.set(savedInstanceState.getInt(SORT));
+        if (getArguments() != null) mCheckedItem = getArguments().getInt(SORT);
+        if (savedInstanceState != null) mCheckedItem = savedInstanceState.getInt(SORT);
 
         SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
         addCheckListener(binding);
@@ -74,7 +71,7 @@ public class SortDialog extends DialogFragment {
                 .setTitle(R.string.sort)
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.sortConfirmClick(mCheckedItem.get()))
+                .setPositiveButton(R.string.confirm, (dialog1, which) -> mListener.sortConfirmClick(mCheckedItem))
                 .show();
         Window window = dialog.getWindow();
         DialogUtils.setLayout(requireContext(), window);
@@ -83,22 +80,10 @@ public class SortDialog extends DialogFragment {
         return dialog;
     }
 
-    private void checkLastedCheckedItem(SortViewBinding binding) {
-        if (mCheckedItem.get() == SORT_CUSTOM) binding.sortCustom.setChecked(true);
-        else if (mCheckedItem.get() == SORT_CREATE) binding.sortCreate.setChecked(true);
-        else if (mCheckedItem.get() == SORT_CREATE_REVERSE)
-            binding.sortCreateReverse.setChecked(true);
-        else if (mCheckedItem.get() == SORT_BRAND) binding.sortBrand.setChecked(true);
-        else if (mCheckedItem.get() == SORT_BRAND_REVERSE)
-            binding.sortBrandReverse.setChecked(true);
-        else if (mCheckedItem.get() == SORT_NAME) binding.sortName.setChecked(true);
-        else if (mCheckedItem.get() == SORT_NAME_REVERSE) binding.sortNameReverse.setChecked(true);
-    }
-
     private void addCheckListener(@NotNull SortViewBinding binding) {
         binding.sortCustom.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_CUSTOM);
+                mCheckedItem = SORT_CUSTOM;
                 binding.sortCreate.setChecked(false);
                 binding.sortCreateReverse.setChecked(false);
                 binding.sortBrand.setChecked(false);
@@ -109,7 +94,7 @@ public class SortDialog extends DialogFragment {
         });
         binding.sortCreate.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_CREATE);
+                mCheckedItem = SORT_CREATE;
                 binding.sortCustom.setChecked(false);
                 binding.sortCreateReverse.setChecked(false);
                 binding.sortBrand.setChecked(false);
@@ -120,7 +105,7 @@ public class SortDialog extends DialogFragment {
         });
         binding.sortCreateReverse.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_CREATE_REVERSE);
+                mCheckedItem = SORT_CREATE_REVERSE;
                 binding.sortCustom.setChecked(false);
                 binding.sortCreate.setChecked(false);
                 binding.sortBrand.setChecked(false);
@@ -131,7 +116,7 @@ public class SortDialog extends DialogFragment {
         });
         binding.sortBrand.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_BRAND);
+                mCheckedItem = SORT_BRAND;
                 binding.sortCustom.setChecked(false);
                 binding.sortCreate.setChecked(false);
                 binding.sortCreateReverse.setChecked(false);
@@ -142,7 +127,7 @@ public class SortDialog extends DialogFragment {
         });
         binding.sortBrandReverse.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_BRAND_REVERSE);
+                mCheckedItem = SORT_BRAND_REVERSE;
                 binding.sortCustom.setChecked(false);
                 binding.sortCreate.setChecked(false);
                 binding.sortCreateReverse.setChecked(false);
@@ -153,7 +138,7 @@ public class SortDialog extends DialogFragment {
         });
         binding.sortName.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_NAME);
+                mCheckedItem = SORT_NAME;
                 binding.sortCustom.setChecked(false);
                 binding.sortCreate.setChecked(false);
                 binding.sortCreateReverse.setChecked(false);
@@ -164,7 +149,7 @@ public class SortDialog extends DialogFragment {
         });
         binding.sortNameReverse.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                mCheckedItem.set(SORT_NAME_REVERSE);
+                mCheckedItem = SORT_NAME_REVERSE;
                 binding.sortCustom.setChecked(false);
                 binding.sortCreate.setChecked(false);
                 binding.sortCreateReverse.setChecked(false);
@@ -175,10 +160,22 @@ public class SortDialog extends DialogFragment {
         });
     }
 
+    private void checkLastedCheckedItem(SortViewBinding binding) {
+        if (mCheckedItem == SORT_CUSTOM) binding.sortCustom.setChecked(true);
+        else if (mCheckedItem == SORT_CREATE) binding.sortCreate.setChecked(true);
+        else if (mCheckedItem == SORT_CREATE_REVERSE)
+            binding.sortCreateReverse.setChecked(true);
+        else if (mCheckedItem == SORT_BRAND) binding.sortBrand.setChecked(true);
+        else if (mCheckedItem == SORT_BRAND_REVERSE)
+            binding.sortBrandReverse.setChecked(true);
+        else if (mCheckedItem == SORT_NAME) binding.sortName.setChecked(true);
+        else if (mCheckedItem == SORT_NAME_REVERSE) binding.sortNameReverse.setChecked(true);
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(SORT, mCheckedItem.get());
+        outState.putInt(SORT, mCheckedItem);
     }
 
     public interface SortConfirmClick {

@@ -174,7 +174,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
     private void showDialog(@NotNull DialogFragment dialog, String tag) {
         dialog.setTargetFragment(this, 0);
-        dialog.show(getParentFragmentManager(), tag);
+        dialog.show(requireActivity().getSupportFragmentManager(), tag);
     }
 
     @Override

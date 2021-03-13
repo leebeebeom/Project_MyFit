@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -54,9 +53,11 @@ public class FolderNameEditDialog extends DialogFragment {
         if (savedInstanceState != null) folderName = savedInstanceState.getString(FOLDER_NAME);
 
         mBinding = DialogUtils.getFolderBinding(getLayoutInflater(), requireContext(), folderName);
+
         boolean finalIsParentName = isParentName;
-        DialogInterface.OnClickListener listener = (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()), finalIsParentName);
-        return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_folder_name), mBinding, listener);
+
+        return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_folder_name), mBinding,
+                (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()), finalIsParentName));
     }
 
     @Override

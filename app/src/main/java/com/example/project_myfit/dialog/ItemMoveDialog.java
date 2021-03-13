@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,11 +22,11 @@ public class ItemMoveDialog extends DialogFragment {
     }
 
     @NotNull
-    public static ItemMoveDialog getInstance(int selectedItemAmount, long id) {
+    public static ItemMoveDialog getInstance(int selectedItemAmount, long folderId) {
         ItemMoveDialog itemMoveDialog = new ItemMoveDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(AMOUNT, selectedItemAmount);
-        bundle.putLong(ID, id);
+        bundle.putLong(ID, folderId);
         itemMoveDialog.setArguments(bundle);
         return itemMoveDialog;
     }
@@ -50,8 +49,8 @@ public class ItemMoveDialog extends DialogFragment {
         }
         long finalId = id;
         String message = amount + getString(R.string.item_move_check);
-        DialogInterface.OnClickListener listener = (dialog, which) -> mListener.itemMoveConfirmClick(finalId);
-        return DialogUtils.getDialog(requireContext(), message, listener);
+        return DialogUtils.getDialog(requireContext(), message,
+                (dialog, which) -> mListener.itemMoveConfirmClick(finalId));
     }
 
     public interface ItemMoveConfirmClick {

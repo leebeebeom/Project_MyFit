@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +25,8 @@ public class GoBackDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogInterface.OnClickListener listener = (dialog, which) -> mListener.goBackConfirmClick();
-        return DialogUtils.getDialog(requireContext(), getString(R.string.go_back_check), listener);
+        return DialogUtils.getDialog(requireContext(), getString(R.string.go_back_check),
+                (dialog, which) -> mListener.goBackConfirmClick());
     }
 
     public interface GoBackConfirmClick {

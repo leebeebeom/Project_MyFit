@@ -92,10 +92,8 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         if (holder instanceof SearchRecyclerFolderVH) {
             Folder folder = (Folder) getCurrentList().get(position);
 
-            if (mActionModeState != ACTION_MODE_ON) {
-                ((SearchRecyclerFolderVH) holder).mFolderBinding.setFolder(folder);
-                ((SearchRecyclerFolderVH) holder).setFolder(folder);
-            }
+            ((SearchRecyclerFolderVH) holder).mFolderBinding.setFolder(folder);
+            ((SearchRecyclerFolderVH) holder).setFolder(folder);
 
             int amount = 0;
             for (Long l : mFolderFolderIdList)
@@ -121,10 +119,9 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         } else {
             Size size = (Size) getCurrentList().get(position);
 
-            if (mActionModeState != ACTION_MODE_ON) {
-                ((SearchRecyclerSizeVH) holder).mSizeBinding.setSize(size);
-                ((SearchRecyclerSizeVH) holder).setSize(size);
-            }
+            ((SearchRecyclerSizeVH) holder).mSizeBinding.setSize(size);
+            ((SearchRecyclerSizeVH) holder).setSize(size);
+
             MaterialCardView cardView = ((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCardView;
             MaterialCheckBox checkBox = ((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCheckBox;
             if (mActionModeState == ACTION_MODE_ON) {

@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -42,13 +41,13 @@ public class CategoryNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String categoryName = "";
+        String categoryName = null;
         if (getArguments() != null) categoryName = getArguments().getString(CATEGORY_NAME);
         if (savedInstanceState != null) categoryName = savedInstanceState.getString(CATEGORY_NAME);
 
         mBinding = DialogUtils.getCategoryBinding(getLayoutInflater(), requireContext(), categoryName);
-        DialogInterface.OnClickListener listener = (dialog, which) -> mListener.categoryNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()));
-        return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding, listener);
+        return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
+                (dialog, which) -> mListener.categoryNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText())));
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -43,8 +42,8 @@ public class SelectedItemDeleteDialog extends DialogFragment {
         int amount = 0;
         if (getArguments() != null) amount = getArguments().getInt(AMOUNT);
         String message = amount + getString(R.string.selected_item_delete_check);
-        DialogInterface.OnClickListener listener = (dialog, which) -> mListener.selectedItemDeleteConfirmClick();
-        return DialogUtils.getDialog(requireContext(), message, listener);
+        return DialogUtils.getDialog(requireContext(), message,
+                (dialog, which) -> mListener.selectedItemDeleteConfirmClick());
     }
 
     public interface SelectedItemDeleteConfirmClick {

@@ -30,7 +30,7 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(binding.searchToolbar);
 
         binding.autoCompleteTextView.requestFocus();
-        getSupportFragmentManager().beginTransaction().replace(R.id.search_fragment_layout, new SearchFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.search_fragment_layout, new SearchFragment()).commit();
 
         AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete, R.id.auto_complete_text, getAutoCompleteList(mRepository));
         binding.autoCompleteTextView.setAdapter(autoCompleteAdapter);

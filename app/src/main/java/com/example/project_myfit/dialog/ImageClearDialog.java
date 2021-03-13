@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +25,8 @@ public class ImageClearDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogInterface.OnClickListener listener = (dialog, which) -> mListener.imageClearConfirmClick();
-        return DialogUtils.getDialog(requireContext(), getString(R.string.image_delete_check), listener);
+        return DialogUtils.getDialog(requireContext(), getString(R.string.image_delete_check),
+                (dialog, which) -> mListener.imageClearConfirmClick());
     }
 
     public interface ImageClearConfirmClick {
