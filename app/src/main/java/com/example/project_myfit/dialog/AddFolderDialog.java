@@ -2,7 +2,6 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.IS_TREE_VIEW;
 
+//서치뷰 - 트리뷰 폴더 추가시 현재 검색어가 들어가있는 아이템이라면
+//액션모드 활성화 안됨
+//서치뷰 - 트리뷰 폴더 추가시 서치뷰에 현재 표기되고있는 아이템 갯수 변경 안됨
 public class AddFolderDialog extends DialogFragment {
     private AddFolderConfirmClick mListener;
     private TreeAddFolderConfirmClick mListener2;
@@ -45,14 +47,14 @@ public class AddFolderDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        ItemDialogEditTextBinding binding = DialogUtils.getFolderBinding(getLayoutInflater(), requireContext());
-        DialogInterface.OnClickListener listener = (dialog, which) -> {
+        ItemDialogEditTextBinding binding = DialogUtils.getFolderBinding(getLayoutInflater(), requireContext(), null);
+
+        return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.add_folder), binding, (dialog, which) -> {
             if (!isTreeView)
                 mListener.addFolderConfirmClick(String.valueOf(binding.dialogEditText.getText()));
             else
                 mListener2.treeAddFolderConfirmClick(String.valueOf(binding.dialogEditText.getText()));
-        };
-        return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.add_folder), binding, listener);
+        });
     }
 
     public interface AddFolderConfirmClick {
