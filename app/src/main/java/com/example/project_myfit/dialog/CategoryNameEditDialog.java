@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.CATEGORY_NAME;
 
+//테스트 끝
 public class CategoryNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
     private CategoryNameEditConfirmClick mListener;
