@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.MyFitConstant.FOLDER_NAME;
 import static com.example.project_myfit.MyFitConstant.IS_PARENT_NAME;
 
+//테스트 끝
 public class FolderNameEditDialog extends DialogFragment {
 
     private ItemDialogEditTextBinding mBinding;
