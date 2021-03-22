@@ -15,8 +15,11 @@ import org.jetbrains.annotations.NotNull;
 
 //TODO 생명주기 안 코드들 메소드 화
 //TODO 변수 인자로 받기
-//반복 코드들 유틸화
-//트리뷰 롱클릭 삭제, 이름변경
+
+//TODO 반복 코드들 유틸화
+//TODO 트리뷰 롱클릭으로 삭제, 이름변경
+
+//테스트 끝
 public class AddCategoryDialog extends DialogFragment {
     private AddCategoryConfirmClick mListener;
 
