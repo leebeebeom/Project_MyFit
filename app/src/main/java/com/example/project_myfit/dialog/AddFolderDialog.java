@@ -15,9 +15,20 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.IS_TREE_VIEW;
 
-//서치뷰 - 트리뷰 폴더 추가시 현재 검색어가 들어가있는 아이템이라면
-//액션모드 활성화 안됨
-//서치뷰 - 트리뷰 폴더 추가시 서치뷰에 현재 표기되고있는 아이템 갯수 변경 안됨
+//테스트 끝
+
+//TODO 셀렉트 포지션 포지션 -> 아이디로
+
+//TODO 트리뷰 나올때 리스트뷰랑 같은 순서로 나오게
+//TODO 트리뷰 폴더 추가시 리스트뷰랑 같은 순서로 추가되게(가능?)
+
+//TODO 서치뷰 순서 체크
+//TODO 트리뷰 나올때 서치뷰랑 같은 순서로 나오게
+//TODO 트리뷰 폴더 추가시 서치뷰랑 같은 순서로 추가되게(가능?)
+
+//TODO 엔드아이콘 클릭하면 키보드 보이게
+
+//테스트 끝
 public class AddFolderDialog extends DialogFragment {
     private AddFolderConfirmClick mListener;
     private TreeAddFolderConfirmClick mListener2;
