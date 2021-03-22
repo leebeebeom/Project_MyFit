@@ -12,6 +12,7 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+//테스트 끝
 public class DeleteConFirmDialog extends DialogFragment {
     private DeleteConfirmClick mListener;
 
