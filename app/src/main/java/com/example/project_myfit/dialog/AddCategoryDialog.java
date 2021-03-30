@@ -13,13 +13,25 @@ import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+//TODO 디자인 패턴은 나중에
+
 //TODO 생명주기 안 코드들 메소드 화
+//TODO 코드 최대한 간결하고 직관적으로
 //TODO 변수 인자로 받기
 
 //TODO 반복 코드들 유틸화
+//TODO 빌더 패턴, 팩토리 패턴, 추상 팩토리 패턴 공부
 //TODO 트리뷰 롱클릭으로 삭제, 이름변경
+//TODO 탭레이아웃 뱃지 텍스트 사이즈
 
-//테스트 끝
+//TODO 구현 못한 것
+//TODO 폴더 이름, 카테고리 이름 변경 시 분신술
+//TODO 트리뷰 카테고리 expand 유지
+
+/*
+테스트 (완료)
+다이얼로그 생성, 로테이트, 30자 제한, 공백
+ */
 public class AddCategoryDialog extends DialogFragment {
     private AddCategoryConfirmClick mListener;
 
