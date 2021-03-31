@@ -72,4 +72,7 @@ public class MyFitConstant {
 
     public static final String IS_TREE_VIEW = "is tree view";
     public static final String IS_PARENT_NAME = "is parent name";
+
+    public static final String PARENT_CATEGORY = "parent category";
+    public static final String IS_SEARCH_VIEW = "is search view";
 }
