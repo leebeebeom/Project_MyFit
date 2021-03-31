@@ -15,10 +15,10 @@ import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
     private Category mCategory;
+    private Folder mFolder;
     private Size mSize;
-    private Folder mFolder, mListFragmentFolder;
     private final Repository mRepository;
-    private List<Folder> mSelectedFolders, mFolderHistory;
+    private List<Folder> mSelectedFolders;
     private List<Size> mSelectedSizes;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
@@ -66,23 +66,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         this.mSelectedSizes = mSelectedSizes;
     }
 
-    public Folder getListFragmentFolder() {
-        return mListFragmentFolder;
-    }
-
-    public void setListFragmentFolder(Folder mListFragmentFolder) {
-        this.mListFragmentFolder = mListFragmentFolder;
-    }
-
     public Repository getRepository() {
         return mRepository;
-    }
-
-    public void setFolderHistory(List<Folder> folderHistory) {
-        this.mFolderHistory = folderHistory;
-    }
-
-    public List<Folder> getFolderHistory() {
-        return mFolderHistory;
     }
 }
