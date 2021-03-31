@@ -22,8 +22,35 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.MyFitConstant.FOLDER_ID;
 import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 
-public class MainActivity extends AppCompatActivity {
+//TODO 디자인 패턴은 일단 나중에
 
+//TODO 생명주기 안 코드들 메소드 화
+
+//TODO 코드 최대한 간결하고 직관적으로
+
+//TODO 변수 엥간하면 인자로 받기
+
+//TODO 반복 코드들 유틸화
+
+//TODO 트리뷰 롱클릭으로 삭제, 이름변경
+//TODO 탭레이아웃 뱃지 텍스트 사이즈
+
+//TODO 어댑터 셀렉트 포지션 포지션말고 아이디로
+
+//TODO 트리뷰 나올때 [리스트뷰]랑 같은 순서로 나오게
+//TODO 트리뷰 폴더 추가시 [리스트뷰]랑 같은 순서로 추가되게(가능?)
+//TODO 트리뷰 나올때 [서치뷰]랑 같은 순서로 나오게
+//TODO 트리뷰 폴더 추가시 [서치뷰]랑 같은 순서로 추가되게(가능?)
+
+//TODO 엔드아이콘 클릭하면 키보드 보이게
+
+//TODO 서치뷰에서 폴더 추가시 뱃지 변경
+
+//TODO 구현 못한 거
+//이름 변경 시 분신술 쓰는 거(서치뷰, 메인 카테고리)
+//트리뷰 리크리에이트 유지
+
+public class MainActivity extends AppCompatActivity {
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -40,13 +67,14 @@ public class MainActivity extends AppCompatActivity {
         //toolbar
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
+        //타이틀 안보이게(커스텀 타이틀 있음)
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
         //navigation controller
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment);
         if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
-        //top level destination
+        //앱 바 연결
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment)
                 .build();
@@ -57,18 +85,21 @@ public class MainActivity extends AppCompatActivity {
         //connect bottom navigation with navController
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
 
-        //bottom bav setting
+        //bottom nav setting
         binding.bottomNav.setBackgroundTintList(null);
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
+        //프래그먼트 변경 리스너
         destinationChangeListener(binding, actionBar);
 
         if (getIntent() != null) {
             Intent intent = getIntent();
             if (intent.getIntExtra(SIZE_ID, 0) != 0) {
-                searchSizeClick(model, intent);
+                //서치뷰 사이즈 클릭
+                searchViewSizeClick(model, intent);
             } else if (intent.getLongExtra(FOLDER_ID, 0) != 0) {
-                searchFolderClick(model, intent);
+                //서치뷰 폴더 클릭
+                searchViewFolderClick(model, intent);
             }
         }
     }
@@ -76,28 +107,31 @@ public class MainActivity extends AppCompatActivity {
     private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar) {
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
-                binding.activityFab.hide();
-                binding.activityFab.setImageResource(R.drawable.icon_search);
-                binding.activityFab.show();
-                binding.toolbarMainTitle.setVisibility(View.VISIBLE);
-                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
+                //메인 프래그먼트
+                fabChange(binding, R.drawable.icon_search);
+                binding.toolbarCustomTitle.setVisibility(View.VISIBLE);
+                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
-                binding.activityFab.hide();
-                binding.activityFab.setImageResource(R.drawable.icon_add);
-                binding.activityFab.show();
-                binding.toolbarMainTitle.setVisibility(View.GONE);
-                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);
+                //리스트 프래그먼트
+                fabChange(binding, R.drawable.icon_add);
+                binding.toolbarCustomTitle.setVisibility(View.GONE);
+                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
-                binding.activityFab.hide();
-                binding.activityFab.setImageResource(R.drawable.icon_save);
-                binding.activityFab.show();
-                binding.toolbarMainTitle.setVisibility(View.GONE);
-                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
+                //인풋아웃풋 프래그먼트
+                fabChange(binding, R.drawable.icon_save);
+                binding.toolbarCustomTitle.setVisibility(View.GONE);
+                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
         });
     }
 
-    private void searchSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent) {
+    private void fabChange(@NotNull ActivityMainBinding binding, int resId) {
+        binding.activityFab.hide();
+        binding.activityFab.setImageResource(resId);
+        binding.activityFab.show();
+    }
+
+    private void searchViewSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent) {
         Size size = model.getRepository().getSize(intent.getIntExtra(SIZE_ID, 0));
         model.setSize(size);
 
@@ -112,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         mNavController.navigate(R.id.action_mainFragment_to_inputOutputFragment);
     }
 
-    private void searchFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent) {
+    private void searchViewFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent) {
         Folder folder = model.getRepository().getFolder(intent.getLongExtra(FOLDER_ID, 0));
         Category category = getCategory(folder, model);
         model.setFolder(folder);
