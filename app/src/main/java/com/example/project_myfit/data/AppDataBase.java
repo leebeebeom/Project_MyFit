@@ -13,9 +13,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.example.project_myfit.MyFitConstant;
 import com.example.project_myfit.data.dao.CategoryDao;
 import com.example.project_myfit.data.dao.FolderDao;
+import com.example.project_myfit.data.dao.RecentSearchDao;
 import com.example.project_myfit.data.dao.SizeDao;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
+import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
 
 import org.jetbrains.annotations.NotNull;
