@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.database;
+package com.example.project_myfit.data;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -11,11 +11,11 @@ import java.util.Objects;
 @Entity
 public class Size {
     @PrimaryKey(autoGenerate = true)
-    private int id;
-    private int orderNumber, isDeleted;
+    private long id;
+    private int orderNumber;
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
     private long folderId;
-    private boolean isFavorite;
+    private boolean isFavorite, isDeleted, parentIsDeleted;
     private Map<String, String> sizeMap;
 
     @Ignore
@@ -37,14 +37,13 @@ public class Size {
         this.isFavorite = isFavorite;
         this.sizeMap = sizeMap;
         this.parentCategory = parentCategory;
-        this.isDeleted = 0;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -144,11 +143,11 @@ public class Size {
         this.sizeMap = sizeMap;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
@@ -156,8 +155,12 @@ public class Size {
         return parentCategory;
     }
 
-    public void setParentCategory(String parentCategory) {
-        this.parentCategory = parentCategory;
+    public boolean getParentIsDeleted() {
+        return parentIsDeleted;
+    }
+
+    public void setParentIsDeleted(boolean parentIsDeleted) {
+        this.parentIsDeleted = parentIsDeleted;
     }
 
     @Override
