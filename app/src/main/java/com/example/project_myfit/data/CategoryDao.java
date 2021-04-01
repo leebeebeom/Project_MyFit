@@ -11,10 +11,10 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
-    LiveData<List<Category>> getAllCategoryLive(int isDeleted);
+    LiveData<List<Category>> getAllCategoryLive(boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryListByParent(String parentCategory, int isDeleted);
+    List<Category> getCategoryListByParent(String parentCategory, boolean isDeleted);
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
