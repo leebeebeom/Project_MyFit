@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.database;
+package com.example.project_myfit.data;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,27 +8,23 @@ import java.util.Objects;
 @Entity
 public class Folder {
     @PrimaryKey
-    private long id;
+    private final long id;
     private long folderId;
-    private String folderName, parentCategory;
-    private int orderNumber, isDeleted, dummy;
+    private String folderName;
+    private final String parentCategory;
+    private int orderNumber;
+    private boolean isDeleted, dummy, parentIsDeleted;
 
     public Folder(long id, String folderName, long folderId, int orderNumber, String parentCategory) {
         this.id = id;
         this.folderName = folderName;
         this.folderId = folderId;
         this.orderNumber = orderNumber;
-        this.dummy = 0;
         this.parentCategory = parentCategory;
-        this.isDeleted = 0;
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getFolderName() {
@@ -38,7 +34,6 @@ public class Folder {
     public void setFolderName(String folderName) {
         this.folderName = folderName;
     }
-
 
     public long getFolderId() {
         return folderId;
@@ -56,19 +51,19 @@ public class Folder {
         this.orderNumber = orderNumber;
     }
 
-    public int getDummy() {
+    public boolean getDummy() {
         return dummy;
     }
 
-    public void setDummy(int dummy) {
+    public void setDummy(boolean dummy) {
         this.dummy = dummy;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
@@ -76,8 +71,12 @@ public class Folder {
         return parentCategory;
     }
 
-    public void setParentCategory(String parentCategory) {
-        this.parentCategory = parentCategory;
+    public boolean getParentIsDeleted() {
+        return parentIsDeleted;
+    }
+
+    public void setParentIsDeleted(boolean parentIsDeleted) {
+        this.parentIsDeleted = parentIsDeleted;
     }
 
     @Override
