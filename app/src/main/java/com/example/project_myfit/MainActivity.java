@@ -12,10 +12,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.project_myfit.data.model.Category;
+import com.example.project_myfit.data.model.Folder;
+import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActivityMainBinding;
-import com.example.project_myfit.data.Category;
-import com.example.project_myfit.data.Folder;
-import com.example.project_myfit.data.Size;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -57,55 +57,48 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //binding
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //view model
         MainActivityViewModel model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        //toolbar
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         //타이틀 안보이게(커스텀 타이틀 있음)
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        //navigation controller
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment);
         if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
-        //앱 바 연결
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment)
                 .build();
 
-        //action bar share
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
-
-        //connect bottom navigation with navController
         NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
 
-        //bottom nav setting
+        //바텀네비게이션 뷰 그림자 제거
         binding.bottomNav.setBackgroundTintList(null);
+        //바텀네비게이션 뷰 정렬 맞추기
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
-        destinationChangeListener(binding, actionBar);
+        destinationChangeListener(binding, actionBar, mNavController);
 
         if (getIntent() != null) {
             Intent intent = getIntent();
             if (intent.getIntExtra(SIZE_ID, 0) != 0) {
                 //서치뷰 사이즈 클릭
-                searchViewSizeClick(model, intent);
+                searchViewSizeClick(model, intent, mNavController);
             } else if (intent.getLongExtra(FOLDER_ID, 0) != 0) {
                 //서치뷰 폴더 클릭
-                searchViewFolderClick(model, intent);
+                searchViewFolderClick(model, intent, mNavController);
             }
         }
     }
 
-    private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar) {
-        mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+    private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar, @NotNull NavController navController) {
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
@@ -131,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         binding.activityFab.show();
     }
 
-    private void searchViewSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent) {
+    private void searchViewSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, NavController navController) {
         Size size = model.getRepository().getSize(intent.getIntExtra(SIZE_ID, 0));
         model.setSize(size);
 
@@ -143,31 +136,25 @@ public class MainActivity extends AppCompatActivity {
             model.setCategory(category);
             model.setFolder(folder);
         }
-        mNavController.navigate(R.id.action_mainFragment_to_inputOutputFragment);
+        navController.navigate(R.id.action_mainFragment_to_inputOutputFragment);
     }
 
-    private void searchViewFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent) {
+    private void searchViewFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, @NotNull NavController navController) {
         Folder folder = model.getRepository().getFolder(intent.getLongExtra(FOLDER_ID, 0));
         Category category = getCategory(folder, model);
         model.setFolder(folder);
         model.setCategory(category);
-        mNavController.navigate(R.id.action_mainFragment_to_listFragment);
+        navController.navigate(R.id.action_mainFragment_to_listFragment);
     }
 
     @NotNull
     private Category getCategory(@NotNull Folder folder, @NotNull MainActivityViewModel model) {
         Category category = model.getRepository().getCategory(folder.getFolderId());
         if (category == null) {
-            Folder newFolder = model.getRepository().getFolder(folder.getFolderId());
-            category = getCategory(newFolder, model);
+            Folder parentFolder = model.getRepository().getFolder(folder.getFolderId());
+            category = getCategory(parentFolder, model);
         }
         return category;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        setSupportActionBar(null);
     }
 
     @Override
