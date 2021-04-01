@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.project_myfit.ui.main.database.Category;
-import com.example.project_myfit.ui.main.listfragment.database.Folder;
-import com.example.project_myfit.ui.main.listfragment.database.Size;
+import com.example.project_myfit.data.Category;
+import com.example.project_myfit.data.Folder;
+import com.example.project_myfit.data.Size;
 
 import org.jetbrains.annotations.NotNull;
 

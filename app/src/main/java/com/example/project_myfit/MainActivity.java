@@ -13,9 +13,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
-import com.example.project_myfit.ui.main.database.Category;
-import com.example.project_myfit.ui.main.listfragment.database.Folder;
-import com.example.project_myfit.ui.main.listfragment.database.Size;
+import com.example.project_myfit.data.Category;
+import com.example.project_myfit.data.Folder;
+import com.example.project_myfit.data.Size;
 
 import org.jetbrains.annotations.NotNull;
 
