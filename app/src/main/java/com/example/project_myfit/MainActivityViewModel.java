@@ -5,19 +5,20 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.project_myfit.data.Category;
-import com.example.project_myfit.data.Folder;
-import com.example.project_myfit.data.Size;
+import com.example.project_myfit.data.model.Category;
+import com.example.project_myfit.data.model.Folder;
+import com.example.project_myfit.data.Repository;
+import com.example.project_myfit.data.model.Size;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
+    private final Repository mRepository;
     private Category mCategory;
     private Folder mFolder;
     private Size mSize;
-    private final Repository mRepository;
     private List<Folder> mSelectedFolders;
     private List<Size> mSelectedSizes;
 
