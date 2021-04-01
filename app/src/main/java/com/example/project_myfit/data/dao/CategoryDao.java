@@ -30,6 +30,9 @@ public interface CategoryDao {
     @Insert
     void categoryInsert(Category category);
 
+    @Insert
+    void categoryInsert(List<Category> categoryList);
+
     @Update
     void categoryUpdate(Category category);
 
