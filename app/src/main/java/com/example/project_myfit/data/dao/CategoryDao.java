@@ -1,10 +1,12 @@
-package com.example.project_myfit.data;
+package com.example.project_myfit.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.example.project_myfit.data.model.Category;
 
 import java.util.List;
 
