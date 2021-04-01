@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.database;
+package com.example.project_myfit.data;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,15 +10,14 @@ public class Category {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private final String parentCategory;
-    private int orderNumber, isDeleted, dummy;
+    private int orderNumber;
+    private boolean isDeleted, dummy;
     private String category;
 
     public Category(String category, String parentCategory, int orderNumber) {
         this.category = category;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
-        this.dummy = 0;
-        this.isDeleted = 0;
     }
 
     public long getId() {
@@ -49,19 +48,19 @@ public class Category {
         this.orderNumber = orderNumber;
     }
 
-    public int getDummy() {
+    public boolean getDummy() {
         return dummy;
     }
 
-    public void setDummy(int dummy) {
+    public void setDummy(boolean dummy) {
         this.dummy = dummy;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
