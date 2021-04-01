@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         Folder folder = model.getRepository().getFolder(size.getFolderId());
         if (category != null) model.setCategory(category);
         else {
-            category = getCategory(folder, model);
+            category = findParentCategory(folder, model);
             model.setCategory(category);
             model.setFolder(folder);
         }
@@ -141,18 +141,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void searchViewFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, @NotNull NavController navController) {
         Folder folder = model.getRepository().getFolder(intent.getLongExtra(FOLDER_ID, 0));
-        Category category = getCategory(folder, model);
+        Category category = findParentCategory(folder, model);
         model.setFolder(folder);
         model.setCategory(category);
         navController.navigate(R.id.action_mainFragment_to_listFragment);
     }
 
     @NotNull
-    private Category getCategory(@NotNull Folder folder, @NotNull MainActivityViewModel model) {
+    private Category findParentCategory(@NotNull Folder folder, @NotNull MainActivityViewModel model) {
         Category category = model.getRepository().getCategory(folder.getFolderId());
         if (category == null) {
             Folder parentFolder = model.getRepository().getFolder(folder.getFolderId());
-            category = getCategory(parentFolder, model);
+            category = findParentCategory(parentFolder, model);
         }
         return category;
     }
