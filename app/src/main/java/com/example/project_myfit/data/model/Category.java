@@ -12,10 +12,10 @@ public class Category {
     private final String parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy;
-    private String category;
+    private String categoryName;
 
-    public Category(String category, String parentCategory, int orderNumber) {
-        this.category = category;
+    public Category(String categoryName, String parentCategory, int orderNumber) {
+        this.categoryName = categoryName;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
     }
@@ -27,11 +27,11 @@ public class Category {
     public void setId(long id){this.id = id;}
 
     public String getCategory() {
-        return category;
+        return categoryName;
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        this.categoryName = category;
     }
 
     public String getParentCategory() {
