@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface CategoryDao {
-    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber DESC")
+    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
     LiveData<List<Category>> getAllCategoryLive(boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
