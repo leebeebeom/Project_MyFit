@@ -1,4 +1,4 @@
-package com.example.project_myfit.data;
+package com.example.project_myfit.data.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class Folder {
     @PrimaryKey
-    private final long id;
+    private long id;
     private long folderId;
     private String folderName;
     private final String parentCategory;

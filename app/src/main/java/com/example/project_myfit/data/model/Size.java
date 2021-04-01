@@ -1,4 +1,4 @@
-package com.example.project_myfit.data;
+package com.example.project_myfit.data.model;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -13,13 +13,15 @@ public class Size {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private int orderNumber;
-    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
+    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
+    private final String parentCategory;
     private long folderId;
     private boolean isFavorite, isDeleted, parentIsDeleted;
     private Map<String, String> sizeMap;
 
     @Ignore
-    public Size() {
+    public Size(String parentCategory) {
+        this.parentCategory = parentCategory;
         sizeMap = new HashMap<>();
     }
 

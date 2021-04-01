@@ -1,4 +1,4 @@
-package com.example.project_myfit.data;
+package com.example.project_myfit.data.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -23,6 +23,8 @@ public class Category {
     public long getId() {
         return id;
     }
+
+    public void setId(long id){this.id = id;}
 
     public String getCategory() {
         return category;
