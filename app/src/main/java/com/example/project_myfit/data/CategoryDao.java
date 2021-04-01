@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.database;
+package com.example.project_myfit.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -16,14 +16,14 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
     List<Category> getCategoryListByParent(String parentCategory, int isDeleted);
 
-    @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
-    Category getLatestCategory();
-
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
 
     @Query("SELECT * FROM Category WHERE id = :id")
     Category getCategory(long id);
+
+    @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
+    Category getLatestCategory();
 
     @Insert
     void categoryInsert(Category category);
