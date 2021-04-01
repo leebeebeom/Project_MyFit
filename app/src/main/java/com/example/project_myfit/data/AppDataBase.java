@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.database;
+package com.example.project_myfit.data;
 
 import android.content.Context;
 
@@ -11,20 +11,19 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.project_myfit.MyFitConstant;
-import com.example.project_myfit.searchActivity.database.RecentSearch;
-import com.example.project_myfit.searchActivity.database.RecentSearchDao;
-import com.example.project_myfit.ui.main.listfragment.database.Converters;
-import com.example.project_myfit.ui.main.listfragment.database.Folder;
-import com.example.project_myfit.ui.main.listfragment.database.FolderDao;
-import com.example.project_myfit.ui.main.listfragment.database.Size;
-import com.example.project_myfit.ui.main.listfragment.database.SizeDao;
+import com.example.project_myfit.data.dao.CategoryDao;
+import com.example.project_myfit.data.dao.FolderDao;
+import com.example.project_myfit.data.dao.SizeDao;
+import com.example.project_myfit.data.model.Category;
+import com.example.project_myfit.data.model.Folder;
+import com.example.project_myfit.data.model.Size;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase sInstance;
@@ -54,14 +53,9 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category("안경", MyFitConstant.ETC, 15));
                             categoryList.add(new Category("목걸이", MyFitConstant.ETC, 16));
                             categoryList.add(new Category("기타", MyFitConstant.ETC, 17));
-                            //insert
-                            new Thread(() -> {
-                                for (Category category : categoryList) {
-                                    getsInstance(context).categoryDao().categoryInsert(category);
-                                }
-                            }).start();
+                            new Repository(context).categoryInsert(categoryList);
                         }
-                    }).addMigrations(MIGRATION_2_1)
+                    }).addMigrations(MIGRATION_1_2)
                     .build();
         }
         return sInstance;
@@ -94,6 +88,49 @@ public abstract class AppDataBase extends RoomDatabase {
                     "SELECT id, folderId, folderName, parentCategory, orderNumber, isDeleted FROM Folder");
             database.execSQL("DROP TABLE Folder");
             database.execSQL("ALTER TABLE Folder_new RENAME TO Folder");
+        }
+    };
+
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull @NotNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE Folder_new(" +
+                    "id INTEGER PRIMARY KEY NOT NULL," +
+                    "folderId INTEGER NOT NULL," +
+                    "folderName TEXT," +
+                    "parentCategory TEXT," +
+                    "orderNumber INTEGER NOT NULL," +
+                    "isDeleted INTEGER NOT NULL," +
+                    "dummy INTEGER NOT NULL DEFAULT 0," +
+                    "parentIsDeleted INTEGER NOT NULL DEFAULT 0)");
+            database.execSQL("INSERT INTO Folder_new(id, folderId, folderName, parentCategory, orderNumber, isDeleted, dummy)" +
+                    "SELECT id, folderId, folderName, parentCategory, orderNumber, isDeleted, dummy FROM Folder");
+            database.execSQL("DROP TABLE Folder");
+            database.execSQL("ALTER TABLE Folder_new RENAME TO Folder");
+
+            database.execSQL("CREATE TABLE Size_new(" +
+                    "id INTEGER PRIMARY KEY NOT NULL," +
+                    "orderNumber INTEGER NOT NULL," +
+                    "isDeleted INTEGER NOT NULL," +
+                    "parentIsDeleted INTEGER NOT NULL DEFAULT 0," +
+                    "createdTime TEXT," +
+                    "modifiedTime TEXT," +
+                    "imageUri TEXT," +
+                    "brand TEXT," +
+                    "name TEXT," +
+                    "size TEXT," +
+                    "link TEXT," +
+                    "memo TEXT," +
+                    "parentCategory TEXT," +
+                    "folderId INTEGER NOT NULL," +
+                    "isFavorite INTEGER NOT NULL," +
+                    "sizeMap TEXT)");
+            database.execSQL("INSERT INTO Size_new(id, orderNumber, isDeleted, createdTime, modifiedTime, imageUri, brand, name, size, link, memo," +
+                    "parentCategory, folderId, isFavorite, sizeMap)" +
+                    "SELECT id, orderNumber, isDeleted, createdTime, modifiedTime, imageUri, brand, name, size, link, memo, " +
+                    "parentCategory, folderId, isFavorite, sizeMap FROM Size");
+            database.execSQL("DROP TABLE Size");
+            database.execSQL("ALTER TABLE Size_new RENAME TO Size");
         }
     };
 
