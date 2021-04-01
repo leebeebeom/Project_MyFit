@@ -1,4 +1,4 @@
-package com.example.project_myfit;
+package com.example.project_myfit.util;
 
 import android.util.Log;
 
@@ -16,7 +16,7 @@ import static com.example.project_myfit.MyFitConstant.TAG;
 
 public class SelectedItemTreat {
     //move------------------------------------------------------------------------------------------
-    public static void ItemMove(long folderId, @NotNull Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+    public static void folderSizeMove(long folderId, @NotNull Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         Category originCategory = getOriginCategory(repository, selectedFolderList, selectedSizeList);
         Category targetCategory = repository.getCategory(folderId);
         Folder originFolder = getOriginFolder(repository, selectedFolderList, selectedSizeList);
@@ -70,7 +70,7 @@ public class SelectedItemTreat {
     //----------------------------------------------------------------------------------------------
 
     //delete----------------------------------------------------------------------------------------
-    public static void ItemDelete(boolean isSearchView, Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+    public static void folderSizeDelete(boolean isSearchView, Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         deleteFolder(repository, selectedFolderList);
         deleteSize(repository, selectedSizeList);
         if (isSearchView) {
