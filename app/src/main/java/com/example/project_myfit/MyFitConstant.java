@@ -85,4 +85,6 @@ public class MyFitConstant {
     //etc
     public static final String ALERT_TITLE = "alertTitle";
     public static final String ID = "id";
+
+    public static final String TAG = "에러";
 }
