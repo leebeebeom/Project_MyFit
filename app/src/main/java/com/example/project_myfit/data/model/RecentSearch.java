@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity.database;
+package com.example.project_myfit.data.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
