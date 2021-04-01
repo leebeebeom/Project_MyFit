@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.database;
+package com.example.project_myfit.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -12,13 +12,7 @@ import java.util.List;
 public interface FolderDao {
 
     @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :isDeleted ORDER BY orderNumber DESC")
-    LiveData<List<Folder>> getFolderLiveByFolder(long folderId, int isDeleted);
-
-    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted ORDER BY folderName")
-    LiveData<List<Folder>> getAllFolderLive(int isDeleted);
-
-    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted ORDER BY orderNumber DESC")
-    List<Folder> getAllFolderList(int isDeleted);
+    LiveData<List<Folder>> getFolderLiveByFolderId(long folderId, int isDeleted);
 
     @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY folderName")
     List<Folder> getAllFolderListByParent(String parentCategory, int isDeleted);
@@ -26,8 +20,8 @@ public interface FolderDao {
     @Query("SELECT folderId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted")
     List<Long> getFolderFolderIdByParent(String parentCategory, int isDeleted);
 
-    @Query("SELECT folderName FROM Folder WHERE isDeleted = :isDeleted ORDER BY folderName")
-    List<String> getFolderNameList(int isDeleted);
+    @Query("SELECT folderName FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY folderName")
+    List<String> getFolderNameList(int isDeleted, int parentIsDeleted);
 
     @Query("SELECT max(orderNumber) FROM Folder")
     int getFolderLargestOrder();
@@ -44,6 +38,12 @@ public interface FolderDao {
     @Update
     void folderUpdate(List<Folder> folderList);
 
-    @Query("SELECT * FROM folder WHERE isDeleted = :isDeleted ORDER BY folderName")
-    List<Folder> getAllFolder(int isDeleted);
+    @Query("SELECT * FROM Folder WHERE folderId = :folderId AND isDeleted = :isDeleted")
+    List<Folder> getFolderListByFolderId(long folderId, int isDeleted);
+
+    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    LiveData<List<Folder>> getAllFolderLive(int isDeleted, int parentIsDeleted);
+
+    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Folder> getAllFolder(int isDeleted, int parentIsDeleted);
 }
