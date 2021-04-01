@@ -1,4 +1,4 @@
-package com.example.project_myfit;
+package com.example.project_myfit.adapter;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.project_myfit.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
