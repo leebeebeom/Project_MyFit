@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class Folder {
     @PrimaryKey
-    private long id;
+    private final long id;
     private long folderId;
     private String folderName;
     private final String parentCategory;
