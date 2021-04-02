@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.adapter;
+package com.example.project_myfit.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -7,8 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,11 +14,10 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.R;
+import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerBinding;
-import com.example.project_myfit.ui.main.MainViewModel;
-import com.example.project_myfit.ui.main.database.Category;
-import com.google.android.material.card.MaterialCardView;
+import com.example.project_myfit.main.MainViewModel;
+import com.example.project_myfit.util.AdapterUtils;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,18 +32,17 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryVH> {
-    private List<Category> mCategoryList, mSelectedItem;
+    private List<Category> mCategoryList, mSelectedCategoryList;
     private final MainViewModel mModel;
-    private final HashSet<Integer> mSelectedPosition;
+    private final HashSet<Long> mSelectedItemIdList;
     private final CategoryAdapterListener mListener;
-    private int mActionModeState;
+    private int mActionModeState, mSort;
     private Animation mAnimation;
-    private int mSort;
-    private final int mViewPagerPosition;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
     private MainViewPagerAdapter.ViewPagerVH mViewPagerVH;
 
-    public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener, int viewPagerPosition) {
+    public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener) {
+        //checked
         super(new DiffUtil.ItemCallback<Category>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
@@ -55,15 +51,14 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
-                return oldItem.getCategory().equals(newItem.getCategory()) &&
+                return oldItem.getCategoryName().equals(newItem.getCategoryName()) &&
                         oldItem.getDummy() == newItem.getDummy();
             }
         });
         this.mModel = model;
         setHasStableIds(true);
-        mSelectedPosition = new HashSet<>();
+        this.mSelectedItemIdList = new HashSet<>();
         this.mListener = listener;
-        this.mViewPagerPosition = viewPagerPosition;
     }
 
     @Override
@@ -71,16 +66,21 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         return getItem(position).getId();
     }
 
-    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Category> list, List<Long> allFolderFolderId, List<Long> allSizeFolderId) {
+    public void submitList(int sort, @Nullable @org.jetbrains.annotations.Nullable List<Category> list,
+                           List<Long> allFolderFolderId, List<Long> allSizeFolderId) {
+        //checked
         super.submitList(list);
         this.mCategoryList = list;
         this.mFolderFolderIdList = allFolderFolderId;
         this.mSizeFolderIdList = allSizeFolderId;
+        this.mSort = sort;
+
         if (list != null && mViewPagerVH != null)
             mViewPagerVH.setNoData(list.isEmpty());
     }
 
     public void setViewPagerVH(MainViewPagerAdapter.ViewPagerVH viewPagerVH) {
+        //checked
         this.mViewPagerVH = viewPagerVH;
     }
 
@@ -88,58 +88,40 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     @NotNull
     @Override
     public CategoryVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        //checked
         ItemMainRecyclerBinding binding = ItemMainRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new CategoryVH(binding, mListener, mViewPagerPosition);
+        return new CategoryVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
-        MaterialCardView cardView = holder.mBinding.mainCardView;
-        MaterialCheckBox checkBox = holder.mBinding.mainCheckBox;
-        ImageView dragHandle = holder.mBinding.mainDragHandle;
+        //checked
+        if (mSelectedCategoryList != null) {
+            mSelectedItemIdList.clear();
+            for (Category selectedItem : mSelectedCategoryList)
+                mSelectedItemIdList.add(selectedItem.getId());
+            mSelectedCategoryList = null;
+        }
 
         Category category = getItem(holder.getLayoutPosition());
         holder.mBinding.setCategory(category);
         holder.setCategory(category);
+
+        holder.setActionMode(mActionModeState, mSelectedItemIdList, mSort);
+        if (mActionModeState == ACTION_MODE_OFF)
+            new Handler().postDelayed(() -> mActionModeState = 0, 301);
+
         int amount = 0;
         for (Long l : mFolderFolderIdList)
             if (l == category.getId()) amount++;
         for (Long l : mSizeFolderIdList)
             if (l == category.getId()) amount++;
         holder.mBinding.mainItemAmount.setText(String.valueOf(amount));
-
-        if (mSelectedItem != null) {
-            mSelectedPosition.clear();
-            for (Category selectedItem : mSelectedItem) {
-                int selectedPosition = getCurrentList().indexOf(selectedItem);
-                mSelectedPosition.add(selectedPosition);
-            }
-            mSelectedItem = null;
-        }
-        //animation---------------------------------------------------------------------------------
-        if (mActionModeState == ACTION_MODE_ON) {
-            if (mAnimation == null)
-                mAnimation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_right);
-            if (!mAnimation.hasStarted()) cardView.setAnimation(mAnimation);
-            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
-            dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
-        } else if (mActionModeState == ACTION_MODE_OFF) {
-            mAnimation = null;
-            cardView.setAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.recycler_list_slide_left));
-            checkBox.setChecked(false);
-            setActionModeStateNone();
-            if (mSelectedPosition.size() != 0) mSelectedPosition.clear();
-            dragHandle.setVisibility(View.GONE);
-        }
-        //------------------------------------------------------------------------------------------
-    }
-
-    private void setActionModeStateNone() {
-        new Handler().postDelayed(() -> mActionModeState = 0, 310);
     }
 
     public void onItemMove(int from, int to) {
-        if (from < to) {
+        //checked
+        if (from < to) {//down
             for (int i = from; i < to; i++) {
                 Collections.swap(mCategoryList, i, i + 1);
 
@@ -148,7 +130,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
                 mCategoryList.get(i).setOrderNumber(fromOrder);
                 mCategoryList.get(i + 1).setOrderNumber(toOrder);
             }
-        } else {
+        } else {//up
             for (int i = from; i > to; i--) {
                 Collections.swap(mCategoryList, i, i - 1);
 
@@ -162,53 +144,56 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
+        //check
         mModel.getRepository().categoryUpdate(mCategoryList);
-        mListener.onCategoryDragHandleTouch(viewHolder, mViewPagerPosition);
+        mListener.onCategoryDragHandleTouch(viewHolder);
+        mModel.getSelectedCategoryList().clear();
+        for (Category c : getCurrentList())
+            if (mSelectedItemIdList.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
     }
 
     public void setActionModeState(int actionModeState) {
+        //checked
         mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
 
     public void setSelectedItem(List<Category> mSelectedItem) {
-        this.mSelectedItem = mSelectedItem;
+        //checked
+        this.mSelectedCategoryList = mSelectedItem;
     }
 
-    public void setSelectedPosition(int position) {
-        if (!mSelectedPosition.contains(position)) mSelectedPosition.add(position);
-        else mSelectedPosition.remove(position);
+    public void setSelectedPosition(long id) {
+        //checked
+        if (!mSelectedItemIdList.contains(id)) mSelectedItemIdList.add(id);
+        else mSelectedItemIdList.remove(id);
     }
 
     public void selectAll() {
-        for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
+        //checked
+        for (Category c : getCurrentList())
+            mSelectedItemIdList.add(c.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
-        mSelectedPosition.clear();
+        //checked
+        mSelectedItemIdList.clear();
         notifyDataSetChanged();
     }
 
-    public void setSort(int sort) {
-        if (mSort != sort) {
-            this.mSort = sort;
-            notifyDataSetChanged();
-        }
-    }
-
-
     public static class CategoryVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
+        //all checked
         private final ItemMainRecyclerBinding mBinding;
         private final CategoryAdapterListener mListener;
         private Category mCategory;
-        int mViewPagerPosition;
+        private final AdapterUtils mAdapterUtils;
 
-        public CategoryVH(@NotNull ItemMainRecyclerBinding binding, CategoryAdapterListener listener, int viewPagerPosition) {
+        public CategoryVH(@NotNull ItemMainRecyclerBinding binding, CategoryAdapterListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
             this.mListener = listener;
-            this.mViewPagerPosition = viewPagerPosition;
+            this.mAdapterUtils = new AdapterUtils(itemView.getContext());
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -221,7 +206,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         @Override
         public void onClick(View v) {
-            mListener.onCategoryCardViewClick(mCategory, this.mBinding.mainCheckBox, getLayoutPosition(), mViewPagerPosition);
+            mListener.onCategoryCardViewClick(mCategory, this.mBinding.mainCheckBox);
         }
 
         @Override
@@ -233,20 +218,33 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         @Override
         public boolean onTouch(View v, @NotNull MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN)
-                mListener.onCategoryDragHandleTouch(this, mViewPagerPosition);
+                mListener.onCategoryDragHandleTouch(this);
             return false;
         }
 
         public ItemMainRecyclerBinding getBinding() {
             return mBinding;
         }
+
+        public void setActionMode(int actionModeState, HashSet<Long> selectedItemIdList, int sort) {
+            //checked
+            if (actionModeState == ACTION_MODE_ON) {
+                mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedItemIdList, mCategory.getId());
+                mBinding.mainDragHandle.setVisibility(sort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
+            } else if (actionModeState == ACTION_MODE_OFF) {
+                mAdapterUtils.listActionModeOff();
+                mBinding.mainDragHandle.setVisibility(View.GONE);
+                if (selectedItemIdList.size() != 0) selectedItemIdList.clear();
+            }
+        }
     }
 
     public interface CategoryAdapterListener {
-        void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox, int position, int viewPagerPosition);
+        //all checked
+        void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox);
 
         void onCategoryCardViewLongClick(int position);
 
-        void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder, int viewPagerPosition);
+        void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder);
     }
 }
