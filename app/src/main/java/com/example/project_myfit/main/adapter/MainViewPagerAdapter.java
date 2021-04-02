@@ -30,14 +30,14 @@ import static com.example.project_myfit.MyFitConstant.UP;
 
 public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdapter.ViewPagerVH> {
     //all checked
-    private final CategoryAdapter[] mAdapterArray;
+    private final CategoryAdapter[] mCategoryAdapterArray;
     private MainDragAutoScrollListener mListener;
     private final DragSelectTouchListener mDragSelectListener;
     private final ItemTouchHelper[] mTouchHelperArray;
 
     public MainViewPagerAdapter(CategoryAdapter[] adapterList, DragSelectTouchListener dragSelectListener, ItemTouchHelper[] touchHelperList) {
         //checked
-        this.mAdapterArray = adapterList;
+        this.mCategoryAdapterArray = adapterList;
         this.mDragSelectListener = dragSelectListener;
         this.mTouchHelperArray = touchHelperList;
         setHasStableIds(true);
@@ -49,7 +49,6 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
         List<Category> bottomList = new ArrayList<>();
         List<Category> outerList = new ArrayList<>();
         List<Category> etcList = new ArrayList<>();
-
         for (Category category : Sort.categorySort(sort, categoryList)) {
             switch (category.getParentCategory()) {
                 case TOP:
@@ -66,11 +65,10 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
                     break;
             }
         }
-
-        mAdapterArray[0].submitList(sort, topList, repository.getFolderFolderIdByParent(TOP), repository.getSizeFolderIdByParent(TOP));
-        mAdapterArray[1].submitList(sort, bottomList, repository.getFolderFolderIdByParent(BOTTOM), repository.getSizeFolderIdByParent(BOTTOM));
-        mAdapterArray[2].submitList(sort, outerList, repository.getFolderFolderIdByParent(OUTER), repository.getSizeFolderIdByParent(OUTER));
-        mAdapterArray[3].submitList(sort, etcList, repository.getFolderFolderIdByParent(ETC), repository.getSizeFolderIdByParent(ETC));
+        mCategoryAdapterArray[0].submitList(sort, topList, repository.getFolderFolderIdByParent(TOP), repository.getSizeFolderIdByParent(TOP));
+        mCategoryAdapterArray[1].submitList(sort, bottomList, repository.getFolderFolderIdByParent(BOTTOM), repository.getSizeFolderIdByParent(BOTTOM));
+        mCategoryAdapterArray[2].submitList(sort, outerList, repository.getFolderFolderIdByParent(OUTER), repository.getSizeFolderIdByParent(OUTER));
+        mCategoryAdapterArray[3].submitList(sort, etcList, repository.getFolderFolderIdByParent(ETC), repository.getSizeFolderIdByParent(ETC));
     }
 
     @Override
@@ -78,7 +76,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
         return position;
     }
 
-    public void setOnCategoryAdapterListener(MainDragAutoScrollListener listener) {
+    public void setOnMainDragAutoScrollListener(MainDragAutoScrollListener listener) {
         //checked
         this.mListener = listener;
     }
@@ -96,14 +94,14 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
         //checked
         if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
-            mAdapterArray[position].setViewPagerVH(holder);
+            mCategoryAdapterArray[position].setViewPagerVH(holder);
 
-            holder.mBinding.mainRecyclerView.setAdapter(mAdapterArray[position]);
+            holder.mBinding.mainRecyclerView.setAdapter(mCategoryAdapterArray[position]);
 
             mTouchHelperArray[position].attachToRecyclerView(holder.mBinding.mainRecyclerView);
             holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
 
-            if (mAdapterArray[position].getItemCount() == 0)
+            if (mCategoryAdapterArray[position].getItemCount() == 0)
                 holder.mBinding.noData.setVisibility(View.VISIBLE);
             else holder.mBinding.noData.setVisibility(View.GONE);
         }
