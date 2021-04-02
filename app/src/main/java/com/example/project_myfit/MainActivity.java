@@ -37,9 +37,7 @@ import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 
 //TODO 어댑터 셀렉트 포지션 포지션말고 아이디로
 
-//TODO 트리뷰 나올때 [리스트뷰]랑 같은 순서로 나오게
 //TODO 트리뷰 폴더 추가시 [리스트뷰]랑 같은 순서로 추가되게(가능?)
-//TODO 트리뷰 나올때 [서치뷰]랑 같은 순서로 나오게
 //TODO 트리뷰 폴더 추가시 [서치뷰]랑 같은 순서로 추가되게(가능?)
 
 //TODO 엔드아이콘 클릭하면 키보드 보이게
@@ -51,6 +49,7 @@ import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 //트리뷰 리크리에이트 유지
 
 public class MainActivity extends AppCompatActivity {
+    //all checked
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -98,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar, @NotNull NavController navController) {
+        //checked
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
@@ -119,12 +119,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fabChange(@NotNull ActivityMainBinding binding, int resId) {
+        //checked
         binding.activityFab.hide();
         binding.activityFab.setImageResource(resId);
         binding.activityFab.show();
     }
 
     private void searchViewSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, NavController navController) {
+        //checked
         Size size = model.getRepository().getSize(intent.getIntExtra(SIZE_ID, 0));
         model.setSize(size);
 
@@ -140,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void searchViewFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, @NotNull NavController navController) {
+        //checked
         Folder folder = model.getRepository().getFolder(intent.getLongExtra(FOLDER_ID, 0));
         Category category = findParentCategory(folder, model);
         model.setFolder(folder);
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     @NotNull
     private Category findParentCategory(@NotNull Folder folder, @NotNull MainActivityViewModel model) {
+        //checked
         Category category = model.getRepository().getCategory(folder.getFolderId());
         if (category == null) {
             Folder parentFolder = model.getRepository().getFolder(folder.getFolderId());
@@ -159,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        //checked
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 }
