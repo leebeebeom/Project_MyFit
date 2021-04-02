@@ -87,4 +87,8 @@ public class MyFitConstant {
     public static final String ID = "id";
 
     public static final String TAG = "에러";
+
+    public static final int DOWN = 0;
+    public static final int UP = 1;
+    public static final int STOP = 2;
 }
