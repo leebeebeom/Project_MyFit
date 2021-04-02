@@ -19,8 +19,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Category mCategory;
     private Folder mFolder;
     private Size mSize;
-    private List<Folder> mSelectedFolders;
-    private List<Size> mSelectedSizes;
+    private List<Folder> mSelectedFolderList;
+    private List<Size> mSelectedSizeList;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
@@ -51,20 +51,20 @@ public class MainActivityViewModel extends AndroidViewModel {
         this.mFolder = folder;
     }
 
-    public List<Folder> getSelectedFolders() {
-        return mSelectedFolders;
+    public List<Folder> getSelectedFolderList() {
+        return mSelectedFolderList;
     }
 
-    public void setSelectedFolders(List<Folder> mSelectedFolders) {
-        this.mSelectedFolders = mSelectedFolders;
+    public void setSelectedFolderList(List<Folder> mSelectedFolders) {
+        this.mSelectedFolderList = mSelectedFolders;
     }
 
-    public List<Size> getSelectedSizes() {
-        return mSelectedSizes;
+    public List<Size> getSelectedSizeList() {
+        return mSelectedSizeList;
     }
 
-    public void setSelectedSizes(List<Size> mSelectedSizes) {
-        this.mSelectedSizes = mSelectedSizes;
+    public void setSelectedSizeList(List<Size> mSelectedSizes) {
+        this.mSelectedSizeList = mSelectedSizes;
     }
 
     public Repository getRepository() {
