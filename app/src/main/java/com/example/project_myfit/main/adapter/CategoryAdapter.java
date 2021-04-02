@@ -106,17 +106,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         Category category = getItem(holder.getLayoutPosition());
         holder.mBinding.setCategory(category);
         holder.setCategory(category);
+        holder.mBinding.mainItemAmount.setText(String.valueOf(new AdapterUtils(holder.itemView.getContext()).
+                getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
 
         holder.setActionMode(mActionModeState, mSelectedItemIdList, mSort);
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
-
-        int amount = 0;
-        for (Long l : mFolderFolderIdList)
-            if (l == category.getId()) amount++;
-        for (Long l : mSizeFolderIdList)
-            if (l == category.getId()) amount++;
-        holder.mBinding.mainItemAmount.setText(String.valueOf(amount));
     }
 
     public void onItemMove(int from, int to) {
