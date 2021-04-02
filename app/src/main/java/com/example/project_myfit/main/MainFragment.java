@@ -494,23 +494,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
     //dialog lister---------------------------------------------------------------------------------
     @Override
-    public void addCategoryConfirmClick(@NotNull String categoryName) {
+    public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
         //checked
-        String parentCategory = null;
-        switch (mBinding.viewPager.getCurrentItem()) {
-            case 0:
-                parentCategory = TOP;
-                break;
-            case 1:
-                parentCategory = BOTTOM;
-                break;
-            case 2:
-                parentCategory = OUTER;
-                break;
-            case 3:
-                parentCategory = ETC;
-                break;
-        }
         mModel.getRepository().categoryInsert(new Category(categoryName.trim(), parentCategory, mModel.getRepository().getCategoryLargestOrderPlus1()));
     }
 
