@@ -1,4 +1,4 @@
-package com.example.project_myfit.adapter;
+package com.example.project_myfit.main.adapter;
 
 import android.graphics.Canvas;
 
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 public class MainDragCallBack extends ItemTouchHelper.Callback {
+    //all checked
     private final CategoryAdapter mCategoryAdapter;
 
     public MainDragCallBack(CategoryAdapter categoryAdapter) {
