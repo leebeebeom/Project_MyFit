@@ -1,4 +1,4 @@
-package com.example.project_myfit.adapter;
+package com.example.project_myfit.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
