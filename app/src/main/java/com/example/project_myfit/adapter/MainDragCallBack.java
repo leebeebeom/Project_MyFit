@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.adapter;
+package com.example.project_myfit.adapter;
 
 import android.graphics.Canvas;
 
@@ -28,6 +28,7 @@ public class MainDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        //checked
         mCategoryAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
@@ -40,11 +41,13 @@ public class MainDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
+        //checked
         mCategoryAdapter.onItemDrop(viewHolder);
     }
 
     @Override
     public void onChildDraw(@NonNull @NotNull Canvas c, @NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        //checked
         RecyclerView.ViewHolder previousViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAdapterPosition() - 1);
         boolean isDraggingUp = dY < 0;
         if (isDraggingUp && previousViewHolder == null) dY = 0;
