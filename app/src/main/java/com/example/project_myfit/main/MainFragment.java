@@ -154,6 +154,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             parentCategoryButtonEnable(mBinding, true);
         }
     };
+    private String mParentCategory;
 
     private void parentCategoryButtonEnable(@NotNull FragmentMainBinding binding, boolean enable) {
         //checked
@@ -198,7 +199,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private void popupMenuClick(PopupWindow popupWindow, @NotNull MainPopupMenuBinding binding) {
         //checked
         binding.addFolder.setOnClickListener(v -> {
-            showDialog(new AddCategoryDialog(), CATEGORY_ADD_DIALOG);
+            showDialog(AddCategoryDialog.getInstance(mParentCategory), CATEGORY_ADD_DIALOG);
             popupWindow.dismiss();
         });
         binding.sort.setOnClickListener(v -> {
@@ -356,6 +357,20 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             public void onPageSelected(int position) {
                 binding.mainScrollView.smoothScrollTo(0, 0);
                 buttonArray[position].setChecked(true);
+                switch (position) {
+                    case 0:
+                        mParentCategory = TOP;
+                        break;
+                    case 1:
+                        mParentCategory = BOTTOM;
+                        break;
+                    case 2:
+                        mParentCategory = OUTER;
+                        break;
+                    case 3:
+                        mParentCategory = ETC;
+                        break;
+                }
             }
         });
     }
