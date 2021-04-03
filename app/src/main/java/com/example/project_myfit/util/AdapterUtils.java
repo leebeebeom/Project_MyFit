@@ -18,8 +18,6 @@ import java.util.List;
 public class AdapterUtils {
     //all checked
     private final Context mContext;
-    private MaterialCardView mCardView;
-    private MaterialCheckBox mCheckBox;
     private Animation mOpenAnimation;
 
     public AdapterUtils(Context context) {
@@ -28,8 +26,6 @@ public class AdapterUtils {
 
     public void listActionModeOn(@NotNull MaterialCardView cardView, @NotNull MaterialCheckBox checkBox, @NotNull HashSet<Long> selectedItemIdList, long id) {
         //checked
-        mCardView = cardView;
-        mCheckBox = checkBox;
         if (mOpenAnimation == null) {
             mOpenAnimation = AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right);
             cardView.setAnimation(mOpenAnimation);
@@ -37,12 +33,10 @@ public class AdapterUtils {
         checkBox.setChecked(selectedItemIdList.contains(id));
     }
 
-    public void listActionModeOff() {
+    public void listActionModeOff(@NotNull MaterialCardView cardView, @NotNull MaterialCheckBox checkBox) {
         //checked
-        mCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
-        mCheckBox.setChecked(false);
-        mCardView = null;
-        mCheckBox = null;
+        cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
+        checkBox.setChecked(false);
         mOpenAnimation = null;
     }
 
