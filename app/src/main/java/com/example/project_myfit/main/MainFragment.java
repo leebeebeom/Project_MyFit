@@ -293,7 +293,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         setToggleGroup(mBinding, mButtonArray);
         if (savedInstanceState == null) mBinding.btnTop.setChecked(true);
         viewPagerChangeListener(mBinding, mButtonArray, mModel);
-        selectedItemAmountLive(mModel, mActionModeTitleBinding, mEditMenu, mDeletedMenu, mActionMode, mCategoryAdapterArray, mBinding);
+        selectedItemAmountLive(mModel, mActionModeTitleBinding, mCategoryAdapterArray, mBinding);
         actionModeRecreate(savedInstanceState, mButtonArray, mCategoryAdapterArray, mBinding, mModel, mActionModeCallback);
     }
 
@@ -380,15 +380,15 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         });
     }
 
-    private void selectedItemAmountLive(@NotNull MainViewModel model, ActionModeTitleBinding actionModeTitleBinding, MenuItem editMenu, MenuItem deletedMenu,
-                                        ActionMode actionMode, CategoryAdapter[] categoryAdapterArray, FragmentMainBinding binding) {
+    private void selectedItemAmountLive(@NotNull MainViewModel model, ActionModeTitleBinding actionModeTitleBinding,
+                                        CategoryAdapter[] categoryAdapterArray, FragmentMainBinding binding) {
         //checked
         model.getSelectedAmount().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.item_selected);
             actionModeTitleBinding.actionModeTitle.setText(title);
-            if (actionMode != null) {
-                editMenu.setVisible(integer == 1);
-                deletedMenu.setVisible(integer > 0);
+            if (mActionMode != null) {
+                mEditMenu.setVisible(integer == 1);
+                mDeletedMenu.setVisible(integer > 0);
             }
 
             int allItemSize = categoryAdapterArray[binding.viewPager.getCurrentItem()].getCurrentList().size();
