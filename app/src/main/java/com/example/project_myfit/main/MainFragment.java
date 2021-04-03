@@ -72,6 +72,7 @@ import static com.example.project_myfit.MyFitConstant.UP;
 
 //TODO 휴지통
 //키보드, 바텀앱바
+//TODO 카테고리 추가시 동일 카테고리 네임이 존재할 시 경고?
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
@@ -89,7 +90,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private MainViewPagerAdapter mViewPagerAdapter;
     private ItemTouchHelper[] mTouchHelperArray;
     private CategoryAdapter[] mCategoryAdapterArray;
-    private MaterialButton[] mButtonArray;
     private DragSelectTouchListener mSelectListener;
     private LiveData<List<Category>> mMainLive;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -105,7 +105,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mode.getMenuInflater().inflate(R.menu.action_mode, menu);
             mode.setCustomView(mActionModeTitleBinding.getRoot());
 
-            parentCategoryButtonEnable(mBinding, false);
+            parentCategoryButtonEnable(false);
             mCategoryAdapterArray[mBinding.viewPager.getCurrentItem()].setActionModeState(ACTION_MODE_ON);
             return true;
         }
@@ -151,17 +151,17 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
 
-            parentCategoryButtonEnable(mBinding, true);
+            parentCategoryButtonEnable(true);
         }
     };
     private String mParentCategory;
 
-    private void parentCategoryButtonEnable(@NotNull FragmentMainBinding binding, boolean enable) {
+    private void parentCategoryButtonEnable(boolean enable) {
         //checked
-        binding.btnTop.setEnabled(enable);
-        binding.btnBottom.setEnabled(enable);
-        binding.btnOuter.setEnabled(enable);
-        binding.btnEtc.setEnabled(enable);
+        mBinding.btnTop.setEnabled(enable);
+        mBinding.btnBottom.setEnabled(enable);
+        mBinding.btnOuter.setEnabled(enable);
+        mBinding.btnEtc.setEnabled(enable);
     }
 
     @Override
@@ -171,6 +171,12 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         setHasOptionsMenu(true);
+
+        //오더넘버 초기화
+        List<Category> categoryList = mModel.getRepository().getAllCategoryList();
+        for (int i = 0; i < categoryList.size(); i++)
+            categoryList.get(i).setOrderNumber(i);
+        mModel.getRepository().categoryUpdate(categoryList);
     }
 
     @Override
@@ -212,16 +218,28 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         //all checked
         super.onViewCreated(view, savedInstanceState);
-        mSelectListener = dragSelectListenerInit();
-        mCategoryAdapterArray = getCategoryAdapterArray();
-        mTouchHelperArray = getTouchHelperArray(mCategoryAdapterArray);
-        mBinding.viewPager.setAdapter(getViewPagerAdapter(mCategoryAdapterArray, mTouchHelperArray, mSelectListener));
-        mButtonArray = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
+        mBinding.viewPager.setAdapter(getViewPagerAdapter());
 
         requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
             if (mActionMode != null) mActionMode.finish();
             Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity);
         });
+    }
+
+    @NotNull
+    private MainViewPagerAdapter getViewPagerAdapter() {
+        //checked
+        mCategoryAdapterArray = new CategoryAdapter[4];
+        for (int i = 0; i < 4; i++)
+            mCategoryAdapterArray[i] = new CategoryAdapter(mModel, this);
+
+        mTouchHelperArray = new ItemTouchHelper[4];
+        for (int i = 0; i < 4; i++)
+            mTouchHelperArray[i] = new ItemTouchHelper(new MainDragCallBack(mCategoryAdapterArray[i]));
+
+        mViewPagerAdapter = new MainViewPagerAdapter(mCategoryAdapterArray, dragSelectListenerInit(), mTouchHelperArray);
+        mViewPagerAdapter.setOnMainDragAutoScrollListener(this);
+        return mViewPagerAdapter;
     }
 
     private DragSelectTouchListener dragSelectListenerInit() {
@@ -254,113 +272,87 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                 }
             }
         };
-        return new DragSelectTouchListener().withSelectListener(listener);
-    }
-
-    @NotNull
-    private CategoryAdapter[] getCategoryAdapterArray() {
-        //checked
-        CategoryAdapter[] categoryAdapterArray = new CategoryAdapter[4];
-        for (int i = 0; i < 4; i++)
-            categoryAdapterArray[i] = new CategoryAdapter(mModel, this);
-        return categoryAdapterArray;
-    }
-
-    @NotNull
-    private ItemTouchHelper[] getTouchHelperArray(CategoryAdapter[] categoryAdapterArray) {
-        //checked
-        ItemTouchHelper[] itemTouchHelperArray = new ItemTouchHelper[4];
-        for (int i = 0; i < 4; i++)
-            itemTouchHelperArray[i] = new ItemTouchHelper(new MainDragCallBack(categoryAdapterArray[i]));
-        return itemTouchHelperArray;
-    }
-
-    @NotNull
-    private MainViewPagerAdapter getViewPagerAdapter(CategoryAdapter[] categoryAdapterArray, ItemTouchHelper[] itemTouchHelperArray,
-                                                     DragSelectTouchListener dragSelectTouchListener) {
-        //checked
-        MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(categoryAdapterArray, dragSelectTouchListener, itemTouchHelperArray);
-        mainViewPagerAdapter.setOnMainDragAutoScrollListener(this);
-        return mViewPagerAdapter = mainViewPagerAdapter;
+        mSelectListener = new DragSelectTouchListener().withSelectListener(listener);
+        return mSelectListener;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //all checked
-        setLiveData(mMainLive, mModel, mViewPagerAdapter);
-        setScrollChangeListener(mBinding, mIsDragSelecting, mIsDragging, mScrollEnable);
-        setToggleGroup(mBinding, mButtonArray);
+        setLiveData();
+        setScrollChangeListener();
+        MaterialButton[] buttonArray = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
+        setToggleGroup(buttonArray);
         if (savedInstanceState == null) mBinding.btnTop.setChecked(true);
-        viewPagerChangeListener(mBinding, mButtonArray, mModel);
-        selectedItemAmountLive(mModel, mActionModeTitleBinding, mCategoryAdapterArray, mBinding);
-        actionModeRecreate(savedInstanceState, mButtonArray, mCategoryAdapterArray, mBinding, mModel, mActionModeCallback);
+        viewPagerChangeListener(buttonArray);
+        selectedItemAmountLive();
+        actionModeRecreate(savedInstanceState, buttonArray);
     }
 
-    public void setLiveData(LiveData<List<Category>> mainLive, MainViewModel model, MainViewPagerAdapter mainViewPagerAdapter) {
+    public void setLiveData() {
         //checked
-        if (mainLive != null && mainLive.hasObservers())
-            mainLive.removeObservers(getViewLifecycleOwner());
-        else if (mainLive == null) mainLive = model.getRepository().getAllCategoryLive();
+        if (mMainLive != null && mMainLive.hasObservers())
+            mMainLive.removeObservers(getViewLifecycleOwner());
+        else if (mMainLive == null) mMainLive = mModel.getRepository().getAllCategoryLive();
 
-        mainLive.observe(getViewLifecycleOwner(), categoryList -> mainViewPagerAdapter.setItem(mSort, categoryList, model.getRepository()));
+        mMainLive.observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel.getRepository()));
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setScrollChangeListener(@NotNull FragmentMainBinding binding, boolean isDragSelecting, boolean isDragging, boolean scrollEnable) {
+    private void setScrollChangeListener() {
         //checked
-        binding.mainScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (oldScrollY < scrollY) binding.mainTopFab.show();
-            else if (scrollY == 0) binding.mainTopFab.hide();
+        mBinding.mainScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (oldScrollY < scrollY) mBinding.mainTopFab.show();
+            else if (scrollY == 0) mBinding.mainTopFab.hide();
 
-            if ((isDragSelecting || isDragging) && scrollEnable && scrollY > oldScrollY)
+            if ((mIsDragSelecting || mIsDragging) && mScrollEnable && scrollY > oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
-            else if ((isDragSelecting || isDragging) && scrollEnable && scrollY < oldScrollY)
+            else if ((mIsDragSelecting || mIsDragging) && mScrollEnable && scrollY < oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, -1), 50);
         });
     }
 
-    private void setToggleGroup(@NotNull FragmentMainBinding binding, @NotNull MaterialButton[] buttonArray) {
+    private void setToggleGroup(@NotNull MaterialButton[] buttonArray) {
         //checked
-        final ColorStateList textOriginColor = binding.btnEtc.getTextColors();
+        final ColorStateList textOriginColor = mBinding.btnEtc.getTextColors();
         TypedValue typedValue = new TypedValue();
         requireContext().getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
         int colorControl = typedValue.data;
         requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         int colorPrimary = typedValue.data;
 
-        binding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+        mBinding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             for (MaterialButton btn : buttonArray) {
                 btn.setBackgroundColor(Color.TRANSPARENT);
                 btn.setTextColor(textOriginColor);
             }
             if (checkedId == R.id.btn_top && isChecked) {
-                binding.btnTop.setBackgroundColor(colorControl);
-                binding.btnTop.setTextColor(colorPrimary);
+                mBinding.btnTop.setBackgroundColor(colorControl);
+                mBinding.btnTop.setTextColor(colorPrimary);
+                mBinding.viewPager.setCurrentItem(0, false);
             } else if (checkedId == R.id.btn_bottom && isChecked) {
-                binding.btnBottom.setBackgroundColor(colorControl);
-                binding.btnBottom.setTextColor(colorPrimary);
+                mBinding.btnBottom.setBackgroundColor(colorControl);
+                mBinding.btnBottom.setTextColor(colorPrimary);
+                mBinding.viewPager.setCurrentItem(1, false);
             } else if (checkedId == R.id.btn_outer && isChecked) {
-                binding.btnOuter.setBackgroundColor(colorControl);
-                binding.btnOuter.setTextColor(colorPrimary);
+                mBinding.btnOuter.setBackgroundColor(colorControl);
+                mBinding.btnOuter.setTextColor(colorPrimary);
+                mBinding.viewPager.setCurrentItem(2, false);
             } else if (checkedId == R.id.btn_etc && isChecked) {
-                binding.btnEtc.setBackgroundColor(colorControl);
-                binding.btnEtc.setTextColor(colorPrimary);
+                mBinding.btnEtc.setBackgroundColor(colorControl);
+                mBinding.btnEtc.setTextColor(colorPrimary);
+                mBinding.viewPager.setCurrentItem(3, false);
             }
         });
-
-        for (int i = 0; i < buttonArray.length; i++) {
-            int finalI = i;
-            buttonArray[i].setOnClickListener(v -> binding.viewPager.setCurrentItem(finalI, false));
-        }
     }
 
-    private void viewPagerChangeListener(@NotNull FragmentMainBinding binding, MaterialButton[] buttonArray, MainViewModel model) {
+    private void viewPagerChangeListener(MaterialButton[] buttonArray) {
         //checked
-        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        mBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                binding.mainScrollView.smoothScrollTo(0, 0);
+                mBinding.mainScrollView.smoothScrollTo(0, 0);
                 buttonArray[position].setChecked(true);
                 switch (position) {
                     case 0:
@@ -380,30 +372,27 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         });
     }
 
-    private void selectedItemAmountLive(@NotNull MainViewModel model, ActionModeTitleBinding actionModeTitleBinding,
-                                        CategoryAdapter[] categoryAdapterArray, FragmentMainBinding binding) {
+    private void selectedItemAmountLive() {
         //checked
-        model.getSelectedAmount().observe(getViewLifecycleOwner(), integer -> {
+        mModel.getSelectedAmount().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.item_selected);
-            actionModeTitleBinding.actionModeTitle.setText(title);
+            mActionModeTitleBinding.actionModeTitle.setText(title);
             if (mActionMode != null) {
                 mEditMenu.setVisible(integer == 1);
                 mDeletedMenu.setVisible(integer > 0);
             }
 
-            int allItemSize = categoryAdapterArray[binding.viewPager.getCurrentItem()].getCurrentList().size();
-            actionModeTitleBinding.actionModeSelectAll.setChecked(allItemSize == integer);
+            int allItemSize = mCategoryAdapterArray[mBinding.viewPager.getCurrentItem()].getCurrentList().size();
+            mActionModeTitleBinding.actionModeSelectAll.setChecked(allItemSize == integer);
         });
     }
 
-    private void actionModeRecreate(@org.jetbrains.annotations.Nullable Bundle savedInstanceState, MaterialButton[] buttonArray,
-                                    CategoryAdapter[] categoryAdapterArray, FragmentMainBinding binding, MainViewModel model,
-                                    ActionMode.Callback actionModeCallback) {
+    private void actionModeRecreate(@org.jetbrains.annotations.Nullable Bundle savedInstanceState, MaterialButton[] buttonArray) {
         //checked
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
             buttonArray[savedInstanceState.getInt(CURRENT_ITEM)].setChecked(true);
-            categoryAdapterArray[savedInstanceState.getInt(CURRENT_ITEM)].setSelectedItem(model.getSelectedCategoryList());
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(actionModeCallback);
+            mCategoryAdapterArray[savedInstanceState.getInt(CURRENT_ITEM)].setSelectedItem(mModel.getSelectedCategoryList());
+            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
     }
 
@@ -497,7 +486,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     }
     //----------------------------------------------------------------------------------------------
 
-    //dialog lister---------------------------------------------------------------------------------
+    //dialog listener-------------------------------------------------------------------------------
     @Override
     public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
         //checked
@@ -508,7 +497,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void sortConfirmClick(int sort) {
         //checked
         mSort = sort;
-        setLiveData(mMainLive, mModel, mViewPagerAdapter);
+        setLiveData();
         SharedPreferences.Editor editor = mSortPreference.edit();
         editor.putInt(SORT_MAIN, mSort);
         editor.apply();
