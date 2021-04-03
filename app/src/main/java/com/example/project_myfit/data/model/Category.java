@@ -26,11 +26,11 @@ public class Category {
 
     public void setId(long id){this.id = id;}
 
-    public String getCategory() {
+    public String getCategoryName() {
         return categoryName;
     }
 
-    public void setCategory(String category) {
+    public void setCategoryName(String category) {
         this.categoryName = category;
     }
 
