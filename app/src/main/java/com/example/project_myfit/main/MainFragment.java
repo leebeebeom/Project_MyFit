@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -44,8 +45,10 @@ import com.example.project_myfit.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.adapter.MainDragCallBack;
 import com.example.project_myfit.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.SelectedItemTreat;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +74,6 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 import static com.example.project_myfit.MyFitConstant.UP;
 
 //TODO 휴지통
-//키보드, 바텀앱바
 //TODO 카테고리 추가시 동일 카테고리 네임이 존재할 시 경고?
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
@@ -83,7 +85,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private PopupWindow mPopupWindow;
     private SharedPreferences mSortPreference;
     private int mSort;
-    private boolean mIsDragging, mActionModeOn, mIsDragSelecting, mScrollEnable;
+    private boolean mIsDragging, mActionModeOn, mIsDragSelecting, mScrollEnable, mIsKeyboardShowing;
     private ActionMode mActionMode;
     private ActionModeTitleBinding mActionModeTitleBinding;
     private MenuItem mEditMenu, mDeletedMenu;
@@ -224,6 +226,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             if (mActionMode != null) mActionMode.finish();
             Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity);
         });
+
+        setKeyboardShowingListener(view);
     }
 
     @NotNull
@@ -274,6 +278,33 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         };
         mSelectListener = new DragSelectTouchListener().withSelectListener(listener);
         return mSelectListener;
+    }
+
+    private void setKeyboardShowingListener(@NotNull View view) {
+        FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.activity_fab);
+        BottomAppBar bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar);
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            view.getWindowVisibleDisplayFrame(r);
+            int screenHeight = view.getRootView().getHeight();
+
+            int keypadHeight = screenHeight - r.bottom;
+
+            if (keypadHeight > screenHeight * 0.15) {
+                if (!mIsKeyboardShowing) {
+                    mIsKeyboardShowing = true;
+                    floatingActionButton.setVisibility(View.INVISIBLE);
+                    bottomAppBar.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                if (mIsKeyboardShowing) {
+                    mIsKeyboardShowing = false;
+                    bottomAppBar.setVisibility(View.VISIBLE);
+                    floatingActionButton.show();
+                }
+            }
+        });
     }
 
     @Override
