@@ -325,8 +325,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         //checked
         if (mMainLive != null && mMainLive.hasObservers())
             mMainLive.removeObservers(getViewLifecycleOwner());
-        else if (mMainLive == null) mMainLive = mModel.getRepository().getAllCategoryLive();
-
+        mMainLive = mModel.getRepository().getAllCategoryLive();
         mMainLive.observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel.getRepository()));
     }
 
@@ -393,7 +392,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                 mBinding.mainScrollView.smoothScrollTo(0, 0);
                 buttonArray[position].setChecked(true);
                 //스크롤 오류 해결
-                mCategoryAdapterArray[position].setActionModeState(0);
+                if (mActionMode == null)
+                    mCategoryAdapterArray[position].setActionModeState(0);
                 switch (position) {
                     case 0:
                         mParentCategory = TOP;
@@ -430,8 +430,10 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private void actionModeRecreate(@org.jetbrains.annotations.Nullable Bundle savedInstanceState, MaterialButton[] buttonArray) {
         //checked
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
-            mBinding.viewPager.setCurrentItem(savedInstanceState.getInt(CURRENT_ITEM));
-            mCategoryAdapterArray[savedInstanceState.getInt(CURRENT_ITEM)].setSelectedItem(mModel.getSelectedCategoryList());
+            mCurrentItem = savedInstanceState.getInt(CURRENT_ITEM);
+            mBinding.viewPager.setCurrentItem(mCurrentItem);
+            buttonArray[mCurrentItem].setChecked(true);
+            mCategoryAdapterArray[mCurrentItem].setSelectedItem(mModel.getSelectedCategoryList());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
     }
