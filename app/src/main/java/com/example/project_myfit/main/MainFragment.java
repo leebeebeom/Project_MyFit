@@ -43,7 +43,6 @@ import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.adapter.MainDragCallBack;
 import com.example.project_myfit.main.adapter.MainViewPagerAdapter;
-import com.example.project_myfit.util.DragSelectUtils;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -76,6 +75,7 @@ import static com.example.project_myfit.MyFitConstant.UP;
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
         SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
+
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
@@ -226,14 +226,15 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
     private DragSelectTouchListener dragSelectListenerInit() {
         //all checked
-        DragSelectUtils dragSelectUtils = new DragSelectUtils(mBinding.viewPager, R.id.main_recyclerView);
         DragSelectTouchListener.OnAdvancedDragSelectListener listener = new DragSelectTouchListener.OnAdvancedDragSelectListener() {
             @Override
             public void onSelectionStarted(int i) {
                 //checked
                 mBinding.mainScrollView.setScrollable(false);
                 mIsDragSelecting = true;
-                dragSelectUtils.viewHolderCallOnClick(i);
+                RecyclerView recyclerView = mBinding.viewPager.getChildAt(0).findViewById(R.id.main_recyclerView);
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
+                if (viewHolder != null) viewHolder.itemView.callOnClick();
             }
 
             @Override
@@ -246,7 +247,11 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
                 //checked
-                for (int j = i; j <= i1; j++) dragSelectUtils.viewHolderCallOnClick(j);
+                RecyclerView recyclerView = mBinding.viewPager.getChildAt(0).findViewById(R.id.main_recyclerView);
+                for (int j = i; j <= i1; j++) {
+                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
+                    if (viewHolder != null) viewHolder.itemView.callOnClick();
+                }
             }
         };
         return new DragSelectTouchListener().withSelectListener(listener);
@@ -255,7 +260,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @NotNull
     private CategoryAdapter[] getCategoryAdapterArray() {
         //checked
-        CategoryAdapter[] categoryAdapterArray = new CategoryAdapter[3];
+        CategoryAdapter[] categoryAdapterArray = new CategoryAdapter[4];
         for (int i = 0; i < 4; i++)
             categoryAdapterArray[i] = new CategoryAdapter(mModel, this);
         return categoryAdapterArray;
@@ -264,7 +269,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @NotNull
     private ItemTouchHelper[] getTouchHelperArray(CategoryAdapter[] categoryAdapterArray) {
         //checked
-        ItemTouchHelper[] itemTouchHelperArray = new ItemTouchHelper[3];
+        ItemTouchHelper[] itemTouchHelperArray = new ItemTouchHelper[4];
         for (int i = 0; i < 4; i++)
             itemTouchHelperArray[i] = new ItemTouchHelper(new MainDragCallBack(categoryAdapterArray[i]));
         return itemTouchHelperArray;
@@ -276,7 +281,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         //checked
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(categoryAdapterArray, dragSelectTouchListener, itemTouchHelperArray);
         mainViewPagerAdapter.setOnMainDragAutoScrollListener(this);
-        return mainViewPagerAdapter;
+        return mViewPagerAdapter = mainViewPagerAdapter;
     }
 
     @Override
