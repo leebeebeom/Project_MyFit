@@ -21,6 +21,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Size mSize;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
+    private List<Folder> mFolderHistory;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
@@ -69,5 +70,13 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public Repository getRepository() {
         return mRepository;
+    }
+
+    public void setFolderHistory(List<Folder> folderHistory) {
+        this.mFolderHistory = folderHistory;
+    }
+
+    public List<Folder> getFolderHistory() {
+        return mFolderHistory;
     }
 }
