@@ -185,7 +185,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mSort = mSortPreference.getInt(SORT_MAIN, SORT_CUSTOM);
 
         MainPopupMenuBinding popupMenuBinding = MainPopupMenuBinding.inflate(inflater);
-        popupMenuClick(mPopupWindow, popupMenuBinding);
+        popupMenuClick(popupMenuBinding);
         mPopupWindow = new PopupWindow(popupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 
@@ -196,15 +196,15 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         return view;
     }
 
-    private void popupMenuClick(PopupWindow popupWindow, @NotNull MainPopupMenuBinding binding) {
+    private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
         //checked
         binding.addFolder.setOnClickListener(v -> {
             showDialog(AddCategoryDialog.getInstance(mParentCategory), CATEGORY_ADD_DIALOG);
-            popupWindow.dismiss();
+            mPopupWindow.dismiss();
         });
         binding.sort.setOnClickListener(v -> {
             showDialog(SortDialog.getInstance(mSort), SORT_DIALOG);
-            popupWindow.dismiss();
+            mPopupWindow.dismiss();
         });
     }
 
