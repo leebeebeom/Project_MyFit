@@ -288,7 +288,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //all checked
-        setLiveData(mMainLive, mModel, mViewPagerAdapter, mSort);
+        setLiveData(mMainLive, mModel, mViewPagerAdapter);
         setScrollChangeListener(mBinding, mIsDragSelecting, mIsDragging, mScrollEnable);
         setToggleGroup(mBinding, mButtonArray);
         if (savedInstanceState == null) mBinding.btnTop.setChecked(true);
@@ -297,13 +297,13 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         actionModeRecreate(savedInstanceState, mButtonArray, mCategoryAdapterArray, mBinding, mModel, mActionModeCallback);
     }
 
-    public void setLiveData(LiveData<List<Category>> mainLive, MainViewModel model, MainViewPagerAdapter mainViewPagerAdapter, int sort) {
+    public void setLiveData(LiveData<List<Category>> mainLive, MainViewModel model, MainViewPagerAdapter mainViewPagerAdapter) {
         //checked
         if (mainLive != null && mainLive.hasObservers())
             mainLive.removeObservers(getViewLifecycleOwner());
         else if (mainLive == null) mainLive = model.getRepository().getAllCategoryLive();
 
-        mainLive.observe(getViewLifecycleOwner(), categoryList -> mainViewPagerAdapter.setItem(sort, categoryList, model.getRepository()));
+        mainLive.observe(getViewLifecycleOwner(), categoryList -> mainViewPagerAdapter.setItem(mSort, categoryList, model.getRepository()));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -508,7 +508,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void sortConfirmClick(int sort) {
         //checked
         mSort = sort;
-        setLiveData(mMainLive, mModel, mViewPagerAdapter, mSort);
+        setLiveData(mMainLive, mModel, mViewPagerAdapter);
         SharedPreferences.Editor editor = mSortPreference.edit();
         editor.putInt(SORT_MAIN, mSort);
         editor.apply();
