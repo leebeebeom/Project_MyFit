@@ -2,6 +2,7 @@ package com.example.project_myfit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (getIntent() != null) {
             Intent intent = getIntent();
-            if (intent.getIntExtra(SIZE_ID, 0) != 0) {
+            if (intent.getLongExtra(SIZE_ID, 0) != 0) {
                 //서치뷰 사이즈 클릭
                 searchViewSizeClick(model, intent, mNavController);
             } else if (intent.getLongExtra(FOLDER_ID, 0) != 0) {
@@ -127,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void searchViewSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, NavController navController) {
         //checked
-        Size size = model.getRepository().getSize(intent.getIntExtra(SIZE_ID, 0));
+        Size size = model.getRepository().getSize(intent.getLongExtra(SIZE_ID, 0));
+        if (size == null) Log.e("에러", "searchViewSizeClick: 널", null);
+        else Log.e("에러", "searchViewSizeClick: 널 아님", null);
         model.setSize(size);
 
         Category category = model.getRepository().getCategory(size.getFolderId());
