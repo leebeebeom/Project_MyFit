@@ -40,6 +40,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private Animation mAnimation;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
     private MainViewPagerAdapter.ViewPagerVH mViewPagerVH;
+    private boolean mIsDragging;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener) {
         //checked
@@ -109,7 +110,16 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         holder.mBinding.mainItemAmount.setText(String.valueOf(new AdapterUtils(holder.itemView.getContext()).
                 getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
 
+        holder.mBinding.mainDragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging){
+                mIsDragging = true;
+                mListener.onCategoryDragHandleTouch(holder);
+            }
+            return false;
+        });
+
         holder.setActionMode(mActionModeState, mSelectedItemIdList, mSort);
+        holder.mBinding.mainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
     }
@@ -145,6 +155,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         mModel.getSelectedCategoryList().clear();
         for (Category c : getCurrentList())
             if (mSelectedItemIdList.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
+        mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
@@ -177,7 +188,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         notifyDataSetChanged();
     }
 
-    public static class CategoryVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
+    public static class CategoryVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         //all checked
         private final ItemMainRecyclerBinding mBinding;
         private final CategoryAdapterListener mListener;
@@ -192,7 +203,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            mBinding.mainDragHandle.setOnTouchListener(this);
         }
 
         public void setCategory(Category category) {
@@ -210,23 +220,15 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             return false;
         }
 
-        @Override
-        public boolean onTouch(View v, @NotNull MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN)
-                mListener.onCategoryDragHandleTouch(this);
-            return false;
-        }
-
         public ItemMainRecyclerBinding getBinding() {
             return mBinding;
         }
 
         public void setActionMode(int actionModeState, HashSet<Long> selectedItemIdList, int sort) {
             //checked
-            if (actionModeState == ACTION_MODE_ON) {
+            if (actionModeState == ACTION_MODE_ON)
                 mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedItemIdList, mCategory.getId());
-                mBinding.mainDragHandle.setVisibility(sort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
-            } else if (actionModeState == ACTION_MODE_OFF) {
+            else if (actionModeState == ACTION_MODE_OFF) {
                 mAdapterUtils.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox);
                 mBinding.mainDragHandle.setVisibility(View.GONE);
                 if (selectedItemIdList.size() != 0) selectedItemIdList.clear();
