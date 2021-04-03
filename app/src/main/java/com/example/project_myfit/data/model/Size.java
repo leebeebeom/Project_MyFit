@@ -13,8 +13,7 @@ public class Size {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private int orderNumber;
-    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
-    private final String parentCategory;
+    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
     private long folderId;
     private boolean isFavorite, isDeleted, parentIsDeleted;
     private Map<String, String> sizeMap;
@@ -155,6 +154,10 @@ public class Size {
 
     public String getParentCategory() {
         return parentCategory;
+    }
+
+    public void setParentCategory(String parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
     public boolean getParentIsDeleted() {
