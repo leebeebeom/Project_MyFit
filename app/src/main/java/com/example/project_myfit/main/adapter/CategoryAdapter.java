@@ -17,12 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerBinding;
 import com.example.project_myfit.main.MainViewModel;
-import com.example.project_myfit.util.AdapterUtils;
+import com.example.project_myfit.util.AdapterUtil;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private Animation mAnimation;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
     private MainViewPagerAdapter.ViewPagerVH mViewPagerVH;
+    private AdapterUtil mAdapterUtil;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener) {
         //checked
@@ -104,10 +104,14 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         }
 
         Category category = getItem(holder.getLayoutPosition());
-        holder.mBinding.setCategory(category);
         holder.setCategory(category);
-        holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
 
+        if (mAdapterUtil == null) {
+            mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
+            holder.setAdapterUtils(mAdapterUtil);
+        }
+
+        holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
         holder.setActionMode(mActionModeState, mSelectedCategoryIdHashSet, mSort);
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
@@ -115,25 +119,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public void onItemMove(int from, int to) {
         //checked
-        if (from < to) {//down
-            for (int i = from; i < to; i++) {
-                Collections.swap(mCategoryList, i, i + 1);
-
-                int toOrder = mCategoryList.get(i).getOrderNumber();
-                int fromOrder = mCategoryList.get(i + 1).getOrderNumber();
-                mCategoryList.get(i).setOrderNumber(fromOrder);
-                mCategoryList.get(i + 1).setOrderNumber(toOrder);
-            }
-        } else {//up
-            for (int i = from; i > to; i--) {
-                Collections.swap(mCategoryList, i, i - 1);
-
-                int toOrder = mCategoryList.get(i).getOrderNumber();
-                int fromOrder = mCategoryList.get(i - 1).getOrderNumber();
-                mCategoryList.get(i).setOrderNumber(fromOrder);
-                mCategoryList.get(i - 1).setOrderNumber(toOrder);
-            }
-        }
+        mAdapterUtil.itemMove(from, to, mCategoryList);
         notifyItemMoved(from, to);
     }
 
@@ -144,7 +130,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         mModel.getSelectedCategoryList().clear();
         for (Category c : getCurrentList())
             if (mSelectedCategoryIdHashSet.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
-        ((CategoryVH) viewHolder).mIsDragging = true;
+        ((CategoryVH) viewHolder).mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
@@ -158,7 +144,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         this.mSelectedCategoryList = selectedCategoryList;
     }
 
-    public void setSelectedCategoryIdHashSet(long id) {
+    public void categorySelected(long id) {
         //checked
         if (!mSelectedCategoryIdHashSet.contains(id)) mSelectedCategoryIdHashSet.add(id);
         else mSelectedCategoryIdHashSet.remove(id);
@@ -181,13 +167,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         //all checked
         private final ItemMainRecyclerBinding mBinding;
         private Category mCategory;
-        private final AdapterUtils mAdapterUtils;
+        private AdapterUtil mAdapterUtil;
         private boolean mIsDragging;
 
         public CategoryVH(@NotNull ItemMainRecyclerBinding binding, CategoryAdapterListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
-            this.mAdapterUtils = new AdapterUtils(itemView.getContext());
 
             itemView.setOnClickListener(v -> listener.onCategoryCardViewClick(mCategory, mBinding.mainCheckBox));
 
@@ -207,15 +192,16 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         public void setCategory(Category category) {
             this.mCategory = category;
+            mBinding.setCategory(category);
+        }
+
+        public void setAdapterUtils(AdapterUtil adapterUtil) {
+            this.mAdapterUtil = adapterUtil;
         }
 
         public void setContentsSize(List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-            mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtils.
+            mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
                     getCategoryContentsSize(mCategory, folderFolderIdList, sizeFolderIdList)));
-        }
-
-        public ItemMainRecyclerBinding getBinding() {
-            return mBinding;
         }
 
         public void setActionMode(int actionModeState, HashSet<Long> selectedCategoryIdHashSet, int sort) {
@@ -223,9 +209,13 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             mBinding.mainDragHandle.setVisibility(sort == SORT_CUSTOM && actionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
 
             if (actionModeState == ACTION_MODE_ON)
-                mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet, mCategory.getId());
+                mAdapterUtil.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet, mCategory.getId());
             else if (actionModeState == ACTION_MODE_OFF)
-                mAdapterUtils.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet);
+                mAdapterUtil.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet);
+        }
+
+        public ItemMainRecyclerBinding getBinding() {
+            return mBinding;
         }
     }
 
