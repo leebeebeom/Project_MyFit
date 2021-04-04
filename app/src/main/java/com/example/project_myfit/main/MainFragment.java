@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -45,11 +44,10 @@ import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.adapter.MainDragCallBack;
 import com.example.project_myfit.main.adapter.MainViewPagerAdapter;
+import com.example.project_myfit.util.ListenerZip;
 import com.example.project_myfit.util.SelectedItemTreat;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -228,7 +226,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity);
         });
 
-        setKeyboardShowingListener(view);
+        ListenerZip listenerZip = new ListenerZip();
+        listenerZip.keyboardShowingListener(view, requireActivity().findViewById(R.id.activity_fab), requireActivity().findViewById(R.id.bottom_app_bar));
     }
 
     @NotNull
@@ -279,33 +278,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         };
         mSelectListener = new DragSelectTouchListener().withSelectListener(listener);
         return mSelectListener;
-    }
-
-    private void setKeyboardShowingListener(@NotNull View view) {
-        FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.activity_fab);
-        BottomAppBar bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar);
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            Rect r = new Rect();
-            view.getWindowVisibleDisplayFrame(r);
-            int screenHeight = view.getRootView().getHeight();
-
-            int keypadHeight = screenHeight - r.bottom;
-
-            if (keypadHeight > screenHeight * 0.15) {
-                if (!mIsKeyboardShowing) {
-                    mIsKeyboardShowing = true;
-                    floatingActionButton.setVisibility(View.INVISIBLE);
-                    bottomAppBar.setVisibility(View.INVISIBLE);
-                }
-            } else {
-                if (mIsKeyboardShowing) {
-                    mIsKeyboardShowing = false;
-                    bottomAppBar.setVisibility(View.VISIBLE);
-                    floatingActionButton.show();
-                }
-            }
-        });
     }
 
     @Override
