@@ -13,10 +13,11 @@ import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.MyFitConstant.PARENT_CATEGORY;
 
 public class AddCategoryDialog extends DialogFragment {
-    private AddCategoryConfirmClick mListener;
+    private AddCategoryConfirmListener mListener;
 
     public AddCategoryDialog() {
     }
@@ -35,7 +36,7 @@ public class AddCategoryDialog extends DialogFragment {
     public void onAttach(@NonNull @NotNull Context context) {
         //checked
         super.onAttach(context);
-        mListener = (AddCategoryConfirmClick) getTargetFragment();
+        mListener = (AddCategoryConfirmListener) getTargetFragment();
     }
 
     @NonNull
@@ -46,15 +47,14 @@ public class AddCategoryDialog extends DialogFragment {
         if (getArguments() != null)
             parentCategory = getArguments().getString(PARENT_CATEGORY);
         //checked
-        ItemDialogEditTextBinding binding = DialogUtils.getCategoryBinding(getLayoutInflater(), requireContext(), null);
+        ItemDialogEditTextBinding binding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), null, CATEGORY);
 
         String finalParentCategory = parentCategory;
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.add_category), binding,
                 (dialog, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.dialogEditText.getText()), finalParentCategory));
     }
 
-    public interface AddCategoryConfirmClick {
-        //checked
+    public interface AddCategoryConfirmListener {
         void addCategoryConfirmClick(String categoryName, String parentCategory);
     }
 }
