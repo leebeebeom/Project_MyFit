@@ -106,10 +106,8 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         Category category = getItem(holder.getLayoutPosition());
         holder.setCategory(category);
 
-        if (mAdapterUtil == null) {
-            mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
-            holder.setAdapterUtils(mAdapterUtil);
-        }
+        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
+        if (holder.mAdapterUtil == null) holder.setAdapterUtils(mAdapterUtil);
 
         holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
         holder.setActionMode(mActionModeState, mSelectedCategoryIdHashSet, mSort);
