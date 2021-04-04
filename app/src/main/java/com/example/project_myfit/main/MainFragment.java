@@ -42,7 +42,7 @@ import com.example.project_myfit.dialog.SameCategoryNameDialog;
 import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
 import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.main.adapter.CategoryAdapter;
-import com.example.project_myfit.main.adapter.MainDragCallBack;
+import com.example.project_myfit.main.adapter.ListDragCallBack;
 import com.example.project_myfit.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.ListenerZip;
 import com.example.project_myfit.util.SelectedItemTreat;
@@ -58,6 +58,7 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.BOTTOM;
+import static com.example.project_myfit.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.MyFitConstant.CATEGORY_ADD_DIALOG;
 import static com.example.project_myfit.MyFitConstant.CATEGORY_EDIT_DIALOG;
 import static com.example.project_myfit.MyFitConstant.CURRENT_ITEM;
@@ -79,8 +80,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         SelectedItemDeleteDialog.SelectedItemDeleteConfirmListener, SameCategoryNameDialog.SameCategoryNameConfirmListener {
 
     private MainViewModel mModel;
-    private FragmentMainBinding mBinding;
     private MainActivityViewModel mActivityModel;
+    private FragmentMainBinding mBinding;
     private PopupWindow mPopupWindow;
     private SharedPreferences mSortPreference;
     private int mSort, mCurrentItem;
@@ -93,6 +94,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private CategoryAdapter[] mCategoryAdapterArray;
     private DragSelectTouchListener mSelectListener;
     private LiveData<List<Category>> mMainLive;
+    private String mParentCategory;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         //all checked
         @Override
@@ -155,7 +157,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             parentCategoryButtonEnable(true);
         }
     };
-    private String mParentCategory;
 
     private void parentCategoryButtonEnable(boolean enable) {
         //checked
@@ -239,7 +240,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
         mTouchHelperArray = new ItemTouchHelper[4];
         for (int i = 0; i < 4; i++)
-            mTouchHelperArray[i] = new ItemTouchHelper(new MainDragCallBack(mCategoryAdapterArray[i]));
+            mTouchHelperArray[i] = new ItemTouchHelper(new ListDragCallBack(mCategoryAdapterArray[i], CATEGORY));
 
         mViewPagerAdapter = new MainViewPagerAdapter(mCategoryAdapterArray, dragSelectListenerInit(), mTouchHelperArray);
         mViewPagerAdapter.setOnMainDragAutoScrollListener(this);
@@ -331,20 +332,20 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
                 btn.setTextColor(textOriginColor);
             }
             if (checkedId == R.id.btn_top && isChecked) {
-                mBinding.btnTop.setBackgroundColor(colorControl);
-                mBinding.btnTop.setTextColor(colorPrimary);
+                buttonArray[0].setBackgroundColor(colorControl);
+                buttonArray[0].setTextColor(colorPrimary);
                 mCurrentItem = 0;
             } else if (checkedId == R.id.btn_bottom && isChecked) {
-                mBinding.btnBottom.setBackgroundColor(colorControl);
-                mBinding.btnBottom.setTextColor(colorPrimary);
+                buttonArray[1].setBackgroundColor(colorControl);
+                buttonArray[1].setTextColor(colorPrimary);
                 mCurrentItem = 1;
             } else if (checkedId == R.id.btn_outer && isChecked) {
-                mBinding.btnOuter.setBackgroundColor(colorControl);
-                mBinding.btnOuter.setTextColor(colorPrimary);
+                buttonArray[2].setBackgroundColor(colorControl);
+                buttonArray[2].setTextColor(colorPrimary);
                 mCurrentItem = 2;
             } else if (checkedId == R.id.btn_etc && isChecked) {
-                mBinding.btnEtc.setBackgroundColor(colorControl);
-                mBinding.btnEtc.setTextColor(colorPrimary);
+                buttonArray[3].setBackgroundColor(colorControl);
+                buttonArray[3].setTextColor(colorPrimary);
                 mCurrentItem = 3;
             }
         });
@@ -364,9 +365,11 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             public void onPageSelected(int position) {
                 mBinding.mainScrollView.smoothScrollTo(0, 0);
                 buttonArray[position].setChecked(true);
+                mCurrentItem = position;
                 //스크롤 오류 해결
                 if (mActionMode == null)
                     mCategoryAdapterArray[position].setActionModeState(0);
+
                 switch (position) {
                     case 0:
                         mParentCategory = TOP;
@@ -406,7 +409,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mCurrentItem = savedInstanceState.getInt(CURRENT_ITEM);
             mBinding.viewPager.setCurrentItem(mCurrentItem);
             buttonArray[mCurrentItem].setChecked(true);
-            mCategoryAdapterArray[mCurrentItem].setSelectedItem(mModel.getSelectedCategoryList());
+            mCategoryAdapterArray[mCurrentItem].setSelectedCategoryList(mModel.getSelectedCategoryList());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
     }
@@ -464,7 +467,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_listFragment);
         } else {
             checkBox.setChecked(!checkBox.isChecked());
-            mCategoryAdapterArray[mCurrentItem].setSelectedPosition(category.getId());
+            mCategoryAdapterArray[mCurrentItem].categorySelected(category.getId());
             mModel.categorySelected(category, checkBox.isChecked());
         }
     }
@@ -531,7 +534,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @Override
     public void categoryNameEditConfirmClick(@NotNull String categoryName) {
         //checked
-        mModel.categoryNameEdit(categoryName.trim());
+        mModel.getSelectedCategoryList().get(0).setCategoryName(categoryName);
+        mModel.getRepository().categoryUpdate(mModel.getSelectedCategoryList().get(0));
         mActionMode.finish();
     }
 
