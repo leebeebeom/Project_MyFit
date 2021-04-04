@@ -1,9 +1,9 @@
-package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
+package com.example.project_myfit.main.list.adapter.sizeadapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.example.project_myfit.ui.main.listfragment.database.Size;
+import com.example.project_myfit.data.model.Size;
 
 import org.jetbrains.annotations.NotNull;
 
