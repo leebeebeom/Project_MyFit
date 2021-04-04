@@ -39,6 +39,7 @@ import com.example.project_myfit.databinding.ItemMainRecyclerBinding;
 import com.example.project_myfit.databinding.MainPopupMenuBinding;
 import com.example.project_myfit.dialog.AddCategoryDialog;
 import com.example.project_myfit.dialog.CategoryNameEditDialog;
+import com.example.project_myfit.dialog.SameCategoryNameDialog;
 import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
 import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.main.adapter.CategoryAdapter;
@@ -74,10 +75,10 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 import static com.example.project_myfit.MyFitConstant.UP;
 
 //TODO 휴지통
-//TODO 카테고리 추가시 동일 카테고리 네임이 존재할 시 경고?
 
-public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmClick, MainViewPagerAdapter.MainDragAutoScrollListener,
-        SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick, SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick {
+public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmListener, MainViewPagerAdapter.MainDragAutoScrollListener,
+        SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick,
+        SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick, SameCategoryNameDialog.SameCategoryNameConfirmListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
@@ -532,7 +533,17 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @Override
     public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
         //checked
-        mModel.getRepository().categoryInsert(new Category(categoryName.trim(), parentCategory, mModel.getRepository().getCategoryLargestOrderPlus1()));
+        boolean isSameName = false;
+        List<String> categoryNameList = mModel.getRepository().getAllCategoryNameList();
+        for (String name : categoryNameList) {
+            if (name.equals(categoryName)) {
+                isSameName = true;
+                showDialog(SameCategoryNameDialog.getInstance(categoryName, parentCategory), "TODO");
+                break;
+            }
+        }
+        if (!isSameName)
+            mModel.getRepository().categoryInsert(new Category(categoryName.trim(), parentCategory, mModel.getRepository().getCategoryLargestOrderPlus1()));
     }
 
     @Override
@@ -557,6 +568,11 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         //checked
         SelectedItemTreat.categoryDelete(mModel.getRepository(), mModel.getSelectedCategoryList());
         mActionMode.finish();
+    }
+
+    @Override
+    public void SameCategoryNameConfirmClick(@NotNull String categoryName, String parentCategory) {
+        mModel.getRepository().categoryInsert(new Category(categoryName.trim(), parentCategory, mModel.getRepository().getCategoryLargestOrderPlus1()));
     }
     //----------------------------------------------------------------------------------------------
 
