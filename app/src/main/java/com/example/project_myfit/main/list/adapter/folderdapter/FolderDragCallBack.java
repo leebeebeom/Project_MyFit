@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter.folderdapter;
+package com.example.project_myfit.main.list.adapter.folderdapter;
 
 import android.graphics.Canvas;
 
@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class FolderDragCallBack extends ItemTouchHelper.Callback {
     private final FolderAdapter mFolderAdapter;
 
-    public FolderDragCallBack(FolderAdapter listFolderAdapter) {
-        this.mFolderAdapter = listFolderAdapter;
+    public FolderDragCallBack(FolderAdapter folderAdapter) {
+        this.mFolderAdapter = folderAdapter;
     }
 
     @Override
@@ -49,8 +49,8 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
 
         int itemCount = 0;
         if (recyclerView.getAdapter() != null) itemCount = recyclerView.getAdapter().getItemCount();
-        int position = viewHolder.getLayoutPosition();
 
+        int position = viewHolder.getLayoutPosition();
         if ((isDraggingDown && itemCount - 5 < position) || isDraggingUp && position < 4) dY = 0;
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
