@@ -50,7 +50,7 @@ public class DialogUtils {
     }
 
     @NotNull
-    public static AlertDialog getDialog(Context context, String message, DialogInterface.OnClickListener listener) {
+    public static AlertDialog getConfirmDialog(Context context, String message, DialogInterface.OnClickListener listener) {
         //checked
         AlertDialog dialog = new MaterialAlertDialogBuilder(context, R.style.myAlertDialog)
                 .setTitle(context.getString(R.string.confirm))
