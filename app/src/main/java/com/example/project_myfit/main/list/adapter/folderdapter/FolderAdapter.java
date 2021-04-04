@@ -98,18 +98,6 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         holder.setFolder(folder);
         holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
 
-        //check box visibility----------------------------------------------------------------------
-        MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
-        if (mActionModeState == ACTION_MODE_ON) {
-            checkBox.setVisibility(View.VISIBLE);
-            checkBox.setChecked(mSelectedFolderIdHashSet.contains(folder.getId()));
-        } else {
-            checkBox.setVisibility(View.GONE);
-            checkBox.setChecked(false);
-            if (!mSelectedFolderIdHashSet.isEmpty()) mSelectedFolderIdHashSet.clear();
-        }
-        //------------------------------------------------------------------------------------------
-        holder.mBinding.folderDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
         holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
     }
 
@@ -232,6 +220,15 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         public ItemListRecyclerFolderBinding getBinding() {
             return mBinding;
+        }
+
+        public void setActionMode(int actionModeState, HashSet<Long> selectedFolderIdHashSet, int sort) {
+            mBinding.folderDragHandle.setVisibility(sort == SORT_CUSTOM && actionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+
+            if (actionModeState == ACTION_MODE_ON)
+                mAdapterUtils.gridActionModeOn(mBinding.folderCheckBox, selectedFolderIdHashSet, mFolder.getId());
+            else
+                mAdapterUtils.gridActionModeOff(mBinding.folderCheckBox, selectedFolderIdHashSet);
         }
     }
 
