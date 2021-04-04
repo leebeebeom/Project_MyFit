@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +35,6 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private int mActionModeState, mSort;
     private final HashSet<Long> mSelectedItemId;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
-    private boolean mIsDragging;
 
     public FolderAdapter(ListViewModel model) {
         //checked
@@ -98,22 +96,10 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         Folder folder = getItem(holder.getLayoutPosition());
         holder.mBinding.setFolder(folder);
         holder.setFolder(folder);
-
-        holder.mBinding.folderAmount.setText(String.valueOf(new AdapterUtils(holder.itemView.getContext())
-                .getFolderContentsSize(folder, mFolderFolderIdList, mSizeFolderIdList)));
-
-        MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
-        AppCompatImageView dragHandle = holder.mBinding.folderDragHandle;
-
-        dragHandle.setOnTouchListener((v, event) -> {
-            if (folder.getId() != -1 && event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
-                mIsDragging = true;
-                mListener.onFolderDragHandleTouch(holder);
-            }
-            return false;
-        });
+        holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
 
         //check box visibility----------------------------------------------------------------------
+        MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
             checkBox.setChecked(mSelectedItemId.contains(folder.getId()));
@@ -123,7 +109,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             if (!mSelectedItemId.isEmpty()) mSelectedItemId.clear();
         }
         //------------------------------------------------------------------------------------------
-        dragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.mBinding.folderDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
         holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
     }
 
@@ -163,8 +149,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         for (Folder folder : getCurrentList())
             if (mSelectedItemId.contains(folder.getId()) && folder.getId() != -1)
                 mModel.getSelectedItemFolderList().add(folder);
-        mIsDragging = false;
-
+        ((FolderVH) viewHolder).mIsDragging = false;
     }
     //----------------------------------------------------------------------------------------------
 
@@ -202,38 +187,47 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
     //----------------------------------------------------------------------------------------------
 
-    public static class FolderVH extends RecyclerView.ViewHolder implements View.OnClickListener,
-            View.OnLongClickListener {
+    public static class FolderVH extends RecyclerView.ViewHolder {
         //all checked
         private final ItemListRecyclerFolderBinding mBinding;
-        private final FolderAdapterListener mListener;
         private Folder mFolder;
+        private boolean mIsDragging;
+        private final AdapterUtils mAdapterUtils;
 
         public FolderVH(@NotNull ItemListRecyclerFolderBinding binding, FolderAdapterListener listener) {
             //checked
             super(binding.getRoot());
             this.mBinding = binding;
-            this.mListener = listener;
+            this.mAdapterUtils = new AdapterUtils(itemView.getContext());
 
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+
+            itemView.setOnClickListener(v -> {
+                if (mFolder.getId() != -1)
+                    listener.onFolderItemViewClick(mFolder, mBinding.folderCheckBox);
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                if (mFolder.getId() != -1)
+                    listener.onFolderItemViewLongClick(getLayoutPosition());
+                return false;
+            });
+
+            mBinding.folderDragHandle.setOnTouchListener((v, event) -> {
+                if (mFolder.getId() != -1 && event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
+                    mIsDragging = true;
+                    listener.onFolderDragHandleTouch(this);
+                }
+                return false;
+            });
+        }
+
+        public void setContentsSize(List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+            mBinding.folderContensSize.setText(String.valueOf(mAdapterUtils
+                    .getFolderContentsSize(mFolder, folderFolderIdList, sizeFolderIdList)));
         }
 
         public void setFolder(Folder folder) {
             this.mFolder = folder;
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mFolder.getId() != -1)
-                mListener.onFolderItemViewClick(mFolder, mBinding.folderCheckBox);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (mFolder.getId() != -1)
-                mListener.onFolderItemViewLongClick(getLayoutPosition());
-            return false;
         }
 
         public ItemListRecyclerFolderBinding getBinding() {
