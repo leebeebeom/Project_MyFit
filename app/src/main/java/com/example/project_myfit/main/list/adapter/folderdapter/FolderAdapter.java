@@ -31,9 +31,9 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private final ListViewModel mModel;
     private FolderAdapterListener mListener;
-    private List<Folder> mFolderList, mSelectedItem;
+    private List<Folder> mFolderList, mSelectedFolderList;
     private int mActionModeState, mSort;
-    private final HashSet<Long> mSelectedItemId;
+    private final HashSet<Long> mSelectedFolderIdHashSet;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
 
     public FolderAdapter(ListViewModel model) {
@@ -51,7 +51,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             }
         });
         this.mModel = model;
-        this.mSelectedItemId = new HashSet<>();
+        this.mSelectedFolderIdHashSet = new HashSet<>();
         setHasStableIds(true);
     }
 
@@ -86,11 +86,11 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderVH holder, int position) {
         //checked
-        if (mSelectedItem != null) {
-            mSelectedItemId.clear();
-            for (Folder selectedItem : mSelectedItem)
-                mSelectedItemId.add(selectedItem.getId());
-            mSelectedItem = null;
+        if (mSelectedFolderList != null) {
+            mSelectedFolderIdHashSet.clear();
+            for (Folder selectedFolder : mSelectedFolderList)
+                mSelectedFolderIdHashSet.add(selectedFolder.getId());
+            mSelectedFolderList = null;
         }
 
         Folder folder = getItem(holder.getLayoutPosition());
@@ -102,11 +102,11 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         MaterialCheckBox checkBox = holder.mBinding.folderCheckBox;
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
-            checkBox.setChecked(mSelectedItemId.contains(folder.getId()));
+            checkBox.setChecked(mSelectedFolderIdHashSet.contains(folder.getId()));
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
-            if (!mSelectedItemId.isEmpty()) mSelectedItemId.clear();
+            if (!mSelectedFolderIdHashSet.isEmpty()) mSelectedFolderIdHashSet.clear();
         }
         //------------------------------------------------------------------------------------------
         holder.mBinding.folderDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
@@ -145,10 +145,10 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         //checked
         mModel.getRepository().folderUpdate(mFolderList);
         mListener.onFolderDragHandleTouch(viewHolder);
-        mModel.getSelectedItemFolderList().clear();
+        mModel.getSelectedFolderList().clear();
         for (Folder folder : getCurrentList())
-            if (mSelectedItemId.contains(folder.getId()) && folder.getId() != -1)
-                mModel.getSelectedItemFolderList().add(folder);
+            if (mSelectedFolderIdHashSet.contains(folder.getId()) && folder.getId() != -1)
+                mModel.getSelectedFolderList().add(folder);
         ((FolderVH) viewHolder).mIsDragging = false;
     }
     //----------------------------------------------------------------------------------------------
@@ -160,28 +160,28 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    public void setSelectedItem(List<Folder> selectedItem) {
+    public void setSelectedItem(List<Folder> selectedFolderList) {
         //checked
-        this.mSelectedItem = selectedItem;
+        this.mSelectedFolderList = selectedFolderList;
     }
 
     //drag select-----------------------------------------------------------------------------------
     public void setSelectedPosition(long id) {
         //checked
-        if (!mSelectedItemId.contains(id)) mSelectedItemId.add(id);
-        else mSelectedItemId.remove(id);
+        if (!mSelectedFolderIdHashSet.contains(id)) mSelectedFolderIdHashSet.add(id);
+        else mSelectedFolderIdHashSet.remove(id);
     }
 
     public void selectAll() {
         //checked
         for (Folder f : getCurrentList())
-            mSelectedItemId.add(f.getId());
+            mSelectedFolderIdHashSet.add(f.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
         //checked
-        mSelectedItemId.clear();
+        mSelectedFolderIdHashSet.clear();
         notifyDataSetChanged();
     }
 
