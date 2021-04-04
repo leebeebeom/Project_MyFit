@@ -34,7 +34,7 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryVH> {
     private List<Category> mCategoryList, mSelectedCategoryList;
     private final MainViewModel mModel;
-    private final HashSet<Long> mSelectedItemIdList;
+    private final HashSet<Long> mSelectedCategoryIdHashSet;
     private final CategoryAdapterListener mListener;
     private int mActionModeState, mSort;
     private Animation mAnimation;
@@ -57,7 +57,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         });
         this.mModel = model;
         setHasStableIds(true);
-        this.mSelectedItemIdList = new HashSet<>();
+        this.mSelectedCategoryIdHashSet = new HashSet<>();
         this.mListener = listener;
     }
 
@@ -97,9 +97,9 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
         //checked
         if (mSelectedCategoryList != null) {
-            mSelectedItemIdList.clear();
-            for (Category selectedItem : mSelectedCategoryList)
-                mSelectedItemIdList.add(selectedItem.getId());
+            mSelectedCategoryIdHashSet.clear();
+            for (Category selectedCategory : mSelectedCategoryList)
+                mSelectedCategoryIdHashSet.add(selectedCategory.getId());
             mSelectedCategoryList = null;
         }
 
@@ -108,7 +108,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         holder.setCategory(category);
         holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
 
-        holder.setActionMode(mActionModeState, mSelectedItemIdList, mSort);
+        holder.setActionMode(mActionModeState, mSelectedCategoryIdHashSet, mSort);
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
     }
@@ -143,7 +143,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         mListener.onCategoryDragHandleTouch(viewHolder);
         mModel.getSelectedCategoryList().clear();
         for (Category c : getCurrentList())
-            if (mSelectedItemIdList.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
+            if (mSelectedCategoryIdHashSet.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
         ((CategoryVH) viewHolder).mIsDragging = true;
     }
 
@@ -153,27 +153,27 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         notifyDataSetChanged();
     }
 
-    public void setSelectedItem(List<Category> mSelectedItem) {
+    public void setSelectedItem(List<Category> selectedCategoryList) {
         //checked
-        this.mSelectedCategoryList = mSelectedItem;
+        this.mSelectedCategoryList = selectedCategoryList;
     }
 
     public void setSelectedPosition(long id) {
         //checked
-        if (!mSelectedItemIdList.contains(id)) mSelectedItemIdList.add(id);
-        else mSelectedItemIdList.remove(id);
+        if (!mSelectedCategoryIdHashSet.contains(id)) mSelectedCategoryIdHashSet.add(id);
+        else mSelectedCategoryIdHashSet.remove(id);
     }
 
     public void selectAll() {
         //checked
         for (Category c : getCurrentList())
-            mSelectedItemIdList.add(c.getId());
+            mSelectedCategoryIdHashSet.add(c.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
         //checked
-        mSelectedItemIdList.clear();
+        mSelectedCategoryIdHashSet.clear();
         notifyDataSetChanged();
     }
 
@@ -218,16 +218,16 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             return mBinding;
         }
 
-        public void setActionMode(int actionModeState, HashSet<Long> selectedItemIdList, int sort) {
+        public void setActionMode(int actionModeState, HashSet<Long> selectedItemIHashSet, int sort) {
             //checked
             mBinding.mainDragHandle.setVisibility(sort == SORT_CUSTOM && actionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
 
             if (actionModeState == ACTION_MODE_ON)
-                mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedItemIdList, mCategory.getId());
+                mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedItemIHashSet, mCategory.getId());
             else if (actionModeState == ACTION_MODE_OFF) {
                 mAdapterUtils.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox);
                 mBinding.mainDragHandle.setVisibility(View.GONE);
-                if (selectedItemIdList.size() != 0) selectedItemIdList.clear();
+                if (selectedItemIHashSet.size() != 0) selectedItemIHashSet.clear();
             }
         }
     }
