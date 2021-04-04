@@ -13,8 +13,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.SortViewBinding;
-import com.example.project_myfit.ui.main.MainFragment;
+import com.example.project_myfit.main.MainFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,13 +30,11 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
     private int mCheckedItem;
-    private SortConfirmClick mListener;
-
-    public SortDialog() {
-    }
+    private SortConfirmListener mListener;
 
     @NotNull
     public static SortDialog getInstance(int sort) {
+        //checked
         SortDialog sortDialog = new SortDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(SORT, sort);
@@ -45,22 +44,27 @@ public class SortDialog extends DialogFragment {
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
+        //checked
         super.onAttach(context);
-        mListener = (SortConfirmClick) getTargetFragment();
+        mListener = (SortConfirmListener) getTargetFragment();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        //checked
         if (getArguments() != null) mCheckedItem = getArguments().getInt(SORT);
         if (savedInstanceState != null) mCheckedItem = savedInstanceState.getInt(SORT);
 
         SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
-        addCheckListener(binding);
-        checkLastedCheckedItem(binding);
+        MaterialRadioButton[] sortButtons = {binding.sortCustom, binding.sortCreate, binding.sortCreateReverse,
+                binding.sortBrand, binding.sortBrandReverse, binding.sortName, binding.sortNameReverse};
+        addCheckListener(sortButtons);
+        sortButtons[mCheckedItem].setChecked(true);
 
-        //for mainFragment
+
+        //메인프래그먼트에서 실행 시 브랜드 삭제
         if (getTargetFragment() instanceof MainFragment) {
             binding.sortBrand.setVisibility(View.GONE);
             binding.sortBrandReverse.setVisibility(View.GONE);
@@ -76,109 +80,71 @@ public class SortDialog extends DialogFragment {
         Window window = dialog.getWindow();
         DialogUtils.setLayout(requireContext(), window);
         DialogUtils.setTextSize(requireContext(), dialog);
-
         return dialog;
     }
 
-    private void addCheckListener(@NotNull SortViewBinding binding) {
-        binding.sortCustom.setOnCheckedChangeListener((buttonView, isChecked) -> {
+    private void addCheckListener(@NotNull MaterialRadioButton[] buttons) {
+        //checked
+        buttons[0].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_CUSTOM;
-                binding.sortCreate.setChecked(false);
-                binding.sortCreateReverse.setChecked(false);
-                binding.sortBrand.setChecked(false);
-                binding.sortBrandReverse.setChecked(false);
-                binding.sortName.setChecked(false);
-                binding.sortNameReverse.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-        binding.sortCreate.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        buttons[1].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_CREATE;
-                binding.sortCustom.setChecked(false);
-                binding.sortCreateReverse.setChecked(false);
-                binding.sortBrand.setChecked(false);
-                binding.sortBrandReverse.setChecked(false);
-                binding.sortName.setChecked(false);
-                binding.sortNameReverse.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-        binding.sortCreateReverse.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        buttons[2].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_CREATE_REVERSE;
-                binding.sortCustom.setChecked(false);
-                binding.sortCreate.setChecked(false);
-                binding.sortBrand.setChecked(false);
-                binding.sortBrandReverse.setChecked(false);
-                binding.sortName.setChecked(false);
-                binding.sortNameReverse.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-        binding.sortBrand.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        buttons[3].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_BRAND;
-                binding.sortCustom.setChecked(false);
-                binding.sortCreate.setChecked(false);
-                binding.sortCreateReverse.setChecked(false);
-                binding.sortBrandReverse.setChecked(false);
-                binding.sortName.setChecked(false);
-                binding.sortNameReverse.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-        binding.sortBrandReverse.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        buttons[4].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_BRAND_REVERSE;
-                binding.sortCustom.setChecked(false);
-                binding.sortCreate.setChecked(false);
-                binding.sortCreateReverse.setChecked(false);
-                binding.sortBrand.setChecked(false);
-                binding.sortName.setChecked(false);
-                binding.sortNameReverse.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-        binding.sortName.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        buttons[5].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_NAME;
-                binding.sortCustom.setChecked(false);
-                binding.sortCreate.setChecked(false);
-                binding.sortCreateReverse.setChecked(false);
-                binding.sortBrand.setChecked(false);
-                binding.sortBrandReverse.setChecked(false);
-                binding.sortNameReverse.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-        binding.sortNameReverse.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        buttons[6].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_NAME_REVERSE;
-                binding.sortCustom.setChecked(false);
-                binding.sortCreate.setChecked(false);
-                binding.sortCreateReverse.setChecked(false);
-                binding.sortBrand.setChecked(false);
-                binding.sortBrandReverse.setChecked(false);
-                binding.sortName.setChecked(false);
+                for (MaterialRadioButton button : buttons)
+                    if (button != buttonView) button.setChecked(false);
             }
         });
-    }
-
-    private void checkLastedCheckedItem(SortViewBinding binding) {
-        if (mCheckedItem == SORT_CUSTOM) binding.sortCustom.setChecked(true);
-        else if (mCheckedItem == SORT_CREATE) binding.sortCreate.setChecked(true);
-        else if (mCheckedItem == SORT_CREATE_REVERSE)
-            binding.sortCreateReverse.setChecked(true);
-        else if (mCheckedItem == SORT_BRAND) binding.sortBrand.setChecked(true);
-        else if (mCheckedItem == SORT_BRAND_REVERSE)
-            binding.sortBrandReverse.setChecked(true);
-        else if (mCheckedItem == SORT_NAME) binding.sortName.setChecked(true);
-        else if (mCheckedItem == SORT_NAME_REVERSE) binding.sortNameReverse.setChecked(true);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        //checked
         super.onSaveInstanceState(outState);
         outState.putInt(SORT, mCheckedItem);
     }
 
-    public interface SortConfirmClick {
-        void sortConfirmClick(int which);
+    public interface SortConfirmListener {
+        //unchecked
+        void sortConfirmClick(int sort);
     }
 }
