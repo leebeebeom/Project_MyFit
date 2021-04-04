@@ -144,7 +144,6 @@ public class SortDialog extends DialogFragment {
     }
 
     public interface SortConfirmListener {
-        //unchecked
         void sortConfirmClick(int sort);
     }
 }
