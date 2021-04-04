@@ -4,6 +4,7 @@ public class MyFitConstant {
     //type
     public static final String CATEGORY = "category";
     public static final String FOLDER = "folder";
+    public static final String SIZE = "size";
 
     //parent category
     public static final String TOP = "TOP";
