@@ -77,8 +77,8 @@ import static com.example.project_myfit.MyFitConstant.UP;
 //TODO 휴지통
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmListener, MainViewPagerAdapter.MainDragAutoScrollListener,
-        SortDialog.SortConfirmClick, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmClick,
-        SelectedItemDeleteDialog.SelectedItemDeleteConfirmClick, SameCategoryNameDialog.SameCategoryNameConfirmListener {
+        SortDialog.SortConfirmListener, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmListener,
+        SelectedItemDeleteDialog.SelectedItemDeleteConfirmListener, SameCategoryNameDialog.SameCategoryNameConfirmListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
