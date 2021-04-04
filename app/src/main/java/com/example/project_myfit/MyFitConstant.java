@@ -1,6 +1,10 @@
 package com.example.project_myfit;
 
 public class MyFitConstant {
+    //type
+    public static final String CATEGORY = "category";
+    public static final String FOLDER = "folder";
+
     //parent category
     public static final String TOP = "TOP";
     public static final String BOTTOM = "BOTTOM";
