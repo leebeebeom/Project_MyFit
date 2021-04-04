@@ -19,9 +19,6 @@ import static com.example.project_myfit.MyFitConstant.PARENT_CATEGORY;
 public class AddCategoryDialog extends DialogFragment {
     private AddCategoryConfirmListener mListener;
 
-    public AddCategoryDialog() {
-    }
-
     @NotNull
     public static AddCategoryDialog getInstance(String parentCategory) {
         //checked
