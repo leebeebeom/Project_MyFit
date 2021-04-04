@@ -153,7 +153,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         notifyDataSetChanged();
     }
 
-    public void setSelectedItem(List<Category> selectedCategoryList) {
+    public void setSelectedCategoryList(List<Category> selectedCategoryList) {
         //checked
         this.mSelectedCategoryList = selectedCategoryList;
     }

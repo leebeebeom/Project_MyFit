@@ -160,7 +160,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         notifyDataSetChanged();
     }
 
-    public void setSelectedItem(List<Folder> selectedFolderList) {
+    public void setSelectedFolderList(List<Folder> selectedFolderList) {
         //checked
         this.mSelectedFolderList = selectedFolderList;
     }
