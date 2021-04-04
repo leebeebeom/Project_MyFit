@@ -45,7 +45,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
         int selectedItemSize = 0;
         if (getArguments() != null) selectedItemSize = getArguments().getInt(SELECTED_ITEM_SIZE);
         String message = selectedItemSize + getString(R.string.selected_item_delete_check);
-        return DialogUtils.getDialog(requireContext(), message,
+        return DialogUtils.getConfirmDialog(requireContext(), message,
                 (dialog, which) -> mListener.selectedItemDeleteConfirmClick());
     }
 
