@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
-import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Size;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +19,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Category mCategory;
     private Folder mFolder;
     private Size mSize;
-    private List<Folder> mSelectedFolderList;
-    private List<Size> mSelectedSizeList;
+    private List<?> mSelectedItemList;
     private List<Folder> mFolderHistory;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
@@ -52,20 +51,12 @@ public class MainActivityViewModel extends AndroidViewModel {
         this.mFolder = folder;
     }
 
-    public List<Folder> getSelectedFolderList() {
-        return mSelectedFolderList;
+    public List<?> getSelectedItemList() {
+        return mSelectedItemList;
     }
 
-    public void setSelectedFolderList(List<Folder> mSelectedFolders) {
-        this.mSelectedFolderList = mSelectedFolders;
-    }
-
-    public List<Size> getSelectedSizeList() {
-        return mSelectedSizeList;
-    }
-
-    public void setSelectedSizeList(List<Size> mSelectedSizes) {
-        this.mSelectedSizeList = mSelectedSizes;
+    public void setSelectedItemList(List<?> mSelectedItemList) {
+        this.mSelectedItemList = mSelectedItemList;
     }
 
     public Repository getRepository() {
