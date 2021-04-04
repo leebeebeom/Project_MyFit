@@ -44,12 +44,6 @@ public class MainViewModel extends AndroidViewModel {
         setSelectedAmount();
     }
 
-    public void categoryNameEdit(String categoryName) {
-        //checked
-        mSelectedCategoryList.get(0).setCategoryName(categoryName);
-        mRepository.categoryUpdate(mSelectedCategoryList.get(0));
-    }
-
     public List<Category> getSelectedCategoryList() {
         //checked
         return mSelectedCategoryList;
