@@ -12,41 +12,44 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.AMOUNT;
+import static com.example.project_myfit.MyFitConstant.SELECTED_ITEM_SIZE;
 
 public class SelectedItemDeleteDialog extends DialogFragment {
-    private SelectedItemDeleteConfirmClick mListener;
+    private SelectedItemDeleteConfirmListener mListener;
 
     public SelectedItemDeleteDialog() {
     }
 
     @NotNull
-    public static SelectedItemDeleteDialog getInstance(int selectedItemAmount) {
+    public static SelectedItemDeleteDialog getInstance(int selectedItemSize) {
+        //checked
         SelectedItemDeleteDialog selectedItemDeleteDialog = new SelectedItemDeleteDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt(AMOUNT, selectedItemAmount);
+        bundle.putInt(SELECTED_ITEM_SIZE, selectedItemSize);
         selectedItemDeleteDialog.setArguments(bundle);
         return selectedItemDeleteDialog;
     }
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
+        //checked
         super.onAttach(context);
-        mListener = (SelectedItemDeleteConfirmClick) getTargetFragment();
+        mListener = (SelectedItemDeleteConfirmListener) getTargetFragment();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        int amount = 0;
-        if (getArguments() != null) amount = getArguments().getInt(AMOUNT);
-        String message = amount + getString(R.string.selected_item_delete_check);
+        //checked
+        int selectedItemSize = 0;
+        if (getArguments() != null) selectedItemSize = getArguments().getInt(SELECTED_ITEM_SIZE);
+        String message = selectedItemSize + getString(R.string.selected_item_delete_check);
         return DialogUtils.getDialog(requireContext(), message,
                 (dialog, which) -> mListener.selectedItemDeleteConfirmClick());
     }
 
-    public interface SelectedItemDeleteConfirmClick {
+    public interface SelectedItemDeleteConfirmListener {
         void selectedItemDeleteConfirmClick();
     }
 }
