@@ -27,31 +27,31 @@ import com.google.android.material.textview.MaterialTextView;
 import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.ALERT_TITLE;
+import static com.example.project_myfit.MyFitConstant.CATEGORY;
+import static com.example.project_myfit.MyFitConstant.FOLDER;
 import static com.example.project_myfit.MyFitConstant.ID;
 
 public class DialogUtils {
     @NotNull
-    public static ItemDialogEditTextBinding getCategoryBinding(LayoutInflater inflater, @NotNull Context context, @Nullable String categoryName) {
+    public static ItemDialogEditTextBinding getBinding(LayoutInflater inflater, @NotNull Context context,
+                                                       @Nullable String name, @NotNull String type) {
+        //checked
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
-        binding.setHint(context.getString(R.string.category_name));
-        binding.setPlaceHolder(context.getString(R.string.category_name_korean));
         binding.dialogEditText.requestFocus();
-        if (categoryName != null) binding.setSetText(categoryName);
-        return binding;
-    }
-
-    @NotNull
-    public static ItemDialogEditTextBinding getFolderBinding(LayoutInflater inflater, @NotNull Context context, @Nullable String folderName) {
-        ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
-        binding.setHint(context.getString(R.string.folder_name));
-        binding.setPlaceHolder(context.getString(R.string.folder_name_korean));
-        binding.dialogEditText.requestFocus();
-        if (folderName != null) binding.setSetText(folderName);
+        if (type.equals(CATEGORY)) {
+            binding.setHint(context.getString(R.string.category_name));
+            binding.setPlaceHolder(context.getString(R.string.category_name_korean));
+        } else if (type.equals(FOLDER)) {
+            binding.setHint(context.getString(R.string.folder_name));
+            binding.setPlaceHolder(context.getString(R.string.folder_name_korean));
+        }
+        if (name != null) binding.setSetText(name);
         return binding;
     }
 
     @NotNull
     public static AlertDialog getDialog(Context context, String message, DialogInterface.OnClickListener listener) {
+        //checked
         AlertDialog dialog = new MaterialAlertDialogBuilder(context, R.style.myAlertDialog)
                 .setTitle(context.getString(R.string.confirm))
                 .setMessage(message)
@@ -65,15 +65,17 @@ public class DialogUtils {
 
     @NotNull
     public static AlertDialog getEditTextDialog(Context context, String title, @NotNull ItemDialogEditTextBinding binding, DialogInterface.OnClickListener listener) {
+        //checked
         AlertDialog dialog = new MaterialAlertDialogBuilder(context, R.style.myAlertDialog)
                 .setTitle(title)
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.confirm, listener)
                 .create();
+
         Window window = dialog.getWindow();
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         setLayout(context, window);
-        setKeyboard(window);
         dialog.show();
         setTextSize(context, dialog);
         addTextChangeListener(binding, dialog);
@@ -81,6 +83,7 @@ public class DialogUtils {
     }
 
     public static void setLayout(@NotNull Context context, @NotNull Window window) {
+        //checked
         int margin = (int) context.getResources().getDimension(R.dimen._20sdp);
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.tree_view_dialog_background);
         InsetDrawable inset = new InsetDrawable(drawable, margin);
@@ -88,11 +91,10 @@ public class DialogUtils {
     }
 
     public static void setTextSize(@NotNull Context context, @NotNull AlertDialog dialog) {
-        float titleSize = context.getResources().getDimension(R.dimen._5sdp);
-
-        int titleId = context.getResources().getIdentifier(ALERT_TITLE, ID, context.getPackageName());
-        TextView title = dialog.findViewById(titleId);
-        if (title != null) title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+        //checked
+        TextView title = dialog.findViewById(context.getResources().getIdentifier(ALERT_TITLE, ID, context.getPackageName()));
+        if (title != null)
+            title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, context.getResources().getDimension(R.dimen._5sdp));
 
         float textSize = context.getResources().getDimensionPixelSize(R.dimen._4sdp);
 
@@ -112,11 +114,8 @@ public class DialogUtils {
         }
     }
 
-    private static void setKeyboard(@NotNull Window window) {
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    }
-
     private static void addTextChangeListener(@NotNull ItemDialogEditTextBinding binding, @NotNull AlertDialog dialog) {
+        //checked
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setEnabled(false);
 
@@ -139,7 +138,7 @@ public class DialogUtils {
 
         binding.dialogEditText.setOnKeyListener((v, keyCode, event) -> {
             if (String.valueOf(binding.dialogEditText.getText()).length() == 30)
-                binding.dialogEditTextLayout.setError("30자까지 입력 가능합니다.");
+                binding.dialogEditTextLayout.setError(binding.dialogEditText.getContext().getString(R.string.max_length));
             else binding.dialogEditTextLayout.setErrorEnabled(false);
             return false;
         });
