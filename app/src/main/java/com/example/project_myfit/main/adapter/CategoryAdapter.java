@@ -226,7 +226,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
                 mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedItemIHashSet, mCategory.getId());
             else if (actionModeState == ACTION_MODE_OFF) {
                 mAdapterUtils.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox);
-                mBinding.mainDragHandle.setVisibility(View.GONE);
                 if (selectedItemIHashSet.size() != 0) selectedItemIHashSet.clear();
             }
         }
