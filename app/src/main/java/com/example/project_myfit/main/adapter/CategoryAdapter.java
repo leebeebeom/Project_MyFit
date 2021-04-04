@@ -218,16 +218,14 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             return mBinding;
         }
 
-        public void setActionMode(int actionModeState, HashSet<Long> selectedItemIHashSet, int sort) {
+        public void setActionMode(int actionModeState, HashSet<Long> selectedCategoryIdHashSet, int sort) {
             //checked
             mBinding.mainDragHandle.setVisibility(sort == SORT_CUSTOM && actionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
 
             if (actionModeState == ACTION_MODE_ON)
-                mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedItemIHashSet, mCategory.getId());
-            else if (actionModeState == ACTION_MODE_OFF) {
-                mAdapterUtils.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox);
-                if (selectedItemIHashSet.size() != 0) selectedItemIHashSet.clear();
-            }
+                mAdapterUtils.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet, mCategory.getId());
+            else if (actionModeState == ACTION_MODE_OFF)
+                mAdapterUtils.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet);
         }
     }
 
