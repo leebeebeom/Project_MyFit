@@ -158,7 +158,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         this.mSelectedCategoryList = selectedCategoryList;
     }
 
-    public void setSelectedPosition(long id) {
+    public void setSelectedCategoryIdHashSet(long id) {
         //checked
         if (!mSelectedCategoryIdHashSet.contains(id)) mSelectedCategoryIdHashSet.add(id);
         else mSelectedCategoryIdHashSet.remove(id);

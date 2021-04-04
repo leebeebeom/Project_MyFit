@@ -166,7 +166,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     //drag select-----------------------------------------------------------------------------------
-    public void setSelectedPosition(long id) {
+    public void setSelectedFolderIdHashSet(long id) {
         //checked
         if (!mSelectedFolderIdHashSet.contains(id)) mSelectedFolderIdHashSet.add(id);
         else mSelectedFolderIdHashSet.remove(id);
