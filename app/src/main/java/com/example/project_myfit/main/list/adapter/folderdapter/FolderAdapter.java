@@ -97,6 +97,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         holder.mBinding.setFolder(folder);
         holder.setFolder(folder);
         holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
+        holder.setActionMode(mActionModeState, mSelectedFolderIdHashSet, mSort);
 
         holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
     }
