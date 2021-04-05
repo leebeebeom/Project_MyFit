@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment;
+package com.example.project_myfit.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,6 +27,7 @@ public class LockableScrollView extends NestedScrollView {
     }
 
     public void setScrollable(boolean enable) {
+        //checked
         mScrollable = enable;
     }
 
