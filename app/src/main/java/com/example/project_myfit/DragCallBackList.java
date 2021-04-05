@@ -1,4 +1,4 @@
-package com.example.project_myfit.main.adapter;
+package com.example.project_myfit;
 
 import android.graphics.Canvas;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_myfit.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,18 +14,18 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.MyFitConstant.SIZE;
 
-public class ListDragCallBack extends ItemTouchHelper.Callback {
+public class DragCallBackList extends ItemTouchHelper.Callback {
     //all checked
     private CategoryAdapter mCategoryAdapter;
     private SizeAdapterList mSizeAdapterList;
     private final String mType;
 
-    public ListDragCallBack(CategoryAdapter categoryAdapter, String type) {
+    public DragCallBackList(CategoryAdapter categoryAdapter, String type) {
         this.mCategoryAdapter = categoryAdapter;
         this.mType = type;
     }
 
-    public ListDragCallBack(SizeAdapterList sizeAdapterList, String type) {
+    public DragCallBackList(SizeAdapterList sizeAdapterList, String type) {
         this.mSizeAdapterList = sizeAdapterList;
         this.mType = type;
     }

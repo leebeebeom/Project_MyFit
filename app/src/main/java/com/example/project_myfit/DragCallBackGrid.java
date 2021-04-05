@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
+package com.example.project_myfit;
 
 import android.graphics.Canvas;
 
@@ -6,12 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
+
 import org.jetbrains.annotations.NotNull;
 
-public class SizeDragCallBackGrid extends ItemTouchHelper.Callback {
+public class DragCallBackGrid extends ItemTouchHelper.Callback {
     private final SizeAdapterGrid mAdapter;
 
-    public SizeDragCallBackGrid(SizeAdapterGrid mAdapter) {
+    public DragCallBackGrid(SizeAdapterGrid mAdapter) {
         this.mAdapter = mAdapter;
     }
 
