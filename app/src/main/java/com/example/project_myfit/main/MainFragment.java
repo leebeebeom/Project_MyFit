@@ -206,6 +206,13 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
     private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
         //checked
+        binding.edit.setOnClickListener(v -> {
+            mModel.getSelectedCategoryList().clear();
+            mModel.setSelectedAmount();
+            ((AppCompatActivity)requireActivity()).startSupportActionMode(mActionModeCallback);
+            mPopupWindow.dismiss();
+        });
+
         binding.addFolder.setOnClickListener(v -> {
             showDialog(AddCategoryDialog.getInstance(mParentCategory), CATEGORY_ADD_DIALOG);
             mPopupWindow.dismiss();
@@ -509,7 +516,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
         //checked
         boolean isSameName = false;
-        List<String> categoryNameList = mModel.getRepository().getAllCategoryNameList();
+        List<String> categoryNameList = mModel.getRepository().getAllCategoryNameListByParent(mParentCategory);
         for (String name : categoryNameList) {
             if (name.equals(categoryName)) {
                 isSameName = true;
