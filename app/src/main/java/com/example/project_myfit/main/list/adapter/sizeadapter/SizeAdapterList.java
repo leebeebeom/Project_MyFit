@@ -173,6 +173,5 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         public ItemListRecyclerListBinding getBinding() {
             return mBinding;
         }
-
     }
 }
