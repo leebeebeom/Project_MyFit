@@ -47,6 +47,7 @@ import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 //TODO 구현 못한 거
 //이름 변경 시 분신술 쓰는 거(서치뷰, 메인 카테고리)
 //트리뷰 리크리에이트 유지
+//서치뷰에서 폴더, 사이즈 클릭 후 리크리에이트시 어플 종료
 
 public class MainActivity extends AppCompatActivity {
     //all checked
