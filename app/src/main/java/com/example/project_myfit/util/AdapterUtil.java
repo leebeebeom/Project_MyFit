@@ -70,6 +70,7 @@ public class AdapterUtil {
     }
 
     private void swap(@NotNull List<?> list, int i, boolean isDown) {
+        //checked
         if (list.get(i) instanceof Category) {
             Category category1 = (Category) list.get(i);
             Category category2 = isDown ? (Category) list.get(i + 1) : (Category) list.get(i - 1);
@@ -80,10 +81,12 @@ public class AdapterUtil {
         } else if (list.get(i) instanceof Folder) {
             Folder folder1 = (Folder) list.get(i);
             Folder folder2 = isDown ? (Folder) list.get(i + 1) : (Folder) list.get(i - 1);
-            int toOrder = folder1.getOrderNumber();
-            int fromOrder = folder2.getOrderNumber();
-            folder1.setOrderNumber(fromOrder);
-            folder2.setOrderNumber(toOrder);
+            if (folder1.getId() != -1 && folder2.getId() != -1) {
+                int toOrder = folder1.getOrderNumber();
+                int fromOrder = folder2.getOrderNumber();
+                folder1.setOrderNumber(fromOrder);
+                folder2.setOrderNumber(toOrder);
+            }
         } else if (list.get(i) instanceof Size) {
             Size size1 = (Size) list.get(i);
             Size size2 = isDown ? (Size) list.get(i + 1) : (Size) list.get(i - 1);
