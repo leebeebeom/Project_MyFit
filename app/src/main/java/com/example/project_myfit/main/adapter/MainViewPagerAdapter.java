@@ -31,15 +31,17 @@ import static com.example.project_myfit.MyFitConstant.UP;
 public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdapter.ViewPagerVH> {
     //all checked
     private final CategoryAdapter[] mCategoryAdapterArray;
-    private MainDragAutoScrollListener mListener;
+    private final MainDragAutoScrollListener mListener;
     private final DragSelectTouchListener mDragSelectListener;
     private final ItemTouchHelper[] mTouchHelperArray;
 
-    public MainViewPagerAdapter(CategoryAdapter[] adapterList, DragSelectTouchListener dragSelectListener, ItemTouchHelper[] touchHelperList) {
+    public MainViewPagerAdapter(CategoryAdapter[] adapterList, DragSelectTouchListener dragSelectListener,
+                                ItemTouchHelper[] touchHelperList, MainDragAutoScrollListener listener) {
         //checked
         this.mCategoryAdapterArray = adapterList;
         this.mDragSelectListener = dragSelectListener;
         this.mTouchHelperArray = touchHelperList;
+        this.mListener = listener;
         setHasStableIds(true);
     }
 
@@ -74,11 +76,6 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    public void setOnMainDragAutoScrollListener(MainDragAutoScrollListener listener) {
-        //checked
-        this.mListener = listener;
     }
 
     @NonNull

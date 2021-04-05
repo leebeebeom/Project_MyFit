@@ -42,7 +42,7 @@ import com.example.project_myfit.dialog.SameCategoryNameDialog;
 import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
 import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.main.adapter.CategoryAdapter;
-import com.example.project_myfit.main.adapter.ListDragCallBack;
+import com.example.project_myfit.DragCallBackList;
 import com.example.project_myfit.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.ListenerZip;
 import com.example.project_myfit.util.SelectedItemTreat;
@@ -248,11 +248,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
         mTouchHelperArray = new ItemTouchHelper[4];
         for (int i = 0; i < 4; i++)
-            mTouchHelperArray[i] = new ItemTouchHelper(new ListDragCallBack(mCategoryAdapterArray[i], CATEGORY));
+            mTouchHelperArray[i] = new ItemTouchHelper(new DragCallBackList(mCategoryAdapterArray[i], CATEGORY));
 
-        mViewPagerAdapter = new MainViewPagerAdapter(mCategoryAdapterArray, dragSelectListenerInit(), mTouchHelperArray);
-        mViewPagerAdapter.setOnMainDragAutoScrollListener(this);
-        return mViewPagerAdapter;
+        return mViewPagerAdapter = new MainViewPagerAdapter(mCategoryAdapterArray, dragSelectListenerInit(), mTouchHelperArray, this);
     }
 
     private DragSelectTouchListener dragSelectListenerInit() {
