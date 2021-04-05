@@ -1,7 +1,5 @@
 package com.example.project_myfit.util;
 
-import android.util.Log;
-
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 
@@ -13,7 +11,6 @@ import static com.example.project_myfit.MyFitConstant.SORT_CREATE;
 import static com.example.project_myfit.MyFitConstant.SORT_CREATE_REVERSE;
 import static com.example.project_myfit.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
-import static com.example.project_myfit.MyFitConstant.TAG;
 
 public class Sort {
     //all checked
@@ -27,7 +24,6 @@ public class Sort {
             categoryList.sort((o1, o2) -> o1.getCategoryName().compareTo(o2.getCategoryName()));
         else if (sort == SORT_NAME_REVERSE)
             categoryList.sort((o1, o2) -> o2.getCategoryName().compareTo(o1.getCategoryName()));
-        else Log.e(TAG, "categorySort: sort가 어디에도 속하지 않음", null);
         return categoryList;
     }
 
