@@ -66,6 +66,7 @@ import static com.example.project_myfit.MyFitConstant.DELETE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.DOWN;
 import static com.example.project_myfit.MyFitConstant.ETC;
 import static com.example.project_myfit.MyFitConstant.OUTER;
+import static com.example.project_myfit.MyFitConstant.SAME_CATEGORY_NAME_DIALOG;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 import static com.example.project_myfit.MyFitConstant.SORT_DIALOG;
 import static com.example.project_myfit.MyFitConstant.SORT_MAIN;
@@ -208,8 +209,8 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         //checked
         binding.edit.setOnClickListener(v -> {
             mModel.getSelectedCategoryList().clear();
+            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
             mModel.setSelectedAmount();
-            ((AppCompatActivity)requireActivity()).startSupportActionMode(mActionModeCallback);
             mPopupWindow.dismiss();
         });
 
@@ -520,7 +521,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         for (String name : categoryNameList) {
             if (name.equals(categoryName)) {
                 isSameName = true;
-                showDialog(SameCategoryNameDialog.getInstance(categoryName, parentCategory), "TODO");
+                showDialog(SameCategoryNameDialog.getInstance(categoryName, parentCategory), SAME_CATEGORY_NAME_DIALOG);
                 break;
             }
         }
