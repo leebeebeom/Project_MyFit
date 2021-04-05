@@ -107,7 +107,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         holder.setCategory(category);
 
         if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
-        if (holder.mAdapterUtil == null) holder.setAdapterUtils(mAdapterUtil);
 
         holder.mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
                 getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
@@ -175,7 +174,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         //all checked
         private final ItemMainRecyclerBinding mBinding;
         private Category mCategory;
-        private AdapterUtil mAdapterUtil;
         private boolean mIsDragging;
 
         public CategoryVH(@NotNull ItemMainRecyclerBinding binding, CategoryAdapterListener listener) {
@@ -201,10 +199,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         public void setCategory(Category category) {
             this.mCategory = category;
             mBinding.setCategory(category);
-        }
-
-        public void setAdapterUtils(AdapterUtil adapterUtil) {
-            this.mAdapterUtil = adapterUtil;
         }
 
         public ItemMainRecyclerBinding getBinding() {
