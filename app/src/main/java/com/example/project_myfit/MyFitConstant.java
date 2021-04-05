@@ -65,6 +65,7 @@ public class MyFitConstant {
     public static final String MOVE_DIALOG = "move dialog";
     public static final String SORT_DIALOG = "sort dialog";
     public static final String TREE_ADD_FOLDER_DIALOG = "tree add folder";
+    public static final String SAME_CATEGORY_NAME_DIALOG = "same category name dialog";
 
     //key
     public static final String FOLDER_TOGGLE = "folder toggle";
@@ -87,8 +88,7 @@ public class MyFitConstant {
     public static final String PARENT_CATEGORY = "parent category";
     public static final String IS_SEARCH_VIEW = "is search view";
 
-    public static final String SCROLL_X = "scroll x";
-    public static final String SCROLL_Y = "scroll y";
+    public static final String POPUP_IS_SHOWING = "popup is showing";
 
     //etc
     public static final String ALERT_TITLE = "alertTitle";
