@@ -109,7 +109,8 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
         if (holder.mAdapterUtil == null) holder.setAdapterUtils(mAdapterUtil);
 
-        holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
+        holder.mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
+                getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
         holder.setActionMode(mActionModeState, mSelectedCategoryIdHashSet, mSort);
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
@@ -195,11 +196,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         public void setAdapterUtils(AdapterUtil adapterUtil) {
             this.mAdapterUtil = adapterUtil;
-        }
-
-        public void setContentsSize(List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-            mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
-                    getCategoryContentsSize(mCategory, folderFolderIdList, sizeFolderIdList)));
         }
 
         public void setActionMode(int actionModeState, HashSet<Long> selectedCategoryIdHashSet, int sort) {

@@ -15,12 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemListRecyclerFolderBinding;
 import com.example.project_myfit.main.list.ListViewModel;
-import com.example.project_myfit.util.AdapterUtils;
+import com.example.project_myfit.util.AdapterUtil;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,6 +34,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     private int mActionModeState, mSort;
     private final HashSet<Long> mSelectedFolderIdHashSet;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
+    private AdapterUtil mAdapterUtil;
 
     public FolderAdapter(ListViewModel model) {
         //checked
@@ -94,9 +94,13 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         }
 
         Folder folder = getItem(holder.getLayoutPosition());
-        holder.mBinding.setFolder(folder);
         holder.setFolder(folder);
-        holder.setContentsSize(mFolderFolderIdList, mSizeFolderIdList);
+
+        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
+        if (holder.mAdapterUtil == null) holder.setAdapterUtil(mAdapterUtil);
+
+        holder.mBinding.folderContensSize.setText(String.valueOf(mAdapterUtil
+                .getFolderContentsSize(folder, mFolderFolderIdList, mSizeFolderIdList)));
         holder.setActionMode(mActionModeState, mSelectedFolderIdHashSet, mSort);
 
         holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
@@ -104,29 +108,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
     public void onItemMove(int from, int to) {
         //checked
-        if (from < to) {
-            for (int i = from; i < to; i++) {
-                Collections.swap(mFolderList, i, i + 1);
-
-                if (mFolderList.get(i + 1).getId() != -1 && mFolderList.get(i).getId() != -1) {
-                    int toOrder = mFolderList.get(i).getOrderNumber();
-                    int fromOrder = mFolderList.get(i + 1).getOrderNumber();
-                    mFolderList.get(i).setOrderNumber(fromOrder);
-                    mFolderList.get(i + 1).setOrderNumber(toOrder);
-                }
-            }
-        } else {
-            for (int i = from; i > to; i--) {
-                Collections.swap(mFolderList, i, i - 1);
-
-                if (mFolderList.get(i - 1).getId() != -1 && mFolderList.get(i).getId() != -1) {
-                    int toOrder = mFolderList.get(i).getOrderNumber();
-                    int fromOrder = mFolderList.get(i - 1).getOrderNumber();
-                    mFolderList.get(i).setOrderNumber(fromOrder);
-                    mFolderList.get(i - 1).setOrderNumber(toOrder);
-                }
-            }
-        }
+        mAdapterUtil.itemMove(from, to, mFolderList);
         notifyItemMoved(from, to);
     }
 
@@ -140,9 +122,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
                 mModel.getSelectedFolderList().add(folder);
         ((FolderVH) viewHolder).mIsDragging = false;
     }
-    //----------------------------------------------------------------------------------------------
 
-    //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
         //checked
         this.mActionModeState = actionModeState;
@@ -155,7 +135,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
     }
 
     //drag select-----------------------------------------------------------------------------------
-    public void setSelectedFolderIdHashSet(long id) {
+    public void folderSelected(long id) {
         //checked
         if (!mSelectedFolderIdHashSet.contains(id)) mSelectedFolderIdHashSet.add(id);
         else mSelectedFolderIdHashSet.remove(id);
@@ -181,14 +161,12 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
         private final ItemListRecyclerFolderBinding mBinding;
         private Folder mFolder;
         private boolean mIsDragging;
-        private final AdapterUtils mAdapterUtils;
+        private AdapterUtil mAdapterUtil;
 
         public FolderVH(@NotNull ItemListRecyclerFolderBinding binding, FolderAdapterListener listener) {
             //checked
             super(binding.getRoot());
             this.mBinding = binding;
-            this.mAdapterUtils = new AdapterUtils(itemView.getContext());
-
 
             itemView.setOnClickListener(v -> {
                 if (mFolder.getId() != -1)
@@ -210,13 +188,13 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             });
         }
 
-        public void setContentsSize(List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-            mBinding.folderContensSize.setText(String.valueOf(mAdapterUtils
-                    .getFolderContentsSize(mFolder, folderFolderIdList, sizeFolderIdList)));
-        }
-
         public void setFolder(Folder folder) {
             this.mFolder = folder;
+            mBinding.setFolder(folder);
+        }
+
+        public void setAdapterUtil(AdapterUtil adapterUtil) {
+            this.mAdapterUtil = adapterUtil;
         }
 
         public ItemListRecyclerFolderBinding getBinding() {
@@ -227,9 +205,9 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             mBinding.folderDragHandle.setVisibility(sort == SORT_CUSTOM && actionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
 
             if (actionModeState == ACTION_MODE_ON)
-                mAdapterUtils.gridActionModeOn(mBinding.folderCheckBox, selectedFolderIdHashSet, mFolder.getId());
+                mAdapterUtil.gridActionModeOn(mBinding.folderCheckBox, selectedFolderIdHashSet, mFolder.getId());
             else
-                mAdapterUtils.gridActionModeOff(mBinding.folderCheckBox, selectedFolderIdHashSet);
+                mAdapterUtil.gridActionModeOff(mBinding.folderCheckBox, selectedFolderIdHashSet);
         }
     }
 
