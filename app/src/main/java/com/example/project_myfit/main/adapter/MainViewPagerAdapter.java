@@ -101,9 +101,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
             mTouchHelperArray[position].attachToRecyclerView(holder.mBinding.mainRecyclerView);
             holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
 
-            if (mCategoryAdapterArray[position].getItemCount() == 0)
-                holder.mBinding.noData.setVisibility(View.VISIBLE);
-            else holder.mBinding.noData.setVisibility(View.GONE);
+            holder.mBinding.noData.setVisibility(mCategoryAdapterArray[position].getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -135,8 +133,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
 
         public void setNoData(boolean isEmpty) {
             //checked
-            if (isEmpty) mBinding.noData.setVisibility(View.VISIBLE);
-            else mBinding.noData.setVisibility(View.GONE);
+            mBinding.noData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         }
     }
 
