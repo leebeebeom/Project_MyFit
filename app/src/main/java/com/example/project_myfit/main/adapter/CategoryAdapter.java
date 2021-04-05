@@ -111,9 +111,18 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         holder.mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
                 getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
-        holder.setActionMode(mActionModeState, mSelectedCategoryIdHashSet, mSort);
+
+        if (mActionModeState == ACTION_MODE_ON)
+            mAdapterUtil.listActionModeOn(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
+                    mSelectedCategoryIdHashSet, category.getId());
+        else if (mActionModeState == ACTION_MODE_OFF)
+            mAdapterUtil.listActionModeOff(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
+                    mSelectedCategoryIdHashSet);
+
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
+
+        holder.mBinding.mainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
     }
 
     public void onItemMove(int from, int to) {
@@ -196,16 +205,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         public void setAdapterUtils(AdapterUtil adapterUtil) {
             this.mAdapterUtil = adapterUtil;
-        }
-
-        public void setActionMode(int actionModeState, HashSet<Long> selectedCategoryIdHashSet, int sort) {
-            //checked
-            mBinding.mainDragHandle.setVisibility(sort == SORT_CUSTOM && actionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-
-            if (actionModeState == ACTION_MODE_ON)
-                mAdapterUtil.listActionModeOn(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet, mCategory.getId());
-            else if (actionModeState == ACTION_MODE_OFF)
-                mAdapterUtil.listActionModeOff(mBinding.mainCardView, mBinding.mainCheckBox, selectedCategoryIdHashSet);
         }
 
         public ItemMainRecyclerBinding getBinding() {
