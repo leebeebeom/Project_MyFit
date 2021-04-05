@@ -17,6 +17,7 @@ import static com.example.project_myfit.MyFitConstant.TAG;
 public class SelectedItemTreat {
     //move------------------------------------------------------------------------------------------
     public static void folderSizeMove(long folderId, @NotNull Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        //checked
         Category originCategory = getOriginCategory(repository, selectedFolderList, selectedSizeList);
         Category targetCategory = repository.getCategory(folderId);
         Folder originFolder = getOriginFolder(repository, selectedFolderList, selectedSizeList);
@@ -45,24 +46,28 @@ public class SelectedItemTreat {
     }
 
     private static Category getOriginCategory(Repository repository, @NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
+        //checked
         if (!selectedItemFolder.isEmpty())
             return repository.getCategory(selectedItemFolder.get(0).getFolderId());
         else return repository.getCategory(selectedItemSize.get(0).getFolderId());
     }
 
     private static Folder getOriginFolder(Repository repository, @NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        //checked
         if (!selectedFolderList.isEmpty())
             return repository.getFolder(selectedFolderList.get(0).getFolderId());
         else return repository.getFolder(selectedSizeList.get(0).getFolderId());
     }
 
     private static void categorySetDummy(Category category) {
+        //checked
         if (category != null)
             category.setDummy(!category.getDummy());
         else Log.e(TAG, "categorySetDummy: category가 null임", null);
     }
 
     private static void folderSetDummy(Folder folder) {
+        //checked
         if (folder != null)
             folder.setDummy(!folder.getDummy());
         else Log.e(TAG, "categorySetDummy: folder가 null임", null);
@@ -71,6 +76,7 @@ public class SelectedItemTreat {
 
     //delete----------------------------------------------------------------------------------------
     public static void folderSizeDelete(boolean isSearchView, Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        //checked
         deleteFolder(repository, selectedFolderList);
         deleteSize(repository, selectedSizeList);
         if (isSearchView) {
@@ -86,6 +92,8 @@ public class SelectedItemTreat {
     }
 
     private static void deleteFolder(Repository repository, @NotNull List<Folder> selectedFolderList) {
+        //checked
+
         List<Folder> childFolderList = new ArrayList<>();
         List<Size> childSizeList = new ArrayList<>();
 
@@ -107,9 +115,12 @@ public class SelectedItemTreat {
     }
 
     private static void getFolderChild(Repository repository, @NotNull List<Folder> parentFolderList, List<Size> sizeList) {
+        //checked
         List<Folder> childFolderList = new ArrayList<>();
+
         for (Folder f : parentFolderList) {
             sizeList.addAll(repository.getSizeByFolderId(f.getId()));
+
             childFolderList.addAll(repository.getFolderListByFolderId(f.getId()));
             if (!childFolderList.isEmpty()) getFolderChild(repository, childFolderList, sizeList);
         }
@@ -117,6 +128,7 @@ public class SelectedItemTreat {
     }
 
     private static void deleteSize(Repository repository, @NotNull List<Size> selectedSizeList) {
+        //checked
         for (Size s : selectedSizeList) s.setIsDeleted(true);
         repository.sizeUpdate(selectedSizeList);
     }
@@ -124,6 +136,7 @@ public class SelectedItemTreat {
 
     //categoryDeleted-------------------------------------------------------------------------------
     public static void categoryDelete(Repository repository, @NotNull List<Category> selectedCategoryList) {
+        //checked
         List<Folder> folderList = new ArrayList<>();
         List<Size> sizeList = new ArrayList<>();
 
