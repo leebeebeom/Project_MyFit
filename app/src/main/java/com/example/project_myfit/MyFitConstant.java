@@ -87,6 +87,9 @@ public class MyFitConstant {
     public static final String PARENT_CATEGORY = "parent category";
     public static final String IS_SEARCH_VIEW = "is search view";
 
+    public static final String SCROLL_X = "scroll x";
+    public static final String SCROLL_Y = "scroll y";
+
     //etc
     public static final String ALERT_TITLE = "alertTitle";
     public static final String ID = "id";
