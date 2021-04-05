@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.main.listfragment.adapter.sizeadapter;
+package com.example.project_myfit.main.list.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -12,9 +12,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
-import com.example.project_myfit.ui.main.listfragment.ListViewModel;
-import com.example.project_myfit.ui.main.listfragment.database.Size;
+import com.example.project_myfit.main.list.ListViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,16 +30,16 @@ import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
     private final ListViewModel mModel;
     private SizeAdapterListener mListener;
-    private List<Size> mSizeList, mSelectedItem;
+    private List<Size> mSizeList, mSelectedSizeList;
     private int mActionModeState, mSort;
-    private final HashSet<Integer> mSelectedPosition;
-
+    private final HashSet<Long> mSelectedSizeIdHashSet;
 
     public SizeAdapterGrid(ListViewModel model) {
+        //checked
         super(new SizeDiffUtil());
         this.mModel = model;
         this.setHasStableIds(true);
-        this.mSelectedPosition = new HashSet<>();
+        this.mSelectedSizeIdHashSet = new HashSet<>();
     }
 
     @Override
@@ -48,19 +48,22 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void setOnSizeAdapterListener(SizeAdapterListener listener) {
+        //checked
         this.mListener = listener;
     }
 
-    @Override
-    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list) {
+    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list, int sort) {
+        //checked
         super.submitList(list);
         this.mSizeList = list;
+        this.mSort = sort;
     }
 
     @NonNull
     @NotNull
     @Override
     public SizeGridVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        //checked
         ItemListRecyclerGridBinding binding = ItemListRecyclerGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeGridVH(binding, mListener);
     }
@@ -74,24 +77,23 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         MaterialCheckBox checkBox = holder.mBinding.gridCheckBox;
         AppCompatImageView dragHandle = holder.mBinding.gridDragHandle;
 
-        if (mSelectedItem != null) {
-            mSelectedPosition.clear();
-            for (Size selectedItem : mSelectedItem) {
-                int selectedPosition = getCurrentList().indexOf(selectedItem);
-                mSelectedPosition.add(selectedPosition);
-            }
-            mSelectedItem = null;
+        if (mSelectedSizeList != null) {
+            mSelectedSizeIdHashSet.clear();
+            for (Size s : mSelectedSizeList)
+                mSelectedSizeIdHashSet.add(s.getId());
+            mSelectedSizeList = null;
         }
+
         //check box visibility----------------------------------------------------------------------
         if (mActionModeState == ACTION_MODE_ON) {
             checkBox.setVisibility(View.VISIBLE);
-            checkBox.setChecked(mSelectedPosition.contains(holder.getLayoutPosition()));
+            checkBox.setChecked(mSelectedSizeIdHashSet.contains(size.getId()));
             dragHandle.setVisibility(mSort == SORT_CUSTOM ? View.VISIBLE : View.GONE);
             holder.mBinding.gridFavoriteCheckBox.setClickable(false);
         } else {
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
-            if (!mSelectedPosition.isEmpty()) mSelectedPosition.clear();
+            if (!mSelectedSizeIdHashSet.isEmpty()) mSelectedSizeIdHashSet.clear();
             dragHandle.setVisibility(View.GONE);
             holder.mBinding.gridFavoriteCheckBox.setClickable(true);
         }
@@ -122,81 +124,75 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        mListener.onSizeDragHandleTouch(viewHolder);
+        //checked
         mModel.getRepository().sizeUpdate(mSizeList);
+        mListener.onSizeDragHandleTouch(viewHolder);
+        mModel.getSelectedItemSizeList().clear();
+        for (Size s : getCurrentList())
+            if (mSelectedSizeIdHashSet.contains(s.getId())) mModel.getSelectedItemSizeList().add(s);
+        ((SizeGridVH) viewHolder).mIsDragging = false;
     }
     //----------------------------------------------------------------------------------------------
 
     //action mode & drag select---------------------------------------------------------------------
     public void setActionModeState(int actionModeState) {
+        //checked
         this.mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
 
     public void setSelectedItem(List<Size> selectedItem) {
-        this.mSelectedItem = selectedItem;
+        this.mSelectedSizeList = selectedItem;
     }
 
     //drag select-----------------------------------------------------------------------------------
-    public void setSelectedPosition(int position) {
-        if (!mSelectedPosition.contains(position)) mSelectedPosition.add(position);
-        else mSelectedPosition.remove(position);
+    public void setSelectedPosition(long id) {
+        if (!mSelectedSizeIdHashSet.contains(id)) mSelectedSizeIdHashSet.add(id);
+        else mSelectedSizeIdHashSet.remove(id);
     }
 
     public void selectAll() {
-        for (int i = 0; i < getCurrentList().size(); i++) mSelectedPosition.add(i);
+        //checked
+        for (Size s : getCurrentList()) mSelectedSizeIdHashSet.add(s.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
-        mSelectedPosition.clear();
+        mSelectedSizeIdHashSet.clear();
         notifyDataSetChanged();
     }
     //----------------------------------------------------------------------------------------------
 
-    public void setSort(int sort) {
-        if (mSort != sort) {
-            this.mSort = sort;
-            notifyDataSetChanged();
-        }
-    }
-
-    public static class SizeGridVH extends RecyclerView.ViewHolder implements View.OnClickListener,
-            View.OnLongClickListener, View.OnTouchListener {
+    public static class SizeGridVH extends RecyclerView.ViewHolder {
         private final ItemListRecyclerGridBinding mBinding;
-        private final SizeAdapterListener mListener;
         private Size mSize;
+        private boolean mIsDragging;
 
         public SizeGridVH(@NotNull ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
+            //checked
             super(binding.getRoot());
             this.mBinding = binding;
-            this.mListener = listener;
 
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-            mBinding.gridDragHandle.setOnTouchListener(this);
-            mBinding.gridFavoriteCheckBox.setOnClickListener(v -> mListener.onSizeFavoriteClick(mSize));
+            itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.gridCheckBox));
+
+            itemView.setOnLongClickListener(v -> {
+                listener.onSizeItemViewLongClick(getLayoutPosition());
+                return false;
+            });
+
+            mBinding.gridDragHandle.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && mIsDragging) {
+                    listener.onSizeDragHandleTouch(this);
+                    mIsDragging = true;
+                }
+                return false;
+            });
+            //폴더랑 같이 액션모드 클래스화
+            mBinding.gridFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {
             this.mSize = size;
-        }
-
-        @Override
-        public void onClick(View v) {
-            mListener.onSizeItemViewClick(mSize, mBinding.gridCheckBox, getLayoutPosition());
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            mListener.onSizeItemViewLongClick(mBinding.gridCardView, getLayoutPosition());
-            return false;
-        }
-
-        @Override
-        public boolean onTouch(View v, @NotNull MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) mListener.onSizeDragHandleTouch(this);
-            return false;
         }
 
         public ItemListRecyclerGridBinding getBinding() {

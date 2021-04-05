@@ -114,12 +114,11 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         if (mActionModeState == ACTION_MODE_ON)
             mAdapterUtil.listActionModeOn(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
                     mSelectedCategoryIdHashSet, category.getId());
-        else if (mActionModeState == ACTION_MODE_OFF)
+        else if (mActionModeState == ACTION_MODE_OFF){
             mAdapterUtil.listActionModeOff(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
                     mSelectedCategoryIdHashSet);
-
-        if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
+        }
 
         holder.mBinding.mainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
     }
