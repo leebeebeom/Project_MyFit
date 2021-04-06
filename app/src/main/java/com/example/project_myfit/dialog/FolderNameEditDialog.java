@@ -13,6 +13,7 @@ import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.MyFitConstant.FOLDER;
 import static com.example.project_myfit.MyFitConstant.FOLDER_NAME;
 import static com.example.project_myfit.MyFitConstant.IS_PARENT_NAME;
 
@@ -20,13 +21,14 @@ import static com.example.project_myfit.MyFitConstant.IS_PARENT_NAME;
 public class FolderNameEditDialog extends DialogFragment {
 
     private ItemDialogEditTextBinding mBinding;
-    private FolderNameEditConfirmClick mListener;
+    private FolderNameEditConfirmListener mListener;
 
     public FolderNameEditDialog() {
     }
 
     @NotNull
     public static FolderNameEditDialog getInstance(String folderName, boolean isParentName) {
+        //checked
         FolderNameEditDialog folderNameEditDialog = new FolderNameEditDialog();
         Bundle bundle = new Bundle();
         bundle.putString(FOLDER_NAME, folderName);
@@ -37,8 +39,9 @@ public class FolderNameEditDialog extends DialogFragment {
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
+        //checked
         super.onAttach(context);
-        mListener = (FolderNameEditConfirmClick) getTargetFragment();
+        mListener = (FolderNameEditConfirmListener) getTargetFragment();
     }
 
     @NonNull
@@ -53,10 +56,9 @@ public class FolderNameEditDialog extends DialogFragment {
         }
         if (savedInstanceState != null) folderName = savedInstanceState.getString(FOLDER_NAME);
 
-        mBinding = DialogUtils.getFolderBinding(getLayoutInflater(), requireContext(), folderName);
+        mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), folderName, FOLDER);
 
         boolean finalIsParentName = isParentName;
-
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_folder_name), mBinding,
                 (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()), finalIsParentName));
     }
@@ -67,7 +69,7 @@ public class FolderNameEditDialog extends DialogFragment {
         outState.putString(FOLDER_NAME, String.valueOf(mBinding.dialogEditText.getText()));
     }
 
-    public interface FolderNameEditConfirmClick {
+    public interface FolderNameEditConfirmListener {
         void folderNameEditConfirmClick(String folderName, boolean isParentName);
     }
 }
