@@ -19,7 +19,7 @@ import java.util.List;
 public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
     //all checked
     private ItemTreeCategoryBinding mBinding;
-    private boolean mIsClickable;
+    private boolean mIsClickable = true;
 
     public TreeHolderCategory(Context context) {
         super(context);
@@ -89,11 +89,11 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
     public static class CategoryTreeHolder {
         //checked
-        public Category category;
-        public TreeViewCategoryFolderAddListener listener;
-        public List<Size> selectedSizeList;
-        public List<Folder> selectedFolderList;
-        public List<Long> folderFolderIdList, sizeFolderIdList;
+        private final Category category;
+        private final TreeViewCategoryFolderAddListener listener;
+        private final List<Size> selectedSizeList;
+        private final List<Folder> selectedFolderList;
+        private final List<Long> folderFolderIdList, sizeFolderIdList;
 
         public CategoryTreeHolder(Category category, TreeViewCategoryFolderAddListener listener,
                                   List<Folder> selectedFolderList, List<Size> selectedSizeList,
@@ -104,6 +104,10 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
             this.selectedSizeList = selectedSizeList;
             this.folderFolderIdList = folderFolderIdList;
             this.sizeFolderIdList = sizeFolderIdList;
+        }
+
+        public Category getCategory() {
+            return category;
         }
     }
 
