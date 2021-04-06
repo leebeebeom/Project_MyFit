@@ -10,7 +10,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
-import com.example.project_myfit.util.AdapterUtils;
+import com.example.project_myfit.util.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,15 +31,15 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolder(value.folder);
 
-        mBinding.amount.setText(String.valueOf(new AdapterUtils(context)
+        mBinding.contentsSize.setText(String.valueOf(new AdapterUtil(context)
                 .getFolderContentsSize(value.folder, value.folderFolderIdList, value.sizeFolderIdList)));
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
 
-        //이 노드가 선택된 폴더라면 알파
-        for (Folder f : value.selectedItemFolder) {
-            if (f.getId() == value.folder.getId()) {
+        //선택된 폴더가 이 노드라면
+        for (Folder selectedFolder : value.selectedFolderList) {
+            if (selectedFolder.getId() == value.folder.getId()) {
                 mBinding.iconLayout.setAlpha(0.5f);
                 mBinding.text.setAlpha(0.5f);
                 isSelected = true;
@@ -66,9 +66,17 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         }
 
         //현재위치가 이 노드라면
-        if (value.selectedItemSize.size() != 0) {
-            Size size = value.selectedItemSize.get(0);
-            if (size.getFolderId() == value.folder.getId()) {
+        if (value.selectedSizeList.size() != 0) {
+            Size selectedSize = value.selectedSizeList.get(0);
+            if (selectedSize.getFolderId() == value.folder.getId()) {
+                mBinding.folderIcon.setAlpha(0.5f);
+                mBinding.text.setAlpha(0.5f);
+            }
+        }
+
+        if (value.selectedFolderList.size() != 0) {
+            Folder selectedFolder = value.selectedFolderList.get(0);
+            if (selectedFolder.getFolderId() == value.folder.getId()){
                 mBinding.folderIcon.setAlpha(0.5f);
                 mBinding.text.setAlpha(0.5f);
             }
@@ -79,7 +87,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         for (Folder folder : value.allFolderList) {
             if (value.folder.getId() == folder.getFolderId()) {
                 TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin, value.listener,
-                        value.selectedItemFolder, value.selectedItemSize, value.allFolderList, value.folderFolderIdList, value.sizeFolderIdList))
+                        value.selectedFolderList, value.selectedSizeList, value.allFolderList, value.folderFolderIdList, value.sizeFolderIdList))
                         .setViewHolder(new TreeHolderFolder(context));
                 node.addChild(treeNode);
             }
@@ -118,18 +126,18 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         private final Folder folder;
         private final int margin;
         private final TreeViewFolderFolderAddListener listener;
-        private final List<Folder> selectedItemFolder, allFolderList;
-        private final List<Size> selectedItemSize;
+        private final List<Folder> selectedFolderList, allFolderList;
+        private final List<Size> selectedSizeList;
         private final List<Long> folderFolderIdList, sizeFolderIdList;
 
-        public FolderTreeHolder(Folder folder, int margin, TreeViewFolderFolderAddListener listener, List<Folder> selectedItemFolder,
-                                List<Size> selectedItemSize, List<Folder> allFolderList, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+        public FolderTreeHolder(Folder folder, int margin, TreeViewFolderFolderAddListener listener, List<Folder> selectedFolderList,
+                                List<Size> selectedSizeList, List<Folder> allFolderList, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
             //checked
             this.folder = folder;
             this.margin = margin;
             this.listener = listener;
-            this.selectedItemFolder = selectedItemFolder;
-            this.selectedItemSize = selectedItemSize;
+            this.selectedFolderList = selectedFolderList;
+            this.selectedSizeList = selectedSizeList;
             this.allFolderList = allFolderList;
             this.folderFolderIdList = folderFolderIdList;
             this.sizeFolderIdList = sizeFolderIdList;
