@@ -3,6 +3,7 @@ package com.example.project_myfit.main.list.adapter.sizeadapter;
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
@@ -31,6 +33,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     private int mActionModeState, mSort;
     private final HashSet<Long> mSelectedSizeIdHashSet;
     private AdapterUtil mAdapterUtil;
+    private boolean mIsDragging;
 
     public SizeAdapterGrid(ListViewModel model, SizeAdapterListener listener) {
         //checked
@@ -75,12 +78,20 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
+        holder.mBinding.gridDragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
+                mListener.onSizeDragHandleTouch(holder);
+                mIsDragging = true;
+            }
+            return false;
+        });
 
         if (mActionModeState == ACTION_MODE_ON)
             mAdapterUtil.gridActionModeOn(holder.mBinding.gridCheckBox, mSelectedSizeIdHashSet, size.getId());
         else if (mActionModeState == ACTION_MODE_OFF)
             mAdapterUtil.gridActionModeOff(holder.mBinding.gridCheckBox, mSelectedSizeIdHashSet);
 
+        holder.mBinding.gridDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
         holder.mBinding.gridFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
@@ -97,7 +108,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         mModel.getSelectedItemSizeList().clear();
         for (Size s : getCurrentList())
             if (mSelectedSizeIdHashSet.contains(s.getId())) mModel.getSelectedItemSizeList().add(s);
-        ((SizeGridVH) viewHolder).mIsDragging = false;
+        mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
@@ -110,7 +121,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         this.mSelectedSizeList = selectedSizeList;
     }
 
-    //drag select-----------------------------------------------------------------------------------
     public void sizeSelected(long id) {
         if (!mSelectedSizeIdHashSet.contains(id)) mSelectedSizeIdHashSet.add(id);
         else mSelectedSizeIdHashSet.remove(id);
@@ -131,7 +141,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     public static class SizeGridVH extends RecyclerView.ViewHolder {
         private final ItemListRecyclerGridBinding mBinding;
         private Size mSize;
-        private boolean mIsDragging;
 
         public SizeGridVH(@NotNull ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
             //checked
@@ -145,13 +154,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
                 return false;
             });
 
-            mBinding.gridDragHandle.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN && mIsDragging) {
-                    listener.onSizeDragHandleTouch(this);
-                    mIsDragging = true;
-                }
-                return false;
-            });
             mBinding.gridFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
         }
 
