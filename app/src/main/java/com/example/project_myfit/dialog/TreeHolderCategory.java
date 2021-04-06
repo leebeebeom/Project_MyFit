@@ -9,7 +9,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeCategoryBinding;
-import com.example.project_myfit.util.AdapterUtils;
+import com.example.project_myfit.util.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,13 +29,13 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
-        mBinding.amount.setText(String.valueOf(new AdapterUtils(context).getCategoryContentsSize(value.category,
+        mBinding.amount.setText(String.valueOf(new AdapterUtil(context).getCategoryContentsSize(value.category,
                 value.folderFolderIdList, value.sizeFolderIdList)));
 
-        //선택된 폴더 카테고리 텍스트 알파
+        //선택된 폴더가 이 카테고리노드라면
         if (!value.selectedFolderList.isEmpty()) {
-            Folder folder = value.selectedFolderList.get(0);
-            if (folder.getFolderId() == value.category.getId()) {
+            Folder selectedFolder = value.selectedFolderList.get(0);
+            if (selectedFolder.getFolderId() == value.category.getId()) {
                 mBinding.iconLayout.setAlpha(0.5f);
                 mBinding.text.setAlpha(0.5f);
             }
@@ -43,13 +43,14 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
         //선택된 사이즈 카테고리 텍스트 알파
         if (!value.selectedSizeList.isEmpty()) {
-            Size size = value.selectedSizeList.get(0);
-            if (size.getFolderId() == value.category.getId()) {
+            Size selectedSize = value.selectedSizeList.get(0);
+            if (selectedSize.getFolderId() == value.category.getId()) {
                 mBinding.iconLayout.setAlpha(0.5f);
                 mBinding.text.setAlpha(0.5f);
             }
         }
 
+        //expandable
         if (node.getChildren().size() != 0)
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
         else mBinding.arrowIconCategory.setVisibility(View.INVISIBLE);
