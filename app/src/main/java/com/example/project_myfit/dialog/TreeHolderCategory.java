@@ -37,17 +37,15 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         //선택된 폴더가 이 카테고리노드라면
         if (!value.selectedFolderList.isEmpty()) {
             Folder selectedFolder = value.selectedFolderList.get(0);
-            if (selectedFolder.getFolderId() == value.category.getId()) {
+            if (selectedFolder.getFolderId() == value.category.getId())
                 setAlpha();
-            }
         }
 
         //선택된 사이즈 카테고리 텍스트 알파
         if (!value.selectedSizeList.isEmpty()) {
             Size selectedSize = value.selectedSizeList.get(0);
-            if (selectedSize.getFolderId() == value.category.getId()) {
+            if (selectedSize.getFolderId() == value.category.getId())
                 setAlpha();
-            }
         }
 
         //expandable
