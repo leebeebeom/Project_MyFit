@@ -58,7 +58,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         return mBinding.getRoot();
     }
 
-    private void setAlpha() {
+    public void setAlpha() {
         if (mBinding.iconLayout.getAlpha() != 0.5f && mBinding.text.getAlpha() != 0.5f) {
             mIsClickable = false;
             mBinding.iconLayout.setAlpha(0.5f);
