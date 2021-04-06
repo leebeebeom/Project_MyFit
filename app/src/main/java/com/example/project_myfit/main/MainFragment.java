@@ -207,13 +207,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
     private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
         //checked
-        binding.edit.setOnClickListener(v -> {
-            mModel.getSelectedCategoryList().clear();
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
-            mModel.setSelectedAmount();
-            mPopupWindow.dismiss();
-        });
-
         binding.addFolder.setOnClickListener(v -> {
             showDialog(AddCategoryDialog.getInstance(mParentCategory), CATEGORY_ADD_DIALOG);
             mPopupWindow.dismiss();
