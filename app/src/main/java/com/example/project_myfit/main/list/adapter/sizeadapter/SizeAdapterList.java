@@ -34,6 +34,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     private int mActionModeState, mSort;
     private final HashSet<Long> mSelectedSizeIdHashSet;
     private AdapterUtil mAdapterUtil;
+    boolean mIsDragging;
 
     public SizeAdapterList(ListViewModel model, SizeAdapterListener listener) {
         //checked
@@ -79,6 +80,13 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
+        holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
+                mIsDragging = true;
+                mListener.onSizeDragHandleTouch(holder);
+            }
+            return false;
+        });
 
         if (mActionModeState == ACTION_MODE_ON)
             mAdapterUtil.listActionModeOn(holder.mBinding.listCardView, holder.mBinding.listCheckBox, mSelectedSizeIdHashSet, size.getId());
@@ -105,7 +113,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         mModel.getSelectedItemSizeList().clear();
         for (Size s : getCurrentList())
             if (mSelectedSizeIdHashSet.contains(s.getId())) mModel.getSelectedItemSizeList().add(s);
-        ((SizeListVH) viewHolder).mIsDragging = false;
+        mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
@@ -141,7 +149,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         //all checked
         private final ItemListRecyclerListBinding mBinding;
         private Size mSize;
-        private boolean mIsDragging;
 
         public SizeListVH(@NotNull ItemListRecyclerListBinding binding, SizeAdapterListener listener) {
             //checked
@@ -152,14 +159,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
             itemView.setOnLongClickListener(v -> {
                 listener.onSizeItemViewLongClick(getLayoutPosition());
-                return false;
-            });
-
-            mBinding.listDragHandle.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
-                    mIsDragging = true;
-                    listener.onSizeDragHandleTouch(this);
-                }
                 return false;
             });
 

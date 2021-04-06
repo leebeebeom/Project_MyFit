@@ -40,6 +40,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
     private MainViewPagerAdapter.ViewPagerVH mViewPagerVH;
     private AdapterUtil mAdapterUtil;
+    private boolean mIsDragging;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener) {
         //checked
@@ -105,6 +106,13 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         Category category = getItem(holder.getLayoutPosition());
         holder.setCategory(category);
+        holder.mBinding.mainDragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
+                mIsDragging = true;
+                mListener.onCategoryDragHandleTouch(holder);
+            }
+            return false;
+        });
 
         if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
 
@@ -114,7 +122,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         if (mActionModeState == ACTION_MODE_ON)
             mAdapterUtil.listActionModeOn(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
                     mSelectedCategoryIdHashSet, category.getId());
-        else if (mActionModeState == ACTION_MODE_OFF){
+        else if (mActionModeState == ACTION_MODE_OFF) {
             mAdapterUtil.listActionModeOff(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
                     mSelectedCategoryIdHashSet);
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
@@ -136,7 +144,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         mModel.getSelectedCategoryList().clear();
         for (Category c : getCurrentList())
             if (mSelectedCategoryIdHashSet.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
-        ((CategoryVH) viewHolder).mIsDragging = false;
+        mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
@@ -173,7 +181,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         //all checked
         private final ItemMainRecyclerBinding mBinding;
         private Category mCategory;
-        private boolean mIsDragging;
 
         public CategoryVH(@NotNull ItemMainRecyclerBinding binding, CategoryAdapterListener listener) {
             super(binding.getRoot());
@@ -183,14 +190,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
             itemView.setOnLongClickListener(v -> {
                 listener.onCategoryCardViewLongClick(getLayoutPosition());
-                return false;
-            });
-
-            mBinding.mainDragHandle.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
-                    mIsDragging = true;
-                    listener.onCategoryDragHandleTouch(this);
-                }
                 return false;
             });
         }
