@@ -20,7 +20,7 @@ import java.util.List;
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.FolderTreeHolder> {
     private ItemTreeFolderBinding mBinding;
     private boolean isSelected;
-    private boolean mIsClickable;
+    private boolean mIsClickable = true;
 
     public TreeHolderFolder(Context context) {
         super(context);
