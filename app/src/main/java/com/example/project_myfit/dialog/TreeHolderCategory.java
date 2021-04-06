@@ -19,6 +19,8 @@ import java.util.List;
 public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
     //all checked
     private ItemTreeCategoryBinding mBinding;
+    private boolean mIsClickable;
+
     public TreeHolderCategory(Context context) {
         super(context);
     }
@@ -36,8 +38,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         if (!value.selectedFolderList.isEmpty()) {
             Folder selectedFolder = value.selectedFolderList.get(0);
             if (selectedFolder.getFolderId() == value.category.getId()) {
-                mBinding.iconLayout.setAlpha(0.5f);
-                mBinding.text.setAlpha(0.5f);
+                setAlpha();
             }
         }
 
@@ -45,8 +46,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         if (!value.selectedSizeList.isEmpty()) {
             Size selectedSize = value.selectedSizeList.get(0);
             if (selectedSize.getFolderId() == value.category.getId()) {
-                mBinding.iconLayout.setAlpha(0.5f);
-                mBinding.text.setAlpha(0.5f);
+                setAlpha();
             }
         }
 
@@ -58,6 +58,18 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewCategoryFolderAddClick(node, value));
 
         return mBinding.getRoot();
+    }
+
+    private void setAlpha() {
+        if (mBinding.iconLayout.getAlpha() != 0.5f && mBinding.text.getAlpha() != 0.5f) {
+            mIsClickable = false;
+            mBinding.iconLayout.setAlpha(0.5f);
+            mBinding.text.setAlpha(0.5f);
+        }
+    }
+
+    public boolean isClickable() {
+        return mIsClickable;
     }
 
     public void setIconClickable() {
