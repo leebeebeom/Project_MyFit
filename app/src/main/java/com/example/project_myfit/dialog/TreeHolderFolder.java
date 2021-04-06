@@ -20,6 +20,7 @@ import java.util.List;
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.FolderTreeHolder> {
     private ItemTreeFolderBinding mBinding;
     private boolean isSelected;
+    private boolean mIsClickable;
 
     public TreeHolderFolder(Context context) {
         super(context);
@@ -40,19 +41,16 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         //선택된 폴더가 이 노드라면
         for (Folder selectedFolder : value.selectedFolderList) {
             if (selectedFolder.getId() == value.folder.getId()) {
-                mBinding.iconLayout.setAlpha(0.5f);
-                mBinding.text.setAlpha(0.5f);
+                setAlpha();
                 isSelected = true;
                 //부모 노드 알파
                 TreeNode parent = node.getParent();
                 if (parent.getViewHolder() instanceof TreeHolderCategory) {
                     TreeHolderCategory holder = (TreeHolderCategory) parent.getViewHolder();
-                    holder.getBinding().iconLayout.setAlpha(0.5f);
-                    holder.getBinding().text.setAlpha(0.5f);
+                    holder.setAlpha();
                 } else {
                     TreeHolderFolder holder = (TreeHolderFolder) parent.getViewHolder();
-                    holder.getBinding().iconLayout.setAlpha(0.5f);
-                    holder.getBinding().text.setAlpha(0.5f);
+                    holder.setAlpha();
                 }
                 break;
             }
@@ -60,26 +58,21 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         //부모 노드가 선택된 폴더라면
         if (node.getParent().getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getParent().getViewHolder()).isSelected) {
-            mBinding.iconLayout.setAlpha(0.5f);
-            mBinding.text.setAlpha(0.5f);
+            setAlpha();
             isSelected = true;
         }
 
         //현재위치가 이 노드라면
         if (value.selectedSizeList.size() != 0) {
             Size selectedSize = value.selectedSizeList.get(0);
-            if (selectedSize.getFolderId() == value.folder.getId()) {
-                mBinding.folderIcon.setAlpha(0.5f);
-                mBinding.text.setAlpha(0.5f);
-            }
+            if (selectedSize.getFolderId() == value.folder.getId())
+                setAlpha();
         }
 
         if (value.selectedFolderList.size() != 0) {
             Folder selectedFolder = value.selectedFolderList.get(0);
-            if (selectedFolder.getFolderId() == value.folder.getId()){
-                mBinding.folderIcon.setAlpha(0.5f);
-                mBinding.text.setAlpha(0.5f);
-            }
+            if (selectedFolder.getFolderId() == value.folder.getId())
+                setAlpha();
         }
 
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
@@ -99,6 +92,18 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewFolderFolderAddClick(mNode, value));
         return mBinding.getRoot();
+    }
+
+    private void setAlpha() {
+        if (mBinding.iconLayout.getAlpha() != 0.5f && mBinding.text.getAlpha() != 0.5f) {
+            mIsClickable = false;
+            mBinding.iconLayout.setAlpha(0.5f);
+            mBinding.text.setAlpha(0.5f);
+        }
+    }
+
+    public boolean isClickable() {
+        return mIsClickable;
     }
 
     public void setIconClickable() {
