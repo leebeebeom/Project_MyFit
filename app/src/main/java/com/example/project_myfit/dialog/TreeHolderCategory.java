@@ -29,7 +29,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
-        mBinding.amount.setText(String.valueOf(new AdapterUtil(context).getCategoryContentsSize(value.category,
+        mBinding.contentsSize.setText(String.valueOf(new AdapterUtil(context).getCategoryContentsSize(value.category,
                 value.folderFolderIdList, value.sizeFolderIdList)));
 
         //선택된 폴더가 이 카테고리노드라면
