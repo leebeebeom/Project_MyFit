@@ -88,7 +88,8 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         }
 
         holder.mBinding.listDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.mBinding.listFavoriteCheckBox.setVisibility(mActionModeState == ACTION_MODE_ON ? View.GONE : View.VISIBLE);
+        holder.mBinding.listFavoriteCheckBox.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.GONE : View.VISIBLE);
+        holder.mBinding.listFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
     public void onItemMove(int from, int to) {
