@@ -48,7 +48,7 @@ public class AddCategoryDialog extends DialogFragment {
 
         String finalParentCategory = parentCategory;
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.add_category), binding,
-                (dialog, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.dialogEditText.getText()), finalParentCategory));
+                (dialog, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.dialogEditText.getText()).trim(), finalParentCategory));
     }
 
     public interface AddCategoryConfirmListener {
