@@ -1,9 +1,12 @@
 package com.example.project_myfit;
 
 import android.app.Application;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
 
 import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
@@ -19,12 +22,50 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Category mCategory;
     private Folder mFolder;
     private Size mSize;
+    private NavController mNavController;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
+    private final MutableLiveData<Intent> intentMutableLiveData;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
         mRepository = new Repository(application);
+        intentMutableLiveData = new MutableLiveData<>();
+    }
+
+    public void searchViewSizeClick(long sizeId) {
+        //checked, tested
+        mSize = mRepository.getSize(sizeId);
+        mCategory = mRepository.getCategory(mSize.getFolderId());
+        mFolder = mRepository.getFolder(mSize.getFolderId());
+        if (mCategory == null)
+            findCategory(mFolder);
+        mNavController.navigate(R.id.action_mainFragment_to_inputOutputFragment);
+    }
+
+    public void searchViewFolderClick(long folderId) {
+        //checked, tested
+        mFolder = mRepository.getFolder(folderId);
+        findCategory(mFolder);
+        mNavController.navigate(R.id.action_mainFragment_to_listFragment);
+    }
+
+    private void findCategory(@NotNull Folder folder) {
+        //checked, tested
+        mCategory = mRepository.getCategory(folder.getFolderId());
+        if (mCategory == null) {
+            Folder parentFolder = mRepository.getFolder(folder.getFolderId());
+            findCategory(parentFolder);
+        }
+    }
+
+    //getter,setter---------------------------------------------------------------------------------
+    public NavController getNavController() {
+        return mNavController;
+    }
+
+    public void setNavController(NavController mNavController) {
+        this.mNavController = mNavController;
     }
 
     public Category getCategory() {
@@ -70,4 +111,10 @@ public class MainActivityViewModel extends AndroidViewModel {
     public Repository getRepository() {
         return mRepository;
     }
+
+    public MutableLiveData<Intent> getIntentMutableLiveData() {
+        //checked, tested
+        return intentMutableLiveData;
+    }
+    //----------------------------------------------------------------------------------------------
 }
