@@ -21,8 +21,7 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private final List<Category> mSelectedCategoryList;
-    private final MutableLiveData<Integer> mSelectedSizeLive;
-    private final MutableLiveData<Integer> mSortLive, mCurrentItemLive;
+    private final MutableLiveData<Integer> mSortLive, mCurrentItemLive, mSelectedSizeLive;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -140,21 +139,32 @@ public class MainViewModel extends AndroidViewModel {
         mRepository.categoryUpdate(categoryList);
     }
 
-    //getter,setter---------------------------------------------------------------------------------
-    public List<Category> getSelectedCategoryList() {
-        return mSelectedCategoryList;
-    }
-
+    //live data-------------------------------------------------------------------------------------
     public MutableLiveData<Integer> getSelectedSizeLive() {
         return mSelectedSizeLive;
     }
 
+    //sort
     public MutableLiveData<Integer> getSortLive() {
         return mSortLive;
     }
 
+    public void setSortLiveValue(int sort) {
+        mSortLive.setValue(sort);
+    }
+
+    //current Item
     public MutableLiveData<Integer> getCurrentItemLive() {
         return mCurrentItemLive;
+    }
+
+    public void setCurrentItemLiveValue(int currentItem) {
+        mCurrentItemLive.setValue(currentItem);
+    }
+
+    //getter,setter---------------------------------------------------------------------------------
+    public List<Category> getSelectedCategoryList() {
+        return mSelectedCategoryList;
     }
 
     public String getSelectedCategoryName() {
@@ -163,10 +173,6 @@ public class MainViewModel extends AndroidViewModel {
 
     public int getSelectedCategorySize() {
         return mSelectedCategoryList.size();
-    }
-
-    public void sortLiveSetValue(int sort) {
-        mSortLive.setValue(sort);
     }
 
     public LiveData<List<Category>> getAllCategoryLive() {
