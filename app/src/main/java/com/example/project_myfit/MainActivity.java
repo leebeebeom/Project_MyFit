@@ -1,6 +1,5 @@
 package com.example.project_myfit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,9 +11,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.data.model.Folder;
-import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,13 +42,12 @@ import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 
 //TODO 구현 못한 거
 //이름 변경 시 분신술 쓰는 거(서치뷰, 메인 카테고리)
-//트리뷰 리크리에이트 유지
 //서치뷰에서 폴더, 사이즈 클릭 후 리크리에이트시 어플 종료
 
 public class MainActivity extends AppCompatActivity {
-    //all checked
-    private NavController mNavController;
+    //all checked, tested
     private AppBarConfiguration mAppBarConfiguration;
+    private MainActivityViewModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        MainActivityViewModel model = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -68,14 +63,14 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment);
-        if (navHostFragment != null) mNavController = navHostFragment.getNavController();
+        if (navHostFragment != null) mModel.setNavController(navHostFragment.getNavController());
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment)
                 .build();
 
-        NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
+        NavigationUI.setupActionBarWithNavController(this, mModel.getNavController(), mAppBarConfiguration);
+        NavigationUI.setupWithNavController(binding.bottomNav, mModel.getNavController());
 
         //바텀네비게이션 뷰 그림자 제거
         binding.bottomNav.setBackgroundTintList(null);
@@ -83,18 +78,17 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
-        destinationChangeListener(binding, actionBar, mNavController);
+        destinationChangeListener(binding, actionBar, mModel.getNavController());
 
-        if (getIntent() != null) {
-            Intent intent = getIntent();
-            if (intent.getLongExtra(SIZE_ID, 0) != 0) {
-                //서치뷰 사이즈 클릭
-                searchViewSizeClick(model, intent, mNavController);
-            } else if (intent.getLongExtra(FOLDER_ID, 0) != 0) {
-                //서치뷰 폴더 클릭
-                searchViewFolderClick(model, intent, mNavController);
-            }
-        }
+        mModel.getIntentMutableLiveData().observe(this, intent -> {
+            if (intent.getLongExtra(SIZE_ID, 0) != 0)
+                mModel.searchViewSizeClick(intent.getLongExtra(SIZE_ID, 0));
+            else if (intent.getLongExtra(FOLDER_ID, 0) != 0)
+                mModel.searchViewFolderClick(intent.getLongExtra(FOLDER_ID, 0));
+        });
+
+        if (getIntent() != null)
+            mModel.getIntentMutableLiveData().setValue(getIntent());
     }
 
     private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar, @NotNull NavController navController) {
@@ -126,45 +120,9 @@ public class MainActivity extends AppCompatActivity {
         binding.activityFab.show();
     }
 
-    private void searchViewSizeClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, NavController navController) {
-        //checked
-        Size size = model.getRepository().getSize(intent.getLongExtra(SIZE_ID, 0));
-        model.setSize(size);
-
-        Category category = model.getRepository().getCategory(size.getFolderId());
-        Folder folder = model.getRepository().getFolder(size.getFolderId());
-        if (category != null) model.setCategory(category);
-        else {
-            category = findParentCategory(folder, model);
-            model.setCategory(category);
-            model.setFolder(folder);
-        }
-        navController.navigate(R.id.action_mainFragment_to_inputOutputFragment);
-    }
-
-    private void searchViewFolderClick(@NotNull MainActivityViewModel model, @NotNull Intent intent, @NotNull NavController navController) {
-        //checked
-        Folder folder = model.getRepository().getFolder(intent.getLongExtra(FOLDER_ID, 0));
-        Category category = findParentCategory(folder, model);
-        model.setFolder(folder);
-        model.setCategory(category);
-        navController.navigate(R.id.action_mainFragment_to_listFragment);
-    }
-
-    @NotNull
-    private Category findParentCategory(@NotNull Folder folder, @NotNull MainActivityViewModel model) {
-        //checked
-        Category category = model.getRepository().getCategory(folder.getFolderId());
-        if (category == null) {
-            Folder parentFolder = model.getRepository().getFolder(folder.getFolderId());
-            category = findParentCategory(parentFolder, model);
-        }
-        return category;
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         //checked
-        return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(mModel.getNavController(), mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 }
