@@ -44,7 +44,6 @@ import static com.example.project_myfit.MyFitConstant.SIZE_ID;
 //서치뷰에서 폴더, 사이즈 클릭 후 리크리에이트시 어플 종료
 
 public class MainActivity extends AppCompatActivity {
-    //all checked, tested
     private AppBarConfiguration mAppBarConfiguration;
     private MainActivityViewModel mModel;
 

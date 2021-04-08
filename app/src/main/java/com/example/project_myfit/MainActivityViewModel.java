@@ -30,7 +30,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void searchViewSizeClick(long sizeId) {
-        //checked, tested
         mSize = mRepository.getSize(sizeId);
         mCategory = mRepository.getCategory(mSize.getFolderId());
         mFolder = mRepository.getFolder(mSize.getFolderId());
@@ -40,14 +39,12 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void searchViewFolderClick(long folderId) {
-        //checked, tested
         mFolder = mRepository.getFolder(folderId);
         findCategory(mFolder);
         mNavController.navigate(R.id.action_mainFragment_to_listFragment);
     }
 
     private void findCategory(@NotNull Folder folder) {
-        //checked, tested
         mCategory = mRepository.getCategory(folder.getFolderId());
         if (mCategory == null) {
             Folder parentFolder = mRepository.getFolder(folder.getFolderId());
