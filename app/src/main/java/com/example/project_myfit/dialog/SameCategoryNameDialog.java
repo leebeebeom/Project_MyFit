@@ -20,7 +20,6 @@ public class SameCategoryNameDialog extends DialogFragment {
 
     @NotNull
     public static SameCategoryNameDialog getInstance(String categoryName, String parentCategory) {
-        //checked
         SameCategoryNameDialog sameCategoryNameDialog = new SameCategoryNameDialog();
         Bundle bundle = new Bundle();
         bundle.putString(CATEGORY_NAME, categoryName);
@@ -32,7 +31,6 @@ public class SameCategoryNameDialog extends DialogFragment {
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
-        //chekced
         mListener = (SameCategoryNameConfirmListener) getTargetFragment();
     }
 
@@ -40,7 +38,6 @@ public class SameCategoryNameDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //checked
         String categoryName = null;
         String parentCategory = null;
         if (getArguments() != null) {
