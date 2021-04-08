@@ -53,7 +53,7 @@ public class FolderNameEditDialog extends DialogFragment {
 
         boolean finalIsParentName = isParentName;
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_folder_name), mBinding,
-                (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()), finalIsParentName));
+                (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()).trim(), finalIsParentName));
     }
 
     @Override
