@@ -336,7 +336,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     }
 
     private void selectedItemAmountLive() {
-        mModel.getSelectedSizeLive().observe(getViewLifecycleOwner(), integer -> {
+        mModel.getSelectedCategorySizeLive().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.item_selected);
             mActionModeTitleBinding.actionModeTitle.setText(title);
             if (mActionMode != null) {

@@ -26,13 +26,13 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 public class MainViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private final List<Category> mSelectedCategoryList;
-    private final MutableLiveData<Integer> mSelectedSizeLive;
+    private final MutableLiveData<Integer> mSelectedCategorySizeLive;
     private int mCurrentItem;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         mRepository = new Repository(application);
-        mSelectedSizeLive = new MutableLiveData<>();
+        mSelectedCategorySizeLive = new MutableLiveData<>();
         mSelectedCategoryList = new ArrayList<>();
     }
 
@@ -42,7 +42,7 @@ public class MainViewModel extends AndroidViewModel {
             mSelectedCategoryList.addAll(categoryAdapter.getCurrentList());
             categoryAdapter.selectAll();
         } else categoryAdapter.deselectAll();
-        mSelectedSizeLive.setValue(mSelectedCategoryList.size());
+        mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
     public void categoryNameEdit(String categoryName) {
@@ -127,15 +127,15 @@ public class MainViewModel extends AndroidViewModel {
     public void categorySelected(@NotNull Category category, boolean isChecked) {
         if (isChecked) mSelectedCategoryList.add(category);
         else mSelectedCategoryList.remove(category);
-        mSelectedSizeLive.setValue(mSelectedCategoryList.size());
+        mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
     public void categoryItemDrop(List<Category> categoryList) {
         mRepository.categoryUpdate(categoryList);
     }
 
-    public MutableLiveData<Integer> getSelectedSizeLive() {
-        return mSelectedSizeLive;
+    public MutableLiveData<Integer> getSelectedCategorySizeLive() {
+        return mSelectedCategorySizeLive;
     }
 
     //getter,setter---------------------------------------------------------------------------------
