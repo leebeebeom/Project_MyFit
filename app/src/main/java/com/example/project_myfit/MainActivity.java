@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -65,9 +64,7 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment);
         if (navHostFragment != null) mModel.setNavController(navHostFragment.getNavController());
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment)
-                .build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
 
         NavigationUI.setupActionBarWithNavController(this, mModel.getNavController(), mAppBarConfiguration);
         NavigationUI.setupWithNavController(binding.bottomNav, mModel.getNavController());
@@ -78,22 +75,17 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
-        destinationChangeListener(binding, actionBar, mModel.getNavController());
-
-        mModel.getIntentMutableLiveData().observe(this, intent -> {
-            if (intent.getLongExtra(SIZE_ID, 0) != 0)
-                mModel.searchViewSizeClick(intent.getLongExtra(SIZE_ID, 0));
-            else if (intent.getLongExtra(FOLDER_ID, 0) != 0)
-                mModel.searchViewFolderClick(intent.getLongExtra(FOLDER_ID, 0));
-        });
+        destinationChangeListener(binding, actionBar);
 
         if (getIntent() != null)
-            mModel.getIntentMutableLiveData().setValue(getIntent());
+            if (getIntent().getLongExtra(SIZE_ID, 0) != 0)
+                mModel.searchViewSizeClick(getIntent().getLongExtra(SIZE_ID, 0));
+            else if (getIntent().getLongExtra(FOLDER_ID, 0) != 0)
+                mModel.searchViewFolderClick(getIntent().getLongExtra(FOLDER_ID, 0));
     }
 
-    private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar, @NotNull NavController navController) {
-        //checked
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+    private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar) {
+        mModel.getNavController().addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
@@ -114,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fabChange(@NotNull ActivityMainBinding binding, int resId) {
-        //checked
         binding.activityFab.hide();
         binding.activityFab.setImageResource(resId);
         binding.activityFab.show();
@@ -122,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        //checked
         return NavigationUI.navigateUp(mModel.getNavController(), mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 }

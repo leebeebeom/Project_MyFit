@@ -1,11 +1,9 @@
 package com.example.project_myfit;
 
 import android.app.Application;
-import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 
 import com.example.project_myfit.data.Repository;
@@ -25,12 +23,10 @@ public class MainActivityViewModel extends AndroidViewModel {
     private NavController mNavController;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
-    private final MutableLiveData<Intent> intentMutableLiveData;
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
         mRepository = new Repository(application);
-        intentMutableLiveData = new MutableLiveData<>();
     }
 
     public void searchViewSizeClick(long sizeId) {
@@ -106,15 +102,6 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void setSelectedSizeList(List<Size> mSelectedSizes) {
         this.mSelectedSizeList = mSelectedSizes;
-    }
-
-    public Repository getRepository() {
-        return mRepository;
-    }
-
-    public MutableLiveData<Intent> getIntentMutableLiveData() {
-        //checked, tested
-        return intentMutableLiveData;
     }
     //----------------------------------------------------------------------------------------------
 }
