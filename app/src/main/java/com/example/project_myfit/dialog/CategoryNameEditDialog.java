@@ -20,12 +20,8 @@ public class CategoryNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
     private CategoryNameEditConfirmListener mListener;
 
-    public CategoryNameEditDialog() {
-    }
-
     @NotNull
     public static CategoryNameEditDialog getInstance(String categoryName) {
-        //checked
         CategoryNameEditDialog categoryNameEditDialog = new CategoryNameEditDialog();
         Bundle bundle = new Bundle();
         bundle.putString(CATEGORY_NAME, categoryName);
@@ -35,7 +31,6 @@ public class CategoryNameEditDialog extends DialogFragment {
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
-        //checked
         super.onAttach(context);
         mListener = (CategoryNameEditConfirmListener) getTargetFragment();
     }
@@ -44,10 +39,10 @@ public class CategoryNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //checked
         String categoryName = null;
         if (getArguments() != null) categoryName = getArguments().getString(CATEGORY_NAME);
         if (savedInstanceState != null) categoryName = savedInstanceState.getString(CATEGORY_NAME);
+
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), categoryName, CATEGORY);
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
                 (dialog, which) -> mListener.categoryNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()).trim()));
@@ -55,7 +50,6 @@ public class CategoryNameEditDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
-        //checked
         super.onSaveInstanceState(outState);
         outState.putString(CATEGORY_NAME, String.valueOf(mBinding.dialogEditText.getText()));
     }
