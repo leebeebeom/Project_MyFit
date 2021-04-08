@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerViewBinding;
+import com.example.project_myfit.main.MainViewModel;
 import com.example.project_myfit.util.Sort;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
@@ -29,7 +29,6 @@ import static com.example.project_myfit.MyFitConstant.TOP;
 import static com.example.project_myfit.MyFitConstant.UP;
 
 public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdapter.ViewPagerVH> {
-    //all checked
     private final CategoryAdapter[] mCategoryAdapterArray;
     private final MainDragAutoScrollListener mListener;
     private final DragSelectTouchListener mDragSelectListener;
@@ -37,7 +36,6 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
 
     public MainViewPagerAdapter(CategoryAdapter[] adapterList, DragSelectTouchListener dragSelectListener,
                                 ItemTouchHelper[] touchHelperList, MainDragAutoScrollListener listener) {
-        //checked
         this.mCategoryAdapterArray = adapterList;
         this.mDragSelectListener = dragSelectListener;
         this.mTouchHelperArray = touchHelperList;
@@ -45,8 +43,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
         setHasStableIds(true);
     }
 
-    public void setItem(int sort, List<Category> categoryList, Repository repository) {
-        //checked
+    public void setItem(int sort, List<Category> categoryList, MainViewModel model) {
         List<Category> topList = new ArrayList<>();
         List<Category> bottomList = new ArrayList<>();
         List<Category> outerList = new ArrayList<>();
@@ -67,10 +64,11 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
                     break;
             }
         }
-        mCategoryAdapterArray[0].submitList(sort, topList, repository.getFolderFolderIdByParent(TOP), repository.getSizeFolderIdByParent(TOP));
-        mCategoryAdapterArray[1].submitList(sort, bottomList, repository.getFolderFolderIdByParent(BOTTOM), repository.getSizeFolderIdByParent(BOTTOM));
-        mCategoryAdapterArray[2].submitList(sort, outerList, repository.getFolderFolderIdByParent(OUTER), repository.getSizeFolderIdByParent(OUTER));
-        mCategoryAdapterArray[3].submitList(sort, etcList, repository.getFolderFolderIdByParent(ETC), repository.getSizeFolderIdByParent(ETC));
+
+        mCategoryAdapterArray[0].submitList(sort, topList, model.getFolderFolderIdList(TOP), model.getSizeFolderIdList(TOP));
+        mCategoryAdapterArray[1].submitList(sort, bottomList, model.getFolderFolderIdList(BOTTOM), model.getSizeFolderIdList(BOTTOM));
+        mCategoryAdapterArray[2].submitList(sort, outerList, model.getFolderFolderIdList(OUTER), model.getSizeFolderIdList(OUTER));
+        mCategoryAdapterArray[3].submitList(sort, etcList, model.getFolderFolderIdList(ETC), model.getSizeFolderIdList(ETC));
     }
 
     @Override
@@ -82,14 +80,12 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
     @NotNull
     @Override
     public ViewPagerVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        //checked
         ItemMainRecyclerViewBinding binding = ItemMainRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewPagerVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        //checked
         if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
             mCategoryAdapterArray[position].setViewPagerVH(holder);
 
@@ -108,12 +104,10 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
     }
 
     public static class ViewPagerVH extends RecyclerView.ViewHolder {
-        //all checked
         private final ItemMainRecyclerViewBinding mBinding;
 
         @SuppressLint("ClickableViewAccessibility")
         public ViewPagerVH(@NotNull ItemMainRecyclerViewBinding binding, MainDragAutoScrollListener listener) {
-            //checked
             super(binding.getRoot());
             this.mBinding = binding;
 
@@ -129,13 +123,11 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
         }
 
         public void setNoData(boolean isEmpty) {
-            //checked
             mBinding.noData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         }
     }
 
     public interface MainDragAutoScrollListener {
-        //checked
         void dragAutoScroll(int upDownStop);
     }
 }
