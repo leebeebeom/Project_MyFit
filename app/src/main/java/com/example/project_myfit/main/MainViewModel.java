@@ -18,19 +18,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.project_myfit.MyFitConstant.BOTTOM;
+import static com.example.project_myfit.MyFitConstant.ETC;
+import static com.example.project_myfit.MyFitConstant.OUTER;
+import static com.example.project_myfit.MyFitConstant.TOP;
+
 public class MainViewModel extends AndroidViewModel {
     private final Repository mRepository;
     private final List<Category> mSelectedCategoryList;
-    private final MutableLiveData<Integer> mSortLive, mCurrentItemLive, mSelectedSizeLive;
+    private final MutableLiveData<Integer> mSelectedSizeLive;
+    private int mCurrentItem;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         mRepository = new Repository(application);
         mSelectedSizeLive = new MutableLiveData<>();
         mSelectedCategoryList = new ArrayList<>();
-        mSortLive = new MutableLiveData<>();
-        mCurrentItemLive = new MutableLiveData<>();
-        mCurrentItemLive.setValue(0);
     }
 
     public void selectAllClick(boolean checked, CategoryAdapter categoryAdapter) {
@@ -121,14 +124,6 @@ public class MainViewModel extends AndroidViewModel {
         mRepository.categoryInsert(new Category(categoryName.trim(), parentCategory, mRepository.getCategoryLargestOrderPlus1()));
     }
 
-    public int getCurrentItem() {
-        return mCurrentItemLive.getValue() != null ? mCurrentItemLive.getValue() : 0;
-    }
-
-    public int getSort() {
-        return mSortLive.getValue() != null ? mSortLive.getValue() : 0;
-    }
-
     public void categorySelected(@NotNull Category category, boolean isChecked) {
         if (isChecked) mSelectedCategoryList.add(category);
         else mSelectedCategoryList.remove(category);
@@ -139,27 +134,8 @@ public class MainViewModel extends AndroidViewModel {
         mRepository.categoryUpdate(categoryList);
     }
 
-    //live data-------------------------------------------------------------------------------------
     public MutableLiveData<Integer> getSelectedSizeLive() {
         return mSelectedSizeLive;
-    }
-
-    //sort
-    public MutableLiveData<Integer> getSortLive() {
-        return mSortLive;
-    }
-
-    public void setSortLiveValue(int sort) {
-        mSortLive.setValue(sort);
-    }
-
-    //current Item
-    public MutableLiveData<Integer> getCurrentItemLive() {
-        return mCurrentItemLive;
-    }
-
-    public void setCurrentItemLiveValue(int currentItem) {
-        mCurrentItemLive.setValue(currentItem);
     }
 
     //getter,setter---------------------------------------------------------------------------------
@@ -175,15 +151,37 @@ public class MainViewModel extends AndroidViewModel {
         return mSelectedCategoryList.size();
     }
 
-    public LiveData<List<Category>> getAllCategoryLive() {
-        return mRepository.getAllCategoryLive();
-    }
-
     public List<Long> getFolderFolderIdList(String parentCategory) {
         return mRepository.getFolderFolderIdByParent(parentCategory);
     }
 
     public List<Long> getSizeFolderIdList(String parentCategory) {
         return mRepository.getSizeFolderIdByParent(parentCategory);
+    }
+
+    public int getCurrentItem() {
+        return mCurrentItem;
+    }
+
+    public void setCurrentItem(int mCurrentItem) {
+        this.mCurrentItem = mCurrentItem;
+    }
+
+    public String getParentCategory() {
+        switch (mCurrentItem) {
+            case 0:
+                return TOP;
+            case 1:
+                return BOTTOM;
+            case 2:
+                return OUTER;
+            case 3:
+                return ETC;
+        }
+        return null;
+    }
+
+    public LiveData<List<Category>> getCategoryLive() {
+        return mRepository.getAllCategoryLive();
     }
 }
