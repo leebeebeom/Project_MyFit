@@ -21,7 +21,6 @@ public class AddCategoryDialog extends DialogFragment {
 
     @NotNull
     public static AddCategoryDialog getInstance(String parentCategory) {
-        //checked
         AddCategoryDialog addCategoryDialog = new AddCategoryDialog();
         Bundle bundle = new Bundle();
         bundle.putString(PARENT_CATEGORY, parentCategory);
@@ -31,7 +30,6 @@ public class AddCategoryDialog extends DialogFragment {
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
-        //checked
         super.onAttach(context);
         mListener = (AddCategoryConfirmListener) getTargetFragment();
     }
@@ -43,10 +41,10 @@ public class AddCategoryDialog extends DialogFragment {
         String parentCategory = null;
         if (getArguments() != null)
             parentCategory = getArguments().getString(PARENT_CATEGORY);
-        //checked
+        String finalParentCategory = parentCategory;
+
         ItemDialogEditTextBinding binding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), null, CATEGORY);
 
-        String finalParentCategory = parentCategory;
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.add_category), binding,
                 (dialog, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.dialogEditText.getText()).trim(), finalParentCategory));
     }
