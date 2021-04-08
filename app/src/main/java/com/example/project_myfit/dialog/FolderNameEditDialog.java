@@ -17,18 +17,12 @@ import static com.example.project_myfit.MyFitConstant.FOLDER;
 import static com.example.project_myfit.MyFitConstant.FOLDER_NAME;
 import static com.example.project_myfit.MyFitConstant.IS_PARENT_NAME;
 
-//테스트 끝
 public class FolderNameEditDialog extends DialogFragment {
-
     private ItemDialogEditTextBinding mBinding;
     private FolderNameEditConfirmListener mListener;
 
-    public FolderNameEditDialog() {
-    }
-
     @NotNull
     public static FolderNameEditDialog getInstance(String folderName, boolean isParentName) {
-        //checked
         FolderNameEditDialog folderNameEditDialog = new FolderNameEditDialog();
         Bundle bundle = new Bundle();
         bundle.putString(FOLDER_NAME, folderName);
@@ -39,7 +33,6 @@ public class FolderNameEditDialog extends DialogFragment {
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
-        //checked
         super.onAttach(context);
         mListener = (FolderNameEditConfirmListener) getTargetFragment();
     }
