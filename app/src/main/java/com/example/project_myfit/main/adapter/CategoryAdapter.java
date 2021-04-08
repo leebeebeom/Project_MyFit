@@ -43,7 +43,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private boolean mIsDragging;
 
     public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener) {
-        //checked
         super(new DiffUtil.ItemCallback<Category>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
@@ -69,7 +68,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     public void submitList(int sort, @Nullable @org.jetbrains.annotations.Nullable List<Category> list,
                            List<Long> allFolderFolderId, List<Long> allSizeFolderId) {
-        //checked
         super.submitList(list);
         this.mCategoryList = list;
         this.mFolderFolderIdList = allFolderFolderId;
@@ -81,7 +79,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void setViewPagerVH(MainViewPagerAdapter.ViewPagerVH viewPagerVH) {
-        //checked
         this.mViewPagerVH = viewPagerVH;
     }
 
@@ -89,14 +86,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     @NotNull
     @Override
     public CategoryVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        //checked
         ItemMainRecyclerBinding binding = ItemMainRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new CategoryVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
-        //checked
         if (mSelectedCategoryList != null) {
             mSelectedCategoryIdHashSet.clear();
             for (Category selectedCategory : mSelectedCategoryList)
@@ -132,14 +127,12 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void onItemMove(int from, int to) {
-        //checked
         mAdapterUtil.itemMove(from, to, mCategoryList);
         notifyItemMoved(from, to);
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        //check
-        mModel.getRepository().categoryUpdate(mCategoryList);
+        mModel.categoryItemDrop(mCategoryList);
         mListener.onCategoryDragHandleTouch(viewHolder);
         mModel.getSelectedCategoryList().clear();
         for (Category c : getCurrentList())
@@ -148,37 +141,31 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void setActionModeState(int actionModeState) {
-        //checked
         mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
 
     public void setSelectedCategoryList(List<Category> selectedCategoryList) {
-        //checked
         this.mSelectedCategoryList = selectedCategoryList;
     }
 
     public void categorySelected(long id) {
-        //checked
         if (!mSelectedCategoryIdHashSet.contains(id)) mSelectedCategoryIdHashSet.add(id);
         else mSelectedCategoryIdHashSet.remove(id);
     }
 
     public void selectAll() {
-        //checked
         for (Category c : getCurrentList())
             mSelectedCategoryIdHashSet.add(c.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
-        //checked
         mSelectedCategoryIdHashSet.clear();
         notifyDataSetChanged();
     }
 
     public static class CategoryVH extends RecyclerView.ViewHolder {
-        //all checked
         private final ItemMainRecyclerBinding mBinding;
         private Category mCategory;
 
@@ -205,7 +192,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public interface CategoryAdapterListener {
-        //all checked
         void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox);
 
         void onCategoryCardViewLongClick(int position);
