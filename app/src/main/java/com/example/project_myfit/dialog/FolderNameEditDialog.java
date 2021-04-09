@@ -41,19 +41,14 @@ public class FolderNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String folderName = null;
-        boolean isParentName = false;
-        if (getArguments() != null) {
-            folderName = getArguments().getString(FOLDER_NAME);
-            isParentName = getArguments().getBoolean(IS_PARENT_NAME);
-        }
-        if (savedInstanceState != null) folderName = savedInstanceState.getString(FOLDER_NAME);
+        String folderName = getArguments() != null ? getArguments().getString(FOLDER_NAME) : null;
+        boolean isParentName = getArguments() != null && getArguments().getBoolean(IS_PARENT_NAME);
+        folderName = savedInstanceState != null ? savedInstanceState.getString(FOLDER_NAME) : folderName;
 
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), folderName, FOLDER);
 
-        boolean finalIsParentName = isParentName;
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_folder_name), mBinding,
-                (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()).trim(), finalIsParentName));
+                (dialog, which) -> mListener.folderNameEditConfirmClick(String.valueOf(mBinding.dialogEditText.getText()).trim(), isParentName));
     }
 
     @Override
