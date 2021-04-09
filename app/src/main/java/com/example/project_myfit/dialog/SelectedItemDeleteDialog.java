@@ -36,8 +36,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        int selectedItemSize = 0;
-        if (getArguments() != null) selectedItemSize = getArguments().getInt(SELECTED_ITEM_SIZE);
+        int selectedItemSize = getArguments() != null ? getArguments().getInt(SELECTED_ITEM_SIZE) : 0;
 
         String message = selectedItemSize + getString(R.string.selected_item_delete_check);
         return DialogUtils.getConfirmDialog(requireContext(), message,
