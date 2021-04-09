@@ -10,6 +10,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
+import com.example.project_myfit.main.list.ListViewModel;
 import com.example.project_myfit.util.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -18,40 +19,55 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFolder.FolderTreeHolder> {
+    private final TreeViewFolderFolderAddListener mListener;
+    private List<Folder> mSelectedFolderList, mAllFolderList;
+    private List<Size> mSelectedSizeList;
+    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
     private ItemTreeFolderBinding mBinding;
     private boolean isSelected;
     private boolean mIsClickable = true;
+    private final AdapterUtil mAdapterUtil;
+    private final ListViewModel mListViewModel;
 
-    public TreeHolderFolder(Context context) {
+
+    public TreeHolderFolder(Context context, TreeViewFolderFolderAddListener listener, ListViewModel listViewModel) {
         super(context);
+        this.mListener = listener;
+        this.mListViewModel = listViewModel;
+        mAdapterUtil = new AdapterUtil(context);
+    }
+
+    public TreeHolderFolder setItems(List<Folder> selectedFolderList,
+                                     List<Size> selectedSizeList, List<Folder> allFolderList, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+        this.mSelectedFolderList = selectedFolderList;
+        this.mSelectedSizeList = selectedSizeList;
+        this.mAllFolderList = allFolderList;
+        this.mFolderFolderIdList = folderFolderIdList;
+        this.mSizeFolderIdList = sizeFolderIdList;
+        return this;
     }
 
     @Override
     public View createNodeView(TreeNode node, @NotNull FolderTreeHolder value) {
-        //checked
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolder(value.folder);
 
-        mBinding.contentsSize.setText(String.valueOf(new AdapterUtil(context)
-                .getFolderContentsSize(value.folder, value.folderFolderIdList, value.sizeFolderIdList)));
+        mBinding.contentsSize.setText(String.valueOf(mAdapterUtil
+                .getFolderContentsSize(value.folder, mFolderFolderIdList, mSizeFolderIdList)));
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
 
-        //선택된 폴더가 이 노드라면
-        for (Folder selectedFolder : value.selectedFolderList) {
+        //선택된 폴더가 이 폴더 노드라면
+        for (Folder selectedFolder : mSelectedFolderList) {
             if (selectedFolder.getId() == value.folder.getId()) {
                 setAlpha();
                 isSelected = true;
                 //부모 노드 알파
-                TreeNode parent = node.getParent();
-                if (parent.getViewHolder() instanceof TreeHolderCategory) {
-                    TreeHolderCategory holder = (TreeHolderCategory) parent.getViewHolder();
-                    holder.setAlpha();
-                } else {
-                    TreeHolderFolder holder = (TreeHolderFolder) parent.getViewHolder();
-                    holder.setAlpha();
-                }
+                if (node.getParent().getViewHolder() instanceof TreeHolderCategory)
+                    ((TreeHolderCategory) node.getParent().getViewHolder()).setAlpha();
+                else
+                    ((TreeHolderFolder) node.getParent().getViewHolder()).setAlpha();
                 break;
             }
         }
@@ -63,42 +79,52 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         }
 
         //현재위치가 이 노드라면
-        if (value.selectedSizeList.size() != 0) {
-            Size selectedSize = value.selectedSizeList.get(0);
-            if (selectedSize.getFolderId() == value.folder.getId())
-                setAlpha();
-        }
+        if (!mSelectedFolderList.isEmpty())
+            for (Folder selectedFolder : mSelectedFolderList)
+                if (selectedFolder.getFolderId() == value.folder.getId()) {
+                    setAlpha();
+                    break;
+                }
 
-        if (value.selectedFolderList.size() != 0) {
-            Folder selectedFolder = value.selectedFolderList.get(0);
-            if (selectedFolder.getFolderId() == value.folder.getId())
-                setAlpha();
-        }
+
+        if (!mSelectedSizeList.isEmpty())
+            for (Size selectedSize : mSelectedSizeList)
+                if (selectedSize.getFolderId() == value.folder.getId()) {
+                    setAlpha();
+                    break;
+                }
+
 
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
         //자식노드 생성
-        for (Folder folder : value.allFolderList) {
+        for (Folder folder : mAllFolderList)
             if (value.folder.getId() == folder.getFolderId()) {
-                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin, value.listener,
-                        value.selectedFolderList, value.selectedSizeList, value.allFolderList, value.folderFolderIdList, value.sizeFolderIdList))
-                        .setViewHolder(new TreeHolderFolder(context));
+                TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin))
+                        .setViewHolder(new TreeHolderFolder(context, mListener, mListViewModel).
+                                setItems(mSelectedFolderList, mSelectedSizeList, mAllFolderList, mFolderFolderIdList, mSizeFolderIdList));
                 node.addChild(treeNode);
             }
-        }
 
-        if (node.getChildren().size() != 0)
+
+        //expandable
+        if (!node.getChildren().isEmpty())
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
         else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
 
-        mBinding.addIcon.setOnClickListener(v -> value.listener.treeViewFolderFolderAddClick(mNode, value));
+        if (mListViewModel != null && mListViewModel.getThisFolder() != null &&
+                value.folder.getId() == mListViewModel.getThisFolder().getId())
+            mBinding.currentPosition.setVisibility(View.VISIBLE);
+        else mBinding.currentPosition.setVisibility(View.GONE);
+
+        mBinding.addIcon.setOnClickListener(v -> mListener.treeViewFolderAddFolderClick(mNode, value));
         return mBinding.getRoot();
     }
 
     private void setAlpha() {
-        if (mBinding.iconLayout.getAlpha() != 0.5f && mBinding.text.getAlpha() != 0.5f) {
-            mIsClickable = false;
+        if (mIsClickable) {
             mBinding.iconLayout.setAlpha(0.5f);
             mBinding.text.setAlpha(0.5f);
+            mIsClickable = false;
         }
     }
 
@@ -107,17 +133,24 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     }
 
     public void setIconClickable() {
-        //checked
         mBinding.arrowIcon.setVisibility(View.VISIBLE);
         mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
-    public boolean isNotSelected() {
-        return !isSelected;
-    }
-
     public ItemTreeFolderBinding getBinding() {
         return mBinding;
+    }
+
+    public Folder getFolder() {
+        return ((FolderTreeHolder) mNode.getValue()).folder;
+    }
+
+    public long getFolderId() {
+        return ((FolderTreeHolder) mNode.getValue()).folder.getId();
+    }
+
+    public int getMargin() {
+        return ((FolderTreeHolder) mNode.getValue()).margin;
     }
 
     @Override
@@ -127,35 +160,17 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     }
 
     public static class FolderTreeHolder {
-        //all checked
         private final Folder folder;
         private final int margin;
-        private final TreeViewFolderFolderAddListener listener;
-        private final List<Folder> selectedFolderList, allFolderList;
-        private final List<Size> selectedSizeList;
-        private final List<Long> folderFolderIdList, sizeFolderIdList;
 
-        public FolderTreeHolder(Folder folder, int margin, TreeViewFolderFolderAddListener listener, List<Folder> selectedFolderList,
-                                List<Size> selectedSizeList, List<Folder> allFolderList, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-            //checked
+        public FolderTreeHolder(Folder folder, int margin) {
             this.folder = folder;
             this.margin = margin;
-            this.listener = listener;
-            this.selectedFolderList = selectedFolderList;
-            this.selectedSizeList = selectedSizeList;
-            this.allFolderList = allFolderList;
-            this.folderFolderIdList = folderFolderIdList;
-            this.sizeFolderIdList = sizeFolderIdList;
-        }
-
-        public Folder getFolder() {
-            return folder;
         }
     }
 
     public interface TreeViewFolderFolderAddListener {
-        //checked
-        void treeViewFolderFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
+        void treeViewFolderAddFolderClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
     }
 }
 
