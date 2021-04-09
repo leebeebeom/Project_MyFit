@@ -38,18 +38,11 @@ public class SameCategoryNameDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String categoryName = null;
-        String parentCategory = null;
-        if (getArguments() != null) {
-            categoryName = getArguments().getString(CATEGORY_NAME);
-            parentCategory = getArguments().getString(PARENT_CATEGORY);
-        }
-
-        String finalCategoryName = categoryName;
-        String finalParentCategory = parentCategory;
+        String categoryName = getArguments() != null ? getArguments().getString(CATEGORY_NAME) : null;
+        String parentCategory = getArguments() != null ? getArguments().getString(PARENT_CATEGORY) : null;
 
         return DialogUtils.getConfirmDialog(requireContext(), getString(R.string.same_category_name),
-                (dialog, which) -> mListener.SameCategoryNameConfirmClick(finalCategoryName, finalParentCategory));
+                (dialog, which) -> mListener.SameCategoryNameConfirmClick(categoryName, parentCategory));
     }
 
     public interface SameCategoryNameConfirmListener {
