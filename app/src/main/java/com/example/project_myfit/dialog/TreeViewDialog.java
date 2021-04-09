@@ -1,7 +1,6 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,19 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
+import com.example.project_myfit.data.model.Category;
+import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.TreeViewRootBinding;
+import com.example.project_myfit.main.list.ListFragment;
+import com.example.project_myfit.main.list.ListViewModel;
 import com.example.project_myfit.searchActivity.SearchFragment;
 import com.example.project_myfit.searchActivity.SearchViewModel;
-import com.example.project_myfit.ui.main.database.Category;
-import com.example.project_myfit.ui.main.listfragment.ListFragment;
-import com.example.project_myfit.ui.main.listfragment.ListViewModel;
-import com.example.project_myfit.ui.main.listfragment.database.Folder;
-import com.example.project_myfit.ui.main.listfragment.database.Size;
-import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderCategory;
-import com.example.project_myfit.ui.main.listfragment.treeview.TreeHolderFolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -32,51 +30,45 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.project_myfit.MyFitConstant.CATEGORY_ADD_DIALOG;
+import static com.example.project_myfit.MyFitConstant.FOLDER_ADD_DIALOG;
+import static com.example.project_myfit.MyFitConstant.MOVE_DIALOG;
+import static com.example.project_myfit.MyFitConstant.PARENT_CATEGORY;
 import static com.example.project_myfit.MyFitConstant.TREE_VIEW_STATE;
 
-public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmClick {
-    private TreeNode mNodeRoot;
-    private ListViewModel mListModel;
-    private SearchViewModel mSearchModel;
-    private AndroidTreeView mTreeView;
-    private TreeNode.TreeNodeClickListener mListener;
-    private List<TreeNode> mCategoryTreeNodeList;
+//TODO 폴더 추가시 리스트프르개르먼트 순서로 추가
 
-    @Override
-    public void onAttach(@NonNull @NotNull Context context) {
-        super.onAttach(context);
-        mListener = (TreeNode.TreeNodeClickListener) getTargetFragment();
+public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmListener,
+        AddFolderDialog.TreeAddFolderConfirmListener, TreeNode.TreeNodeClickListener,
+        TreeHolderCategory.TreeViewCategoryFolderAddListener, TreeHolderFolder.TreeViewFolderFolderAddListener {
+
+    private TreeViewModel mModel;
+    private TreeNode mNodeRoot;
+    private AndroidTreeView mTreeView;
+    private ListViewModel mListViewModel;
+
+    @NotNull
+    public static TreeViewDialog getInstance(String parentCategory) {
+        TreeViewDialog treeViewDialog = new TreeViewDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(PARENT_CATEGORY, parentCategory);
+        treeViewDialog.setArguments(bundle);
+        return treeViewDialog;
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        if (getTargetFragment() != null) {
-            if (getTargetFragment() instanceof ListFragment)
-                mListModel = new ViewModelProvider(getTargetFragment()).get(ListViewModel.class);
-            else if (getTargetFragment() instanceof SearchFragment)
-                mSearchModel = new ViewModelProvider(getTargetFragment()).get(SearchViewModel.class);
-        }
-        String parentCategory = null;
-        if (mListModel != null)
-            parentCategory = " " + mListModel.getThisCategory().getParentCategory();
-        else if (mSearchModel != null) parentCategory = " " + mSearchModel.getParentCategory();
-        mTreeView = getTreeView();
+        mModel = new ViewModelProvider(this).get(TreeViewModel.class);
+        mModel.setParentCategory(getArguments() != null ? getArguments().getString(PARENT_CATEGORY) : null);
+        mListViewModel = getTargetFragment() instanceof ListFragment ?
+                new ViewModelProvider(getTargetFragment()).get(ListViewModel.class) : null;
 
-        //tree view root binding for addCategory
-        TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
-        binding.treeViewRoot.addView(mTreeView.getView(), 2);
-        binding.treeViewParentText.setText(parentCategory);
-        binding.addCategoryLayout.setOnClickListener(v -> {
-            DialogFragment dialog = new AddCategoryDialog();
-            dialog.setTargetFragment(this, 0);
-            dialog.show(getParentFragmentManager(), null);
-        });
+        setSelectedItems();
 
-        //create dialog
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setView(binding.getRoot())
+                .setView(getDialogView())
                 .setTitle(R.string.tree_view_dialog_title)
                 .create();
 
@@ -86,173 +78,177 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         return dialog;
     }
 
+    private void setSelectedItems() {
+        AndroidViewModel mActivityModel = getTargetFragment() instanceof SearchFragment ?
+                new ViewModelProvider(requireActivity()).get(SearchViewModel.class) :
+                new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+
+        if (mActivityModel instanceof MainActivityViewModel)
+            mModel.setSelectedItemList(((MainActivityViewModel) mActivityModel).getSelectedFolderList(),
+                    ((MainActivityViewModel) mActivityModel).getSelectedSizeList());
+        else
+            mModel.setSelectedItemList(((SearchViewModel) mActivityModel).getSelectedFolderList(),
+                    ((SearchViewModel) mActivityModel).getSelectedSizeList());
+    }
+
     @NotNull
-    private AndroidTreeView getTreeView() {
-        int margin = (int) getResources().getDimension(R.dimen._12sdp);
-        mCategoryTreeNodeList = new ArrayList<>();
+    private View getDialogView() {
+        TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
 
-        //category list
-        List<Category> categoryList = new ArrayList<>();
-        if (mListModel != null)
-            categoryList = mListModel.getCategoryListByParent();
-        else if (mSearchModel != null)
-            categoryList = mSearchModel.getRepository().getCategoryListByParent(mSearchModel.getParentCategory());
+        binding.treeViewRoot.addView(getTreeView(), 2);
 
-        //folder list
-        List<Folder> folderList = new ArrayList<>();
-        if (mListModel != null)
-            folderList = mListModel.getAllFolderByParent();
-        else if (mSearchModel != null)
-            folderList = mSearchModel.getRepository().getAllFolderListByParent(mSearchModel.getParentCategory());
+        String category = " " + mModel.getParentCategory();
+        binding.treeViewParentText.setText(category);
 
-        //selected item folder list
-        List<Folder> selectedItemFolder = new ArrayList<>();
-        if (mListModel != null)
-            selectedItemFolder = mListModel.getSelectedItemFolder();
-        else if (mSearchModel != null) {
-            List<Object> selectedItem = mSearchModel.getSelectedItem();
-            for (Object o : selectedItem)
-                if (o instanceof Folder)
-                    selectedItemFolder.add((Folder) o);
-        }
+        binding.addCategoryLayout.setOnClickListener(v -> showDialog(AddCategoryDialog.getInstance(mModel.getParentCategory()), CATEGORY_ADD_DIALOG));
+        return binding.getRoot();
+    }
 
-        //selected item size list
-        List<Size> selectedItemSize = new ArrayList<>();
-        if (mListModel != null)
-            selectedItemSize = mListModel.getSelectedItemSize();
-        else if (mSearchModel != null) {
-            List<Object> selectedItem = mSearchModel.getSelectedItem();
-            for (Object o : selectedItem)
-                if (o instanceof Size)
-                    selectedItemSize.add((Size) o);
-        }
+    @NotNull
+    private View getTreeView() {
+        mTreeView = new AndroidTreeView(requireContext(), getNodeRoot());
+        mTreeView.setDefaultAnimation(false);
+        mTreeView.setUseAutoToggle(false);
+        mTreeView.setDefaultNodeClickListener(this);
+        return mTreeView.getView();
+    }
 
-        //folder folderId list
-        List<Long> folderFolderIdList = new ArrayList<>();
-        if (mListModel != null)
-            folderFolderIdList = mListModel.getRepository().getFolderFolderIdByParent(mListModel.getThisCategory().getParentCategory());
-        else if (mSearchModel != null)
-            folderFolderIdList = mSearchModel.getRepository().getFolderFolderIdByParent(mSearchModel.getParentCategory());
+    @NotNull
+    private TreeNode getNodeRoot() {
+        mNodeRoot = TreeNode.root();
 
-        //size folderId list
-        List<Long> sizeFolderIdList = new ArrayList<>();
-        if (mListModel != null)
-            sizeFolderIdList = mListModel.getRepository().getSizeFolderIdByParent(mListModel.getThisCategory().getParentCategory());
-        else if (mSearchModel != null)
-            sizeFolderIdList = mSearchModel.getRepository().getSizeFolderIdByParent(mSearchModel.getParentCategory());
-
-        for (Category category : categoryList) {
-            TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category, (TreeViewAddClick) mListener, selectedItemSize,
-                    folderFolderIdList, sizeFolderIdList))
-                    .setViewHolder(new TreeHolderCategory(requireContext()));
-            for (Folder folder : folderList) {
+        for (Category category : mModel.getCategoryList()) {//카테고리 노드 생성
+            TreeNode categoryTreeNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(category))
+                    .setViewHolder(mModel.getCategoryViewHolder(new TreeHolderCategory(requireContext(), this, mListViewModel)));
+            for (Folder folder : mModel.getFolderList()) {//카테고리 노드 속 폴더 노드 생성
                 if (category.getId() == folder.getFolderId()) {
-                    TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, margin, (TreeViewAddClick) mListener,
-                            selectedItemFolder, selectedItemSize, folderList, folderFolderIdList, sizeFolderIdList)).setViewHolder(new TreeHolderFolder(requireContext()));
+                    TreeNode folderTreeNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, mModel.getMargin()))
+                            .setViewHolder(mModel.getFolderViewHolder(new TreeHolderFolder(requireContext(), this, mListViewModel)));
                     categoryTreeNode.addChild(folderTreeNode);
                 }
             }
-            mCategoryTreeNodeList.add(categoryTreeNode);
+            mNodeRoot.addChild(categoryTreeNode);
         }
+        return mNodeRoot;
+    }
 
-        mNodeRoot = TreeNode.root();
-        mNodeRoot.addChildren(mCategoryTreeNodeList);
-        AndroidTreeView treeView = new AndroidTreeView(requireContext(), mNodeRoot);
-        treeView.setDefaultAnimation(false);
-        treeView.setUseAutoToggle(false);
-        treeView.setDefaultNodeClickListener(mListener);
-        if (mListModel != null)
-            mListModel.setTreeNodeRoot(mNodeRoot);
-        else if (mSearchModel != null)
-            mSearchModel.setTreeNodeRoot(mNodeRoot);
-
-        return treeView;
+    private void showDialog(@NotNull DialogFragment dialog, String tag) {
+        dialog.setTargetFragment(this, 0);
+        dialog.show(getParentFragmentManager(), tag);
     }
 
     @Override
     public void onActivityCreated(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<TreeNode> topFolderList = new ArrayList<>();
-        for (TreeNode categoryNode : mCategoryTreeNodeList)
-            if (categoryNode.getChildren().size() != 0)
-                topFolderList.addAll(categoryNode.getChildren());
-        if (mListModel != null) expandingNode(topFolderList);
 
-        if (savedInstanceState != null)
+        if (savedInstanceState == null && mListViewModel != null) //listFragment expanding node
+            expandingNode();
+        else if (savedInstanceState != null) {
             mTreeView.restoreState(savedInstanceState.getString(TREE_VIEW_STATE));
+        }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mListModel != null)
-            mListModel.setTreeNodeRoot(null);
-        else if (mSearchModel != null)
-            mSearchModel.setTreeNodeRoot(null);
+    private void expandingNode() {
+        expandCategoryNode();
+
+        if (mListViewModel.getThisFolder() != null) {
+            List<TreeNode> topFolderNodeList = new ArrayList<>();
+            for (TreeNode categoryTreeNode : mNodeRoot.getChildren())
+                if (!categoryTreeNode.getChildren().isEmpty())
+                    topFolderNodeList.addAll(categoryTreeNode.getChildren());
+            expandingFolderNode(topFolderNodeList);
+        }
     }
 
-    private void expandingNode(List<TreeNode> topFolderNodeList) {
-        for (TreeNode categoryTreeNode : mCategoryTreeNodeList) {
-            TreeHolderCategory.CategoryTreeHolder holder = (TreeHolderCategory.CategoryTreeHolder) categoryTreeNode.getValue();
-            if (mListModel.getThisCategory().getId() == holder.category.getId() && categoryTreeNode.getChildren().size() != 0)
+    private void expandCategoryNode() {
+        for (TreeNode categoryTreeNode : mNodeRoot.getChildren()) {
+            TreeHolderCategory categoryViewHolder = (TreeHolderCategory) categoryTreeNode.getViewHolder();
+            if (mListViewModel.getThisCategory().getId() == categoryViewHolder.getCategoryId() && !categoryTreeNode.getChildren().isEmpty()) {
                 mTreeView.expandNode(categoryTreeNode);
-        }
-
-        if (mListModel.getThisFolder() != null) {//if current position is folder
-            for (TreeNode folderNode : topFolderNodeList) {
-                //visible current position text
-                if (mListModel.getFolderHistory().get(mListModel.getFolderHistory().size() - 1).getId() == ((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).getFolder().getId())
-                    ((TreeHolderFolder) folderNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
-                for (Folder folder : mListModel.getFolderHistory())
-                    if (((TreeHolderFolder.FolderTreeHolder) folderNode.getValue()).getFolder().getId() == folder.getId() && folderNode.getChildren().size() != 0)
-                        mTreeView.expandNode(folderNode);
-                if (folderNode.getChildren().size() != 0)
-                    expandingNode(folderNode.getChildren());
+                break;
             }
-        } else {//current position is category
-            for (TreeNode categoryNode : mCategoryTreeNodeList)
-                if (mListModel.getThisCategory().getId() == ((TreeHolderCategory.CategoryTreeHolder) categoryNode.getValue()).category.getId())
-                    ((TreeHolderCategory) categoryNode.getViewHolder()).getBinding().currentPosition.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
-    public void addCategoryConfirmClick(@NotNull String categoryName) {
-        Category addedCategory = null;
-        List<Size> selectedItemSize = new ArrayList<>();
-        List<Long> folderFolderIdList = new ArrayList<>();
-        List<Long> sizeFolderIdList = new ArrayList<>();
-        if (mListModel != null) {
-            int orderNumber = mListModel.getRepository().getCategoryLargestOrder() + 1;
-            Category category = new Category(categoryName.trim(), mListModel.getThisCategory().getParentCategory(), orderNumber);
-            addedCategory = mListModel.getRepository().treeViewAddCategory(category);
-            selectedItemSize = mListModel.getSelectedItemSize();
-            folderFolderIdList = mListModel.getRepository().getFolderFolderIdByParent(mListModel.getThisCategory().getParentCategory());
-            sizeFolderIdList = mListModel.getRepository().getSizeFolderIdByParent(mListModel.getThisCategory().getParentCategory());
-        } else if (mSearchModel != null) {
-            int orderNumber = mSearchModel.getRepository().getCategoryLargestOrder() + 1;
-            Category category = new Category(categoryName.trim(), mSearchModel.getParentCategory(), orderNumber);
-            addedCategory = mSearchModel.getRepository().treeViewAddCategory(category);
-            for (Object o : mSearchModel.getSelectedItem())
-                if (o instanceof Size) selectedItemSize.add((Size) o);
-            folderFolderIdList = mSearchModel.getRepository().getFolderFolderIdByParent(mSearchModel.getParentCategory());
-            sizeFolderIdList = mSearchModel.getRepository().getSizeFolderIdByParent(mSearchModel.getParentCategory());
+    public void expandingFolderNode(@NotNull List<TreeNode> topFolderNodeList) {
+        for (TreeNode folderNode : topFolderNodeList) {
+            TreeHolderFolder folderViewHolder = (TreeHolderFolder) folderNode.getViewHolder();
+            for (Folder folder : mListViewModel.getFolderHistory())
+                if (folderViewHolder.getFolderId() == folder.getId() && !folderNode.getChildren().isEmpty()) {
+                    mTreeView.expandNode(folderNode);
+                    expandingFolderNode(folderNode.getChildren());
+                }
         }
-
-        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(addedCategory, (TreeViewAddClick) mListener, selectedItemSize, folderFolderIdList, sizeFolderIdList))
-                .setViewHolder(new TreeHolderCategory(requireContext()));
-        mTreeView.addNode(mNodeRoot, categoryNode);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(TREE_VIEW_STATE, mTreeView.getSaveState());
+        mModel.treeViewDestroy();
     }
 
-    public interface TreeViewAddClick {
-        void treeViewCategoryAddClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
+    @Override
+    public void onClick(@NotNull TreeNode node, Object value) {//노드 클릭
+        if (node.getViewHolder() instanceof TreeHolderCategory) {//category node click
+            TreeHolderCategory categoryViewHolder = (TreeHolderCategory) node.getViewHolder();
+            if (categoryViewHolder.isClickable()) {
+                DialogFragment dialogFragment = ItemMoveDialog.getInstance(mModel.getSelectedItemSize(), categoryViewHolder.getCategoryId());
+                dialogFragment.setTargetFragment(getTargetFragment(), 0);
+                dialogFragment.show(getParentFragmentManager(), MOVE_DIALOG);
+            }
+        } else if (node.getViewHolder() instanceof TreeHolderFolder) {//folder node click
+            TreeHolderFolder folderViewHolder = (TreeHolderFolder) node.getViewHolder();
+            if (folderViewHolder.isClickable()) {
+                DialogFragment dialogFragment = ItemMoveDialog.getInstance(mModel.getSelectedItemSize(), folderViewHolder.getFolderId());
+                dialogFragment.setTargetFragment(getTargetFragment(), 0);
+                dialogFragment.show(getParentFragmentManager(), MOVE_DIALOG);
+            }
+        }
+    }
 
-        void treeViewFolderAddClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value);
+    @Override
+    public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
+        //TODO 카테고리 추가시 메인프래그먼트 순서로 추가
+        TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(mModel.addCategoryConfirmClick(categoryName)))
+                .setViewHolder(mModel.getCategoryViewHolder(new TreeHolderCategory(requireContext(), this, mListViewModel)));
+        mTreeView.addNode(mNodeRoot, categoryNode);
+    }
+
+    @Override
+    public void treeViewCategoryAddFolderClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value) {
+        showDialog(AddFolderDialog.getInstance(true), FOLDER_ADD_DIALOG);
+        mModel.setClickedNode(node);
+    }
+
+    @Override
+    public void treeViewFolderAddFolderClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value) {
+        showDialog(AddFolderDialog.getInstance(true), FOLDER_ADD_DIALOG);
+        mModel.setClickedNode(node);
+    }
+
+    @Override
+    public void treeAddFolderConfirmClick(String folderName) {
+        if (mModel.getClickedNode().getViewHolder() instanceof TreeHolderCategory) {//category node
+            mModel.findCategoryClickedNode(mNodeRoot);
+
+            TreeNode addedFolderNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(mModel.categoryFolderInsert(folderName), mModel.getMargin()))
+                    .setViewHolder(mModel.getFolderViewHolder(new TreeHolderFolder(requireContext(), this, mListViewModel)));
+
+            mTreeView.addNode(mModel.getClickedNode(), addedFolderNode);
+            mTreeView.expandNode(mModel.getClickedNode());
+
+            mModel.categoryAddFolderConfirmClick();
+        } else {
+            mModel.findFolderClickedNode(mNodeRoot);
+
+            TreeNode addedFolderNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(mModel.folderFolderInsert(folderName), mModel.getMargin2()))
+                    .setViewHolder(mModel.getFolderViewHolder(new TreeHolderFolder(requireContext(), this, mListViewModel)));
+
+            mTreeView.addNode(mModel.getClickedNode(), addedFolderNode);
+            mTreeView.expandNode(mModel.getClickedNode());
+
+            mModel.folderAddFolderConfirmClick();
+        }
     }
 }
