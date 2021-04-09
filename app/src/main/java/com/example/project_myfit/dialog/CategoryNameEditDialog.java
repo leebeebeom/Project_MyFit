@@ -39,9 +39,8 @@ public class CategoryNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String categoryName = null;
-        if (getArguments() != null) categoryName = getArguments().getString(CATEGORY_NAME);
-        if (savedInstanceState != null) categoryName = savedInstanceState.getString(CATEGORY_NAME);
+        String categoryName = getArguments() != null ? getArguments().getString(CATEGORY_NAME) : null;
+        categoryName = savedInstanceState != null ? savedInstanceState.getString(CATEGORY_NAME) : categoryName;
 
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), categoryName, CATEGORY);
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
