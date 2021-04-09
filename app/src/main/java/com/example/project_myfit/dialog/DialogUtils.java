@@ -35,7 +35,6 @@ public class DialogUtils {
     @NotNull
     public static ItemDialogEditTextBinding getBinding(LayoutInflater inflater, @NotNull Context context,
                                                        @Nullable String name, @NotNull String type) {
-        //checked
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(inflater);
         binding.dialogEditText.requestFocus();
         if (type.equals(CATEGORY)) {
@@ -51,7 +50,6 @@ public class DialogUtils {
 
     @NotNull
     public static AlertDialog getConfirmDialog(Context context, String message, DialogInterface.OnClickListener listener) {
-        //checked
         AlertDialog dialog = new MaterialAlertDialogBuilder(context, R.style.myAlertDialog)
                 .setTitle(context.getString(R.string.confirm))
                 .setMessage(message)
@@ -65,7 +63,6 @@ public class DialogUtils {
 
     @NotNull
     public static AlertDialog getEditTextDialog(Context context, String title, @NotNull ItemDialogEditTextBinding binding, DialogInterface.OnClickListener listener) {
-        //checked
         AlertDialog dialog = new MaterialAlertDialogBuilder(context, R.style.myAlertDialog)
                 .setTitle(title)
                 .setView(binding.getRoot())
@@ -83,7 +80,6 @@ public class DialogUtils {
     }
 
     public static void setLayout(@NotNull Context context, @NotNull Window window) {
-        //checked
         int margin = (int) context.getResources().getDimension(R.dimen._20sdp);
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.tree_view_dialog_background);
         InsetDrawable inset = new InsetDrawable(drawable, margin);
@@ -91,7 +87,6 @@ public class DialogUtils {
     }
 
     public static void setTextSize(@NotNull Context context, @NotNull AlertDialog dialog) {
-        //checked
         TextView title = dialog.findViewById(context.getResources().getIdentifier(ALERT_TITLE, ID, context.getPackageName()));
         if (title != null)
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, context.getResources().getDimension(R.dimen._5sdp));
@@ -115,7 +110,6 @@ public class DialogUtils {
     }
 
     private static void addTextChangeListener(@NotNull ItemDialogEditTextBinding binding, @NotNull AlertDialog dialog) {
-        //checked
         Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positive.setEnabled(false);
 
