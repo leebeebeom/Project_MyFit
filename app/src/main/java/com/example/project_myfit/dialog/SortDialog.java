@@ -34,7 +34,6 @@ public class SortDialog extends DialogFragment {
 
     @NotNull
     public static SortDialog getInstance(int sort) {
-        //checked
         SortDialog sortDialog = new SortDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(SORT, sort);
@@ -44,7 +43,6 @@ public class SortDialog extends DialogFragment {
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
-        //checked
         super.onAttach(context);
         mListener = (SortConfirmListener) getTargetFragment();
     }
@@ -53,9 +51,8 @@ public class SortDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //checked
-        if (getArguments() != null) mCheckedItem = getArguments().getInt(SORT);
-        if (savedInstanceState != null) mCheckedItem = savedInstanceState.getInt(SORT);
+        mCheckedItem = getArguments() != null ? getArguments().getInt(SORT) : 0;
+        mCheckedItem = savedInstanceState != null ? savedInstanceState.getInt(SORT) : mCheckedItem;
 
         SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
         MaterialRadioButton[] sortButtons = {binding.sortCustom, binding.sortCreate, binding.sortCreateReverse,
@@ -63,14 +60,12 @@ public class SortDialog extends DialogFragment {
         addCheckListener(sortButtons);
         sortButtons[mCheckedItem].setChecked(true);
 
-
         //메인프래그먼트에서 실행 시 브랜드 삭제
         if (getTargetFragment() instanceof MainFragment) {
             binding.sortBrand.setVisibility(View.GONE);
             binding.sortBrandReverse.setVisibility(View.GONE);
         }
 
-        //create dialog
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
                 .setTitle(R.string.sort)
                 .setView(binding.getRoot())
@@ -84,7 +79,6 @@ public class SortDialog extends DialogFragment {
     }
 
     private void addCheckListener(@NotNull MaterialRadioButton[] buttons) {
-        //checked
         buttons[0].setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mCheckedItem = SORT_CUSTOM;
@@ -138,7 +132,6 @@ public class SortDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
-        //checked
         super.onSaveInstanceState(outState);
         outState.putInt(SORT, mCheckedItem);
     }
