@@ -54,16 +54,21 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
         //선택된 폴더가 이 카테고리노드라면
         if (!mSelectedFolderList.isEmpty()) {
-            Folder selectedFolder = mSelectedFolderList.get(0);
-            if (selectedFolder.getFolderId() == value.category.getId())
-                setAlpha();
+            for (Folder selectedFolder : mSelectedFolderList)
+                if (selectedFolder.getFolderId() == value.category.getId()) {
+                    setAlpha();
+                    break;
+                }
+
         }
 
         //선택된 사이즈가 이 카테고리노드라면
         if (!mSelectedSizeList.isEmpty()) {
-            Size selectedSize = mSelectedSizeList.get(0);
-            if (selectedSize.getFolderId() == value.category.getId())
-                setAlpha();
+            for (Size selectedSize : mSelectedSizeList)
+                if (selectedSize.getFolderId() == value.category.getId()) {
+                    setAlpha();
+                    break;
+                }
         }
 
         //expandable
