@@ -12,21 +12,18 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.AMOUNT;
-import static com.example.project_myfit.MyFitConstant.ID;
+import static com.example.project_myfit.MyFitConstant.FOLDER_ID;
+import static com.example.project_myfit.MyFitConstant.SELECTED_ITEM_SIZE;
 
 public class ItemMoveDialog extends DialogFragment {
-    private ItemMoveConfirmClick mListener;
-
-    public ItemMoveDialog() {
-    }
+    private ItemMoveConfirmListener mListener;
 
     @NotNull
-    public static ItemMoveDialog getInstance(int selectedItemAmount, long folderId) {
+    public static ItemMoveDialog getInstance(int selectedItemSize, long folderId) {
         ItemMoveDialog itemMoveDialog = new ItemMoveDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt(AMOUNT, selectedItemAmount);
-        bundle.putLong(ID, folderId);
+        bundle.putInt(SELECTED_ITEM_SIZE, selectedItemSize);
+        bundle.putLong(FOLDER_ID, folderId);
         itemMoveDialog.setArguments(bundle);
         return itemMoveDialog;
     }
@@ -34,26 +31,22 @@ public class ItemMoveDialog extends DialogFragment {
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
-        mListener = (ItemMoveConfirmClick) getTargetFragment();
+        mListener = (ItemMoveConfirmListener) getTargetFragment();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        int amount = 0;
-        long id = 0;
-        if (getArguments() != null) {
-            amount = getArguments().getInt(AMOUNT);
-            id = getArguments().getLong(ID);
-        }
-        long finalId = id;
+        int amount = getArguments() != null ? getArguments().getInt(SELECTED_ITEM_SIZE) : 0;
+        long folderId = getArguments() != null ? getArguments().getLong(FOLDER_ID) : 0;
+
         String message = amount + getString(R.string.item_move_check);
-        return DialogUtils.getDialog(requireContext(), message,
-                (dialog, which) -> mListener.itemMoveConfirmClick(finalId));
+        return DialogUtils.getConfirmDialog(requireContext(), message,
+                (dialog, which) -> mListener.itemMoveConfirmClick(folderId));
     }
 
-    public interface ItemMoveConfirmClick {
+    public interface ItemMoveConfirmListener {
         void itemMoveConfirmClick(long folderId);
     }
 }
