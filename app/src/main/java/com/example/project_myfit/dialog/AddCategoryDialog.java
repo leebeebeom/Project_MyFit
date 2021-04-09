@@ -38,15 +38,12 @@ public class AddCategoryDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String parentCategory = null;
-        if (getArguments() != null)
-            parentCategory = getArguments().getString(PARENT_CATEGORY);
-        String finalParentCategory = parentCategory;
+        String parentCategory = getArguments() != null ? getArguments().getString(PARENT_CATEGORY) : null;
 
         ItemDialogEditTextBinding binding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), null, CATEGORY);
 
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.add_category), binding,
-                (dialog, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.dialogEditText.getText()).trim(), finalParentCategory));
+                (dialog, which) -> mListener.addCategoryConfirmClick(String.valueOf(binding.dialogEditText.getText()).trim(), parentCategory));
     }
 
     public interface AddCategoryConfirmListener {
