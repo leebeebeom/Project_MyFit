@@ -45,11 +45,6 @@ public class MainViewModel extends AndroidViewModel {
         mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
-    public void categoryNameEdit(String categoryName) {
-        mSelectedCategoryList.get(0).setCategoryName(categoryName);
-        mRepository.categoryUpdate(mSelectedCategoryList.get(0));
-    }
-
     public void selectedCategoryDelete() {
         List<Size> childSizeList = new ArrayList<>();
 
@@ -143,8 +138,8 @@ public class MainViewModel extends AndroidViewModel {
         return mSelectedCategoryList;
     }
 
-    public String getSelectedCategoryName() {
-        return mSelectedCategoryList.get(0).getCategoryName();
+    public long getSelectedCategoryId() {
+        return mSelectedCategoryList.get(0).getId();
     }
 
     public int getSelectedCategorySize() {
