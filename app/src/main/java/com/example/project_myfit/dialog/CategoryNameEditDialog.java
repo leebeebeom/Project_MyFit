@@ -30,7 +30,7 @@ public class CategoryNameEditDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         NavController navController = NavHostFragment.findNavController(this);
-        NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(this.getId());
+        NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(R.id.categoryNameEditDialog);
         NavigationViewModel navigationViewModel = new ViewModelProvider(navController.getViewModelStoreOwner(R.id.main_nav_graph)).get(NavigationViewModel.class);
         navigationViewModel.backStackEntryLiveSetValue(navBackStackEntry);
 
