@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -29,9 +30,9 @@ public class CategoryNameEditDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         NavController navController = NavHostFragment.findNavController(this);
-        NavigationViewModel navigationViewModel = new ViewModelProvider(navController.getViewModelStoreOwner(R.id.main_nav_graph))
-                .get(NavigationViewModel.class);
-        navigationViewModel.backStackEntryLiveSetValue(navController.getBackStackEntry(R.id.categoryNameEditDialog));
+        NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(this.getId());
+        NavigationViewModel navigationViewModel = new ViewModelProvider(navController.getViewModelStoreOwner(R.id.main_nav_graph)).get(NavigationViewModel.class);
+        navigationViewModel.backStackEntryLiveSetValue(navBackStackEntry);
 
         long categoryId = CategoryNameEditDialogArgs.fromBundle(getArguments()).getCategoryId();
         Category category = navigationViewModel.getCategory(categoryId);
@@ -40,7 +41,7 @@ public class CategoryNameEditDialog extends DialogFragment {
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), categoryName, CATEGORY);
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
                 (dialog, which) -> {
-                    navController.getBackStackEntry(R.id.categoryNameEditDialog).getSavedStateHandle().set(DIALOG_CONFIRM_CLICK, null);
+                    navBackStackEntry.getSavedStateHandle().set(DIALOG_CONFIRM_CLICK, null);
                     navigationViewModel.categoryNameConfirmClick(category, String.valueOf(mBinding.dialogEditText.getText()).trim());
                 });
     }
