@@ -12,19 +12,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.SELECTED_ITEM_SIZE;
-
 public class SelectedItemDeleteDialog extends DialogFragment {
     private SelectedItemDeleteConfirmListener mListener;
-
-    @NotNull
-    public static SelectedItemDeleteDialog getInstance(int selectedItemSize) {
-        SelectedItemDeleteDialog selectedItemDeleteDialog = new SelectedItemDeleteDialog();
-        Bundle bundle = new Bundle();
-        bundle.putInt(SELECTED_ITEM_SIZE, selectedItemSize);
-        selectedItemDeleteDialog.setArguments(bundle);
-        return selectedItemDeleteDialog;
-    }
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -36,8 +25,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        int selectedItemSize = getArguments() != null ? getArguments().getInt(SELECTED_ITEM_SIZE) : 0;
-
+        int selectedItemSize = SelectedItemDeleteDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
         String message = selectedItemSize + getString(R.string.selected_item_delete_check);
         return DialogUtils.getConfirmDialog(requireContext(), message,
                 (dialog, which) -> mListener.selectedItemDeleteConfirmClick());
