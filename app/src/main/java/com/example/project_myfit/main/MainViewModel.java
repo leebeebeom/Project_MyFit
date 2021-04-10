@@ -121,7 +121,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void sameCategoryNameConfirmClick(@NotNull String categoryName, String parentCategory) {
-        mRepository.categoryInsert(new Category(categoryName.trim(), parentCategory, mRepository.getCategoryLargestOrderPlus1()));
+        mRepository.categoryInsert(new Category(categoryName, parentCategory, mRepository.getCategoryLargestOrderPlus1()));
     }
 
     public void categorySelected(@NotNull Category category, boolean isChecked) {
