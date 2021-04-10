@@ -14,19 +14,9 @@ import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.MyFitConstant.PARENT_CATEGORY;
 
 public class AddCategoryDialog extends DialogFragment {
     private AddCategoryConfirmListener mListener;
-
-    @NotNull
-    public static AddCategoryDialog getInstance(String parentCategory) {
-        AddCategoryDialog addCategoryDialog = new AddCategoryDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString(PARENT_CATEGORY, parentCategory);
-        addCategoryDialog.setArguments(bundle);
-        return addCategoryDialog;
-    }
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -38,7 +28,7 @@ public class AddCategoryDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String parentCategory = getArguments() != null ? getArguments().getString(PARENT_CATEGORY) : null;
+        String parentCategory = AddCategoryDialogArgs.fromBundle(getArguments()).getParentCategory();
 
         ItemDialogEditTextBinding binding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), null, CATEGORY);
 
