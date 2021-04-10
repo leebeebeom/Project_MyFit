@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.project_myfit.DragCallBackList;
-import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
@@ -72,7 +71,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         SelectedItemDeleteDialog.SelectedItemDeleteConfirmListener, SameCategoryNameDialog.SameCategoryNameConfirmListener {
 
     private MainViewModel mModel;
-    private MainActivityViewModel mActivityModel;
     private FragmentMainBinding mBinding;
     private PopupWindow mPopupWindow;
     private boolean mIsDragging, mActionModeOn, mIsDragSelecting, mScrollEnable;
@@ -146,7 +144,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
-        mActivityModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         setHasOptionsMenu(true);
         mModel.orderNumberInit();
     }
@@ -385,10 +382,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     //category adapter------------------------------------------------------------------------------
     @Override
     public void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox) {
-        if (mActionMode == null) {
-            mActivityModel.setCategory(category);
-            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_listFragment);
-        } else {
+        if (mActionMode == null)
+            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0));
+        else {
             checkBox.setChecked(!checkBox.isChecked());
             mCategoryAdapterArray[mModel.getCurrentItem()].categorySelected(category.getId());
             mModel.categorySelected(category, checkBox.isChecked());
