@@ -20,9 +20,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,13 +53,8 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.MyFitConstant.CATEGORY_ADD_DIALOG;
-import static com.example.project_myfit.MyFitConstant.CATEGORY_EDIT_DIALOG;
-import static com.example.project_myfit.MyFitConstant.DELETE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.DOWN;
-import static com.example.project_myfit.MyFitConstant.SAME_CATEGORY_NAME_DIALOG;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
-import static com.example.project_myfit.MyFitConstant.SORT_DIALOG;
 import static com.example.project_myfit.MyFitConstant.SORT_MAIN;
 import static com.example.project_myfit.MyFitConstant.STOP;
 import static com.example.project_myfit.MyFitConstant.UP;
@@ -83,6 +78,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     private DragSelectTouchListener mSelectListener;
     private MaterialButton[] mButtonArray;
     private int mSort;
+    private NavController mNavController;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -112,9 +108,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
             if (item.getItemId() == R.id.action_mode_edit)
-                showDialog(CategoryNameEditDialog.getInstance(mModel.getSelectedCategoryName()), CATEGORY_EDIT_DIALOG);
+                mNavController.navigate(MainFragmentDirections.actionMainFragmentToCategoryNameEditDialog(mModel.getSelectedCategoryName()));
             else if (item.getItemId() == R.id.action_mode_del)
-                showDialog(SelectedItemDeleteDialog.getInstance(mModel.getSelectedCategorySize()), DELETE_DIALOG);
+                mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
             return true;
         }
 
@@ -146,6 +142,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         setHasOptionsMenu(true);
         mModel.orderNumberInit();
+        mNavController = Navigation.findNavController(requireActivity(), R.id.host_fragment);
     }
 
     @Override
@@ -172,11 +169,11 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
     private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
         binding.addFolder.setOnClickListener(v -> {
-            showDialog(AddCategoryDialog.getInstance(mModel.getParentCategory()), CATEGORY_ADD_DIALOG);
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddCategoryDialog(mModel.getParentCategory()));
             mPopupWindow.dismiss();
         });
         binding.sort.setOnClickListener(v -> {
-            showDialog(SortDialog.getInstance(mSort), SORT_DIALOG);
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort));
             mPopupWindow.dismiss();
         });
     }
@@ -188,7 +185,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
         requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
             if (mActionMode != null) mActionMode.finish();
-            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity);
+            mNavController.navigate(R.id.action_mainFragment_to_searchActivity);
         });
 
         ListenerZip listenerZip = new ListenerZip();
@@ -351,11 +348,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mSelectListener = null;
     }
 
-    private void showDialog(@NotNull DialogFragment dialog, String tag) {
-        dialog.setTargetFragment(this, 0);
-        dialog.show(getParentFragmentManager(), tag);
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
@@ -367,7 +359,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
             mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menu_main_popup));
             return true;
         } else if (item.getItemId() == R.id.menu_main_search) {
-            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(R.id.action_mainFragment_to_searchActivity);
+            mNavController.navigate(R.id.action_mainFragment_to_searchActivity);
             return true;
         }
         return false;
@@ -383,7 +375,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @Override
     public void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox) {
         if (mActionMode == null)
-            Navigation.findNavController(requireActivity(), R.id.host_fragment).navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0));
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0));
         else {
             checkBox.setChecked(!checkBox.isChecked());
             mCategoryAdapterArray[mModel.getCurrentItem()].categorySelected(category.getId());
@@ -425,7 +417,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @Override
     public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
         if (mModel.addCategoryConfirmClick(categoryName, parentCategory))
-            showDialog(SameCategoryNameDialog.getInstance(categoryName, parentCategory), SAME_CATEGORY_NAME_DIALOG);
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSameCategoryNameDialog(categoryName, parentCategory));
     }
 
     @Override
