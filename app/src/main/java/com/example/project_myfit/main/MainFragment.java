@@ -142,12 +142,13 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         setHasOptionsMenu(true);
         mModel.orderNumberInit();
-        mNavController = Navigation.findNavController(requireActivity(), R.id.host_fragment);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mNavController = Navigation.findNavController(requireActivity(), R.id.host_fragment);
+
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
         View view = mBinding.getRoot();
