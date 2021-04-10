@@ -36,8 +36,6 @@ import static com.example.project_myfit.MyFitConstant.MOVE_DIALOG;
 import static com.example.project_myfit.MyFitConstant.PARENT_CATEGORY;
 import static com.example.project_myfit.MyFitConstant.TREE_VIEW_STATE;
 
-//TODO 폴더 추가시 리스트프르개르먼트 순서로 추가
-
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmListener,
         AddFolderDialog.TreeAddFolderConfirmListener, TreeNode.TreeNodeClickListener,
         TreeHolderCategory.TreeViewCategoryFolderAddListener, TreeHolderFolder.TreeViewFolderFolderAddListener {
@@ -209,7 +207,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
 
     @Override
     public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
-        //TODO 카테고리 추가시 메인프래그먼트 순서로 추가
         TreeNode categoryNode = new TreeNode(new TreeHolderCategory.CategoryTreeHolder(mModel.addCategoryConfirmClick(categoryName)))
                 .setViewHolder(mModel.getCategoryViewHolder(new TreeHolderCategory(requireContext(), this, mListViewModel)));
         mTreeView.addNode(mNodeRoot, categoryNode);
