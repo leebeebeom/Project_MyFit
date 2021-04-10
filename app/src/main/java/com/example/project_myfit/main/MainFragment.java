@@ -309,10 +309,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            mButtonArray[i].setOnClickListener(v -> {
-                mBinding.viewPager.setCurrentItem(finalI, false);
-                mButtonArray[finalI].setChecked(true);
-            });
+            mButtonArray[i].setOnClickListener(v -> mBinding.viewPager.setCurrentItem(finalI, false));
         }
     }
 
