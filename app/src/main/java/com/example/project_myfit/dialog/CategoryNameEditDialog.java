@@ -36,11 +36,11 @@ public class CategoryNameEditDialog extends DialogFragment {
         NavController navController = NavHostFragment.findNavController(this);
         NavigationViewModel navigationViewModel = new ViewModelProvider(navController.getViewModelStoreOwner(R.id.main_nav_graph))
                 .get(NavigationViewModel.class);
-        navigationViewModel.backStackEntryLiveSetValue(navController.getBackStackEntry(R.id.categoryNameEditDialog));
 
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), categoryName, CATEGORY);
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
                 (dialog, which) -> {
+                    navigationViewModel.backStackEntryLiveSetValue(navController.getBackStackEntry(R.id.categoryNameEditDialog));
                     category.setCategoryName(String.valueOf(mBinding.dialogEditText.getText()).trim());
                     repository.categoryUpdate(category);
                 });
