@@ -15,21 +15,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.FOLDER;
 import static com.example.project_myfit.MyFitConstant.FOLDER_NAME;
-import static com.example.project_myfit.MyFitConstant.IS_PARENT_NAME;
 
 public class FolderNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
     private FolderNameEditConfirmListener mListener;
-
-    @NotNull
-    public static FolderNameEditDialog getInstance(String folderName, boolean isParentName) {
-        FolderNameEditDialog folderNameEditDialog = new FolderNameEditDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString(FOLDER_NAME, folderName);
-        bundle.putBoolean(IS_PARENT_NAME, isParentName);
-        folderNameEditDialog.setArguments(bundle);
-        return folderNameEditDialog;
-    }
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -41,8 +30,8 @@ public class FolderNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String folderName = getArguments() != null ? getArguments().getString(FOLDER_NAME) : null;
-        boolean isParentName = getArguments() != null && getArguments().getBoolean(IS_PARENT_NAME);
+        String folderName = FolderNameEditDialogArgs.fromBundle(getArguments()).getFolderName();
+        boolean isParentName = FolderNameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
         folderName = savedInstanceState != null ? savedInstanceState.getString(FOLDER_NAME) : folderName;
 
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), folderName, FOLDER);
