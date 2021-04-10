@@ -21,14 +21,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.project_myfit.DragCallBackList;
+import com.example.project_myfit.NavigationViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
@@ -36,7 +39,6 @@ import com.example.project_myfit.databinding.FragmentMainBinding;
 import com.example.project_myfit.databinding.ItemMainRecyclerBinding;
 import com.example.project_myfit.databinding.MainPopupMenuBinding;
 import com.example.project_myfit.dialog.AddCategoryDialog;
-import com.example.project_myfit.dialog.CategoryNameEditDialog;
 import com.example.project_myfit.dialog.SameCategoryNameDialog;
 import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
 import com.example.project_myfit.dialog.SortDialog;
@@ -62,7 +64,7 @@ import static com.example.project_myfit.MyFitConstant.UP;
 //TODO 휴지통
 
 public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmListener, MainViewPagerAdapter.MainDragAutoScrollListener,
-        SortDialog.SortConfirmListener, CategoryAdapter.CategoryAdapterListener, CategoryNameEditDialog.CategoryNameEditConfirmListener,
+        SortDialog.SortConfirmListener, CategoryAdapter.CategoryAdapterListener,
         SelectedItemDeleteDialog.SelectedItemDeleteConfirmListener, SameCategoryNameDialog.SameCategoryNameConfirmListener {
 
     private MainViewModel mModel;
@@ -108,7 +110,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
             if (item.getItemId() == R.id.action_mode_edit)
-                mNavController.navigate(MainFragmentDirections.actionMainFragmentToCategoryNameEditDialog(mModel.getSelectedCategoryName()));
+                mNavController.navigate(MainFragmentDirections.actionMainFragmentToCategoryNameEditDialog(mModel.getSelectedCategoryId()));
             else if (item.getItemId() == R.id.action_mode_del)
                 mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
             return true;
@@ -147,7 +149,16 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mNavController = Navigation.findNavController(requireActivity(), R.id.host_fragment);
+        mNavController = NavHostFragment.findNavController(this);
+
+        NavigationViewModel navigationViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph))
+                .get(NavigationViewModel.class);
+
+        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
+                navBackStackEntry.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
+                    if (event == Lifecycle.Event.ON_DESTROY && mActionMode != null)
+                        mActionMode.finish();
+                }));
 
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
@@ -428,12 +439,6 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         editor.putInt(SORT_MAIN, sort);
         editor.apply();
         setCategoryLive();
-    }
-
-    @Override
-    public void categoryNameEditConfirmClick(@NotNull String categoryName) {
-        mModel.categoryNameEdit(categoryName);
-        mActionMode.finish();
     }
 
     @Override
