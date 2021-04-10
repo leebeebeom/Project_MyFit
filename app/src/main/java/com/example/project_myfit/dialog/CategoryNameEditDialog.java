@@ -12,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.NavigationViewModel;
 import com.example.project_myfit.R;
-import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.MyFitConstant.CATEGORY_NAME;
+import static com.example.project_myfit.MyFitConstant.DIALOG_CONFIRM_CLICK;
 
 public class CategoryNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
@@ -28,21 +28,20 @@ public class CategoryNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        Repository repository = new Repository(requireContext());
-        long categoryId = CategoryNameEditDialogArgs.fromBundle(getArguments()).getCategoryId();
-        Category category = repository.getCategory(categoryId);
-        String categoryName = savedInstanceState == null ? category.getCategoryName() : savedInstanceState.getString(CATEGORY_NAME);
-
         NavController navController = NavHostFragment.findNavController(this);
         NavigationViewModel navigationViewModel = new ViewModelProvider(navController.getViewModelStoreOwner(R.id.main_nav_graph))
                 .get(NavigationViewModel.class);
+        navigationViewModel.backStackEntryLiveSetValue(navController.getBackStackEntry(R.id.categoryNameEditDialog));
+
+        long categoryId = CategoryNameEditDialogArgs.fromBundle(getArguments()).getCategoryId();
+        Category category = navigationViewModel.getCategory(categoryId);
+        String categoryName = savedInstanceState == null ? category.getCategoryName() : savedInstanceState.getString(CATEGORY_NAME);
 
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), categoryName, CATEGORY);
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
                 (dialog, which) -> {
-                    navigationViewModel.backStackEntryLiveSetValue(navController.getBackStackEntry(R.id.categoryNameEditDialog));
-                    category.setCategoryName(String.valueOf(mBinding.dialogEditText.getText()).trim());
-                    repository.categoryUpdate(category);
+                    navController.getBackStackEntry(R.id.categoryNameEditDialog).getSavedStateHandle().set(DIALOG_CONFIRM_CLICK, null);
+                    navigationViewModel.categoryNameConfirmClick(category, String.valueOf(mBinding.dialogEditText.getText()).trim());
                 });
     }
 
