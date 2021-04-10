@@ -11,7 +11,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.example.project_myfit.MainActivity;
 import com.example.project_myfit.MainActivityViewModel;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
@@ -19,6 +22,7 @@ import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.TreeViewRootBinding;
 import com.example.project_myfit.main.list.ListFragment;
 import com.example.project_myfit.main.list.ListViewModel;
+import com.example.project_myfit.searchActivity.SearchActivity;
 import com.example.project_myfit.searchActivity.SearchFragment;
 import com.example.project_myfit.searchActivity.SearchViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -30,38 +34,32 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.CATEGORY_ADD_DIALOG;
-import static com.example.project_myfit.MyFitConstant.FOLDER_ADD_DIALOG;
 import static com.example.project_myfit.MyFitConstant.MOVE_DIALOG;
-import static com.example.project_myfit.MyFitConstant.PARENT_CATEGORY;
 import static com.example.project_myfit.MyFitConstant.TREE_VIEW_STATE;
 
 public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.AddCategoryConfirmListener,
-        AddFolderDialog.TreeAddFolderConfirmListener, TreeNode.TreeNodeClickListener,
+        AddFolderDialog.AddFolderConfirmListener, TreeNode.TreeNodeClickListener,
         TreeHolderCategory.TreeViewCategoryFolderAddListener, TreeHolderFolder.TreeViewFolderFolderAddListener {
 
     private TreeViewModel mModel;
     private TreeNode mNodeRoot;
     private AndroidTreeView mTreeView;
     private ListViewModel mListViewModel;
-
-    @NotNull
-    public static TreeViewDialog getInstance(String parentCategory) {
-        TreeViewDialog treeViewDialog = new TreeViewDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString(PARENT_CATEGORY, parentCategory);
-        treeViewDialog.setArguments(bundle);
-        return treeViewDialog;
-    }
+    private NavController mNavController;
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         mModel = new ViewModelProvider(this).get(TreeViewModel.class);
-        mModel.setParentCategory(getArguments() != null ? getArguments().getString(PARENT_CATEGORY) : null);
+        mModel.setParentCategory(TreeViewDialogArgs.fromBundle(getArguments()).getParentCategory());
         mListViewModel = getTargetFragment() instanceof ListFragment ?
                 new ViewModelProvider(getTargetFragment()).get(ListViewModel.class) : null;
+
+        if (requireActivity() instanceof MainActivity)
+            mNavController = Navigation.findNavController(requireActivity(), R.id.host_fragment);
+        else if (requireActivity() instanceof SearchActivity)
+            mNavController = Navigation.findNavController(requireActivity(), R.id.search_host_fragment);
 
         setSelectedItems();
 
@@ -98,7 +96,8 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
         String category = " " + mModel.getParentCategory();
         binding.treeViewParentText.setText(category);
 
-        binding.addCategoryLayout.setOnClickListener(v -> showDialog(AddCategoryDialog.getInstance(mModel.getParentCategory()), CATEGORY_ADD_DIALOG));
+        binding.addCategoryLayout.setOnClickListener(v ->
+                mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToAddCategoryDialog(mModel.getParentCategory())));
         return binding.getRoot();
     }
 
@@ -128,11 +127,6 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
             mNodeRoot.addChild(categoryTreeNode);
         }
         return mNodeRoot;
-    }
-
-    private void showDialog(@NotNull DialogFragment dialog, String tag) {
-        dialog.setTargetFragment(this, 0);
-        dialog.show(getParentFragmentManager(), tag);
     }
 
     @Override
@@ -214,18 +208,18 @@ public class TreeViewDialog extends DialogFragment implements AddCategoryDialog.
 
     @Override
     public void treeViewCategoryAddFolderClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value) {
-        showDialog(AddFolderDialog.getInstance(true), FOLDER_ADD_DIALOG);
+        mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToAddFolderDialog());
         mModel.setClickedNode(node);
     }
 
     @Override
     public void treeViewFolderAddFolderClick(TreeNode node, TreeHolderFolder.FolderTreeHolder value) {
-        showDialog(AddFolderDialog.getInstance(true), FOLDER_ADD_DIALOG);
+        mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToAddFolderDialog());
         mModel.setClickedNode(node);
     }
 
     @Override
-    public void treeAddFolderConfirmClick(String folderName) {
+    public void addFolderConfirmClick(String folderName) {
         if (mModel.getClickedNode().getViewHolder() instanceof TreeHolderCategory) {//category node
             mModel.findCategoryClickedNode(mNodeRoot);
 
