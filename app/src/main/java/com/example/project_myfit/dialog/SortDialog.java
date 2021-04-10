@@ -32,15 +32,6 @@ public class SortDialog extends DialogFragment {
     private int mCheckedItem;
     private SortConfirmListener mListener;
 
-    @NotNull
-    public static SortDialog getInstance(int sort) {
-        SortDialog sortDialog = new SortDialog();
-        Bundle bundle = new Bundle();
-        bundle.putInt(SORT, sort);
-        sortDialog.setArguments(bundle);
-        return sortDialog;
-    }
-
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
@@ -51,7 +42,7 @@ public class SortDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mCheckedItem = getArguments() != null ? getArguments().getInt(SORT) : 0;
+        mCheckedItem = SortDialogArgs.fromBundle(getArguments()).getSort();
         mCheckedItem = savedInstanceState != null ? savedInstanceState.getInt(SORT) : mCheckedItem;
 
         SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
