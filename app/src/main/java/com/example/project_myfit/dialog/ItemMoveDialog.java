@@ -22,13 +22,12 @@ public class ItemMoveDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         int selectedItemSize = ItemMoveDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
         long folderId = ItemMoveDialogArgs.fromBundle(getArguments()).getFolderId();
+        String message = selectedItemSize + getString(R.string.item_move_check);
 
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.itemMoveDialog);
 
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog();
-        String message = selectedItemSize + getString(R.string.item_move_check);
-        alertDialog.setMessage(message);
+        AlertDialog alertDialog = dialogUtils.getConfirmDialog(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.itemMoveConfirmClick(folderId));
