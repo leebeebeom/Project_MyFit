@@ -105,6 +105,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
                 mListener.onCategoryDragHandleTouch(holder);
+                draggingView(holder);
             }
             return false;
         });
@@ -126,6 +127,20 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         holder.mBinding.mainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
     }
 
+    private void draggingView(@NotNull CategoryVH holder) {
+        holder.itemView.setTranslationZ(10);
+        holder.mBinding.mainCheckBox.setVisibility(View.INVISIBLE);
+        holder.mBinding.mainCategoryText.setAlpha(0.5f);
+        holder.mBinding.mainAmountLayout.setAlpha(0.5f);
+    }
+
+    private void dropView(@NotNull CategoryVH holder) {
+        holder.itemView.setTranslationZ(0);
+        holder.mBinding.mainCheckBox.setVisibility(View.VISIBLE);
+        holder.mBinding.mainCategoryText.setAlpha(0.8f);
+        holder.mBinding.mainAmountLayout.setAlpha(0.8f);
+    }
+
     public void onItemMove(int from, int to) {
         mAdapterUtil.itemMove(from, to, mCategoryList);
         notifyItemMoved(from, to);
@@ -137,6 +152,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         mModel.getSelectedCategoryList().clear();
         for (Category c : getCurrentList())
             if (mSelectedCategoryIdHashSet.contains(c.getId())) mModel.getSelectedCategoryList().add(c);
+        dropView((CategoryVH) viewHolder);
         mIsDragging = false;
     }
 
