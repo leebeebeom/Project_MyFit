@@ -32,11 +32,10 @@ public class AddDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.addDialog);
 
         ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, itemType);
-        AlertDialog alertDialog = dialogUtils.getEditTextDialog(binding);
-
+        AlertDialog alertDialog;
         if (itemType.equals(CATEGORY))
-            alertDialog.setTitle(R.string.add_category);
-        else alertDialog.setTitle(R.string.add_folder);
+            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_category));
+        else alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_folder));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 

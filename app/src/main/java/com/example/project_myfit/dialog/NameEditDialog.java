@@ -45,7 +45,11 @@ public class NameEditDialog extends DialogFragment {
         name = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : name;
 
         mBinding = dialogUtils.getBinding(name, itemType);
-        AlertDialog alertDialog = dialogUtils.getEditTextDialog(mBinding);
+        AlertDialog alertDialog;
+        if (itemType.equals(CATEGORY))
+            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_category_name));
+        else
+            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_folder_name));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
