@@ -21,8 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -36,12 +34,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentMainBinding;
-import com.example.project_myfit.databinding.ItemMainRecyclerBinding;
 import com.example.project_myfit.databinding.MainPopupMenuBinding;
-import com.example.project_myfit.dialog.AddCategoryDialog;
-import com.example.project_myfit.dialog.SameCategoryNameDialog;
-import com.example.project_myfit.dialog.SelectedItemDeleteDialog;
-import com.example.project_myfit.dialog.SortDialog;
 import com.example.project_myfit.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.ListenerZip;
@@ -56,6 +49,10 @@ import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.MyFitConstant.DOWN;
+import static com.example.project_myfit.MyFitConstant.MAIN_FRAGMENT;
+import static com.example.project_myfit.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
+import static com.example.project_myfit.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
+import static com.example.project_myfit.MyFitConstant.SORT_CONFIRM_CLICK;
 import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
 import static com.example.project_myfit.MyFitConstant.SORT_MAIN;
 import static com.example.project_myfit.MyFitConstant.STOP;
@@ -63,9 +60,7 @@ import static com.example.project_myfit.MyFitConstant.UP;
 
 //TODO 휴지통
 
-public class MainFragment extends Fragment implements AddCategoryDialog.AddCategoryConfirmListener, MainViewPagerAdapter.MainDragAutoScrollListener,
-        SortDialog.SortConfirmListener, CategoryAdapter.CategoryAdapterListener,
-        SelectedItemDeleteDialog.SelectedItemDeleteConfirmListener, SameCategoryNameDialog.SameCategoryNameConfirmListener {
+public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryAdapter.CategoryAdapterListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
@@ -110,7 +105,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
             if (item.getItemId() == R.id.action_mode_edit)
-                mNavController.navigate(MainFragmentDirections.actionMainFragmentToCategoryNameEditDialog(mModel.getSelectedCategoryId()));
+                mNavController.navigate(MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
             else if (item.getItemId() == R.id.action_mode_del)
                 mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
             return true;
@@ -150,15 +145,7 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mNavController = NavHostFragment.findNavController(this);
-
-        NavigationViewModel navigationViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph))
-                .get(NavigationViewModel.class);
-
-        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
-                navBackStackEntry.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
-                    if (event == Lifecycle.Event.ON_DESTROY && mActionMode != null)
-                        mActionMode.finish();
-                }));
+        setNavigationLive();
 
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
@@ -179,13 +166,44 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
         return view;
     }
 
+    private void setNavigationLive() {
+        NavigationViewModel navigationViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph))
+                .get(NavigationViewModel.class);
+
+        //category name edit confirm
+        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
+                navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                    if (mActionMode != null) mActionMode.finish();
+                }));
+
+        //sort confirm
+        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
+                navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                    int sort = (int) o;
+                    if (mSort != sort) {
+                        mSort = sort;
+                        SharedPreferences.Editor editor = requireActivity().getSharedPreferences(SORT_MAIN, SORT_CUSTOM).edit();
+                        editor.putInt(SORT_MAIN, sort);
+                        editor.apply();
+                        setCategoryLive();
+                    }
+                }));
+
+        //selected item delete confirm
+        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
+                navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                    if (mActionMode != null) mActionMode.finish();
+                    mModel.selectedCategoryDelete();
+                }));
+    }
+
     private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
         binding.addFolder.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddCategoryDialog(mModel.getParentCategory()));
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(mModel.getParentCategory(), CATEGORY, 0));
             mPopupWindow.dismiss();
         });
         binding.sort.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort));
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
             mPopupWindow.dismiss();
         });
     }
@@ -408,48 +426,9 @@ public class MainFragment extends Fragment implements AddCategoryDialog.AddCateg
     public void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
         if (!mIsDragging) {
             mIsDragging = true;
-            viewHolder.itemView.setTranslationZ(10);
-            ItemMainRecyclerBinding binding = ((CategoryAdapter.CategoryVH) viewHolder).getBinding();
-            binding.mainCheckBox.setVisibility(View.INVISIBLE);
-            binding.mainCategoryText.setAlpha(0.5f);
-            binding.mainAmountLayout.setAlpha(0.5f);
             mTouchHelperArray[mModel.getCurrentItem()].startDrag(viewHolder);
-        } else {
+        } else
             mIsDragging = false;
-            viewHolder.itemView.setTranslationZ(0);
-            ItemMainRecyclerBinding binding = ((CategoryAdapter.CategoryVH) viewHolder).getBinding();
-            binding.mainCheckBox.setVisibility(View.VISIBLE);
-            binding.mainCategoryText.setAlpha(0.8f);
-            binding.mainAmountLayout.setAlpha(0.8f);
-        }
-    }
-    //----------------------------------------------------------------------------------------------
-
-    //dialog listener-------------------------------------------------------------------------------
-    @Override
-    public void addCategoryConfirmClick(@NotNull String categoryName, String parentCategory) {
-        if (mModel.addCategoryConfirmClick(categoryName, parentCategory))
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSameCategoryNameDialog(categoryName, parentCategory));
-    }
-
-    @Override
-    public void sortConfirmClick(int sort) {
-        mSort = sort;
-        SharedPreferences.Editor editor = requireActivity().getSharedPreferences(SORT_MAIN, SORT_CUSTOM).edit();
-        editor.putInt(SORT_MAIN, sort);
-        editor.apply();
-        setCategoryLive();
-    }
-
-    @Override
-    public void selectedItemDeleteConfirmClick() {
-        mModel.selectedCategoryDelete();
-        mActionMode.finish();
-    }
-
-    @Override
-    public void SameCategoryNameConfirmClick(@NotNull String categoryName, String parentCategory) {
-        mModel.sameCategoryNameConfirmClick(categoryName, parentCategory);
     }
     //----------------------------------------------------------------------------------------------
 
