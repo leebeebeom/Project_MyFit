@@ -29,11 +29,10 @@ public class SameNameEditDialog extends DialogFragment {
 
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.sameNameEditDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog();
-
+        AlertDialog alertDialog;
         if (itemType.equals(CATEGORY))
-            alertDialog.setMessage(getString(R.string.same_category_name_edit));
-        else alertDialog.setMessage(getString(R.string.same_folder_name_edit));
+            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_category_name_edit));
+        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_folder_name_edit));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
