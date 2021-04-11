@@ -26,7 +26,7 @@ public class SelectedItemDeleteDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.selectedItemDeleteDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog();
-        alertDialog.setTitle(message);
+        alertDialog.setMessage(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.selectedItemDeleteConfirmClick());
