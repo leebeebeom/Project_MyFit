@@ -214,7 +214,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
         requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
             if (mActionMode != null) mActionMode.finish();
-            mNavController.navigate(R.id.action_mainFragment_to_searchActivity);
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
         });
 
         ListenerZip listenerZip = new ListenerZip();
@@ -388,7 +388,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menu_main_popup));
             return true;
         } else if (item.getItemId() == R.id.menu_main_search) {
-            mNavController.navigate(R.id.action_mainFragment_to_searchActivity);
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
             return true;
         }
         return false;
