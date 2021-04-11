@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.navigation.NavController;
 
 import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
@@ -20,7 +19,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Category mCategory;
     private Folder mFolder;
     private Size mSize;
-    private NavController mNavController;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
 
@@ -35,13 +33,11 @@ public class MainActivityViewModel extends AndroidViewModel {
         mFolder = mRepository.getFolder(mSize.getFolderId());
         if (mCategory == null)
             findCategory(mFolder);
-        mNavController.navigate(R.id.action_mainFragment_to_inputOutputFragment);
     }
 
     public void searchViewFolderClick(long folderId) {
         mFolder = mRepository.getFolder(folderId);
         findCategory(mFolder);
-        mNavController.navigate(R.id.action_mainFragment_to_listFragment);
     }
 
     private void findCategory(@NotNull Folder folder) {
@@ -53,20 +49,9 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     //getter,setter---------------------------------------------------------------------------------
-    public NavController getNavController() {
-        return mNavController;
-    }
-
-    public void setNavController(NavController mNavController) {
-        this.mNavController = mNavController;
-    }
-
+    //TODO 이 밑으로 다 제거
     public Category getCategory() {
         return mCategory;
-    }
-
-    public void setCategory(Category category) {
-        this.mCategory = category;
     }
 
     public Size getSize() {
@@ -79,10 +64,6 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public Folder getFolder() {
         return mFolder;
-    }
-
-    public void setFolder(Folder folder) {
-        this.mFolder = folder;
     }
 
     public List<Folder> getSelectedFolderList() {
