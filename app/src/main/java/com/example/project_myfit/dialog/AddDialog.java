@@ -29,7 +29,7 @@ public class AddDialog extends DialogFragment {
         String parentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
         long folderId = AddDialogArgs.fromBundle(getArguments()).getFolderId();
 
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.addDialog);
 
         ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, itemType);
         AlertDialog alertDialog = dialogUtils.getEditTextDialog(binding);
