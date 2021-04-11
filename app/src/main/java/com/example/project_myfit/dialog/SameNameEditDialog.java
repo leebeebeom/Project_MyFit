@@ -32,8 +32,8 @@ public class SameNameEditDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtils.getConfirmDialog();
 
         if (itemType.equals(CATEGORY))
-            alertDialog.setTitle(R.string.same_category_name_edit);
-        else alertDialog.setTitle(R.string.same_folder_name_edit);
+            alertDialog.setMessage(getString(R.string.same_category_name_edit));
+        else alertDialog.setMessage(getString(R.string.same_folder_name_edit));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
