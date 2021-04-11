@@ -16,7 +16,6 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.DIALOG_CONFIRM_CLICK;
 import static com.example.project_myfit.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
 
 public class SelectedItemDeleteDialog extends DialogFragment {
@@ -34,6 +33,6 @@ public class SelectedItemDeleteDialog extends DialogFragment {
 
         String message = selectedItemSize + getString(R.string.selected_item_delete_check);
         return DialogUtils.getConfirmDialog(requireContext(), message,
-                (dialog, which) -> navBackStackEntry.getSavedStateHandle().set(DIALOG_CONFIRM_CLICK, SELECTED_ITEM_DELETE_CONFIRM_CLICK));
+                (dialog, which) -> navBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM_CLICK, null));
     }
 }
