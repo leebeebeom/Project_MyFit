@@ -6,6 +6,10 @@ public class MyFitConstant {
     public static final String FOLDER = "folder";
     public static final String SIZE = "size";
 
+    //fragment type
+    public static final String MAIN_FRAGMENT = "main fragment";
+    public static final String LIST_FRAGMENT = "list fragment";
+
     //parent category
     public static final String TOP = "TOP";
     public static final String BOTTOM = "BOTTOM";
@@ -68,6 +72,11 @@ public class MyFitConstant {
     public static final String SAME_CATEGORY_NAME_DIALOG = "same category name dialog";
 
     //key
+    public static final String DIALOG_CONFIRM_CLICK = "dialog confirm click";
+    public static final String CATEGORY_NAME_EDIT_CONFIRM_CLICK = "category name edit confirm click";
+    public static final String SELECTED_ITEM_DELETE_CONFIRM_CLICK = "selected item deleted confirm click";
+    public static final String SORT_CONFIRM_CLICK = "sort confirm click";
+
     public static final String FOLDER_TOGGLE = "folder toggle";
 
     public static final String CATEGORY_NAME = "category name";
