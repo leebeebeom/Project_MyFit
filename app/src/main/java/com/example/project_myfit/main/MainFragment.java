@@ -190,8 +190,8 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
             //selected item delete confirm
             navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                if (mActionMode != null) mActionMode.finish();
                 mModel.selectedCategoryDelete();
+                if (mActionMode != null) mActionMode.finish();
             });
         });
     }
