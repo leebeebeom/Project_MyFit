@@ -170,31 +170,30 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         NavigationViewModel navigationViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph))
                 .get(NavigationViewModel.class);
 
-        //category name edit confirm
-        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
-                navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                    if (mActionMode != null) mActionMode.finish();
-                }));
+        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
+            //category name edit confirm
+            navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                if (mActionMode != null) mActionMode.finish();
+            });
 
-        //sort confirm
-        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
-                navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                    int sort = (int) o;
-                    if (mSort != sort) {
-                        mSort = sort;
-                        SharedPreferences.Editor editor = requireActivity().getSharedPreferences(SORT_MAIN, SORT_CUSTOM).edit();
-                        editor.putInt(SORT_MAIN, sort);
-                        editor.apply();
-                        setCategoryLive();
-                    }
-                }));
+            //sort confirm
+            navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                int sort = (int) o;
+                if (mSort != sort) {
+                    mSort = sort;
+                    SharedPreferences.Editor editor = requireActivity().getSharedPreferences(SORT_MAIN, SORT_CUSTOM).edit();
+                    editor.putInt(SORT_MAIN, sort);
+                    editor.apply();
+                    setCategoryLive();
+                }
+            });
 
-        //selected item delete confirm
-        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
-                navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                    if (mActionMode != null) mActionMode.finish();
-                    mModel.selectedCategoryDelete();
-                }));
+            //selected item delete confirm
+            navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                if (mActionMode != null) mActionMode.finish();
+                mModel.selectedCategoryDelete();
+            });
+        });
     }
 
     private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
