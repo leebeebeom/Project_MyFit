@@ -102,23 +102,6 @@ public class MainViewModel extends AndroidViewModel {
         mRepository.categoryUpdate(categoryList);
     }
 
-    public boolean addCategoryConfirmClick(String categoryName, String parentCategory) {
-        boolean isSameName = false;
-        List<String> categoryNameList = mRepository.getAllCategoryNameListByParent(parentCategory);
-        for (String name : categoryNameList)
-            if (name.equals(categoryName)) {
-                isSameName = true;
-                break;
-            }
-        if (!isSameName)
-            mRepository.categoryInsert(new Category(categoryName, parentCategory, mRepository.getCategoryLargestOrderPlus1()));
-        return isSameName;
-    }
-
-    public void sameCategoryNameConfirmClick(@NotNull String categoryName, String parentCategory) {
-        mRepository.categoryInsert(new Category(categoryName, parentCategory, mRepository.getCategoryLargestOrderPlus1()));
-    }
-
     public void categorySelected(@NotNull Category category, boolean isChecked) {
         if (isChecked) mSelectedCategoryList.add(category);
         else mSelectedCategoryList.remove(category);
