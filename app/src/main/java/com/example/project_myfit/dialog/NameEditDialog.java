@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -41,20 +39,20 @@ public class NameEditDialog extends DialogFragment {
         Category category = itemType.equals(CATEGORY) ? dialogUtils.getCategory(itemId) : null;
         Folder folder = itemType.equals(FOLDER) ? dialogUtils.getFolder(itemId) : null;
 
-        String name = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
-        name = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : name;
+        String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
+        final String finalOldName = oldName;
+        //입력된 이름 복구
+        oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
-        mBinding = dialogUtils.getBinding(name, itemType);
+        mBinding = dialogUtils.getBinding(oldName, itemType);
         AlertDialog alertDialog;
         if (itemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_category_name));
+            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_category_name), finalOldName);
         else
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_folder_name));
+            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_folder_name), finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
-
-        addTextChangedListener(category, folder, positiveButton);
 
         positiveButton.setOnClickListener(v -> {
             InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -67,28 +65,6 @@ public class NameEditDialog extends DialogFragment {
                 dialogUtils.folderNameEditConfirmCLick(folder, newName, isParentName);
         });
         return alertDialog;
-    }
-
-    private void addTextChangedListener(Category category, Folder folder, Button positiveButton) {
-        mBinding.dialogEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (category != null)
-                    positiveButton.setEnabled(!category.getCategoryName().equals(String.valueOf(s).trim()));
-                else if (folder != null)
-                    positiveButton.setEnabled(!folder.getFolderName().equals(String.valueOf(s).trim()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     @Override
