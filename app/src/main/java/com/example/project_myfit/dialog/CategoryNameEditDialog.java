@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.MyFitConstant.CATEGORY_NAME;
-import static com.example.project_myfit.MyFitConstant.DIALOG_CONFIRM_CLICK;
+import static com.example.project_myfit.MyFitConstant.CATEGORY_NAME_EDIT_CONFIRM_CLICK;
 
 public class CategoryNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
@@ -41,7 +41,7 @@ public class CategoryNameEditDialog extends DialogFragment {
         mBinding = DialogUtils.getBinding(getLayoutInflater(), requireContext(), categoryName, CATEGORY);
         return DialogUtils.getEditTextDialog(requireContext(), getString(R.string.edit_category_name), mBinding,
                 (dialog, which) -> {
-                    navBackStackEntry.getSavedStateHandle().set(DIALOG_CONFIRM_CLICK, null);
+                    navBackStackEntry.getSavedStateHandle().set(CATEGORY_NAME_EDIT_CONFIRM_CLICK, null);
                     navigationViewModel.categoryNameConfirmClick(category, String.valueOf(mBinding.dialogEditText.getText()).trim());
                 });
     }
