@@ -52,7 +52,6 @@ public class NameEditDialog extends DialogFragment {
             alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_folder_name), finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setEnabled(false);
 
         positiveButton.setOnClickListener(v -> {
             InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
