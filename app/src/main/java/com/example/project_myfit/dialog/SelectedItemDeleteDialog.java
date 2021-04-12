@@ -16,12 +16,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class SelectedItemDeleteDialog extends DialogFragment {
 
+    private int mSelectedItemSize;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        mSelectedItemSize = SelectedItemDeleteDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
+        super.onCreate(savedInstanceState);
+    }
+
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        int selectedItemSize = SelectedItemDeleteDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        String message = selectedItemSize + getString(R.string.selected_item_delete_check);
+        //tested
+        String message = mSelectedItemSize + getString(R.string.selected_item_delete_check);
 
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.selectedItemDeleteDialog);
 
