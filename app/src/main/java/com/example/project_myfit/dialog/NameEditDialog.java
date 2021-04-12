@@ -25,28 +25,37 @@ import static com.example.project_myfit.MyFitConstant.NAME_EDIT_NAME;
 
 public class NameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
+    private String mItemType;
+    private boolean mIsParentName;
+    private long mItemId;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mItemType = NameEditDialogArgs.fromBundle(getArguments()).getItemType();
+        mIsParentName = NameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
+        mItemId = NameEditDialogArgs.fromBundle(getArguments()).getItemId();
+    }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String itemType = NameEditDialogArgs.fromBundle(getArguments()).getItemType();
-        long itemId = NameEditDialogArgs.fromBundle(getArguments()).getItemId();
-        boolean isParentName = NameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
-
+        //tested
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.NameEditDialog);
 
-        Category category = itemType.equals(CATEGORY) ? dialogUtils.getCategory(itemId) : null;
-        Folder folder = itemType.equals(FOLDER) ? dialogUtils.getFolder(itemId) : null;
+        Category category = mItemType.equals(CATEGORY) ? dialogUtils.getCategory(mItemId) : null;
+        Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getFolder(mItemId) : null;
 
         String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
         final String finalOldName = oldName;
-        //입력된 이름 복구
+        //입력된 이름 리스토어
         oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
-        mBinding = dialogUtils.getBinding(oldName, itemType);
+        mBinding = dialogUtils.getBinding(oldName, mItemType);
+
         AlertDialog alertDialog;
-        if (itemType.equals(CATEGORY))
+        if (mItemType.equals(CATEGORY))
             alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_category_name), finalOldName);
         else
             alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_folder_name), finalOldName);
@@ -59,9 +68,9 @@ public class NameEditDialog extends DialogFragment {
 
             String newName = String.valueOf(mBinding.dialogEditText.getText()).trim();
             if (category != null)
-                dialogUtils.categoryNameEditConfirmClick(category, newName, isParentName);
+                dialogUtils.categoryNameEditConfirmClick(category, newName, mIsParentName);
             else if (folder != null)
-                dialogUtils.folderNameEditConfirmCLick(folder, newName, isParentName);
+                dialogUtils.folderNameEditConfirmCLick(folder, newName, mIsParentName);
         });
         return alertDialog;
     }
