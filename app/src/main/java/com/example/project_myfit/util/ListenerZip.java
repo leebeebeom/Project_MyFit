@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class ListenerZip {
     private boolean mIsKeyboardShowing;
 
-    public void keyboardShowingListener(@NotNull View view, FloatingActionButton floatingActionButton, BottomAppBar bottomAppBar) {
+    public void keyboardShowingListener(@NotNull View view, FloatingActionButton activityFab, BottomAppBar bottomAppBar, FloatingActionButton topFab) {
         view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             Rect r = new Rect();
             view.getWindowVisibleDisplayFrame(r);
@@ -22,14 +22,16 @@ public class ListenerZip {
             if (keypadHeight > screenHeight * 0.15) {
                 if (!mIsKeyboardShowing) {
                     mIsKeyboardShowing = true;
-                    floatingActionButton.setVisibility(View.INVISIBLE);
+                    activityFab.setVisibility(View.INVISIBLE);
                     bottomAppBar.setVisibility(View.INVISIBLE);
+                    topFab.setVisibility(View.INVISIBLE);
                 }
             } else {
                 if (mIsKeyboardShowing) {
                     mIsKeyboardShowing = false;
                     bottomAppBar.setVisibility(View.VISIBLE);
-                    floatingActionButton.show();
+                    activityFab.show();
+                    topFab.setVisibility(View.VISIBLE);
                 }
             }
         });
