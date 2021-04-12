@@ -21,21 +21,31 @@ import static com.example.project_myfit.MyFitConstant.CATEGORY;
 
 public class AddDialog extends DialogFragment {
 
+    private String mItemType;
+    private String mParentCategory;
+    private long mFolderId;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mItemType = AddDialogArgs.fromBundle(getArguments()).getItemType();
+        mParentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
+        mFolderId = AddDialogArgs.fromBundle(getArguments()).getFolderId();
+    }
+
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String itemType = AddDialogArgs.fromBundle(getArguments()).getItemType();
-        String parentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
-        long folderId = AddDialogArgs.fromBundle(getArguments()).getFolderId();
-
+        //tested
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.addDialog);
 
-        ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, itemType);
+        ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, mItemType);
         AlertDialog alertDialog;
-        if (itemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_category));
-        else alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_folder));
+        if (mItemType.equals(CATEGORY))
+            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_category), null);
+        else
+            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_folder), null);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 
@@ -43,11 +53,11 @@ public class AddDialog extends DialogFragment {
             InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-            String name = String.valueOf(binding.dialogEditText.getText()).trim();
+            String newName = String.valueOf(binding.dialogEditText.getText()).trim();
 
-            if (itemType.equals(CATEGORY))
-                dialogUtils.addCategoryConfirmClick(name, parentCategory);
-            else dialogUtils.addFolderConfirmClick(name, folderId, parentCategory);
+            if (mItemType.equals(CATEGORY))
+                dialogUtils.addCategoryConfirmClick(newName, mParentCategory);
+            else dialogUtils.addFolderConfirmClick(newName, mFolderId, mParentCategory);
         });
 
         return alertDialog;
