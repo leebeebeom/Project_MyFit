@@ -8,14 +8,14 @@
     <item
         android:id="@+id/allListFragment"
         android:icon="@drawable/icon_all_list"
-        android:title="@string/all_list" />
+        android:title="@string/daily_look" />
     <item
         android:id="@+id/dummy_menu"
         android:title="" />
     <item
         android:id="@+id/favoriteFragment"
         android:icon="@drawable/icon_favorite"
-        android:title="@string/favorite" />
+        android:title="@string/unTitle" />
     <item
         android:id="@+id/settingFragment"
         android:icon="@drawable/icon_setting"
