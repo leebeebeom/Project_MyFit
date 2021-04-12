@@ -36,7 +36,16 @@ public class MainViewModel extends AndroidViewModel {
         mSelectedCategoryList = new ArrayList<>();
     }
 
+    public void orderNumberInit() {
+        //tested
+        List<Category> categoryList = mRepository.getAllCategoryList();
+        for (int i = 0; i < categoryList.size(); i++)
+            categoryList.get(i).setOrderNumber(i);
+        mRepository.categoryUpdate(categoryList);
+    }
+
     public void selectAllClick(boolean checked, CategoryAdapter categoryAdapter) {
+        //tested
         if (!mSelectedCategoryList.isEmpty()) mSelectedCategoryList.clear();
         if (checked) {
             mSelectedCategoryList.addAll(categoryAdapter.getCurrentList());
@@ -46,6 +55,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void selectedCategoryDelete() {
+        //tested
         List<Size> childSizeList = new ArrayList<>();
 
         for (Category category : mSelectedCategoryList) {
@@ -66,6 +76,7 @@ public class MainViewModel extends AndroidViewModel {
 
     @NotNull
     private List<Folder> findAllChildFolder() {
+        //tested
         List<Folder> topFolderList = new ArrayList<>();
         for (Category category : mSelectedCategoryList)
             topFolderList.addAll(mRepository.getFolderListByFolderId(category.getId()));
@@ -76,6 +87,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     private void findAllChildFolder2(@NotNull List<Folder> topFolderList, List<Folder> allFolderList) {
+        //tested
         List<Folder> childFolderList = new ArrayList<>();
         for (Folder folder : topFolderList) {
             if (!childFolderList.isEmpty()) childFolderList.clear();
@@ -89,63 +101,68 @@ public class MainViewModel extends AndroidViewModel {
 
     @NotNull
     private List<Size> findAllChildSize(@NotNull List<Folder> allChildFolderList) {
+        //tested
         List<Size> allChildSizeList = new ArrayList<>();
         for (Folder folder : allChildFolderList)
             allChildSizeList.addAll(mRepository.getSizeLiseByFolderId(folder.getId()));
         return allChildSizeList;
     }
 
-    public void orderNumberInit() {
-        List<Category> categoryList = mRepository.getAllCategoryList();
-        for (int i = 0; i < categoryList.size(); i++)
-            categoryList.get(i).setOrderNumber(i);
-        mRepository.categoryUpdate(categoryList);
-    }
-
     public void categorySelected(@NotNull Category category, boolean isChecked) {
+        //tested
         if (isChecked) mSelectedCategoryList.add(category);
         else mSelectedCategoryList.remove(category);
         mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
     public void categoryItemDrop(List<Category> categoryList) {
+        //tested
         mRepository.categoryUpdate(categoryList);
     }
 
     public MutableLiveData<Integer> getSelectedCategorySizeLive() {
+        //tested
         return mSelectedCategorySizeLive;
     }
 
     //getter,setter---------------------------------------------------------------------------------
     public List<Category> getSelectedCategoryList() {
+        //tested
         return mSelectedCategoryList;
     }
 
     public long getSelectedCategoryId() {
+        //tested
         return mSelectedCategoryList.get(0).getId();
     }
 
     public int getSelectedCategorySize() {
+        //tested
         return mSelectedCategoryList.size();
     }
 
     public List<Long> getFolderFolderIdList(String parentCategory) {
+        //tested
         return mRepository.getFolderFolderIdByParent(parentCategory);
     }
 
     public List<Long> getSizeFolderIdList(String parentCategory) {
+        //tested
         return mRepository.getSizeFolderIdByParent(parentCategory);
     }
 
     public int getCurrentItem() {
+        //tested
         return mCurrentItem;
     }
 
     public void setCurrentItem(int mCurrentItem) {
+        //tested
         this.mCurrentItem = mCurrentItem;
     }
 
     public String getParentCategory() {
+        //tested
         switch (mCurrentItem) {
             case 0:
                 return TOP;
@@ -160,6 +177,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Category>> getCategoryLive() {
+        //tested
         return mRepository.getAllCategoryLive();
     }
 }
