@@ -77,4 +77,9 @@
     <string name="http">http://</string>
     <string name="edit_name">이름 변경</string>
     <string name="no_result">검색 결과가 없습니다.</string>
+    <string name="max_length">30자까지 입력 가능합니다.</string>
+    <string name="same_category_name_add">같은 이름의 카테고리가 존재합니다.\n그래도 추가하시겠습니까?</string>
+    <string name="same_folder_name_add">같은 이름의 폴더가 존재합니다.\n그래도 추가하시겠습니까?</string>
+    <string name="same_category_name_edit">같은 이름의 카테고리가 존재합니다.\n그래도 변경하시겠습니까?</string>
+    <string name="same_folder_name_edit">같은 이름의 폴더가 존재합니다.\n그래도 변경하시겠습니까?</string>
 </resources>
