@@ -17,28 +17,37 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.MyFitConstant.CATEGORY;
 
 public class SameNameAddDialog extends DialogFragment {
+    private String mItemType;
+    private String mParentCategory;
+    private long mFolderId;
+    private String mNewName;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mItemType = SameNameAddDialogArgs.fromBundle(getArguments()).getItemType();
+        mParentCategory = SameNameAddDialogArgs.fromBundle(getArguments()).getParentCategory();
+        mFolderId = SameNameAddDialogArgs.fromBundle(getArguments()).getFolderId();
+        mNewName = SameNameAddDialogArgs.fromBundle(getArguments()).getNewName();
+    }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String itemType = SameNameAddDialogArgs.fromBundle(getArguments()).getItemType();
-        String parentCategory = SameNameAddDialogArgs.fromBundle(getArguments()).getParentCategory();
-        long folderId = SameNameAddDialogArgs.fromBundle(getArguments()).getFolderId();
-        String newName = SameNameAddDialogArgs.fromBundle(getArguments()).getNewName();
-
+        //tested
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
 
         AlertDialog alertDialog;
-        if (itemType.equals(CATEGORY))
+        if (mItemType.equals(CATEGORY))
             alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_category_name_add));
         else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_folder_name_add));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            if (itemType.equals(CATEGORY))
-                dialogUtils.sameNameCategoryAddConfirmClick(newName, parentCategory);
-            else dialogUtils.sameNameFolderAddConfirmClick(newName, parentCategory, folderId);
+            if (mItemType.equals(CATEGORY))
+                dialogUtils.sameNameCategoryAddConfirmClick(mNewName, mParentCategory);
+            else dialogUtils.sameNameFolderAddConfirmClick(mNewName, mParentCategory, mFolderId);
         });
 
         return alertDialog;
