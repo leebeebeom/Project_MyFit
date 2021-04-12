@@ -59,7 +59,6 @@ import static com.example.project_myfit.MyFitConstant.STOP;
 import static com.example.project_myfit.MyFitConstant.UP;
 
 //TODO 휴지통
-//TODO topFab 키보드 보일 시 제거
 
 public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryAdapter.CategoryAdapterListener {
 
