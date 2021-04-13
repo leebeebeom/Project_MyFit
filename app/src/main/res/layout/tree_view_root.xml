@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="parentCategory"
+            type="String" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:scrollbars="vertical"
@@ -36,10 +42,11 @@
                     app:fontFamily="@font/noto_bold" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tree_view_parent_text"
+                    android:id="@+id/tree_view_parent_category_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
+                    android:text="@{' ' + parentCategory}"
                     android:textSize="@dimen/_12sdp"
                     app:fontFamily="@font/noto_bold"
                     tools:text="TOP" />
@@ -65,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:src="@drawable/icon_add" />
+                    setAddIcon2="@{parentCategory}"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
