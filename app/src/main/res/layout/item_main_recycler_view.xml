@@ -18,7 +18,7 @@
             android:paddingTop="@dimen/_8sdp"
             android:paddingBottom="@dimen/_60sdp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_main_recycler" />
+            tools:listitem="@layout/item_main_category" />
 
         <FrameLayout
             android:id="@+id/no_data"
