@@ -12,14 +12,14 @@ import java.util.List;
 
 @Dao
 public interface FolderDao {
-    @Query("SELECT * FROM Folder WHERE parentId = :folderId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
-    LiveData<List<Folder>> getFolderLiveByFolderId(long folderId);
+    @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
+    LiveData<List<Folder>> getFolderLiveByParentId(long parentId);
 
     @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
     List<Folder> getFolderListByParent(String parentCategory);
 
     @Query("SELECT parentId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Long> getFolderFolderIdByParent(String parentCategory);
+    List<Long> getFolderParentIdByParent(String parentCategory);
 
     @Query("SELECT folderName FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY folderName")
     List<String> getFolderNameList();
@@ -39,8 +39,8 @@ public interface FolderDao {
     @Update
     void folderUpdate(List<Folder> folderList);
 
-    @Query("SELECT * FROM Folder WHERE parentId = :folderId AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Folder> getFolderListByFolderId(long folderId);
+    @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0")
+    List<Folder> getFolderListByParentId(long parentId);
 
     @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0")
     LiveData<List<Folder>> getAllFolderLive();
