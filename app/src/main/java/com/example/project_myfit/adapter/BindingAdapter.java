@@ -51,6 +51,12 @@ public class BindingAdapter {
         }
     }
 
+    @androidx.databinding.BindingAdapter("setAddIcon2")
+    public static void setAddIcon2(ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView).load(dummy).error(R.drawable.icon_add).into(imageView);
+    }
+
     @androidx.databinding.BindingAdapter("setRecentSearchIcon")
     public static void setRecentSearchIcon(@NotNull ImageView imageView, String dummy) {
         dummy = null;
