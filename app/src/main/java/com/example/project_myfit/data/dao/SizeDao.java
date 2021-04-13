@@ -16,13 +16,13 @@ public interface SizeDao {
     LiveData<List<Size>> getSizeLiveByParentId(long parentId);
 
     @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Long> getSizeParentIdByParent(String parentCategory);
+    List<Long> getSizeParentIdByParentCategory(String parentCategory);
 
     @Query("SELECT * FROM size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
     LiveData<List<Size>> getAllSizeLive();
 
     @Query("SELECT * FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
-    List<Size> getAllSizeListByParent(String parentCategory);
+    List<Size> getAllSizeListByParentCategory(String parentCategory);
 
     @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY brand")
     List<String> getSizeBrandList();
