@@ -34,11 +34,11 @@
             app:endIconMode="clear_text"
             app:errorTextAppearance="@style/myTextSize8sdp"
             app:hintTextAppearance="@style/myTextSize8sdp"
-            app:placeholderTextAppearance="@style/myTextSize10sdp">
+            app:placeholderTextAppearance="@style/myTextSize11sdp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dialog_editText"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_36sdp"
                 android:layout_width="match_parent"
                 android:maxLength="30"
                 android:imeOptions="actionDone"
