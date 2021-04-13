@@ -9,18 +9,20 @@ import java.util.Objects;
 public class Folder {
     @PrimaryKey
     private final long id;
-    private long folderId;
+    private long parentId;
     private String folderName;
     private final String parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy, parentIsDeleted;
+    private byte parentType;
 
-    public Folder(long id, String folderName, long folderId, int orderNumber, String parentCategory) {
+    public Folder(long id, String folderName, long parentId, int orderNumber, String parentCategory, byte parentType) {
         this.id = id;
         this.folderName = folderName;
-        this.folderId = folderId;
+        this.parentId = parentId;
         this.orderNumber = orderNumber;
         this.parentCategory = parentCategory;
+        this.parentType = parentType;
     }
 
     public long getId() {
@@ -35,12 +37,12 @@ public class Folder {
         this.folderName = folderName;
     }
 
-    public long getFolderId() {
-        return folderId;
+    public long getParentId() {
+        return parentId;
     }
 
-    public void setFolderId(long folderId) {
-        this.folderId = folderId;
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
     }
 
     public int getOrderNumber() {
@@ -77,6 +79,14 @@ public class Folder {
 
     public void setParentIsDeleted(boolean parentIsDeleted) {
         this.parentIsDeleted = parentIsDeleted;
+    }
+
+    public byte getParentType() {
+        return parentType;
+    }
+
+    public void setParentType(byte parentType) {
+        this.parentType = parentType;
     }
 
     @Override
