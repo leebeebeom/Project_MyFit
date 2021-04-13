@@ -12,11 +12,11 @@ import java.util.List;
 
 @Dao
 public interface CategoryDao {
-    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
-    LiveData<List<Category>> getAllCategoryLive(boolean isDeleted);
+    @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
+    LiveData<List<Category>> getAllCategoryLive();
 
-    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryListByParent(String parentCategory, boolean isDeleted);
+    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = 0 ORDER BY orderNumber")
+    List<Category> getCategoryListByParent(String parentCategory);
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
@@ -38,4 +38,10 @@ public interface CategoryDao {
 
     @Update
     void categoryUpdate(List<Category> categoryList);
+
+    @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
+    List<Category> getAllCategoryList();
+
+    @Query("SELECT categoryName FROM Category WHERE isDeleted = 0 AND parentCategory = :parentCategory")
+    List<String> getCategoryNameListByParent(String parentCategory);
 }
