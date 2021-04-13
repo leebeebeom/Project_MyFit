@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:theme="@style/myEditText"
-                app:endIconMode="none"
+                app:endIconMode="clear_text"
                 app:placeholderText="@string/search"
                 app:placeholderTextAppearance="@style/myTextSize10sdp"
                 app:startIconDrawable="@drawable/icon_search">
@@ -43,9 +43,14 @@
             </com.google.android.material.textfield.TextInputLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <FrameLayout
-            android:id="@+id/search_fragment_layout"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/search_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:defaultNavHost="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:navGraph="@navigation/search_nav_graph"
+            tools:layout="@layout/fragment_search" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
