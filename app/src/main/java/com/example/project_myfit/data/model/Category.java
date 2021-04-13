@@ -24,14 +24,16 @@ public class Category {
         return id;
     }
 
-    public void setId(long id){this.id = id;}
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getCategoryName() {
         return categoryName;
     }
 
-    public void setCategoryName(String category) {
-        this.categoryName = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getParentCategory() {
