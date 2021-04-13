@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <data>
+
+        <variable
+            name="size"
+            type="com.example.project_myfit.data.model.Size" />
+
+        <variable
+            name="constant"
+            type="com.example.project_myfit.MyFitConstant" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/input_top_outer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:hint="@string/length"
+                android:theme="@style/myEditText"
+                app:hintTextAppearance="@style/myTextSize8sdp"
+                app:shapeAppearance="@style/myEditTextCorner"
+                app:suffixText="cm"
+                app:suffixTextAppearance="@style/myTextSize10sdp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/length"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:text='@={size.sizeMap[constant.LENGTH]}'
+                    android:textSize="@dimen/_10sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/shoulder"
+                android:theme="@style/myEditText"
+                app:hintTextAppearance="@style/myTextSize8sdp"
+                app:shapeAppearance="@style/myEditTextCorner"
+                app:suffixText="cm"
+                app:suffixTextAppearance="@style/myTextSize10sdp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shoulder"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:text='@={size.sizeMap[constant.SHOULDER]}'
+                    android:textSize="@dimen/_10sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:hint="@string/chest"
+                android:theme="@style/myEditText"
+                app:hintTextAppearance="@style/myTextSize8sdp"
+                app:shapeAppearance="@style/myEditTextCorner"
+                app:suffixText="cm"
+                app:suffixTextAppearance="@style/myTextSize10sdp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/chest"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:text='@={size.sizeMap[constant.CHEST]}'
+                    android:textSize="@dimen/_10sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/sleeve"
+                android:theme="@style/myEditText"
+                app:hintTextAppearance="@style/myTextSize8sdp"
+                app:shapeAppearance="@style/myEditTextCorner"
+                app:suffixText="cm"
+                app:suffixTextAppearance="@style/myTextSize10sdp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sleeve"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:text='@={size.sizeMap[constant.SLEEVE]}'
+                    android:textSize="@dimen/_10sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>
