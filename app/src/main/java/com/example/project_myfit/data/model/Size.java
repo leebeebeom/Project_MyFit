@@ -14,7 +14,7 @@ public class Size {
     private long id;
     private int orderNumber;
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
-    private long folderId;
+    private long parentId;
     private boolean isFavorite, isDeleted, parentIsDeleted;
     private Map<String, String> sizeMap;
 
@@ -24,7 +24,7 @@ public class Size {
         sizeMap = new HashMap<>();
     }
 
-    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long folderId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
+    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long parentId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
         this.modifiedTime = modifiedTime;
@@ -34,7 +34,7 @@ public class Size {
         this.size = size;
         this.link = link;
         this.memo = memo;
-        this.folderId = folderId;
+        this.parentId = parentId;
         this.isFavorite = isFavorite;
         this.sizeMap = sizeMap;
         this.parentCategory = parentCategory;
@@ -120,12 +120,12 @@ public class Size {
         this.memo = memo;
     }
 
-    public long getFolderId() {
-        return folderId;
+    public long getParentId() {
+        return parentId;
     }
 
-    public void setFolderId(long folderId) {
-        this.folderId = folderId;
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
     }
 
     public boolean isFavorite() {
