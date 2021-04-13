@@ -7,7 +7,7 @@
 
         <variable
             name="folder"
-            type="com.example.project_myfit.ui.main.listfragment.database.Folder" />
+            type="com.example.project_myfit.data.model.Folder" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -67,14 +67,13 @@
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/folder_amount_layout"
+            android:id="@+id/folder_contents_size_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:layout_gravity="center_horizontal">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/folder_amount"
+                android:id="@+id/folder_contents_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_8sdp"
