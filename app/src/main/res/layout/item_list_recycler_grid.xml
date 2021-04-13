@@ -7,7 +7,7 @@
 
         <variable
             name="size"
-            type="com.example.project_myfit.ui.main.listfragment.database.Size" />
+            type="com.example.project_myfit.data.model.Size" />
     </data>
 
     <FrameLayout
