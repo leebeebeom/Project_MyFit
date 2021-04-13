@@ -47,11 +47,7 @@
     <string name="confirm">확인</string>
     <string name="folder_name">Folder Name</string>
     <string name="folder_name_korean">폴더 이름</string>
-    <string name="folder_name_helper">폴더 이름은 최대 3줄까지 표현 가능합니다.</string>
-    <string name="delete_check">휴지통으로 이동하시겠습니까?</string>
     <string name="edit_folder_name">폴더 이름 변경</string>
-    <string name="go_back_check">저장되지 않았습니다.\n종료하시겠습니까?</string>
-    <string name="image_delete_check">이미지를 삭제하시겠습니까?</string>
     <string name="item_move_check">개의 아이템을 이동하시겠습니까?</string>
     <string name="selected_item_delete_check">개의 아이템을 휴지통으로 이동하시겠습니까?</string>
     <string name="tree_view_dialog_title">이동할 위치를 선택하세요.</string>
@@ -72,7 +68,6 @@
     <string name="edit_category_name">카테고리 이름 변경</string>
     <string name="search">검색</string>
     <string name="recent_search">최근 검색</string>
-    <string name="recent_search_all_delete">전체 삭제</string>
     <string name="no_recent_search_list">최근 검색 목록이 없습니다.</string>
     <string name="tree_view_category">CATEGORY :</string>
     <string name="http">http://</string>
