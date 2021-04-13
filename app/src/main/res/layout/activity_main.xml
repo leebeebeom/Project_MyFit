@@ -20,7 +20,7 @@
                     app:titleTextAppearance="@style/myActionBarTitleStyle">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/toolbar_main_title"
+                        android:id="@+id/toolbar_custom_title"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:navGraph="@navigation/nav_graph"
+                app:navGraph="@navigation/main_nav_graph"
                 tools:layout="@layout/fragment_list" />
 
             <com.google.android.material.bottomappbar.BottomAppBar
