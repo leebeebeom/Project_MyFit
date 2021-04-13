@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
-
         <variable
             name="recentSearch"
-            type="com.example.project_myfit.searchActivity.database.RecentSearch" />
+            type="com.example.project_myfit.data.model.RecentSearch" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatImageView
             setRecentSearchIcon="@{recentSearch.word}"
@@ -31,12 +28,12 @@
             android:alpha="0.7"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:maxWidth="@dimen/_200sdp"
+            android:maxWidth="@dimen/_220sdp"
             android:maxLines="1"
             android:paddingBottom="@dimen/_1sdp"
             android:text="@{recentSearch.word}"
             android:textSize="@dimen/_10sdp"
-            tools:text="안녕하세여" />
+            tools:text="안녕하세a여" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
