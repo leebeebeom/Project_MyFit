@@ -25,16 +25,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
+            android:minHeight="@dimen/_540sdp"
             android:background="@drawable/recycler_background">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_240sdp"
+                android:layout_gravity="center"
                 android:alpha="0.5"
                 android:text="@string/no_data"
-                android:textSize="@dimen/_22sdp" />
+                android:textSize="@dimen/_20sdp" />
         </FrameLayout>
 
     </FrameLayout>
