@@ -7,7 +7,7 @@
 
         <variable
             name="category"
-            type="com.example.project_myfit.ui.main.database.Category" />
+            type="com.example.project_myfit.data.model.Category" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -15,9 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
-        tools:context=".ui.main.listfragment.ListFragment">
+        tools:context=".main.list.ListFragment">
 
-        <com.example.project_myfit.ui.main.listfragment.LockableScrollView
+        <com.example.project_myfit.util.LockableScrollView
             android:id="@+id/list_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -52,7 +52,6 @@
                             app:tint="?colorControlNormal" />
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/list_icon_arrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.8"
@@ -64,7 +63,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
-                            android:text="@{category.category}"
+                            android:text="@{category.categoryName}"
                             android:textSize="@dimen/_11sdp"
                             tools:text="Short Sleeve" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -98,20 +97,25 @@
                         tools:itemCount="4"
                         tools:listitem="@layout/item_list_recycler_folder" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <com.google.android.material.textview.MaterialTextView
+                <FrameLayout
                     android:id="@+id/no_data"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:alpha="0.5"
+                    android:minHeight="@dimen/_560sdp"
                     android:background="@drawable/recycler_background"
-                    android:gravity="center"
-                    android:text="@string/no_data"
-                    android:textSize="@dimen/_20sdp"
-                    android:visibility="gone" />
+                    android:visibility="gone">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.5"
+                        android:text="@string/no_data"
+                        android:textSize="@dimen/_20sdp" />
+                </FrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:minHeight="@dimen/_560sdp"
                     android:id="@+id/recycler_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -126,7 +130,7 @@
                     app:spanCount="2"
                     tools:listitem="@layout/item_list_recycler_grid" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.example.project_myfit.ui.main.listfragment.LockableScrollView>
+        </com.example.project_myfit.util.LockableScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/list_fab"
