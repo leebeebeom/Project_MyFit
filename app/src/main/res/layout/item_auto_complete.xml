@@ -6,7 +6,7 @@
 
         <variable
             name="recentSearch"
-            type="com.example.project_myfit.searchActivity.database.RecentSearch" />
+            type="com.example.project_myfit.data.model.RecentSearch" />
     </data>
 
     <FrameLayout
