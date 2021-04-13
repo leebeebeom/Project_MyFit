@@ -85,6 +85,7 @@
                 android:layout_height="match_parent"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_16sdp"
+                android:alpha="0.8"
                 setAddIcon2="@{folder.folderName}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
