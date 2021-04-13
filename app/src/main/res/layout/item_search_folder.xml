@@ -2,12 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
-
         <variable
             name="folder"
-            type="com.example.project_myfit.ui.main.listfragment.database.Folder" />
+            type="com.example.project_myfit.data.model.Folder" />
     </data>
 
     <FrameLayout
@@ -78,7 +76,7 @@
                         android:paddingBottom="@dimen/_1sdp">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/search_item_amount"
+                            android:id="@+id/search_contents_size"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:alpha="0.6"
