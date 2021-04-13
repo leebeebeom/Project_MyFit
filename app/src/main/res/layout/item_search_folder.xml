@@ -71,7 +71,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_4sdp"
                         android:layout_marginTop="@dimen/_1sdp"
-                        android:background="@drawable/item_amount_background"
+                        android:background="@drawable/item_contents_size_background"
                         android:paddingHorizontal="@dimen/_6sdp"
                         android:paddingBottom="@dimen/_1sdp">
 
