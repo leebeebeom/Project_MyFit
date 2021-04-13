@@ -12,16 +12,16 @@ import java.util.List;
 
 @Dao
 public interface FolderDao {
-    @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0")
+    @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY folderName")
     LiveData<List<Folder>> getAllFolderLive();
 
     @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
     LiveData<List<Folder>> getFolderLiveByParentId(long parentId);
 
     @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0")
-    List<Folder> getAllFolder();
+    List<Folder> getAllFolderList();
 
-    @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
+    @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
     List<Folder> getFolderListByParentCategory(String parentCategory);
 
     @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0")
