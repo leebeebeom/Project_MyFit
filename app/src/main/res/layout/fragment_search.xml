@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".searchActivity.SearchFragment">
 
-        <com.example.project_myfit.ui.main.listfragment.LockableScrollView
+        <com.example.project_myfit.util.LockableScrollView
             android:id="@+id/view_pager_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.example.project_myfit.ui.main.listfragment.LockableScrollView>
+        </com.example.project_myfit.util.LockableScrollView>
 
         <androidx.core.widget.NestedScrollView
             android:background="?colorPrimary"
@@ -91,6 +91,18 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:contentDescription="@string/floating_action_button"
+            android:src="@drawable/icon_arrow_up"
+            android:visibility="invisible"
+            app:backgroundTint="@color/white"
+            app:fabSize="mini" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/recent_search_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
