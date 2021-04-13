@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="size"
             type="com.example.project_myfit.data.model.Size" />
@@ -73,8 +74,8 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -82,8 +83,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_6sdp"
-                        android:alpha="0.7"
                         android:layout_marginTop="-1dp"
+                        android:alpha="0.7"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@{size.brand.trim()}"

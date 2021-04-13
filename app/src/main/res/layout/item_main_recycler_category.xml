@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    setDotIcon="@{category.categoryName}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -49,7 +50,6 @@
                     android:alpha="0.8"
                     android:scaleX="0.3"
                     android:scaleY="0.3"
-                    setDotIcon="@{category.categoryName}"
                     tools:src="@drawable/icon_dot" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -93,10 +93,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:alpha="0.8"
-                android:visibility="gone"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_12sdp"
                 android:scaleX="0.9"
+                android:visibility="gone"
                 tools:src="@drawable/icon_drag_handle" />
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>

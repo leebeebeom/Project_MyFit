@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="parentCategory"
             type="String" />
@@ -11,8 +12,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:scrollbars="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/tree_view_root"
@@ -29,9 +30,9 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_4sdp"
-                android:layout_marginBottom="@dimen/_2sdp"
-                android:layout_marginStart="@dimen/_12sdp">
+                android:layout_marginBottom="@dimen/_2sdp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -69,10 +70,10 @@
                     android:textSize="@dimen/_10sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    setAddIcon2="@{parentCategory}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    setAddIcon2="@{parentCategory}"/>
+                    android:layout_gravity="end" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
