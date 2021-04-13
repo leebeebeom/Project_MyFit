@@ -14,15 +14,13 @@ public class Folder {
     private final String parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy, parentIsDeleted;
-    private byte parentType;
 
-    public Folder(long id, String folderName, long parentId, int orderNumber, String parentCategory, byte parentType) {
+    public Folder(long id, String folderName, long parentId, int orderNumber, String parentCategory) {
         this.id = id;
         this.folderName = folderName;
         this.parentId = parentId;
         this.orderNumber = orderNumber;
         this.parentCategory = parentCategory;
-        this.parentType = parentType;
     }
 
     public long getId() {
@@ -79,14 +77,6 @@ public class Folder {
 
     public void setParentIsDeleted(boolean parentIsDeleted) {
         this.parentIsDeleted = parentIsDeleted;
-    }
-
-    public byte getParentType() {
-        return parentType;
-    }
-
-    public void setParentType(byte parentType) {
-        this.parentType = parentType;
     }
 
     @Override
