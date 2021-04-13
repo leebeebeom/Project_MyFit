@@ -7,7 +7,7 @@
 
         <variable
             name="category"
-            type="com.example.project_myfit.ui.main.database.Category" />
+            type="com.example.project_myfit.data.model.Category" />
     </data>
 
     <FrameLayout
@@ -49,7 +49,7 @@
                     android:alpha="0.8"
                     android:scaleX="0.3"
                     android:scaleY="0.3"
-                    setDotIcon="@{category.parentCategory}"
+                    setDotIcon="@{category.categoryName}"
                     tools:src="@drawable/icon_dot" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -61,23 +61,23 @@
                     android:ellipsize="end"
                     android:maxWidth="@dimen/_220sdp"
                     android:maxLines="1"
-                    android:text="@{category.category}"
+                    android:text="@{category.categoryName}"
                     android:textSize="@dimen/_11sdp"
                     tools:text="반팔" />
 
                 <FrameLayout
-                    android:id="@+id/main_amount_layout"
+                    android:id="@+id/main_contents_size_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_1sdp"
-                    android:background="@drawable/item_amount_background"
+                    android:background="@drawable/item_contents_size_background"
                     android:paddingHorizontal="@dimen/_6sdp"
                     android:paddingBottom="@dimen/_1sdp">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/main_item_amount"
+                        android:id="@+id/main_contents_size"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:alpha="0.6"
@@ -88,7 +88,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_drag_handle"
-                setDragHandle="@{category.category}"
+                setDragHandle="@{category.categoryName}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
