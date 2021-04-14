@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -36,7 +35,6 @@ public class NameEditDialog extends DialogFragment {
         mItemType = NameEditDialogArgs.fromBundle(getArguments()).getItemType();
         mIsParentName = NameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
         mItemId = NameEditDialogArgs.fromBundle(getArguments()).getItemId();
-        Log.d("TAG", "onCreate: asd");
     }
 
     @NonNull
@@ -51,7 +49,6 @@ public class NameEditDialog extends DialogFragment {
         String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
         final String finalOldName = oldName;
         //입력된 이름 리스토어
-        //tested
         oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
         mBinding = dialogUtils.getBinding(oldName, mItemType);
