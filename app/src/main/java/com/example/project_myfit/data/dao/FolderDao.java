@@ -33,9 +33,6 @@ public interface FolderDao {
     @Query("SELECT parentId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
     List<Long> getFolderParentIdListByParentCategory(String parentCategory);
 
-    @Query("SELECT folderName FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY folderName")
-    List<String> getFolderNameList();
-
     @Query("SELECT * FROM Folder WHERE id = :id")
     Folder getFolder(long id);
 
