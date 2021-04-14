@@ -1,4 +1,4 @@
-package com.example.project_myfit.main.adapter;
+package com.example.project_myfit.fragment.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerCategoryBinding;
-import com.example.project_myfit.main.MainViewModel;
-import com.example.project_myfit.util.AdapterUtil;
+import com.example.project_myfit.fragment.main.MainViewModel;
+import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
-import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryVH> {
