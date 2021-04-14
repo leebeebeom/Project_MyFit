@@ -18,27 +18,36 @@ import static com.example.project_myfit.MyFitConstant.CATEGORY;
 
 public class SameNameEditDialog extends DialogFragment {
 
+    private String mItemType;
+    private long mItemId;
+    private String mNewName;
+    private boolean mIsParentName;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mItemType = SameNameEditDialogArgs.fromBundle(getArguments()).getItemType();
+        mItemId = SameNameEditDialogArgs.fromBundle(getArguments()).getItemId();
+        mNewName = SameNameEditDialogArgs.fromBundle(getArguments()).getNewName();
+        mIsParentName = SameNameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
+    }
+
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String itemType = SameNameEditDialogArgs.fromBundle(getArguments()).getItemType();
-        long itemId = SameNameEditDialogArgs.fromBundle(getArguments()).getItemId();
-        String newName = SameNameEditDialogArgs.fromBundle(getArguments()).getNewName();
-        boolean isParentName = SameNameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
-
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.sameNameEditDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.sameNameEditDialog);
 
         AlertDialog alertDialog;
-        if (itemType.equals(CATEGORY))
+        if (mItemType.equals(CATEGORY))
             alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_category_name_edit));
         else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_folder_name_edit));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            if (itemType.equals(CATEGORY))
-                dialogUtils.sameNameCategoryEditConfirmClick(itemId, newName, isParentName);
-            else dialogUtils.sameNameFolderEditConfirmClick(itemId, newName, isParentName);
+            if (mItemType.equals(CATEGORY))
+                dialogUtils.sameNameCategoryEditConfirmClick(mItemId, mNewName, mIsParentName);
+            else dialogUtils.sameNameFolderEditConfirmClick(mItemId, mNewName, mIsParentName);
         });
 
         return alertDialog;
