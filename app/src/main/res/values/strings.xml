@@ -78,4 +78,7 @@
     <string name="same_folder_name_add">같은 이름의 폴더가 존재합니다.\n그래도 추가하시겠습니까?</string>
     <string name="same_category_name_edit">같은 이름의 카테고리가 존재합니다.\n그래도 변경하시겠습니까?</string>
     <string name="same_folder_name_edit">같은 이름의 폴더가 존재합니다.\n그래도 변경하시겠습니까?</string>
+    <string name="delete_check">휴지통으로 이동하시겠습니까?</string>
+    <string name="go_back_check">저장되지 않았습니다.\n종료하시겠습니까?</string>
+    <string name="image_delete_check">이미지를 삭제하시겠습니까?</string>
 </resources>
