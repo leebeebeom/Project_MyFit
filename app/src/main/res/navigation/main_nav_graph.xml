@@ -103,6 +103,12 @@
         <argument
             android:name="sizeId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_inputOutputFragment_to_deleteConfirmDialog"
+            app:destination="@id/deleteConfirmDialog" />
+        <action
+            android:id="@+id/action_inputOutputFragment_to_goBackDialog"
+            app:destination="@id/goBackDialog" />
     </fragment>
     <activity
         android:id="@+id/searchActivity"
@@ -218,8 +224,20 @@
             android:name="selected_item_size"
             app:argType="integer" />
         <argument
-            android:name="folder_id"
+            android:name="parent_id"
             app:argType="long" />
     </dialog>
+    <dialog
+        android:id="@+id/deleteConfirmDialog"
+        android:name="com.example.project_myfit.dialog.DeleteConfirmDialog"
+        android:label="DeleteConfirmDialog" >
+        <argument
+            android:name="sizeId"
+            app:argType="long" />
+    </dialog>
+    <dialog
+        android:id="@+id/goBackDialog"
+        android:name="com.example.project_myfit.dialog.GoBackDialog"
+        android:label="GoBackDialog" />
     <!--    Dialog-->
 </navigation>
