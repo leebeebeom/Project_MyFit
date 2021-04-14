@@ -1,4 +1,4 @@
-package com.example.project_myfit.main.adapter;
+package com.example.project_myfit.fragment.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerViewBinding;
-import com.example.project_myfit.main.MainViewModel;
+import com.example.project_myfit.fragment.main.MainViewModel;
 import com.example.project_myfit.util.Sort;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
@@ -20,13 +20,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.BOTTOM;
-import static com.example.project_myfit.MyFitConstant.DOWN;
-import static com.example.project_myfit.MyFitConstant.ETC;
-import static com.example.project_myfit.MyFitConstant.OUTER;
-import static com.example.project_myfit.MyFitConstant.STOP;
-import static com.example.project_myfit.MyFitConstant.TOP;
-import static com.example.project_myfit.MyFitConstant.UP;
+import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
+import static com.example.project_myfit.util.MyFitConstant.DOWN;
+import static com.example.project_myfit.util.MyFitConstant.ETC;
+import static com.example.project_myfit.util.MyFitConstant.OUTER;
+import static com.example.project_myfit.util.MyFitConstant.STOP;
+import static com.example.project_myfit.util.MyFitConstant.TOP;
+import static com.example.project_myfit.util.MyFitConstant.UP;
 
 public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdapter.ViewPagerVH> {
     private final CategoryAdapter[] mCategoryAdapterArray;
@@ -65,10 +65,10 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
             }
         }
 
-        mCategoryAdapterArray[0].submitList(sort, topList, model.getFolderFolderIdList(TOP), model.getSizeFolderIdList(TOP));
-        mCategoryAdapterArray[1].submitList(sort, bottomList, model.getFolderFolderIdList(BOTTOM), model.getSizeFolderIdList(BOTTOM));
-        mCategoryAdapterArray[2].submitList(sort, outerList, model.getFolderFolderIdList(OUTER), model.getSizeFolderIdList(OUTER));
-        mCategoryAdapterArray[3].submitList(sort, etcList, model.getFolderFolderIdList(ETC), model.getSizeFolderIdList(ETC));
+        mCategoryAdapterArray[0].submitList(sort, topList, model.getFolderParentIdList(TOP), model.getSizeParentIdList(TOP));
+        mCategoryAdapterArray[1].submitList(sort, bottomList, model.getFolderParentIdList(BOTTOM), model.getSizeParentIdList(BOTTOM));
+        mCategoryAdapterArray[2].submitList(sort, outerList, model.getFolderParentIdList(OUTER), model.getSizeParentIdList(OUTER));
+        mCategoryAdapterArray[3].submitList(sort, etcList, model.getFolderParentIdList(ETC), model.getSizeParentIdList(ETC));
     }
 
     @Override
