@@ -9,9 +9,9 @@ import java.util.Objects;
 public class Folder {
     @PrimaryKey
     private final long id;
+    private final String parentCategory;
     private long parentId;
     private String folderName;
-    private final String parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy, parentIsDeleted;
 

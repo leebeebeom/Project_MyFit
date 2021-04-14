@@ -7,9 +7,9 @@ import java.util.Objects;
 
 @Entity
 public class Category {
+    private final String parentCategory;
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private final String parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy;
     private String categoryName;
