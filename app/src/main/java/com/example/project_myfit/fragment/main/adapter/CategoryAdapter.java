@@ -74,7 +74,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
         this.mSizeFolderIdList = allSizeFolderId;
         this.mSort = sort;
 
-        //tested
         if (list != null && mViewPagerVH != null)
             mViewPagerVH.setNoData(list.isEmpty());
     }
@@ -93,7 +92,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
-        //tested
         if (mSelectedCategoryList != null) {
             mSelectedCategoryIdHashSet.clear();
             for (Category selectedCategory : mSelectedCategoryList)
@@ -103,12 +101,10 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         Category category = getItem(holder.getLayoutPosition());
         holder.setCategory(category);
-        //tested
         holder.mBinding.mainDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
                 mListener.onCategoryDragHandleTouch(holder);
-                //tested
                 draggingView(holder);
             }
             return false;
@@ -116,27 +112,22 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
         if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
 
-        //tested
         holder.mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
                 getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
 
         if (mActionModeState == ACTION_MODE_ON)
-            //tested
             mAdapterUtil.listActionModeOn(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
                     mSelectedCategoryIdHashSet, category.getId());
         else if (mActionModeState == ACTION_MODE_OFF) {
-            //tested
             mAdapterUtil.listActionModeOff(holder.mBinding.mainCardView, holder.mBinding.mainCheckBox,
                     mSelectedCategoryIdHashSet);
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
         }
 
-        //tested
         holder.mBinding.mainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
     }
 
     private void draggingView(@NotNull CategoryVH holder) {
-        //tested
         holder.itemView.setTranslationZ(10);
         holder.mBinding.mainCheckBox.setVisibility(View.INVISIBLE);
         holder.mBinding.mainCategoryText.setAlpha(0.5f);
@@ -144,7 +135,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     private void dropView(@NotNull CategoryVH holder) {
-        //tested
         holder.itemView.setTranslationZ(0);
         holder.mBinding.mainCheckBox.setVisibility(View.VISIBLE);
         holder.mBinding.mainCategoryText.setAlpha(0.8f);
@@ -152,46 +142,38 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     }
 
     public void onItemMove(int from, int to) {
-        //tested
         mAdapterUtil.itemMove(from, to, mCategoryList);
         notifyItemMoved(from, to);
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        //tested
         mListener.onCategoryDragHandleTouch(viewHolder);
         mModel.categoryItemDrop(mCategoryList);
-        //tested
         dropView((CategoryVH) viewHolder);
         mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
-        //tested
         mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
 
     public void setSelectedCategoryList(List<Category> selectedCategoryList) {
-        //tested
         this.mSelectedCategoryList = selectedCategoryList;
     }
 
     public void categorySelected(long id) {
-        //tested
         if (!mSelectedCategoryIdHashSet.contains(id)) mSelectedCategoryIdHashSet.add(id);
         else mSelectedCategoryIdHashSet.remove(id);
     }
 
     public void selectAll() {
-        //tested
         for (Category c : getCurrentList())
             mSelectedCategoryIdHashSet.add(c.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
-        //tested
         mSelectedCategoryIdHashSet.clear();
         notifyDataSetChanged();
     }
