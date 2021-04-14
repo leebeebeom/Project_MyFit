@@ -1,4 +1,4 @@
-package com.example.project_myfit;
+package com.example.project_myfit.util;
 
 public class MyFitConstant {
     //type
