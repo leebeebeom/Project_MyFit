@@ -28,7 +28,7 @@ public class DeleteConfirmDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.deleteConfirmDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.delete_check));
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
