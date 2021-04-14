@@ -220,11 +220,11 @@ public class Repository {
             return folderList;
         }
 
-        public List<String> getFolderNameListByParentCategory(String parentCategory) {
+        public List<String> getFolderNameListByParentId(long parentId) {
             //order by id
             //used in DialogViewModel -> isSameNameFolder
             List<String> folderNameList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameListByParentCategory(parentCategory)));
+            Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameListByParentId(parentId)));
             thread.start();
             try {
                 thread.join();
