@@ -1,4 +1,4 @@
-package com.example.project_myfit.main;
+package com.example.project_myfit.fragment.main;
 
 import android.app.Application;
 
@@ -11,43 +11,45 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.main.adapter.CategoryAdapter;
+import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.BOTTOM;
-import static com.example.project_myfit.MyFitConstant.ETC;
-import static com.example.project_myfit.MyFitConstant.OUTER;
-import static com.example.project_myfit.MyFitConstant.TOP;
+import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
+import static com.example.project_myfit.util.MyFitConstant.ETC;
+import static com.example.project_myfit.util.MyFitConstant.OUTER;
+import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class MainViewModel extends AndroidViewModel {
-    private final Repository mRepository;
-    private final List<Category> mSelectedCategoryList;
+    private final Repository.CategoryRepository mCategoryRepository;
+    private final Repository.FolderRepository mFolderRepository;
+    private final Repository.SizeRepository mSizeRepository;
+    private List<Category> mSelectedCategoryList;
     private final MutableLiveData<Integer> mSelectedCategorySizeLive;
     private int mCurrentItem;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new Repository(application);
+        mCategoryRepository = Repository.getCategoryRepository(application);
+        mFolderRepository = Repository.getFolderRepository(application);
+        mSizeRepository = Repository.getSizeRepository(application);
         mSelectedCategorySizeLive = new MutableLiveData<>();
         mSelectedCategoryList = new ArrayList<>();
     }
 
     public void orderNumberInit() {
-        //tested
-        List<Category> categoryList = mRepository.getAllCategoryList();
+        List<Category> categoryList = mCategoryRepository.getAllCategoryList();
         for (int i = 0; i < categoryList.size(); i++)
             categoryList.get(i).setOrderNumber(i);
-        mRepository.categoryUpdate(categoryList);
+        mCategoryRepository.categoryUpdate(categoryList);
     }
 
-    public void selectAllClick(boolean checked, CategoryAdapter categoryAdapter) {
-        //tested
+    public void selectAllClick(boolean isChecked, CategoryAdapter categoryAdapter) {
         if (!mSelectedCategoryList.isEmpty()) mSelectedCategoryList.clear();
-        if (checked) {
+        if (isChecked) {
             mSelectedCategoryList.addAll(categoryAdapter.getCurrentList());
             categoryAdapter.selectAll();
         } else categoryAdapter.deselectAll();
@@ -55,12 +57,11 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void selectedCategoryDelete() {
-        //tested
         List<Size> childSizeList = new ArrayList<>();
 
         for (Category category : mSelectedCategoryList) {
             category.setIsDeleted(true);
-            childSizeList.addAll(mRepository.getSizeLiseByFolderId(category.getId()));
+            childSizeList.addAll(mSizeRepository.getSizeListByParentId(category.getId()));
         }
 
         List<Folder> childFolderList = findAllChildFolder();
@@ -69,17 +70,16 @@ public class MainViewModel extends AndroidViewModel {
         for (Folder f : childFolderList) f.setParentIsDeleted(true);
         for (Size s : childSizeList) s.setParentIsDeleted(true);
 
-        mRepository.categoryUpdate(mSelectedCategoryList);
-        mRepository.folderUpdate(childFolderList);
-        mRepository.sizeUpdate(childSizeList);
+        mCategoryRepository.categoryUpdate(mSelectedCategoryList);
+        mFolderRepository.folderUpdate(childFolderList);
+        mSizeRepository.sizeUpdate(childSizeList);
     }
 
     @NotNull
     private List<Folder> findAllChildFolder() {
-        //tested
         List<Folder> topFolderList = new ArrayList<>();
         for (Category category : mSelectedCategoryList)
-            topFolderList.addAll(mRepository.getFolderListByFolderId(category.getId()));
+            topFolderList.addAll(mFolderRepository.getFolderListByParentId(category.getId()));
 
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
         findAllChildFolder2(topFolderList, allFolderList);
@@ -87,11 +87,10 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     private void findAllChildFolder2(@NotNull List<Folder> topFolderList, List<Folder> allFolderList) {
-        //tested
         List<Folder> childFolderList = new ArrayList<>();
         for (Folder folder : topFolderList) {
             if (!childFolderList.isEmpty()) childFolderList.clear();
-            childFolderList.addAll(mRepository.getFolderListByFolderId(folder.getId()));
+            childFolderList.addAll(mFolderRepository.getFolderListByParentId(folder.getId()));
             if (!childFolderList.isEmpty()) {
                 allFolderList.addAll(childFolderList);
                 findAllChildFolder2(childFolderList, allFolderList);
@@ -101,68 +100,61 @@ public class MainViewModel extends AndroidViewModel {
 
     @NotNull
     private List<Size> findAllChildSize(@NotNull List<Folder> allChildFolderList) {
-        //tested
         List<Size> allChildSizeList = new ArrayList<>();
         for (Folder folder : allChildFolderList)
-            allChildSizeList.addAll(mRepository.getSizeLiseByFolderId(folder.getId()));
+            allChildSizeList.addAll(mSizeRepository.getSizeListByParentId(folder.getId()));
         return allChildSizeList;
     }
 
     public void categorySelected(@NotNull Category category, boolean isChecked) {
-        //tested
         if (isChecked) mSelectedCategoryList.add(category);
         else mSelectedCategoryList.remove(category);
         mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
-    public void categoryItemDrop(List<Category> categoryList) {
-        //tested
-        mRepository.categoryUpdate(categoryList);
+    public void categoryItemDrop(@NotNull List<Category> newOrderNumberCategoryList) {
+        List<Category> newSelectedCategoryList = new ArrayList<>();
+        for (Category category : newOrderNumberCategoryList)
+            if (mSelectedCategoryList.contains(category)) newSelectedCategoryList.add(category);
+        mSelectedCategoryList = newSelectedCategoryList;
+
+        mCategoryRepository.categoryUpdate(newOrderNumberCategoryList);
     }
 
     public MutableLiveData<Integer> getSelectedCategorySizeLive() {
-        //tested
         return mSelectedCategorySizeLive;
     }
 
     //getter,setter---------------------------------------------------------------------------------
     public List<Category> getSelectedCategoryList() {
-        //tested
         return mSelectedCategoryList;
     }
 
     public long getSelectedCategoryId() {
-        //tested
         return mSelectedCategoryList.get(0).getId();
     }
 
     public int getSelectedCategorySize() {
-        //tested
         return mSelectedCategoryList.size();
     }
 
-    public List<Long> getFolderFolderIdList(String parentCategory) {
-        //tested
-        return mRepository.getFolderFolderIdByParent(parentCategory);
+    public List<Long> getFolderParentIdList(String parentCategory) {
+        return mFolderRepository.getFolderParentIdListByParentCategory(parentCategory);
     }
 
-    public List<Long> getSizeFolderIdList(String parentCategory) {
-        //tested
-        return mRepository.getSizeFolderIdByParent(parentCategory);
+    public List<Long> getSizeParentIdList(String parentCategory) {
+        return mSizeRepository.getSizeParentIdListByParentCategory(parentCategory);
     }
 
     public int getCurrentItem() {
-        //tested
         return mCurrentItem;
     }
 
     public void setCurrentItem(int mCurrentItem) {
-        //tested
         this.mCurrentItem = mCurrentItem;
     }
 
     public String getParentCategory() {
-        //tested
         switch (mCurrentItem) {
             case 0:
                 return TOP;
@@ -177,7 +169,6 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Category>> getCategoryLive() {
-        //tested
-        return mRepository.getAllCategoryLive();
+        return mCategoryRepository.getAllCategoryLive();
     }
 }
