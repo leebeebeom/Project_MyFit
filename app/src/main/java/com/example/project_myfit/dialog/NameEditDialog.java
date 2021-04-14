@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -35,14 +36,14 @@ public class NameEditDialog extends DialogFragment {
         mItemType = NameEditDialogArgs.fromBundle(getArguments()).getItemType();
         mIsParentName = NameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
         mItemId = NameEditDialogArgs.fromBundle(getArguments()).getItemId();
+        Log.d("TAG", "onCreate: asd");
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //tested
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.NameEditDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.NameEditDialog);
 
         Category category = mItemType.equals(CATEGORY) ? dialogUtils.getCategory(mItemId) : null;
         Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getFolder(mItemId) : null;
@@ -50,6 +51,7 @@ public class NameEditDialog extends DialogFragment {
         String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
         final String finalOldName = oldName;
         //입력된 이름 리스토어
+        //tested
         oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
         mBinding = dialogUtils.getBinding(oldName, mItemType);
