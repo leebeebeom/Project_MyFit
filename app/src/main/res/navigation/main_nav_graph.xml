@@ -109,6 +109,9 @@
         <action
             android:id="@+id/action_inputOutputFragment_to_goBackDialog"
             app:destination="@id/goBackDialog" />
+        <action
+            android:id="@+id/action_inputOutputFragment_to_imageClearDialog"
+            app:destination="@id/imageClearDialog" />
     </fragment>
     <activity
         android:id="@+id/searchActivity"
@@ -239,5 +242,9 @@
         android:id="@+id/goBackDialog"
         android:name="com.example.project_myfit.dialog.GoBackDialog"
         android:label="GoBackDialog" />
+    <dialog
+        android:id="@+id/imageClearDialog"
+        android:name="com.example.project_myfit.dialog.ImageClearDialog"
+        android:label="ImageClearDialog" />
     <!--    Dialog-->
 </navigation>
