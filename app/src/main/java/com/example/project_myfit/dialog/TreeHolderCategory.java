@@ -9,7 +9,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeCategoryBinding;
-import com.example.project_myfit.main.list.ListViewModel;
+import com.example.project_myfit.fragment.list.ListViewModel;
 import com.example.project_myfit.util.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -22,7 +22,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     private final TreeViewCategoryFolderAddListener mListener;
     private List<Size> mSelectedSizeList;
     private List<Folder> mSelectedFolderList;
-    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
+    private List<Long> mFolderParentIdList, mSizeParentIdList;
     private ItemTreeCategoryBinding mBinding;
     private boolean mIsClickable = true;
     private final AdapterUtil mAdapterUtil;
@@ -36,11 +36,11 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     public TreeHolderCategory setItems(List<Folder> selectedFolderList, List<Size> selectedSizeList,
-                                       List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+                                       List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         this.mSelectedFolderList = selectedFolderList;
         this.mSelectedSizeList = selectedSizeList;
-        this.mFolderFolderIdList = folderFolderIdList;
-        this.mSizeFolderIdList = sizeFolderIdList;
+        this.mFolderParentIdList = folderParentIdList;
+        this.mSizeParentIdList = sizeParentIdList;
         return this;
     }
 
@@ -50,12 +50,12 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding.setCategory(value.category);
 
         mBinding.contentsSize.setText(String.valueOf(mAdapterUtil.getCategoryContentsSize(value.category,
-                mFolderFolderIdList, mSizeFolderIdList)));
+                mFolderParentIdList, mSizeParentIdList)));
 
         //선택된 폴더가 이 카테고리노드라면
         if (!mSelectedFolderList.isEmpty())
             for (Folder selectedFolder : mSelectedFolderList)
-                if (selectedFolder.getFolderId() == value.category.getId()) {
+                if (selectedFolder.getParentId() == value.category.getId()) {
                     setAlpha();
                     break;
                 }
@@ -63,7 +63,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         //선택된 사이즈가 이 카테고리노드라면
         if (!mSelectedSizeList.isEmpty())
             for (Size selectedSize : mSelectedSizeList)
-                if (selectedSize.getFolderId() == value.category.getId()) {
+                if (selectedSize.getParentId() == value.category.getId()) {
                     setAlpha();
                     break;
                 }
