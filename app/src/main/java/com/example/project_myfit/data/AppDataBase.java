@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.project_myfit.MyFitConstant;
+import com.example.project_myfit.util.MyFitConstant;
 import com.example.project_myfit.data.dao.CategoryDao;
 import com.example.project_myfit.data.dao.FolderDao;
 import com.example.project_myfit.data.dao.RecentSearchDao;
