@@ -10,7 +10,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
-import com.example.project_myfit.main.list.ListViewModel;
+import com.example.project_myfit.fragment.list.ListViewModel;
 import com.example.project_myfit.util.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -22,7 +22,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     private final TreeViewFolderFolderAddListener mListener;
     private List<Folder> mSelectedFolderList, mAllFolderList;
     private List<Size> mSelectedSizeList;
-    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
+    private List<Long> mFolderParentIdList, mSizeParentIdList;
     private ItemTreeFolderBinding mBinding;
     private boolean isSelected;
     private boolean mIsClickable = true;
@@ -38,12 +38,12 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     }
 
     public TreeHolderFolder setItems(List<Folder> selectedFolderList,
-                                     List<Size> selectedSizeList, List<Folder> allFolderList, List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
+                                     List<Size> selectedSizeList, List<Folder> allFolderList, List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         this.mSelectedFolderList = selectedFolderList;
         this.mSelectedSizeList = selectedSizeList;
         this.mAllFolderList = allFolderList;
-        this.mFolderFolderIdList = folderFolderIdList;
-        this.mSizeFolderIdList = sizeFolderIdList;
+        this.mFolderParentIdList = folderParentIdList;
+        this.mSizeParentIdList = sizeParentIdList;
         return this;
     }
 
@@ -53,7 +53,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         mBinding.setFolder(value.folder);
 
         mBinding.contentsSize.setText(String.valueOf(mAdapterUtil
-                .getFolderContentsSize(value.folder, mFolderFolderIdList, mSizeFolderIdList)));
+                .getFolderContentsSize(value.folder, mFolderParentIdList, mSizeParentIdList)));
 
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.arrowIcon.getLayoutParams();
         params.leftMargin = value.margin;
@@ -81,7 +81,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         //현재위치가 이 노드라면
         if (!mSelectedFolderList.isEmpty())
             for (Folder selectedFolder : mSelectedFolderList)
-                if (selectedFolder.getFolderId() == value.folder.getId()) {
+                if (selectedFolder.getParentId() == value.folder.getId()) {
                     setAlpha();
                     break;
                 }
@@ -89,7 +89,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         if (!mSelectedSizeList.isEmpty())
             for (Size selectedSize : mSelectedSizeList)
-                if (selectedSize.getFolderId() == value.folder.getId()) {
+                if (selectedSize.getParentId() == value.folder.getId()) {
                     setAlpha();
                     break;
                 }
@@ -98,10 +98,10 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
         //자식노드 생성
         for (Folder folder : mAllFolderList)
-            if (value.folder.getId() == folder.getFolderId()) {
+            if (value.folder.getId() == folder.getParentId()) {
                 TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin))
                         .setViewHolder(new TreeHolderFolder(context, mListener, mListViewModel).
-                                setItems(mSelectedFolderList, mSelectedSizeList, mAllFolderList, mFolderFolderIdList, mSizeFolderIdList));
+                                setItems(mSelectedFolderList, mSelectedSizeList, mAllFolderList, mFolderParentIdList, mSizeParentIdList));
                 node.addChild(treeNode);
             }
 
@@ -145,7 +145,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         return ((FolderTreeHolder) mNode.getValue()).folder;
     }
 
-    public long getFolderId() {
+    public long getParentId() {
         return ((FolderTreeHolder) mNode.getValue()).folder.getId();
     }
 
