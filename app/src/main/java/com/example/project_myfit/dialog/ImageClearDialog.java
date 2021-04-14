@@ -1,36 +1,30 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-//테스트 끝
 public class ImageClearDialog extends DialogFragment {
-    private ImageClearConfirmClick mListener;
-
-    @Override
-    public void onAttach(@NonNull @NotNull Context context) {
-        super.onAttach(context);
-        mListener = (ImageClearConfirmClick) getTargetFragment();
-    }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return DialogUtils.getDialog(requireContext(), getString(R.string.image_delete_check),
-                (dialog, which) -> mListener.imageClearConfirmClick());
-    }
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
 
-    public interface ImageClearConfirmClick {
-        void imageClearConfirmClick();
+        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.image_delete_check));
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(v -> dialogUtils.imageDeleteConfirm());
+        return alertDialog;
     }
 }
