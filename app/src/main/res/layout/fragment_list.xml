@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
-        tools:context=".main.list.ListFragment">
+        tools:context=".fragment.list.ListFragment">
 
         <com.example.project_myfit.util.LockableScrollView
             android:id="@+id/list_scroll_view"

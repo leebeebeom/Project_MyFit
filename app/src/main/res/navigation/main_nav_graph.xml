@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.project_myfit.main.MainFragment"
+        android:name="com.example.project_myfit.fragment.main.MainFragment"
         android:label=""
         tools:layout="@layout/fragment_main">
         <action
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.example.project_myfit.main.list.ListFragment"
+        android:name="com.example.project_myfit.fragment.list.ListFragment"
         android:label=""
         tools:layout="@layout/fragment_list">
         <argument
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/inputOutputFragment"
-        android:name="com.example.project_myfit.fragment.main.listfragment.inputoutputfragment.InputOutputFragment"
+        android:name="com.example.project_myfit.fragment.inputoutput.InputOutputFragment"
         android:label=""
         tools:layout="@layout/fragment_input_output">
         <argument
