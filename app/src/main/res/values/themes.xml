@@ -61,7 +61,7 @@
     <!--    edit text corner-->
     <style name="myEditTextCorner" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/_12sdp</item>
+        <item name="cornerSize">@dimen/_6sdp</item>
     </style>
     <!--    bottom navigation active color-->
     <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
