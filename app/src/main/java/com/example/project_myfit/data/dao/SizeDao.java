@@ -24,17 +24,11 @@ public interface SizeDao {
     @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ")
     List<Size> getSizeListByParentId(long parentId);
 
-    @Query("SELECT * FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
-    List<Size> getSizeListByParentCategory(String parentCategory);
-
     @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
     List<Long> getSizeParentIdListByParentCategory(String parentCategory);
 
     @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY brand")
     List<String> getSizeBrandList();
-
-    @Query("SELECT name FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
-    List<String> getSizeNameList();
 
     @Query("SELECT * FROM Size WHERE id = :id")
     Size getSize(long id);
