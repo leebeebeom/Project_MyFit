@@ -35,7 +35,6 @@ public class SameNameAddDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //tested
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
 
         AlertDialog alertDialog;
