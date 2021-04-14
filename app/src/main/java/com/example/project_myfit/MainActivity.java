@@ -15,9 +15,6 @@ import com.example.project_myfit.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.FOLDER_ID;
-import static com.example.project_myfit.MyFitConstant.SIZE_ID;
-
 //TODO 트리뷰 롱클릭으로 삭제, 이름변경?
 //TODO 탭레이아웃 뱃지 텍스트 사이즈
 
@@ -61,18 +58,18 @@ public class MainActivity extends AppCompatActivity {
         //프래그먼트 변경 리스너
         destinationChangeListener(binding, actionBar);
 
-        //TODO getIntent 제거, navigation 이용
-        //sizeId, folderId 받은 후 존재하면 이동
-        if (getIntent() != null)
-            if (getIntent().getLongExtra(SIZE_ID, 0) != 0)
-                //TODO 삭제시 서치뷰 복귀
-                model.searchViewSizeClick(getIntent().getLongExtra(SIZE_ID, 0));
-            else if (getIntent().getLongExtra(FOLDER_ID, 0) != 0)
-                //TODO UP버튼 클릭시 서치뷰 복귀
-                //TODO 이름 변경시 종료됨
-                //TODO 네비게이션으로 뒤로 이동 후 백버튼 누르면 다시 서치뷰로 북귀함 and 어플 종료됨
-                //TODO 다른 폴더로 이동 후 back버튼 클릭시 다시 복귀됨(복귀 안되게)
-                model.searchViewFolderClick(getIntent().getLongExtra(FOLDER_ID, 0));
+//        //TODO getIntent 제거, navigation 이용
+//        //sizeId, folderId 받은 후 존재하면 이동
+//        if (getIntent() != null)
+//            if (getIntent().getLongExtra(SIZE_ID, 0) != 0)
+//                //TODO 삭제시 서치뷰 복귀
+//                model.searchViewSizeClick(getIntent().getLongExtra(SIZE_ID, 0));
+//            else if (getIntent().getLongExtra(FOLDER_ID, 0) != 0)
+//                //TODO UP버튼 클릭시 서치뷰 복귀
+//                //TODO 이름 변경시 종료됨
+//                //TODO 네비게이션으로 뒤로 이동 후 백버튼 누르면 다시 서치뷰로 북귀함 and 어플 종료됨
+//                //TODO 다른 폴더로 이동 후 back버튼 클릭시 다시 복귀됨(복귀 안되게)
+//                model.searchViewFolderClick(getIntent().getLongExtra(FOLDER_ID, 0));
     }
 
     private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar) {
