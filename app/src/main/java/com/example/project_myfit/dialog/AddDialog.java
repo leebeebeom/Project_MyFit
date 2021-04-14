@@ -37,8 +37,7 @@ public class AddDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //tested
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.addDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.addDialog);
 
         ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, mItemType);
         AlertDialog alertDialog;
@@ -59,7 +58,6 @@ public class AddDialog extends DialogFragment {
                 dialogUtils.addCategoryConfirmClick(newName, mParentCategory);
             else dialogUtils.addFolderConfirmClick(newName, mFolderId, mParentCategory);
         });
-
         return alertDialog;
     }
 }
