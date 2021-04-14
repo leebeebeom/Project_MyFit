@@ -28,16 +28,15 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //tested
         String message = mSelectedItemSize + getString(R.string.selected_item_delete_check);
 
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.selectedItemDeleteDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.selectedItemDeleteDialog);        //tested
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.selectedItemDeleteConfirmClick());
-
+        positiveButton.setOnClickListener(v ->
+                dialogUtils.selectedItemDeleteConfirmClick());
         return alertDialog;
     }
 }
