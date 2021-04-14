@@ -17,7 +17,7 @@ import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.CATEGORY;
+import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 
 public class AddDialog extends DialogFragment {
 

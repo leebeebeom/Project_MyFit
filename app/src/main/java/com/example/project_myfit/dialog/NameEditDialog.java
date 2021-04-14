@@ -19,9 +19,9 @@ import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.MyFitConstant.FOLDER;
-import static com.example.project_myfit.MyFitConstant.NAME_EDIT_NAME;
+import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
+import static com.example.project_myfit.util.MyFitConstant.FOLDER;
+import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_NAME;
 
 public class NameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;

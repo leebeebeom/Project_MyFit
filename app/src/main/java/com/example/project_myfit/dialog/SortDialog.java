@@ -17,15 +17,15 @@ import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.MAIN_FRAGMENT;
-import static com.example.project_myfit.MyFitConstant.SORT;
-import static com.example.project_myfit.MyFitConstant.SORT_BRAND;
-import static com.example.project_myfit.MyFitConstant.SORT_BRAND_REVERSE;
-import static com.example.project_myfit.MyFitConstant.SORT_CREATE;
-import static com.example.project_myfit.MyFitConstant.SORT_CREATE_REVERSE;
-import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
-import static com.example.project_myfit.MyFitConstant.SORT_NAME;
-import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
+import static com.example.project_myfit.util.MyFitConstant.MAIN_FRAGMENT;
+import static com.example.project_myfit.util.MyFitConstant.SORT;
+import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND;
+import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND_REVERSE;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CREATE;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CREATE_REVERSE;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.SORT_NAME;
+import static com.example.project_myfit.util.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
     private int mCheckedItem;

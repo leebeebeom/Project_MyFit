@@ -14,7 +14,7 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.MyFitConstant.CATEGORY;
+import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 
 public class SameNameAddDialog extends DialogFragment {
     private String mItemType;
