@@ -29,15 +29,20 @@ import static com.example.project_myfit.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
     private int mCheckedItem;
+    private String mFragmentType;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mCheckedItem = savedInstanceState == null ? SortDialogArgs.fromBundle(getArguments()).getSort() : savedInstanceState.getInt(SORT);
+        mFragmentType = SortDialogArgs.fromBundle(getArguments()).getFragmentType();
+    }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mCheckedItem = savedInstanceState == null ? SortDialogArgs.fromBundle(getArguments()).getSort() : savedInstanceState.getInt(SORT);
-        String fragmentType = SortDialogArgs.fromBundle(getArguments()).getFragmentType();
-
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).setBackStack(R.id.sortDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.sortDialog);
 
         SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
         MaterialRadioButton[] sortButtons = {binding.sortCustom, binding.sortCreate, binding.sortCreateReverse,
@@ -46,7 +51,7 @@ public class SortDialog extends DialogFragment {
         sortButtons[mCheckedItem].setChecked(true);
 
         //메인프래그먼트에서 실행 시 브랜드 삭제
-        if (fragmentType.equals(MAIN_FRAGMENT)) {
+        if (mFragmentType.equals(MAIN_FRAGMENT)) {
             binding.sortBrand.setVisibility(View.GONE);
             binding.sortBrandReverse.setVisibility(View.GONE);
         }
