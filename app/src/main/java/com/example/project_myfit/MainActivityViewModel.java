@@ -15,7 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class MainActivityViewModel extends AndroidViewModel {
-    private final Repository mRepository;
+    private final Repository.CategoryRepository mCategoryRepository;
+    private final Repository.FolderRepository mFolderRepository;
+    private final Repository.SizeRepository mSizeRepository;
     private Category mCategory;
     private Folder mFolder;
     private Size mSize;
@@ -24,48 +26,33 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
-        mRepository = new Repository(application);
+        mCategoryRepository = Repository.getCategoryRepository(application);
+        mFolderRepository = Repository.getFolderRepository(application);
+        mSizeRepository = Repository.getSizeRepository(application);
     }
 
-    public void searchViewSizeClick(long sizeId) {
-        mSize = mRepository.getSize(sizeId);
-        mCategory = mRepository.getCategory(mSize.getFolderId());
-        mFolder = mRepository.getFolder(mSize.getFolderId());
-        if (mCategory == null)
-            findCategory(mFolder);
-    }
-
-    public void searchViewFolderClick(long folderId) {
-        mFolder = mRepository.getFolder(folderId);
-        findCategory(mFolder);
-    }
-
-    private void findCategory(@NotNull Folder folder) {
-        mCategory = mRepository.getCategory(folder.getFolderId());
-        if (mCategory == null) {
-            Folder parentFolder = mRepository.getFolder(folder.getFolderId());
-            findCategory(parentFolder);
-        }
-    }
+//    public void searchViewSizeClick(long sizeId) {
+//        mSize = mSizeRepository.getSize(sizeId);
+//        mCategory = mCategoryRepository.getCategory(mSize.getParentId());
+//        mFolder = mFolderRepository.getFolder(mSize.getParentId());
+//        if (mCategory == null)
+//            findCategory(mFolder);
+//    }
+//
+//    public void searchViewFolderClick(long folderId) {
+//        mFolder = mFolderRepository.getFolder(folderId);
+//        findCategory(mFolder);
+//    }
+//
+//    private void findCategory(@NotNull Folder folder) {
+//        mCategory = mCategoryRepository.getCategory(folder.getParentId());
+//        if (mCategory == null) {
+//            Folder parentFolder = mFolderRepository.getFolder(folder.getParentId());
+//            findCategory(parentFolder);
+//        }
+//    }
 
     //getter,setter---------------------------------------------------------------------------------
-    //TODO 이 밑으로 다 제거
-    public Category getCategory() {
-        return mCategory;
-    }
-
-    public Size getSize() {
-        return mSize;
-    }
-
-    public void setSize(Size size) {
-        this.mSize = size;
-    }
-
-    public Folder getFolder() {
-        return mFolder;
-    }
-
     public List<Folder> getSelectedFolderList() {
         return mSelectedFolderList;
     }
