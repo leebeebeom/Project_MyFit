@@ -127,19 +127,8 @@ public class Repository {
             return largestOrder.get() + 1;
         }
 
-        public Category categoryInsert(Category category) {
-            AtomicReference<Category> addedCategory = new AtomicReference<>();
-            Thread thread = new Thread(() -> {
-                mCategoryDao.categoryInsert(category);
-                addedCategory.set(mCategoryDao.getLatestCategory());
-            });
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return addedCategory.get();
+        public void categoryInsert(Category category) {
+            new Thread(() -> mCategoryDao.categoryInsert(category)).start();
         }
 
         public void categoryInsert(List<Category> categoryList) {
