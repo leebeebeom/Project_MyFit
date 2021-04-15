@@ -1,5 +1,6 @@
 package com.example.project_myfit;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 
@@ -29,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavControl;
+    private boolean mIsKeyboardShowing;
+    private int mTopFabOriginVisibility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         //프래그먼트 변경 리스너
         destinationChangeListener(binding, actionBar);
+        //키보드 쇼잉 리스너
+        keyBoardShowingListener(binding);
 
 //        //TODO getIntent 제거, navigation 이용
 //        //sizeId, folderId 받은 후 존재하면 이동
@@ -78,16 +83,19 @@ public class MainActivity extends AppCompatActivity {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
                 binding.toolbarCustomTitle.setVisibility(View.VISIBLE);
+                binding.topFab.hide();
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
                 fabChange(binding, R.drawable.icon_add);
                 binding.toolbarCustomTitle.setVisibility(View.GONE);
+                binding.topFab.hide();
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
                 fabChange(binding, R.drawable.icon_save);
                 binding.toolbarCustomTitle.setVisibility(View.GONE);
+                binding.topFab.hide();
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
         });
@@ -97,6 +105,34 @@ public class MainActivity extends AppCompatActivity {
         binding.activityFab.hide();
         binding.activityFab.setImageResource(resId);
         binding.activityFab.show();
+    }
+
+    private void keyBoardShowingListener(@NotNull ActivityMainBinding binding) {
+        View rootView = binding.getRoot();
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            rootView.getWindowVisibleDisplayFrame(r);
+
+            int screenHeight = rootView.getRootView().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
+
+            if (keypadHeight > screenHeight * 0.15) {
+                if (!mIsKeyboardShowing) {
+                    mIsKeyboardShowing = true;
+                    binding.activityFab.setVisibility(View.INVISIBLE);
+                    binding.bottomAppBar.setVisibility(View.INVISIBLE);
+                    mTopFabOriginVisibility = binding.topFab.getVisibility();
+                    binding.topFab.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                if (mIsKeyboardShowing) {
+                    mIsKeyboardShowing = false;
+                    binding.bottomAppBar.setVisibility(View.VISIBLE);
+                    binding.activityFab.show();
+                    binding.topFab.setVisibility(mTopFabOriginVisibility);
+                }
+            }
+        });
     }
 
     @Override
