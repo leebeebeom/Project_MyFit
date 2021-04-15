@@ -115,18 +115,6 @@ public class Repository {
             return category.get();
         }
 
-        public Category getLatestCategory() {
-            AtomicReference<Category> category = new AtomicReference<>();
-            Thread thread = new Thread(() -> category.set(mCategoryDao.getLatestCategory()));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return category.get();
-        }
-
         public int getCategoryLargestOrderPlus1() {
             AtomicInteger largestOrder = new AtomicInteger();
             Thread thread = new Thread(() -> largestOrder.set(mCategoryDao.getCategoryLargestOrder()));
@@ -139,8 +127,19 @@ public class Repository {
             return largestOrder.get() + 1;
         }
 
-        public void categoryInsert(Category category) {
-            new Thread(() -> mCategoryDao.categoryInsert(category)).start();
+        public Category categoryInsert(Category category) {
+            AtomicReference<Category> addedCategory = new AtomicReference<>();
+            Thread thread = new Thread(() -> {
+                mCategoryDao.categoryInsert(category);
+                addedCategory.set(mCategoryDao.getLatestCategory());
+            });
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return addedCategory.get();
         }
 
         public void categoryInsert(List<Category> categoryList) {
@@ -253,18 +252,6 @@ public class Repository {
         public Folder getFolder(long id) {
             AtomicReference<Folder> folder = new AtomicReference<>();
             Thread thread = new Thread(() -> folder.set(mFolderDao.getFolder(id)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return folder.get();
-        }
-
-        public Folder getLatestFolder() {
-            AtomicReference<Folder> folder = new AtomicReference<>();
-            Thread thread = new Thread(() -> folder.set(mFolderDao.getLatestFolder()));
             thread.start();
             try {
                 thread.join();
