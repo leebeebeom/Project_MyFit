@@ -1,4 +1,4 @@
-package com.example.project_myfit.util;
+package com.example.project_myfit.util.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class AdapterUtil {
-    //all checked
     private final Context mContext;
     private Animation mOpenAnimation;
 
@@ -28,7 +27,6 @@ public class AdapterUtil {
     }
 
     public void listActionModeOn(@NotNull MaterialCardView cardView, @NotNull MaterialCheckBox checkBox, @NotNull HashSet<Long> selectedItemIdHashSet, long id) {
-        //checked
         if (mOpenAnimation == null)
             mOpenAnimation = AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right);
         if (!mOpenAnimation.hasStarted())
@@ -37,7 +35,6 @@ public class AdapterUtil {
     }
 
     public void listActionModeOff(@NotNull MaterialCardView cardView, @NotNull MaterialCheckBox checkBox, @NotNull HashSet<Long> selectedCategoryIdHashSet) {
-        //checked
         cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
         checkBox.setChecked(false);
         mOpenAnimation = null;
@@ -50,8 +47,9 @@ public class AdapterUtil {
     }
 
     public void gridActionModeOff(@NotNull MaterialCheckBox checkBox, @NotNull HashSet<Long> selectedItemHashSet) {
-        checkBox.setVisibility(View.GONE);
         checkBox.setChecked(false);
+        checkBox.jumpDrawablesToCurrentState();
+        checkBox.setVisibility(View.GONE);
         if (!selectedItemHashSet.isEmpty()) selectedItemHashSet.clear();
     }
 
@@ -70,7 +68,6 @@ public class AdapterUtil {
     }
 
     private void swap(@NotNull List<?> list, int i, boolean isDown) {
-        //checked
         if (list.get(i) instanceof Category) {
             Category category1 = (Category) list.get(i);
             Category category2 = isDown ? (Category) list.get(i + 1) : (Category) list.get(i - 1);
@@ -97,22 +94,20 @@ public class AdapterUtil {
         }
     }
 
-    public int getCategoryContentsSize(Category category, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-        //checked
+    public int getCategoryContentsSize(Category category, @NotNull List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         int amount = 0;
-        for (Long l : folderFolderIdList)
+        for (Long l : folderParentIdList)
             if (l == category.getId()) amount++;
-        for (Long l : sizeFolderIdList)
+        for (Long l : sizeParentIdList)
             if (l == category.getId()) amount++;
         return amount;
     }
 
-    public int getFolderContentsSize(Folder folder, @NotNull List<Long> folderFolderIdList, List<Long> sizeFolderIdList) {
-        //checked
+    public int getFolderContentsSize(Folder folder, @NotNull List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         int amount = 0;
-        for (Long l : folderFolderIdList)
+        for (Long l : folderParentIdList)
             if (l == folder.getId()) amount++;
-        for (Long l : sizeFolderIdList)
+        for (Long l : sizeParentIdList)
             if (l == folder.getId()) amount++;
         return amount;
     }
