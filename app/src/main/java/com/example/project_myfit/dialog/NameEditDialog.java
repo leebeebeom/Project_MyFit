@@ -43,8 +43,8 @@ public class NameEditDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this).backStackLiveSetValue(R.id.NameEditDialog);
 
-        Category category = mItemType.equals(CATEGORY) ? dialogUtils.getCategory(mItemId) : null;
-        Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getFolder(mItemId) : null;
+        Category category = mItemType.equals(CATEGORY) ? dialogUtils.getDialogViewModel().getCategory(mItemId) : null;
+        Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getDialogViewModel().getFolder(mItemId) : null;
 
         String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
         final String finalOldName = oldName;

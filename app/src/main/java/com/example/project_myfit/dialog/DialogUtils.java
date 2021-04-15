@@ -284,12 +284,4 @@ public class DialogUtils {
     public void treeViewNodeClick(int selectedItemSize, long parentId) {
         mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToItemMoveDialog(selectedItemSize, parentId));
     }
-
-    public Category getCategory(long categoryId) {
-        return mDialogViewModel.getCategory(categoryId);
-    }
-
-    public Folder getFolder(long folderId) {
-        return mDialogViewModel.getFolder(folderId);
-    }
 }

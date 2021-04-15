@@ -51,8 +51,8 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         mDialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
-        mThisCategory = mDialogUtils.getCategory(TreeViewDialogArgs.fromBundle(getArguments()).getThisCategoryId());
-        mThisFolder = mDialogUtils.getFolder(TreeViewDialogArgs.fromBundle(getArguments()).getThisFolderId());
+        mThisCategory = mDialogUtils.getDialogViewModel().getCategory(TreeViewDialogArgs.fromBundle(getArguments()).getThisCategoryId());
+        mThisFolder = mDialogUtils.getDialogViewModel().getFolder(TreeViewDialogArgs.fromBundle(getArguments()).getThisFolderId());
         mModel.setSelectedItemList(mDialogUtils.getDialogViewModel().getSelectedFolderList(), mDialogUtils.getDialogViewModel().getSelectedSizeList());
 
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
