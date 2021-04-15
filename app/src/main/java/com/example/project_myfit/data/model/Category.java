@@ -7,14 +7,15 @@ import java.util.Objects;
 
 @Entity
 public class Category {
-    private final String parentCategory;
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long id;
+    private final String parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy;
     private String categoryName;
 
-    public Category(String categoryName, String parentCategory, int orderNumber) {
+    public Category(long id, String categoryName, String parentCategory, int orderNumber) {
+        this.id = id;
         this.categoryName = categoryName;
         this.parentCategory = parentCategory;
         this.orderNumber = orderNumber;
