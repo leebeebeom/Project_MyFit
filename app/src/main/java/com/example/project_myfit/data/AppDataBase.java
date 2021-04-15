@@ -10,7 +10,6 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.project_myfit.util.MyFitConstant;
 import com.example.project_myfit.data.dao.CategoryDao;
 import com.example.project_myfit.data.dao.FolderDao;
 import com.example.project_myfit.data.dao.RecentSearchDao;
@@ -19,6 +18,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
+import com.example.project_myfit.util.MyFitConstant;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -96,23 +96,23 @@ public abstract class AppDataBase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             List<Category> categoryList = new ArrayList<>();
-                            categoryList.add(new Category("반팔", MyFitConstant.TOP, 1));
-                            categoryList.add(new Category("긴팔", MyFitConstant.TOP, 2));
-                            categoryList.add(new Category("니트", MyFitConstant.TOP, 3));
-                            categoryList.add(new Category("후드", MyFitConstant.TOP, 4));
-                            categoryList.add(new Category("셔츠", MyFitConstant.TOP, 5));
-                            categoryList.add(new Category("청바지", MyFitConstant.BOTTOM, 6));
-                            categoryList.add(new Category("슬랙스", MyFitConstant.BOTTOM, 7));
-                            categoryList.add(new Category("반바지", MyFitConstant.BOTTOM, 8));
-                            categoryList.add(new Category("트랙 팬츠", MyFitConstant.BOTTOM, 9));
-                            categoryList.add(new Category("Ma-1", MyFitConstant.OUTER, 10));
-                            categoryList.add(new Category("패딩", MyFitConstant.OUTER, 11));
-                            categoryList.add(new Category("야상", MyFitConstant.OUTER, 12));
-                            categoryList.add(new Category("후드 집업", MyFitConstant.OUTER, 13));
-                            categoryList.add(new Category("신발", MyFitConstant.ETC, 14));
-                            categoryList.add(new Category("안경", MyFitConstant.ETC, 15));
-                            categoryList.add(new Category("목걸이", MyFitConstant.ETC, 16));
-                            categoryList.add(new Category("기타", MyFitConstant.ETC, 17));
+                            categoryList.add(new Category(1, "반팔", MyFitConstant.TOP, 1));
+                            categoryList.add(new Category(2, "긴팔", MyFitConstant.TOP, 2));
+                            categoryList.add(new Category(3, "니트", MyFitConstant.TOP, 3));
+                            categoryList.add(new Category(4, "후드", MyFitConstant.TOP, 4));
+                            categoryList.add(new Category(5, "셔츠", MyFitConstant.TOP, 5));
+                            categoryList.add(new Category(6, "청바지", MyFitConstant.BOTTOM, 6));
+                            categoryList.add(new Category(7, "슬랙스", MyFitConstant.BOTTOM, 7));
+                            categoryList.add(new Category(8, "반바지", MyFitConstant.BOTTOM, 8));
+                            categoryList.add(new Category(9, "트랙 팬츠", MyFitConstant.BOTTOM, 9));
+                            categoryList.add(new Category(10, "Ma-1", MyFitConstant.OUTER, 10));
+                            categoryList.add(new Category(11, "패딩", MyFitConstant.OUTER, 11));
+                            categoryList.add(new Category(12, "야상", MyFitConstant.OUTER, 12));
+                            categoryList.add(new Category(13, "후드 집업", MyFitConstant.OUTER, 13));
+                            categoryList.add(new Category(14, "신발", MyFitConstant.ETC, 14));
+                            categoryList.add(new Category(15, "안경", MyFitConstant.ETC, 15));
+                            categoryList.add(new Category(16, "목걸이", MyFitConstant.ETC, 16));
+                            categoryList.add(new Category(17, "기타", MyFitConstant.ETC, 17));
                             Repository.getCategoryRepository(context).categoryInsert(categoryList);
                         }
                     }).addMigrations(MIGRATION_1_2)
