@@ -3,7 +3,6 @@ package com.example.project_myfit;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -84,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
-                Toast.makeText(this, "호출", Toast.LENGTH_SHORT).show();
                 fabChange(binding, R.drawable.icon_add);
                 binding.toolbarCustomTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
