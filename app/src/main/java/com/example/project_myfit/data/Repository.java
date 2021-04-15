@@ -178,7 +178,7 @@ public class Repository {
         }
 
         public List<Folder> getFolderListByParentCategory(String parentCategory) {
-            //order by id
+            //order by orderNumber
             //used in listViewModel -> getFolderHistory(sort.folderSort)
             //used in treeViewDialog -> sort.folderSort
             List<Folder> folderList = new ArrayList<>();
