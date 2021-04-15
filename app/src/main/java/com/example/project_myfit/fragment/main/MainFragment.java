@@ -37,9 +37,9 @@ import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 import com.example.project_myfit.fragment.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.adapter.DragCallBackList;
-import com.example.project_myfit.util.keyBoardListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +124,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
-    private int mTopFabVisibility;
+    private FloatingActionButton mTopFab;
 
     private void viewPagerSetEnable(boolean enable) {
         mBinding.viewPager.setUserInputEnabled(enable);
@@ -176,6 +176,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mTopFab = requireActivity().findViewById(R.id.top_fab);
         mBinding.viewPager.setAdapter(getViewPagerAdapter());
         setDialogLive();
         setCategoryLive();
@@ -185,11 +186,6 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             if (mActionMode != null) mActionMode.finish();
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
         });
-
-        keyBoardListener keyBoardListener = new keyBoardListener();
-        view.getViewTreeObserver().addOnGlobalLayoutListener(() ->
-                keyBoardListener.keyboardShowingListener(view, requireActivity().findViewById(R.id.activity_fab),
-                        requireActivity().findViewById(R.id.bottom_app_bar), mBinding.mainTopFab, mTopFabVisibility));
     }
 
     @NotNull
@@ -301,9 +297,8 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
     private void setScrollChangeListener() {
         mBinding.mainScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (v.getScrollY() == 0) mBinding.mainTopFab.hide();
-            else mBinding.mainTopFab.show();
-            mTopFabVisibility = mBinding.mainTopFab.getVisibility();
+            if (v.getScrollY() == 0) mTopFab.hide();
+            else mTopFab.show();
 
             if ((mIsDragSelecting || mIsDragging) && mScrollEnable && scrollY > oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
@@ -366,7 +361,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     }
 
     private void topFabClickListener() {
-        mBinding.mainTopFab.setOnClickListener(v -> {
+        mTopFab.setOnClickListener(v -> {
             mBinding.mainScrollView.smoothScrollTo(0, 0);
             mBinding.mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY != 0)
