@@ -39,7 +39,6 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.example.project_myfit.fragment.list.ListFragment"
-        android:label=""
         tools:layout="@layout/fragment_list">
         <argument
             android:name="categoryId"
