@@ -212,7 +212,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
         } else {
             if (savedInstanceState != null) mModel.findFolderClickedNode(mNodeRoot);
 
-            TreeNode addedFolderNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(mDialogUtils.getDialogViewModel().getAddedFolder(), mModel.getMargin2()))
+            TreeNode addedFolderNode = new TreeNode(new TreeHolderFolder.FolderTreeHolder(mDialogUtils.getDialogViewModel().getAddedFolder(), mModel.getPlusMargin()))
                     .setViewHolder(mModel.getFolderViewHolder(new TreeHolderFolder(requireContext(), this, mThisFolder)));
 
             mTreeView.addNode(mModel.getClickedNode(), addedFolderNode);
