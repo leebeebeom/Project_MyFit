@@ -22,88 +22,38 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
-import static com.example.project_myfit.MyFitConstant.SORT_LIST;
-import static com.example.project_myfit.MyFitConstant.SORT_MAIN;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.SORT_LIST;
+import static com.example.project_myfit.util.MyFitConstant.SORT_MAIN;
 
 public class TreeViewModel extends AndroidViewModel {
-    private final Repository mRepository;
+    private final Repository.CategoryRepository mCategoryRepository;
+    private final Repository.FolderRepository mFolderRepository;
     private String mParentCategory;
     private List<Folder> mAllFolderList, mSelectedFolderList;
     private List<Size> mSelectedSizeList;
     private List<Category> mAllCategoryList;
-    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
+    private List<Long> mFolderParentIdList, mSizeParentIdList;
     private TreeNode mClickedNode;
     private final int mMargin, mMainSort, mListSort;
 
     public TreeViewModel(@NonNull @NotNull Application application) {
         super(application);
-        mRepository = new Repository(application);
+        mCategoryRepository = Repository.getCategoryRepository(application);
+        mFolderRepository = Repository.getFolderRepository(application);
         mMargin = (int) application.getResources().getDimension(R.dimen._12sdp);
         mMainSort = getApplication().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE).getInt(SORT_MAIN, SORT_CUSTOM);
         mListSort = getApplication().getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE).getInt(SORT_LIST, SORT_CUSTOM);
     }
 
-    public void setParentCategory(String mParentCategory) {
-        this.mParentCategory = mParentCategory;
-    }
-
-    public void setSelectedItemList(List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        this.mSelectedFolderList = selectedFolderList;
-        this.mSelectedSizeList = selectedSizeList;
-    }
-
-    public List<Category> getCategoryList() {
-        if (mAllCategoryList == null)
-            mAllCategoryList = Sort.categorySort(mMainSort, mRepository.getCategoryListByParent(mParentCategory));
-        return mAllCategoryList;
-    }
-
-    public List<Folder> getFolderList() {
-        if (mAllFolderList == null)
-            mAllFolderList = Sort.folderSort(mListSort, mRepository.getFolderListByParent(mParentCategory));
-        return mAllFolderList;
-    }
-
-    public int getMargin() {
-        return mMargin;
-    }
-
     public TreeHolderCategory getCategoryViewHolder(@NotNull TreeHolderCategory treeHolderCategory) {
         return treeHolderCategory.setItems(mSelectedFolderList, mSelectedSizeList,
-                getFolderFolderIdList(), getSizeFolderIdList());
+                getFolderParentIdList(), getSizeParentIdList());
     }
 
     public TreeHolderFolder getFolderViewHolder(@NotNull TreeHolderFolder treeHolderFolder) {
         return treeHolderFolder.setItems(mSelectedFolderList, mSelectedSizeList,
-                getFolderList(), getFolderFolderIdList(), getSizeFolderIdList());
-    }
-
-    public String getParentCategory() {
-        return mParentCategory;
-    }
-
-    public void treeViewDestroy() {
-        mAllCategoryList = null;
-        mAllFolderList = null;
-        mFolderFolderIdList = null;
-        mSizeFolderIdList = null;
-    }
-
-    public int getSelectedItemSize() {
-        return mSelectedFolderList.size() + mSelectedSizeList.size();
-    }
-
-    public Category addCategoryConfirmClick(@NotNull String categoryName) {
-        return mRepository.treeViewAddCategory(new Category(categoryName.trim(), mParentCategory, mRepository.getCategoryLargestOrderPlus1()));
-    }
-
-    public void setClickedNode(TreeNode node) {
-        mClickedNode = node;
-    }
-
-    public TreeNode getClickedNode() {
-        return mClickedNode;
+                getFolderList(), getFolderParentIdList(), getSizeParentIdList());
     }
 
     public void findCategoryClickedNode(@NotNull TreeNode nodeRoot) {
@@ -114,31 +64,6 @@ public class TreeViewModel extends AndroidViewModel {
                 break;
             }
         }
-    }
-
-    private TreeHolderCategory getClickedCategoryViewHolder() {
-        return (TreeHolderCategory) mClickedNode.getViewHolder();
-    }
-
-    public Folder categoryFolderInsert(@NotNull String folderName) {
-        Folder folder = new Folder(getCurrentTime(), folderName,
-                getClickedCategoryViewHolder().getCategoryId(),
-                mRepository.getFolderLargestOrderPlus1(), mParentCategory);
-        mRepository.folderInsert(folder);
-        return folder;
-    }
-
-    public void categoryAddFolderConfirmClick() {
-        TreeHolderCategory categoryViewHolder = getClickedCategoryViewHolder();
-
-        categoryViewHolder.setIconClickable();
-
-        int size = Integer.parseInt(categoryViewHolder.getBinding().contentsSize.getText().toString());
-        categoryViewHolder.getBinding().contentsSize.setText(String.valueOf(size + 1));
-
-        Category dummy = getClickedCategoryViewHolder().getCategory();
-        dummy.setDummy(!dummy.getDummy());
-        mRepository.categoryUpdate(dummy);
     }
 
     public void findFolderClickedNode(TreeNode nodeRoot) {
@@ -171,22 +96,17 @@ public class TreeViewModel extends AndroidViewModel {
             }
     }
 
-    public TreeHolderFolder getClickedFolderViewHolder() {
-        return (TreeHolderFolder) mClickedNode.getViewHolder();
-    }
+    public void categoryAddFolderConfirmClick() {
+        TreeHolderCategory categoryViewHolder = getClickedCategoryViewHolder();
 
-    @NotNull
-    public Folder folderFolderInsert(@NotNull String folderName) {
-        Folder folder = new Folder(getCurrentTime(), folderName, getClickedFolderViewHolder().getFolderId(),
-                mRepository.getFolderLargestOrderPlus1(), mParentCategory);
-        mRepository.folderInsert(folder);
-        return folder;
-    }
+        categoryViewHolder.setIconClickable();
 
-    public int getMargin2() {
-        int originMargin = getClickedFolderViewHolder().getMargin();
-        int plusMarin = (int) getApplication().getResources().getDimension(R.dimen._8sdp);
-        return originMargin + plusMarin;
+        int size = Integer.parseInt(categoryViewHolder.getBinding().contentsSize.getText().toString());
+        categoryViewHolder.getBinding().contentsSize.setText(String.valueOf(size + 1));
+
+        Category dummy = categoryViewHolder.getCategory();
+        dummy.setDummy(!dummy.getDummy());
+        mCategoryRepository.categoryUpdate(dummy);
     }
 
     public void folderAddFolderConfirmClick() {
@@ -197,21 +117,84 @@ public class TreeViewModel extends AndroidViewModel {
         int size = Integer.parseInt(folderViewHolder.getBinding().contentsSize.getText().toString());
         folderViewHolder.getBinding().contentsSize.setText(String.valueOf(size + 1));
 
-        Folder dummy = getClickedFolderViewHolder().getFolder();
+        Folder dummy = folderViewHolder.getFolder();
         dummy.setDummy(!dummy.getDummy());
-        mRepository.folderUpdate(dummy);
+        mFolderRepository.folderUpdate(dummy);
     }
 
-    private List<Long> getFolderFolderIdList() {
-        if (mFolderFolderIdList == null)
-            mFolderFolderIdList = mRepository.getFolderFolderIdByParent(mParentCategory);
-        return mFolderFolderIdList;
+    public void treeViewDestroy() {
+        //for new category, new folder node
+        mAllCategoryList = null;
+        mAllFolderList = null;
+        mFolderParentIdList = null;
+        mSizeParentIdList = null;
     }
 
-    private List<Long> getSizeFolderIdList() {
-        if (mSizeFolderIdList == null)
-            mSizeFolderIdList = mRepository.getSizeFolderIdByParent(mParentCategory);
-        return mSizeFolderIdList;
+    public int getMargin() {
+        return mMargin;
+    }
+
+    public int getPlusMargin() {
+        int originMargin = getClickedFolderViewHolder().getMargin();
+        int plusMarin = (int) getApplication().getResources().getDimension(R.dimen._8sdp);
+        return originMargin + plusMarin;
+    }
+
+    public void setSelectedItemList(List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        this.mSelectedFolderList = selectedFolderList;
+        this.mSelectedSizeList = selectedSizeList;
+    }
+
+    public void setParentCategory(String mParentCategory) {
+        this.mParentCategory = mParentCategory;
+    }
+
+    public String getParentCategory() {
+        return mParentCategory;
+    }
+
+    private TreeHolderCategory getClickedCategoryViewHolder() {
+        return (TreeHolderCategory) mClickedNode.getViewHolder();
+    }
+
+    private TreeHolderFolder getClickedFolderViewHolder() {
+        return (TreeHolderFolder) mClickedNode.getViewHolder();
+    }
+
+    public List<Category> getCategoryList() {
+        if (mAllCategoryList == null)
+            mAllCategoryList = Sort.categorySort(mMainSort, mCategoryRepository.getCategoryListByParentCategory(mParentCategory));
+        return mAllCategoryList;
+    }
+
+    public List<Folder> getFolderList() {
+        if (mAllFolderList == null)
+            mAllFolderList = Sort.folderSort(mListSort, mFolderRepository.getFolderListByParentCategory(mParentCategory));
+        return mAllFolderList;
+    }
+
+    public int getSelectedItemSize() {
+        return mSelectedFolderList.size() + mSelectedSizeList.size();
+    }
+
+    public void setClickedNode(TreeNode node) {
+        mClickedNode = node;
+    }
+
+    public TreeNode getClickedNode() {
+        return mClickedNode;
+    }
+
+    private List<Long> getFolderParentIdList() {
+        if (mFolderParentIdList == null)
+            mFolderParentIdList = mFolderRepository.getFolderParentIdListByParentCategory(mParentCategory);
+        return mFolderParentIdList;
+    }
+
+    private List<Long> getSizeParentIdList() {
+        if (mSizeParentIdList == null)
+            mSizeParentIdList = Repository.getSizeRepository(getApplication()).getSizeParentIdListByParentCategory(mParentCategory);
+        return mSizeParentIdList;
     }
 
     private long getCurrentTime() {
