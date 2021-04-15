@@ -10,7 +10,6 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
-import com.example.project_myfit.fragment.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -27,13 +26,12 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     private boolean isSelected;
     private boolean mIsClickable = true;
     private final AdapterUtil mAdapterUtil;
-    private final ListViewModel mListViewModel;
+    private Folder mThisFolder;
 
-
-    public TreeHolderFolder(Context context, TreeViewFolderFolderAddListener listener, ListViewModel listViewModel) {
+    public TreeHolderFolder(Context context, TreeViewFolderFolderAddListener listener, Folder thisFolder) {
         super(context);
         this.mListener = listener;
-        this.mListViewModel = listViewModel;
+        this.mThisFolder = thisFolder;
         mAdapterUtil = new AdapterUtil(context);
     }
 
@@ -100,7 +98,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         for (Folder folder : mAllFolderList)
             if (value.folder.getId() == folder.getParentId()) {
                 TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin))
-                        .setViewHolder(new TreeHolderFolder(context, mListener, mListViewModel).
+                        .setViewHolder(new TreeHolderFolder(context, mListener, mThisFolder).
                                 setItems(mSelectedFolderList, mSelectedSizeList, mAllFolderList, mFolderParentIdList, mSizeParentIdList));
                 node.addChild(treeNode);
             }
@@ -111,8 +109,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
             mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
         else mBinding.arrowIcon.setVisibility(View.INVISIBLE);
 
-        if (mListViewModel != null && mListViewModel.getThisFolder() != null &&
-                value.folder.getId() == mListViewModel.getThisFolder().getId())
+        if (mThisFolder != null && mThisFolder.getId() == value.folder.getId())
             mBinding.currentPosition.setVisibility(View.VISIBLE);
         else mBinding.currentPosition.setVisibility(View.GONE);
 
