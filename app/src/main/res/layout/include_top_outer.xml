@@ -10,7 +10,7 @@
 
         <variable
             name="constant"
-            type="com.example.project_myfit.MyFitConstant" />
+            type="com.example.project_myfit.util.MyFitConstant" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
