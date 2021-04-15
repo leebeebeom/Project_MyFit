@@ -287,9 +287,8 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         viewPagerChangeListener();
         topFabClickListener();
 
-        if (savedInstanceState == null) mBinding.viewPager.setCurrentItem(0);
-        else if (savedInstanceState.getBoolean(ACTION_MODE)) {
-            mButtonArray[mModel.getCurrentItem()].setChecked(true);
+        mButtonArray[mModel.getCurrentItem()].setChecked(true);
+        if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
             mCategoryAdapterArray[mModel.getCurrentItem()].setSelectedCategoryList(mModel.getSelectedCategoryList());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
