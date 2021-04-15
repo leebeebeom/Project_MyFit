@@ -1,4 +1,4 @@
-package com.example.project_myfit;
+package com.example.project_myfit.util.adapter;
 
 import android.graphics.Canvas;
 
@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
+import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterGrid;
 
 import org.jetbrains.annotations.NotNull;
 
