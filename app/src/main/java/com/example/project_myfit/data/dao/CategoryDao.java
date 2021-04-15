@@ -28,7 +28,7 @@ public interface CategoryDao {
     Category getCategory(long id);
 
     @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
-    LiveData<Category> getLatestCategory();
+    LiveData<Category> getLatestCategoryLive();
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
