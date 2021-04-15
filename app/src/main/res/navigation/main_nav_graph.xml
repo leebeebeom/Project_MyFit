@@ -129,7 +129,7 @@
             android:name="parentCategory"
             app:argType="string" />
         <argument
-            android:name="folderId"
+            android:name="parentId"
             app:argType="long" />
         <action
             android:id="@+id/action_addDialog_to_sameNameAddDialog"
@@ -195,6 +195,12 @@
         <argument
             android:name="parent_category"
             app:argType="string" />
+        <argument
+            android:name="this_category_id"
+            app:argType="long" />
+        <argument
+            android:name="this_folder_id"
+            app:argType="long" />
         <action
             android:id="@+id/action_treeViewDialog_to_addDialog"
             app:destination="@id/addDialog" />
