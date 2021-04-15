@@ -3,6 +3,7 @@ package com.example.project_myfit;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,19 +81,17 @@ public class MainActivity extends AppCompatActivity {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
                 binding.toolbarCustomTitle.setVisibility(View.VISIBLE);
-                binding.topFab.hide();
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
+                Toast.makeText(this, "호출", Toast.LENGTH_SHORT).show();
                 fabChange(binding, R.drawable.icon_add);
                 binding.toolbarCustomTitle.setVisibility(View.GONE);
-                binding.topFab.hide();
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
                 fabChange(binding, R.drawable.icon_save);
                 binding.toolbarCustomTitle.setVisibility(View.GONE);
-                binding.topFab.hide();
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
         });
