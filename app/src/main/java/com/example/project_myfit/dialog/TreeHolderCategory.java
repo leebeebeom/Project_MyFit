@@ -9,7 +9,6 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeCategoryBinding;
-import com.example.project_myfit.fragment.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -26,12 +25,14 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     private ItemTreeCategoryBinding mBinding;
     private boolean mIsClickable = true;
     private final AdapterUtil mAdapterUtil;
-    private final ListViewModel mListViewModel;
+    private Category mThisCategory;
+    private Folder mThisFolder;
 
-    public TreeHolderCategory(Context context, TreeViewCategoryFolderAddListener listener, ListViewModel listViewModel) {
+    public TreeHolderCategory(Context context, TreeViewCategoryFolderAddListener listener, Category thisCategory, Folder thisFolder) {
         super(context);
         this.mListener = listener;
-        this.mListViewModel = listViewModel;
+        this.mThisCategory = thisCategory;
+        this.mThisFolder = thisFolder;
         mAdapterUtil = new AdapterUtil(context);
     }
 
@@ -74,8 +75,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         else mBinding.arrowIconCategory.setVisibility(View.INVISIBLE);
 
         //currentPosition
-        if (mListViewModel != null && mListViewModel.getThisFolder() == null &&
-                value.category.getId() == mListViewModel.getThisCategory().getId())
+        if (mThisFolder == null && mThisCategory.getId() == value.category.getId())
             mBinding.currentPosition.setVisibility(View.VISIBLE);
         else mBinding.currentPosition.setVisibility(View.GONE);
 
