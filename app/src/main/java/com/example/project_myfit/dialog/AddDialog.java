@@ -23,14 +23,14 @@ public class AddDialog extends DialogFragment {
 
     private String mItemType;
     private String mParentCategory;
-    private long mFolderId;
+    private long mParentId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItemType = AddDialogArgs.fromBundle(getArguments()).getItemType();
         mParentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
-        mFolderId = AddDialogArgs.fromBundle(getArguments()).getFolderId();
+        mParentId = AddDialogArgs.fromBundle(getArguments()).getParentId();
     }
 
     @NonNull
@@ -56,7 +56,7 @@ public class AddDialog extends DialogFragment {
 
             if (mItemType.equals(CATEGORY))
                 dialogUtils.addCategoryConfirmClick(newName, mParentCategory);
-            else dialogUtils.addFolderConfirmClick(newName, mFolderId, mParentCategory);
+            else dialogUtils.addFolderConfirmClick(newName, mParentId, mParentCategory);
         });
         return alertDialog;
     }
