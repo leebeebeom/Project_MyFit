@@ -142,7 +142,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         return ((FolderTreeHolder) mNode.getValue()).folder;
     }
 
-    public long getParentId() {
+    public long getFolderId() {
         return ((FolderTreeHolder) mNode.getValue()).folder.getId();
     }
 
