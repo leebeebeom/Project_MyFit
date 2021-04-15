@@ -115,10 +115,6 @@ public class Repository {
             return category.get();
         }
 
-        public LiveData<Category> getLatestCategoryLive() {
-            return mCategoryDao.getLatestCategoryLive();
-        }
-
         public Category getLatestCategory() {
             AtomicReference<Category> category = new AtomicReference<>();
             Thread thread = new Thread(() -> category.set(mCategoryDao.getLatestCategory()));
