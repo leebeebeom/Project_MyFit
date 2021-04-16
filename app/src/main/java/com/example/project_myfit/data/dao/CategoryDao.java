@@ -27,6 +27,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE id = :id")
     Category getCategory(long id);
 
+    @Query("SELECT * FROM Category WHERE id = :id")
+    LiveData<Category> getCategoryLive(long id);
+
     @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
     Category getLatestCategory();
 

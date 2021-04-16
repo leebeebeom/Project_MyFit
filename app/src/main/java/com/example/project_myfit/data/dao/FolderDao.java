@@ -36,6 +36,9 @@ public interface FolderDao {
     @Query("SELECT * FROM Folder WHERE id = :id")
     Folder getFolder(long id);
 
+    @Query("SELECT * FROM Folder WHERE id = :id")
+    LiveData<Folder> getFolderLive(long id);
+
     @Query("SELECT * FROM Folder ORDER BY id DESC limit 1")
     Folder getLatestFolder();
 
