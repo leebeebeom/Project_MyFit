@@ -340,7 +340,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            mButtonArray[i].setOnClickListener(v -> mBinding.viewPager.setCurrentItem(finalI, false));
+            mButtonArray[i].setOnClickListener(v -> mBinding.viewPager.setCurrentItem(finalI));
         }
     }
 
