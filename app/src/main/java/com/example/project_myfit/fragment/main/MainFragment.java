@@ -125,6 +125,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         }
     };
     private FloatingActionButton mTopFab;
+    private SharedPreferences mSortPreferences;
 
     private void viewPagerSetEnable(boolean enable) {
         mBinding.viewPager.setUserInputEnabled(enable);
@@ -140,8 +141,8 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
 
-        SharedPreferences sortPreferences = requireActivity().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
-        mSort = sortPreferences.getInt(SORT_MAIN, SORT_CUSTOM);
+        mSortPreferences = requireActivity().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
+        mSort = mSortPreferences.getInt(SORT_MAIN, SORT_CUSTOM);
 
         setHasOptionsMenu(true);
         mModel.orderNumberInit();
@@ -246,7 +247,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
                 int sort = (int) o;
                 if (mSort != sort) {
                     mSort = sort;
-                    SharedPreferences.Editor editor = requireActivity().getSharedPreferences(SORT_MAIN, SORT_CUSTOM).edit();
+                    SharedPreferences.Editor editor = mSortPreferences.edit();
                     editor.putInt(SORT_MAIN, sort);
                     editor.apply();
                     setCategoryLive();
