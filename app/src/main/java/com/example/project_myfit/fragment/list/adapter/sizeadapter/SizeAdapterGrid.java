@@ -97,6 +97,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         holder.mBinding.gridBrandText.setAlpha(0.4f);
         holder.mBinding.gridNameText.setAlpha(0.6f);
         holder.mBinding.gridCheckBox.setAlpha(0.5f);
+        holder.mBinding.gridFavoriteCheckBox.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull SizeGridVH holder) {
@@ -105,6 +106,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         holder.mBinding.gridBrandText.setAlpha(0.7f);
         holder.mBinding.gridNameText.setAlpha(0.9f);
         holder.mBinding.gridCheckBox.setAlpha(0.8f);
+        holder.mBinding.gridFavoriteCheckBox.setAlpha(1);
     }
 
     public void onItemMove(int from, int to) {
