@@ -225,28 +225,35 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
                 .get(DialogViewModel.class);
 
         navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
-            //category name edit confirm
-            navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                if (mActionMode != null) mActionMode.finish();
-            });
+            nameEditDialogLive(navBackStackEntry);
+            sortDialogLive(navBackStackEntry);
+            selectedItemDeletedLive(navBackStackEntry);
+        });
+    }
 
-            //sort confirm
-            navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                int sort = (int) o;
-                if (mSort != sort) {
-                    mSort = sort;
-                    SharedPreferences.Editor editor = mSortPreferences.edit();
-                    editor.putInt(SORT_MAIN, sort);
-                    editor.apply();
-                    setCategoryLive();
-                }
-            });
+    private void nameEditDialogLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+            if (mActionMode != null) mActionMode.finish();
+        });
+    }
 
-            //selected item delete confirm
-            navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-                mModel.selectedCategoryDelete();
-                if (mActionMode != null) mActionMode.finish();
-            });
+    private void sortDialogLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+            int sort = (int) o;
+            if (mSort != sort) {
+                mSort = sort;
+                SharedPreferences.Editor editor = mSortPreferences.edit();
+                editor.putInt(SORT_MAIN, sort);
+                editor.apply();
+                setCategoryLive();
+            }
+        });
+    }
+
+    private void selectedItemDeletedLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+            mModel.selectedCategoryDelete();
+            if (mActionMode != null) mActionMode.finish();
         });
     }
 
