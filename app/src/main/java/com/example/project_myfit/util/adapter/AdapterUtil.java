@@ -111,4 +111,20 @@ public class AdapterUtil {
             if (l == folder.getId()) amount++;
         return amount;
     }
+
+    public void restoreActionMode(List<?> selectedList, @NotNull HashSet<Long> mSelectedIdHashSet) {
+        mSelectedIdHashSet.clear();
+        addSelectedId(selectedList, mSelectedIdHashSet);
+    }
+
+    private void addSelectedId(@NotNull List<?> selectedList, HashSet<Long> mSelectedIdHashSet) {
+        for (int i = 0; i < selectedList.size(); i++) {
+            if (selectedList.get(i) instanceof Category)
+                mSelectedIdHashSet.add(((Category) selectedList.get(i)).getId());
+            else if (selectedList.get(i) instanceof Folder)
+                mSelectedIdHashSet.add(((Folder) selectedList.get(i)).getId());
+            else if (selectedList.get(i) instanceof Size)
+                mSelectedIdHashSet.add(((Size) selectedList.get(i)).getId());
+        }
+    }
 }
