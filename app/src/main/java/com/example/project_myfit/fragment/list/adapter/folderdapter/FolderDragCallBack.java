@@ -1,4 +1,4 @@
-package com.example.project_myfit.main.list.adapter.folderdapter;
+package com.example.project_myfit.fragment.list.adapter.folderdapter;
 
 import android.graphics.Canvas;
 
