@@ -196,10 +196,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             this.mCategory = category;
             mBinding.setCategory(category);
         }
-
-        public ItemMainRecyclerCategoryBinding getBinding() {
-            return mBinding;
-        }
     }
 
     public interface CategoryAdapterListener {
