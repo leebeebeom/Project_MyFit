@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -128,13 +129,25 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         }
     };
 
-
     private void viewPagerSetEnable(boolean enable) {
         mBinding.viewPager.setUserInputEnabled(enable);
         mBinding.btnTop.setEnabled(enable);
         mBinding.btnBottom.setEnabled(enable);
         mBinding.btnOuter.setEnabled(enable);
         mBinding.btnEtc.setEnabled(enable);
+    }
+
+    @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
+                else mNavController.popBackStack();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
