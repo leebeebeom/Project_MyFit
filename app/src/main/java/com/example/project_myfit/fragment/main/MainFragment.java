@@ -169,11 +169,6 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         setDialogLive();
         setCategoryLive();
         selectedItemAmountLive();
-
-        requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
-            if (mActionMode != null) mActionMode.finish();
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
-        });
     }
 
     @NotNull
@@ -282,6 +277,11 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         viewPagerChangeListener();
         topFabClickListener();
         popupMenuClickListener();
+
+        requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
+            if (mActionMode != null) mActionMode.finish();
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
+        });
 
         mButtonArray[mModel.getCurrentItem()].setChecked(true);
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
