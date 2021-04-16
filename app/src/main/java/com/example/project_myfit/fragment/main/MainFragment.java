@@ -374,7 +374,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
     private void topFabClickListener() {
         mTopFab.setOnClickListener(v -> {
-            mBinding.mainScrollView.smoothScrollTo(0, 0);
+            mBinding.mainScrollView.scrollTo(0, 0);
             mBinding.mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY != 0)
                     mBinding.mainScrollView.scrollTo(0, 0);
