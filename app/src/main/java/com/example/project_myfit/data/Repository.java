@@ -115,6 +115,10 @@ public class Repository {
             return category.get();
         }
 
+        public LiveData<Category> getCategoryLive(long id){
+            return mCategoryDao.getCategoryLive(id);
+        }
+
         public int getCategoryLargestOrderPlus1() {
             AtomicInteger largestOrder = new AtomicInteger();
             Thread thread = new Thread(() -> largestOrder.set(mCategoryDao.getCategoryLargestOrder()));
@@ -248,6 +252,10 @@ public class Repository {
                 e.printStackTrace();
             }
             return folder.get();
+        }
+
+        public LiveData<Folder> getFolderLive(long id){
+            return mFolderDao.getFolderLive(id);
         }
 
         public int getFolderLargestOrderPlus1() {
