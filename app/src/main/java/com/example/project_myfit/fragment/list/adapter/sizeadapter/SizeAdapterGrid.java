@@ -1,4 +1,4 @@
-package com.example.project_myfit.main.list.adapter.sizeadapter;
+package com.example.project_myfit.fragment.list.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -13,17 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
-import com.example.project_myfit.main.list.ListViewModel;
-import com.example.project_myfit.util.AdapterUtil;
+import com.example.project_myfit.fragment.list.ListViewModel;
+import com.example.project_myfit.util.adapter.AdapterUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
-import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridVH> {
@@ -36,7 +36,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     private boolean mIsDragging;
 
     public SizeAdapterGrid(ListViewModel model, SizeAdapterListener listener) {
-        //checked
         super(new SizeDiffUtil());
         this.mModel = model;
         this.mSelectedSizeIdHashSet = new HashSet<>();
@@ -50,7 +49,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list, int sort) {
-        //checked
         super.submitList(list);
         this.mSizeList = list;
         this.mSort = sort;
@@ -60,27 +58,25 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     @NotNull
     @Override
     public SizeGridVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        //checked
         ItemListRecyclerGridBinding binding = ItemListRecyclerGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeGridVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
-        if (mSelectedSizeList != null) {
-            mSelectedSizeIdHashSet.clear();
-            for (Size s : mSelectedSizeList)
-                mSelectedSizeIdHashSet.add(s.getId());
+        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
+
+        if (mSelectedSizeList != null && !mSelectedSizeList.isEmpty()) {
+            mAdapterUtil.restoreActionMode(mSelectedSizeList, mSelectedSizeIdHashSet);
             mSelectedSizeList = null;
         }
-
-        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
         holder.mBinding.gridDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mListener.onSizeDragHandleTouch(holder);
+                draggingView(holder);
                 mIsDragging = true;
             }
             return false;
@@ -95,24 +91,35 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         holder.mBinding.gridFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
+    private void draggingView(@NotNull SizeGridVH holder) {
+        holder.itemView.setTranslationZ(10);
+        holder.mBinding.gridImage.setAlpha(0.5f);
+        holder.mBinding.gridBrandText.setAlpha(0.4f);
+        holder.mBinding.gridNameText.setAlpha(0.6f);
+        holder.mBinding.gridCheckBox.setAlpha(0.5f);
+    }
+
+    private void dropView(@NotNull SizeGridVH holder) {
+        holder.itemView.setTranslationZ(0);
+        holder.mBinding.gridImage.setAlpha(1f);
+        holder.mBinding.gridBrandText.setAlpha(0.7f);
+        holder.mBinding.gridNameText.setAlpha(0.9f);
+        holder.mBinding.gridCheckBox.setAlpha(0.8f);
+    }
+
     public void onItemMove(int from, int to) {
-        //checked
         mAdapterUtil.itemMove(from, to, mSizeList);
         notifyItemMoved(from, to);
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        //checked
-        mModel.getRepository().sizeUpdate(mSizeList);
         mListener.onSizeDragHandleTouch(viewHolder);
-        mModel.getSelectedItemSizeList().clear();
-        for (Size s : getCurrentList())
-            if (mSelectedSizeIdHashSet.contains(s.getId())) mModel.getSelectedItemSizeList().add(s);
+        mModel.sizeItemDrop(mSizeList);
+        dropView((SizeGridVH) viewHolder);
         mIsDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
-        //checked
         this.mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
@@ -127,7 +134,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
     }
 
     public void selectAll() {
-        //checked
         for (Size s : getCurrentList())
             mSelectedSizeIdHashSet.add(s.getId());
         notifyDataSetChanged();
@@ -143,7 +149,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         private Size mSize;
 
         public SizeGridVH(@NotNull ItemListRecyclerGridBinding binding, SizeAdapterListener listener) {
-            //checked
             super(binding.getRoot());
             this.mBinding = binding;
 
@@ -160,10 +165,6 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         public void setSize(Size size) {
             this.mSize = size;
             mBinding.setSize(size);
-        }
-
-        public ItemListRecyclerGridBinding getBinding() {
-            return mBinding;
         }
     }
 }
