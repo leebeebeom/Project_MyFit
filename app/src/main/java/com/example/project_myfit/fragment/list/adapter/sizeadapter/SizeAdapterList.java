@@ -1,4 +1,4 @@
-package com.example.project_myfit.main.list.adapter.sizeadapter;
+package com.example.project_myfit.fragment.list.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -14,17 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemListRecyclerListBinding;
-import com.example.project_myfit.main.list.ListViewModel;
-import com.example.project_myfit.util.AdapterUtil;
+import com.example.project_myfit.fragment.list.ListViewModel;
+import com.example.project_myfit.util.adapter.AdapterUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.project_myfit.MyFitConstant.ACTION_MODE_ON;
-import static com.example.project_myfit.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListVH> {
@@ -37,7 +37,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     boolean mIsDragging;
 
     public SizeAdapterList(ListViewModel model, SizeAdapterListener listener) {
-        //checked
         super(new SizeDiffUtil());
         this.mModel = model;
         this.mSelectedSizeIdHashSet = new HashSet<>();
@@ -51,7 +50,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list, int sort) {
-        //checked
         super.submitList(list);
         this.mSizeList = list;
         this.mSort = sort;
@@ -61,28 +59,25 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     @NotNull
     @Override
     public SizeListVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        //checked
         ItemListRecyclerListBinding binding = ItemListRecyclerListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeListVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
-        //checked
-        if (mSelectedSizeList != null) {
-            mSelectedSizeIdHashSet.clear();
-            for (Size size : mSelectedSizeList)
-                mSelectedSizeIdHashSet.add(size.getId());
+        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
+
+        if (mSelectedSizeList != null && !mSelectedSizeList.isEmpty()) {
+            mAdapterUtil.restoreActionMode(mSelectedSizeList, mSelectedSizeIdHashSet);
             mSelectedSizeList = null;
         }
-
-        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
         holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
+                draggingView(holder);
                 mListener.onSizeDragHandleTouch(holder);
             }
             return false;
@@ -96,23 +91,35 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         }
 
         holder.mBinding.listDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.mBinding.listFavoriteCheckBox.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.GONE : View.VISIBLE);
+        holder.mBinding.listFavoriteCheckBox.setVisibility(holder.mBinding.listDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
         holder.mBinding.listFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
+    private void draggingView(@NotNull SizeListVH holder) {
+        holder.itemView.setTranslationZ(10);
+        holder.mBinding.listCheckBox.setVisibility(View.INVISIBLE);
+        holder.mBinding.listBrandText.setAlpha(0.4f);
+        holder.mBinding.listNameText.setAlpha(0.5f);
+        holder.mBinding.listImage.setAlpha(0.5f);
+    }
+
+    private void dropView(@NotNull SizeListVH holder) {
+        holder.itemView.setTranslationZ(0);
+        holder.mBinding.listCheckBox.setVisibility(View.VISIBLE);
+        holder.mBinding.listBrandText.setAlpha(0.7f);
+        holder.mBinding.listNameText.setAlpha(0.8f);
+        holder.mBinding.listImage.setAlpha(1f);
+    }
+
     public void onItemMove(int from, int to) {
-        //checked
-        mAdapterUtil.itemMove(from,to,mSizeList);
+        mAdapterUtil.itemMove(from, to, mSizeList);
         notifyItemMoved(from, to);
     }
 
     public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        //checked
-        mModel.getRepository().sizeUpdate(mSizeList);
         mListener.onSizeDragHandleTouch(viewHolder);
-        mModel.getSelectedItemSizeList().clear();
-        for (Size s : getCurrentList())
-            if (mSelectedSizeIdHashSet.contains(s.getId())) mModel.getSelectedItemSizeList().add(s);
+        mModel.sizeItemDrop(mSizeList);
+        dropView((SizeListVH) viewHolder);
         mIsDragging = false;
     }
 
@@ -122,36 +129,30 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
     }
 
     public void setSelectedSizeList(List<Size> selectedSizeList) {
-        //checked
         this.mSelectedSizeList = selectedSizeList;
     }
 
     public void sizeSelected(long id) {
-        //checked
         if (!mSelectedSizeIdHashSet.contains(id)) mSelectedSizeIdHashSet.add(id);
         else mSelectedSizeIdHashSet.remove(id);
     }
 
     public void selectAll() {
-        //checked
         for (Size s : getCurrentList())
             mSelectedSizeIdHashSet.add(s.getId());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
-        //checked
         mSelectedSizeIdHashSet.clear();
         notifyDataSetChanged();
     }
 
     public static class SizeListVH extends RecyclerView.ViewHolder {
-        //all checked
         private final ItemListRecyclerListBinding mBinding;
         private Size mSize;
 
         public SizeListVH(@NotNull ItemListRecyclerListBinding binding, SizeAdapterListener listener) {
-            //checked
             super(binding.getRoot());
             this.mBinding = binding;
 
@@ -168,10 +169,6 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         public void setSize(Size size) {
             mSize = size;
             mBinding.setSize(size);
-        }
-
-        public ItemListRecyclerListBinding getBinding() {
-            return mBinding;
         }
     }
 }
