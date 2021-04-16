@@ -126,6 +126,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     };
     private FloatingActionButton mTopFab;
     private SharedPreferences mSortPreferences;
+    private MainPopupMenuBinding mPopupMenuBinding;
 
     private void viewPagerSetEnable(boolean enable) {
         mBinding.viewPager.setUserInputEnabled(enable);
@@ -154,24 +155,11 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
         View view = mBinding.getRoot();
-
-        MainPopupMenuBinding popupMenuBinding = MainPopupMenuBinding.inflate(inflater);
-        popupMenuClick(popupMenuBinding);
-        mPopupWindow = new PopupWindow(popupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupMenuBinding = MainPopupMenuBinding.inflate(inflater);
+        mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 
         return view;
-    }
-
-    private void popupMenuClick(@NotNull MainPopupMenuBinding binding) {
-        binding.addFolder.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
-            mPopupWindow.dismiss();
-        });
-        binding.sort.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
-            mPopupWindow.dismiss();
-        });
     }
 
     @Override
@@ -287,6 +275,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         setButtonClickListener();
         viewPagerChangeListener();
         topFabClickListener();
+        popupMenuClickListener();
 
         mButtonArray[mModel.getCurrentItem()].setChecked(true);
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
@@ -371,6 +360,17 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
                     setScrollChangeListener();
                 }
             });
+        });
+    }
+
+    private void popupMenuClickListener() {
+        mPopupMenuBinding.addFolder.setOnClickListener(v -> {
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
+            mPopupWindow.dismiss();
+        });
+        mPopupMenuBinding.sort.setOnClickListener(v -> {
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
+            mPopupWindow.dismiss();
         });
     }
 
