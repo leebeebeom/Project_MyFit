@@ -76,6 +76,9 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     private MaterialButton[] mButtonArray;
     private int mSort;
     private NavController mNavController;
+    private FloatingActionButton mTopFab;
+    private SharedPreferences mSortPreferences;
+    private MainPopupMenuBinding mPopupMenuBinding;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -124,9 +127,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
-    private FloatingActionButton mTopFab;
-    private SharedPreferences mSortPreferences;
-    private MainPopupMenuBinding mPopupMenuBinding;
+
 
     private void viewPagerSetEnable(boolean enable) {
         mBinding.viewPager.setUserInputEnabled(enable);
