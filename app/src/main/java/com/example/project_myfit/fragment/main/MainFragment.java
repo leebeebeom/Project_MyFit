@@ -309,7 +309,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
     private void setScrollChangeListener() {
         mBinding.mainScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (scrollY == 0) mTopFab.hide();
+            if (v.getScrollY()== 0) mTopFab.hide();
             else mTopFab.show();
 
             if ((mIsDragSelecting || mIsDragging) && mScrollEnable && scrollY > oldScrollY)
