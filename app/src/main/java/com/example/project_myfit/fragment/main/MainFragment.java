@@ -429,7 +429,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     @Override
     public void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox) {
         if (mActionMode == null)
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0));
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0, category.getParentCategory()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
             mCategoryAdapterArray[mModel.getCurrentItem()].categorySelected(category.getId());
