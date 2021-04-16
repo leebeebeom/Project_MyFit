@@ -92,10 +92,10 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CategoryVH holder, int position) {
-        if (mSelectedCategoryList != null) {
-            mSelectedCategoryIdHashSet.clear();
-            for (Category selectedCategory : mSelectedCategoryList)
-                mSelectedCategoryIdHashSet.add(selectedCategory.getId());
+        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
+
+        if (mSelectedCategoryList != null && !mSelectedCategoryList.isEmpty()) {
+            mAdapterUtil.restoreActionMode(mSelectedCategoryList, mSelectedCategoryIdHashSet);
             mSelectedCategoryList = null;
         }
 
@@ -109,8 +109,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
             }
             return false;
         });
-
-        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
 
         holder.mBinding.mainContentsSize.setText(String.valueOf(mAdapterUtil.
                 getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
