@@ -179,6 +179,9 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mTopFab = requireActivity().findViewById(R.id.top_fab);
+        if (mBinding.mainScrollView.getScrollY() == 0) mTopFab.hide();
+
         mBinding.viewPager.setAdapter(getViewPagerAdapter());
         setDialogLive();
         setCategoryLive();
@@ -305,7 +308,6 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     }
 
     private void setScrollChangeListener() {
-        mTopFab = requireActivity().findViewById(R.id.top_fab);
         mBinding.mainScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (scrollY == 0) mTopFab.hide();
             else mTopFab.show();
