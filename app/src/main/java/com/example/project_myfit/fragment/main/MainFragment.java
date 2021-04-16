@@ -379,9 +379,6 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         super.onDestroyView();
         if (mActionMode != null) mActionMode.finish();
         if (mTopFab.getVisibility() == View.VISIBLE) mTopFab.hide();
-        mBinding = null;
-        mViewPagerAdapter = null;
-        mSelectListener = null;
     }
 
     @Override
