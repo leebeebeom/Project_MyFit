@@ -98,38 +98,43 @@
                         tools:listitem="@layout/item_list_recycler_folder" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
                 <FrameLayout
-                    android:id="@+id/no_data"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:minHeight="@dimen/_560sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/recycler_background"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:alpha="0.5"
-                        android:text="@string/no_data"
-                        android:textSize="@dimen/_20sdp" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:background="@drawable/recycler_background"
+                        android:clipToPadding="false"
+                        android:minHeight="@dimen/_560sdp"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_60sdp"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        tools:listitem="@layout/item_list_recycler_grid" />
+
+                    <FrameLayout
+                        android:id="@+id/no_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:background="@drawable/recycler_background"
+                        android:minHeight="@dimen/_560sdp"
+                        android:visibility="visible">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:alpha="0.5"
+                            android:text="@string/no_data"
+                            android:textSize="@dimen/_20sdp" />
+                    </FrameLayout>
                 </FrameLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:minHeight="@dimen/_560sdp"
-                    android:id="@+id/recycler_size"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/recycler_background"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"
-                    android:paddingTop="@dimen/_8sdp"
-                    android:paddingBottom="@dimen/_60sdp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    tools:listitem="@layout/item_list_recycler_grid" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.example.project_myfit.util.LockableScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
