@@ -14,7 +14,7 @@
         android:title="@string/favorite"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menu_list_list_grid"
+        android:id="@+id/menu_list_view_type"
         android:icon="@drawable/icon_list"
         android:title="@string/view_type"
         app:showAsAction="always"
