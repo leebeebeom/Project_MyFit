@@ -154,35 +154,44 @@ public class SelectedItemTreat {
     }
 
     private void deleteFolder(@NotNull List<Folder> selectedFolderList) {
-        List<Folder> childFolderList = new ArrayList<>();
-        List<Size> childSizeList = new ArrayList<>();
+        List<Folder> topFolderList = new ArrayList<>();
+        List<Size> allSizeList = new ArrayList<>();
 
         for (Folder f : selectedFolderList) {
             f.setIsDeleted(true);
-            childFolderList.addAll(mFolderRepository.getFolderListByParentId(f.getId()));
-            childSizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
+            topFolderList.addAll(mFolderRepository.getFolderListByParentId(f.getId()));
+            allSizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
         }
 
-        if (!childFolderList.isEmpty()) getFolderChild(childFolderList, childSizeList);
+        //size 따로
+        List<Folder> allFolderList = new ArrayList<>(topFolderList);
+        getFolderChildList(topFolderList, allFolderList);
+        getAllSizeList(allFolderList, allSizeList);
 
-        for (Folder f : childFolderList) f.setParentIsDeleted(true);
-        for (Size s : childSizeList) s.setParentIsDeleted(true);
+        for (Folder f : allFolderList) f.setParentIsDeleted(true);
+        for (Size s : allSizeList) s.setParentIsDeleted(true);
 
-        selectedFolderList.addAll(childFolderList);
+        selectedFolderList.addAll(allFolderList);
 
         mFolderRepository.folderUpdate(selectedFolderList);
-        mSizeRepository.sizeUpdate(childSizeList);
+        mSizeRepository.sizeUpdate(allSizeList);
     }
 
-    private void getFolderChild(@NotNull List<Folder> parentFolderList, List<Size> sizeList) {
+    private void getFolderChildList(@NotNull List<Folder> topFolderList, List<Folder> allFolderList) {
         List<Folder> childFolderList = new ArrayList<>();
-
-        for (Folder f : parentFolderList) {
-            sizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
+        for (Folder f : topFolderList) {
+            if (!childFolderList.isEmpty()) childFolderList.clear();
             childFolderList.addAll(mFolderRepository.getFolderListByParentId(f.getId()));
-            if (!childFolderList.isEmpty()) getFolderChild(childFolderList, sizeList);
+            if (!childFolderList.isEmpty()) {
+                allFolderList.addAll(childFolderList);
+                getFolderChildList(childFolderList, allFolderList);
+            }
         }
-        parentFolderList.addAll(childFolderList);
+    }
+
+    private void getAllSizeList(@NotNull List<Folder> childFolderList, List<Size> childSizeList) {
+        for (Folder folder : childFolderList)
+            childSizeList.addAll(mSizeRepository.getSizeListByParentId(folder.getId()));
     }
 
     private void deleteSize(@NotNull List<Size> selectedSizeList) {
