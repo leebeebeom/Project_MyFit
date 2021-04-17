@@ -493,7 +493,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private void itemMoveDialogLive(SelectedItemTreat selectedItemTreat, @NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(ITEM_MOVE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
             long folderId = (long) o;
-            selectedItemTreat.folderSizeMove(folderId, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
+            selectedItemTreat.folderSizeMove(false,folderId, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
             if (mActionMode != null) mActionMode.finish();
         });
     }
