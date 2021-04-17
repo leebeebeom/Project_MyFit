@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.project_myfit">
 
     <queries>
@@ -25,10 +24,8 @@
         android:theme="@style/Theme.Project_MyFit">
         <activity android:name=".searchActivity.SearchActivity" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +35,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="com.example.project_myfit.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
