@@ -27,21 +27,38 @@ public class SelectedItemTreat {
     //move------------------------------------------------------------------------------------------
     public void folderSizeMove(boolean isSearchView, long targetId, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         if (isSearchView){
-            List<Category> originCategoryList = getOriginCategory(selectedFolderList, selectedSizeList);
+            List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
             Category targetCategory = mCategoryRepository.getCategory(targetId);
-            List<Folder> originFolderList = getOriginFolder(selectedFolderList, selectedSizeList);
+            List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
             Folder targetFolder = mFolderRepository.getFolder(targetId);
 
             categorySetDummy(originCategoryList);
-            categorySetDummy(targetCategory);
+            if (targetCategory != null) {
+                targetCategory.setDummy(!targetCategory.getDummy());
+                originCategoryList.add(targetCategory);
+            }
             folderSetDummy(originFolderList);
-            folderSetDummy(targetFolder);
-
-            if (targetCategory != null) originCategoryList.add(targetCategory);
+            if (targetFolder != null) {
+                targetFolder.setDummy(!targetFolder.getDummy());
+                originFolderList.add(targetFolder);
+            }
             mCategoryRepository.categoryUpdate(originCategoryList);
-
-            if (targetFolder != null) originFolderList.add(targetFolder);
             mFolderRepository.folderUpdate(originFolderList);
+        } else {
+            Category originCategory = getOriginCategory(selectedFolderList, selectedSizeList);
+            Category targetCategory = mCategoryRepository.getCategory(targetId);
+            Folder originFolder = getOriginFolder(selectedFolderList, selectedSizeList);
+            Folder targetFolder = mFolderRepository.getFolder(targetId);
+
+            List<Category> dummyUpdateCategoryList = new ArrayList<>();
+            categorySetDummy(originCategory, dummyUpdateCategoryList);
+            categorySetDummy(targetCategory, dummyUpdateCategoryList);
+            List<Folder> dummyUpdateFolderList = new ArrayList<>();
+            folderSetDummy(originFolder, dummyUpdateFolderList);
+            folderSetDummy(targetFolder, dummyUpdateFolderList);
+
+            mCategoryRepository.categoryUpdate(dummyUpdateCategoryList);
+            mFolderRepository.folderUpdate(dummyUpdateFolderList);
         }
 
         for (Folder f : selectedFolderList) f.setParentId(targetId);
@@ -52,7 +69,7 @@ public class SelectedItemTreat {
     }
 
     @NotNull
-    private List<Category> getOriginCategory(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
+    private List<Category> getOriginCategoryList(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
         HashSet<Long> originCategoryIdList = new HashSet<>();
         for (Folder folder : selectedItemFolder)
             originCategoryIdList.add(folder.getParentId());
@@ -60,13 +77,16 @@ public class SelectedItemTreat {
             originCategoryIdList.add(size.getParentId());
 
         List<Category> originCategoryList = new ArrayList<>();
-        for (long categoryId : originCategoryIdList)
-            originCategoryList.add(mCategoryRepository.getCategory(categoryId));
+        for (long categoryId : originCategoryIdList) {
+            Category category = mCategoryRepository.getCategory(categoryId);
+            if (category != null)
+                originCategoryList.add(null);
+        }
         return originCategoryList;
     }
 
     @NotNull
-    private List<Folder> getOriginFolder(@NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+    private List<Folder> getOriginFolderList(@NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         HashSet<Long> originFolderIdList = new HashSet<>();
         for (Folder folder : selectedFolderList)
             originFolderIdList.add(folder.getParentId());
@@ -74,29 +94,46 @@ public class SelectedItemTreat {
             originFolderIdList.add(size.getParentId());
 
         List<Folder> originFolderList = new ArrayList<>();
-        for (long folderId : originFolderIdList)
-            originFolderList.add(mFolderRepository.getFolder(folderId));
+        for (long folderId : originFolderIdList) {
+            Folder folder = mFolderRepository.getFolder(folderId);
+            if (folder != null)
+                originFolderList.add(folder);
+        }
         return originFolderList;
     }
 
-    private void categorySetDummy(Category category) {
-        if (category != null)
+    private Category getOriginCategory(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
+        if (!selectedItemFolder.isEmpty())
+            return mCategoryRepository.getCategory(selectedItemFolder.get(0).getParentId());
+        else return mCategoryRepository.getCategory(selectedItemSize.get(0).getParentId());
+    }
+
+    private Folder getOriginFolder(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
+        if (!selectedItemFolder.isEmpty())
+            return mFolderRepository.getFolder(selectedItemFolder.get(0).getParentId());
+        else return mFolderRepository.getFolder(selectedItemSize.get(0).getParentId());
+    }
+
+    private void categorySetDummy(Category category, List<Category> dummyUpdateCategoryList) {
+        if (category != null) {
             category.setDummy(!category.getDummy());
+            dummyUpdateCategoryList.add(category);
+        }
     }
 
     private void categorySetDummy(@NotNull List<Category> categoryList) {
-        for (Category category : categoryList)
-            category.setDummy(!category.getDummy());
+        for (Category category : categoryList) category.setDummy(!category.getDummy());
     }
 
-    private void folderSetDummy(Folder folder) {
-        if (folder != null)
+    private void folderSetDummy(Folder folder, List<Folder> dummyUpdateFolderList) {
+        if (folder != null) {
             folder.setDummy(!folder.getDummy());
+            dummyUpdateFolderList.add(folder);
+        }
     }
 
     private void folderSetDummy(@NotNull List<Folder> folderList) {
-        for (Folder folder : folderList)
-            folder.setDummy(!folder.getDummy());
+        for (Folder folder : folderList) folder.setDummy(!folder.getDummy());
     }
     //----------------------------------------------------------------------------------------------
 
@@ -105,8 +142,8 @@ public class SelectedItemTreat {
         deleteFolder(selectedFolderList);
         deleteSize(selectedSizeList);
         if (isSearchView) {
-            List<Category> originCategoryList = getOriginCategory(selectedFolderList, selectedSizeList);
-            List<Folder> originFolderList = getOriginFolder(selectedFolderList, selectedSizeList);
+            List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
+            List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
 
             categorySetDummy(originCategoryList);
             folderSetDummy(originFolderList);
@@ -142,7 +179,6 @@ public class SelectedItemTreat {
 
         for (Folder f : parentFolderList) {
             sizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
-
             childFolderList.addAll(mFolderRepository.getFolderListByParentId(f.getId()));
             if (!childFolderList.isEmpty()) getFolderChild(childFolderList, sizeList);
         }
