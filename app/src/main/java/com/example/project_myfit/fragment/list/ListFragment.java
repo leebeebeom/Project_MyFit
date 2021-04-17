@@ -240,9 +240,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void adapterAndItemTouchHelperInit() {
-        if (mFolderAdapter == null) mFolderAdapter = new FolderAdapter(mModel);
-        if (mSizeAdapterList == null) mSizeAdapterList = new SizeAdapterList(mModel, this);
-        if (mSizeAdapterGrid == null) mSizeAdapterGrid = new SizeAdapterGrid(mModel, this);
+        mFolderAdapter = new FolderAdapter(mModel);
+        mSizeAdapterList = new SizeAdapterList(mModel, this);
+        mSizeAdapterGrid = new SizeAdapterGrid(mModel, this);
 
         if (mTouchHelperFolder == null)
             mTouchHelperFolder = new ItemTouchHelper(new FolderDragCallBack(mFolderAdapter));
