@@ -10,12 +10,15 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND;
 import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND_REVERSE;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CREATE;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CREATE_REVERSE;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.util.MyFitConstant.SORT_NAME_REVERSE;
 
 public class Sort {
     public static List<Category> categorySort(int sort, List<Category> categoryList) {
-        if (sort == SORT_CREATE)
+        if (sort == SORT_CUSTOM)
+            categoryList.sort((o1, o2) -> Integer.compare(o1.getOrderNumber(), o2.getOrderNumber()));
+        else if (sort == SORT_CREATE)
             categoryList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
         else if (sort == SORT_CREATE_REVERSE)
             categoryList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
@@ -27,7 +30,9 @@ public class Sort {
     }
 
     public static List<Folder> folderSort(int sort, List<Folder> folderList) {
-        if (sort == SORT_CREATE)
+        if (sort == SORT_CUSTOM)
+            folderList.sort((o1, o2) -> Integer.compare(o1.getOrderNumber(), o2.getOrderNumber()));
+        else if (sort == SORT_CREATE)
             folderList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
         else if (sort == SORT_CREATE_REVERSE)
             folderList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
@@ -38,18 +43,20 @@ public class Sort {
         return folderList;
     }
 
-    public static List<Size> sizeSort(int mSort, List<Size> sizeList) {
-        if (mSort == SORT_CREATE)
+    public static List<Size> sizeSort(int sort, List<Size> sizeList) {
+        if (sort == SORT_CUSTOM)
+            sizeList.sort((o1, o2) -> Integer.compare(o1.getOrderNumber(), o2.getOrderNumber()));
+        else if (sort == SORT_CREATE)
             sizeList.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
-        else if (mSort == SORT_CREATE_REVERSE)
+        else if (sort == SORT_CREATE_REVERSE)
             sizeList.sort((o1, o2) -> Long.compare(o1.getId(), o2.getId()));
-        else if (mSort == SORT_BRAND)
+        else if (sort == SORT_BRAND)
             sizeList.sort((o1, o2) -> o1.getBrand().compareTo(o2.getBrand()));
-        else if (mSort == SORT_BRAND_REVERSE)
+        else if (sort == SORT_BRAND_REVERSE)
             sizeList.sort((o1, o2) -> o2.getBrand().compareTo(o1.getBrand()));
-        else if (mSort == SORT_NAME)
+        else if (sort == SORT_NAME)
             sizeList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
-        else if (mSort == SORT_NAME_REVERSE)
+        else if (sort == SORT_NAME_REVERSE)
             sizeList.sort((o1, o2) -> o2.getName().compareTo(o1.getName()));
         return sizeList;
     }
