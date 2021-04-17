@@ -244,14 +244,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         mSizeAdapterList = new SizeAdapterList(mModel, this);
         mSizeAdapterGrid = new SizeAdapterGrid(mModel, this);
 
-        if (mTouchHelperFolder == null)
-            mTouchHelperFolder = new ItemTouchHelper(new FolderDragCallBack(mFolderAdapter));
+        mTouchHelperFolder = new ItemTouchHelper(new FolderDragCallBack(mFolderAdapter));
         mTouchHelperFolder.attachToRecyclerView(mBinding.recyclerFolder);
 
-        if (mTouchHelperList == null)
-            mTouchHelperList = new ItemTouchHelper(new DragCallBackList(mSizeAdapterList, SIZE));
-        if (mTouchHelperGrid == null)
-            mTouchHelperGrid = new ItemTouchHelper(new DragCallBackGrid(mSizeAdapterGrid));
+        mTouchHelperList = new ItemTouchHelper(new DragCallBackList(mSizeAdapterList, SIZE));
+        mTouchHelperGrid = new ItemTouchHelper(new DragCallBackGrid(mSizeAdapterGrid));
     }
 
     private void recyclerViewInit() {
