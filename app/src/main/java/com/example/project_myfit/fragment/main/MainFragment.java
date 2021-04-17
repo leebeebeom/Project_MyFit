@@ -160,7 +160,6 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         mSort = mSortPreferences.getInt(SORT_MAIN, SORT_CUSTOM);
 
         setHasOptionsMenu(true);
-        mModel.orderNumberInit();
     }
 
     @Override
@@ -232,10 +231,11 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     }
 
     private void setDialogLive() {
-        DialogViewModel navigationViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph))
+        DialogViewModel dialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph))
                 .get(DialogViewModel.class);
+        dialogViewModel.orderNumberInit();
 
-        navigationViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
+        dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
             nameEditDialogLive(navBackStackEntry);
             sortDialogLive(navBackStackEntry);
             selectedItemDeletedLive(navBackStackEntry);
