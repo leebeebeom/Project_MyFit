@@ -40,13 +40,6 @@ public class MainViewModel extends AndroidViewModel {
         mSelectedCategoryList = new ArrayList<>();
     }
 
-    public void orderNumberInit() {
-        List<Category> categoryList = mCategoryRepository.getAllCategoryList();
-        for (int i = 0; i < categoryList.size(); i++)
-            categoryList.get(i).setOrderNumber(i);
-        mCategoryRepository.categoryUpdate(categoryList);
-    }
-
     public void selectAllClick(boolean isChecked, CategoryAdapter categoryAdapter) {
         if (!mSelectedCategoryList.isEmpty()) mSelectedCategoryList.clear();
         if (isChecked) {
