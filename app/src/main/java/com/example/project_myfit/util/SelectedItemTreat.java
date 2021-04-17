@@ -1,6 +1,6 @@
 package com.example.project_myfit.util;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
@@ -10,148 +10,148 @@ import com.example.project_myfit.data.model.Size;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-import static com.example.project_myfit.MyFitConstant.TAG;
-
 public class SelectedItemTreat {
+    private final Repository.CategoryRepository mCategoryRepository;
+    private final Repository.FolderRepository mFolderRepository;
+    private final Repository.SizeRepository mSizeRepository;
+
+    public SelectedItemTreat(Context context) {
+        mCategoryRepository = Repository.getCategoryRepository(context);
+        mFolderRepository = Repository.getFolderRepository(context);
+        mSizeRepository = Repository.getSizeRepository(context);
+    }
+
     //move------------------------------------------------------------------------------------------
-    public static void folderSizeMove(long folderId, @NotNull Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        //checked
-        Category originCategory = getOriginCategory(repository, selectedFolderList, selectedSizeList);
-        Category targetCategory = repository.getCategory(folderId);
-        Folder originFolder = getOriginFolder(repository, selectedFolderList, selectedSizeList);
-        Folder targetFolder = repository.getFolder(folderId);
+    public void folderSizeMove(boolean isSearchView, long targetId, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        if (isSearchView){
+            List<Category> originCategoryList = getOriginCategory(selectedFolderList, selectedSizeList);
+            Category targetCategory = mCategoryRepository.getCategory(targetId);
+            List<Folder> originFolderList = getOriginFolder(selectedFolderList, selectedSizeList);
+            Folder targetFolder = mFolderRepository.getFolder(targetId);
 
-        categorySetDummy(originCategory);
-        categorySetDummy(targetCategory);
-        folderSetDummy(originFolder);
-        folderSetDummy(targetFolder);
+            categorySetDummy(originCategoryList);
+            categorySetDummy(targetCategory);
+            folderSetDummy(originFolderList);
+            folderSetDummy(targetFolder);
 
-        for (Folder f : selectedFolderList) f.setFolderId(folderId);
-        for (Size s : selectedSizeList) s.setFolderId(folderId);
+            if (targetCategory != null) originCategoryList.add(targetCategory);
+            mCategoryRepository.categoryUpdate(originCategoryList);
 
-        repository.folderUpdate(selectedFolderList);
-        repository.sizeUpdate(selectedSizeList);
+            if (targetFolder != null) originFolderList.add(targetFolder);
+            mFolderRepository.folderUpdate(originFolderList);
+        }
 
-        List<Category> categoryList = new ArrayList<>();
-        if (originCategory != null) categoryList.add(originCategory);
-        if (targetCategory != null) categoryList.add(targetCategory);
-        repository.categoryUpdate(categoryList);
+        for (Folder f : selectedFolderList) f.setParentId(targetId);
+        for (Size s : selectedSizeList) s.setParentId(targetId);
 
-        List<Folder> folderList = new ArrayList<>();
-        if (originFolder != null) folderList.add(originFolder);
-        if (targetFolder != null) folderList.add(targetFolder);
-        repository.folderUpdate(folderList);
+        mFolderRepository.folderUpdate(selectedFolderList);
+        mSizeRepository.sizeUpdate(selectedSizeList);
     }
 
-    private static Category getOriginCategory(Repository repository, @NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
-        //checked
-        if (!selectedItemFolder.isEmpty())
-            return repository.getCategory(selectedItemFolder.get(0).getFolderId());
-        else return repository.getCategory(selectedItemSize.get(0).getFolderId());
+    @NotNull
+    private List<Category> getOriginCategory(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
+        HashSet<Long> originCategoryIdList = new HashSet<>();
+        for (Folder folder : selectedItemFolder)
+            originCategoryIdList.add(folder.getParentId());
+        for (Size size : selectedItemSize)
+            originCategoryIdList.add(size.getParentId());
+
+        List<Category> originCategoryList = new ArrayList<>();
+        for (long categoryId : originCategoryIdList)
+            originCategoryList.add(mCategoryRepository.getCategory(categoryId));
+        return originCategoryList;
     }
 
-    private static Folder getOriginFolder(Repository repository, @NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        //checked
-        if (!selectedFolderList.isEmpty())
-            return repository.getFolder(selectedFolderList.get(0).getFolderId());
-        else return repository.getFolder(selectedSizeList.get(0).getFolderId());
+    @NotNull
+    private List<Folder> getOriginFolder(@NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        HashSet<Long> originFolderIdList = new HashSet<>();
+        for (Folder folder : selectedFolderList)
+            originFolderIdList.add(folder.getParentId());
+        for (Size size : selectedSizeList)
+            originFolderIdList.add(size.getParentId());
+
+        List<Folder> originFolderList = new ArrayList<>();
+        for (long folderId : originFolderIdList)
+            originFolderList.add(mFolderRepository.getFolder(folderId));
+        return originFolderList;
     }
 
-    private static void categorySetDummy(Category category) {
-        //checked
+    private void categorySetDummy(Category category) {
         if (category != null)
             category.setDummy(!category.getDummy());
-        else Log.e(TAG, "categorySetDummy: category가 null임", null);
     }
 
-    private static void folderSetDummy(Folder folder) {
-        //checked
+    private void categorySetDummy(@NotNull List<Category> categoryList) {
+        for (Category category : categoryList)
+            category.setDummy(!category.getDummy());
+    }
+
+    private void folderSetDummy(Folder folder) {
         if (folder != null)
             folder.setDummy(!folder.getDummy());
-        else Log.e(TAG, "categorySetDummy: folder가 null임", null);
+    }
+
+    private void folderSetDummy(@NotNull List<Folder> folderList) {
+        for (Folder folder : folderList)
+            folder.setDummy(!folder.getDummy());
     }
     //----------------------------------------------------------------------------------------------
 
     //delete----------------------------------------------------------------------------------------
-    public static void folderSizeDelete(boolean isSearchView, Repository repository, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        //checked
-        deleteFolder(repository, selectedFolderList);
-        deleteSize(repository, selectedSizeList);
+    public void folderSizeDelete(boolean isSearchView, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
+        deleteFolder(selectedFolderList);
+        deleteSize(selectedSizeList);
         if (isSearchView) {
-            Category category = getOriginCategory(repository, selectedFolderList, selectedSizeList);
-            Folder folder = getOriginFolder(repository, selectedFolderList, selectedSizeList);
+            List<Category> originCategoryList = getOriginCategory(selectedFolderList, selectedSizeList);
+            List<Folder> originFolderList = getOriginFolder(selectedFolderList, selectedSizeList);
 
-            categorySetDummy(category);
-            folderSetDummy(folder);
+            categorySetDummy(originCategoryList);
+            folderSetDummy(originFolderList);
 
-            repository.categoryUpdate(category);
-            repository.folderUpdate(folder);
+            mCategoryRepository.categoryUpdate(originCategoryList);
+            mFolderRepository.folderUpdate(originFolderList);
         }
     }
 
-    private static void deleteFolder(Repository repository, @NotNull List<Folder> selectedFolderList) {
-        //checked
-
+    private void deleteFolder(@NotNull List<Folder> selectedFolderList) {
         List<Folder> childFolderList = new ArrayList<>();
         List<Size> childSizeList = new ArrayList<>();
 
         for (Folder f : selectedFolderList) {
             f.setIsDeleted(true);
-            childFolderList.addAll(repository.getFolderListByFolderId(f.getId()));
-            childSizeList.addAll(repository.getSizeByFolderId(f.getId()));
+            childFolderList.addAll(mFolderRepository.getFolderListByParentId(f.getId()));
+            childSizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
         }
 
-        if (!childFolderList.isEmpty()) getFolderChild(repository, childFolderList, childSizeList);
+        if (!childFolderList.isEmpty()) getFolderChild(childFolderList, childSizeList);
 
         for (Folder f : childFolderList) f.setParentIsDeleted(true);
         for (Size s : childSizeList) s.setParentIsDeleted(true);
 
         selectedFolderList.addAll(childFolderList);
 
-        repository.folderUpdate(selectedFolderList);
-        repository.sizeUpdate(childSizeList);
+        mFolderRepository.folderUpdate(selectedFolderList);
+        mSizeRepository.sizeUpdate(childSizeList);
     }
 
-    private static void getFolderChild(Repository repository, @NotNull List<Folder> parentFolderList, List<Size> sizeList) {
-        //checked
+    private void getFolderChild(@NotNull List<Folder> parentFolderList, List<Size> sizeList) {
         List<Folder> childFolderList = new ArrayList<>();
 
         for (Folder f : parentFolderList) {
-            sizeList.addAll(repository.getSizeByFolderId(f.getId()));
+            sizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
 
-            childFolderList.addAll(repository.getFolderListByFolderId(f.getId()));
-            if (!childFolderList.isEmpty()) getFolderChild(repository, childFolderList, sizeList);
+            childFolderList.addAll(mFolderRepository.getFolderListByParentId(f.getId()));
+            if (!childFolderList.isEmpty()) getFolderChild(childFolderList, sizeList);
         }
         parentFolderList.addAll(childFolderList);
     }
 
-    private static void deleteSize(Repository repository, @NotNull List<Size> selectedSizeList) {
-        //checked
+    private void deleteSize(@NotNull List<Size> selectedSizeList) {
         for (Size s : selectedSizeList) s.setIsDeleted(true);
-        repository.sizeUpdate(selectedSizeList);
+        mSizeRepository.sizeUpdate(selectedSizeList);
     }
     //----------------------------------------------------------------------------------------------
-
-    //categoryDeleted-------------------------------------------------------------------------------
-    public static void categoryDelete(Repository repository, @NotNull List<Category> selectedCategoryList) {
-        //checked
-        List<Folder> folderList = new ArrayList<>();
-        List<Size> sizeList = new ArrayList<>();
-
-        for (Category category : selectedCategoryList) {
-            category.setIsDeleted(true);
-            sizeList.addAll(repository.getSizeByFolderId(category.getId()));
-            folderList.addAll(repository.getFolderListByFolderId(category.getId()));
-        }
-
-        if (!folderList.isEmpty()) getFolderChild(repository, folderList, sizeList);
-        for (Folder f : folderList) f.setParentIsDeleted(true);
-        for (Size s : sizeList) s.setParentIsDeleted(true);
-
-        repository.categoryUpdate(selectedCategoryList);
-        repository.folderUpdate(folderList);
-        repository.sizeUpdate(sizeList);
-    }
 }
