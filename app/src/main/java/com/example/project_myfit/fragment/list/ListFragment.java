@@ -252,8 +252,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void recyclerViewInit() {
-        if (mBinding.recyclerFolder.getAdapter() == null)
-            mBinding.recyclerFolder.setAdapter(mFolderAdapter);
+        mBinding.recyclerFolder.setAdapter(mFolderAdapter);
         mBinding.recyclerFolder.addOnItemTouchListener(getFolderDragSelectListener());
 
         mBinding.recyclerSize.setHasFixedSize(true);
