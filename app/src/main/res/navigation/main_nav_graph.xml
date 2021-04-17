@@ -113,6 +113,9 @@
         <action
             android:id="@+id/action_inputOutputFragment_to_imageClearDialog"
             app:destination="@id/imageClearDialog" />
+        <argument
+            android:name="parent_category"
+            app:argType="string" />
     </fragment>
     <activity
         android:id="@+id/searchActivity"
