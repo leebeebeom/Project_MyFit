@@ -30,7 +30,6 @@ public class MainViewModel extends AndroidViewModel {
     private List<Category> mSelectedCategoryList;
     private final MutableLiveData<Integer> mSelectedCategorySizeLive;
     private int mCurrentItem;
-    private boolean mIsActionModeOn;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -164,13 +163,5 @@ public class MainViewModel extends AndroidViewModel {
 
     public LiveData<List<Category>> getCategoryLive() {
         return mCategoryRepository.getAllCategoryLive();
-    }
-
-    public void setActionModeOn(boolean isActionModeOn) {
-        this.mIsActionModeOn = isActionModeOn;
-    }
-
-    public boolean isActionModeOn() {
-        return mIsActionModeOn;
     }
 }
