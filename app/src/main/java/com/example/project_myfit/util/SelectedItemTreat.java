@@ -80,7 +80,7 @@ public class SelectedItemTreat {
         for (long categoryId : originCategoryIdList) {
             Category category = mCategoryRepository.getCategory(categoryId);
             if (category != null)
-                originCategoryList.add(null);
+                originCategoryList.add(category);
         }
         return originCategoryList;
     }
@@ -139,8 +139,6 @@ public class SelectedItemTreat {
 
     //delete----------------------------------------------------------------------------------------
     public void folderSizeDelete(boolean isSearchView, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        deleteFolder(selectedFolderList);
-        deleteSize(selectedSizeList);
         if (isSearchView) {
             List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
             List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
@@ -151,6 +149,8 @@ public class SelectedItemTreat {
             mCategoryRepository.categoryUpdate(originCategoryList);
             mFolderRepository.folderUpdate(originFolderList);
         }
+        deleteFolder(selectedFolderList);
+        deleteSize(selectedSizeList);
     }
 
     private void deleteFolder(@NotNull List<Folder> selectedFolderList) {
