@@ -187,7 +187,7 @@
             android:name="parent_category"
             app:argType="string" />
         <argument
-            android:name="folder_id"
+            android:name="parent_id"
             app:argType="long" />
         <argument
             android:name="new_name"
