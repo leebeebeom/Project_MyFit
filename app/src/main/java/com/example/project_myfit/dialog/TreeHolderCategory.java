@@ -75,7 +75,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         else mBinding.arrowIconCategory.setVisibility(View.INVISIBLE);
 
         //currentPosition
-        if (mThisFolder == null && mThisCategory.getId() == value.category.getId())
+        if (mThisFolder == null && mThisCategory != null && mThisCategory.getId() == value.category.getId())
             mBinding.currentPosition.setVisibility(View.VISIBLE);
         else mBinding.currentPosition.setVisibility(View.GONE);
 
