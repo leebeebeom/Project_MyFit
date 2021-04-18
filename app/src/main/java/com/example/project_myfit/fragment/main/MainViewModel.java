@@ -66,8 +66,6 @@ public class MainViewModel extends AndroidViewModel {
         mCategoryRepository.categoryUpdate(mSelectedCategoryList);
         mFolderRepository.folderUpdate(childFolderList);
         mSizeRepository.sizeUpdate(childSizeList);
-
-        mSelectedCategoryList.clear();
     }
 
     @NotNull
