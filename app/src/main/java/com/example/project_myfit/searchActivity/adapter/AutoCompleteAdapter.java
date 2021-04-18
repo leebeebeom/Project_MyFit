@@ -46,7 +46,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
             ArrayList<String> filteredList = new ArrayList<>();
             for (String s : mOriginList)
                 if (s.toLowerCase().trim().contains(filterString))
-                    filteredList.add(s);
+                    filteredList.add(s.trim());
             mBindList = filteredList;
             return null;
         }
