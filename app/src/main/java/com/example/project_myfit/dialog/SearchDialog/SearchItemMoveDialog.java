@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.dialog.DialogUtils;
-import com.example.project_myfit.dialog.ItemMoveDialogArgs;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,8 +23,8 @@ public class SearchItemMoveDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSelectedItemSize = ItemMoveDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        mParentId = ItemMoveDialogArgs.fromBundle(getArguments()).getParentId();
+        mSelectedItemSize = SearchItemMoveDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
+        mParentId = SearchItemMoveDialogArgs.fromBundle(getArguments()).getParentId();
     }
 
     @NonNull
@@ -34,12 +33,12 @@ public class SearchItemMoveDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         String message = mSelectedItemSize + getString(R.string.item_move_check);
 
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph).backStackLiveSetValue(R.id.itemMoveDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.search_nav_gragh).backStackLiveSetValue(R.id.searchItemMoveDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.itemMoveConfirmClick(mParentId, false));
+        positiveButton.setOnClickListener(v -> dialogUtils.itemMoveConfirmClick(mParentId, true));
 
         return alertDialog;
     }
