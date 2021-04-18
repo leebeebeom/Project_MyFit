@@ -19,7 +19,7 @@ import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 public class SameNameAddDialog extends DialogFragment {
     private String mItemType;
     private String mParentCategory;
-    private long mFolderId;
+    private long mParentId;
     private String mNewName;
 
     @Override
@@ -27,7 +27,7 @@ public class SameNameAddDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         mItemType = SameNameAddDialogArgs.fromBundle(getArguments()).getItemType();
         mParentCategory = SameNameAddDialogArgs.fromBundle(getArguments()).getParentCategory();
-        mFolderId = SameNameAddDialogArgs.fromBundle(getArguments()).getFolderId();
+        mParentId = SameNameAddDialogArgs.fromBundle(getArguments()).getParentId();
         mNewName = SameNameAddDialogArgs.fromBundle(getArguments()).getNewName();
     }
 
@@ -46,7 +46,7 @@ public class SameNameAddDialog extends DialogFragment {
         positiveButton.setOnClickListener(v -> {
             if (mItemType.equals(CATEGORY))
                 dialogUtils.sameNameCategoryAddConfirmClick(mNewName, mParentCategory);
-            else dialogUtils.sameNameFolderAddConfirmClick(mNewName, mParentCategory, mFolderId);
+            else dialogUtils.sameNameFolderAddConfirmClick(mNewName, mParentCategory, mParentId);
         });
 
         return alertDialog;
