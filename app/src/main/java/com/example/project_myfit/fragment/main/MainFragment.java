@@ -45,6 +45,7 @@ import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
@@ -65,7 +66,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
     private PopupWindow mPopupWindow;
-    private boolean mIsDragging, mIsDragSelecting, mScrollEnable;
+    private boolean mIsDragging, mActionModeOn, mIsDragSelecting, mScrollEnable;
     private ActionMode mActionMode;
     private ActionModeTitleBinding mActionModeTitleBinding;
     private MenuItem mEditMenu, mDeletedMenu;
@@ -85,7 +86,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             viewPagerSetEnable(false);
 
             mActionMode = mode;
-            mModel.setActionModeOn(true);
+            mActionModeOn = true;
 
             mode.getMenuInflater().inflate(R.menu.action_mode, menu);
             mode.setCustomView(mActionModeTitleBinding.getRoot());
@@ -119,7 +120,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             viewPagerSetEnable(true);
 
             mActionMode = null;
-            mModel.setActionModeOn(true);
+            mActionModeOn = false;
 
             mCategoryAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_OFF);
 
@@ -300,7 +301,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         });
 
         mButtonArray[mModel.getCurrentItem()].setChecked(true);
-        if (mModel.isActionModeOn()) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
             mCategoryAdapterArray[mModel.getCurrentItem()].setSelectedCategoryList(mModel.getSelectedCategoryList());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
@@ -418,6 +419,12 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ACTION_MODE, mActionModeOn);
     }
 
     //category adapter------------------------------------------------------------------------------
