@@ -26,7 +26,7 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     private boolean isSelected;
     private boolean mIsClickable = true;
     private final AdapterUtil mAdapterUtil;
-    private Folder mThisFolder;
+    private final Folder mThisFolder;
 
     public TreeHolderFolder(Context context, TreeViewFolderFolderAddListener listener, Folder thisFolder) {
         super(context);
