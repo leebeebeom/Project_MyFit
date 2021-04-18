@@ -50,7 +50,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mDialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this);
+        mDialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph);
         mThisCategory = mDialogUtils.getDialogViewModel().getCategory(TreeViewDialogArgs.fromBundle(getArguments()).getThisCategoryId());
         mThisFolder = mDialogUtils.getDialogViewModel().getFolder(TreeViewDialogArgs.fromBundle(getArguments()).getThisFolderId());
         mModel.setSelectedItemList(mDialogUtils.getDialogViewModel().getSelectedFolderList(), mDialogUtils.getDialogViewModel().getSelectedSizeList());

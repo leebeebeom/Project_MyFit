@@ -51,12 +51,12 @@ public class DialogUtils {
     private final DialogFragment mThisFragment;
     private NavBackStackEntry mNavBackStackEntry;
 
-    public DialogUtils(Context context, LayoutInflater inflater, DialogFragment fragment) {
+    public DialogUtils(Context context, LayoutInflater inflater, DialogFragment fragment, int navGraphId) {
         this.mContext = context;
         this.mInflater = inflater;
         this.mThisFragment = fragment;
         this.mNavController = NavHostFragment.findNavController(fragment);
-        this.mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.main_nav_graph)).get(DialogViewModel.class);
+        this.mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(navGraphId)).get(DialogViewModel.class);
     }
 
     public DialogUtils backStackLiveSetValue(int destinationId) {
