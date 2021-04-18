@@ -189,4 +189,9 @@ public class ListViewModel extends AndroidViewModel {
     public List<Folder> getFolderHistory3() {
         return mFolderHistory;
     }
+
+    public void selectedItemsClear() {
+        mSelectedFolderList.clear();
+        mSelectedSizeList.clear();
+    }
 }

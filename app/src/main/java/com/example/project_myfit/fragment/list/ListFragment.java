@@ -483,6 +483,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
                 else mBinding.listTextCategory.setText(parentName);
             }
             if (mActionMode != null) mActionMode.finish();
+            mModel.selectedItemsClear();
         });
     }
 
@@ -491,6 +492,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             long folderId = (long) o;
             selectedItemTreat.folderSizeMove(false,folderId, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
             if (mActionMode != null) mActionMode.finish();
+            mModel.selectedItemsClear();
         });
     }
 
@@ -498,6 +500,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
             selectedItemTreat.folderSizeDelete(false, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
             if (mActionMode != null) mActionMode.finish();
+            mModel.selectedItemsClear();
         });
     }
 
@@ -653,8 +656,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             @Override
             public void onFolderItemViewLongClick(int position) {
                 if (mActionMode == null) {
-                    mModel.getSelectedFolderList().clear();
-                    mModel.getSelectedSizeList().clear();
+                    mModel.selectedItemsClear();
                     ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
                 }
                 isFolderStart = true;
@@ -913,8 +915,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     @Override
     public void onSizeItemViewLongClick(int position) {
         if (mActionMode == null) {
-            mModel.getSelectedFolderList().clear();
-            mModel.getSelectedSizeList().clear();
+            mModel.selectedItemsClear();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
         isSizeStart = true;
