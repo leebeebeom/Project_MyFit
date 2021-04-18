@@ -245,6 +245,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     private void nameEditDialogLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
             if (mActionMode != null) mActionMode.finish();
+            mModel.getSelectedCategory().clear();
         });
     }
 
