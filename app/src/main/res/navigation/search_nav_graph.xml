@@ -9,5 +9,79 @@
         android:id="@+id/searchFragment"
         android:name="com.example.project_myfit.searchActivity.SearchFragment"
         tools:layout="@layout/fragment_search"
-        android:label="SearchFragment" />
+        android:label="SearchFragment">
+        <action
+            android:id="@+id/action_searchFragment_to_searchSelectedItemDeleteDialog"
+            app:destination="@id/searchSelectedItemDeleteDialog" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchTreeViewDialog"
+            app:destination="@id/searchTreeViewDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/searchSelectedItemDeleteDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchSelectedItemDeleteDialog"
+        android:label="SearchSelectedItemDeleteDialog">
+        <argument
+            android:name="selected_item_size"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/searchTreeViewDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchTreeViewDialog"
+        android:label="SearchTreeViewDialog">
+        <argument
+            android:name="parent_category"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_searchTreeViewDialog_to_searchAddDialog"
+            app:destination="@id/searchAddDialog" />
+        <action
+            android:id="@+id/action_searchTreeViewDialog_to_searchItemMoveDialog"
+            app:destination="@id/searchItemMoveDialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/searchAddDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchAddDialog"
+        android:label="SearchAddDialog">
+        <argument
+            android:name="item_type"
+            app:argType="string" />
+        <argument
+            android:name="parent_category"
+            app:argType="string" />
+        <argument
+            android:name="parent_id"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_searchAddDialog_to_searchSameNameAddDialog"
+            app:destination="@id/searchSameNameAddDialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/searchItemMoveDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchItemMoveDialog"
+        android:label="SearchItemMoveDialog">
+        <argument
+            android:name="selected_item_size"
+            app:argType="integer" />
+        <argument
+            android:name="parent_id"
+            app:argType="long" />
+    </dialog>
+    <dialog
+        android:id="@+id/searchSameNameAddDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchSameNameAddDialog"
+        android:label="SearchSameNameAddDialog">
+        <argument
+            android:name="item_type"
+            app:argType="string" />
+        <argument
+            android:name="parent_category"
+            app:argType="string" />
+        <argument
+            android:name="parent_id"
+            app:argType="long" />
+        <argument
+            android:name="new_name"
+            app:argType="string" />
+    </dialog>
 </navigation>
