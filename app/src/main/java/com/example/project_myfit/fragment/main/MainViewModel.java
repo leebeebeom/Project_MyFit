@@ -166,8 +166,4 @@ public class MainViewModel extends AndroidViewModel {
     public LiveData<List<Category>> getCategoryLive() {
         return mCategoryRepository.getAllCategoryLive();
     }
-
-    public List<Category> getSelectedCategory() {
-        return mSelectedCategoryList;
-    }
 }
