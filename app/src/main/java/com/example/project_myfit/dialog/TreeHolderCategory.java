@@ -25,8 +25,8 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     private ItemTreeCategoryBinding mBinding;
     private boolean mIsClickable = true;
     private final AdapterUtil mAdapterUtil;
-    private Category mThisCategory;
-    private Folder mThisFolder;
+    private final Category mThisCategory;
+    private final Folder mThisFolder;
 
     public TreeHolderCategory(Context context, TreeViewCategoryFolderAddListener listener, Category thisCategory, Folder thisFolder) {
         super(context);
