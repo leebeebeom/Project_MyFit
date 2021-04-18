@@ -148,7 +148,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
                 mNavController.navigate(ListFragmentDirections.actionListFragmentToNameEditDialog(mModel.getSelectedFolderId(), FOLDER, false));
                 // -> dialogLive
             else if (item.getItemId() == R.id.action_mode_move) {
-                mDialogViewModel.fromListFragment(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), mModel.getFolderHistory3());
+                mDialogViewModel.forTreeView(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), mModel.getFolderHistory3());
                 mNavController.navigate(ListFragmentDirections.actionListFragmentToTreeViewDialog(mParentCategory, mThisCategoryId, mThisFolderId));
                 // -> dialogLive
             } else if (item.getItemId() == R.id.action_mode_del)

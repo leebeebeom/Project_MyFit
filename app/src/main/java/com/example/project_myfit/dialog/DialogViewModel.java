@@ -131,7 +131,7 @@ public class DialogViewModel extends AndroidViewModel {
         return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
 
-    public void fromListFragment(List<Folder> selectedFolderList, List<Size> selectedSizeList, List<Folder> folderHistory) {
+    public void forTreeView(List<Folder> selectedFolderList, List<Size> selectedSizeList, List<Folder> folderHistory) {
         mSelectedFolderList = selectedFolderList;
         mSelectedSizeList = selectedSizeList;
         mFolderHistory = folderHistory;
