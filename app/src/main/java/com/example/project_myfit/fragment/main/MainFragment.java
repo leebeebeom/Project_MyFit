@@ -122,7 +122,9 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             mActionMode = null;
             mActionModeOn = false;
 
-            mCategoryAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_OFF);
+            //스크롤 오류 해결
+            for (int i = 0; i < 4; i++)
+                mCategoryAdapterArray[i].setActionModeState(ACTION_MODE_OFF);
 
             mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
@@ -362,10 +364,6 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             @Override
             public void onPageSelected(int position) {
                 mBinding.mainScrollView.smoothScrollTo(0, 0);
-                //스크롤 오류 해결
-                if (mActionMode == null)
-                    mCategoryAdapterArray[position].setActionModeState(0);
-
                 mModel.setCurrentItem(position);
                 mButtonArray[position].setChecked(true);
             }
