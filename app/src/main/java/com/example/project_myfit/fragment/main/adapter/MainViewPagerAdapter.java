@@ -125,6 +125,10 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
         public void setNoData(boolean isEmpty) {
             mBinding.noData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         }
+
+        public ItemMainRecyclerViewBinding getBinding() {
+            return mBinding;
+        }
     }
 
     public interface MainDragAutoScrollListener {
