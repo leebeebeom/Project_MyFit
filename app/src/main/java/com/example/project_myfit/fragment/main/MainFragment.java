@@ -212,9 +212,14 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             public void onSelectionStarted(int i) {
                 mBinding.mainScrollView.setScrollable(false);
                 mIsDragSelecting = true;
-                RecyclerView recyclerView = mBinding.viewPager.getChildAt(0).findViewById(R.id.main_recyclerView);
-                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
-                if (viewHolder != null) viewHolder.itemView.callOnClick();
+
+                MainViewPagerAdapter.ViewPagerVH viewPagerVH = (MainViewPagerAdapter.ViewPagerVH) ((RecyclerView) mBinding.viewPager.getChildAt(0))
+                        .findViewHolderForAdapterPosition(mModel.getCurrentItem());
+                if (viewPagerVH != null){
+                    RecyclerView recyclerView = viewPagerVH.getBinding().mainRecyclerView;
+                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
+                    if (viewHolder != null) viewHolder.itemView.callOnClick();
+                }
             }
 
             @Override
@@ -225,10 +230,14 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
-                RecyclerView recyclerView = mBinding.viewPager.getChildAt(0).findViewById(R.id.main_recyclerView);
-                for (int j = i; j <= i1; j++) {
-                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
-                    if (viewHolder != null) viewHolder.itemView.callOnClick();
+                MainViewPagerAdapter.ViewPagerVH viewPagerVH = (MainViewPagerAdapter.ViewPagerVH) ((RecyclerView) mBinding.viewPager.getChildAt(0))
+                        .findViewHolderForAdapterPosition(mModel.getCurrentItem());
+                if (viewPagerVH != null){
+                    RecyclerView recyclerView = viewPagerVH.getBinding().mainRecyclerView;
+                    for (int j = i; j <= i1; j++) {
+                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
+                        if (viewHolder != null) viewHolder.itemView.callOnClick();
+                    }
                 }
             }
         };
