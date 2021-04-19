@@ -123,8 +123,12 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             mActionModeOn = false;
 
             //스크롤 오류 해결
-            for (int i = 0; i < 4; i++)
-                mCategoryAdapterArray[i].setActionModeState(ACTION_MODE_OFF);
+            for (int i = 0; i < 4; i++) {
+                if (i == mModel.getCurrentItem())
+                    mCategoryAdapterArray[i].setActionModeState(ACTION_MODE_OFF);
+                else mCategoryAdapterArray[i].setActionModeState(0);
+            }
+
 
             mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
