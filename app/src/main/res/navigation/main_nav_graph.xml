@@ -117,7 +117,17 @@
         android:id="@+id/searchActivity"
         android:name="com.example.project_myfit.searchActivity.SearchActivity"
         tools:layout="@layout/activity_search"
-        android:label="SearchActivity" />
+        android:label="SearchActivity">
+        <argument
+            android:name="folder_id"
+            app:argType="long" />
+        <argument
+            android:name="size_id"
+            app:argType="long" />
+        <argument
+            android:name="parent_id"
+            app:argType="long" />
+    </activity>
     <!--    Dialog-->
     <dialog
         android:id="@+id/addDialog"
