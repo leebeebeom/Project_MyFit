@@ -330,7 +330,7 @@ public class InputOutputFragment extends Fragment {
                 if (TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim()))
                     mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
             } else {
-                if (mSizeId == 0) mModel.sizeInsert();
+                if (mSizeId == 0) mModel.sizeInsert(mIsSearchView);
                 else mModel.update();
 
                 if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0) requireActivity().finish();
