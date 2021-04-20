@@ -42,6 +42,7 @@ import static com.example.project_myfit.util.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.util.MyFitConstant.GET_IMAGE_REQUEST_CODE;
 import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
+import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class InputOutputFragment extends Fragment {
@@ -53,6 +54,7 @@ public class InputOutputFragment extends Fragment {
     private NavController mNavController;
     private long mSizeId;
     private String mParentCategory;
+    private boolean mIsSearchView;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -60,7 +62,8 @@ public class InputOutputFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (mSizeId == 0) inputOnBackPressed();
+                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0) requireActivity().finish();
+                else if (mSizeId == 0) inputOnBackPressed();
                 else outputOnBackPressed();
             }
         };
@@ -115,6 +118,7 @@ public class InputOutputFragment extends Fragment {
         long parentId = InputOutputFragmentArgs.fromBundle(getArguments()).getParentId();
         mSizeId = InputOutputFragmentArgs.fromBundle(getArguments()).getSizeId();
         mParentCategory = InputOutputFragmentArgs.fromBundle(getArguments()).getParentCategory();
+        mIsSearchView = requireActivity().getIntent().getExtras() != null;
 
         mModel = new ViewModelProvider(this).get(InputOutputViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
@@ -216,9 +220,14 @@ public class InputOutputFragment extends Fragment {
                 .get(DialogViewModel.class);
 
         //image clear confirm click
-        dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry ->
-                navBackStackEntry.getSavedStateHandle().getLiveData(IMAGE_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry, o ->
-                        mModel.getMutableImageUri().setValue(null)));
+        dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
+            navBackStackEntry.getSavedStateHandle().getLiveData(IMAGE_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry, o ->
+                    mModel.getMutableImageUri().setValue(null));
+            if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0){
+                navBackStackEntry.getSavedStateHandle().getLiveData(SIZE_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o ->
+                        requireActivity().finish());
+            }
+        });
     }
 
     @Override
@@ -323,7 +332,9 @@ public class InputOutputFragment extends Fragment {
             } else {
                 if (mSizeId == 0) mModel.sizeInsert();
                 else mModel.update();
-                mNavController.popBackStack();
+
+                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0) requireActivity().finish();
+                else mNavController.popBackStack();
             }
 
         });
@@ -357,6 +368,9 @@ public class InputOutputFragment extends Fragment {
         } else if (item.getItemId() == R.id.input_output_favorite) {
             mModel.getSize().setFavorite(!mModel.getSize().isFavorite());
             item.setIcon(mModel.getSize().isFavorite() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
+            return true;
+        } else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0) {
+            requireActivity().finish();
             return true;
         }
         return false;
