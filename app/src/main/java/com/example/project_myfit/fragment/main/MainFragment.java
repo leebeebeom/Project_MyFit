@@ -122,13 +122,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             mActionMode = null;
             mActionModeOn = false;
 
-            //스크롤 오류 해결
-            for (int i = 0; i < 4; i++) {
-                if (i == mModel.getCurrentItem())
-                    mCategoryAdapterArray[i].setActionModeState(ACTION_MODE_OFF);
-                else mCategoryAdapterArray[i].setActionModeState(0);
-            }
-
+            mCategoryAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_OFF);
 
             mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
@@ -188,6 +182,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         if (mBinding.mainScrollView.getScrollY() == 0) mTopFab.hide();
 
         mBinding.viewPager.setAdapter(getViewPagerAdapter());
+        mBinding.viewPager.setOffscreenPageLimit(1);
         setDialogLive();
         setCategoryLive();
         selectedItemAmountLive();
