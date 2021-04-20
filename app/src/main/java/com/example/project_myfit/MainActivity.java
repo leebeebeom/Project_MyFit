@@ -6,7 +6,9 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -28,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
-    private NavController mNavControl;
+    private NavController mNavController;
     private boolean mIsKeyboardShowing;
     private int mTopFabOriginVisibility;
 
@@ -38,17 +40,19 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        MainActivityModel model = new ViewModelProvider(this).get(MainActivityModel.class);
+
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment);
-        if (navHostFragment != null) mNavControl = navHostFragment.getNavController();
+        if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
 
-        NavigationUI.setupActionBarWithNavController(this, mNavControl, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(binding.bottomNav, mNavControl);
+        NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
 
         //바텀네비게이션 뷰 그림자 제거
         binding.bottomNav.setBackgroundTintList(null);
@@ -60,22 +64,41 @@ public class MainActivity extends AppCompatActivity {
         //키보드 쇼잉 리스너
         keyBoardShowingListener(binding);
 
-//        //TODO getIntent 제거, navigation 이용
-//        //sizeId, folderId 받은 후 존재하면 이동
-//        if (getIntent() != null)
-//            if (getIntent().getLongExtra(SIZE_ID, 0) != 0)
-//                //TODO 삭제시 서치뷰 복귀
-//                model.searchViewSizeClick(getIntent().getLongExtra(SIZE_ID, 0));
-//            else if (getIntent().getLongExtra(FOLDER_ID, 0) != 0)
-//                //TODO UP버튼 클릭시 서치뷰 복귀
-//                //TODO 이름 변경시 종료됨
-//                //TODO 네비게이션으로 뒤로 이동 후 백버튼 누르면 다시 서치뷰로 북귀함 and 어플 종료됨
-//                //TODO 다른 폴더로 이동 후 back버튼 클릭시 다시 복귀됨(복귀 안되게)
-//                model.searchViewFolderClick(getIntent().getLongExtra(FOLDER_ID, 0));
+        if (getIntent().getExtras() != null) {
+            if (MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId() != 0) {
+                long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
+                long folderId = MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId();
+                long categoryId = model.getCategoryId(parentId);
+                String parentCategory = model.getParentCategory();
+
+                Bundle bundle = new Bundle();
+                bundle.putLong("category_id", categoryId);
+                bundle.putLong("folder_id", folderId);
+                bundle.putString("parent_category", parentCategory);
+
+                NavGraph graph = mNavController.getGraph();
+                graph.setStartDestination(R.id.listFragment);
+                mNavController.setGraph(graph, bundle);
+
+            } else if (MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId() != 0) {
+                long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
+                long sizeId = MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId();
+                String parentCategory = model.getSizeParentCategory(parentId);
+
+                Bundle bundle = new Bundle();
+                bundle.putLong("parent_id", parentId);
+                bundle.putLong("size_id", sizeId);
+                bundle.putString("parent_category", parentCategory);
+
+                NavGraph graph = mNavController.getGraph();
+                graph.setStartDestination(R.id.inputOutputFragment);
+                mNavController.setGraph(graph, bundle);
+            }
+        }
     }
 
     private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar) {
-        mNavControl.addOnDestinationChangedListener((controller, destination, arguments) -> {
+        mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
@@ -131,6 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(mNavControl, mAppBarConfiguration) || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 }
