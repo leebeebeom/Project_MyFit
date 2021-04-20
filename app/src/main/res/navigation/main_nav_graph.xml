@@ -95,12 +95,8 @@
         android:name="com.example.project_myfit.fragment.inputoutput.InputOutputFragment"
         android:label=""
         tools:layout="@layout/fragment_input_output">
-        <argument
-            android:name="category_id"
-            app:argType="long" />
-        <argument
-            android:name="folder_id"
-            app:argType="long" />
+        <argument android:name="parent_id"
+            app:argType="long"/>
         <argument
             android:name="size_id"
             app:argType="long" />
