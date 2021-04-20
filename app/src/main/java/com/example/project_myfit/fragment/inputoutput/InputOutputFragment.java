@@ -112,14 +112,13 @@ public class InputOutputFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long categoryId = InputOutputFragmentArgs.fromBundle(getArguments()).getCategoryId();
-        long colderId = InputOutputFragmentArgs.fromBundle(getArguments()).getFolderId();
+        long parentId = InputOutputFragmentArgs.fromBundle(getArguments()).getParentId();
         mSizeId = InputOutputFragmentArgs.fromBundle(getArguments()).getSizeId();
         mParentCategory = InputOutputFragmentArgs.fromBundle(getArguments()).getParentCategory();
 
         mModel = new ViewModelProvider(this).get(InputOutputViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
-        mModel.initResources(categoryId, colderId, mSizeId, mParentCategory);
+        mModel.initResources(parentId, mSizeId, mParentCategory);
         setHasOptionsMenu(true);
     }
 
