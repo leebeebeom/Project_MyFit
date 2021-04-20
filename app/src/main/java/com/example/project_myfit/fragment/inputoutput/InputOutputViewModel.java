@@ -98,12 +98,11 @@ public class InputOutputViewModel extends AndroidViewModel {
         }
     }
 
-    public void initResources(long categoryId, long folderId, long sizeId, String parentCategory) {
+    public void initResources(long parentId, long sizeId, String parentCategory) {
         this.mOriginSize = mSizeRepository.getSize(sizeId);
         this.mParentCategory = parentCategory;
+        this.mParentId = parentId;
 
-        if (mParentId == 0)
-            mParentId = folderId == 0 ? categoryId : folderId;
         if (mOriginSize != null) {
             mCompareSize = mSizeRepository.getSize(sizeId);
             mMutableLiveImageUri.setValue(mOriginSize.getImageUri() != null ? Uri.parse(mOriginSize.getImageUri()) : null);
