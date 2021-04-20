@@ -15,6 +15,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.data.Repository;
+import com.example.project_myfit.data.model.Category;
+import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 
 import org.jetbrains.annotations.NotNull;
@@ -140,13 +142,26 @@ public class InputOutputViewModel extends AndroidViewModel {
         return intent;
     }
 
-    public void sizeInsert() {
+    public void sizeInsert(boolean mIsSearchView) {
         mNewSize.setOrderNumber(mSizeRepository.getSizeLargestOrderPlus1());
         mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
         mNewSize.setModifiedTime("");
         mNewSize.setImageUri(mMutableLiveImageUri.getValue() == null ? null : getRenameUri());
         mNewSize.setParentId(mParentId);
         mSizeRepository.sizeInsert(mNewSize);
+        if (mIsSearchView) parentSetDummy();
+    }
+
+    private void parentSetDummy() {
+        Category category = Repository.getCategoryRepository(getApplication()).getCategory(mParentId);
+        if (category != null){
+            category.setDummy(!category.getDummy());
+            Repository.getCategoryRepository(getApplication()).categoryUpdate(category);
+        }else{
+            Folder folder = Repository.getFolderRepository(getApplication()).getFolder(mParentId);
+            folder.setDummy(!folder.getDummy());
+            Repository.getFolderRepository(getApplication()).folderUpdate(folder);
+        }
     }
 
     public void update() {
