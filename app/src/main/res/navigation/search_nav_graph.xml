@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_searchFragment_to_searchTreeViewDialog"
             app:destination="@id/searchTreeViewDialog" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchNameEditDialog"
+            app:destination="@id/searchNameEditDialog" />
     </fragment>
     <dialog
         android:id="@+id/searchSelectedItemDeleteDialog"
@@ -84,4 +87,52 @@
             android:name="new_name"
             app:argType="string" />
     </dialog>
+    <dialog
+        android:id="@+id/searchNameEditDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchNameEditDialog"
+        android:label="SearchNameEditDialog">
+        <argument
+            android:name="item_id"
+            app:argType="long" />
+        <argument
+            android:name="item_type"
+            app:argType="string" />
+        <argument
+            android:name="is_parent_name"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_searchNameEditDialog_to_searchSameNameEditDialog"
+            app:destination="@id/searchSameNameEditDialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/searchSameNameEditDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.SearchSameNameEditDialog"
+        android:label="SearchSameNameEditDialog">
+        <argument
+            android:name="item_type"
+            app:argType="string" />
+        <argument
+            android:name="item_id"
+            app:argType="long" />
+        <argument
+            android:name="new_name"
+            app:argType="string" />
+        <argument
+            android:name="is_parent_name"
+            app:argType="boolean" />
+    </dialog>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.project_myfit.MainActivity"
+        android:label="MainActivity">
+        <argument
+            android:name="parent_id"
+            app:argType="long" />
+        <argument
+            android:name="folder_id"
+            app:argType="long" />
+        <argument
+            android:name="size_id"
+            app:argType="long" />
+    </activity>
 </navigation>
