@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_searchFragment_to_searchNameEditDialog"
             app:destination="@id/searchNameEditDialog" />
+        <action
+            android:id="@+id/action_searchFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <dialog
         android:id="@+id/searchSelectedItemDeleteDialog"
@@ -126,13 +129,13 @@
         android:name="com.example.project_myfit.MainActivity"
         android:label="MainActivity">
         <argument
-            android:name="parent_id"
-            app:argType="long" />
-        <argument
             android:name="folder_id"
             app:argType="long" />
         <argument
             android:name="size_id"
+            app:argType="long" />
+        <argument
+            android:name="parent_id"
             app:argType="long" />
     </activity>
 </navigation>
