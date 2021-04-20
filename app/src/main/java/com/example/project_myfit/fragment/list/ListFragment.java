@@ -609,7 +609,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private void setActivityFabClickListener() {
         requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v ->
                 mNavController.navigate(ListFragmentDirections.actionListFragmentToInputOutputFragment(
-                        mThisCategoryId, mThisFolderId, 0, mParentCategory)));
+                        mParentId, 0, mParentCategory)));
     }
 
     private void setTextNavigationClickListener() {
@@ -902,7 +902,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     public void onSizeItemViewClick(Size size, MaterialCheckBox checkBox) {
         if (mActionMode == null) {
             mNavController.navigate(ListFragmentDirections.actionListFragmentToInputOutputFragment(
-                    mThisCategoryId, mThisFolderId, size.getId(), mParentCategory));
+                    size.getParentId(), size.getId(), mParentCategory));
         } else {
             checkBox.setChecked(!checkBox.isChecked());
             mModel.sizeSelected(size, checkBox.isChecked(), mSizeAdapterList, mSizeAdapterGrid, mViewType);
