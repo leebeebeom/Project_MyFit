@@ -171,6 +171,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         }
     };
     private boolean mIsNavigationSet;
+    private boolean mIsSearchView;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -178,7 +179,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
+                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
+                    requireActivity().finish();
+                else if (mPopupWindow.isShowing()) mPopupWindow.dismiss();
                 else mNavController.popBackStack();
             }
         };
@@ -192,6 +195,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         mThisFolderId = ListFragmentArgs.fromBundle(getArguments()).getFolderId();
         mParentId = mThisFolderId == 0 ? mThisCategoryId : mThisFolderId;
         mParentCategory = ListFragmentArgs.fromBundle(getArguments()).getParentCategory();
+        mIsSearchView = requireActivity().getIntent().getExtras() != null;
 
         mModel = new ViewModelProvider(this).get(ListViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
@@ -614,8 +618,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
 
     private void setTextNavigationClickListener() {
         //home icon click
-        mBinding.listIconHome.setOnClickListener(v ->
-                mNavController.popBackStack(R.id.mainFragment, false));
+        mBinding.listIconHome.setOnClickListener(v -> {
+            if (mIsSearchView)
+                mNavController.navigate(ListFragmentDirections.actionListFragmentToMainFragment());
+            else mNavController.popBackStack(R.id.mainFragment, false);
+        });
 
         //category text click
         mBinding.listTextCategory.setOnClickListener(v -> {
@@ -976,7 +983,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         } else if (item.getItemId() == R.id.menu_list_search) {
             mNavController.navigate(ListFragmentDirections.actionListFragmentToSearchActivity());
             return true;
-        }
+        } else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
+            requireActivity().finish();
         return false;
     }
 
