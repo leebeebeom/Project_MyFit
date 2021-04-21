@@ -68,8 +68,6 @@ import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 //TODO 위치 표시
-
-//TODO 아이콘
 //TODO 하트
 //TODO 애니메이션 변경
 //TODO 인풋아웃풋 브랜드 리스트
@@ -279,10 +277,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         });
     }
 
-    private void recentSearchAllClearDialogLive(NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-            mModel.deleteAllRecentSearch();
-        });
+    private void recentSearchAllClearDialogLive(@NotNull NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry,
+                o -> mModel.deleteAllRecentSearch());
     }
 
     private void setRecentSearchLive() {
