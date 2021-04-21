@@ -14,17 +14,29 @@ import java.util.List;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> {
     private List<String> mBindList;
-    private final List<String> mOriginList;
+    private List<String> mOriginList;
 
-    public AutoCompleteAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<String> objects) {
+    public AutoCompleteAdapter(@NonNull @NotNull Context context, int resource, int textViewResourceId, @NonNull @NotNull List<String> objects) {
         super(context, resource, textViewResourceId, objects);
         this.mBindList = objects;
         this.mOriginList = objects;
     }
 
+    public AutoCompleteAdapter(@NonNull @NotNull Context context, int resource, int textViewResourceId) {
+        super(context, resource, textViewResourceId);
+    }
+
+    public void setItem(List<String> autoCompleteList){
+        clear();
+        this.mBindList = autoCompleteList;
+        this.mOriginList = autoCompleteList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return mBindList.size();
+        if (mBindList != null) return mBindList.size();
+        else return 0;
     }
 
     @Nullable
@@ -45,8 +57,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
 
             ArrayList<String> filteredList = new ArrayList<>();
             for (String s : mOriginList)
-                if (s.toLowerCase().trim().contains(filterString))
-                    filteredList.add(s.trim());
+                if (s.toLowerCase().contains(filterString))
+                    filteredList.add(s);
             mBindList = filteredList;
             return null;
         }
