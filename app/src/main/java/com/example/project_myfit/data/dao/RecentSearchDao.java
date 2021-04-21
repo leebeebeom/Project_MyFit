@@ -23,4 +23,7 @@ public interface RecentSearchDao {
 
     @Delete
     void deleteRecentSearch(RecentSearch recentSearch);
+
+    @Query("DELETE FROM RecentSearch")
+    void deleteAllRecentSearch();
 }

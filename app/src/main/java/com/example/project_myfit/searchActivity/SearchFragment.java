@@ -63,6 +63,7 @@ import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
+import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
@@ -70,13 +71,9 @@ import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 //TODO 아이콘
 //TODO 하트
-//TODO 폴더 아이템 갯수
-//TODO 트리뷰 회색되는거 안되게
-//TODO 서치 누르면 오토컴플리트 안나오게
 //TODO 애니메이션 변경
 //TODO 인풋아웃풋 브랜드 리스트
 //TODO 액션모드시 키보드 숨기기
-//TODO 바인드 될때 잠깐 나왔다 사라지ㄴ는거 수정
 //TODO 최근 검색 전체삭제 추가
 
 public class SearchFragment extends Fragment implements SearchAdapter.SearchAdapterListener, SearchViewPagerAdapter.SearchDragAutoScrollListener {
@@ -98,6 +95,10 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
+            mAutoCompleteTextView.clearFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(mAutoCompleteTextView.getWindowToken(), 0);
+
             mBinding.viewPager.setUserInputEnabled(false);
 
             mActionMode = mode;
@@ -253,6 +254,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
             selectedItemDeleteLive(selectedItemTreat, navBackStackEntry);
             itemMoveDialogLive(selectedItemTreat, navBackStackEntry);
             nameEditDialogLive(navBackStackEntry);
+            recentSearchAllClearDialogLive(navBackStackEntry);
         });
     }
 
@@ -274,6 +276,12 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     private void nameEditDialogLive(@NotNull NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
             if (mActionMode != null) mActionMode.finish();
+        });
+    }
+
+    private void recentSearchAllClearDialogLive(NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+            mModel.deleteAllRecentSearch();
         });
     }
 
@@ -343,10 +351,10 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         setRecentSearchScrollListener();
         fabClickLister();
         viewPagerChangeListener();
-        recentSearchAdapterClick();
+        recentSearchAdapterClickListener();
         autoCompleteImeListener();
         autoCompleteTextChangeListener();
-
+        recentSearchAllClearClickListener();
 
         actionModeRecreate();
     }
@@ -404,7 +412,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         });
     }
 
-    private void recentSearchAdapterClick() {
+    private void recentSearchAdapterClickListener() {
         mRecentSearchAdapter.setRecentSearchAdapterListener(new RecentSearchAdapter.RecentSearchAdapterListener() {
             @Override
             public void recentSearchItemClick(String word) {
@@ -488,6 +496,11 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    private void recentSearchAllClearClickListener() {
+        mBinding.recentSearchAllClear.setOnClickListener(v ->
+                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchAllClearDialog()));
     }
 
     private void actionModeRecreate() {

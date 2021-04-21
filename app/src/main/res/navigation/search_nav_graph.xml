@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_searchFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_searchFragment_to_recentSearchAllClearDialog"
+            app:destination="@id/recentSearchAllClearDialog" />
     </fragment>
     <dialog
         android:id="@+id/searchSelectedItemDeleteDialog"
@@ -138,4 +141,8 @@
             android:name="parent_id"
             app:argType="long" />
     </activity>
+    <dialog
+        android:id="@+id/recentSearchAllClearDialog"
+        android:name="com.example.project_myfit.dialog.SearchDialog.RecentSearchAllClearDialog"
+        android:label="RecentSearchAllClearDialog" />
 </navigation>

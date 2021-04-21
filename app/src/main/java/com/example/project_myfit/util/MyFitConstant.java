@@ -67,6 +67,7 @@ public class MyFitConstant {
     public static final String ITEM_MOVE_CONFIRM_CLICK = "item move confirm click";
     public static final String IMAGE_CLEAR_CONFIRM_CLICK = "image clear confirm click";
     public static final String SIZE_DELETE_CONFIRM_CLICK = "size delete confirm click";
+    public static final String RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK = "recent search all clear confirm click";
 
     public static final String NAME_EDIT_NAME = "name edit name";
 

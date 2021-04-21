@@ -434,5 +434,9 @@ public class Repository {
         public void deleteOverLapRecentSearch(String word) {
             new Thread(() -> mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearchByWord(word))).start();
         }
+
+        public void deleteAllRecentSearch(){
+            new Thread(mRecentSearchDao::deleteAllRecentSearch).start();
+        }
     }
 }

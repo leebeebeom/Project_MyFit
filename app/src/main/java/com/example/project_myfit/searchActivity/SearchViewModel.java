@@ -162,4 +162,8 @@ public class SearchViewModel extends AndroidViewModel {
     public void setCurrentItem(int currentItem) {
         this.mCurrentItem = currentItem;
     }
+
+    public void deleteAllRecentSearch() {
+        mRecentSearchRepository.deleteAllRecentSearch();
+    }
 }

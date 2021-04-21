@@ -43,6 +43,7 @@ import static com.example.project_myfit.util.MyFitConstant.ID;
 import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM_CLICK;
@@ -310,5 +311,10 @@ public class DialogUtils {
             mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToItemMoveDialog(selectedItemSize, parentId));
         else
             mNavController.navigate(SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchItemMoveDialog(selectedItemSize, parentId));
+    }
+
+    public void recentSearchAllClearClick() {
+        mNavBackStackEntry.getSavedStateHandle().set(RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK, null);
+        mNavController.popBackStack();
     }
 }
