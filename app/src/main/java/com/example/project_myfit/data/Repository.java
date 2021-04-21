@@ -361,18 +361,6 @@ public class Repository {
             return brandList;
         }
 
-        public List<String> getSizeNameList(){
-            List<String> nameList = new ArrayList<>();
-            Thread thread = new Thread(() -> nameList.addAll(mSizeDao.getSizeNameList()));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return nameList;
-        }
-
         public Size getSize(long id) {
             AtomicReference<Size> size = new AtomicReference<>();
             Thread thread = new Thread(() -> size.set(mSizeDao.getSize(id)));

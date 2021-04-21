@@ -30,9 +30,6 @@ public interface SizeDao {
     @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY brand")
     List<String> getSizeBrandList();
 
-    @Query("SELECT name FROM Size WHERE isDeleted =0 AND parentIsDeleted =0 ORDER BY name")
-    List<String> getSizeNameList();
-
     @Query("SELECT * FROM Size WHERE id = :id")
     Size getSize(long id);
 
