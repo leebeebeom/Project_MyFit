@@ -313,20 +313,26 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         mediatorLiveData.addSource(folderLiveData, mediatorLiveData::setValue);
         mediatorLiveData.addSource(sizeLiveData, mediatorLiveData::setValue);
         mediatorLiveData.observe(getViewLifecycleOwner(), o -> {
-            if (o instanceof List<?>) {
-                if (((List<?>) o).get(0) instanceof Folder) {
-                    List<Object> allItemList = new ArrayList<>((Collection<?>) o);
-                    if (sizeLiveData.getValue() != null)
-                        allItemList.addAll(sizeLiveData.getValue());
-                    mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
-                } else if (((List<?>) o).get(0) instanceof Size) {
-                    List<Object> allItemList = new ArrayList<>((Collection<?>) o);
-                    if (folderLiveData.getValue() != null)
-                        allItemList.addAll(0, folderLiveData.getValue());
-                    mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
-                }
-            }
+            if (o instanceof List<?>)
+                if (((List<?>) o).get(0) instanceof Folder)
+                    folderChangedValue(sizeLiveData, (Collection<?>) o);
+                else if (((List<?>) o).get(0) instanceof Size)
+                    sizeChangedValue(folderLiveData, (Collection<?>) o);
         });
+    }
+
+    private void sizeChangedValue(@NotNull LiveData<List<Folder>> folderLiveData, Collection<?> o) {
+        List<Object> allItemList = new ArrayList<>(o);
+        if (folderLiveData.getValue() != null)
+            allItemList.addAll(0, folderLiveData.getValue());
+        mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
+    }
+
+    private void folderChangedValue(@NotNull LiveData<List<Size>> sizeLiveData, Collection<?> o) {
+        List<Object> allItemList = new ArrayList<>(o);
+        if (sizeLiveData.getValue() != null)
+            allItemList.addAll(sizeLiveData.getValue());
+        mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
     }
 
     @Override
