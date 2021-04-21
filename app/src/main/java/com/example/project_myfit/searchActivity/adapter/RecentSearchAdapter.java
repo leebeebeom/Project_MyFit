@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.databinding.ItemRecentSearchRecyclerBinding;
-import com.example.project_myfit.searchActivity.database.RecentSearch;
+import com.example.project_myfit.data.model.RecentSearch;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,8 +44,7 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecentSearchVH holder, int position) {
-        holder.setRecentSearch(getCurrentList().get(position));
-        holder.mBinding.setRecentSearch(getCurrentList().get(position));
+        holder.setRecentSearch(getItem(position));
     }
 
     public static class RecentSearchVH extends RecyclerView.ViewHolder {
@@ -61,6 +60,7 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
         }
 
         public void setRecentSearch(RecentSearch recentSearch) {
+            mBinding.setRecentSearch(recentSearch);
             this.mRecentSearch = recentSearch;
         }
     }
