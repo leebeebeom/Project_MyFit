@@ -80,6 +80,19 @@ public class DialogViewModel extends AndroidViewModel {
     public void folderInsert(@NotNull String folderName, long parentId, String parentCategory) {
         mAddedFolder = new Folder(getCurrentTime(), folderName.trim(), parentId, mFolderRepository.getFolderLargestOrderPlus1(), parentCategory);
         mFolderRepository.folderInsert(mAddedFolder);
+        parentSetDummy(parentId);
+    }
+
+    private void parentSetDummy(long parentId) {
+        Category parentCategory = mCategoryRepository.getCategory(parentId);
+        if (parentCategory != null) {
+            parentCategory.setDummy(!parentCategory.getDummy());
+            mCategoryRepository.categoryUpdate(parentCategory);
+        } else {
+            Folder parentFolder = mFolderRepository.getFolder(parentId);
+            parentFolder.setDummy(!parentFolder.getDummy());
+            mFolderRepository.folderUpdate(parentFolder);
+        }
     }
 
     public void categoryNameEditConfirmClick(@NotNull Category category, String categoryName, boolean isParentName) {
@@ -112,6 +125,7 @@ public class DialogViewModel extends AndroidViewModel {
         Size size = Repository.getSizeRepository(getApplication()).getSize(sizeId);
         size.setIsDeleted(true);
         Repository.getSizeRepository(getApplication()).sizeUpdate(size);
+        parentSetDummy(size.getParentId());
     }
 
     public Category getCategory(long categoryId) {
