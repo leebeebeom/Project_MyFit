@@ -433,7 +433,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
                 mAutoCompleteTextView.dismissDropDown();
 
                 String word = mAutoCompleteTextView.getText().toString().trim();
-                //검색어 중복시 본래 검색어 지우고 맨 위로
+                //검색어 중복시 지우고 맨 위로
                 if (!TextUtils.isEmpty(word)) {
                     if (mRecentSearchStringList.contains(word))
                         mModel.deleteOverLapRecentSearch(word);
