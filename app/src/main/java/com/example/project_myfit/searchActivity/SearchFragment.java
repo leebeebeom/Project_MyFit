@@ -126,7 +126,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
             if (item.getItemId() == R.id.action_mode_del)
-                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchSelectedItemDeleteDialog(mModel.getSelectedItemSize()));
+                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchSelectedItemDeleteDialog(mModel.getSelectedItemSizeLiveValue()));
             else if (item.getItemId() == R.id.action_mode_move) {
                 mDialogViewModel.forTreeView(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), null);
                 mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchTreeViewDialog(mModel.getParentCategory()));
@@ -290,7 +290,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void setActionModeTitleLive() {
-        mModel.getSelectedAmount().observe(getViewLifecycleOwner(), integer -> {
+        mModel.getSelectedItemSizeLive().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.item_selected);
             mActionModeTitleBinding.actionModeTitle.setText(title);
 
