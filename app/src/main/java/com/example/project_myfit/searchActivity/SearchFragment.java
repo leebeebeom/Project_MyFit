@@ -39,6 +39,7 @@ import com.example.project_myfit.databinding.FragmentSearchBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.searchActivity.adapter.RecentSearchAdapter;
 import com.example.project_myfit.searchActivity.adapter.SearchAdapter;
+import com.example.project_myfit.searchActivity.adapter.SearchViewPagerAdapter;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.checkbox.MaterialCheckBox;
