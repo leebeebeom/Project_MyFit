@@ -1,20 +1,19 @@
-package com.example.project_myfit.ui.Average;
-
-import androidx.lifecycle.ViewModelProvider;
+package com.example.project_myfit.fragment.Average;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.project_myfit.R;
 
-public class AverageFragment extends Fragment {
+public class
+AverageFragment extends Fragment {
 
     private AverageViewModel mViewModel;
 

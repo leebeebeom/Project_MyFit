@@ -1,4 +1,4 @@
-package com.example.project_myfit.ui.favorite;
+package com.example.project_myfit.fragment.favorite;
 
 import androidx.lifecycle.ViewModel;
 

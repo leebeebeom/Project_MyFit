@@ -1,16 +1,14 @@
-package com.example.project_myfit.ui.favorite;
-
-import androidx.lifecycle.ViewModelProvider;
+package com.example.project_myfit.fragment.favorite;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
 
