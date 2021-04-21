@@ -1,7 +1,6 @@
-package com.example.project_myfit.searchActivity;
+package com.example.project_myfit.searchActivity.adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemSearchRecyclerViewBinding;
-import com.example.project_myfit.searchActivity.adapter.SearchAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
@@ -23,8 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
+import static com.example.project_myfit.util.MyFitConstant.DOWN;
+import static com.example.project_myfit.util.MyFitConstant.ETC;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
+import static com.example.project_myfit.util.MyFitConstant.STOP;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
+import static com.example.project_myfit.util.MyFitConstant.UP;
 
 public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPagerAdapter.SearchViewPagerVH> {
     private final SearchAdapter[] mSearchAdapterArray;
@@ -38,42 +40,48 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
         setHasStableIds(true);
     }
 
-    public void setItems(@NotNull List<Folder> allFolderList, List<Size> allSizeList, CharSequence word, TabLayout tabLayout, TypedValue colorControl) {
+    public void setItems(@NotNull List<Object> allItemList, CharSequence word, TabLayout tabLayout, TypedValue colorControl) {
         List<Object> topList = new ArrayList<>();
         List<Object> bottomList = new ArrayList<>();
         List<Object> outerList = new ArrayList<>();
         List<Object> etcList = new ArrayList<>();
-        for (Folder folder : allFolderList)
-            switch (folder.getParentCategory()) {
-                case TOP:
-                    topList.add(folder);
-                    break;
-                case BOTTOM:
-                    bottomList.add(folder);
-                    break;
-                case OUTER:
-                    outerList.add(folder);
-                    break;
-                default:
-                    etcList.add(folder);
-                    break;
-            }
-        for (Size size : allSizeList)
-            switch (size.getParentCategory()) {
-                case TOP:
-                    topList.add(size);
-                    break;
-                case BOTTOM:
-                    bottomList.add(size);
-                    break;
-                case OUTER:
-                    outerList.add(size);
-                    break;
-                default:
-                    etcList.add(size);
-                    break;
-            }
 
+        for (Object o : allItemList) {
+            if (o instanceof Folder) {
+                switch (((Folder) o).getParentCategory()) {
+                    case TOP:
+                        topList.add(o);
+                        break;
+                    case BOTTOM:
+                        bottomList.add(o);
+                        break;
+                    case OUTER:
+                        outerList.add(o);
+                        break;
+                    case ETC:
+                        etcList.add(o);
+                        break;
+                }
+            }
+        }
+        for (Object o : allItemList) {
+            if (o instanceof Size) {
+                switch (((Size) o).getParentCategory()) {
+                    case TOP:
+                        topList.add(o);
+                        break;
+                    case BOTTOM:
+                        bottomList.add(o);
+                        break;
+                    case OUTER:
+                        outerList.add(o);
+                        break;
+                    case ETC:
+                        etcList.add(o);
+                        break;
+                }
+            }
+        }
         mSearchAdapterArray[0].setItem(topList, word, tabLayout.getTabAt(0), colorControl);
         mSearchAdapterArray[1].setItem(bottomList, word, tabLayout.getTabAt(1), colorControl);
         mSearchAdapterArray[2].setItem(outerList, word, tabLayout.getTabAt(2), colorControl);
@@ -115,15 +123,14 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
         public SearchViewPagerVH(@NotNull ItemSearchRecyclerViewBinding binding, SearchDragAutoScrollListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
-            mBinding.getRoot().setBackgroundColor(Color.TRANSPARENT);
 
             mBinding.searchRecyclerView.setOnTouchListener((v, event) -> {
                 if (event.getRawY() > 2000)
-                    listener.dragAutoScroll(0);
+                    listener.dragAutoScroll(DOWN);
                 else if (event.getRawY() < 250)
-                    listener.dragAutoScroll(1);
+                    listener.dragAutoScroll(UP);
                 else if (event.getRawY() < 2000 && event.getRawY() > 250)
-                    listener.dragAutoScroll(2);
+                    listener.dragAutoScroll(STOP);
                 return false;
             });
         }
