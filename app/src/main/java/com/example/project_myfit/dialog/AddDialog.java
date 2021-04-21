@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -57,6 +58,11 @@ public class AddDialog extends DialogFragment {
             if (mItemType.equals(CATEGORY))
                 dialogUtils.addCategoryConfirmClick(newName, mParentCategory, false);
             else dialogUtils.addFolderConfirmClick(newName, mParentId, mParentCategory, false);
+        });
+
+        binding.dialogEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled()) positiveButton.callOnClick();
+            return false;
         });
         return alertDialog;
     }

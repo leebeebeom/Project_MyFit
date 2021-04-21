@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -71,6 +72,13 @@ public class NameEditDialog extends DialogFragment {
             else if (folder != null)
                 dialogUtils.folderNameEditConfirmCLick(folder, newName, mIsParentName, false);
         });
+
+        mBinding.dialogEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
+                positiveButton.callOnClick();
+            return false;
+        });
+
         return alertDialog;
     }
 
