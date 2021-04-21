@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
@@ -49,6 +51,7 @@ import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
@@ -182,9 +185,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         setDialogLive();
         setRecentSearchLive();
         setActionModeTitleLive();
-
-        mModel.getAllFolderLive().observe(getViewLifecycleOwner(), folderList -> setSearchAdapterData(folderList, null));
-        mModel.getAllSizeLive().observe(getViewLifecycleOwner(), sizeList -> setSearchAdapterData(null, sizeList));
+        setCombineLive();
     }
 
     @NotNull
@@ -304,11 +305,28 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         });
     }
 
-    private void setSearchAdapterData(@Nullable List<Folder> allFolderList, @Nullable List<Size> allSizeList) {
-        if (allFolderList == null) allFolderList = mModel.getAllFolderList();
-        if (allSizeList == null) allSizeList = mModel.getAllSizeList();
+    private void setCombineLive() {
+        LiveData<List<Folder>> folderLiveData = mModel.getAllFolderLive();
+        LiveData<List<Size>> sizeLiveData = mModel.getAllSizeLive();
 
-        mSearchViewPagerAdapter.setItems(allFolderList, allSizeList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
+        MediatorLiveData<Object> mediatorLiveData = new MediatorLiveData<>();
+        mediatorLiveData.addSource(folderLiveData, mediatorLiveData::setValue);
+        mediatorLiveData.addSource(sizeLiveData, mediatorLiveData::setValue);
+        mediatorLiveData.observe(getViewLifecycleOwner(), o -> {
+            if (o instanceof List<?>) {
+                if (((List<?>) o).get(0) instanceof Folder) {
+                    List<Object> allItemList = new ArrayList<>((Collection<?>) o);
+                    if (sizeLiveData.getValue() != null)
+                        allItemList.addAll(sizeLiveData.getValue());
+                    mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
+                } else if (((List<?>) o).get(0) instanceof Size) {
+                    List<Object> allItemList = new ArrayList<>((Collection<?>) o);
+                    if (folderLiveData.getValue() != null)
+                        allItemList.addAll(0, folderLiveData.getValue());
+                    mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayout, mColorControl);
+                }
+            }
+        });
     }
 
     @Override
