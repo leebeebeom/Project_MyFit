@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
+import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActivitySearchBinding;
 import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.util.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND;
+import static com.example.project_myfit.util.MyFitConstant.SORT_NAME;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -28,21 +33,23 @@ public class SearchActivity extends AppCompatActivity {
 
         binding.autoCompleteTextView.requestFocus();
 
-        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete, R.id.auto_complete_text, getAutoCompleteList(model));
+        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete, R.id.auto_complete_text);
         binding.autoCompleteTextView.setAdapter(autoCompleteAdapter);
+        setAutoCompleteLive(model, autoCompleteAdapter);
     }
 
-    @NotNull
-    private List<String> getAutoCompleteList(@NotNull SearchViewModel model) {
-        List<String> autoCompleteList = new ArrayList<>();
-
-        List<String> sizeBrandNameList = model.getSizeBrandList();
-        List<String> sizeNameList = model.getSizeNameList();
-
-        for (String s : sizeBrandNameList)
-            if (!autoCompleteList.contains(s)) autoCompleteList.add(s);
-        for (String s : sizeNameList)
-            if (!autoCompleteList.contains(s)) autoCompleteList.add(s);
-        return autoCompleteList;
+    private void setAutoCompleteLive(@NotNull SearchViewModel model, AutoCompleteAdapter autoCompleteAdapter) {
+        model.getAllSizeLive().observe(this, sizeList -> {
+            List<String> autoCompleteList = new ArrayList<>();
+            Sort.sizeSort(SORT_BRAND, sizeList);
+            for (Size size : sizeList)
+                if (!autoCompleteList.contains(size.getBrand()))
+                    autoCompleteList.add(size.getBrand());
+            Sort.sizeSort(SORT_NAME, sizeList);
+            for (Size size : sizeList)
+                if (!autoCompleteList.contains(size.getName()))
+                    autoCompleteList.add(size.getName());
+            autoCompleteAdapter.setItem(autoCompleteList);
+        });
     }
 }
