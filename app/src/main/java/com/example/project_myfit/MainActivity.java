@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        MainActivityModel model = new ViewModelProvider(this).get(MainActivityModel.class);
+        MainActivityViewModel model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -56,44 +56,19 @@ public class MainActivity extends AppCompatActivity {
 
         //바텀네비게이션 뷰 그림자 제거
         binding.bottomNav.setBackgroundTintList(null);
-        //바텀네비게이션 뷰 정렬 맞추기
+        //바텀네비게이션 뷰 정렬
         binding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
         destinationChangeListener(binding, actionBar);
         //키보드 쇼잉 리스너
-        keyBoardShowingListener(binding);
+        keyboardShowingListener(binding);
 
         if (getIntent().getExtras() != null) {
-            if (MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId() != 0) {
-                long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
-                long folderId = MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId();
-                long categoryId = model.getCategoryId(parentId);
-                String parentCategory = model.getParentCategory();
-
-                Bundle bundle = new Bundle();
-                bundle.putLong("category_id", categoryId);
-                bundle.putLong("folder_id", folderId);
-                bundle.putString("parent_category", parentCategory);
-
-                NavGraph graph = mNavController.getGraph();
-                graph.setStartDestination(R.id.listFragment);
-                mNavController.setGraph(graph, bundle);
-
-            } else if (MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId() != 0) {
-                long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
-                long sizeId = MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId();
-                String parentCategory = model.getSizeParentCategory(parentId);
-
-                Bundle bundle = new Bundle();
-                bundle.putLong("parent_id", parentId);
-                bundle.putLong("size_id", sizeId);
-                bundle.putString("parent_category", parentCategory);
-
-                NavGraph graph = mNavController.getGraph();
-                graph.setStartDestination(R.id.inputOutputFragment);
-                mNavController.setGraph(graph, bundle);
-            }
+            if (MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId() != 0)
+                searchViewFolderClick(model);
+            else if (MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId() != 0)
+                searchViewSizeClick(model);
         }
     }
 
@@ -124,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         binding.activityFab.show();
     }
 
-    private void keyBoardShowingListener(@NotNull ActivityMainBinding binding) {
+    private void keyboardShowingListener(@NotNull ActivityMainBinding binding) {
         View rootView = binding.getRoot();
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             Rect r = new Rect();
@@ -133,23 +108,60 @@ public class MainActivity extends AppCompatActivity {
             int screenHeight = rootView.getRootView().getHeight();
             int keypadHeight = screenHeight - r.bottom;
 
-            if (keypadHeight > screenHeight * 0.15) {
-                if (!mIsKeyboardShowing) {
-                    mIsKeyboardShowing = true;
-                    binding.activityFab.setVisibility(View.INVISIBLE);
-                    binding.bottomAppBar.setVisibility(View.INVISIBLE);
-                    mTopFabOriginVisibility = binding.topFab.getVisibility();
-                    binding.topFab.setVisibility(View.INVISIBLE);
-                }
-            } else {
-                if (mIsKeyboardShowing) {
-                    mIsKeyboardShowing = false;
-                    binding.bottomAppBar.setVisibility(View.VISIBLE);
-                    binding.activityFab.show();
-                    binding.topFab.setVisibility(mTopFabOriginVisibility);
-                }
-            }
+            if (keypadHeight > screenHeight * 0.15)
+                keyboardShow(binding);
+            else keyboardHide(binding);
         });
+    }
+
+    private void keyboardShow(@NotNull ActivityMainBinding binding) {
+        if (!mIsKeyboardShowing) {
+            mIsKeyboardShowing = true;
+            binding.activityFab.setVisibility(View.INVISIBLE);
+            binding.bottomAppBar.setVisibility(View.INVISIBLE);
+            mTopFabOriginVisibility = binding.topFab.getVisibility();
+            binding.topFab.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void keyboardHide(@NotNull ActivityMainBinding binding) {
+        if (mIsKeyboardShowing) {
+            mIsKeyboardShowing = false;
+            binding.bottomAppBar.setVisibility(View.VISIBLE);
+            binding.activityFab.show();
+            binding.topFab.setVisibility(mTopFabOriginVisibility);
+        }
+    }
+
+    private void searchViewSizeClick(@NotNull MainActivityViewModel model) {
+        long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
+        long sizeId = MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId();
+        String parentCategory = model.getSizeParentCategory(parentId);
+
+        Bundle bundle = new Bundle();
+        bundle.putLong("parent_id", parentId);
+        bundle.putLong("size_id", sizeId);
+        bundle.putString("parent_category", parentCategory);
+
+        NavGraph graph = mNavController.getGraph();
+        graph.setStartDestination(R.id.inputOutputFragment);
+        mNavController.setGraph(graph, bundle);
+    }
+
+    private void searchViewFolderClick(@NotNull MainActivityViewModel model) {
+        long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
+        long folderId = MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId();
+        long categoryId = model.getCategoryId(parentId);
+        String parentCategory = model.getParentCategory();
+
+        Bundle bundle = new Bundle();
+        bundle.putLong("category_id", categoryId);
+        bundle.putLong("folder_id", folderId);
+        bundle.putString("parent_category", parentCategory);
+
+        NavGraph graph = mNavController.getGraph();
+        graph.setStartDestination(R.id.listFragment);
+        mNavController.setGraph(graph, bundle);
     }
 
     @Override

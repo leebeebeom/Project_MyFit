@@ -11,12 +11,12 @@ import com.example.project_myfit.data.model.Folder;
 
 import org.jetbrains.annotations.NotNull;
 
-public class MainActivityModel extends AndroidViewModel {
+public class MainActivityViewModel extends AndroidViewModel {
     private final Repository.CategoryRepository mCategoryRepository;
     private final Repository.FolderRepository mFolderRepository;
     private String mParentCategory;
 
-    public MainActivityModel(@NonNull @NotNull Application application) {
+    public MainActivityViewModel(@NonNull @NotNull Application application) {
         super(application);
         mCategoryRepository = Repository.getCategoryRepository(getApplication());
         mFolderRepository = Repository.getFolderRepository(getApplication());
