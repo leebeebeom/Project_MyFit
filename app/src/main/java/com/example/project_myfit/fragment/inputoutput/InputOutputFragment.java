@@ -202,7 +202,7 @@ public class InputOutputFragment extends Fragment {
         List<String> autoCompleteList = new ArrayList<>();
         List<String> brandList = mModel.getSizeBrandList();
         for (String s : brandList)
-            if (!autoCompleteList.contains(s)) autoCompleteList.add(s);
+            if (!autoCompleteList.contains(s.trim())) autoCompleteList.add(s.trim());
         AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete, R.id.auto_complete_text, autoCompleteList);
         mBinding.brand.setAdapter(autoCompleteAdapter);
     }
