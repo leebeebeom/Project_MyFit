@@ -212,7 +212,7 @@ public class InputOutputFragment extends Fragment {
     private void setImageUriLive() {
         mModel.getMutableImageUri().observe(getViewLifecycleOwner(), uri -> {
             mBinding.inputOutputImage.setImageURI(uri);
-            if (uri != null) mBinding.inputOutputImage.setVisibility(View.GONE);
+            if (uri != null) mBinding.inputOutputAddIcon.setVisibility(View.GONE);
             else mBinding.inputOutputAddIcon.setVisibility(View.VISIBLE);
         });
     }
