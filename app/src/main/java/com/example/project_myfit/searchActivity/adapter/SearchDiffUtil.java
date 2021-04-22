@@ -22,12 +22,16 @@ public class SearchDiffUtil extends DiffUtil.ItemCallback<Object> {
     public boolean areContentsTheSame(@NonNull @NotNull Object oldItem, @NonNull @NotNull Object newItem) {
         if (oldItem instanceof Folder && newItem instanceof Folder)
             return ((Folder) oldItem).getFolderName().equals(((Folder) newItem).getFolderName()) &&
-                    ((Folder) oldItem).getDummy() == ((Folder) newItem).getDummy();
+                    ((Folder) oldItem).getDummy() == ((Folder) newItem).getDummy() &&
+                    //for Item move
+                    ((Folder) oldItem).getParentId() == ((Folder) newItem).getParentId();
         else if (oldItem instanceof Size && newItem instanceof Size)
             return ((Size) oldItem).getBrand().equals(((Size) newItem).getBrand()) &&
                     ((Size) oldItem).getName().equals(((Size) newItem).getName()) &&
                     ((Size) oldItem).isFavorite() == ((Size) newItem).isFavorite() &&
-                    String.valueOf(((Size) oldItem).getImageUri()).equals(String.valueOf(((Size) newItem).getImageUri()));
+                    String.valueOf(((Size) oldItem).getImageUri()).equals(String.valueOf(((Size) newItem).getImageUri())) &&
+                    //for Item move
+                    ((Size) oldItem).getParentId() == ((Size) newItem).getParentId();
         return false;
     }
 }
