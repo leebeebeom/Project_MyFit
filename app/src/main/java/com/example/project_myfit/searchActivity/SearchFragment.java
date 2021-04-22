@@ -67,12 +67,6 @@ import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_ALL_CLE
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
-//TODO 위치 표시
-//TODO 하트
-//TODO 애니메이션 변경
-//TODO 인풋아웃풋 브랜드 리스트
-//TODO 액션모드시 키보드 숨기기
-//TODO 최근 검색 전체삭제 추가
 
 public class SearchFragment extends Fragment implements SearchAdapter.SearchAdapterListener, SearchViewPagerAdapter.SearchDragAutoScrollListener {
     private SearchViewModel mModel;
