@@ -259,8 +259,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
     private void itemMoveDialogLive(SelectedItemTreat selectedItemTreat, @NotNull NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(ITEM_MOVE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
-            long folderId = (long) o;
-            selectedItemTreat.folderSizeMove(true, folderId, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
+            long parentId = (long) o;
+            selectedItemTreat.folderSizeMove(true, parentId, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
             if (mActionMode != null) mActionMode.finish();
         });
     }
