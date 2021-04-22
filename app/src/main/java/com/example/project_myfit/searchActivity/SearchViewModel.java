@@ -166,4 +166,8 @@ public class SearchViewModel extends AndroidViewModel {
     public void deleteAllRecentSearch() {
         mRecentSearchRepository.deleteAllRecentSearch();
     }
+
+    public void sizeFavoriteClick(Size size) {
+        Repository.getSizeRepository(getApplication()).sizeUpdate(size);
+    }
 }

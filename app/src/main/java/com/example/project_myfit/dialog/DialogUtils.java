@@ -275,12 +275,11 @@ public class DialogUtils {
     public void deletedConfirmClick(long sizeId) {
         mDialogViewModel.deleteConfirmClick(sizeId);
         mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM_CLICK, null);
-        mNavController.popBackStack(R.id.inputOutputFragment, true);
     }
 
     public void goBackConfirmClick() {
         mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM_CLICK, null);
-        mThisFragment.dismiss();
+        mNavController.popBackStack(R.id.inputOutputFragment, true);
     }
 
     public void imageDeleteConfirm() {

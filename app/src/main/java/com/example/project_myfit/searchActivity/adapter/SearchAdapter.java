@@ -132,6 +132,8 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
             else if (mActionModeState == ACTION_MODE_OFF)
                 mSizeAdapterUtil.listActionModeOff(((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCardView,
                         ((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCheckBox, mSelectedItemIdHashSet);
+
+            ((SearchRecyclerSizeVH) holder).mSizeBinding.searchFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
         }
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
@@ -241,6 +243,7 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
                 listener.searchAdapterSizeLongClick(getLayoutPosition());
                 return false;
             });
+            mSizeBinding.searchFavoriteCheckBox.setOnClickListener(v -> listener.searchAdapterFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {
@@ -253,6 +256,8 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         void searchAdapterSizeClick(Size size, MaterialCheckBox checkBox);
 
         void searchAdapterSizeLongClick(int position);
+
+        void searchAdapterFavoriteClick(Size size);
 
         void searchAdapterFolderClick(Folder folder, MaterialCheckBox checkBox);
 

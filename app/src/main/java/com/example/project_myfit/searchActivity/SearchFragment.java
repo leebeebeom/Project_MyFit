@@ -527,6 +527,11 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     @Override
+    public void searchAdapterFavoriteClick(Size size) {
+        mModel.sizeFavoriteClick(size);
+    }
+
+    @Override
     public void searchAdapterFolderClick(@NotNull Folder folder, MaterialCheckBox checkBox) {
         if (mActionMode == null)
             mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToMainActivity(
