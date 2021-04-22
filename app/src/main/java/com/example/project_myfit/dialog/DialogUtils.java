@@ -39,6 +39,7 @@ import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.ALERT_TITLE;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
+import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.ID;
 import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
@@ -278,7 +279,8 @@ public class DialogUtils {
     }
 
     public void goBackConfirmClick() {
-        mNavController.popBackStack(R.id.inputOutputFragment, true);
+        mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM_CLICK, null);
+        mThisFragment.dismiss();
     }
 
     public void imageDeleteConfirm() {
