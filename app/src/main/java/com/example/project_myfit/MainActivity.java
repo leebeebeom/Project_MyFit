@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
         String parentCategory = model.getSizeParentCategory(parentId);
 
         Bundle bundle = new Bundle();
-        bundle.putLong("parent_id", parentId);
-        bundle.putLong("size_id", sizeId);
-        bundle.putString("parent_category", parentCategory);
+        bundle.putLong("parentId", parentId);
+        bundle.putLong("sizeId", sizeId);
+        bundle.putString("parentCategory", parentCategory);
 
         NavGraph graph = mNavController.getGraph();
         graph.setStartDestination(R.id.inputOutputFragment);
@@ -157,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
         String parentCategory = model.getParentCategory();
 
         Bundle bundle = new Bundle();
-        bundle.putLong("category_id", categoryId);
-        bundle.putLong("folder_id", folderId);
-        bundle.putString("parent_category", parentCategory);
+        bundle.putLong("categoryId", categoryId);
+        bundle.putLong("folderId", folderId);
+        bundle.putString("parentCategory", parentCategory);
 
         NavGraph graph = mNavController.getGraph();
         graph.setStartDestination(R.id.listFragment);
