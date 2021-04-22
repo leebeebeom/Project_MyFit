@@ -79,31 +79,31 @@ public class InputOutputFragment extends Fragment {
     private boolean isDefaultInputChanged() {
         return mModel.getMutableImageUri().getValue() != null ||//이미지 추가
                 mModel.getSize().isFavorite() ||//favorite 변경
-                !TextUtils.isEmpty(mBinding.brand.getText()) ||
-                !TextUtils.isEmpty(mBinding.name.getText()) ||
-                !TextUtils.isEmpty(mBinding.size.getText()) ||
-                !TextUtils.isEmpty(mBinding.link.getText()) ||
-                !TextUtils.isEmpty(mBinding.memo.getText());
+                !TextUtils.isEmpty(mBinding.inputOutputBrandEditText.getText()) ||
+                !TextUtils.isEmpty(mBinding.inputOutputNameEditText.getText()) ||
+                !TextUtils.isEmpty(mBinding.inputOutputSizeEditText.getText()) ||
+                !TextUtils.isEmpty(mBinding.inputOutputLinkEditText.getText()) ||
+                !TextUtils.isEmpty(mBinding.inputOutputMemoEditText.getText());
     }
 
     private boolean isSizeInputChanged() {
         if (mParentCategory.equals(TOP) || mParentCategory.equals(OUTER)) {
-            return !TextUtils.isEmpty(mTopOuterBinding.length.getText()) ||
-                    !TextUtils.isEmpty(mTopOuterBinding.shoulder.getText()) ||
-                    !TextUtils.isEmpty(mTopOuterBinding.chest.getText()) ||
-                    !TextUtils.isEmpty(mTopOuterBinding.sleeve.getText());
+            return !TextUtils.isEmpty(mTopOuterBinding.includeLengthEditText.getText()) ||
+                    !TextUtils.isEmpty(mTopOuterBinding.includeShoulderEditText.getText()) ||
+                    !TextUtils.isEmpty(mTopOuterBinding.includeChestEditText.getText()) ||
+                    !TextUtils.isEmpty(mTopOuterBinding.includeSleeveEditText.getText());
         } else if (mParentCategory.equals(BOTTOM)) {
-            return !TextUtils.isEmpty(mBottomBinding.bottomLength.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.waist.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.thigh.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.rise.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.hem.getText());
-        } else return !TextUtils.isEmpty(mEtcBinding.option1.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.option2.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.option3.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.option4.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.option5.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.option6.getText());
+            return !TextUtils.isEmpty(mBottomBinding.includeBottomLengthEditText.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.includeWaistEditText.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.includeThighEditText.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.includeRiseEditText.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.includeHemEditText.getText());
+        } else return !TextUtils.isEmpty(mEtcBinding.includeOption1EditText.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.includeOption2EditText.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.includeOption3EditText.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.includeOption4EditText.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.includeOption5EditText.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.includeOption6EditText.getText());
     }
 
     private void outputOnBackPressed() {
@@ -145,39 +145,39 @@ public class InputOutputFragment extends Fragment {
         mEtcBinding = IncludeEtcBinding.inflate(inflater);
 
         if (mParentCategory.equals(MyFitConstant.TOP) || mParentCategory.equals(MyFitConstant.OUTER))
-            mBinding.detailFrameLayout.addView(mTopOuterBinding.getRoot());
+            mBinding.inputOutputDetailContainer.addView(mTopOuterBinding.getRoot());
         else if (mParentCategory.equals(MyFitConstant.BOTTOM))
-            mBinding.detailFrameLayout.addView(mBottomBinding.getRoot());
-        else mBinding.detailFrameLayout.addView(mEtcBinding.getRoot());
+            mBinding.inputOutputDetailContainer.addView(mBottomBinding.getRoot());
+        else mBinding.inputOutputDetailContainer.addView(mEtcBinding.getRoot());
 
-        if (mSizeId != 0) mBinding.timeLayout.setVisibility(View.VISIBLE);
+        if (mSizeId != 0) mBinding.inputOutputTimeLayout.setVisibility(View.VISIBLE);
     }
 
     private void setSelection() {
-        mBinding.brand.setSelection(mBinding.brand.length());
-        mBinding.name.setSelection(mBinding.name.length());
-        mBinding.size.setSelection(mBinding.size.length());
-        mBinding.link.setSelection(mBinding.link.length());
-        mBinding.memo.setSelection(mBinding.memo.length());
+        mBinding.inputOutputBrandEditText.setSelection(mBinding.inputOutputBrandEditText.length());
+        mBinding.inputOutputNameEditText.setSelection(mBinding.inputOutputNameEditText.length());
+        mBinding.inputOutputSizeEditText.setSelection(mBinding.inputOutputSizeEditText.length());
+        mBinding.inputOutputLinkEditText.setSelection(mBinding.inputOutputLinkEditText.length());
+        mBinding.inputOutputMemoEditText.setSelection(mBinding.inputOutputMemoEditText.length());
 
         if (mParentCategory.equals(TOP) || mParentCategory.equals(OUTER)) {
-            mTopOuterBinding.length.setSelection(mTopOuterBinding.length.length());
-            mTopOuterBinding.shoulder.setSelection(mTopOuterBinding.shoulder.length());
-            mTopOuterBinding.chest.setSelection(mTopOuterBinding.chest.length());
-            mTopOuterBinding.sleeve.setSelection(mTopOuterBinding.sleeve.length());
+            mTopOuterBinding.includeLengthEditText.setSelection(mTopOuterBinding.includeLengthEditText.length());
+            mTopOuterBinding.includeShoulderEditText.setSelection(mTopOuterBinding.includeShoulderEditText.length());
+            mTopOuterBinding.includeChestEditText.setSelection(mTopOuterBinding.includeChestEditText.length());
+            mTopOuterBinding.includeSleeveEditText.setSelection(mTopOuterBinding.includeSleeveEditText.length());
         } else if (mParentCategory.equals(BOTTOM)) {
-            mBottomBinding.bottomLength.setSelection(mBottomBinding.bottomLength.length());
-            mBottomBinding.waist.setSelection(mBottomBinding.waist.length());
-            mBottomBinding.thigh.setSelection(mBottomBinding.thigh.length());
-            mBottomBinding.rise.setSelection(mBottomBinding.rise.length());
-            mBottomBinding.hem.setSelection(mBottomBinding.hem.length());
+            mBottomBinding.includeBottomLengthEditText.setSelection(mBottomBinding.includeBottomLengthEditText.length());
+            mBottomBinding.includeWaistEditText.setSelection(mBottomBinding.includeWaistEditText.length());
+            mBottomBinding.includeThighEditText.setSelection(mBottomBinding.includeThighEditText.length());
+            mBottomBinding.includeRiseEditText.setSelection(mBottomBinding.includeRiseEditText.length());
+            mBottomBinding.includeHemEditText.setSelection(mBottomBinding.includeHemEditText.length());
         } else {
-            mEtcBinding.option1.setSelection(mEtcBinding.option1.length());
-            mEtcBinding.option2.setSelection(mEtcBinding.option2.length());
-            mEtcBinding.option3.setSelection(mEtcBinding.option3.length());
-            mEtcBinding.option4.setSelection(mEtcBinding.option4.length());
-            mEtcBinding.option5.setSelection(mEtcBinding.option5.length());
-            mEtcBinding.option6.setSelection(mEtcBinding.option6.length());
+            mEtcBinding.includeOption1EditText.setSelection(mEtcBinding.includeOption1EditText.length());
+            mEtcBinding.includeOption2EditText.setSelection(mEtcBinding.includeOption2EditText.length());
+            mEtcBinding.includeOption3EditText.setSelection(mEtcBinding.includeOption3EditText.length());
+            mEtcBinding.includeOption4EditText.setSelection(mEtcBinding.includeOption4EditText.length());
+            mEtcBinding.includeOption5EditText.setSelection(mEtcBinding.includeOption5EditText.length());
+            mEtcBinding.includeOption6EditText.setSelection(mEtcBinding.includeOption6EditText.length());
         }
     }
 
@@ -205,15 +205,15 @@ public class InputOutputFragment extends Fragment {
         List<String> brandList = mModel.getSizeBrandList();
         for (String s : brandList)
             if (!autoCompleteList.contains(s.trim())) autoCompleteList.add(s.trim());
-        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete, R.id.auto_complete_text, autoCompleteList);
-        mBinding.brand.setAdapter(autoCompleteAdapter);
+        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete, R.id.itemAutoCompleteText, autoCompleteList);
+        mBinding.inputOutputBrandEditText.setAdapter(autoCompleteAdapter);
     }
 
     private void setImageUriLive() {
         mModel.getMutableImageUri().observe(getViewLifecycleOwner(), uri -> {
-            mBinding.image.setImageURI(uri);
-            if (uri != null) mBinding.addIcon.setVisibility(View.GONE);
-            else mBinding.addIcon.setVisibility(View.VISIBLE);
+            mBinding.inputOutputImage.setImageURI(uri);
+            if (uri != null) mBinding.inputOutputImage.setVisibility(View.GONE);
+            else mBinding.inputOutputAddIcon.setVisibility(View.VISIBLE);
         });
     }
 
@@ -251,28 +251,28 @@ public class InputOutputFragment extends Fragment {
     }
 
     private void brandNameTextChangeListener() {
-        mBinding.brand.addTextChangedListener(new TextWatcher() {
+        mBinding.inputOutputBrandEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) mBinding.brandLayout.setErrorEnabled(false);
+                if (!TextUtils.isEmpty(s)) mBinding.inputOutputBrandLayout.setErrorEnabled(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-        mBinding.name.addTextChangedListener(new TextWatcher() {
+        mBinding.inputOutputNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) mBinding.nameLayout.setErrorEnabled(false);
+                if (!TextUtils.isEmpty(s)) mBinding.inputOutputNameLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -283,7 +283,7 @@ public class InputOutputFragment extends Fragment {
     }
 
     private void imageClick() {
-        mBinding.image.setOnClickListener(v -> {
+        mBinding.inputOutputImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             if (intent.resolveActivity(requireActivity().getPackageManager()) != null)
@@ -309,7 +309,7 @@ public class InputOutputFragment extends Fragment {
     }
 
     private void imageLongClick() {
-        mBinding.image.setOnLongClickListener(v -> {
+        mBinding.inputOutputImage.setOnLongClickListener(v -> {
             if (mModel.getMutableImageUri().getValue() != null)
                 mNavController.navigate(InputOutputFragmentDirections.actionInputOutputFragmentToImageClearDialog());
             return true;
@@ -317,8 +317,8 @@ public class InputOutputFragment extends Fragment {
     }
 
     private void goButtonClick() {
-        mBinding.goButton.setOnClickListener(v -> {
-            String link = String.valueOf(mBinding.link.getText());
+        mBinding.inputOutputGoButton.setOnClickListener(v -> {
+            String link = String.valueOf(mBinding.inputOutputLinkEditText.getText());
             if (!TextUtils.isEmpty(link)) {
                 if (!link.startsWith(getString(R.string.https)) && !link.startsWith(getString(R.string.http)))
                     link = getString(R.string.https) + link;
@@ -333,17 +333,19 @@ public class InputOutputFragment extends Fragment {
     }
 
     private void fabClick() {
-        requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim()) || TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim())) {
-                if (TextUtils.isEmpty(mBinding.brand.getText().toString().trim()))
-                    mBinding.brandLayout.setError(getString(R.string.necessary_field_brand));
-                if (TextUtils.isEmpty(String.valueOf(mBinding.name.getText()).trim()))
-                    mBinding.nameLayout.setError(getString(R.string.necessary_field_name));
+        requireActivity().findViewById(R.id.mainActivityFab).setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mBinding.inputOutputBrandEditText.getText().toString().trim())
+                    || TextUtils.isEmpty(String.valueOf(mBinding.inputOutputNameEditText.getText()).trim())) {
+                if (TextUtils.isEmpty(mBinding.inputOutputBrandEditText.getText().toString().trim()))
+                    mBinding.inputOutputBrandLayout.setError(getString(R.string.necessary_field_brand));
+                if (TextUtils.isEmpty(String.valueOf(mBinding.inputOutputNameEditText.getText()).trim()))
+                    mBinding.inputOutputNameLayout.setError(getString(R.string.necessary_field_name));
             } else {
                 if (mSizeId == 0) mModel.sizeInsert(mIsSearchView);
                 else mModel.update();
 
-                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0) requireActivity().finish();
+                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
+                    requireActivity().finish();
                 else mNavController.popBackStack();
             }
 
@@ -372,10 +374,10 @@ public class InputOutputFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
-        if (item.getItemId() == R.id.input_output_delete) {
+        if (item.getItemId() == R.id.menuInputOutputDelete) {
             mNavController.navigate(InputOutputFragmentDirections.actionInputOutputFragmentToDeleteConfirmDialog(mSizeId));
             return true;
-        } else if (item.getItemId() == R.id.input_output_favorite) {
+        } else if (item.getItemId() == R.id.menuInputOutputFavorite) {
             mModel.getSize().setFavorite(!mModel.getSize().isFavorite());
             item.setIcon(mModel.getSize().isFavorite() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
             return true;

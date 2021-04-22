@@ -34,7 +34,7 @@
         <!--        recycler view background color-->
         <item name="recyclerBackground">@color/recycler_background_night</item>
         <!--        input output go button color-->
-        <item name="go_button_color">@color/go_button_color_night</item>
+        <item name="goButtonColor">@color/go_button_color_night</item>
         <!--        ripple color remove-->
         <item name="colorControlHighlight">@android:color/transparent</item>
         <!--        my color control-->

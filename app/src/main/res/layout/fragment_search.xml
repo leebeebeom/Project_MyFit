@@ -9,7 +9,7 @@
         tools:context=".searchActivity.SearchFragment">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/view_pager_layout"
+            android:id="@+id/searchViewPagerScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -20,7 +20,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tab_layout"
+                    android:id="@+id/searchTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_32sdp"
                     android:layout_marginTop="@dimen/_8sdp"
@@ -30,7 +30,7 @@
                     app:tabTextAppearance="@style/myTextSize9sdp" />
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
+                    android:id="@+id/searchViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -38,7 +38,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:background="?colorPrimary"
-            android:id="@+id/recent_search_layout"
+            android:id="@+id/searchRecentSearchScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -48,7 +48,6 @@
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/recent_search_recycler_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -58,7 +57,6 @@
                         android:layout_height="wrap_content">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/recent_search_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_16sdp"
@@ -71,7 +69,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/recent_search_all_clear"
+                            android:id="@+id/searchRecentSearchAllClearText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_4sdp"
@@ -85,7 +83,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recent_search_recycler"
+                        android:id="@+id/searchRecentSearchRecycler"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -93,7 +91,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <FrameLayout
-                    android:id="@+id/recent_search_no_data"
+                    android:id="@+id/searchRecentSearchNoDataLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
@@ -112,7 +110,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/search_fab"
+            android:id="@+id/searchTopFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"

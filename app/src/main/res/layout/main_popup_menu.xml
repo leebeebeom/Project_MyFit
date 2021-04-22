@@ -19,7 +19,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/add_folder"
+                    android:id="@+id/mainPopupAddFolderText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
@@ -29,7 +29,7 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/sort"
+                    android:id="@+id/mainPopupSortText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
@@ -39,7 +39,7 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/recycle_bin"
+                    android:id="@+id/mainPopupRecycleBinText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"

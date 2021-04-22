@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/main_scroll_view"
+            android:id="@+id/mainScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -28,7 +28,7 @@
                     app:fontFamily="@font/noto_black" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/toggle_group"
+                    android:id="@+id/mainToggleGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -36,7 +36,7 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_top"
+                        android:id="@+id/mainTopButton"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
@@ -45,7 +45,7 @@
                         app:rippleColor="@android:color/transparent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_bottom"
+                        android:id="@+id/mainBottomButton"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
@@ -54,7 +54,7 @@
                         app:rippleColor="@android:color/transparent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_outer"
+                        android:id="@+id/mainOuterButton"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
@@ -63,7 +63,7 @@
                         app:rippleColor="@android:color/transparent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_etc"
+                        android:id="@+id/mainETCButton"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
@@ -73,7 +73,7 @@
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
+                    android:id="@+id/mainViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>

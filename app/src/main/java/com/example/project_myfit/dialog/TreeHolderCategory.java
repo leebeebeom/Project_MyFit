@@ -50,7 +50,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
-        mBinding.contentsSize.setText(String.valueOf(mAdapterUtil.getCategoryContentsSize(value.category,
+        mBinding.itemTreeCategoryContentsSizeText.setText(String.valueOf(mAdapterUtil.getCategoryContentsSize(value.category,
                 mFolderParentIdList, mSizeParentIdList)));
 
         //선택된 폴더가 이 카테고리노드라면
@@ -71,23 +71,23 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
         //expandable
         if (!node.getChildren().isEmpty())
-            mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(node));
-        else mBinding.arrowIconCategory.setVisibility(View.INVISIBLE);
+            mBinding.itemTreeCategoryFolderIconLayout.setOnClickListener(v -> tView.toggleNode(node));
+        else mBinding.itemTreeCategoryArrowIcon.setVisibility(View.INVISIBLE);
 
         //currentPosition
         if (mThisFolder == null && mThisCategory != null && mThisCategory.getId() == value.category.getId())
-            mBinding.currentPosition.setVisibility(View.VISIBLE);
-        else mBinding.currentPosition.setVisibility(View.GONE);
+            mBinding.itemTreeCategoryCurrentPositionText.setVisibility(View.VISIBLE);
+        else mBinding.itemTreeCategoryCurrentPositionText.setVisibility(View.GONE);
 
-        mBinding.addIcon.setOnClickListener(v -> mListener.treeViewCategoryAddFolderClick(node, value));
+        mBinding.itemTreeCategoryAddIcon.setOnClickListener(v -> mListener.treeViewCategoryAddFolderClick(node, value));
 
         return mBinding.getRoot();
     }
 
     public void setAlpha() {
         if (mIsClickable) {
-            mBinding.iconLayout.setAlpha(0.5f);
-            mBinding.text.setAlpha(0.5f);
+            mBinding.itemTreeCategoryFolderIconLayout.setAlpha(0.5f);
+            mBinding.itemTreeCategoryText.setAlpha(0.5f);
             mIsClickable = false;
         }
     }
@@ -97,8 +97,8 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     public void setIconClickable() {
-        mBinding.arrowIconCategory.setVisibility(View.VISIBLE);
-        mBinding.iconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
+        mBinding.itemTreeCategoryArrowIcon.setVisibility(View.VISIBLE);
+        mBinding.itemTreeCategoryFolderIconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
     public ItemTreeCategoryBinding getBinding() {
@@ -115,8 +115,8 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
 
     @Override
     public void toggle(boolean active) {
-        mBinding.arrowIconCategory.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
-        mBinding.folderIconCategory.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
+        mBinding.itemTreeCategoryArrowIcon.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
+        mBinding.itemTreeCategoryFolderIcon.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
     public static class CategoryTreeHolder {

@@ -56,7 +56,7 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
             this.mBinding = binding;
 
             itemView.setOnClickListener(v -> listener.recentSearchItemClick(mRecentSearch.getWord()));
-            binding.recentSearchDelete.setOnClickListener(v -> listener.recentSearchDeleteClick(mRecentSearch));
+            binding.itemRecentSearchDeleteIcon.setOnClickListener(v -> listener.recentSearchDeleteClick(mRecentSearch));
         }
 
         public void setRecentSearch(RecentSearch recentSearch) {

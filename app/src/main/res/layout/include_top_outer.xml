@@ -14,7 +14,6 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/input_top_outer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -37,7 +36,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/length"
+                    android:id="@+id/includeLengthEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -59,7 +58,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/shoulder"
+                    android:id="@+id/includeShoulderEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -88,7 +87,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/chest"
+                    android:id="@+id/includeChestEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -110,7 +109,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sleeve"
+                    android:id="@+id/includeSleeveEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"

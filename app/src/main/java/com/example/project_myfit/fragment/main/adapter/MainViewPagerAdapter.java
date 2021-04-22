@@ -86,15 +86,15 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        if (holder.mBinding.mainRecyclerView.getAdapter() == null) {
+        if (holder.mBinding.itemMainRecyclerView.getAdapter() == null) {
             mCategoryAdapterArray[position].setViewPagerVH(holder);
 
-            holder.mBinding.mainRecyclerView.setAdapter(mCategoryAdapterArray[position]);
+            holder.mBinding.itemMainRecyclerView.setAdapter(mCategoryAdapterArray[position]);
 
-            mTouchHelperArray[position].attachToRecyclerView(holder.mBinding.mainRecyclerView);
-            holder.mBinding.mainRecyclerView.addOnItemTouchListener(mDragSelectListener);
+            mTouchHelperArray[position].attachToRecyclerView(holder.mBinding.itemMainRecyclerView);
+            holder.mBinding.itemMainRecyclerView.addOnItemTouchListener(mDragSelectListener);
 
-            holder.mBinding.noData.setVisibility(mCategoryAdapterArray[position].getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            holder.mBinding.itemMainNoDataLayout.setVisibility(mCategoryAdapterArray[position].getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -111,7 +111,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
             super(binding.getRoot());
             this.mBinding = binding;
 
-            mBinding.mainRecyclerView.setOnTouchListener((v, event) -> {
+            mBinding.itemMainRecyclerView.setOnTouchListener((v, event) -> {
                 if (event.getRawY() > 2000)
                     listener.dragAutoScroll(DOWN);
                 else if (event.getRawY() < 250)
@@ -123,7 +123,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
         }
 
         public void setNoData(boolean isEmpty) {
-            mBinding.noData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            mBinding.itemMainNoDataLayout.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         }
 
         public ItemMainRecyclerViewBinding getBinding() {

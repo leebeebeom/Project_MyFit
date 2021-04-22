@@ -40,11 +40,14 @@
         android:name="com.example.project_myfit.fragment.list.ListFragment"
         tools:layout="@layout/fragment_list">
         <argument
-            android:name="category_id"
+            android:name="categoryId"
             app:argType="long" />
         <argument
-            android:name="folder_id"
+            android:name="folderId"
             app:argType="long" />
+        <argument
+            android:name="parentCategory"
+            app:argType="string" />
         <action
             android:id="@+id/action_listFragment_to_inputOutputFragment"
             app:destination="@id/inputOutputFragment"
@@ -86,20 +89,21 @@
         <action
             android:id="@+id/action_listFragment_to_addDialog"
             app:destination="@id/addDialog" />
-        <argument
-            android:name="parent_category"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/inputOutputFragment"
         android:name="com.example.project_myfit.fragment.inputoutput.InputOutputFragment"
         android:label=""
         tools:layout="@layout/fragment_input_output">
-        <argument android:name="parent_id"
-            app:argType="long"/>
         <argument
-            android:name="size_id"
+            android:name="parentId"
             app:argType="long" />
+        <argument
+            android:name="sizeId"
+            app:argType="long" />
+        <argument
+            android:name="parentCategory"
+            app:argType="string" />
         <action
             android:id="@+id/action_inputOutputFragment_to_deleteConfirmDialog"
             app:destination="@id/deleteConfirmDialog" />
@@ -109,9 +113,7 @@
         <action
             android:id="@+id/action_inputOutputFragment_to_imageClearDialog"
             app:destination="@id/imageClearDialog" />
-        <argument
-            android:name="parent_category"
-            app:argType="string" />
+
     </fragment>
     <activity
         android:id="@+id/searchActivity"
@@ -124,13 +126,13 @@
         android:name="com.example.project_myfit.dialog.AddDialog"
         android:label="AddDialog">
         <argument
-            android:name="item_type"
+            android:name="itemType"
             app:argType="string" />
         <argument
-            android:name="parent_category"
+            android:name="parentCategory"
             app:argType="string" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
         <action
             android:id="@+id/action_addDialog_to_sameNameAddDialog"
@@ -141,13 +143,13 @@
         android:name="com.example.project_myfit.dialog.NameEditDialog"
         android:label="NameEditDialog">
         <argument
-            android:name="item_id"
+            android:name="itemId"
             app:argType="long" />
         <argument
-            android:name="item_type"
+            android:name="itemType"
             app:argType="string" />
         <argument
-            android:name="is_parent_name"
+            android:name="isParentName"
             app:argType="boolean" />
         <action
             android:id="@+id/action_NameEditDialog_to_sameNameEditDialog"
@@ -158,7 +160,7 @@
         android:name="com.example.project_myfit.dialog.SelectedItemDeleteDialog"
         android:label="SelectedItemDeleteDialog">
         <argument
-            android:name="selected_item_size"
+            android:name="selectedItemSize"
             app:argType="integer" />
     </dialog>
     <dialog
@@ -169,7 +171,7 @@
             android:name="sort"
             app:argType="integer" />
         <argument
-            android:name="fragment_type"
+            android:name="fragmentType"
             app:argType="string" />
     </dialog>
     <dialog
@@ -177,16 +179,16 @@
         android:name="com.example.project_myfit.dialog.SameNameAddDialog"
         android:label="SameNameAddDialog">
         <argument
-            android:name="item_type"
+            android:name="itemType"
             app:argType="string" />
         <argument
-            android:name="parent_category"
+            android:name="parentCategory"
             app:argType="string" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
         <argument
-            android:name="new_name"
+            android:name="newName"
             app:argType="string" />
     </dialog>
     <dialog
@@ -194,13 +196,13 @@
         android:name="com.example.project_myfit.dialog.TreeViewDialog"
         android:label="TreeViewDialog">
         <argument
-            android:name="parent_category"
+            android:name="parentCategory"
             app:argType="string" />
         <argument
-            android:name="this_category_id"
+            android:name="thisCategoryId"
             app:argType="long" />
         <argument
-            android:name="this_folder_id"
+            android:name="thisFolderId"
             app:argType="long" />
         <action
             android:id="@+id/action_treeViewDialog_to_addDialog"
@@ -214,16 +216,16 @@
         android:name="com.example.project_myfit.dialog.SameNameEditDialog"
         android:label="SameNameEditDialog">
         <argument
-            android:name="item_type"
+            android:name="itemType"
             app:argType="string" />
         <argument
-            android:name="item_id"
+            android:name="itemId"
             app:argType="long" />
         <argument
-            android:name="new_name"
+            android:name="newName"
             app:argType="string" />
         <argument
-            android:name="is_parent_name"
+            android:name="isParentName"
             app:argType="boolean" />
     </dialog>
     <dialog
@@ -231,10 +233,10 @@
         android:name="com.example.project_myfit.dialog.ItemMoveDialog"
         android:label="ItemMoveDialog">
         <argument
-            android:name="selected_item_size"
+            android:name="selectedItemSize"
             app:argType="integer" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
     </dialog>
     <dialog
@@ -242,7 +244,7 @@
         android:name="com.example.project_myfit.dialog.DeleteConfirmDialog"
         android:label="DeleteConfirmDialog" >
         <argument
-            android:name="size_id"
+            android:name="sizeId"
             app:argType="long" />
     </dialog>
     <dialog

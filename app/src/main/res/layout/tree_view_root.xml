@@ -16,7 +16,7 @@
         android:scrollbars="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/tree_view_root"
+            android:id="@+id/dialogTreeRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -43,7 +43,6 @@
                     app:fontFamily="@font/noto_bold" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tree_view_parent_category_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
@@ -54,7 +53,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/add_category_layout"
+                android:id="@+id/dialogTreeAddCategoryLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

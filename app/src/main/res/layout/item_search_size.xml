@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/search_size_check_box"
+            android:id="@+id/itemSearchSizeCheckBox"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
             android:scaleY="0.7" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/search_size_card_view"
+            android:id="@+id/itemSearchSizeCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -45,7 +45,7 @@
                     android:layout_height="@dimen/_36sdp">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/search_size_image"
+                        android:id="@+id/itemSearchSizeImage"
                         setUri="@{size.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -57,7 +57,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/search_size_add_icon"
+                        android:id="@+id/itemSearchSizeAddIcon"
                         setAddIcon="@{size.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -105,7 +105,7 @@
                         tools:text="DAMAGED CREW NECK SWEATER" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
                 <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/search_favorite_check_box"
+                    android:id="@+id/itemSearchFavoriteCheckBox"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"

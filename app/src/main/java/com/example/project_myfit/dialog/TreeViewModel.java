@@ -101,8 +101,8 @@ public class TreeViewModel extends AndroidViewModel {
 
         categoryViewHolder.setIconClickable();
 
-        int size = Integer.parseInt(categoryViewHolder.getBinding().contentsSize.getText().toString());
-        categoryViewHolder.getBinding().contentsSize.setText(String.valueOf(size + 1));
+        int size = Integer.parseInt(categoryViewHolder.getBinding().itemTreeCategoryContentsSizeText.getText().toString());
+        categoryViewHolder.getBinding().itemTreeCategoryContentsSizeText.setText(String.valueOf(size + 1));
 
         Category dummy = categoryViewHolder.getCategory();
         dummy.setDummy(!dummy.getDummy());
@@ -114,8 +114,8 @@ public class TreeViewModel extends AndroidViewModel {
 
         folderViewHolder.setIconClickable();
 
-        int size = Integer.parseInt(folderViewHolder.getBinding().contentsSize.getText().toString());
-        folderViewHolder.getBinding().contentsSize.setText(String.valueOf(size + 1));
+        int size = Integer.parseInt(folderViewHolder.getBinding().itemTreeFolderContentsSizeText.getText().toString());
+        folderViewHolder.getBinding().itemTreeFolderContentsSizeText.setText(String.valueOf(size + 1));
 
         Folder dummy = folderViewHolder.getFolder();
         dummy.setDummy(!dummy.getDummy());

@@ -14,7 +14,6 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/input_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -36,7 +35,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/bottom_length"
+                    android:id="@+id/includeBottomLengthEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -71,7 +70,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/waist"
+                    android:id="@+id/includeWaistEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -93,7 +92,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/thigh"
+                    android:id="@+id/includeThighEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -122,7 +121,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/rise"
+                    android:id="@+id/includeRiseEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -144,7 +143,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/hem"
+                    android:id="@+id/includeHemEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"

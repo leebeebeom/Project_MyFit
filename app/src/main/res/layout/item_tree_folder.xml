@@ -21,13 +21,13 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/icon_layout"
+                android:id="@+id/itemTreeFolderFolderIconLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/_4sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/arrow_icon"
+                    android:id="@+id/itemTreeFolderArrowIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_16sdp"
@@ -35,7 +35,7 @@
                     app:srcCompat="@drawable/icon_triangle_right" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/folder_icon"
+                    android:id="@+id/itemTreeFolderFolderIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:alpha="0.8"
@@ -43,7 +43,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text"
+                android:id="@+id/itemTreeFolderText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_8sdp"
@@ -56,7 +56,7 @@
                 tools:text="폴더 1" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/current_position"
+                android:id="@+id/itemTreeFolderCurrentPositionText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/_4sdp"
@@ -69,7 +69,7 @@
                 android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/contents_size"
+                android:id="@+id/itemTreeFolderContentsSizeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -80,11 +80,12 @@
                 tools:text="20" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/add_icon"
+                android:id="@+id/itemTreeFolderAddIcon"
                 setAddIcon2="@{folder.folderName}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:alpha="0.8"
+                tools:src="@drawable/icon_add"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_16sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>

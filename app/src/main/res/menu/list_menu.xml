@@ -4,23 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menu_list_search"
+        android:id="@+id/menuListSearch"
         android:icon="@drawable/icon_search"
         android:title="@string/search"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menu_list_favorite"
+        android:id="@+id/menuListFavorite"
         android:icon="@drawable/icon_favorite_border"
         android:title="@string/favorite"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menu_list_view_type"
+        android:id="@+id/menuListViewType"
         android:icon="@drawable/icon_list"
         android:title="@string/view_type"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
     <item
-        android:id="@+id/menu_list_popup"
+        android:id="@+id/menuListPopup"
         android:icon="@drawable/icon_popup_menu"
         android:title="@string/menu"
         app:showAsAction="always" />

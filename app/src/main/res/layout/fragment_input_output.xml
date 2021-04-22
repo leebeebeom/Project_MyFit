@@ -15,7 +15,7 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/input_output_scroll_view"
+        android:id="@+id/inputOutputScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:colorBackground"
@@ -47,12 +47,12 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/image"
+                        android:id="@+id/inputOutputImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/add_icon"
+                        android:id="@+id/inputOutputAddIcon"
                         android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_60sdp"
                         android:layout_gravity="center"
@@ -64,7 +64,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/time_layout"
+                android:id="@+id/inputOutputTimeLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
@@ -123,7 +123,7 @@
                 android:paddingHorizontal="@dimen/_16sdp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/brand_layout"
+                    android:id="@+id/inputOutputBrandLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                     app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/brand"
+                        android:id="@+id/inputOutputBrandEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_34sdp"
                         android:imeOptions="actionNext"
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/name_layout"
+                        android:id="@+id/inputOutputNameLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                         app:shapeAppearance="@style/myEditTextCorner">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/name"
+                            android:id="@+id/inputOutputNameEditText"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_34sdp"
                             android:imeOptions="actionNext"
@@ -184,7 +184,7 @@
                         app:shapeAppearance="@style/myEditTextCorner">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/size"
+                            android:id="@+id/inputOutputSizeEditText"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_34sdp"
                             android:imeOptions="actionNext"
@@ -195,7 +195,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <FrameLayout
-                    android:id="@+id/detail_frame_layout"
+                    android:id="@+id/inputOutputDetailContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -214,7 +214,7 @@
                         app:shapeAppearance="@style/myEditTextCorner">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/link"
+                            android:id="@+id/inputOutputLinkEditText"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_34sdp"
                             android:autoLink="web"
@@ -227,7 +227,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/go_button"
+                        android:id="@+id/inputOutputGoButton"
                         style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="@dimen/_44sdp"
                         android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                         android:text="@string/go"
                         android:textColor="?colorControlNormal"
                         android:textSize="@dimen/_10sdp"
-                        app:backgroundTint="?go_button_color" />
+                        app:backgroundTint="?attr/goButtonColor" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -249,7 +249,7 @@
                     app:shapeAppearance="@style/myEditTextCorner">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/memo"
+                        android:id="@+id/inputOutputMemoEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"

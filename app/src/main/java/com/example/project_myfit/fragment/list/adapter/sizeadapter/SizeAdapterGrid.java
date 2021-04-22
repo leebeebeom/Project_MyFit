@@ -73,7 +73,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
-        holder.mBinding.gridDragHandle.setOnTouchListener((v, event) -> {
+        holder.mBinding.itemListGridDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mListener.onSizeDragHandleTouch(holder);
                 draggingView(holder);
@@ -83,30 +83,30 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
         });
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.gridActionModeOn(holder.mBinding.gridCheckBox, mSelectedSizeIdHashSet, size.getId());
+            mAdapterUtil.gridActionModeOn(holder.mBinding.itemListGridCheckBox, mSelectedSizeIdHashSet, size.getId());
         else if (mActionModeState == ACTION_MODE_OFF)
-            mAdapterUtil.gridActionModeOff(holder.mBinding.gridCheckBox, mSelectedSizeIdHashSet);
+            mAdapterUtil.gridActionModeOff(holder.mBinding.itemListGridCheckBox, mSelectedSizeIdHashSet);
 
-        holder.mBinding.gridDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.mBinding.gridFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
+        holder.mBinding.itemListGridDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.mBinding.itemListGridFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
     private void draggingView(@NotNull SizeGridVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.mBinding.gridImage.setAlpha(0.5f);
-        holder.mBinding.gridBrandText.setAlpha(0.4f);
-        holder.mBinding.gridNameText.setAlpha(0.6f);
-        holder.mBinding.gridCheckBox.setAlpha(0.5f);
-        holder.mBinding.gridFavoriteCheckBox.setAlpha(0.5f);
+        holder.mBinding.itemListGridImage.setAlpha(0.5f);
+        holder.mBinding.itemListGridBrandText.setAlpha(0.4f);
+        holder.mBinding.itemListGridNameText.setAlpha(0.6f);
+        holder.mBinding.itemListGridCheckBox.setAlpha(0.5f);
+        holder.mBinding.itemListGridFavoriteCheckBox.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull SizeGridVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.mBinding.gridImage.setAlpha(1f);
-        holder.mBinding.gridBrandText.setAlpha(0.7f);
-        holder.mBinding.gridNameText.setAlpha(0.9f);
-        holder.mBinding.gridCheckBox.setAlpha(0.8f);
-        holder.mBinding.gridFavoriteCheckBox.setAlpha(1);
+        holder.mBinding.itemListGridImage.setAlpha(1f);
+        holder.mBinding.itemListGridBrandText.setAlpha(0.7f);
+        holder.mBinding.itemListGridNameText.setAlpha(0.9f);
+        holder.mBinding.itemListGridCheckBox.setAlpha(0.8f);
+        holder.mBinding.itemListGridFavoriteCheckBox.setAlpha(1);
     }
 
     public void onItemMove(int from, int to) {
@@ -154,14 +154,14 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeAdapterGrid.SizeGridV
             super(binding.getRoot());
             this.mBinding = binding;
 
-            itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.gridCheckBox));
+            itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.itemListGridCheckBox));
 
             itemView.setOnLongClickListener(v -> {
                 listener.onSizeItemViewLongClick(getLayoutPosition());
                 return false;
             });
 
-            mBinding.gridFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
+            mBinding.itemListGridFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {

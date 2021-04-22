@@ -74,7 +74,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
-        holder.mBinding.listDragHandle.setOnTouchListener((v, event) -> {
+        holder.mBinding.itemListListDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
                 draggingView(holder);
@@ -84,31 +84,31 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         });
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.listActionModeOn(holder.mBinding.listCardView, holder.mBinding.listCheckBox, mSelectedSizeIdHashSet, size.getId());
+            mAdapterUtil.listActionModeOn(holder.mBinding.itemListListCardView, holder.mBinding.itemListListCheckBox, mSelectedSizeIdHashSet, size.getId());
         else if (mActionModeState == ACTION_MODE_OFF) {
-            mAdapterUtil.listActionModeOff(holder.mBinding.listCardView, holder.mBinding.listCheckBox, mSelectedSizeIdHashSet);
+            mAdapterUtil.listActionModeOff(holder.mBinding.itemListListCardView, holder.mBinding.itemListListCheckBox, mSelectedSizeIdHashSet);
             new Handler().postDelayed(() -> mActionModeState = 0, 310);
         }
 
-        holder.mBinding.listDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.mBinding.listFavoriteCheckBox.setVisibility(holder.mBinding.listDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-        holder.mBinding.listFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
+        holder.mBinding.itemListListDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.mBinding.itemListListFavoriteCheckBox.setVisibility(holder.mBinding.itemListListDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        holder.mBinding.itemListListFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
     private void draggingView(@NotNull SizeListVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.mBinding.listCheckBox.setVisibility(View.INVISIBLE);
-        holder.mBinding.listBrandText.setAlpha(0.4f);
-        holder.mBinding.listNameText.setAlpha(0.5f);
-        holder.mBinding.listImage.setAlpha(0.5f);
+        holder.mBinding.itemListListCheckBox.setVisibility(View.INVISIBLE);
+        holder.mBinding.itemListListBrandText.setAlpha(0.4f);
+        holder.mBinding.itemListListNameText.setAlpha(0.5f);
+        holder.mBinding.itemListListImage.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull SizeListVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.mBinding.listCheckBox.setVisibility(View.VISIBLE);
-        holder.mBinding.listBrandText.setAlpha(0.7f);
-        holder.mBinding.listNameText.setAlpha(0.8f);
-        holder.mBinding.listImage.setAlpha(1f);
+        holder.mBinding.itemListListCheckBox.setVisibility(View.VISIBLE);
+        holder.mBinding.itemListListBrandText.setAlpha(0.7f);
+        holder.mBinding.itemListListNameText.setAlpha(0.8f);
+        holder.mBinding.itemListListImage.setAlpha(1f);
     }
 
     public void onItemMove(int from, int to) {
@@ -156,14 +156,14 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
             super(binding.getRoot());
             this.mBinding = binding;
 
-            itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.listCheckBox));
+            itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.itemListListCheckBox));
 
             itemView.setOnLongClickListener(v -> {
                 listener.onSizeItemViewLongClick(getLayoutPosition());
                 return false;
             });
 
-            mBinding.listFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
+            mBinding.itemListListFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {

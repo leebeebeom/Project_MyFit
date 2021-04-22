@@ -11,14 +11,13 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/list_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
         tools:context=".fragment.list.ListFragment">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/list_scroll_view"
+            android:id="@+id/listScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -36,7 +35,7 @@
                     android:scrollbars="none">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/list_navigation"
+                        android:id="@+id/listTextNavigationLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
@@ -44,7 +43,7 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/list_icon_home"
+                            android:id="@+id/listIconHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
@@ -59,7 +58,7 @@
                             app:tint="?colorControlNormal" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/list_text_category"
+                            android:id="@+id/listTextCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
@@ -70,13 +69,13 @@
                 </HorizontalScrollView>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/recycler_folder_layout"
+                    android:id="@+id/listRecyclerFolderLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/folder_toggle_icon"
+                        android:id="@+id/listFolderToggleIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -85,7 +84,7 @@
                         android:src="@drawable/icon_triangle_down" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_folder"
+                        android:id="@+id/listRecyclerFolder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
@@ -102,7 +101,7 @@
                     android:layout_height="wrap_content">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_size"
+                        android:id="@+id/listRecyclerSize"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -118,7 +117,7 @@
                         tools:listitem="@layout/item_list_recycler_grid" />
 
                     <FrameLayout
-                        android:id="@+id/no_data"
+                        android:id="@+id/listNoDataLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"

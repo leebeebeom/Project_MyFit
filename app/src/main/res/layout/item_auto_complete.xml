@@ -14,13 +14,13 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/auto_complete_text"
+            android:id="@+id/itemAutoCompleteText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginVertical="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_18sdp"
             android:text="@{recentSearch.word}"
             android:textSize="@dimen/_10sdp"
-            tools:text="검색어" />
+            tools:text="검색된 단어" />
     </FrameLayout>
 </layout>

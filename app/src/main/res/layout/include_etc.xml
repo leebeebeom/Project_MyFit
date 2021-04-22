@@ -14,7 +14,6 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/input_etc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -35,7 +34,7 @@
                 app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/option1"
+                    android:id="@+id/includeOption1EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -55,7 +54,7 @@
                 app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/option2"
+                    android:id="@+id/includeOption2EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -83,7 +82,7 @@
                 app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/option3"
+                    android:id="@+id/includeOption3EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -103,7 +102,7 @@
                 app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/option4"
+                    android:id="@+id/includeOption4EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -130,7 +129,7 @@
                 app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/option5"
+                    android:id="@+id/includeOption5EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -150,7 +149,7 @@
                 app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/option6"
+                    android:id="@+id/includeOption6EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"

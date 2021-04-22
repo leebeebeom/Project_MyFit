@@ -108,10 +108,10 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SearchViewPagerVH holder, int position) {
-        if (holder.mBinding.searchRecyclerView.getAdapter() == null) {
+        if (holder.mBinding.itemSearchRecyclerView.getAdapter() == null) {
             mSearchAdapterArray[position].setSearchViewPagerVH(holder);
-            holder.mBinding.searchRecyclerView.setAdapter(mSearchAdapterArray[position]);
-            holder.mBinding.searchRecyclerView.addOnItemTouchListener(mDragSelectListener);
+            holder.mBinding.itemSearchRecyclerView.setAdapter(mSearchAdapterArray[position]);
+            holder.mBinding.itemSearchRecyclerView.addOnItemTouchListener(mDragSelectListener);
             holder.setNoResult(mSearchAdapterArray[position].getCurrentList().isEmpty());
         }
     }
@@ -124,7 +124,7 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
             super(binding.getRoot());
             this.mBinding = binding;
 
-            mBinding.searchRecyclerView.setOnTouchListener((v, event) -> {
+            mBinding.itemSearchRecyclerView.setOnTouchListener((v, event) -> {
                 if (event.getRawY() > 2000)
                     listener.dragAutoScroll(DOWN);
                 else if (event.getRawY() < 250)
@@ -137,8 +137,8 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
 
         public void setNoResult(boolean isEmpty) {
             if (isEmpty)
-                mBinding.noData.setVisibility(View.VISIBLE);
-            else mBinding.noData.setVisibility(View.GONE);
+                mBinding.itemSearchNoData.setVisibility(View.VISIBLE);
+            else mBinding.itemSearchNoData.setVisibility(View.GONE);
         }
 
         public ItemSearchRecyclerViewBinding getBinding() {

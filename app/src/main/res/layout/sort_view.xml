@@ -15,7 +15,7 @@
             android:background="?myColorControl" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/sort_custom"
+            android:id="@+id/dialogSortCustomRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sort_create"
+                android:id="@+id/dialogSortCreateRadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
@@ -42,7 +42,7 @@
                 android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sort_create_reverse"
+                android:id="@+id/dialogSortCreateReverseRadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sort_brand"
+                android:id="@+id/dialogSortBrandRadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
@@ -71,7 +71,7 @@
                 android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sort_brand_reverse"
+                android:id="@+id/dialogSortBrandReverseRadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sort_name"
+                android:id="@+id/dialogSortNameRadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
@@ -100,7 +100,7 @@
                 android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/sort_name_reverse"
+                android:id="@+id/dialogSortNameReverseRadioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"

@@ -113,27 +113,27 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
                 else if (o instanceof Size && ((Size) o).getParentId() == folder.getId())
                     amount++;
 
-            ((SearchRecyclerFolderVH) holder).mFolderBinding.searchContentsSize.setText(String.valueOf(amount));
+            ((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchContentsSizeText.setText(String.valueOf(amount));
 
             if (mActionModeState == ACTION_MODE_ON)
-                mFolderAdapterUtil.listActionModeOn(((SearchRecyclerFolderVH) holder).mFolderBinding.searchFolderCardView,
-                        ((SearchRecyclerFolderVH) holder).mFolderBinding.searchFolderCheckBox, mSelectedItemIdHashSet, folder.getId());
+                mFolderAdapterUtil.listActionModeOn(((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCardView,
+                        ((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCheckBox, mSelectedItemIdHashSet, folder.getId());
             else if (mActionModeState == ACTION_MODE_OFF)
-                mFolderAdapterUtil.listActionModeOff(((SearchRecyclerFolderVH) holder).mFolderBinding.searchFolderCardView,
-                        ((SearchRecyclerFolderVH) holder).mFolderBinding.searchFolderCheckBox, mSelectedItemIdHashSet);
+                mFolderAdapterUtil.listActionModeOff(((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCardView,
+                        ((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCheckBox, mSelectedItemIdHashSet);
         } else {
             Size size = (Size) getItem(holder.getLayoutPosition());
 
             ((SearchRecyclerSizeVH) holder).setSize(size);
 
             if (mActionModeState == ACTION_MODE_ON)
-                mSizeAdapterUtil.listActionModeOn(((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCardView,
-                        ((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCheckBox, mSelectedItemIdHashSet, size.getId());
+                mSizeAdapterUtil.listActionModeOn(((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCardView,
+                        ((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCheckBox, mSelectedItemIdHashSet, size.getId());
             else if (mActionModeState == ACTION_MODE_OFF)
-                mSizeAdapterUtil.listActionModeOff(((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCardView,
-                        ((SearchRecyclerSizeVH) holder).mSizeBinding.searchSizeCheckBox, mSelectedItemIdHashSet);
+                mSizeAdapterUtil.listActionModeOff(((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCardView,
+                        ((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCheckBox, mSelectedItemIdHashSet);
 
-            ((SearchRecyclerSizeVH) holder).mSizeBinding.searchFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
+            ((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
         }
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
@@ -217,7 +217,7 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
             super(folderBinding.getRoot());
             this.mFolderBinding = folderBinding;
 
-            itemView.setOnClickListener(v -> listener.searchAdapterFolderClick(mFolder, mFolderBinding.searchFolderCheckBox));
+            itemView.setOnClickListener(v -> listener.searchAdapterFolderClick(mFolder, mFolderBinding.itemSearchFolderCheckBox));
             itemView.setOnLongClickListener(v -> {
                 listener.searchAdapterFolderLongClick(getLayoutPosition());
                 return false;
@@ -238,12 +238,12 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
             super(sizeBinding.getRoot());
             this.mSizeBinding = sizeBinding;
 
-            itemView.setOnClickListener(v -> listener.searchAdapterSizeClick(mSize, mSizeBinding.searchSizeCheckBox));
+            itemView.setOnClickListener(v -> listener.searchAdapterSizeClick(mSize, mSizeBinding.itemSearchSizeCheckBox));
             itemView.setOnLongClickListener(v -> {
                 listener.searchAdapterSizeLongClick(getLayoutPosition());
                 return false;
             });
-            mSizeBinding.searchFavoriteCheckBox.setOnClickListener(v -> listener.searchAdapterFavoriteClick(mSize));
+            mSizeBinding.itemSearchFavoriteCheckBox.setOnClickListener(v -> listener.searchAdapterFavoriteClick(mSize));
         }
 
         public void setSize(Size size) {

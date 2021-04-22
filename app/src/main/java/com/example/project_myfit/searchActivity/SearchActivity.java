@@ -36,10 +36,10 @@ public class SearchActivity extends AppCompatActivity {
 
         SearchViewModel model = new ViewModelProvider(this).get(SearchViewModel.class);
 
-        binding.autoCompleteTextView.requestFocus();
+        binding.searchAutoCompleteEditText.requestFocus();
 
-        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete, R.id.auto_complete_text);
-        binding.autoCompleteTextView.setAdapter(autoCompleteAdapter);
+        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete, R.id.itemAutoCompleteText);
+        binding.searchAutoCompleteEditText.setAdapter(autoCompleteAdapter);
         setAutoCompleteLive(model, autoCompleteAdapter);
     }
 

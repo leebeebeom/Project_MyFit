@@ -9,7 +9,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:nestedScrollingEnabled="false"
-            android:id="@+id/main_recyclerView"
+            android:id="@+id/itemMainRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
@@ -22,10 +22,11 @@
             tools:listitem="@layout/item_main_recycler_category" />
 
         <FrameLayout
-            android:id="@+id/no_data"
+            android:id="@+id/itemMainNoDataLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
+            android:visibility="gone"
             android:minHeight="@dimen/_540sdp"
             android:background="@drawable/recycler_background">
 

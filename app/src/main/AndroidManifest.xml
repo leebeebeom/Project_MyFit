@@ -22,6 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_MyFit">
+        <activity android:name=".trash.TrashActivity"></activity>
         <activity android:name=".searchActivity.SearchActivity" />
         <activity
             android:name=".MainActivity"

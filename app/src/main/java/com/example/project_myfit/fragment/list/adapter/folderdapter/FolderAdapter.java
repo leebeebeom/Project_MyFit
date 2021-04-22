@@ -91,7 +91,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
         Folder folder = getItem(holder.getLayoutPosition());
         holder.setFolder(folder);
-        holder.mBinding.folderDragHandle.setOnTouchListener((v, event) -> {
+        holder.mBinding.itemListFolderDragHandle.setOnTouchListener((v, event) -> {
             if (folder.getId() != -1 && event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
                 mListener.onFolderDragHandleTouch(holder);
@@ -100,31 +100,31 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
             return false;
         });
 
-        holder.mBinding.folderContentsSize.setText(String.valueOf(mAdapterUtil
+        holder.mBinding.itemListFolderContentsSizeText.setText(String.valueOf(mAdapterUtil
                 .getFolderContentsSize(folder, mFolderFolderIdList, mSizeFolderIdList)));
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.gridActionModeOn(holder.mBinding.folderCheckBox, mSelectedFolderIdHashSet, folder.getId());
+            mAdapterUtil.gridActionModeOn(holder.mBinding.itemListFolderCheckBox, mSelectedFolderIdHashSet, folder.getId());
         else
-            mAdapterUtil.gridActionModeOff(holder.mBinding.folderCheckBox, mSelectedFolderIdHashSet);
+            mAdapterUtil.gridActionModeOff(holder.mBinding.itemListFolderCheckBox, mSelectedFolderIdHashSet);
 
-        holder.mBinding.folderDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.mBinding.itemListFolderDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
 
         holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void draggingView(@NotNull FolderVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.mBinding.folderContentsSizeLayout.setVisibility(View.INVISIBLE);
-        holder.mBinding.folderNameText.setAlpha(0.5f);
-        holder.mBinding.folderCheckBox.setVisibility(View.INVISIBLE);
+        holder.mBinding.itemListFolderContentsSizeLayout.setVisibility(View.INVISIBLE);
+        holder.mBinding.itemListFolderNameText.setAlpha(0.5f);
+        holder.mBinding.itemListFolderCheckBox.setVisibility(View.INVISIBLE);
     }
 
     private void dropView(@NotNull FolderVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.mBinding.folderContentsSizeLayout.setVisibility(View.VISIBLE);
-        holder.mBinding.folderNameText.setAlpha(1);
-        holder.mBinding.folderCheckBox.setVisibility(View.VISIBLE);
+        holder.mBinding.itemListFolderContentsSizeLayout.setVisibility(View.VISIBLE);
+        holder.mBinding.itemListFolderNameText.setAlpha(1);
+        holder.mBinding.itemListFolderCheckBox.setVisibility(View.VISIBLE);
     }
 
     public void onItemMove(int from, int to) {
@@ -174,7 +174,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderAdapter.FolderVH> {
 
             itemView.setOnClickListener(v -> {
                 if (mFolder.getId() != -1)
-                    listener.onFolderItemViewClick(mFolder, mBinding.folderCheckBox);
+                    listener.onFolderItemViewClick(mFolder, mBinding.itemListFolderCheckBox);
             });
 
             itemView.setOnLongClickListener(v -> {

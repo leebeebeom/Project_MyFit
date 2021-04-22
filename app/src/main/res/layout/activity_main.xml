@@ -14,13 +14,13 @@
                 android:layout_height="@dimen/_40sdp">
 
                 <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/mainToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:titleTextAppearance="@style/myActionBarTitleStyle">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/toolbar_custom_title"
+                        android:id="@+id/mainToolbarCustomTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -33,7 +33,7 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/host_fragment"
+                android:id="@+id/mainHostFragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -43,7 +43,7 @@
                 tools:layout="@layout/fragment_list" />
 
             <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottom_app_bar"
+                android:id="@+id/mainBottomAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_36sdp"
                 android:layout_gravity="bottom"
@@ -54,7 +54,7 @@
                 app:fabCradleMargin="@dimen/_6sdp">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottom_nav"
+                    android:id="@+id/mainBottomNav"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_36sdp"
                     android:layout_gravity="bottom"
@@ -68,17 +68,17 @@
             </com.google.android.material.bottomappbar.BottomAppBar>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/activity_fab"
+                android:id="@+id/mainActivityFab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/floating_action_button"
                 android:src="@drawable/icon_add"
                 app:elevation="0dp"
-                app:layout_anchor="@id/bottom_app_bar"
+                app:layout_anchor="@id/mainBottomAppBar"
                 app:tint="?colorPrimary" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/top_fab"
+                android:id="@+id/mainTopFab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"

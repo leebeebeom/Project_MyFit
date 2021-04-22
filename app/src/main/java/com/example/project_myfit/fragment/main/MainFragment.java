@@ -96,7 +96,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
-            mActionModeTitleBinding.actionModeSelectAll.setOnClickListener(v ->
+            mActionModeTitleBinding.actionModeCheckBox.setOnClickListener(v ->
                     mModel.selectAllClick(((MaterialCheckBox) v).isChecked(), mCategoryAdapterArray[mModel.getCurrentItem()]));
 
             mEditMenu = menu.getItem(0);
@@ -107,9 +107,9 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
-            if (item.getItemId() == R.id.action_mode_edit)
+            if (item.getItemId() == R.id.menuActionModeEdit)
                 mNavController.navigate(MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
-            else if (item.getItemId() == R.id.action_mode_del)
+            else if (item.getItemId() == R.id.menuActionModeDelete)
                 mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
             return true;
         }
@@ -123,17 +123,17 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
             mCategoryAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_OFF);
 
-            mActionModeTitleBinding.actionModeSelectAll.setChecked(false);
+            mActionModeTitleBinding.actionModeCheckBox.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
 
     private void viewPagerSetEnable(boolean enable) {
-        mBinding.viewPager.setUserInputEnabled(enable);
-        mBinding.btnTop.setEnabled(enable);
-        mBinding.btnBottom.setEnabled(enable);
-        mBinding.btnOuter.setEnabled(enable);
-        mBinding.btnEtc.setEnabled(enable);
+        mBinding.mainViewPager.setUserInputEnabled(enable);
+        mBinding.mainTopButton.setEnabled(enable);
+        mBinding.mainBottomButton.setEnabled(enable);
+        mBinding.mainOuterButton.setEnabled(enable);
+        mBinding.mainETCButton.setEnabled(enable);
     }
 
     @Override
@@ -164,11 +164,11 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mTopFab = requireActivity().findViewById(R.id.top_fab);
+        mTopFab = requireActivity().findViewById(R.id.mainTopFab);
         if (mBinding.mainScrollView.getScrollY() == 0) mTopFab.hide();
 
-        mBinding.viewPager.setAdapter(getViewPagerAdapter());
-        mBinding.viewPager.setOffscreenPageLimit(1);
+        mBinding.mainViewPager.setAdapter(getViewPagerAdapter());
+        mBinding.mainViewPager.setOffscreenPageLimit(1);
         setDialogLive();
         setCategoryLive();
         selectedItemAmountLive();
@@ -194,10 +194,10 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
                 mBinding.mainScrollView.setScrollable(false);
                 mIsDragSelecting = true;
 
-                MainViewPagerAdapter.ViewPagerVH viewPagerVH = (MainViewPagerAdapter.ViewPagerVH) ((RecyclerView) mBinding.viewPager.getChildAt(0))
+                MainViewPagerAdapter.ViewPagerVH viewPagerVH = (MainViewPagerAdapter.ViewPagerVH) ((RecyclerView) mBinding.mainViewPager.getChildAt(0))
                         .findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null){
-                    RecyclerView recyclerView = viewPagerVH.getBinding().mainRecyclerView;
+                    RecyclerView recyclerView = viewPagerVH.getBinding().itemMainRecyclerView;
                     RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
                     if (viewHolder != null) viewHolder.itemView.callOnClick();
                 }
@@ -211,10 +211,10 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
-                MainViewPagerAdapter.ViewPagerVH viewPagerVH = (MainViewPagerAdapter.ViewPagerVH) ((RecyclerView) mBinding.viewPager.getChildAt(0))
+                MainViewPagerAdapter.ViewPagerVH viewPagerVH = (MainViewPagerAdapter.ViewPagerVH) ((RecyclerView) mBinding.mainViewPager.getChildAt(0))
                         .findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null){
-                    RecyclerView recyclerView = viewPagerVH.getBinding().mainRecyclerView;
+                    RecyclerView recyclerView = viewPagerVH.getBinding().itemMainRecyclerView;
                     for (int j = i; j <= i1; j++) {
                         RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
                         if (viewHolder != null) viewHolder.itemView.callOnClick();
@@ -277,7 +277,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
                 mDeletedMenu.setVisible(integer > 0);
             }
 
-            mActionModeTitleBinding.actionModeSelectAll.setChecked(mCategoryAdapterArray[mModel.getCurrentItem()].getCurrentList().size() == integer);
+            mActionModeTitleBinding.actionModeCheckBox.setChecked(mCategoryAdapterArray[mModel.getCurrentItem()].getCurrentList().size() == integer);
         });
     }
 
@@ -291,7 +291,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         topFabClickListener();
         popupMenuClickListener();
 
-        requireActivity().findViewById(R.id.activity_fab).setOnClickListener(v -> {
+        requireActivity().findViewById(R.id.mainActivityFab).setOnClickListener(v -> {
             if (mActionMode != null) mActionMode.finish();
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
         });
@@ -316,9 +316,9 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     }
 
     private void setButtonClickListener() {
-        mButtonArray = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
+        mButtonArray = new MaterialButton[]{mBinding.mainTopButton, mBinding.mainBottomButton, mBinding.mainOuterButton, mBinding.mainETCButton};
 
-        final ColorStateList textOriginColor = mBinding.btnEtc.getTextColors();
+        final ColorStateList textOriginColor = mBinding.mainETCButton.getTextColors();
         TypedValue typedValue = new TypedValue();
         requireContext().getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
         int colorControl = typedValue.data;
@@ -326,19 +326,19 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         int colorPrimary = typedValue.data;
 
         //버튼 클릭 시 첫번째 호출
-        mBinding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+        mBinding.mainToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             for (int i = 0; i < 4; i++) {
                 mButtonArray[i].setBackgroundColor(Color.TRANSPARENT);
                 mButtonArray[i].setTextColor(textOriginColor);
             }
 
-            if (checkedId == R.id.btn_top && isChecked) {
+            if (checkedId == R.id.mainTopButton && isChecked) {
                 mButtonArray[0].setBackgroundColor(colorControl);
                 mButtonArray[0].setTextColor(colorPrimary);
-            } else if (checkedId == R.id.btn_bottom && isChecked) {
+            } else if (checkedId == R.id.mainBottomButton && isChecked) {
                 mButtonArray[1].setBackgroundColor(colorControl);
                 mButtonArray[1].setTextColor(colorPrimary);
-            } else if (checkedId == R.id.btn_outer && isChecked) {
+            } else if (checkedId == R.id.mainOuterButton && isChecked) {
                 mButtonArray[2].setBackgroundColor(colorControl);
                 mButtonArray[2].setTextColor(colorPrimary);
             } else {
@@ -349,12 +349,12 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            mButtonArray[i].setOnClickListener(v -> mBinding.viewPager.setCurrentItem(finalI));
+            mButtonArray[i].setOnClickListener(v -> mBinding.mainViewPager.setCurrentItem(finalI));
         }
     }
 
     private void viewPagerChangeListener() {
-        mBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        mBinding.mainViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 mBinding.mainScrollView.smoothScrollTo(0, 0);
@@ -379,11 +379,11 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     }
 
     private void popupMenuClickListener() {
-        mPopupMenuBinding.addFolder.setOnClickListener(v -> {
+        mPopupMenuBinding.mainPopupAddFolderText.setOnClickListener(v -> {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
             mPopupWindow.dismiss();
         });
-        mPopupMenuBinding.sort.setOnClickListener(v -> {
+        mPopupMenuBinding.mainPopupSortText.setOnClickListener(v -> {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
             mPopupWindow.dismiss();
         });
@@ -403,10 +403,10 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_main_popup) {
-            mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menu_main_popup));
+        if (item.getItemId() == R.id.menuMainPopup) {
+            mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menuMainPopup));
             return true;
-        } else if (item.getItemId() == R.id.menu_main_search) {
+        } else if (item.getItemId() == R.id.menuMainSearch) {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
             return true;
         }

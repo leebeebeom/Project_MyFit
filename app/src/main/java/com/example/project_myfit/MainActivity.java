@@ -44,22 +44,22 @@ public class MainActivity extends AppCompatActivity {
 
         MainActivityViewModel model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.mainToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.mainHostFragment);
         if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(binding.bottomNav, mNavController);
+        NavigationUI.setupWithNavController(binding.mainBottomNav, mNavController);
 
         //바텀네비게이션 뷰 그림자 제거
-        binding.bottomNav.setBackgroundTintList(null);
+        binding.mainBottomNav.setBackgroundTintList(null);
         //바텀네비게이션 뷰 정렬
-        binding.bottomNav.getMenu().getItem(2).setEnabled(false);
+        binding.mainBottomNav.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
         destinationChangeListener(binding, actionBar);
@@ -79,26 +79,26 @@ public class MainActivity extends AppCompatActivity {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
-                binding.toolbarCustomTitle.setVisibility(View.VISIBLE);
+                binding.mainToolbarCustomTitle.setVisibility(View.VISIBLE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
                 fabChange(binding, R.drawable.icon_add);
-                binding.toolbarCustomTitle.setVisibility(View.GONE);
+                binding.mainToolbarCustomTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
                 fabChange(binding, R.drawable.icon_save);
-                binding.toolbarCustomTitle.setVisibility(View.GONE);
+                binding.mainToolbarCustomTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
         });
     }
 
     private void fabChange(@NotNull ActivityMainBinding binding, int resId) {
-        binding.activityFab.hide();
-        binding.activityFab.setImageResource(resId);
-        binding.activityFab.show();
+        binding.mainActivityFab.hide();
+        binding.mainActivityFab.setImageResource(resId);
+        binding.mainActivityFab.show();
     }
 
     private void keyboardShowingListener(@NotNull ActivityMainBinding binding) {
@@ -119,19 +119,19 @@ public class MainActivity extends AppCompatActivity {
     private void keyboardShow(@NotNull ActivityMainBinding binding) {
         if (!mIsKeyboardShowing) {
             mIsKeyboardShowing = true;
-            binding.activityFab.setVisibility(View.INVISIBLE);
-            binding.bottomAppBar.setVisibility(View.INVISIBLE);
-            mTopFabOriginVisibility = binding.topFab.getVisibility();
-            binding.topFab.setVisibility(View.INVISIBLE);
+            binding.mainActivityFab.setVisibility(View.INVISIBLE);
+            binding.mainBottomAppBar.setVisibility(View.INVISIBLE);
+            mTopFabOriginVisibility = binding.mainTopFab.getVisibility();
+            binding.mainTopFab.setVisibility(View.INVISIBLE);
         }
     }
 
     private void keyboardHide(@NotNull ActivityMainBinding binding) {
         if (mIsKeyboardShowing) {
             mIsKeyboardShowing = false;
-            binding.bottomAppBar.setVisibility(View.VISIBLE);
-            binding.activityFab.show();
-            binding.topFab.setVisibility(mTopFabOriginVisibility);
+            binding.mainBottomAppBar.setVisibility(View.VISIBLE);
+            binding.mainActivityFab.show();
+            binding.mainTopFab.setVisibility(mTopFabOriginVisibility);
         }
     }
 
