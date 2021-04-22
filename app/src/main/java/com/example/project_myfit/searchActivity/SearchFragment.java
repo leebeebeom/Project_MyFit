@@ -87,10 +87,6 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
-            mAutoCompleteTextView.clearFocus();
-            InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(mAutoCompleteTextView.getWindowToken(), 0);
-
             mBinding.viewPager.setUserInputEnabled(false);
 
             mActionMode = mode;
