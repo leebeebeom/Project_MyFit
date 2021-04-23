@@ -7,10 +7,13 @@ import android.widget.Filter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.project_myfit.util.ktw.KoreanTextMatcher;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> {
     private List<String> mBindList;
@@ -53,12 +56,14 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
     private class StringFilter extends Filter {
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
-            String filterString = constraint.toString().toLowerCase().trim();
-
+            String keyWord = constraint.toString().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "");
             ArrayList<String> filteredList = new ArrayList<>();
-            for (String s : mOriginList)
-                if (s.toLowerCase().contains(filterString))
+            for (String s : mOriginList) {
+                if (KoreanTextMatcher.isMatch(s.toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", ""), keyWord))
                     filteredList.add(s);
+                else if (s.toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "").contains(keyWord))
+                    filteredList.add(s);
+            }
             mBindList = filteredList;
             return null;
         }
