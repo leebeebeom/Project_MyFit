@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menuListSearch"
-        android:icon="@drawable/icon_search"
-        android:title="@string/search"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/menuListFavorite"
         android:icon="@drawable/icon_favorite_border"
         android:title="@string/favorite"

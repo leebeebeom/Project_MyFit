@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -60,6 +62,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
@@ -86,11 +90,13 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private FragmentListBinding mBinding;
     private ActionModeTitleBinding mActionModeTitleBinding;
     private ItemTouchHelper mTouchHelperList, mTouchHelperGrid, mTouchHelperFolder;
-    private boolean mIsFolderDragSelecting, mIsSizeDragSelecting, mScrollEnable, mActionModeOn, mIsFolderToggleOpen, isDragging, isFolderStart, isSizeStart, mSizeSelectedState, mFolderSelectedState;
+    private boolean mIsFolderDragSelecting, mIsSizeDragSelecting, mScrollEnable, mActionModeOn,
+            mIsFolderToggleOpen, isDragging, isFolderStart, isSizeStart, mSizeSelectedState,
+            mFolderSelectedState, mIsNavigationSet, mIsSearchView;
     private MenuItem mEditMenu, mMoveMenu, mDeletedMenu;
     private DragSelectTouchListener mSizeDragSelectListener, mFolderDragSelectListener;
     private SharedPreferences mViewTypePreference, mSortPreference, mFolderTogglePreference;
-    private int mViewType, mSort;
+    private int mViewType, mSort, mPadding8dp, mPaddingBottom;
     private ActionMode mActionMode;
     private PopupWindow mPopupWindow;
     private LiveData<List<Folder>> mFolderLive;
@@ -108,12 +114,9 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private DialogViewModel mDialogViewModel;
     private FloatingActionButton mTopFab;
     private ListPopupMenuBinding mPopupMenuBinding;
-    private int mPadding8dp, mPaddingBottom;
     private float mTextViewSize;
     private ActionBar mActionBar;
-    private long mThisCategoryId;
-    private long mThisFolderId;
-    private long mParentId;
+    private long mThisCategoryId, mThisFolderId, mParentId;
     private String mParentCategory;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
@@ -170,8 +173,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
-    private boolean mIsNavigationSet;
-    private boolean mIsSearchView;
+    private MenuItem mFavoriteMenu, mViewTypeMenu, mPopupMenu;
+    private SearchView mSearchView;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -231,6 +234,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTopFab = requireActivity().findViewById(R.id.mainTopFab);
+        mSearchView = requireActivity().findViewById(R.id.mainSearchView);
 
         adapterAndItemTouchHelperInit();
         recyclerViewInit();
@@ -550,6 +554,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         folderAdapterClick();
         setFolderRecyclerTouchListener();
         setSizeRecyclerTouchListener();
+        setSearchViewClickListener();
 
         //restore actionMode
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
@@ -897,11 +902,34 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         }
     }
 
+    private void setSearchViewClickListener() {
+        mSearchView.setOnSearchClickListener(v -> {
+            mActionBar.setDisplayShowTitleEnabled(false);
+            mSearchView.getLayoutParams().width = MATCH_PARENT;
+            Toast.makeText(requireContext(), "d", Toast.LENGTH_SHORT).show();
+            mFavoriteMenu.setVisible(false);
+            mViewTypeMenu.setVisible(false);
+            mPopupMenu.setVisible(false);
+        });
+        mSearchView.setOnCloseListener(() -> {
+            mActionBar.setDisplayShowTitleEnabled(true);
+            mSearchView.getLayoutParams().width = WRAP_CONTENT;
+            mFavoriteMenu.setVisible(true);
+            mViewTypeMenu.setVisible(true);
+            mPopupMenu.setVisible(true);
+            return false;
+        });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (mActionMode != null) mActionMode.finish();
         mIsNavigationSet = false;
+        if (mSearchView.getLayoutParams().width == MATCH_PARENT) {
+            mSearchView.getLayoutParams().width = WRAP_CONTENT;
+            mSearchView.onActionViewCollapsed();
+        }
     }
 
     //size adapter click listener-------------------------------------------------------------------
@@ -945,11 +973,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        MenuItem favoriteIcon = menu.getItem(1);
-        MenuItem viewTypeIcon = menu.getItem(2);
+        mFavoriteMenu = menu.getItem(0);
+        mViewTypeMenu = menu.getItem(1);
+        mPopupMenu = menu.getItem(2);
 
-        favoriteIcon.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
-        viewTypeIcon.setIcon(mViewType == LISTVIEW ? R.drawable.icon_list : R.drawable.icon_grid);
+        mFavoriteMenu.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
+        mViewTypeMenu.setIcon(mViewType == LISTVIEW ? R.drawable.icon_list : R.drawable.icon_grid);
     }
 
     @Override
@@ -980,10 +1009,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             item.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
             setSizeLive();
             return true;
-        } else if (item.getItemId() == R.id.menuListSearch) {
-            mNavController.navigate(ListFragmentDirections.actionListFragmentToSearchActivity());
-            return true;
-        } else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
+        }
+//        else if (item.getItemId() == R.id.menuListSearch) {
+//            mNavController.navigate(ListFragmentDirections.actionListFragmentToSearchActivity());
+//            return true;
+//        }
+        else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
             requireActivity().finish();
         return false;
     }
