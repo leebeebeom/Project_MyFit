@@ -11,7 +11,6 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.util.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 public class DialogViewModel extends AndroidViewModel {
     private final Repository.CategoryRepository mCategoryRepository;
@@ -176,10 +173,10 @@ public class DialogViewModel extends AndroidViewModel {
             List<Category> categoryList = mCategoryRepository.getAllCategoryList();
             for (int i = 0; i < categoryList.size(); i++)
                 categoryList.get(i).setOrderNumber(i);
-            List<Folder> folderList = Sort.folderSort(SORT_CUSTOM, mFolderRepository.getAllFolderList());
+            List<Folder> folderList = mFolderRepository.getAllFolderList();
             for (int i = 0; i < folderList.size(); i++)
                 folderList.get(i).setOrderNumber(i);
-            List<Size> sizeList = Sort.sizeSort(SORT_CUSTOM, Repository.getSizeRepository(getApplication()).getAllSizeList());
+            List<Size> sizeList = Repository.getSizeRepository(getApplication()).getAllSizeList();
             for (int i = 0; i < sizeList.size(); i++)
                 sizeList.get(i).setOrderNumber(i);
             mCategoryRepository.categoryUpdate(categoryList);
