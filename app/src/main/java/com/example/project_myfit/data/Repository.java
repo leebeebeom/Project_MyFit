@@ -63,7 +63,7 @@ public class Repository {
 
         public List<Category> getAllCategoryList() {
             //order by orderNumber
-            //used in mainViewModel -> orderNumberInit
+            //used in orderNumberInit
             List<Category> allCategoryList = new ArrayList<>();
             Thread thread = new Thread(() -> allCategoryList.addAll(mCategoryDao.getAllCategoryList()));
             thread.start();
@@ -168,8 +168,8 @@ public class Repository {
         }
 
         public List<Folder> getAllFolderList() {
-            //order by folderName
-            //used in searchFragment
+            //order by orderNumber
+            //used in orderNumberInit
             List<Folder> folderList = new ArrayList<>();
             Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getAllFolderList()));
             thread.start();
@@ -210,6 +210,14 @@ public class Repository {
                 e.printStackTrace();
             }
             return folderList;
+        }
+
+        public LiveData<List<String>> getAllFolderNameLive() {
+            return mFolderDao.getAllFolderNameLive();
+        }
+
+        public LiveData<List<String>> getFolderNameLiveByParentId(long parentId) {
+            return mFolderDao.getFolderNameLiveByParentId(parentId);
         }
 
         public List<String> getFolderNameListByParentId(long parentId) {
@@ -303,8 +311,8 @@ public class Repository {
         }
 
         public List<Size> getAllSizeList() {
-            //order by name
-            //used in searchFragment
+            //order by orderNumber
+            //used in orderNumberInit
             List<Size> sizeList = new ArrayList<>();
             Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getAllSizeList()));
             thread.start();
@@ -345,6 +353,22 @@ public class Repository {
                 e.printStackTrace();
             }
             return sizeParentIdList;
+        }
+
+        public LiveData<List<String>> getAllSizeBrandLive() {
+            return mSizeDao.getAllSizeBrandLive();
+        }
+
+        public LiveData<List<String>> getAllSizeNameLive() {
+            return mSizeDao.getAllSizeNameLive();
+        }
+
+        public LiveData<List<String>> getSizeBrandLiveByParentId(long parentId) {
+            return mSizeDao.getSizeBrandLiveByParentId(parentId);
+        }
+
+        public LiveData<List<String>> getSizeNameLiveByParentId(long parentId) {
+            return mSizeDao.getSizeNameLiveByParentId(parentId);
         }
 
         public List<String> getSizeBrandList() {
