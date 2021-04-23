@@ -12,8 +12,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.data.model.Folder;
-import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActivitySearchBinding;
 import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -44,59 +42,31 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setAutoCompleteLive(@NotNull SearchViewModel model, AutoCompleteAdapter autoCompleteAdapter) {
-        LiveData<List<Folder>> folderLiveData = model.getAllFolderLive();
-        LiveData<List<Size>> sizeLiveData = model.getAllSizeLive();
+        LiveData<List<String>> folderNameLive = model.getAllFolderNameLive();
+        LiveData<List<String>> sizeBrandLive = model.getAllSizeBrandLive();
+        LiveData<List<String>> sizeNameLive = model.getAllSizeNameLive();
 
-        MediatorLiveData<Object> mediatorLiveData = new MediatorLiveData<>();
-        mediatorLiveData.addSource(folderLiveData, mediatorLiveData::setValue);
-        mediatorLiveData.addSource(sizeLiveData, mediatorLiveData::setValue);
+        MediatorLiveData<List<String>> mediatorLiveData = new MediatorLiveData<>();
+        mediatorLiveData.addSource(folderNameLive, mediatorLiveData::setValue);
+        mediatorLiveData.addSource(sizeBrandLive, mediatorLiveData::setValue);
+        mediatorLiveData.addSource(sizeNameLive, mediatorLiveData::setValue);
 
-        mediatorLiveData.observe(this, o -> {
-            List<String> autoCompleteList = new ArrayList<>();
-
-            if (o instanceof List<?>){
-                if (((List<?>) o).get(0) instanceof Folder)
-                    folderChangedValue(sizeLiveData, (List<?>) o, autoCompleteList);
-                else if (((List<?>) o).get(0) instanceof Size)
-                    sizeChangedValue(folderLiveData, (List<?>) o, autoCompleteList);
-            }
+        List<String> autoCompleteList = new ArrayList<>();
+        mediatorLiveData.observe(this, stringList -> {
+            autoCompleteList.clear();
+            autoCompleteListAddValue(folderNameLive, autoCompleteList);
+            autoCompleteListAddValue(sizeBrandLive, autoCompleteList);
+            autoCompleteListAddValue(sizeNameLive, autoCompleteList);
             autoCompleteList.sort(String::compareTo);
             autoCompleteAdapter.setItem(autoCompleteList);
         });
     }
 
-    private void folderChangedValue(LiveData<List<Size>> sizeLiveData, @NotNull List<?> objects, List<String> autoCompleteList) {
-        for (Object o : objects)
-            if (o instanceof Folder && !autoCompleteList.contains(((Folder) o).getFolderName().trim()))
-                autoCompleteList.add(((Folder) o).getFolderName().trim());
-
-        if (sizeLiveData.getValue() != null) {
-            List<Size> sizeList = sizeLiveData.getValue();
-            for (Size size : sizeList) {
-                if (!autoCompleteList.contains(size.getBrand().trim()))
-                    autoCompleteList.add(size.getBrand().trim());
-                if (!autoCompleteList.contains(size.getName().trim()))
-                    autoCompleteList.add(size.getName().trim());
-            }
-        }
-    }
-
-    private void sizeChangedValue(@NotNull LiveData<List<Folder>> folderLiveData, List<?> objects, List<String> autoCompleteList) {
-        if (folderLiveData.getValue() != null) {
-            List<Folder> folderList = folderLiveData.getValue();
-            for (Folder folder : folderList)
-                if (!autoCompleteList.contains(folder.getFolderName().trim()))
-                    autoCompleteList.add(folder.getFolderName().trim());
-        }
-
-        for (Object o : objects) {
-            if (o instanceof Size) {
-                if (!autoCompleteList.contains(((Size) o).getBrand().trim()))
-                    autoCompleteList.add(((Size) o).getBrand().trim());
-                if (!autoCompleteList.contains(((Size) o).getName().trim()))
-                    autoCompleteList.add(((Size) o).getName().trim());
-            }
-        }
+    private void autoCompleteListAddValue(@NotNull LiveData<List<String>> liveData, List<String> autoCompleteList) {
+        if (liveData.getValue() != null)
+            for (String s : liveData.getValue())
+                if (!autoCompleteList.contains(s.trim()))
+                    autoCompleteList.add(s);
     }
 
     @Override
