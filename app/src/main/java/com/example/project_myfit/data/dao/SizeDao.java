@@ -18,7 +18,7 @@ public interface SizeDao {
     @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber DESC")
     LiveData<List<Size>> getSizeLiveByParentId(long parentId);
 
-    @Query("SELECT * FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
+    @Query("SELECT * FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
     List<Size> getAllSizeList();
 
     @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ")
@@ -26,6 +26,18 @@ public interface SizeDao {
 
     @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
     List<Long> getSizeParentIdListByParentCategory(String parentCategory);
+
+    @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0")
+    LiveData<List<String>> getAllSizeBrandLive();
+
+    @Query("SELECT name FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0")
+    LiveData<List<String>> getAllSizeNameLive();
+
+    @Query("SELECT brand FROM Size WHERE parentId =:parentId AND isDeleted = 0 AND parentIsDeleted = 0")
+    LiveData<List<String>> getSizeBrandLiveByParentId(long parentId);
+
+    @Query("SELECT name FROM Size WHERE parentId =:parentId AND isDeleted = 0 AND parentIsDeleted = 0")
+    LiveData<List<String>> getSizeNameLiveByParentId(long parentId);
 
     @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY brand")
     List<String> getSizeBrandList();

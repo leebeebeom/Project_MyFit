@@ -18,7 +18,7 @@ public interface FolderDao {
     @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
     LiveData<List<Folder>> getFolderLiveByParentId(long parentId);
 
-    @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY folderName")
+    @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
     List<Folder> getAllFolderList();
 
     @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
@@ -26,6 +26,12 @@ public interface FolderDao {
 
     @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0")
     List<Folder> getFolderListByParentId(long parentId);
+
+    @Query("SELECT folderName FROM Folder WHERE isDeleted =0 AND parentIsDeleted = 0")
+    LiveData<List<String>> getAllFolderNameLive();
+
+    @Query("SELECT folderName FROM Folder WHERE parentId = :parentId AND isDeleted =0 AND parentIsDeleted = 0")
+    LiveData<List<String>> getFolderNameLiveByParentId(long parentId);
 
     @Query("SELECT folderName FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 AND parentId = :parentId")
     List<String> getFolderNameListByParentId(long parentId);
