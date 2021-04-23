@@ -17,6 +17,7 @@ import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemSearchFolderBinding;
 import com.example.project_myfit.databinding.ItemSearchSizeBinding;
 import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.ktw.KoreanTextMatcher;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.tabs.TabLayout;
@@ -175,18 +176,18 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     private class SearchAdapterFilter extends Filter {
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
-            String filterString = constraint.toString().toLowerCase().trim();
+            String keyWord = constraint.toString().toLowerCase().replaceAll("\\p{Z}", "");
             List<Object> filteredList = new ArrayList<>();
-            if (!TextUtils.isEmpty(filterString)) {
+            if (!TextUtils.isEmpty(keyWord)) {
                 for (Object o : mOriginList)
                     if (o instanceof Folder) {
                         Folder folder = (Folder) o;
-                        if (folder.getFolderName().toLowerCase().trim().contains(filterString))
+                        if (KoreanTextMatcher.isMatch(folder.getFolderName().toLowerCase().replaceAll("\\p{Z}", ""), keyWord))
                             filteredList.add((Folder) o);
                     } else {
                         Size size = (Size) o;
-                        if (size.getBrand().toLowerCase().trim().contains(filterString) ||
-                                size.getName().toLowerCase().trim().contains(filterString))
+                        if (KoreanTextMatcher.isMatch(size.getBrand().toLowerCase().replaceAll("\\p{Z}", ""), keyWord) ||
+                                KoreanTextMatcher.isMatch(size.getName().toLowerCase().replaceAll("\\p{Z}", ""), keyWord))
                             filteredList.add((Size) o);
                     }
             }
