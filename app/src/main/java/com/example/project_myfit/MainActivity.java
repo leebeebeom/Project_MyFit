@@ -79,19 +79,16 @@ public class MainActivity extends AppCompatActivity {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
                 fabChange(binding, R.drawable.icon_search);
-                binding.mainSearchView.setVisibility(View.GONE);
                 binding.mainToolbarCustomTitle.setVisibility(View.VISIBLE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
                 fabChange(binding, R.drawable.icon_add);
-                binding.mainSearchView.setVisibility(View.VISIBLE);
                 binding.mainToolbarCustomTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
                 fabChange(binding, R.drawable.icon_save);
-                binding.mainSearchView.setVisibility(View.GONE);
                 binding.mainToolbarCustomTitle.setVisibility(View.GONE);
                 if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
