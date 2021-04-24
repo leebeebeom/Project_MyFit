@@ -1,4 +1,4 @@
-package com.example.project_myfit.dialog.SearchDialog;
+package com.example.project_myfit.dialog.searchDialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -15,31 +15,28 @@ import com.example.project_myfit.dialog.DialogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-public class SearchItemMoveDialog extends DialogFragment {
+public class SearchSelectedItemDeleteDialog extends DialogFragment {
 
     private int mSelectedItemSize;
-    private long mParentId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        mSelectedItemSize = SearchSelectedItemDeleteDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
         super.onCreate(savedInstanceState);
-        mSelectedItemSize = SearchItemMoveDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        mParentId = SearchItemMoveDialogArgs.fromBundle(getArguments()).getParentId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String message = mSelectedItemSize + getString(R.string.item_move_check);
+        String message = mSelectedItemSize + getString(R.string.selected_item_delete_check);
 
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.search_nav_gragh).backStackLiveSetValue(R.id.searchItemMoveDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.search_nav_gragh).backStackLiveSetValue(R.id.searchSelectedItemDeleteDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.itemMoveConfirmClick(mParentId, true));
-
+        positiveButton.setOnClickListener(v -> dialogUtils.selectedItemDeleteConfirmClick());
         return alertDialog;
     }
 }
