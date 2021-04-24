@@ -9,7 +9,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import org.jetbrains.annotations.NotNull;
 
 public class CategoryVH extends RecyclerView.ViewHolder {
-    public final ItemMainRecyclerCategoryBinding mBinding;
+    private final ItemMainRecyclerCategoryBinding mBinding;
     private Category mCategory;
 
     public CategoryVH(@NotNull ItemMainRecyclerCategoryBinding binding, CategoryAdapterListener listener) {
@@ -27,6 +27,10 @@ public class CategoryVH extends RecyclerView.ViewHolder {
     public void setCategory(Category category) {
         this.mCategory = category;
         mBinding.setCategory(category);
+    }
+
+    public ItemMainRecyclerCategoryBinding getBinding() {
+        return mBinding;
     }
 
     public interface CategoryAdapterListener {
