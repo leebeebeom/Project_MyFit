@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/recycle_bin_main"
-        android:name="com.example.project_myfit.recycler_bin.fragment.RecycleBinMainFragment"
+        android:name="com.example.project_myfit.recycler_bin_activity.fragment.RecycleBinMainFragment"
         android:label="fragment_recycle_bin_main"
         tools:layout="@layout/fragment_recycle_bin_main" />
 </navigation>

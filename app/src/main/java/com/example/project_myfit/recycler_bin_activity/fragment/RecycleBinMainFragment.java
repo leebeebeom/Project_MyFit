@@ -1,4 +1,4 @@
-package com.example.project_myfit.recycler_bin.fragment;
+package com.example.project_myfit.recycler_bin_activity.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

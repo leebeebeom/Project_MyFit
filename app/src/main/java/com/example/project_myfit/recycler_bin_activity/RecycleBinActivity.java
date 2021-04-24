@@ -1,4 +1,4 @@
-package com.example.project_myfit.recycler_bin;
+package com.example.project_myfit.recycler_bin_activity;
 
 import android.os.Bundle;
 

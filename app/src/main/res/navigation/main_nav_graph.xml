@@ -260,7 +260,7 @@
         android:label="ImageClearDialog" />
     <activity
         android:id="@+id/trashActivity"
-        android:name="com.example.project_myfit.recycler_bin.RecycleBinActivity"
+        android:name="com.example.project_myfit.recycler_bin_activity.RecycleBinActivity"
         android:label="activity_trash"
         tools:layout="@layout/activity_recycle_bin" />
     <!--    Dialog-->
