@@ -37,6 +37,7 @@ import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 import com.example.project_myfit.fragment.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.adapter.DragCallBackList;
+import com.example.project_myfit.util.adapter.view_holder.CategoryVH;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,7 +61,7 @@ import static com.example.project_myfit.util.MyFitConstant.UP;
 
 //TODO 휴지통
 
-public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryAdapter.CategoryAdapterListener {
+public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryVH.CategoryAdapterListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
