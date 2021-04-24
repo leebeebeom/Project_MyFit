@@ -87,7 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_recent_search_recycler" />
+                        tools:listitem="@layout/item_recycler_recent_search" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <FrameLayout

@@ -94,7 +94,7 @@
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="4"
                         tools:itemCount="4"
-                        tools:listitem="@layout/item_list_recycler_folder" />
+                        tools:listitem="@layout/item_recycler_folder_grid" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                         android:paddingBottom="@dimen/_60sdp"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="2"
-                        tools:listitem="@layout/item_list_recycler_grid" />
+                        tools:listitem="@layout/item_recycler_size_grid" />
 
                     <FrameLayout
                         android:id="@+id/listNoDataLayout"
