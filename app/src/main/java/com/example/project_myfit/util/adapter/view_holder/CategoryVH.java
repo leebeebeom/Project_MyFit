@@ -12,7 +12,7 @@ public class CategoryVH extends RecyclerView.ViewHolder {
     private final ItemMainRecyclerCategoryBinding mBinding;
     private Category mCategory;
 
-    public CategoryVH(@NotNull ItemMainRecyclerCategoryBinding binding, CategoryAdapterListener listener) {
+    public CategoryVH(@NotNull ItemMainRecyclerCategoryBinding binding, CategoryVHListener listener) {
         super(binding.getRoot());
         this.mBinding = binding;
 
@@ -33,7 +33,7 @@ public class CategoryVH extends RecyclerView.ViewHolder {
         return mBinding;
     }
 
-    public interface CategoryAdapterListener {
+    public interface CategoryVHListener {
         void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox);
 
         void onCategoryCardViewLongClick(int position);

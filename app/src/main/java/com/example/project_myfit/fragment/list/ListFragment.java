@@ -50,6 +50,7 @@ import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.Sort;
 import com.example.project_myfit.util.adapter.DragCallBackGrid;
 import com.example.project_myfit.util.adapter.DragCallBackList;
+import com.example.project_myfit.util.adapter.view_holder.FolderGridVH;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -647,7 +648,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     }
 
     private void folderAdapterClick() {
-        mFolderAdapter.setOnFolderAdapterListener(new FolderAdapter.FolderAdapterListener() {
+        mFolderAdapter.setOnFolderAdapterListener(new FolderGridVH.FolderGridVHListener() {
             @Override
             public void onFolderItemViewClick(Folder folder, MaterialCheckBox checkBox) {
                 if (mActionMode == null) {

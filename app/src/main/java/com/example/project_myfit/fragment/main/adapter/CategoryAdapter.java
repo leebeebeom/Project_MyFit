@@ -34,7 +34,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
     private List<Category> mCategoryList, mSelectedCategoryList;
     private final MainViewModel mModel;
     private final HashSet<Long> mSelectedCategoryIdHashSet;
-    private final CategoryVH.CategoryAdapterListener mListener;
+    private final CategoryVH.CategoryVHListener mListener;
     private int mActionModeState, mSort;
     private Animation mAnimation;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
@@ -42,7 +42,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
     private AdapterUtil mAdapterUtil;
     private boolean mIsDragging;
 
-    public CategoryAdapter(MainViewModel model, CategoryVH.CategoryAdapterListener listener) {
+    public CategoryAdapter(MainViewModel model, CategoryVH.CategoryVHListener listener) {
         super(new DiffUtil.ItemCallback<Category>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {

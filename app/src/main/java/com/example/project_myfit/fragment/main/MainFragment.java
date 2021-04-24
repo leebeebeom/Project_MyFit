@@ -61,7 +61,7 @@ import static com.example.project_myfit.util.MyFitConstant.UP;
 
 //TODO 휴지통
 
-public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryVH.CategoryAdapterListener {
+public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryVH.CategoryVHListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;

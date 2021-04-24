@@ -88,4 +88,5 @@
     <string name="size_cap">SIZE</string>
     <string name="daily_look_cap">DAILY LOOK</string>
     <string name="wish_list_cap">WISH LIST</string>
+    <string name="recycle_bin_category">CATEGORY :</string>
 </resources>
