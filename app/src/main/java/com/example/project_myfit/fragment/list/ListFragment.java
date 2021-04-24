@@ -943,8 +943,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        MenuItem favoriteMenu = menu.getItem(0);
-        MenuItem viewTypeMenu = menu.getItem(1);
+        MenuItem favoriteMenu = menu.getItem(1);
+        MenuItem viewTypeMenu = menu.getItem(2);
 
         favoriteMenu.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
         viewTypeMenu.setIcon(mViewType == LISTVIEW ? R.drawable.icon_list : R.drawable.icon_grid);
