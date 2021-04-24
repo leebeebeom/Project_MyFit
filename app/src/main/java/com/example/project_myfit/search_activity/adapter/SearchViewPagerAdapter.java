@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity.adapter;
+package com.example.project_myfit.search_activity.adapter;
 
 import android.annotation.SuppressLint;
 import android.util.TypedValue;

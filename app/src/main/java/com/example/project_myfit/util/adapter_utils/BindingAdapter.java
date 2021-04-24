@@ -1,4 +1,4 @@
-package com.example.project_myfit.util.adapter;
+package com.example.project_myfit.util.adapter_utils;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.list.adapter.sizeadapter;
+package com.example.project_myfit.fragment.list.adapter.size_adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
 import com.example.project_myfit.fragment.list.ListViewModel;
-import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.adapter_utils.AdapterUtil;
 
 import org.jetbrains.annotations.NotNull;
 

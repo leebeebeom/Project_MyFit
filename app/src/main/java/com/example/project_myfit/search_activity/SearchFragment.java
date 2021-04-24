@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity;
+package com.example.project_myfit.search_activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -37,9 +37,9 @@ import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentSearchBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
-import com.example.project_myfit.searchActivity.adapter.RecentSearchAdapter;
-import com.example.project_myfit.searchActivity.adapter.SearchAdapter;
-import com.example.project_myfit.searchActivity.adapter.SearchViewPagerAdapter;
+import com.example.project_myfit.search_activity.adapter.RecentSearchAdapter;
+import com.example.project_myfit.search_activity.adapter.SearchAdapter;
+import com.example.project_myfit.search_activity.adapter.SearchViewPagerAdapter;
 import com.example.project_myfit.util.LockableScrollView;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.google.android.material.badge.BadgeDrawable;

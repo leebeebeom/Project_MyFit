@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".trash.TrashActivity">
+        tools:context=".recycler_bin.RecycleBinActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/trashAppBarLayout"
@@ -35,8 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="false"
-            app:navGraph="@navigation/trash_nav_graph"
-            tools:layout="@layout/fragment_trash_main" />
+            app:navGraph="@navigation/recycle_bin_nav_graph"
+            tools:layout="@layout/fragment_recycle_bin_main" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -1,4 +1,4 @@
-package com.example.project_myfit.trash;
+package com.example.project_myfit.recycler_bin.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,15 +15,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.databinding.FragmentTrashMainBinding;
-import com.example.project_myfit.databinding.PopupMenuTrashMainBinding;
+import com.example.project_myfit.databinding.FragmentRecycleBinMainBinding;
+import com.example.project_myfit.databinding.PopupMenuRecycleBinMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class trashMainFragment extends Fragment {
+public class RecycleBinMainFragment extends Fragment {
 
-    private FragmentTrashMainBinding mBinding;
-    private PopupMenuTrashMainBinding mPopupMenuBinding;
+    private FragmentRecycleBinMainBinding mBinding;
+    private PopupMenuRecycleBinMainBinding mPopupMenuBinding;
     private PopupWindow mPopupWindow;
 
     @Override
@@ -36,9 +36,9 @@ public class trashMainFragment extends Fragment {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = FragmentTrashMainBinding.inflate(inflater);
+        mBinding = FragmentRecycleBinMainBinding.inflate(inflater);
         View view = mBinding.getRoot();
-        mPopupMenuBinding = PopupMenuTrashMainBinding.inflate(inflater);
+        mPopupMenuBinding = PopupMenuRecycleBinMainBinding.inflate(inflater);
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 

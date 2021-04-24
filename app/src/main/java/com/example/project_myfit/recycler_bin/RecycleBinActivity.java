@@ -1,17 +1,17 @@
-package com.example.project_myfit.trash;
+package com.example.project_myfit.recycler_bin;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.project_myfit.databinding.ActivityTrashBinding;
+import com.example.project_myfit.databinding.ActivityRecycleBinBinding;
 
-public class TrashActivity extends AppCompatActivity {
+public class RecycleBinActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityTrashBinding binding = ActivityTrashBinding.inflate(getLayoutInflater());
+        ActivityRecycleBinBinding binding = ActivityRecycleBinBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.trashToolBar);

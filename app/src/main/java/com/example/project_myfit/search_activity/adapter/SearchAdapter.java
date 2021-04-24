@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity.adapter;
+package com.example.project_myfit.search_activity.adapter;
 
 import android.os.Handler;
 import android.text.TextUtils;
@@ -16,7 +16,7 @@ import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemSearchFolderBinding;
 import com.example.project_myfit.databinding.ItemSearchSizeBinding;
-import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.adapter_utils.AdapterUtil;
 import com.example.project_myfit.util.ktw.KoreanTextMatcher;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.checkbox.MaterialCheckBox;

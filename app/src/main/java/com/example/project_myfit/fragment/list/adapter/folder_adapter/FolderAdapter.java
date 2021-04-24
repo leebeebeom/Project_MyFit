@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.list.adapter.folderdapter;
+package com.example.project_myfit.fragment.list.adapter.folder_adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemListRecyclerFolderBinding;
 import com.example.project_myfit.fragment.list.ListViewModel;
-import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.adapter_utils.AdapterUtil;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;

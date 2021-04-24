@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity.adapter;
+package com.example.project_myfit.search_activity.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;

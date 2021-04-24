@@ -6,7 +6,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".searchActivity.SearchFragment">
+        tools:context=".search_activity.SearchFragment">
 
         <com.example.project_myfit.util.LockableScrollView
             android:id="@+id/searchViewPagerScrollView"

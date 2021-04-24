@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity;
+package com.example.project_myfit.search_activity;
 
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ActivitySearchBinding;
-import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.search_activity.adapter.AutoCompleteAdapter;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 

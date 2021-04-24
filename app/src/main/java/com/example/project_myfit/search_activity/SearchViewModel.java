@@ -1,4 +1,4 @@
-package com.example.project_myfit.searchActivity;
+package com.example.project_myfit.search_activity;
 
 import android.app.Application;
 
@@ -11,7 +11,7 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.searchActivity.adapter.SearchAdapter;
+import com.example.project_myfit.search_activity.adapter.SearchAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
