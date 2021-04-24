@@ -11,7 +11,7 @@
     <string name="shoulder">Shoulder</string>
     <string name="chest">Chest</string>
     <string name="sleeve">Sleeve</string>
-    <string name="category">CATEGORY</string>
+    <string name="category_cap">CATEGORY</string>
     <string name="items">item</string>
     <string name="top">TOP</string>
     <string name="bottom">BOTTOM</string>
@@ -84,5 +84,9 @@
     <string name="recent_search_all_clear">최근 검색 목록을 모두 삭제하시겠습니까?</string>
     <string name="all_clear">전체삭제</string>
     <string name="recycler_bin">RECYCLER BIN</string>
-ㅈ    <string name="delete_all">전체 삭제</string>
+    <string name="delete_all">전체 삭제</string>
+    <string name="folder_cap">FOLDER</string>
+    <string name="size_cap">SIZE</string>
+    <string name="daily_look_cap">DAILY LOOK</string>
+    <string name="wish_list_cap">WISH LIST</string>
 </resources>
