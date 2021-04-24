@@ -31,7 +31,7 @@
                 app:startIconDrawable="@drawable/icon_search">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/searchAutoCompleteEditText"
+                    android:id="@+id/searchAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_36sdp"
                     android:background="@android:color/transparent"
