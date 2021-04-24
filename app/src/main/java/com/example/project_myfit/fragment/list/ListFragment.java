@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
@@ -24,12 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -50,7 +46,6 @@ import com.example.project_myfit.fragment.list.adapter.folderdapter.FolderDragCa
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterGrid;
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterListener;
-import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.Sort;
 import com.example.project_myfit.util.adapter.DragCallBackGrid;
@@ -65,8 +60,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
@@ -121,7 +114,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private ActionBar mActionBar;
     private long mThisCategoryId, mThisFolderId, mParentId;
     private String mParentCategory;
-    private MenuItem mFavoriteMenu, mViewTypeMenu, mPopupMenu;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -951,12 +943,11 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
-        mFavoriteMenu = menu.getItem(0);
-        mViewTypeMenu = menu.getItem(1);
-        mPopupMenu = menu.getItem(2);
+        MenuItem favoriteMenu = menu.getItem(0);
+        MenuItem viewTypeMenu = menu.getItem(1);
 
-        mFavoriteMenu.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
-        mViewTypeMenu.setIcon(mViewType == LISTVIEW ? R.drawable.icon_list : R.drawable.icon_grid);
+        favoriteMenu.setIcon(mModel.isFavoriteView() ? R.drawable.icon_favorite : R.drawable.icon_favorite_border);
+        viewTypeMenu.setIcon(mViewType == LISTVIEW ? R.drawable.icon_list : R.drawable.icon_grid);
     }
 
     @Override
@@ -988,10 +979,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             setSizeLive();
             return true;
         }
-//        else if (item.getItemId() == R.id.menuListSearch) {
-//            mNavController.navigate(ListFragmentDirections.actionListFragmentToSearchActivity());
-//            return true;
-//        }
+        else if (item.getItemId() == R.id.menuListSearch) {
+            mNavController.navigate(ListFragmentDirections.actionListFragmentToSearchActivity());
+            return true;
+        }
         else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
             requireActivity().finish();
         return false;
