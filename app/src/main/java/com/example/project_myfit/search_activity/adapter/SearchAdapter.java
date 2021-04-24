@@ -36,7 +36,7 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     private final SearchAdapterListener mListener;
     private int mActionModeState;
     private final HashSet<Long> mSelectedItemIdHashSet;
-    private SearchViewPagerAdapter.SearchViewPagerVH mSearchViewPagerVH;
+    private SearchViewPagerAdapter.ViewPagerVH mViewPagerVH;
     private AdapterUtil mFolderAdapterUtil, mSizeAdapterUtil;
 
     public SearchAdapter(SearchAdapterListener listener) {
@@ -46,8 +46,8 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         setHasStableIds(true);
     }
 
-    public void setSearchViewPagerVH(SearchViewPagerAdapter.SearchViewPagerVH searchViewPagerVH) {
-        this.mSearchViewPagerVH = searchViewPagerVH;
+    public void setSearchViewPagerVH(SearchViewPagerAdapter.ViewPagerVH viewPagerVH) {
+        this.mViewPagerVH = viewPagerVH;
     }
 
     @Override
@@ -200,8 +200,8 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if (mSearchViewPagerVH != null)
-                mSearchViewPagerVH.setNoResult(results.count == 0);
+            if (mViewPagerVH != null)
+                mViewPagerVH.setNoResult(results.count == 0);
         }
     }
 

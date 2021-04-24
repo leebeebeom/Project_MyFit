@@ -23,7 +23,7 @@
             tools:listitem="@layout/item_main_recycler_category" />
 
         <FrameLayout
-            android:id="@+id/itemSearchNoData"
+            android:id="@+id/itemViewPagerRecyclerViewNoResultLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"

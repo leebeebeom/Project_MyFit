@@ -69,7 +69,7 @@ import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 
-public class SearchFragment extends Fragment implements SearchAdapter.SearchAdapterListener, SearchViewPagerAdapter.SearchDragAutoScrollListener {
+public class SearchFragment extends Fragment implements SearchAdapter.SearchAdapterListener, SearchViewPagerAdapter.ViewPagerAutoScrollListener {
     private SearchViewModel mModel;
     private FragmentSearchBinding mBinding;
     private List<String> mRecentSearchStringList;
@@ -195,7 +195,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
                 mBinding.searchViewPagerScrollView.setScrollable(false);
                 isDragSelecting = true;
 
-                SearchViewPagerAdapter.SearchViewPagerVH viewPagerVH = (SearchViewPagerAdapter.SearchViewPagerVH)
+                SearchViewPagerAdapter.ViewPagerVH viewPagerVH = (SearchViewPagerAdapter.ViewPagerVH)
                         ((RecyclerView) mBinding.searchViewPager.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
                     RecyclerView recyclerView = viewPagerVH.getBinding().itemSearchRecyclerView;
@@ -212,7 +212,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
-                SearchViewPagerAdapter.SearchViewPagerVH viewPagerVH = (SearchViewPagerAdapter.SearchViewPagerVH)
+                SearchViewPagerAdapter.ViewPagerVH viewPagerVH = (SearchViewPagerAdapter.ViewPagerVH)
                         ((RecyclerView) mBinding.searchViewPager.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
                     RecyclerView recyclerView = viewPagerVH.getBinding().itemSearchRecyclerView;
