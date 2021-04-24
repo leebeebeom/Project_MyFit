@@ -580,6 +580,10 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             mNavController.navigate(ListFragmentDirections.actionListFragmentToSortDialog(mSort, LIST_FRAGMENT));
             mPopupWindow.dismiss();
         });
+
+        mPopupMenuBinding.listPopupRecycleBinText.setOnClickListener(v -> {
+
+        });
     }
 
     private void setFolderToggleClickListener() {

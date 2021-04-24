@@ -387,6 +387,10 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
             mPopupWindow.dismiss();
         });
+        mPopupMenuBinding.mainPopupRecycleBinText.setOnClickListener(v -> {
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToTrashActivity());
+            mPopupWindow.dismiss();
+        });
     }
 
     @Override
