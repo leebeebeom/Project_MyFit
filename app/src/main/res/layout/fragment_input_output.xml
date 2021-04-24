@@ -22,7 +22,7 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/_68sdp"
-        tools:context=".fragment.inputoutput.InputOutputFragment">
+        tools:context=".fragment.input_output.InputOutputFragment">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

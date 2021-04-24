@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.inputoutput;
+package com.example.project_myfit.fragment.input_output;
 
 import android.app.Activity;
 import android.content.Context;
