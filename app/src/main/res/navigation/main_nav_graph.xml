@@ -20,9 +20,6 @@
             android:id="@+id/action_mainFragment_to_searchActivity"
             app:destination="@id/searchActivity" />
         <action
-            android:id="@+id/action_mainFragment_to_inputOutputFragment"
-            app:destination="@id/inputOutputFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_addDialog"
             app:destination="@id/addDialog" />
         <action
@@ -34,6 +31,9 @@
         <action
             android:id="@+id/action_mainFragment_to_sortDialog"
             app:destination="@id/sortDialog" />
+        <action
+            android:id="@+id/action_mainFragment_to_trashActivity"
+            app:destination="@id/trashActivity" />
     </fragment>
     <fragment
         android:id="@+id/listFragment"
@@ -89,6 +89,9 @@
         <action
             android:id="@+id/action_listFragment_to_addDialog"
             app:destination="@id/addDialog" />
+        <action
+            android:id="@+id/action_listFragment_to_trashActivity"
+            app:destination="@id/trashActivity" />
     </fragment>
     <fragment
         android:id="@+id/inputOutputFragment"
@@ -255,5 +258,10 @@
         android:id="@+id/imageClearDialog"
         android:name="com.example.project_myfit.dialog.ImageClearDialog"
         android:label="ImageClearDialog" />
+    <activity
+        android:id="@+id/trashActivity"
+        android:name="com.example.project_myfit.trash.TrashActivity"
+        android:label="activity_trash"
+        tools:layout="@layout/activity_trash" />
     <!--    Dialog-->
 </navigation>
