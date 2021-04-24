@@ -22,7 +22,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@string/category"
+                    android:text="@string/category_cap"
                     android:textSize="@dimen/_16sdp"
                     android:textStyle="bold"
                     app:fontFamily="@font/noto_black" />
