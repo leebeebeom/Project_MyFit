@@ -36,7 +36,7 @@ import com.example.project_myfit.databinding.PopupMenuMainBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 import com.example.project_myfit.fragment.main.adapter.MainViewPagerAdapter;
-import com.example.project_myfit.util.adapter_utils.DragCallBackList;
+import com.example.project_myfit.util.adapter.DragCallBackList;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

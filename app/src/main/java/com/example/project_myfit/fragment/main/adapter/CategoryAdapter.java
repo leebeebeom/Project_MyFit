@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerCategoryBinding;
 import com.example.project_myfit.fragment.main.MainViewModel;
-import com.example.project_myfit.util.adapter_utils.AdapterUtil;
+import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
