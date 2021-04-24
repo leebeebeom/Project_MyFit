@@ -1,4 +1,4 @@
-package com.example.project_myfit.dialog.searchDialog;
+package com.example.project_myfit.dialog.search_dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

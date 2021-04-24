@@ -27,9 +27,9 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.dialog.searchDialog.SearchAddDialogDirections;
-import com.example.project_myfit.dialog.searchDialog.SearchNameEditDialogDirections;
-import com.example.project_myfit.dialog.searchDialog.SearchTreeViewDialogDirections;
+import com.example.project_myfit.dialog.search_dialog.SearchAddDialogDirections;
+import com.example.project_myfit.dialog.search_dialog.SearchNameEditDialogDirections;
+import com.example.project_myfit.dialog.search_dialog.SearchTreeViewDialogDirections;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
