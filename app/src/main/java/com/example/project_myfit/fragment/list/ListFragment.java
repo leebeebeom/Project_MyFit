@@ -13,9 +13,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -48,6 +50,7 @@ import com.example.project_myfit.fragment.list.adapter.folderdapter.FolderDragCa
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterGrid;
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterListener;
+import com.example.project_myfit.searchActivity.adapter.AutoCompleteAdapter;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.Sort;
 import com.example.project_myfit.util.adapter.DragCallBackGrid;
@@ -118,6 +121,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private ActionBar mActionBar;
     private long mThisCategoryId, mThisFolderId, mParentId;
     private String mParentCategory;
+    private MenuItem mFavoriteMenu, mViewTypeMenu, mPopupMenu;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -173,8 +177,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
-    private MenuItem mFavoriteMenu, mViewTypeMenu, mPopupMenu;
-    private SearchView mSearchView;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -234,7 +236,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTopFab = requireActivity().findViewById(R.id.mainTopFab);
-        mSearchView = requireActivity().findViewById(R.id.mainSearchView);
 
         adapterAndItemTouchHelperInit();
         recyclerViewInit();
@@ -554,7 +555,6 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         folderAdapterClick();
         setFolderRecyclerTouchListener();
         setSizeRecyclerTouchListener();
-        setSearchViewClickListener();
 
         //restore actionMode
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
@@ -902,34 +902,12 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         }
     }
 
-    private void setSearchViewClickListener() {
-        mSearchView.setOnSearchClickListener(v -> {
-            mActionBar.setDisplayShowTitleEnabled(false);
-            mSearchView.getLayoutParams().width = MATCH_PARENT;
-            Toast.makeText(requireContext(), "d", Toast.LENGTH_SHORT).show();
-            mFavoriteMenu.setVisible(false);
-            mViewTypeMenu.setVisible(false);
-            mPopupMenu.setVisible(false);
-        });
-        mSearchView.setOnCloseListener(() -> {
-            mActionBar.setDisplayShowTitleEnabled(true);
-            mSearchView.getLayoutParams().width = WRAP_CONTENT;
-            mFavoriteMenu.setVisible(true);
-            mViewTypeMenu.setVisible(true);
-            mPopupMenu.setVisible(true);
-            return false;
-        });
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (mActionMode != null) mActionMode.finish();
         mIsNavigationSet = false;
-        if (mSearchView.getLayoutParams().width == MATCH_PARENT) {
-            mSearchView.getLayoutParams().width = WRAP_CONTENT;
-            mSearchView.onActionViewCollapsed();
-        }
+
     }
 
     //size adapter click listener-------------------------------------------------------------------
