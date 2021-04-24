@@ -10,7 +10,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemTreeFolderBinding;
-import com.example.project_myfit.util.adapter_utils.AdapterUtil;
+import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
