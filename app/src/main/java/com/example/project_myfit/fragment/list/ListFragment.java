@@ -45,12 +45,13 @@ import com.example.project_myfit.fragment.list.adapter.folder_adapter.FolderAdap
 import com.example.project_myfit.fragment.list.adapter.folder_adapter.FolderDragCallBack;
 import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterGrid;
 import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterList;
-import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.Sort;
 import com.example.project_myfit.util.adapter.DragCallBackGrid;
 import com.example.project_myfit.util.adapter.DragCallBackList;
 import com.example.project_myfit.util.adapter.view_holder.FolderGridVH;
+import com.example.project_myfit.util.adapter.view_holder.SizeListVH;
+import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -935,7 +936,7 @@ public class ListFragment extends Fragment implements SizeVHListener {
     public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
         if (!isDragging) {
             isDragging = true;
-            if (viewHolder instanceof SizeAdapterList.SizeListVH)
+            if (viewHolder instanceof SizeListVH)
                 mTouchHelperList.startDrag(viewHolder);
             else mTouchHelperGrid.startDrag(viewHolder);
         } else isDragging = false;
