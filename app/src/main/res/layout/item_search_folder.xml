@@ -31,7 +31,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/itemSearchFolderCardView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
             app:cardBackgroundColor="?myCardViewBackground"
@@ -41,14 +41,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    setFolderIcon="@{folder.folderName}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginVertical="@dimen/_6sdp"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:alpha="0.8"
-                    tools:src="@drawable/icon_folder" />
+                <FrameLayout
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        setFolderIcon="@{folder.folderName}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleY="1.2"
+                        android:scaleX="1.2"
+                        android:alpha="0.8"
+                        tools:src="@drawable/icon_folder" />
+                </FrameLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -57,7 +63,7 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_6sdp"
                         android:alpha="0.8"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
