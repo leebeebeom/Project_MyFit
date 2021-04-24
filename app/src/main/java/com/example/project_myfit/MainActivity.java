@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 
 //TODO 구현 못한 거
 //이름 변경 시 분신술 쓰는 거(서치뷰, 메인 카테고리)
-//서치뷰에서 폴더, 사이즈 클릭 후 리크리에이트시 어플 종료
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         //키보드 쇼잉 리스너
         keyboardShowingListener(binding);
 
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null && savedInstanceState == null) {
             if (MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId() != 0)
                 searchViewFolderClick(model);
             else if (MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId() != 0)
