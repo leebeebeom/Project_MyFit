@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 import com.example.project_myfit.fragment.list.adapter.sizeadapter.SizeAdapterList;
+import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 
 import org.jetbrains.annotations.NotNull;
 

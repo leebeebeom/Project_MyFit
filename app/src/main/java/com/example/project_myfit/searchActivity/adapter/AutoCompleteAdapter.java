@@ -58,12 +58,10 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
             String keyWord = constraint.toString().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "");
             ArrayList<String> filteredList = new ArrayList<>();
-            for (String s : mOriginList) {
+            for (String s : mOriginList)
                 if (KoreanTextMatcher.isMatch(s.toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", ""), keyWord))
                     filteredList.add(s);
-                else if (s.toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "").contains(keyWord))
-                    filteredList.add(s);
-            }
+
             mBindList = filteredList;
             return null;
         }
