@@ -5,7 +5,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/actionModeCheckBox"
+            android:id="@+id/selectAllCheckBox"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center_vertical"
@@ -16,7 +16,7 @@
             android:scaleY="0.9" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/actionModeTitleText"
+            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
