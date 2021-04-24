@@ -582,7 +582,8 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         });
 
         mPopupMenuBinding.listPopupRecycleBinText.setOnClickListener(v -> {
-
+            mNavController.navigate(ListFragmentDirections.actionListFragmentToTrashActivity());
+            mPopupWindow.dismiss();
         });
     }
 
