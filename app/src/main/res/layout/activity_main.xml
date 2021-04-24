@@ -29,16 +29,6 @@
                         android:textColor="?colorControlNormal"
                         android:textSize="@dimen/_26sdp"
                         app:fontFamily="@font/ballet_harmony" />
-
-                    <androidx.appcompat.widget.SearchView
-                        android:id="@+id/mainSearchView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:autofillHints="aa"
-                        android:visibility="gone"
-                        app:defaultQueryHint="검색"
-                        app:searchHintIcon="@null" />
                 </com.google.android.material.appbar.MaterialToolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
