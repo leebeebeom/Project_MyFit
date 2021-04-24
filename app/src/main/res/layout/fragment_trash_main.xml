@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".trash.trashMainFragment">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trashCategoryText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/category_cap"
+            android:textSize="@dimen/_14sdp"
+            app:fontFamily="@font/noto_black"
+            app:layout_constraintBottom_toTopOf="@id/trashCategoryDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trashFolderText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/folder_cap"
+            android:textSize="@dimen/_14sdp"
+            app:fontFamily="@font/noto_black"
+            app:layout_constraintBottom_toTopOf="@id/trashFolderDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashCategoryDivider" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trashSizeText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/size_cap"
+            android:textSize="@dimen/_14sdp"
+            app:fontFamily="@font/noto_black"
+            app:layout_constraintBottom_toTopOf="@id/trashSizeDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashFolderDivider" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trashDailyLookText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/daily_look_cap"
+            android:textSize="@dimen/_14sdp"
+            app:fontFamily="@font/noto_black"
+            app:layout_constraintBottom_toTopOf="@id/trashDailyLookDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashSizeDivider" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trashWishListText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/wish_list_cap"
+            android:textSize="@dimen/_14sdp"
+            app:fontFamily="@font/noto_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashDailyLookDivider" />
+
+        <View
+            android:id="@+id/trashCategoryDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?myColorControl"
+            app:layout_constraintBottom_toTopOf="@id/trashFolderText"
+            app:layout_constraintTop_toBottomOf="@id/trashCategoryText" />
+
+        <View
+            android:id="@+id/trashFolderDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?myColorControl"
+            app:layout_constraintBottom_toTopOf="@id/trashSizeText"
+            app:layout_constraintTop_toBottomOf="@id/trashFolderText" />
+
+        <View
+            android:id="@+id/trashSizeDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?myColorControl"
+            app:layout_constraintBottom_toTopOf="@id/trashDailyLookText"
+            app:layout_constraintTop_toBottomOf="@id/trashSizeText" />
+
+        <View
+            android:id="@+id/trashDailyLookDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?myColorControl"
+            app:layout_constraintBottom_toTopOf="@id/trashWishListText"
+            app:layout_constraintTop_toBottomOf="@id/trashDailyLookText" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trashCategoryArrowIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            app:layout_constraintBottom_toTopOf="@id/trashFolderArrowIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_arrow_forward" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trashFolderArrowIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            app:layout_constraintBottom_toTopOf="@id/trashSizeArrowIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashCategoryArrowIcon"
+            app:srcCompat="@drawable/icon_arrow_forward" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trashSizeArrowIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            app:layout_constraintBottom_toTopOf="@id/trashDailyLookArrowIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashFolderArrowIcon"
+            app:srcCompat="@drawable/icon_arrow_forward" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trashDailyLookArrowIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            app:layout_constraintBottom_toTopOf="@id/trashWishListArrowIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashSizeArrowIcon"
+            app:srcCompat="@drawable/icon_arrow_forward" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trashWishListArrowIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trashDailyLookArrowIcon"
+            app:srcCompat="@drawable/icon_arrow_forward" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
