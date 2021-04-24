@@ -45,7 +45,7 @@ import com.example.project_myfit.fragment.list.adapter.folder_adapter.FolderAdap
 import com.example.project_myfit.fragment.list.adapter.folder_adapter.FolderDragCallBack;
 import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterGrid;
 import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterList;
-import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterListener;
+import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.Sort;
 import com.example.project_myfit.util.adapter.DragCallBackGrid;
@@ -81,7 +81,7 @@ import static com.example.project_myfit.util.MyFitConstant.VIEW_TYPE;
 //TODO 휴지통 클릭
 
 @SuppressLint("ClickableViewAccessibility")
-public class ListFragment extends Fragment implements SizeAdapterListener {
+public class ListFragment extends Fragment implements SizeVHListener {
 
     private ListViewModel mModel;
     private FragmentListBinding mBinding;

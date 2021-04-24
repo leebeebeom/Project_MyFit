@@ -101,7 +101,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
 
         Category category = getItem(holder.getLayoutPosition());
         holder.setCategory(category);
-        holder.mBinding.itemMainDragHandle.setOnTouchListener((v, event) -> {
+        holder.getBinding().itemMainDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
                 mListener.onCategoryDragHandleTouch(holder);
@@ -110,33 +110,33 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
             return false;
         });
 
-        holder.mBinding.itemMainContentsSizeText.setText(String.valueOf(mAdapterUtil.
+        holder.getBinding().itemMainContentsSizeText.setText(String.valueOf(mAdapterUtil.
                 getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.listActionModeOn(holder.mBinding.itemMainCardView, holder.mBinding.itemMainCheckBox,
+            mAdapterUtil.listActionModeOn(holder.getBinding().itemMainCardView, holder.getBinding().itemMainCheckBox,
                     mSelectedCategoryIdHashSet, category.getId());
         else if (mActionModeState == ACTION_MODE_OFF) {
-            mAdapterUtil.listActionModeOff(holder.mBinding.itemMainCardView, holder.mBinding.itemMainCheckBox,
+            mAdapterUtil.listActionModeOff(holder.getBinding().itemMainCardView, holder.getBinding().itemMainCheckBox,
                     mSelectedCategoryIdHashSet);
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
         }
 
-        holder.mBinding.itemMainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.getBinding().itemMainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
     }
 
     private void draggingView(@NotNull CategoryVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.mBinding.itemMainCheckBox.setVisibility(View.INVISIBLE);
-        holder.mBinding.itemMainCategoryText.setAlpha(0.5f);
-        holder.mBinding.itemMainContentsSizeLayout.setAlpha(0.5f);
+        holder.getBinding().itemMainCheckBox.setVisibility(View.INVISIBLE);
+        holder.getBinding().itemMainCategoryText.setAlpha(0.5f);
+        holder.getBinding().itemMainContentsSizeLayout.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull CategoryVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.mBinding.itemMainCheckBox.setVisibility(View.VISIBLE);
-        holder.mBinding.itemMainCategoryText.setAlpha(0.8f);
-        holder.mBinding.itemMainContentsSizeLayout.setAlpha(0.8f);
+        holder.getBinding().itemMainCheckBox.setVisibility(View.VISIBLE);
+        holder.getBinding().itemMainCategoryText.setAlpha(0.8f);
+        holder.getBinding().itemMainContentsSizeLayout.setAlpha(0.8f);
     }
 
     public void onItemMove(int from, int to) {

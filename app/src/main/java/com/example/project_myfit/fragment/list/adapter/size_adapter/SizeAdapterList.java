@@ -16,6 +16,7 @@ import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemListRecyclerListBinding;
 import com.example.project_myfit.fragment.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,14 +30,14 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 @SuppressLint("ClickableViewAccessibility")
 public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListVH> {
     private final ListViewModel mModel;
-    private final SizeAdapterListener mListener;
+    private final SizeVHListener mListener;
     private List<Size> mSizeList, mSelectedSizeList;
     private int mActionModeState, mSort;
     private final HashSet<Long> mSelectedSizeIdHashSet;
     private AdapterUtil mAdapterUtil;
     boolean mIsDragging;
 
-    public SizeAdapterList(ListViewModel model, SizeAdapterListener listener) {
+    public SizeAdapterList(ListViewModel model, SizeVHListener listener) {
         super(new SizeDiffUtil());
         this.mModel = model;
         this.mSelectedSizeIdHashSet = new HashSet<>();
@@ -152,7 +153,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeAdapterList.SizeListV
         private final ItemListRecyclerListBinding mBinding;
         private Size mSize;
 
-        public SizeListVH(@NotNull ItemListRecyclerListBinding binding, SizeAdapterListener listener) {
+        public SizeListVH(@NotNull ItemListRecyclerListBinding binding, SizeVHListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
 
