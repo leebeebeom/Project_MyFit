@@ -28,7 +28,7 @@
     </fragment>
     <dialog
         android:id="@+id/searchSelectedItemDeleteDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchSelectedItemDeleteDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchSelectedItemDeleteDialog"
         android:label="SearchSelectedItemDeleteDialog">
         <argument
             android:name="selectedItemSize"
@@ -36,7 +36,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchTreeViewDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchTreeViewDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchTreeViewDialog"
         android:label="SearchTreeViewDialog">
         <argument
             android:name="parentCategory"
@@ -50,7 +50,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchAddDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchAddDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchAddDialog"
         android:label="SearchAddDialog">
         <argument
             android:name="itemType"
@@ -67,7 +67,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchItemMoveDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchItemMoveDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchItemMoveDialog"
         android:label="SearchItemMoveDialog">
         <argument
             android:name="selectedItemSize"
@@ -78,7 +78,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchSameNameAddDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchSameNameAddDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchSameNameAddDialog"
         android:label="SearchSameNameAddDialog">
         <argument
             android:name="itemType"
@@ -95,7 +95,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchNameEditDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchNameEditDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchNameEditDialog"
         android:label="SearchNameEditDialog">
         <argument
             android:name="itemId"
@@ -112,7 +112,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchSameNameEditDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.SearchSameNameEditDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.SearchSameNameEditDialog"
         android:label="SearchSameNameEditDialog">
         <argument
             android:name="itemType"
@@ -143,6 +143,6 @@
     </activity>
     <dialog
         android:id="@+id/recentSearchAllClearDialog"
-        android:name="com.example.project_myfit.dialog.SearchDialog.RecentSearchAllClearDialog"
+        android:name="com.example.project_myfit.dialog.search_dialog.RecentSearchAllClearDialog"
         android:label="RecentSearchAllClearDialog" />
 </navigation>
