@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".recycler_bin_activity.fragment.RecycleBinMainFragment">
+        tools:context=".recycle_bin_activity.fragment.RecycleBinMainFragment">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trashCategoryText"
