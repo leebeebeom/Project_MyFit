@@ -48,8 +48,8 @@ import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterL
 import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterListener;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.Sort;
-import com.example.project_myfit.util.adapter_utils.DragCallBackGrid;
-import com.example.project_myfit.util.adapter_utils.DragCallBackList;
+import com.example.project_myfit.util.adapter.DragCallBackGrid;
+import com.example.project_myfit.util.adapter.DragCallBackList;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
