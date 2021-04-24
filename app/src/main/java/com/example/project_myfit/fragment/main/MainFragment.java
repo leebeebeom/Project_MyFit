@@ -32,7 +32,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentMainBinding;
-import com.example.project_myfit.databinding.MainPopupMenuBinding;
+import com.example.project_myfit.databinding.PopupMenuMainBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
 import com.example.project_myfit.fragment.main.adapter.MainViewPagerAdapter;
@@ -78,7 +78,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
     private NavController mNavController;
     private FloatingActionButton mTopFab;
     private SharedPreferences mSortPreferences;
-    private MainPopupMenuBinding mPopupMenuBinding;
+    private PopupMenuMainBinding mPopupMenuBinding;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -154,7 +154,7 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
         View view = mBinding.getRoot();
-        mPopupMenuBinding = MainPopupMenuBinding.inflate(inflater);
+        mPopupMenuBinding = PopupMenuMainBinding.inflate(inflater);
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 

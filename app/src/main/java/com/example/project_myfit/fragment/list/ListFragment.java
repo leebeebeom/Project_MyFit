@@ -39,7 +39,7 @@ import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentListBinding;
-import com.example.project_myfit.databinding.ListPopupMenuBinding;
+import com.example.project_myfit.databinding.PopupMenuListBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.fragment.list.adapter.folderdapter.FolderAdapter;
 import com.example.project_myfit.fragment.list.adapter.folderdapter.FolderDragCallBack;
@@ -109,7 +109,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
     private NavController mNavController;
     private DialogViewModel mDialogViewModel;
     private FloatingActionButton mTopFab;
-    private ListPopupMenuBinding mPopupMenuBinding;
+    private PopupMenuListBinding mPopupMenuBinding;
     private float mTextViewSize;
     private ActionBar mActionBar;
     private long mThisCategoryId, mThisFolderId, mParentId;
@@ -218,7 +218,7 @@ public class ListFragment extends Fragment implements SizeAdapterListener {
         mBinding = FragmentListBinding.inflate(inflater);
         View view = mBinding.getRoot();
         mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
-        mPopupMenuBinding = ListPopupMenuBinding.inflate(inflater);
+        mPopupMenuBinding = PopupMenuListBinding.inflate(inflater);
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
         return view;
