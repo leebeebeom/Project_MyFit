@@ -18,7 +18,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemMainRecyclerCategoryBinding;
 import com.example.project_myfit.fragment.main.MainViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
-import com.google.android.material.checkbox.MaterialCheckBox;
+import com.example.project_myfit.util.adapter.view_holder.CategoryVH;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,11 +30,11 @@ import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
-public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryVH> {
+public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
     private List<Category> mCategoryList, mSelectedCategoryList;
     private final MainViewModel mModel;
     private final HashSet<Long> mSelectedCategoryIdHashSet;
-    private final CategoryAdapterListener mListener;
+    private final CategoryVH.CategoryAdapterListener mListener;
     private int mActionModeState, mSort;
     private Animation mAnimation;
     private List<Long> mFolderFolderIdList, mSizeFolderIdList;
@@ -42,7 +42,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     private AdapterUtil mAdapterUtil;
     private boolean mIsDragging;
 
-    public CategoryAdapter(MainViewModel model, CategoryAdapterListener listener) {
+    public CategoryAdapter(MainViewModel model, CategoryVH.CategoryAdapterListener listener) {
         super(new DiffUtil.ItemCallback<Category>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull Category oldItem, @NonNull @NotNull Category newItem) {
@@ -174,35 +174,5 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.Categ
     public void deselectAll() {
         mSelectedCategoryIdHashSet.clear();
         notifyDataSetChanged();
-    }
-
-    public static class CategoryVH extends RecyclerView.ViewHolder {
-        private final ItemMainRecyclerCategoryBinding mBinding;
-        private Category mCategory;
-
-        public CategoryVH(@NotNull ItemMainRecyclerCategoryBinding binding, CategoryAdapterListener listener) {
-            super(binding.getRoot());
-            this.mBinding = binding;
-
-            itemView.setOnClickListener(v -> listener.onCategoryCardViewClick(mCategory, mBinding.itemMainCheckBox));
-
-            itemView.setOnLongClickListener(v -> {
-                listener.onCategoryCardViewLongClick(getLayoutPosition());
-                return false;
-            });
-        }
-
-        public void setCategory(Category category) {
-            this.mCategory = category;
-            mBinding.setCategory(category);
-        }
-    }
-
-    public interface CategoryAdapterListener {
-        void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox);
-
-        void onCategoryCardViewLongClick(int position);
-
-        void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder);
     }
 }
