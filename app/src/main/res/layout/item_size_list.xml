@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/itemListListCheckBox"
+            android:id="@+id/cb_item_size_list"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
             android:scaleY="0.7" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/itemListListCardView"
+            android:id="@+id/card_view_item_size_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -45,7 +45,7 @@
                     android:layout_height="@dimen/_40sdp">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/itemListListImage"
+                        android:id="@+id/iv_item_size_list_picture"
                         setUri="@{size.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -57,7 +57,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/itemListListAddIcon"
+                        android:id="@+id/icon_item_size_list_add_image"
                         setAddIcon="@{size.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -81,7 +81,7 @@
                     android:paddingHorizontal="@dimen/_6sdp">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/itemListListBrandText"
+                        android:id="@+id/tv_item_size_list_brand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
@@ -93,7 +93,7 @@
                         tools:text="Anderson Bell" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/itemListListNameText"
+                        android:id="@+id/tv_item_size_list_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:alpha="0.8"
@@ -105,7 +105,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/itemListListFavoriteCheckBox"
+                    android:id="@+id/cb_item_size_list_favorite"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
@@ -117,7 +117,7 @@
                     android:scaleY="0.7" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/itemListListDragHandle"
+                    android:id="@+id/icon_item_size_list_drag_handle"
                     setDragHandle="@{size.size}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
