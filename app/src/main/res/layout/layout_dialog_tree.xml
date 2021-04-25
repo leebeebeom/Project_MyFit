@@ -16,7 +16,7 @@
         android:scrollbars="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/dialogTreeRoot"
+            android:id="@+id/layout_dialog_tree"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
-                    android:text="@string/tree_view_category"
+                    android:text="@string/tree_category"
                     android:textSize="@dimen/_12sdp"
                     app:fontFamily="@font/noto_bold" />
 
@@ -53,7 +53,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/dialogTreeAddCategoryLayout"
+                android:id="@+id/tv_dialog_tree_add_category_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/_4sdp"
-                    android:text="@string/add_category"
+                    android:text="@string/all_add_category"
                     android:textSize="@dimen/_10sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
