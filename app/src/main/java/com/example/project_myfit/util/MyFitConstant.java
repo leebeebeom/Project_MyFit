@@ -6,6 +6,13 @@ public class MyFitConstant {
     public static final String FOLDER = "folder";
     public static final String SIZE = "size";
 
+    //key
+    public static final String PARENT_ID = "parent_id";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String FOLDER_ID = "folder_id";
+    public static final String SIZE_ID = "size_id";
+    public static final String PARENT_CATEGORY = "parent_category";
+
     //fragment type
     public static final String MAIN_FRAGMENT = "main fragment";
     public static final String LIST_FRAGMENT = "list fragment";
@@ -76,9 +83,6 @@ public class MyFitConstant {
 
     public static final String TREE_VIEW_STATE = "state";
 
-    public static final String SIZE_ID = "size id";
-    public static final String FOLDER_ID = "folder id";
-
     //etc
     public static final String ALERT_TITLE = "alertTitle";
     public static final String ID = "id";
@@ -86,4 +90,7 @@ public class MyFitConstant {
     public static final int DOWN = 0;
     public static final int UP = 1;
     public static final int STOP = 2;
+
+    public static final String HTTP = "http://";
+    public static final String HTTPS = "https://";
 }
