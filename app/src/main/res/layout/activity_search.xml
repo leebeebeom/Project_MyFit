@@ -20,7 +20,7 @@
                 android:layout_height="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ac_tv_layout_search"
+                android:id="@+id/ac_tv_search_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
