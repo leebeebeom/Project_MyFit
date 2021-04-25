@@ -115,7 +115,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/ch_item_size_grid"
+            android:id="@+id/cb_item_size_grid"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="top|center"
