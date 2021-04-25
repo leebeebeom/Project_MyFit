@@ -1,6 +1,5 @@
-package com.example.project_myfit.search_activity;
+package com.example.project_myfit.search.main;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -34,14 +32,17 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ActionModeTitleBinding;
 import com.example.project_myfit.databinding.FragmentSearchBinding;
+import com.example.project_myfit.databinding.TitleActionModeBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
-import com.example.project_myfit.search_activity.adapter.RecentSearchAdapter;
-import com.example.project_myfit.search_activity.adapter.SearchAdapter;
-import com.example.project_myfit.search_activity.adapter.SearchViewPagerAdapter;
-import com.example.project_myfit.util.LockableScrollView;
+import com.example.project_myfit.search.SearchViewModel;
+import com.example.project_myfit.search.main.adapter.RecentSearchAdapter;
+import com.example.project_myfit.search.main.adapter.SearchAdapter;
+import com.example.project_myfit.search.main.adapter.SearchViewPagerAdapter;
+import com.example.project_myfit.util.KeyboardUtil;
 import com.example.project_myfit.util.SelectedItemTreat;
+import com.example.project_myfit.util.adapter.view_holder.FolderVHListener;
+import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.tabs.TabLayout;
@@ -64,20 +65,19 @@ import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
-import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 
-public class SearchFragment extends Fragment implements SearchAdapter.SearchAdapterListener, SearchViewPagerAdapter.ViewPagerAutoScrollListener {
+public class SearchFragment extends Fragment implements SearchViewPagerAdapter.ViewPagerAutoScrollListener, FolderVHListener, SizeVHListener {
     private SearchViewModel mModel;
     private FragmentSearchBinding mBinding;
     private List<String> mRecentSearchStringList;
-    private MaterialAutoCompleteTextView mAutoCompleteEditText;
+    private MaterialAutoCompleteTextView mAutoCompleteTextView;
     private ActionMode mActionMode;
     private boolean isDragSelecting, mAutoScrollEnable;
-    private ActionModeTitleBinding mActionModeTitleBinding;
-    private SearchViewPagerAdapter mSearchViewPagerAdapter;
+    private TitleActionModeBinding mActionModeTitleBinding;
+    private SearchViewPagerAdapter mViewPagerAdapter;
     private MenuItem mEditMenu, mMoveMenu, mDeletedMenu;
     private DragSelectTouchListener mDragSelectListener;
     private SearchAdapter[] mSearchAdapterArray;
@@ -88,15 +88,15 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
-            mBinding.searchViewPager.setUserInputEnabled(false);
+            mBinding.vpSearch.setUserInputEnabled(false);
 
             mActionMode = mode;
             mModel.setActionModeOn(true);
 
-            LinearLayout tab = (LinearLayout) mBinding.searchTabLayout.getChildAt(0);
+            LinearLayout tab = (LinearLayout) mBinding.tabLayoutSearch.getChildAt(0);
             for (int i = 0; i < 4; i++) tab.getChildAt(i).setClickable(false);
 
-            mode.getMenuInflater().inflate(R.menu.action_mode, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             mode.setCustomView(mActionModeTitleBinding.getRoot());
 
             mSearchAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_ON);
@@ -105,8 +105,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
-            mActionModeTitleBinding.actionModeCheckBox.setOnClickListener(v ->
-                    mModel.selectAllClick(mActionModeTitleBinding.actionModeCheckBox.isChecked(), mSearchAdapterArray));
+            mActionModeTitleBinding.cbActionModeTitle.setOnClickListener(v ->
+                    mModel.selectAllClick(mActionModeTitleBinding.cbActionModeTitle.isChecked(), mSearchAdapterArray));
 
             mEditMenu = menu.getItem(0);
             mMoveMenu = menu.getItem(1);
@@ -116,9 +116,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
-            if (item.getItemId() == R.id.menuActionModeDelete)
-                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchSelectedItemDeleteDialog(mModel.getSelectedItemSizeLiveValue()));
-            else if (item.getItemId() == R.id.menuActionModeMove) {
+            if (item.getItemId() == R.id.menu_action_mode_delete)
+                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchSelectedItemDeleteDialog(mModel.getSelectedItemSize()));
+            else if (item.getItemId() == R.id.menu_action_mode_move) {
                 mDialogViewModel.forTreeView(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), null);
                 mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchTreeViewDialog(mModel.getParentCategory()));
             } else
@@ -128,17 +128,17 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mBinding.searchViewPager.setUserInputEnabled(true);
+            mBinding.vpSearch.setUserInputEnabled(true);
 
             mActionMode = null;
             mModel.setActionModeOn(false);
 
-            LinearLayout tab = (LinearLayout) mBinding.searchTabLayout.getChildAt(0);
+            LinearLayout tab = (LinearLayout) mBinding.tabLayoutSearch.getChildAt(0);
             for (int i = 0; i < 4; i++) tab.getChildAt(i).setClickable(true);
 
             mSearchAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_OFF);
 
-            mActionModeTitleBinding.actionModeCheckBox.setChecked(false);
+            mActionModeTitleBinding.cbActionModeTitle.setChecked(false);
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
@@ -148,7 +148,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
-        mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.search_nav_gragh)).get(DialogViewModel.class);
+        mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.nav_graph_search)).get(DialogViewModel.class);
         mColorControl = new TypedValue();
         requireContext().getTheme().resolveAttribute(R.attr.myColorControl, mColorControl, true);
     }
@@ -158,20 +158,20 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
                              @Nullable Bundle savedInstanceState) {
         mBinding = FragmentSearchBinding.inflate(inflater);
         View view = mBinding.getRoot();
-        mActionModeTitleBinding = ActionModeTitleBinding.inflate(inflater);
+        mActionModeTitleBinding = TitleActionModeBinding.inflate(inflater);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAutoCompleteEditText = requireActivity().findViewById(R.id.searchAutoCompleteEditText);
+        mAutoCompleteTextView = requireActivity().findViewById(R.id.ac_tv_search);
 
-        mBinding.searchViewPager.setAdapter(getViewPagerAdapter());
-        mBinding.searchViewPager.setOffscreenPageLimit(1);
+        mBinding.vpSearch.setAdapter(getViewPagerAdapter());
+        mBinding.vpSearch.setOffscreenPageLimit(1);
         tabLayoutInit();
         mRecentSearchAdapter = new RecentSearchAdapter();
-        mBinding.searchRecentSearchRecycler.setAdapter(mRecentSearchAdapter);
+        mBinding.rvSearchRecentSearch.setAdapter(mRecentSearchAdapter);
 
         setDialogLive();
         setRecentSearchLive();
@@ -182,23 +182,23 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     @NotNull
     private SearchViewPagerAdapter getViewPagerAdapter() {
         mSearchAdapterArray = new SearchAdapter[4];
-        for (int i = 0; i < 4; i++) mSearchAdapterArray[i] = new SearchAdapter(this);
+        for (int i = 0; i < 4; i++) mSearchAdapterArray[i] = new SearchAdapter(this, this);
 
-        mSearchViewPagerAdapter = new SearchViewPagerAdapter(mSearchAdapterArray, getDragSelectListener(), this);
-        return mSearchViewPagerAdapter;
+        mViewPagerAdapter = new SearchViewPagerAdapter(mSearchAdapterArray, getDragSelectListener(), this);
+        return mViewPagerAdapter;
     }
 
     private DragSelectTouchListener getDragSelectListener() {
         DragSelectTouchListener.OnAdvancedDragSelectListener listener = new DragSelectTouchListener.OnAdvancedDragSelectListener() {
             @Override
             public void onSelectionStarted(int i) {
-                mBinding.searchViewPagerScrollView.setScrollable(false);
+                mBinding.svSearch.setScrollable(false);
                 isDragSelecting = true;
 
                 SearchViewPagerAdapter.ViewPagerVH viewPagerVH = (SearchViewPagerAdapter.ViewPagerVH)
-                        ((RecyclerView) mBinding.searchViewPager.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
+                        ((RecyclerView) mBinding.vpSearch.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
-                    RecyclerView recyclerView = viewPagerVH.getBinding().itemSearchRecyclerView;
+                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemSearchRv;
                     RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
                     if (viewHolder != null) viewHolder.itemView.callOnClick();
                 }
@@ -206,16 +206,16 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
 
             @Override
             public void onSelectionFinished(int i) {
-                mBinding.searchViewPagerScrollView.setScrollable(true);
+                mBinding.svSearch.setScrollable(true);
                 isDragSelecting = false;
             }
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
                 SearchViewPagerAdapter.ViewPagerVH viewPagerVH = (SearchViewPagerAdapter.ViewPagerVH)
-                        ((RecyclerView) mBinding.searchViewPager.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
+                        ((RecyclerView) mBinding.vpSearch.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
-                    RecyclerView recyclerView = viewPagerVH.getBinding().itemSearchRecyclerView;
+                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemSearchRv;
                     for (int j = i; j <= i1; j++) {
                         RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
                         if (viewHolder != null) viewHolder.itemView.callOnClick();
@@ -228,7 +228,7 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void tabLayoutInit() {
-        new TabLayoutMediator(mBinding.searchTabLayout, mBinding.searchViewPager, (tab, position) -> {
+        new TabLayoutMediator(mBinding.tabLayoutSearch, mBinding.vpSearch, (tab, position) -> {
             if (position == 0) tab.setText(TOP);
             else if (position == 1) tab.setText(BOTTOM);
             else if (position == 2) tab.setText(OUTER);
@@ -243,7 +243,6 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
             selectedItemDeleteLive(selectedItemTreat, navBackStackEntry);
             itemMoveDialogLive(selectedItemTreat, navBackStackEntry);
             nameEditDialogLive(navBackStackEntry);
-            recentSearchAllClearDialogLive(navBackStackEntry);
         });
     }
 
@@ -268,28 +267,25 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         });
     }
 
-    private void recentSearchAllClearDialogLive(@NotNull NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry,
-                o -> mModel.deleteAllRecentSearch());
-    }
-
     private void setRecentSearchLive() {
         mModel.getAllRecentSearchLive().observe(getViewLifecycleOwner(), recentSearchList -> {
             mRecentSearchAdapter.submitList(recentSearchList);
 
-            mRecentSearchStringList = new ArrayList<>();
+            if (mRecentSearchStringList == null) mRecentSearchStringList = new ArrayList<>();
+            if (!mRecentSearchStringList.isEmpty()) mRecentSearchStringList.clear();
             for (RecentSearch recentSearch : recentSearchList)
                 mRecentSearchStringList.add(recentSearch.getWord());
 
-            if (recentSearchList.isEmpty()) mBinding.searchRecentSearchNoDataLayout.setVisibility(View.VISIBLE);
-            else mBinding.searchRecentSearchNoDataLayout.setVisibility(View.GONE);
+            if (recentSearchList.isEmpty())
+                mBinding.tvSearchNoResultLayout.setVisibility(View.VISIBLE);
+            else mBinding.tvSearchNoResultLayout.setVisibility(View.GONE);
         });
     }
 
     private void setActionModeTitleLive() {
         mModel.getSelectedItemSizeLive().observe(getViewLifecycleOwner(), integer -> {
-            String title = integer + getString(R.string.item_selected);
-            mActionModeTitleBinding.actionModeTitle.setText(title);
+            String title = integer + getString(R.string.action_mode_title);
+            mActionModeTitleBinding.tvActionModeTitle.setText(title);
 
             if (mActionMode != null) {
                 mEditMenu.setVisible(integer == 1 && mModel.getSelectedItem().get(0) instanceof Folder);
@@ -297,8 +293,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
                 mDeletedMenu.setVisible(integer > 0);
             }
 
-            int allItemSize = mSearchAdapterArray[mBinding.searchViewPager.getCurrentItem()].getItemCount();
-            mActionModeTitleBinding.actionModeCheckBox.setChecked(allItemSize == integer);
+            int allItemSize = mSearchAdapterArray[mModel.getCurrentItem()].getItemCount();
+            mActionModeTitleBinding.cbActionModeTitle.setChecked(allItemSize == integer);
         });
     }
 
@@ -306,10 +302,10 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         LiveData<List<Folder>> folderLiveData = mModel.getAllFolderLive();
         LiveData<List<Size>> sizeLiveData = mModel.getAllSizeLive();
 
-        MediatorLiveData<Object> mediatorLiveData = new MediatorLiveData<>();
-        mediatorLiveData.addSource(folderLiveData, mediatorLiveData::setValue);
-        mediatorLiveData.addSource(sizeLiveData, mediatorLiveData::setValue);
-        mediatorLiveData.observe(getViewLifecycleOwner(), o -> {
+        MediatorLiveData<Object> combineLiveData = new MediatorLiveData<>();
+        combineLiveData.addSource(folderLiveData, combineLiveData::setValue);
+        combineLiveData.addSource(sizeLiveData, combineLiveData::setValue);
+        combineLiveData.observe(getViewLifecycleOwner(), o -> {
             if (o instanceof List<?>)
                 if (((List<?>) o).get(0) instanceof Folder)
                     folderChangedValue(sizeLiveData, (Collection<?>) o);
@@ -318,18 +314,18 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         });
     }
 
-    private void sizeChangedValue(@NotNull LiveData<List<Folder>> folderLiveData, Collection<?> o) {
-        List<Object> allItemList = new ArrayList<>(o);
-        if (folderLiveData.getValue() != null)
-            allItemList.addAll(0, folderLiveData.getValue());
-        mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteEditText.getText(), mBinding.searchTabLayout, mColorControl);
-    }
-
     private void folderChangedValue(@NotNull LiveData<List<Size>> sizeLiveData, Collection<?> o) {
         List<Object> allItemList = new ArrayList<>(o);
         if (sizeLiveData.getValue() != null)
             allItemList.addAll(sizeLiveData.getValue());
-        mSearchViewPagerAdapter.setItems(allItemList, mAutoCompleteEditText.getText(), mBinding.searchTabLayout, mColorControl);
+        mViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayoutSearch, mColorControl);
+    }
+
+    private void sizeChangedValue(@NotNull LiveData<List<Folder>> folderLiveData, Collection<?> o) {
+        List<Object> allItemList = new ArrayList<>(o);
+        if (folderLiveData.getValue() != null)
+            allItemList.addAll(0, folderLiveData.getValue());
+        mViewPagerAdapter.setItems(allItemList, mAutoCompleteTextView.getText(), mBinding.tabLayoutSearch, mColorControl);
     }
 
     @Override
@@ -348,9 +344,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void setMainScrollChangeListener() {
-        mBinding.searchViewPagerScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (v.getScrollY() != 0) mBinding.searchTopFab.show();
-            else mBinding.searchTopFab.hide();
+        mBinding.svSearch.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (v.getScrollY() != 0) mBinding.fabSearch.show();
+            else mBinding.fabSearch.hide();
 
             if (isDragSelecting && mAutoScrollEnable && scrollY > oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
@@ -360,44 +356,37 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void setRecentSearchScrollListener() {
-        mBinding.searchRecentSearchScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (v.getScrollY() != 0) mBinding.searchTopFab.show();
-            else mBinding.searchTopFab.hide();
+        mBinding.svSearchRecentSearch.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (v.getScrollY() != 0) mBinding.fabSearch.show();
+            else mBinding.fabSearch.hide();
         });
     }
 
     private void fabClickLister() {
-        mBinding.searchTopFab.setOnClickListener(v -> {
-            NestedScrollView recentSearchScrollView = (LockableScrollView) mBinding.searchRecentSearchScrollView;
-            LockableScrollView viewPagerScrollView = mBinding.searchViewPagerScrollView;
+        mBinding.fabSearch.setOnClickListener(v -> {
+            if (mBinding.svSearchRecentSearch.getVisibility() != View.VISIBLE)
+                svScrollToTop(mBinding.svSearch);
+            else if (mBinding.svSearchRecentSearch.getVisibility() == View.VISIBLE)
+                svScrollToTop(mBinding.svSearchRecentSearch);
+        });
+    }
 
-            if (recentSearchScrollView.getVisibility() != View.VISIBLE) {
-                viewPagerScrollView.scrollTo(0, 0);
-                viewPagerScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                    if (scrollY != 0) viewPagerScrollView.scrollTo(0, 0);
-                    else {
-                        viewPagerScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                        setMainScrollChangeListener();
-                    }
-                });
-            } else if (recentSearchScrollView.getVisibility() == View.VISIBLE) {
-                recentSearchScrollView.scrollTo(0, 0);
-                recentSearchScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                    if (scrollY != 0) recentSearchScrollView.scrollTo(0, 0);
-                    else {
-                        recentSearchScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                        setRecentSearchScrollListener();
-                    }
-                });
+    private void svScrollToTop(@NotNull NestedScrollView scrollView) {
+        scrollView.scrollTo(0, 0);
+        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollY != 0) scrollView.scrollTo(0, 0);
+            else {
+                scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
+                setMainScrollChangeListener();
             }
         });
     }
 
     private void viewPagerChangeListener() {
-        mBinding.searchViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        mBinding.vpSearch.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                mBinding.searchViewPagerScrollView.smoothScrollTo(0, 0);
+                mBinding.svSearch.smoothScrollTo(0, 0);
                 mModel.setCurrentItem(position);
             }
         });
@@ -407,13 +396,11 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
         mRecentSearchAdapter.setRecentSearchAdapterListener(new RecentSearchAdapter.RecentSearchAdapterListener() {
             @Override
             public void recentSearchItemClick(String word) {
-                mAutoCompleteEditText.setText(word);
-                mAutoCompleteEditText.setSelection(word.length());
-                mAutoCompleteEditText.dismissDropDown();
-                mModel.deleteOverLapRecentSearch(word);
-                mModel.insertRecentSearch(word);
-                InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(mAutoCompleteEditText.getWindowToken(), 0);
+                mAutoCompleteTextView.setText(word);
+                mAutoCompleteTextView.setSelection(word.length());
+                mAutoCompleteTextView.dismissDropDown();
+                mModel.overLapRecentSearchReInsert(word);
+                KeyboardUtil.keyboardHide(requireContext(), mAutoCompleteTextView);
             }
 
             @Override
@@ -424,19 +411,18 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void autoCompleteImeListener() {
-        mAutoCompleteEditText.setOnEditorActionListener((v, actionId, event) -> {
+        mAutoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                KeyboardUtil.keyboardHide(requireContext(), v);
 
-                mAutoCompleteEditText.dismissDropDown();
+                mAutoCompleteTextView.dismissDropDown();
 
-                String word = mAutoCompleteEditText.getText().toString().trim();
+                String word = mAutoCompleteTextView.getText().toString().trim();
                 //검색어 중복시 지우고 맨 위로
                 if (!TextUtils.isEmpty(word)) {
                     if (mRecentSearchStringList.contains(word))
-                        mModel.deleteOverLapRecentSearch(word);
-                    mModel.insertRecentSearch(word);
+                        mModel.overLapRecentSearchReInsert(word);
+                    else mModel.insertRecentSearch(word);
                 }
             }
             return true;
@@ -444,9 +430,9 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void autoCompleteTextChangeListener() {
-        TextInputLayout autoCompleteTextLayout = requireActivity().findViewById(R.id.searchAutoCompleteLayout);
+        TextInputLayout autoCompleteTextLayout = requireActivity().findViewById(R.id.ac_tv_search_layout);
 
-        mAutoCompleteEditText.addTextChangedListener(new TextWatcher() {
+        mAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -454,22 +440,23 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)) {
-                    mBinding.searchRecentSearchScrollView.setVisibility(View.GONE);
-                    if (mBinding.searchViewPagerScrollView.getScrollY() == 0)
-                        mBinding.searchTopFab.setVisibility(View.GONE);
-                    else mBinding.searchTopFab.setVisibility(View.VISIBLE);
+                    mBinding.svSearchRecentSearch.setVisibility(View.GONE);
+                    if (mBinding.vpSearch.getScrollY() == 0)
+                        mBinding.fabSearch.setVisibility(View.GONE);
+                    else mBinding.fabSearch.setVisibility(View.VISIBLE);
                     autoCompleteTextLayout.setEndIconVisible(true);
                 } else {
-                    mBinding.searchRecentSearchScrollView.scrollTo(0, 0);
-                    mBinding.searchRecentSearchScrollView.setVisibility(View.VISIBLE);
-                    mBinding.searchTopFab.setVisibility(View.GONE);
+                    mBinding.svSearchRecentSearch.scrollTo(0, 0);
+                    mBinding.svSearchRecentSearch.setVisibility(View.VISIBLE);
+                    mBinding.fabSearch.setVisibility(View.GONE);
                     autoCompleteTextLayout.setEndIconVisible(false);
+                    KeyboardUtil.keyboardShow(requireContext(), mAutoCompleteTextView);
                 }
 
                 for (int i = 0; i < 4; i++) {
                     int finalI = i;
-                    mSearchAdapterArray[i].getFilter().filter(mAutoCompleteEditText.getText(), count1 -> {
-                        TabLayout.Tab tab = mBinding.searchTabLayout.getTabAt(finalI);
+                    mSearchAdapterArray[i].getFilter().filter(mAutoCompleteTextView.getText(), count1 -> {
+                        TabLayout.Tab tab = mBinding.tabLayoutSearch.getTabAt(finalI);
                         if (tab != null) {
                             if (count1 == 0) tab.removeBadge();
                             else {
@@ -490,8 +477,8 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     private void recentSearchAllClearClickListener() {
-        mBinding.searchRecentSearchAllClearText.setOnClickListener(v ->
-                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchAllClearDialog()));
+        mBinding.tvSearchDeleteAll.setOnClickListener(v ->
+                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchDeleteAllDialog()));
     }
 
     private void actionModeRecreate() {
@@ -502,61 +489,70 @@ public class SearchFragment extends Fragment implements SearchAdapter.SearchAdap
     }
 
     @Override
-    public void searchAdapterSizeClick(@NotNull Size size, MaterialCheckBox checkBox) {
-        if (mActionMode == null)
-            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToMainActivity(0, size.getId(), size.getParentId()));
-        else {
-            checkBox.setChecked(!checkBox.isChecked());
-            mModel.sizeSelected(size, checkBox.isChecked(), mSearchAdapterArray[mBinding.searchViewPager.getCurrentItem()]);
-        }
+    public void dragAutoScroll(int upDown) {
+        if (isDragSelecting)
+            if (upDown == 0) {
+                mBinding.svSearch.scrollBy(0, 1);
+                mAutoScrollEnable = true;
+            } else if (upDown == 1) {
+                mBinding.svSearch.scrollBy(0, -1);
+                mAutoScrollEnable = true;
+            } else if (upDown == 2) {
+                mBinding.svSearch.scrollBy(0, 0);
+                mAutoScrollEnable = false;
+            }
     }
 
     @Override
-    public void searchAdapterSizeLongClick(int position) {
-        if (mActionMode == null) {
-            mModel.getSelectedItem().clear();
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
-        }
-        mDragSelectListener.startDragSelection(position);
-    }
-
-    @Override
-    public void searchAdapterFavoriteClick(Size size) {
-        mModel.sizeFavoriteClick(size);
-    }
-
-    @Override
-    public void searchAdapterFolderClick(@NotNull Folder folder, MaterialCheckBox checkBox) {
+    public void onFolderItemViewClick(Folder folder, MaterialCheckBox checkBox) {
         if (mActionMode == null)
             mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToMainActivity(
                     folder.getId(), 0, folder.getParentId()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
-            mModel.folderSelected(folder, checkBox.isChecked(), mSearchAdapterArray[mBinding.searchViewPager.getCurrentItem()]);
+            mModel.itemSelected(folder, folder.getId(), checkBox.isChecked(), mSearchAdapterArray);
         }
     }
 
     @Override
-    public void searchAdapterFolderLongClick(int position) {
+    public void onFolderItemViewLongClick(int position) {
+        actionModeStart(position);
+    }
+
+    @Override
+    public void onFolderDragHandleTouch(RecyclerView.ViewHolder holder) {
+    }
+
+    @Override
+    public void onSizeItemViewClick(Size size, MaterialCheckBox checkBox) {
+        if (mActionMode == null)
+            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToMainActivity(0, size.getId(), size.getParentId()));
+        else {
+            checkBox.setChecked(!checkBox.isChecked());
+            mModel.itemSelected(size, size.getId(), checkBox.isChecked(), mSearchAdapterArray);
+        }
+    }
+
+    @Override
+    public void onSizeItemViewLongClick(int position) {
+        actionModeStart(position);
+    }
+
+    @Override
+    public void onSizeDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void onSizeFavoriteClick(Size size) {
+        mModel.sizeFavoriteClick(size);
+    }
+
+    private void actionModeStart(int position) {
         if (mActionMode == null) {
             mModel.getSelectedItem().clear();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
         mDragSelectListener.startDragSelection(position);
-    }
-
-    @Override
-    public void dragAutoScroll(int upDown) {
-        if (isDragSelecting)
-            if (upDown == 0) {
-                mBinding.searchViewPagerScrollView.scrollBy(0, 1);
-                mAutoScrollEnable = true;
-            } else if (upDown == 1) {
-                mBinding.searchViewPagerScrollView.scrollBy(0, -1);
-                mAutoScrollEnable = true;
-            } else if (upDown == 2) {
-                mBinding.searchViewPagerScrollView.scrollBy(0, 0);
-                mAutoScrollEnable = false;
-            }
     }
 }
