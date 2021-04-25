@@ -6,10 +6,10 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".search_activity.SearchFragment">
+        tools:context=".search.main.SearchFragment">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/searchViewPagerScrollView"
+            android:id="@+id/sv_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -20,25 +20,47 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/searchTabLayout"
+                    android:id="@+id/tap_layout_search"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_32sdp"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:background="@android:color/transparent"
                     app:tabIndicatorColor="?myColorControl"
                     app:tabSelectedTextColor="?myColorControl"
-                    app:tabTextAppearance="@style/myTextSize9sdp" />
+                    app:tabTextAppearance="@style/myTextSize9sdp">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/all_top_cap" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/all_bottom_cap" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/all_outer_cap" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/all_etc_cap" />
+                </com.google.android.material.tabs.TabLayout>
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/searchViewPager"
+                    android:id="@+id/vp_search"
+                    tools:layout="@layout/fragment_search_main"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.example.project_myfit.util.LockableScrollView>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/sv_search_recent_search"
             android:background="?colorPrimary"
-            android:id="@+id/searchRecentSearchScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -62,20 +84,20 @@
                             android:layout_marginStart="@dimen/_16sdp"
                             android:layout_marginTop="@dimen/_4sdp"
                             android:alpha="0.7"
-                            android:text="@string/recent_search"
+                            android:text="@string/search_recent_search"
                             android:textSize="@dimen/_8sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/searchRecentSearchAllClearText"
+                            android:id="@+id/tv_search_all_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_4sdp"
                             android:layout_marginEnd="@dimen/_16sdp"
                             android:alpha="0.7"
-                            android:text="@string/delete_all"
+                            android:text="@string/recent_search_delete_all"
                             android:textSize="@dimen/_8sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +105,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/searchRecentSearchRecycler"
+                        android:id="@+id/rv_search_recent_search"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -91,7 +113,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <FrameLayout
-                    android:id="@+id/searchRecentSearchNoDataLayout"
+                    android:id="@+id/tv_search_no_result_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
@@ -102,7 +124,7 @@
                         android:layout_height="match_parent"
                         android:alpha="0.7"
                         android:gravity="center"
-                        android:text="@string/no_recent_search_list"
+                        android:text="@string/recent_search_no_result"
                         android:textSize="@dimen/_10sdp" />
                 </FrameLayout>
 
@@ -115,10 +137,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="@dimen/_20sdp"
-            android:contentDescription="@string/floating_action_button"
             android:src="@drawable/icon_arrow_up"
             android:visibility="invisible"
             app:backgroundTint="@color/white"
-            app:fabSize="mini" />
+            app:fabSize="mini"
+            tools:ignore="ContentDescription" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
