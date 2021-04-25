@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/itemListGridCardView"
+            android:id="@+id/card_view_item_size_grid"
             android:layout_width="@dimen/_140sdp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/itemListGridImage"
+                        android:id="@+id/iv_item_size_grid_picture"
                         android:scaleType="centerCrop"
                         setUri="@{size.imageUri}"
                         android:layout_width="@dimen/_140sdp"
@@ -42,7 +42,7 @@
                         android:layout_marginTop="@dimen/_16sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/itemListAddImageIcon"
+                        android:id="@+id/icon_item_size_grid_add_image"
                         setAddIcon="@{size.imageUri}"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
@@ -51,8 +51,8 @@
                         android:alpha="0.2" />
 
                     <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icon_item_size_grid_drag_handle"
                         setDragHandle2="@{size.size}"
-                        android:id="@+id/itemListGridDragHandle"
                         android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                         android:paddingVertical="@dimen/_2sdp">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/itemListGridBrandText"
+                            android:id="@+id/tv_item_size_grid_brand"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:alpha="0.7"
@@ -87,7 +87,7 @@
                             tools:text="앤더슨벨" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/itemListGridNameText"
+                            android:id="@+id/tv_item_size_grid_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="-2dp"
@@ -100,7 +100,7 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/itemListGridFavoriteCheckBox"
+                        android:id="@+id/cb_item_size_grid_favorite"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
@@ -115,7 +115,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/itemListGridCheckBox"
+            android:id="@+id/ch_item_size_grid"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="top|center"
