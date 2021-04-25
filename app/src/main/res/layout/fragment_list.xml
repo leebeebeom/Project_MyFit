@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
-        tools:context=".fragment.list.ListFragment">
+        tools:context=".main.list.ListFragment">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/listScrollView"
+            android:id="@+id/sv_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -35,7 +35,7 @@
                     android:scrollbars="none">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/listTextNavigationLayout"
+                        android:id="@+id/layout_list_text_navigation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
@@ -43,7 +43,7 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/listIconHome"
+                            android:id="@+id/icon_list_home"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
@@ -58,7 +58,7 @@
                             app:tint="?colorControlNormal" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/listTextCategory"
+                            android:id="@+id/tv_list_navigation_category"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
@@ -69,13 +69,13 @@
                 </HorizontalScrollView>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/listRecyclerFolderLayout"
+                    android:id="@+id/rv_list_folder_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/listFolderToggleIcon"
+                        android:id="@+id/icon_list_toggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -84,7 +84,7 @@
                         android:src="@drawable/icon_triangle_down" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listRecyclerFolder"
+                        android:id="@+id/rv_list_folder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listRecyclerSize"
+                        android:id="@+id/rv_list_size"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -117,7 +117,7 @@
                         tools:listitem="@layout/item_recycler_size_grid" />
 
                     <FrameLayout
-                        android:id="@+id/listNoDataLayout"
+                        android:id="@+id/tv_list_no_data_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -130,7 +130,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:alpha="0.5"
-                            android:text="@string/no_data"
+                            android:text="@string/all_no_data"
                             android:textSize="@dimen/_20sdp" />
                     </FrameLayout>
                 </FrameLayout>
