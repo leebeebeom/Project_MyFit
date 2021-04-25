@@ -36,15 +36,15 @@
         <!--        font-->
         <item name="fontFamily">@font/noto</item>
         <!--        recycler view background color-->
-        <item name="recyclerBackground">@color/recycler_background</item>
+        <item name="rvBackground">@color/rv_background</item>
         <!--        input output go button color-->
-        <item name="goButtonColor">@color/go_button_color</item>
+        <item name="goBtnBackground">@color/go_btn_background</item>
         <!--        ripple color remove-->
         <item name="colorControlHighlight">@android:color/transparent</item>
         <!--        my color control-->
         <item name="myColorControl">@color/black</item>
         <!--        tree view background color-->
-        <item name="treeViewBackgroundColor">@color/white</item>
+        <item name="treeBackgroundColor">@color/white</item>
         <!--        menu icon padding-->
         <item name="actionButtonStyle">@style/myMenuPadding</item>
         <item name="android:includeFontPadding">false</item>
@@ -64,18 +64,18 @@
         <item name="cornerSize">@dimen/_6sdp</item>
     </style>
     <!--    bottom navigation active color-->
-    <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="myBottomNavActiveColor" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/black</item>
     </style>
     <!--    alert dialog Style-->
-    <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+    <style name="myAlertDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/black</item>
         <!--        single choice item text color-->
         <item name="textColorAlertDialogListItem">@color/black</item>
         <item name="android:textSize">@dimen/_12sdp</item>
     </style>
     <!--    edit text focused outline-->
-    <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+    <style name="myEditTextOutlineColor" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/black</item>
     </style>
     <!--    action bar title style-->
@@ -99,9 +99,9 @@
         <item name="android:textSize">@dimen/_11sdp</item>
     </style>
 
-    <attr name="recyclerBackground" format="color" />
-    <attr name="goButtonColor" format="color" />
+    <attr name="rvBackground" format="color" />
+    <attr name="goBtnBackground" format="color" />
     <attr name="myColorControl" format="color" />
-    <attr name="treeViewBackgroundColor" format="color" />
+    <attr name="treeBackgroundColor" format="color" />
     <attr name="myCardViewBackground" format="color" />
 </resources>

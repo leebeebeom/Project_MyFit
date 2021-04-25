@@ -32,33 +32,33 @@
         <!--        font-->
         <item name="fontFamily">@font/noto</item>
         <!--        recycler view background color-->
-        <item name="recyclerBackground">@color/recycler_background_night</item>
+        <item name="rvBackground">@color/rv_background_night</item>
         <!--        input output go button color-->
-        <item name="goButtonColor">@color/go_button_color_night</item>
+        <item name="goBtnBackground">@color/go_btn_background_night</item>
         <!--        ripple color remove-->
         <item name="colorControlHighlight">@android:color/transparent</item>
         <!--        my color control-->
         <item name="myColorControl">@color/white</item>
         <!--        tree view background color-->
-        <item name="treeViewBackgroundColor">#FF292929</item>
+        <item name="treeBackgroundColor">#FF292929</item>
         <!--        menu icon padding-->
         <item name="actionButtonStyle">@style/myMenuPadding</item>
         <item name="android:includeFontPadding">false</item>
         <item name="myCardViewBackground">#FF080808</item>
     </style>
     <!--    bottom navigation active color-->
-    <style name="myBottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="myBottomNavActiveColor" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
     </style>
     <!--    alert dialog style-->
-    <style name="myAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+    <style name="myAlertDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/white</item>
         <!--        single choice item text color-->
         <item name="android:textColorAlertDialogListItem">@color/white</item>
         <item name="android:textSize">@dimen/_12sdp</item>
     </style>
     <!--    edit text focused outline-->
-    <style name="myEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+    <style name="myEditTextOutlineColor" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="colorPrimary">@color/white</item>
     </style>
 </resources>
