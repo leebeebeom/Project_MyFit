@@ -7,159 +7,159 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".recycle_bin_activity.fragment.main.RecycleBinMainFragment">
+        tools:context=".recyclebin.main.RecycleBinMainFragment">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trashCategoryText"
+            android:id="@+id/tv_recycle_bin_category"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
-            android:text="@string/category_cap"
+            android:text="@string/all_category_cap"
             android:textSize="@dimen/_14sdp"
             app:fontFamily="@font/noto_black"
-            app:layout_constraintBottom_toTopOf="@id/trashCategoryDivider"
+            app:layout_constraintBottom_toTopOf="@id/divider_recycle_bin_category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trashFolderText"
+            android:id="@+id/tv_recycle_bin_folder"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/folder_cap"
+            android:text="@string/all_folder_cap"
             android:textSize="@dimen/_14sdp"
             app:fontFamily="@font/noto_black"
-            app:layout_constraintBottom_toTopOf="@id/trashFolderDivider"
+            app:layout_constraintBottom_toTopOf="@id/divider_recycle_bin_folder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashCategoryDivider" />
+            app:layout_constraintTop_toBottomOf="@id/divider_recycle_bin_category" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trashSizeText"
+            android:id="@+id/tv_recycle_bin_size"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/size_cap"
+            android:text="@string/all_size_cap"
             android:textSize="@dimen/_14sdp"
             app:fontFamily="@font/noto_black"
-            app:layout_constraintBottom_toTopOf="@id/trashSizeDivider"
+            app:layout_constraintBottom_toTopOf="@id/divider_recycle_bin_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashFolderDivider" />
+            app:layout_constraintTop_toBottomOf="@id/divider_recycle_bin_folder" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trashDailyLookText"
+            android:id="@+id/tv_recycle_bin_daily_look"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/daily_look_cap"
+            android:text="@string/all_daily_look_cap"
             android:textSize="@dimen/_14sdp"
             app:fontFamily="@font/noto_black"
-            app:layout_constraintBottom_toTopOf="@id/trashDailyLookDivider"
+            app:layout_constraintBottom_toTopOf="@id/divider_recycle_bin_daily_look"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashSizeDivider" />
+            app:layout_constraintTop_toBottomOf="@id/divider_recycle_bin_size" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trashWishListText"
+            android:id="@+id/tv_recycle_bin_wish_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/wish_list_cap"
+            android:text="@string/all_wish_list_cap"
             android:textSize="@dimen/_14sdp"
             app:fontFamily="@font/noto_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashDailyLookDivider" />
+            app:layout_constraintTop_toBottomOf="@id/divider_recycle_bin_daily_look" />
 
         <View
-            android:id="@+id/trashCategoryDivider"
+            android:id="@+id/divider_recycle_bin_category"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="?myColorControl"
-            app:layout_constraintBottom_toTopOf="@id/trashFolderText"
-            app:layout_constraintTop_toBottomOf="@id/trashCategoryText" />
+            app:layout_constraintBottom_toTopOf="@id/tv_recycle_bin_folder"
+            app:layout_constraintTop_toBottomOf="@id/tv_recycle_bin_category" />
 
         <View
-            android:id="@+id/trashFolderDivider"
+            android:id="@+id/divider_recycle_bin_folder"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="?myColorControl"
-            app:layout_constraintBottom_toTopOf="@id/trashSizeText"
-            app:layout_constraintTop_toBottomOf="@id/trashFolderText" />
+            app:layout_constraintBottom_toTopOf="@id/tv_recycle_bin_size"
+            app:layout_constraintTop_toBottomOf="@id/tv_recycle_bin_folder" />
 
         <View
-            android:id="@+id/trashSizeDivider"
+            android:id="@+id/divider_recycle_bin_size"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="?myColorControl"
-            app:layout_constraintBottom_toTopOf="@id/trashDailyLookText"
-            app:layout_constraintTop_toBottomOf="@id/trashSizeText" />
+            app:layout_constraintBottom_toTopOf="@id/tv_recycle_bin_daily_look"
+            app:layout_constraintTop_toBottomOf="@id/tv_recycle_bin_size" />
 
         <View
-            android:id="@+id/trashDailyLookDivider"
+            android:id="@+id/divider_recycle_bin_daily_look"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="?myColorControl"
-            app:layout_constraintBottom_toTopOf="@id/trashWishListText"
-            app:layout_constraintTop_toBottomOf="@id/trashDailyLookText" />
+            app:layout_constraintBottom_toTopOf="@id/tv_recycle_bin_wish_list"
+            app:layout_constraintTop_toBottomOf="@id/tv_recycle_bin_daily_look" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/trashCategoryArrowIcon"
+            android:id="@+id/icon_recycle_bin_category"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:scaleX="1.1"
             android:scaleY="1.1"
-            app:layout_constraintBottom_toTopOf="@id/trashFolderArrowIcon"
+            app:layout_constraintBottom_toTopOf="@id/icon_recycle_bin_folder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_arrow_forward" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/trashFolderArrowIcon"
+            android:id="@+id/icon_recycle_bin_folder"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:scaleX="1.1"
             android:scaleY="1.1"
-            app:layout_constraintBottom_toTopOf="@id/trashSizeArrowIcon"
+            app:layout_constraintBottom_toTopOf="@id/icon_recycle_bin_size"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashCategoryArrowIcon"
+            app:layout_constraintTop_toBottomOf="@id/icon_recycle_bin_category"
             app:srcCompat="@drawable/icon_arrow_forward" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/trashSizeArrowIcon"
+            android:id="@+id/icon_recycle_bin_size"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:scaleX="1.1"
             android:scaleY="1.1"
-            app:layout_constraintBottom_toTopOf="@id/trashDailyLookArrowIcon"
+            app:layout_constraintBottom_toTopOf="@id/icon_recycle_bin_daily_look"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashFolderArrowIcon"
+            app:layout_constraintTop_toBottomOf="@id/icon_recycle_bin_folder"
             app:srcCompat="@drawable/icon_arrow_forward" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/trashDailyLookArrowIcon"
+            android:id="@+id/icon_recycle_bin_daily_look"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:scaleX="1.1"
             android:scaleY="1.1"
-            app:layout_constraintBottom_toTopOf="@id/trashWishListArrowIcon"
+            app:layout_constraintBottom_toTopOf="@id/icon_recycle_bin_wish_list"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashSizeArrowIcon"
+            app:layout_constraintTop_toBottomOf="@id/icon_recycle_bin_size"
             app:srcCompat="@drawable/icon_arrow_forward" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/trashWishListArrowIcon"
+            android:id="@+id/icon_recycle_bin_wish_list"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/_16sdp"
@@ -167,7 +167,7 @@
             android:scaleY="1.1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trashDailyLookArrowIcon"
+            app:layout_constraintTop_toBottomOf="@id/icon_recycle_bin_daily_look"
             app:srcCompat="@drawable/icon_arrow_forward" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
