@@ -97,7 +97,7 @@
         android:id="@+id/inputOutputFragment"
         android:name="com.example.project_myfit.main.size.SizeFragment"
         android:label=""
-        tools:layout="@layout/fragment_input_output">
+        tools:layout="@layout/fragment_size">
         <argument
             android:name="parent_id"
             app:argType="long" />
