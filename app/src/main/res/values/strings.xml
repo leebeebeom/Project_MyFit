@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">MyFit</string>
 
-    <string name="main_bottom_nav_menu_main">메인 메뉴</string>
-    <string name="main_bottom_nav_menu_daily_look">데일리룩</string>
-    <string name="main_bottom_nav_menu_setting">설정</string>
-    <string name="main_bottom_nav_menu_wish_list">위시 리스트</string>
+    <string name="main_bn_menu_main">메인 메뉴</string>
+    <string name="main_bn_menu_daily_look">데일리룩</string>
+    <string name="main_bn_menu_setting">설정</string>
+    <string name="main_bn_menu_wish_list">위시 리스트</string>
     <string name="size_created_time">생성일 : </string>
     <string name="size_modified_time">수정일 : </string>
     <string name="size_brand">Brand</string>
@@ -48,7 +48,7 @@
 
     <string name="all_add_category">카테고리 추가</string>
     <string name="all_create_folder">폴더 생성</string>
-    <string name="all_sort">정렬 순서</string>
+    <string name="all_sort_order">정렬 순서</string>
 
     <string name="all_no_data">No Data</string>
 
@@ -68,7 +68,7 @@
     <string name="action_mode_title">개 선택됨.</string>
 
     <string name="tree_title">이동할 위치를 선택하세요.</string>
-    <string name="tree_view_current_position">(현재 위치)</string>
+    <string name="tree_current_position">(현재 위치)</string>
     <string name="tree_category">CATEGORY :</string>
 
     <string name="dialog_confirm">확인</string>
@@ -92,7 +92,7 @@
 
     <string name="dialog_message_item_move">개의 아이템을 이동하시겠습니까?</string>
     <string name="dialog_message_selected_item_delete">개의 아이템을 휴지통으로 이동하시겠습니까?</string>
-    <string name="dialog_edit_text_max_length">30자까지 입력 가능합니다.</string>
+    <string name="dialog_et_max_length">30자까지 입력 가능합니다.</string>
     <string name="dialog_message_same_category_name_add">같은 이름의 카테고리가 존재합니다.\n그래도 추가하시겠습니까?</string>
     <string name="dialog_message_same_folder_name_add">같은 이름의 폴더가 존재합니다.\n그래도 추가하시겠습니까?</string>
     <string name="dialog_message_same_category_name_edit">같은 이름의 카테고리가 존재합니다.\n그래도 변경하시겠습니까?</string>
