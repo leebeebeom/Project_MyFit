@@ -20,7 +20,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tap_layout_search"
+                    android:id="@+id/tab_layout_search"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_32sdp"
                     android:layout_marginTop="@dimen/_8sdp"
