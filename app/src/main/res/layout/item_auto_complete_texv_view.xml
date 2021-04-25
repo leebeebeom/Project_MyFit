@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/itemAutoCompleteText"
+            android:id="@+id/tv_item_ac_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginVertical="@dimen/_8sdp"
