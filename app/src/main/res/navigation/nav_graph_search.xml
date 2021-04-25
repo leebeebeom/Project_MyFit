@@ -2,13 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/search_nav_gragh"
+    android:id="@+id/nav_graph_search"
     app:startDestination="@id/searchFragment">
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.project_myfit.search_activity.SearchFragment"
-        tools:layout="@layout/fragment_search"
+        android:name="com.example.project_myfit.search.main.SearchFragment"
+        tools:layout="@layout/fragment_search_main"
         android:label="SearchFragment">
         <action
             android:id="@+id/action_searchFragment_to_searchSelectedItemDeleteDialog"
@@ -28,18 +28,18 @@
     </fragment>
     <dialog
         android:id="@+id/searchSelectedItemDeleteDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchSelectedItemDeleteDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchSelectedItemDeleteDialog"
         android:label="SearchSelectedItemDeleteDialog">
         <argument
-            android:name="selectedItemSize"
+            android:name="selected_item_size"
             app:argType="integer" />
     </dialog>
     <dialog
         android:id="@+id/searchTreeViewDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchTreeViewDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchTreeViewDialog"
         android:label="SearchTreeViewDialog">
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <action
             android:id="@+id/action_searchTreeViewDialog_to_searchAddDialog"
@@ -50,16 +50,16 @@
     </dialog>
     <dialog
         android:id="@+id/searchAddDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchAddDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchAddDialog"
         android:label="SearchAddDialog">
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
         <action
             android:id="@+id/action_searchAddDialog_to_searchSameNameAddDialog"
@@ -67,44 +67,44 @@
     </dialog>
     <dialog
         android:id="@+id/searchItemMoveDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchItemMoveDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchItemMoveDialog"
         android:label="SearchItemMoveDialog">
         <argument
-            android:name="selectedItemSize"
+            android:name="selected_item_size"
             app:argType="integer" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
     </dialog>
     <dialog
         android:id="@+id/searchSameNameAddDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchSameNameAddDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchSameNameAddDialog"
         android:label="SearchSameNameAddDialog">
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
         <argument
-            android:name="newName"
+            android:name="new_name"
             app:argType="string" />
     </dialog>
     <dialog
         android:id="@+id/searchNameEditDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchNameEditDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchNameEditDialog"
         android:label="SearchNameEditDialog">
         <argument
-            android:name="itemId"
+            android:name="item_id"
             app:argType="long" />
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="isParentName"
+            android:name="is_parent_name"
             app:argType="boolean" />
         <action
             android:id="@+id/action_searchNameEditDialog_to_searchSameNameEditDialog"
@@ -112,19 +112,19 @@
     </dialog>
     <dialog
         android:id="@+id/searchSameNameEditDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.SearchSameNameEditDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.SearchSameNameEditDialog"
         android:label="SearchSameNameEditDialog">
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="itemId"
+            android:name="item_id"
             app:argType="long" />
         <argument
-            android:name="newName"
+            android:name="new_name"
             app:argType="string" />
         <argument
-            android:name="isParentName"
+            android:name="is_parent_name"
             app:argType="boolean" />
     </dialog>
     <activity
@@ -132,17 +132,17 @@
         android:name="com.example.project_myfit.MainActivity"
         android:label="MainActivity">
         <argument
-            android:name="folderId"
+            android:name="folder_id"
             app:argType="long" />
         <argument
-            android:name="sizeId"
+            android:name="size_id"
             app:argType="long" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
     </activity>
     <dialog
         android:id="@+id/recentSearchAllClearDialog"
-        android:name="com.example.project_myfit.dialog.search_dialog.RecentSearchAllClearDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.RecentSearchAllClearDialog"
         android:label="RecentSearchAllClearDialog" />
 </navigation>

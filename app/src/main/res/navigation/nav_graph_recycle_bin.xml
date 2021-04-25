@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/trash_nav_gragh"
+    android:id="@+id/nav_graph_recycle_bin"
     app:startDestination="@id/recycleBinMain">
 
     <fragment
         android:id="@+id/recycleBinMain"
-        android:name="com.example.project_myfit.recycle_bin_activity.fragment.main.RecycleBinMainFragment"
+        android:name="com.example.project_myfit.recyclebin.main.RecycleBinMainFragment"
         android:label="fragment_recycle_bin_main"
         tools:layout="@layout/fragment_recycle_bin_main" />
 </navigation>
