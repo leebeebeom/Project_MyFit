@@ -28,14 +28,14 @@ public class AdapterUtil {
 
     public void listActionModeOn(@NotNull MaterialCardView cardView, @NotNull MaterialCheckBox checkBox, @NotNull HashSet<Long> selectedItemIdHashSet, long id) {
         if (mOpenAnimation == null)
-            mOpenAnimation = AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_right);
+            mOpenAnimation = AnimationUtils.loadAnimation(mContext, R.anim.item_list_slide_right);
         if (!mOpenAnimation.hasStarted())
             cardView.setAnimation(mOpenAnimation);
         checkBox.setChecked(selectedItemIdHashSet.contains(id));
     }
 
     public void listActionModeOff(@NotNull MaterialCardView cardView, @NotNull MaterialCheckBox checkBox, @NotNull HashSet<Long> selectedCategoryIdHashSet) {
-        cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.recycler_list_slide_left));
+        cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.item_list_slide_left));
         checkBox.setChecked(false);
         mOpenAnimation = null;
         if (selectedCategoryIdHashSet.size() != 0) selectedCategoryIdHashSet.clear();
@@ -94,21 +94,12 @@ public class AdapterUtil {
         }
     }
 
-    public int getCategoryContentsSize(Category category, @NotNull List<Long> folderParentIdList, List<Long> sizeParentIdList) {
+    public int getContentsSize(long id, @NotNull List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         int amount = 0;
         for (Long l : folderParentIdList)
-            if (l == category.getId()) amount++;
+            if (l == id) amount++;
         for (Long l : sizeParentIdList)
-            if (l == category.getId()) amount++;
-        return amount;
-    }
-
-    public int getFolderContentsSize(Folder folder, @NotNull List<Long> folderParentIdList, List<Long> sizeParentIdList) {
-        int amount = 0;
-        for (Long l : folderParentIdList)
-            if (l == folder.getId()) amount++;
-        for (Long l : sizeParentIdList)
-            if (l == folder.getId()) amount++;
+            if (l == id) amount++;
         return amount;
     }
 
