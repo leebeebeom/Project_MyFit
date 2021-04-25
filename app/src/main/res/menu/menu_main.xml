@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menuMainSearch"
+        android:id="@+id/menu_main_search"
         android:icon="@drawable/icon_search"
-        android:title="@string/search"
+        android:title="@string/menu_search"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menuMainPopup"
+        android:id="@+id/menu_main_popup"
         android:icon="@drawable/icon_popup_menu"
-        android:title="@string/menu"
+        android:title="@string/menu_menu"
         app:showAsAction="always" />
 </menu>

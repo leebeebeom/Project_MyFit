@@ -4,17 +4,18 @@
     <item
         android:id="@+id/mainFragment"
         android:icon="@drawable/icon_home"
-        android:title="@string/main" />
+        android:title="@string/main_bn_menu_main" />
     <item
+        android:id="@+id/dailyLookFragment"
         android:icon="@drawable/icon_all_list"
-        android:title="@string/daily_look" />
+        android:title="@string/main_bn_menu_daily_look" />
     <item android:title="" />
     <item
-        android:id="@+id/favoriteFragment"
+        android:id="@+id/wishListFragment"
         android:icon="@drawable/icon_favorite"
-        android:title="@string/unTitle" />
+        android:title="@string/main_bn_menu_wish_list" />
     <item
         android:id="@+id/settingFragment"
         android:icon="@drawable/icon_setting"
-        android:title="@string/setting" />
+        android:title="@string/main_bn_menu_setting" />
 </menu>

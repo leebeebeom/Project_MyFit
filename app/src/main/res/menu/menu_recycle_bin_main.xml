@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/menuTrashMainSearch"
+        android:id="@+id/menu_recycle_bin_search"
         android:icon="@drawable/icon_search"
-        android:title="@string/search"
+        android:title="@string/menu_search"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
     <item
-        android:id="@+id/menuTrashMainPopup"
+        android:id="@+id/menu_recycle_bin_popup"
         android:icon="@drawable/icon_popup_menu"
-        android:title="@string/menu"
+        android:title="@string/menu_menu"
         app:showAsAction="always" />
 </menu>

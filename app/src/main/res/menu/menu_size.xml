@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menuInputOutputFavorite"
+        android:id="@+id/menu_size_favorite"
         android:icon="@drawable/icon_favorite_border"
-        android:title="@string/favorite"
+        android:title="@string/menu_favorite"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menuInputOutputDelete"
+        android:id="@+id/menu_size_delete"
         android:icon="@drawable/icon_delete"
-        android:title="@string/delete"
+        android:title="@string/menu_delete"
         app:showAsAction="ifRoom" />
 </menu>
