@@ -14,13 +14,13 @@
                 android:layout_height="@dimen/_40sdp">
 
                 <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/mainToolbar"
+                    android:id="@+id/tool_bar_main"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:titleTextAppearance="@style/myActionBarTitleStyle">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/customTitle"
+                        android:id="@+id/tv_main_title"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -33,17 +33,17 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/mainHostFragment"
+                android:id="@+id/host_fragment_main"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:navGraph="@navigation/main_nav_graph"
+                app:navGraph="@navigation/nav_graph_main"
                 tools:layout="@layout/fragment_list" />
 
             <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/mainBottomAppBar"
+                android:id="@+id/bottom_app_bar_main"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_36sdp"
                 android:layout_gravity="bottom"
@@ -54,41 +54,41 @@
                 app:fabCradleMargin="@dimen/_6sdp">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/mainBottomNav"
+                    android:id="@+id/bottom_nav_main"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_36sdp"
                     android:layout_gravity="bottom"
                     android:background="@android:color/transparent"
-                    android:theme="@style/myBottomNav"
+                    android:theme="@style/myBottomNavActiveColor"
                     app:elevation="0dp"
                     app:itemIconSize="@dimen/_22sdp"
                     app:itemRippleColor="@android:color/transparent"
                     app:labelVisibilityMode="unlabeled"
-                    app:menu="@menu/bottom_nav_menu" />
+                    app:menu="@menu/menu_bottom_nav" />
             </com.google.android.material.bottomappbar.BottomAppBar>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/mainActivityFab"
+                android:id="@+id/fab_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/floating_action_button"
                 android:src="@drawable/icon_add"
                 app:elevation="0dp"
-                app:layout_anchor="@id/mainBottomAppBar"
-                app:tint="?colorPrimary" />
+                app:layout_anchor="@id/bottom_app_bar_main"
+                app:tint="?colorPrimary"
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/mainTopFab"
+                android:id="@+id/fab_main_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_44sdp"
-                android:contentDescription="@string/floating_action_button"
                 android:src="@drawable/icon_arrow_up"
                 android:visibility="invisible"
                 app:backgroundTint="@color/white"
                 app:fabCustomSize="@dimen/_24sdp"
-                app:fabSize="mini" />
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
