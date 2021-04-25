@@ -288,7 +288,7 @@ public class SearchFragment extends Fragment implements SearchViewPagerAdapter.V
             mActionModeTitleBinding.tvActionModeTitle.setText(title);
 
             if (mActionMode != null) {
-                mEditMenu.setVisible(integer == 1 && mModel.getSelectedItem().get(0) instanceof Folder);
+                mEditMenu.setVisible(integer == 1 && mModel.getSelectedItemList().get(0) instanceof Folder);
                 mMoveMenu.setVisible(integer > 0);
                 mDeletedMenu.setVisible(integer > 0);
             }
@@ -483,7 +483,7 @@ public class SearchFragment extends Fragment implements SearchViewPagerAdapter.V
 
     private void actionModeRecreate() {
         if (mModel.isActionModeOn()) {
-            mSearchAdapterArray[mModel.getCurrentItem()].setSelectedItem(mModel.getSelectedItem());
+            mSearchAdapterArray[mModel.getCurrentItem()].setSelectedItem(mModel.getSelectedItemList());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
     }
@@ -550,7 +550,7 @@ public class SearchFragment extends Fragment implements SearchViewPagerAdapter.V
 
     private void actionModeStart(int position) {
         if (mActionMode == null) {
-            mModel.getSelectedItem().clear();
+            mModel.getSelectedItemList().clear();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
         }
         mDragSelectListener.startDragSelection(position);

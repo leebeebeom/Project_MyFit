@@ -1,4 +1,4 @@
-package com.example.project_myfit.search_activity;
+package com.example.project_myfit.search;
 
 import android.app.Application;
 
@@ -11,15 +11,12 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.search_activity.adapter.SearchAdapter;
+import com.example.project_myfit.search.main.adapter.SearchAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.ETC;
@@ -51,18 +48,26 @@ public class SearchViewModel extends AndroidViewModel {
         mSelectedItemSizeLive.setValue(mSelectedItemList.size());
     }
 
-    public void sizeSelected(@NotNull Size size, boolean isChecked, @NotNull SearchAdapter searchAdapter) {
-        searchAdapter.itemSelected(size.getId());
-        if (isChecked) mSelectedItemList.add(size);
-        else mSelectedItemList.remove(size);
-        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
-    }
+//    public void sizeSelected(@NotNull Size size, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
+//        searchAdapterArray[mCurrentItem].itemSelected(size.getId());
+//        if (isChecked) mSelectedItemList.add(size);
+//        else mSelectedItemList.remove(size);
+//        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
+//    }
+//
+//    public void folderSelected(@NotNull Folder folder, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
+//        searchAdapterArray[mCurrentItem].itemSelected(folder.getId());
+//        if (isChecked) mSelectedItemList.add(folder);
+//        else mSelectedItemList.remove(folder);
+//        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
+//    }
 
-    public void folderSelected(@NotNull Folder folder, boolean isChecked, @NotNull SearchAdapter searchAdapter) {
-        searchAdapter.itemSelected(folder.getId());
-        if (isChecked) mSelectedItemList.add(folder);
-        else mSelectedItemList.remove(folder);
+    //TODO check
+    public void itemSelected(Object item, long id, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
+        if (isChecked) mSelectedItemList.add(item);
+        else mSelectedItemList.remove(item);
         mSelectedItemSizeLive.setValue(mSelectedItemList.size());
+        searchAdapterArray[mCurrentItem].itemSelected(id);
     }
 
     public String getParentCategory() {
@@ -98,24 +103,18 @@ public class SearchViewModel extends AndroidViewModel {
         return selectedSizeList;
     }
 
-    public int getSelectedItemSizeLiveValue() {
+    public int getSelectedItemSize() {
         if (mSelectedItemSizeLive.getValue() != null)
             return mSelectedItemSizeLive.getValue();
         else return 0;
     }
 
-    public void deleteOverLapRecentSearch(String word) {
-        mRecentSearchRepository.deleteOverLapRecentSearch(word);
+    public void overLapRecentSearchReInsert(String word) {
+        mRecentSearchRepository.overLapRecentSearchReInsert(word);
     }
 
     public void insertRecentSearch(String word) {
-        mRecentSearchRepository.insertRecentSearch(new RecentSearch(word, getCurrentDate()));
-    }
-
-    @NotNull
-    private String getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일", Locale.getDefault());
-        return dateFormat.format(new Date(System.currentTimeMillis()));
+        mRecentSearchRepository.insertRecentSearch(word);
     }
 
     public LiveData<List<RecentSearch>> getAllRecentSearchLive() {
@@ -151,7 +150,7 @@ public class SearchViewModel extends AndroidViewModel {
         return Repository.getSizeRepository(getApplication()).getAllSizeNameLive();
     }
 
-    public List<Object> getSelectedItem() {
+    public List<Object> getSelectedItemList() {
         return mSelectedItemList;
     }
 
@@ -175,11 +174,7 @@ public class SearchViewModel extends AndroidViewModel {
         this.mCurrentItem = currentItem;
     }
 
-    public void deleteAllRecentSearch() {
-        mRecentSearchRepository.deleteAllRecentSearch();
-    }
-
-    public void sizeFavoriteClick(Size size) {
+    public void sizeUpdate(Size size) {
         Repository.getSizeRepository(getApplication()).sizeUpdate(size);
     }
 }
