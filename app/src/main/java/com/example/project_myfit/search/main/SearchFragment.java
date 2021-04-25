@@ -545,7 +545,7 @@ public class SearchFragment extends Fragment implements SearchViewPagerAdapter.V
 
     @Override
     public void onSizeFavoriteClick(Size size) {
-        mModel.sizeFavoriteClick(size);
+        mModel.sizeUpdate(size);
     }
 
     private void actionModeStart(int position) {
