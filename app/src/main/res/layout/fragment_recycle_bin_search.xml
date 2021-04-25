@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".recycle_bin_activity.fragment.search.RecycleBinSearch">
+        tools:context=".recyclebin.search.RecycleBinSearch">
 
         <com.example.project_myfit.util.LockableScrollView
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/recycleBinSearchTabLayout"
+                    android:id="@+id/tab_layout_recycle_bin_search"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -29,12 +29,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/va_recycle_bin_search"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recycleBinSearchTabLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/tab_layout_recycle_bin_search" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.example.project_myfit.util.LockableScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
