@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.project_myfit.fragment.main.MainFragment"
+        android:name="com.example.project_myfit.main.main.MainFragment"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_listFragment"
             app:destination="@id/listFragment"
-            app:enterAnim="@anim/slide_in"
+            app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/slide_out" />
+            app:popExitAnim="@anim/fragment_slide_out" />
         <action
             android:id="@+id/action_mainFragment_to_searchActivity"
             app:destination="@id/searchActivity" />
@@ -23,8 +23,8 @@
             android:id="@+id/action_mainFragment_to_addDialog"
             app:destination="@id/addDialog" />
         <action
-            android:id="@+id/action_mainFragment_to_NameEditDialog"
-            app:destination="@id/NameEditDialog" />
+            android:id="@+id/action_mainFragment_to_nameEditDialog"
+            app:destination="@id/nameEditDialog" />
         <action
             android:id="@+id/action_mainFragment_to_selectedItemDeleteDialog"
             app:destination="@id/selectedItemDeleteDialog" />
@@ -32,45 +32,45 @@
             android:id="@+id/action_mainFragment_to_sortDialog"
             app:destination="@id/sortDialog" />
         <action
-            android:id="@+id/action_mainFragment_to_trashActivity"
-            app:destination="@id/trashActivity" />
+            android:id="@+id/action_mainFragment_to_recycleBinActivity"
+            app:destination="@id/recycleBinActivity" />
     </fragment>
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.example.project_myfit.fragment.list.ListFragment"
+        android:name="com.example.project_myfit.main.list.ListFragment"
         tools:layout="@layout/fragment_list">
         <argument
-            android:name="categoryId"
+            android:name="category_id"
             app:argType="long" />
         <argument
-            android:name="folderId"
+            android:name="folder_id"
             app:argType="long" />
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <action
             android:id="@+id/action_listFragment_to_inputOutputFragment"
             app:destination="@id/inputOutputFragment"
-            app:enterAnim="@anim/slide_in"
+            app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/slide_out" />
+            app:popExitAnim="@anim/fragment_slide_out" />
         <action
             android:id="@+id/action_listFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/slide_out"
+            app:exitAnim="@anim/fragment_slide_out"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/slide_out"
+            app:popExitAnim="@anim/fragment_slide_out"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_listFragment_refresh"
             app:destination="@id/listFragment"
             app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/slide_out"
+            app:exitAnim="@anim/fragment_slide_out"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/slide_out" />
+            app:popExitAnim="@anim/fragment_slide_out" />
         <action
             android:id="@+id/action_listFragment_to_searchActivity"
             app:destination="@id/searchActivity" />
@@ -78,8 +78,8 @@
             android:id="@+id/action_listFragment_to_selectedItemDeleteDialog"
             app:destination="@id/selectedItemDeleteDialog" />
         <action
-            android:id="@+id/action_listFragment_to_NameEditDialog"
-            app:destination="@id/NameEditDialog" />
+            android:id="@+id/action_listFragment_to_nameEditDialog"
+            app:destination="@id/nameEditDialog" />
         <action
             android:id="@+id/action_listFragment_to_sortDialog"
             app:destination="@id/sortDialog" />
@@ -91,21 +91,21 @@
             app:destination="@id/addDialog" />
         <action
             android:id="@+id/action_listFragment_to_trashActivity"
-            app:destination="@id/trashActivity" />
+            app:destination="@id/recycleBinActivity" />
     </fragment>
     <fragment
         android:id="@+id/inputOutputFragment"
-        android:name="com.example.project_myfit.fragment.input_output.InputOutputFragment"
+        android:name="com.example.project_myfit.main.size.SizeFragment"
         android:label=""
         tools:layout="@layout/fragment_input_output">
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
         <argument
-            android:name="sizeId"
+            android:name="size_id"
             app:argType="long" />
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <action
             android:id="@+id/action_inputOutputFragment_to_deleteConfirmDialog"
@@ -120,7 +120,7 @@
     </fragment>
     <activity
         android:id="@+id/searchActivity"
-        android:name="com.example.project_myfit.search_activity.SearchActivity"
+        android:name="com.example.project_myfit.search.SearchActivity"
         tools:layout="@layout/activity_search"
         android:label="SearchActivity"/>
     <!--    Dialog-->
@@ -129,33 +129,33 @@
         android:name="com.example.project_myfit.dialog.AddDialog"
         android:label="AddDialog">
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
         <action
             android:id="@+id/action_addDialog_to_sameNameAddDialog"
             app:destination="@id/sameNameAddDialog" />
     </dialog>
     <dialog
-        android:id="@+id/NameEditDialog"
+        android:id="@+id/nameEditDialog"
         android:name="com.example.project_myfit.dialog.NameEditDialog"
         android:label="NameEditDialog">
         <argument
-            android:name="itemId"
+            android:name="item_id"
             app:argType="long" />
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="isParentName"
+            android:name="is_parent_name"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_NameEditDialog_to_sameNameEditDialog"
+            android:id="@+id/action_nameEditDialog_to_sameNameEditDialog"
             app:destination="@id/sameNameEditDialog" />
     </dialog>
     <dialog
@@ -163,7 +163,7 @@
         android:name="com.example.project_myfit.dialog.SelectedItemDeleteDialog"
         android:label="SelectedItemDeleteDialog">
         <argument
-            android:name="selectedItemSize"
+            android:name="selected_item_size"
             app:argType="integer" />
     </dialog>
     <dialog
@@ -174,7 +174,7 @@
             android:name="sort"
             app:argType="integer" />
         <argument
-            android:name="fragmentType"
+            android:name="fragment_type"
             app:argType="string" />
     </dialog>
     <dialog
@@ -182,16 +182,16 @@
         android:name="com.example.project_myfit.dialog.SameNameAddDialog"
         android:label="SameNameAddDialog">
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
         <argument
-            android:name="newName"
+            android:name="new_name"
             app:argType="string" />
     </dialog>
     <dialog
@@ -199,13 +199,13 @@
         android:name="com.example.project_myfit.dialog.TreeViewDialog"
         android:label="TreeViewDialog">
         <argument
-            android:name="parentCategory"
+            android:name="parent_category"
             app:argType="string" />
         <argument
-            android:name="thisCategoryId"
+            android:name="this_category_id"
             app:argType="long" />
         <argument
-            android:name="thisFolderId"
+            android:name="this_folder_id"
             app:argType="long" />
         <action
             android:id="@+id/action_treeViewDialog_to_addDialog"
@@ -219,16 +219,16 @@
         android:name="com.example.project_myfit.dialog.SameNameEditDialog"
         android:label="SameNameEditDialog">
         <argument
-            android:name="itemType"
+            android:name="item_type"
             app:argType="string" />
         <argument
-            android:name="itemId"
+            android:name="item_id"
             app:argType="long" />
         <argument
-            android:name="newName"
+            android:name="new_name"
             app:argType="string" />
         <argument
-            android:name="isParentName"
+            android:name="is_parent_name"
             app:argType="boolean" />
     </dialog>
     <dialog
@@ -236,10 +236,10 @@
         android:name="com.example.project_myfit.dialog.ItemMoveDialog"
         android:label="ItemMoveDialog">
         <argument
-            android:name="selectedItemSize"
+            android:name="selected_item_size"
             app:argType="integer" />
         <argument
-            android:name="parentId"
+            android:name="parent_id"
             app:argType="long" />
     </dialog>
     <dialog
@@ -247,7 +247,7 @@
         android:name="com.example.project_myfit.dialog.DeleteConfirmDialog"
         android:label="DeleteConfirmDialog" >
         <argument
-            android:name="sizeId"
+            android:name="size_id"
             app:argType="long" />
     </dialog>
     <dialog
@@ -259,8 +259,8 @@
         android:name="com.example.project_myfit.dialog.ImageClearDialog"
         android:label="ImageClearDialog" />
     <activity
-        android:id="@+id/trashActivity"
-        android:name="com.example.project_myfit.recycle_bin_activity.RecycleBinActivity"
+        android:id="@+id/recycleBinActivity"
+        android:name="com.example.project_myfit.recyclebin.RecycleBinActivity"
         android:label="activity_trash"
         tools:layout="@layout/activity_recycle_bin" />
     <!--    Dialog-->
