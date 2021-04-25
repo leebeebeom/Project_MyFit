@@ -6,28 +6,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterList;
-import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
+import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
+import com.example.project_myfit.main.main.adapter.CategoryAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.util.MyFitConstant.SIZE;
-
 public class DragCallBackList extends ItemTouchHelper.Callback {
-    //all checked
     private CategoryAdapter mCategoryAdapter;
     private SizeAdapterList mSizeAdapterList;
-    private final String mType;
 
-    public DragCallBackList(CategoryAdapter categoryAdapter, String type) {
+    public DragCallBackList(CategoryAdapter categoryAdapter) {
         this.mCategoryAdapter = categoryAdapter;
-        this.mType = type;
     }
 
-    public DragCallBackList(SizeAdapterList sizeAdapterList, String type) {
+    public DragCallBackList(SizeAdapterList sizeAdapterList) {
         this.mSizeAdapterList = sizeAdapterList;
-        this.mType = type;
     }
 
     @Override
@@ -43,10 +36,9 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        //checked
-        if (mType.equals(CATEGORY))
+        if (mCategoryAdapter != null)
             mCategoryAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-        else if (mType.equals(SIZE))
+        else if (mSizeAdapterList != null)
             mSizeAdapterList.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
@@ -59,14 +51,12 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        //checked
-        if (mType.equals(CATEGORY)) mCategoryAdapter.onItemDrop(viewHolder);
-        else if (mType.equals(SIZE)) mSizeAdapterList.onItemDrop(viewHolder);
+        if (mCategoryAdapter != null) mCategoryAdapter.onItemDrop(viewHolder);
+        else if (mSizeAdapterList != null) mSizeAdapterList.onItemDrop(viewHolder);
     }
 
     @Override
     public void onChildDraw(@NonNull @NotNull Canvas c, @NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        //checked
         RecyclerView.ViewHolder previousViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAdapterPosition() - 1);
         boolean isDraggingUp = dY < 0;
         if (isDraggingUp && previousViewHolder == null) dY = 0;
