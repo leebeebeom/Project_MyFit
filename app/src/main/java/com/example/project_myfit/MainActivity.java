@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +15,19 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
+import com.example.project_myfit.util.KeyboardUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
+
+import static com.example.project_myfit.util.MyFitConstant.CATEGORY_ID;
+import static com.example.project_myfit.util.MyFitConstant.FOLDER_ID;
+import static com.example.project_myfit.util.MyFitConstant.PARENT_CATEGORY;
+import static com.example.project_myfit.util.MyFitConstant.PARENT_ID;
+import static com.example.project_myfit.util.MyFitConstant.SIZE_ID;
 
 //TODO 트리뷰 롱클릭으로 삭제, 이름변경?
 //TODO 탭레이아웃 뱃지 텍스트 사이즈
@@ -43,22 +51,23 @@ public class MainActivity extends AppCompatActivity {
 
         MainActivityViewModel model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        setSupportActionBar(binding.mainToolbar);
+        setSupportActionBar(binding.toolBarMain);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.mainHostFragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment_main);
         if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment, R.id.favoriteFragment, R.id.settingFragment).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment, R.id.dailyLookFragment,
+                R.id.wishListFragment, R.id.settingFragment).build();
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(binding.mainBottomNav, mNavController);
+        NavigationUI.setupWithNavController(binding.bottomNavMain, mNavController);
 
         //바텀네비게이션 뷰 그림자 제거
-        binding.mainBottomNav.setBackgroundTintList(null);
+        binding.bottomNavMain.setBackgroundTintList(null);
         //바텀네비게이션 뷰 정렬
-        binding.mainBottomNav.getMenu().getItem(2).setEnabled(false);
+        binding.bottomNavMain.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
         destinationChangeListener(binding, actionBar);
@@ -73,31 +82,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void destinationChangeListener(ActivityMainBinding binding, ActionBar actionBar) {
+    private void destinationChangeListener(@NotNull ActivityMainBinding binding, ActionBar actionBar) {
+        MaterialTextView customTitle = binding.tvMainCustomTitle;
+        FloatingActionButton mainFab = binding.fabMain;
+
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
-                fabChange(binding, R.drawable.icon_search);
-                binding.mainToolbarCustomTitle.setVisibility(View.VISIBLE);
-                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
+                fabChange(mainFab, R.drawable.icon_search);
+                customTitle.setVisibility(View.VISIBLE);
+                actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
-                fabChange(binding, R.drawable.icon_add);
-                binding.mainToolbarCustomTitle.setVisibility(View.GONE);
-                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
+                fabChange(mainFab, R.drawable.icon_add);
+                customTitle.setVisibility(View.GONE);
+                actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
-                fabChange(binding, R.drawable.icon_save);
-                binding.mainToolbarCustomTitle.setVisibility(View.GONE);
-                if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
+                fabChange(mainFab, R.drawable.icon_save);
+                customTitle.setVisibility(View.GONE);
+                actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
         });
     }
 
-    private void fabChange(@NotNull ActivityMainBinding binding, int resId) {
-        binding.mainActivityFab.hide();
-        binding.mainActivityFab.setImageResource(resId);
-        binding.mainActivityFab.show();
+    private void fabChange(@NotNull FloatingActionButton fab, int resId) {
+        fab.hide();
+        fab.setImageResource(resId);
+        fab.show();
     }
 
     private void keyboardShowingListener(@NotNull ActivityMainBinding binding) {
@@ -106,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             Rect r = new Rect();
             rootView.getWindowVisibleDisplayFrame(r);
 
-            int screenHeight = rootView.getRootView().getHeight();
+            int screenHeight = rootView.getHeight();
             int keypadHeight = screenHeight - r.bottom;
 
             if (keypadHeight > screenHeight * 0.15)
@@ -118,19 +130,19 @@ public class MainActivity extends AppCompatActivity {
     private void keyboardShow(@NotNull ActivityMainBinding binding) {
         if (!mIsKeyboardShowing) {
             mIsKeyboardShowing = true;
-            binding.mainActivityFab.setVisibility(View.INVISIBLE);
-            binding.mainBottomAppBar.setVisibility(View.INVISIBLE);
-            mTopFabOriginVisibility = binding.mainTopFab.getVisibility();
-            binding.mainTopFab.setVisibility(View.INVISIBLE);
+            binding.fabMain.setVisibility(View.INVISIBLE);
+            binding.bottomAppBarMain.setVisibility(View.INVISIBLE);
+            mTopFabOriginVisibility = binding.fabMainTop.getVisibility();
+            binding.fabMainTop.setVisibility(View.INVISIBLE);
         }
     }
 
     private void keyboardHide(@NotNull ActivityMainBinding binding) {
         if (mIsKeyboardShowing) {
             mIsKeyboardShowing = false;
-            binding.mainBottomAppBar.setVisibility(View.VISIBLE);
-            binding.mainActivityFab.show();
-            binding.mainTopFab.setVisibility(mTopFabOriginVisibility);
+            binding.bottomAppBarMain.setVisibility(View.VISIBLE);
+            binding.fabMain.show();
+            binding.fabMainTop.setVisibility(mTopFabOriginVisibility);
         }
     }
 
@@ -140,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
         String parentCategory = model.getSizeParentCategory(parentId);
 
         Bundle bundle = new Bundle();
-        bundle.putLong("parentId", parentId);
-        bundle.putLong("sizeId", sizeId);
-        bundle.putString("parentCategory", parentCategory);
+        bundle.putLong(PARENT_ID, parentId);
+        bundle.putLong(SIZE_ID, sizeId);
+        bundle.putString(PARENT_CATEGORY, parentCategory);
 
         NavGraph graph = mNavController.getGraph();
         graph.setStartDestination(R.id.inputOutputFragment);
@@ -156,9 +168,9 @@ public class MainActivity extends AppCompatActivity {
         String parentCategory = model.getParentCategory();
 
         Bundle bundle = new Bundle();
-        bundle.putLong("categoryId", categoryId);
-        bundle.putLong("folderId", folderId);
-        bundle.putString("parentCategory", parentCategory);
+        bundle.putLong(CATEGORY_ID, categoryId);
+        bundle.putLong(FOLDER_ID, folderId);
+        bundle.putString(PARENT_CATEGORY, parentCategory);
 
         NavGraph graph = mNavController.getGraph();
         graph.setStartDestination(R.id.listFragment);
@@ -179,8 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 v.getGlobalVisibleRect(outRect);
                 if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
                     v.clearFocus();
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    KeyboardUtil.keyboardShow(this, v);
                 }
             }
         }
