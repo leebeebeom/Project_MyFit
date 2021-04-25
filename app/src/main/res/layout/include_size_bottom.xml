@@ -27,15 +27,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/length"
-                android:theme="@style/myEditText"
+                android:hint="@string/include_length"
+                android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
                 app:shapeAppearance="@style/myEditTextCorner"
                 app:suffixText="cm"
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/includeBottomLengthEditText"
+                    android:id="@+id/et_include_bottom_length"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -62,15 +62,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:layout_weight="1"
-                android:hint="@string/waist"
-                android:theme="@style/myEditText"
+                android:hint="@string/include_waist"
+                android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
                 app:shapeAppearance="@style/myEditTextCorner"
                 app:suffixText="cm"
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/includeWaistEditText"
+                    android:id="@+id/et_include_bottom_waist"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -84,15 +84,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/thigh"
-                android:theme="@style/myEditText"
+                android:hint="@string/include_thigh"
+                android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
                 app:shapeAppearance="@style/myEditTextCorner"
                 app:suffixText="cm"
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/includeThighEditText"
+                    android:id="@+id/et_include_bottom_thigh"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -113,15 +113,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:layout_weight="1"
-                android:hint="@string/rise"
-                android:theme="@style/myEditText"
+                android:hint="@string/include_rise"
+                android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
                 app:shapeAppearance="@style/myEditTextCorner"
                 app:suffixText="cm"
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/includeRiseEditText"
+                    android:id="@+id/et_include_bottom_rise"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -135,15 +135,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/hem"
-                android:theme="@style/myEditText"
+                android:hint="@string/include_hem"
+                android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
                 app:shapeAppearance="@style/myEditTextCorner"
                 app:suffixText="cm"
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/includeHemEditText"
+                    android:id="@+id/et_include_bottom_hem"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
