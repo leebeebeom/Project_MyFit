@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/itemMainCheckBox"
+            android:id="@+id/cb_item_category"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
             android:scaleY="0.7" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/itemMainCardView"
+            android:id="@+id/card_view_item_category"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -53,7 +53,7 @@
                     tools:src="@drawable/icon_dot" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/itemMainCategoryText"
+                    android:id="@+id/tv_item_category_title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -66,7 +66,7 @@
                     tools:text="반팔" />
 
                 <FrameLayout
-                    android:id="@+id/itemMainContentsSizeLayout"
+                    android:id="@+id/tv_item_category_contents_size_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -77,7 +77,7 @@
                     android:paddingBottom="@dimen/_1sdp">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/itemMainContentsSizeText"
+                        android:id="@+id/tv__item_category_contents_size"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:alpha="0.6"
@@ -87,7 +87,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/itemMainDragHandle"
+                android:id="@+id/icon_item_category_drag_handle"
                 setDragHandle="@{category.categoryName}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
