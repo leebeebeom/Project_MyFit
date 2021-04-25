@@ -114,7 +114,7 @@
                         android:paddingBottom="@dimen/_60sdp"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="2"
-                        tools:listitem="@layout/item_recycler_size_grid" />
+                        tools:listitem="@layout/item_size_grid" />
 
                     <FrameLayout
                         android:id="@+id/tv_list_no_data_layout"
