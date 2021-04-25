@@ -19,33 +19,33 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/mainPopupAddFolderText"
+                    android:id="@+id/tv_popup_main_add_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
-                    android:text="@string/add_category"
+                    android:text="@string/all_add_category"
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/mainPopupSortText"
+                    android:id="@+id/tv_popup_main_sort_order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
-                    android:text="@string/sort"
+                    android:text="@string/all_sort_order"
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/mainPopupRecycleBinText"
+                    android:id="@+id/tv_popup_main_recycle_bin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
-                    android:text="@string/recycle_bin"
+                    android:text="@string/menu_recycle_bin"
                     android:textSize="@dimen/_11sdp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.card.MaterialCardView>
