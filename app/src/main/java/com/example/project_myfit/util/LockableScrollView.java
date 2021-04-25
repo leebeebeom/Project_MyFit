@@ -27,7 +27,6 @@ public class LockableScrollView extends NestedScrollView {
     }
 
     public void setScrollable(boolean enable) {
-        //checked
         mScrollable = enable;
     }
 
