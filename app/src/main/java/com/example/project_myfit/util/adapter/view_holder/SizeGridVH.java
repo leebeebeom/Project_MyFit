@@ -3,26 +3,26 @@ package com.example.project_myfit.util.adapter.view_holder;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
+import com.example.project_myfit.databinding.ItemSizeGridBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 public class SizeGridVH extends RecyclerView.ViewHolder {
-    private final ItemListRecyclerGridBinding mBinding;
+    private final ItemSizeGridBinding mBinding;
     private Size mSize;
 
-    public SizeGridVH(@NotNull ItemListRecyclerGridBinding binding, SizeVHListener listener) {
+    public SizeGridVH(@NotNull ItemSizeGridBinding binding, SizeVHListener listener) {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.itemListGridCheckBox));
+        itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.cbItemSizeGrid));
 
         itemView.setOnLongClickListener(v -> {
             listener.onSizeItemViewLongClick(getLayoutPosition());
             return false;
         });
 
-        mBinding.itemListGridFavoriteCheckBox.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
+        mBinding.cbItemSizeGridFavorite.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
     }
 
     public void setSize(Size size) {
@@ -30,7 +30,7 @@ public class SizeGridVH extends RecyclerView.ViewHolder {
         mBinding.setSize(size);
     }
 
-    public ItemListRecyclerGridBinding getBinding() {
+    public ItemSizeGridBinding getBinding() {
         return mBinding;
     }
 }
