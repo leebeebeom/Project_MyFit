@@ -3,20 +3,20 @@ package com.example.project_myfit.util.adapter.view_holder;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.databinding.ItemMainRecyclerCategoryBinding;
+import com.example.project_myfit.databinding.ItemCategoryBinding;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
 public class CategoryVH extends RecyclerView.ViewHolder {
-    private final ItemMainRecyclerCategoryBinding mBinding;
+    private final ItemCategoryBinding mBinding;
     private Category mCategory;
 
-    public CategoryVH(@NotNull ItemMainRecyclerCategoryBinding binding, CategoryVHListener listener) {
+    public CategoryVH(@NotNull ItemCategoryBinding binding, CategoryVHListener listener) {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onCategoryCardViewClick(mCategory, mBinding.itemMainCheckBox));
+        itemView.setOnClickListener(v -> listener.onCategoryCardViewClick(mCategory, mBinding.cbItemCategory));
 
         itemView.setOnLongClickListener(v -> {
             listener.onCategoryCardViewLongClick(getLayoutPosition());
@@ -29,7 +29,7 @@ public class CategoryVH extends RecyclerView.ViewHolder {
         mBinding.setCategory(category);
     }
 
-    public ItemMainRecyclerCategoryBinding getBinding() {
+    public ItemCategoryBinding getBinding() {
         return mBinding;
     }
 
