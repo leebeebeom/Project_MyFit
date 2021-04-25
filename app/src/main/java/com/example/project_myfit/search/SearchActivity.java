@@ -1,10 +1,9 @@
-package com.example.project_myfit.search_activity;
+package com.example.project_myfit.search;
 
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -13,13 +12,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ActivitySearchBinding;
-import com.example.project_myfit.search_activity.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.search.main.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.util.KeyboardUtil;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
@@ -30,14 +31,14 @@ public class SearchActivity extends AppCompatActivity {
         ActivitySearchBinding binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.searchToolbar);
+        setSupportActionBar(binding.toolBarSearch);
 
         SearchViewModel model = new ViewModelProvider(this).get(SearchViewModel.class);
 
-        binding.searchAutoCompleteEditText.requestFocus();
+        binding.acTvSearch.requestFocus();
 
-        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete, R.id.itemAutoCompleteText);
-        binding.searchAutoCompleteEditText.setAdapter(autoCompleteAdapter);
+        AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv);
+        binding.acTvSearch.setAdapter(autoCompleteAdapter);
         setAutoCompleteLive(model, autoCompleteAdapter);
     }
 
@@ -51,22 +52,26 @@ public class SearchActivity extends AppCompatActivity {
         mediatorLiveData.addSource(sizeBrandLive, mediatorLiveData::setValue);
         mediatorLiveData.addSource(sizeNameLive, mediatorLiveData::setValue);
 
+        HashSet<String> autoCompleteHashSet = new HashSet<>();
         List<String> autoCompleteList = new ArrayList<>();
         mediatorLiveData.observe(this, stringList -> {
+            autoCompleteHashSet.clear();
             autoCompleteList.clear();
-            autoCompleteListAddValue(folderNameLive, autoCompleteList);
-            autoCompleteListAddValue(sizeBrandLive, autoCompleteList);
-            autoCompleteListAddValue(sizeNameLive, autoCompleteList);
+
+            autoCompleteListAddValue(folderNameLive, autoCompleteHashSet);
+            autoCompleteListAddValue(sizeBrandLive, autoCompleteHashSet);
+            autoCompleteListAddValue(sizeNameLive, autoCompleteHashSet);
+
+            autoCompleteList.addAll(autoCompleteHashSet);
             autoCompleteList.sort(String::compareTo);
+
             autoCompleteAdapter.setItem(autoCompleteList);
         });
     }
 
-    private void autoCompleteListAddValue(@NotNull LiveData<List<String>> liveData, List<String> autoCompleteList) {
+    private void autoCompleteListAddValue(@NotNull LiveData<List<String>> liveData, HashSet<String> autoCompleteList) {
         if (liveData.getValue() != null)
-            for (String s : liveData.getValue())
-                if (!autoCompleteList.contains(s.trim()))
-                    autoCompleteList.add(s);
+            for (String s : liveData.getValue()) autoCompleteList.add(s.trim());
     }
 
     @Override
@@ -78,8 +83,7 @@ public class SearchActivity extends AppCompatActivity {
                 v.getGlobalVisibleRect(outRect);
                 if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
                     v.clearFocus();
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    KeyboardUtil.keyboardHide(this, v);
                 }
             }
         }
