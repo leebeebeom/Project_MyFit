@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/mainScrollView"
+            android:id="@+id/sv_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -22,13 +22,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@string/category_cap"
+                    android:text="@string/all_category_cap"
                     android:textSize="@dimen/_16sdp"
                     android:textStyle="bold"
                     app:fontFamily="@font/noto_black" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/mainToggleGroup"
+                    android:id="@+id/toggle_group_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -36,44 +36,44 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/mainTopButton"
+                        android:id="@+id/btn_main_top"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
-                        android:text="@string/top"
+                        android:text="@string/all_top_cap"
                         android:textSize="@dimen/_9sdp"
                         app:rippleColor="@android:color/transparent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/mainBottomButton"
+                        android:id="@+id/btn_main_bottom"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
-                        android:text="@string/bottom"
+                        android:text="@string/all_bottom_cap"
                         android:textSize="@dimen/_9sdp"
                         app:rippleColor="@android:color/transparent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/mainOuterButton"
+                        android:id="@+id/btn_main_outer"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
-                        android:text="@string/outer"
+                        android:text="@string/all_outer_cap"
                         android:textSize="@dimen/_9sdp"
                         app:rippleColor="@android:color/transparent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/mainETCButton"
+                        android:id="@+id/btn_main_etc"
                         style="?materialButtonOutlinedStyle"
                         android:layout_width="@dimen/_72sdp"
                         android:layout_height="@dimen/_36sdp"
-                        android:text="@string/etc"
+                        android:text="@string/all_etc_cap"
                         android:textSize="@dimen/_9sdp"
                         app:rippleColor="@android:color/transparent" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/mainViewPager"
+                    android:id="@+id/vp_main"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
