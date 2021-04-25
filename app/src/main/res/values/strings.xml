@@ -100,5 +100,5 @@
     <string name="dialog_message_delete">휴지통으로 이동하시겠습니까?</string>
     <string name="dialog_message_go_back">저장되지 않았습니다.\n종료하시겠습니까?</string>
     <string name="dialog_message_image_clear">이미지를 삭제하시겠습니까?</string>
-    <string name="dialog_message_recent_search_all_delete">최근 검색 목록을 모두 삭제하시겠습니까?</string>
+    <string name="dialog_message_recent_search_delete_all">최근 검색 목록을 모두 삭제하시겠습니까?</string>
 </resources>
