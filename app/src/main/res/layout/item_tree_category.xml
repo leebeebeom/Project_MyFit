@@ -21,13 +21,13 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/itemTreeCategoryFolderIconLayout"
+                android:id="@+id/icon_item_tree_category_folder_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/_8sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/itemTreeCategoryArrowIcon"
+                    android:id="@+id/icon_item_size_list_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_4sdp"
@@ -35,7 +35,7 @@
                     app:srcCompat="@drawable/icon_triangle_right" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/itemTreeCategoryFolderIcon"
+                    android:id="@+id/icon_item_size_list_folder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.8"
@@ -43,7 +43,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/itemTreeCategoryText"
+                android:id="@+id/tv_item_size_list_category"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_8sdp"
@@ -56,18 +56,18 @@
                 tools:text="Short Sleeve" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/itemTreeCategoryCurrentPositionText"
+                android:id="@+id/tv_item_size_list_current_position"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:alpha="0.5"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="@string/current_position"
+                android:text="@string/tree_current_position"
                 android:textSize="@dimen/_6sdp"
                 android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/itemTreeCategoryContentsSizeText"
+                android:id="@+id/tv_item_size_list_contents_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -78,7 +78,7 @@
                 tools:text="20" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/itemTreeCategoryAddIcon"
+                android:id="@+id/icon_item_size_list_add"
                 setAddIcon2="@{category.categoryName}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
