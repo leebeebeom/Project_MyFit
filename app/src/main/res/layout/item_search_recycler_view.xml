@@ -9,8 +9,8 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_search_rv"
             android:nestedScrollingEnabled="false"
-            android:id="@+id/itemSearchRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
@@ -20,10 +20,10 @@
             android:paddingTop="@dimen/_8sdp"
             android:paddingBottom="@dimen/_60sdp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_recycler_category" />
+            tools:listitem="@layout/item_category" />
 
         <FrameLayout
-            android:id="@+id/itemViewPagerRecyclerViewNoResultLayout"
+            android:id="@+id/tv_item_search_rv_no_result_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
@@ -36,7 +36,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_280sdp"
                 android:alpha="0.5"
-                android:text="@string/no_result"
+                android:text="@string/search_no_result"
                 android:textSize="@dimen/_10sdp" />
         </FrameLayout>
 
