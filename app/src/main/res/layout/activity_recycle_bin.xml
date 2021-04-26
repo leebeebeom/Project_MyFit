@@ -20,11 +20,38 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_recycle_bin_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/all_recycler_bin_cap"
                     android:textSize="@dimen/_14sdp"
+                    android:visibility="visible"
                     app:fontFamily="@font/noto_bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ac_tv_recycle_bin_search_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/myEditTextOutlineColor"
+                    android:visibility="gone"
+                    app:endIconMode="clear_text"
+                    app:placeholderText="@string/menu_search"
+                    app:placeholderTextAppearance="@style/myTextSize10sdp"
+                    app:startIconDrawable="@drawable/icon_search">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/ac_tv_recycle_bin_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_36sdp"
+                        android:background="@android:color/transparent"
+                        android:completionThreshold="1"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textSize="@dimen/_11sdp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
