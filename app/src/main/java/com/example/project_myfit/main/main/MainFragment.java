@@ -157,6 +157,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         mActionModeTitleBinding = TitleActionModeBinding.inflate(inflater);
         View view = mBinding.getRoot();
         mPopupMenuBinding = LayoutPopupMainBinding.inflate(inflater);
+        mPopupMenuBinding.tvPopupCreateFolder.setVisibility(View.GONE);
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
 
@@ -378,15 +379,15 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     }
 
     private void setPopupMenuClickListener() {
-        mPopupMenuBinding.tvPopupMainAddCategory.setOnClickListener(v -> {
+        mPopupMenuBinding.tvPopupAddCategory.setOnClickListener(v -> {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
             mPopupWindow.dismiss();
         });
-        mPopupMenuBinding.tvPopupMainSortOrder.setOnClickListener(v -> {
+        mPopupMenuBinding.tvPopupSortOrder.setOnClickListener(v -> {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
             mPopupWindow.dismiss();
         });
-        mPopupMenuBinding.tvPopupMainRecycleBin.setOnClickListener(v -> {
+        mPopupMenuBinding.tvPopupRecycleBin.setOnClickListener(v -> {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToRecycleBinActivity());
             mPopupWindow.dismiss();
         });
