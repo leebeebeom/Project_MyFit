@@ -64,7 +64,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/time_layout_size"
+                android:id="@+id/time_size_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
@@ -123,7 +123,7 @@
                 android:paddingHorizontal="@dimen/_16sdp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/ac_tv_layout_size_brand"
+                    android:id="@+id/ac_tv_size_brand_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/et_layout_size_name"
+                        android:id="@+id/et_size_name_layout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
