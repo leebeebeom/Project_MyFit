@@ -65,19 +65,15 @@ public class SelectedItemTreat {
 
     @NotNull
     private List<Category> getOriginCategoryList(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
-        HashSet<Long> originCategoryIdList = new HashSet<>();
+        HashSet<Long> originCategoryIdHashSet = new HashSet<>();
         for (Folder folder : selectedItemFolder)
-            originCategoryIdList.add(folder.getParentId());
+            originCategoryIdHashSet.add(folder.getParentId());
         for (Size size : selectedItemSize)
-            originCategoryIdList.add(size.getParentId());
+            originCategoryIdHashSet.add(size.getParentId());
 
         List<Category> originCategoryList = new ArrayList<>();
-        /*
-        TODO
-         CategoryDao - List<Category> getCategoryListByIdList(List<Long> categoryIdList);
-         확인
-         */
-        for (long categoryId : originCategoryIdList) {
+
+        for (long categoryId : originCategoryIdHashSet) {
             Category category = mCategoryRepository.getCategory(categoryId);
             if (category != null)
                 originCategoryList.add(category);
@@ -87,18 +83,14 @@ public class SelectedItemTreat {
 
     @NotNull
     private List<Folder> getOriginFolderList(@NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        HashSet<Long> originFolderIdList = new HashSet<>();
+        HashSet<Long> originFolderIdHashSet = new HashSet<>();
         for (Folder folder : selectedFolderList)
-            originFolderIdList.add(folder.getParentId());
+            originFolderIdHashSet.add(folder.getParentId());
         for (Size size : selectedSizeList)
-            originFolderIdList.add(size.getParentId());
-        /*
-        TODO
-         FolderDao - List<Folder> getFolderListByIdList(List<Long> folderIdList);
-         확인
-         */
+            originFolderIdHashSet.add(size.getParentId());
+
         List<Folder> originFolderList = new ArrayList<>();
-        for (long folderId : originFolderIdList) {
+        for (long folderId : originFolderIdHashSet) {
             Folder folder = mFolderRepository.getFolder(folderId);
             if (folder != null)
                 originFolderList.add(folder);
