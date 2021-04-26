@@ -1,4 +1,4 @@
-package com.example.project_myfit.recycle_bin_activity;
+package com.example.project_myfit.recyclebin;
 
 import android.os.Bundle;
 
@@ -14,7 +14,7 @@ public class RecycleBinActivity extends AppCompatActivity {
         ActivityRecycleBinBinding binding = ActivityRecycleBinBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.trashToolBar);
+        setSupportActionBar(binding.toolBarRecycleBin);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 }
