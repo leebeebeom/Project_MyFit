@@ -47,8 +47,4 @@ public interface CategoryDao {
 
     @Update
     void categoryUpdate(List<Category> categoryList);
-
-    //TODO check
-    @Query("SELECT * FROM Category WHERE id = :categoryIdList")
-    List<Category> getCategoryListByIdList(List<Long> categoryIdList);
 }
