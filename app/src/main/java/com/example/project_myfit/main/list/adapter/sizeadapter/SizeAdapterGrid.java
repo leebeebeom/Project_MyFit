@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.list.adapter.size_adapter;
+package com.example.project_myfit.main.list.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ItemListRecyclerGridBinding;
-import com.example.project_myfit.fragment.list.ListViewModel;
+import com.example.project_myfit.main.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
-import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 import com.example.project_myfit.util.adapter.view_holder.SizeGridVH;
+import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +59,8 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeGridVH> {
     @NotNull
     @Override
     public SizeGridVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemListRecyclerGridBinding binding = ItemListRecyclerGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        com.example.project_myfit.databinding.ItemSizeGridBinding binding =
+                com.example.project_myfit.databinding.ItemSizeGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeGridVH(binding, mListener);
     }
 
@@ -75,7 +75,7 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeGridVH> {
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
-        holder.getBinding().itemListGridDragHandle.setOnTouchListener((v, event) -> {
+        holder.getBinding().iconItemSizeGridDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mListener.onSizeDragHandleTouch(holder);
                 draggingView(holder);
@@ -85,30 +85,30 @@ public class SizeAdapterGrid extends ListAdapter<Size, SizeGridVH> {
         });
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.gridActionModeOn(holder.getBinding().itemListGridCheckBox, mSelectedSizeIdHashSet, size.getId());
+            mAdapterUtil.gridActionModeOn(holder.getBinding().cbItemSizeGrid, mSelectedSizeIdHashSet, size.getId());
         else if (mActionModeState == ACTION_MODE_OFF)
-            mAdapterUtil.gridActionModeOff(holder.getBinding().itemListGridCheckBox, mSelectedSizeIdHashSet);
+            mAdapterUtil.gridActionModeOff(holder.getBinding().cbItemSizeGrid, mSelectedSizeIdHashSet);
 
-        holder.getBinding().itemListGridDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.getBinding().itemListGridFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
+        holder.getBinding().iconItemSizeGridDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.getBinding().cbItemSizeGridFavorite.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
     private void draggingView(@NotNull SizeGridVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.getBinding().itemListGridImage.setAlpha(0.5f);
-        holder.getBinding().itemListGridBrandText.setAlpha(0.4f);
-        holder.getBinding().itemListGridNameText.setAlpha(0.6f);
-        holder.getBinding().itemListGridCheckBox.setAlpha(0.5f);
-        holder.getBinding().itemListGridFavoriteCheckBox.setAlpha(0.5f);
+        holder.getBinding().ivItemSizeGridPicture.setAlpha(0.5f);
+        holder.getBinding().tvItemSizeGridBrand.setAlpha(0.4f);
+        holder.getBinding().tvItemSizeGridName.setAlpha(0.6f);
+        holder.getBinding().cbItemSizeGrid.setAlpha(0.5f);
+        holder.getBinding().cbItemSizeGridFavorite.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull SizeGridVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.getBinding().itemListGridImage.setAlpha(1f);
-        holder.getBinding().itemListGridBrandText.setAlpha(0.7f);
-        holder.getBinding().itemListGridNameText.setAlpha(0.9f);
-        holder.getBinding().itemListGridCheckBox.setAlpha(0.8f);
-        holder.getBinding().itemListGridFavoriteCheckBox.setAlpha(1);
+        holder.getBinding().ivItemSizeGridPicture.setAlpha(1f);
+        holder.getBinding().tvItemSizeGridBrand.setAlpha(0.7f);
+        holder.getBinding().tvItemSizeGridName.setAlpha(0.9f);
+        holder.getBinding().cbItemSizeGrid.setAlpha(0.8f);
+        holder.getBinding().cbItemSizeGridFavorite.setAlpha(1);
     }
 
     public void onItemMove(int from, int to) {
