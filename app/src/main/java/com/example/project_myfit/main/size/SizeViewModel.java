@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.input_output;
+package com.example.project_myfit.main.size;
 
 import android.app.Application;
 import android.content.Intent;
@@ -48,7 +48,7 @@ import static com.example.project_myfit.util.MyFitConstant.THIGH;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 import static com.example.project_myfit.util.MyFitConstant.WAIST;
 
-public class InputOutputViewModel extends AndroidViewModel {
+public class SizeViewModel extends AndroidViewModel {
     private final Repository.SizeRepository mSizeRepository;
     private Size mCompareSize, mNewSize;
     private final MutableLiveData<Uri> mMutableLiveImageUri;
@@ -58,7 +58,7 @@ public class InputOutputViewModel extends AndroidViewModel {
     private Size mOriginSize;
     private List<String> mSizeBrandList;
 
-    public InputOutputViewModel(@NonNull Application application) {
+    public SizeViewModel(@NonNull Application application) {
         super(application);
         mSizeRepository = Repository.getSizeRepository(getApplication());
         mMutableLiveImageUri = new MutableLiveData<>();
