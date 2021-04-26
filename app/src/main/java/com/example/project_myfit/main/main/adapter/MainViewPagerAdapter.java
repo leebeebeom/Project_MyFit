@@ -12,7 +12,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemRecyclerViewBinding;
 import com.example.project_myfit.main.main.MainViewModel;
 import com.example.project_myfit.util.Sort;
-import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
+import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;

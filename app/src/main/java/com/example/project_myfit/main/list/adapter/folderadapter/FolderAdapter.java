@@ -17,8 +17,8 @@ import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemFolderGridBinding;
 import com.example.project_myfit.main.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
-import com.example.project_myfit.util.adapter.view_holder.FolderGridVH;
-import com.example.project_myfit.util.adapter.view_holder.FolderVHListener;
+import com.example.project_myfit.util.adapter.viewholder.FolderGridVH;
+import com.example.project_myfit.util.adapter.viewholder.FolderVHListener;
 
 import org.jetbrains.annotations.NotNull;
 

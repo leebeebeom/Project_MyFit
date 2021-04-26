@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.main.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
-import com.example.project_myfit.util.adapter.view_holder.SizeGridVH;
-import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
+import com.example.project_myfit.util.adapter.viewholder.SizeGridVH;
+import com.example.project_myfit.util.adapter.viewholder.SizeVHListener;
 
 import org.jetbrains.annotations.NotNull;
 

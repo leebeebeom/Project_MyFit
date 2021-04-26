@@ -17,8 +17,8 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemCategoryBinding;
 import com.example.project_myfit.main.main.MainViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
-import com.example.project_myfit.util.adapter.view_holder.CategoryVH;
-import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
+import com.example.project_myfit.util.adapter.viewholder.CategoryVH;
+import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
 
 import org.jetbrains.annotations.NotNull;
 
