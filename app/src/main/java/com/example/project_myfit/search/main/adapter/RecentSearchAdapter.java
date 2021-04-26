@@ -1,4 +1,4 @@
-package com.example.project_myfit.search_activity.adapter;
+package com.example.project_myfit.search.main.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.databinding.ItemRecentSearchRecyclerBinding;
 import com.example.project_myfit.data.model.RecentSearch;
+import com.example.project_myfit.databinding.ItemRecentSearchBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
     @NotNull
     @Override
     public RecentSearchVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemRecentSearchRecyclerBinding binding = ItemRecentSearchRecyclerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemRecentSearchBinding binding = ItemRecentSearchBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new RecentSearchVH(binding, mListener);
     }
 
@@ -48,15 +48,15 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
     }
 
     public static class RecentSearchVH extends RecyclerView.ViewHolder {
-        private final ItemRecentSearchRecyclerBinding mBinding;
+        private final ItemRecentSearchBinding mBinding;
         private RecentSearch mRecentSearch;
 
-        public RecentSearchVH(@NotNull ItemRecentSearchRecyclerBinding binding, RecentSearchAdapterListener listener) {
+        public RecentSearchVH(@NotNull ItemRecentSearchBinding binding, RecentSearchAdapterListener listener) {
             super(binding.getRoot());
             this.mBinding = binding;
 
             itemView.setOnClickListener(v -> listener.recentSearchItemClick(mRecentSearch.getWord()));
-            binding.itemRecentSearchDeleteIcon.setOnClickListener(v -> listener.recentSearchDeleteClick(mRecentSearch));
+            binding.iconItemRecentSearchDelete.setOnClickListener(v -> listener.recentSearchDeleteClick(mRecentSearch));
         }
 
         public void setRecentSearch(RecentSearch recentSearch) {
