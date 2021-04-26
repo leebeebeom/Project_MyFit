@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ItemSearchRecyclerViewBinding;
+import com.example.project_myfit.databinding.ItemRecyclerViewBinding;
 import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 import com.google.android.material.tabs.TabLayout;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
@@ -89,7 +89,7 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
     @NotNull
     @Override
     public ViewPagerVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemSearchRecyclerViewBinding binding = ItemSearchRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemRecyclerViewBinding binding = ItemRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewPagerVH(binding, mListener);
     }
 
@@ -105,10 +105,10 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        if (holder.getBinding().rvItemSearchRv.getAdapter() == null) {
+        if (holder.getBinding().rvItemRv.getAdapter() == null) {
             mSearchAdapterArray[position].setSearchViewPagerVH(holder);
-            holder.getBinding().rvItemSearchRv.setAdapter(mSearchAdapterArray[position]);
-            holder.getBinding().rvItemSearchRv.addOnItemTouchListener(mDragSelectListener);
+            holder.getBinding().rvItemRv.setAdapter(mSearchAdapterArray[position]);
+            holder.getBinding().rvItemRv.addOnItemTouchListener(mDragSelectListener);
             holder.setNoResult(mSearchAdapterArray[position].getCurrentList().isEmpty());
         }
     }
