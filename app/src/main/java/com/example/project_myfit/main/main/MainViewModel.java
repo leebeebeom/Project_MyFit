@@ -54,7 +54,6 @@ public class MainViewModel extends AndroidViewModel {
 
         for (Category category : mSelectedCategoryList) {
             category.setIsDeleted(true);
-            //TODO check
             childSizeList.addAll(mSizeRepository.getSizeListByParentId(category.getId()));
         }
 
@@ -73,7 +72,6 @@ public class MainViewModel extends AndroidViewModel {
     private List<Folder> findAllChildFolder() {
         List<Folder> topFolderList = new ArrayList<>();
         for (Category category : mSelectedCategoryList)
-            //TODO check
             topFolderList.addAll(mFolderRepository.getFolderListByParentId(category.getId()));
 
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
@@ -85,7 +83,6 @@ public class MainViewModel extends AndroidViewModel {
         List<Folder> childFolderList = new ArrayList<>();
         for (Folder folder : topFolderList) {
             if (!childFolderList.isEmpty()) childFolderList.clear();
-            //TODO check
             childFolderList.addAll(mFolderRepository.getFolderListByParentId(folder.getId()));
             if (!childFolderList.isEmpty()) {
                 allFolderList.addAll(childFolderList);

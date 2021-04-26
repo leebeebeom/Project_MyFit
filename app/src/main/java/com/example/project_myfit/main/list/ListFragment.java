@@ -79,8 +79,6 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_LIST;
 import static com.example.project_myfit.util.MyFitConstant.THIS_FOLDER_TEXT_VIEW;
 import static com.example.project_myfit.util.MyFitConstant.VIEW_TYPE;
 
-//TODO 휴지통 클릭
-
 @SuppressLint("ClickableViewAccessibility")
 public class ListFragment extends Fragment implements SizeVHListener {
 

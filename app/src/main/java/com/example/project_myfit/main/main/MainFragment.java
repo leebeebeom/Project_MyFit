@@ -60,8 +60,6 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_MAIN;
 import static com.example.project_myfit.util.MyFitConstant.STOP;
 import static com.example.project_myfit.util.MyFitConstant.UP;
 
-//TODO 휴지통
-
 public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoScrollListener, CategoryVH.CategoryVHListener {
 
     private MainViewModel mModel;
