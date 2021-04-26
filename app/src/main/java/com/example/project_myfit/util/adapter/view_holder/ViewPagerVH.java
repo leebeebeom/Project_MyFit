@@ -41,6 +41,7 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
     public ItemSearchRecyclerViewBinding getBinding() {
         return mBinding;
     }
+
     public interface ViewPagerAutoScrollListener {
         void dragAutoScroll(int upDown);
     }
