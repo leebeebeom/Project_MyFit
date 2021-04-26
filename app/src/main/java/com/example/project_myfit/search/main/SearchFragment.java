@@ -43,6 +43,7 @@ import com.example.project_myfit.util.KeyboardUtil;
 import com.example.project_myfit.util.SelectedItemTreat;
 import com.example.project_myfit.util.adapter.view_holder.FolderVHListener;
 import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
+import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.tabs.TabLayout;
@@ -69,7 +70,7 @@ import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 
-public class SearchFragment extends Fragment implements SearchViewPagerAdapter.ViewPagerAutoScrollListener, FolderVHListener, SizeVHListener {
+public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAutoScrollListener, FolderVHListener, SizeVHListener {
     private SearchViewModel mModel;
     private FragmentSearchBinding mBinding;
     private List<String> mRecentSearchStringList;
@@ -195,7 +196,7 @@ public class SearchFragment extends Fragment implements SearchViewPagerAdapter.V
                 mBinding.svSearch.setScrollable(false);
                 isDragSelecting = true;
 
-                SearchViewPagerAdapter.ViewPagerVH viewPagerVH = (SearchViewPagerAdapter.ViewPagerVH)
+                ViewPagerVH viewPagerVH = (ViewPagerVH)
                         ((RecyclerView) mBinding.vpSearch.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
                     RecyclerView recyclerView = viewPagerVH.getBinding().rvItemSearchRv;
@@ -212,7 +213,7 @@ public class SearchFragment extends Fragment implements SearchViewPagerAdapter.V
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
-                SearchViewPagerAdapter.ViewPagerVH viewPagerVH = (SearchViewPagerAdapter.ViewPagerVH)
+                ViewPagerVH viewPagerVH = (ViewPagerVH)
                         ((RecyclerView) mBinding.vpSearch.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
                     RecyclerView recyclerView = viewPagerVH.getBinding().rvItemSearchRv;

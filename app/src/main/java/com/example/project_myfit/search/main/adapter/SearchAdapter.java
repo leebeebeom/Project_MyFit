@@ -22,6 +22,7 @@ import com.example.project_myfit.util.adapter.view_holder.FolderListVH;
 import com.example.project_myfit.util.adapter.view_holder.FolderVHListener;
 import com.example.project_myfit.util.adapter.view_holder.SizeListVH;
 import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
+import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 import com.example.project_myfit.util.ktw.KoreanTextMatcher;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
@@ -42,7 +43,7 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     private final FolderVHListener mFolderListener;
     private int mActionModeState;
     private final HashSet<Long> mSelectedItemIdHashSet;
-    private SearchViewPagerAdapter.ViewPagerVH mViewPagerVH;
+    private ViewPagerVH mViewPagerVH;
     private AdapterUtil mFolderAdapterUtil, mSizeAdapterUtil;
 
     public SearchAdapter(SizeVHListener sizeVHListener, FolderVHListener folderVHListener) {
@@ -53,7 +54,7 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
         setHasStableIds(true);
     }
 
-    public void setSearchViewPagerVH(SearchViewPagerAdapter.ViewPagerVH viewPagerVH) {
+    public void setSearchViewPagerVH(ViewPagerVH viewPagerVH) {
         this.mViewPagerVH = viewPagerVH;
     }
 
