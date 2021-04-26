@@ -32,8 +32,6 @@ import static com.example.project_myfit.util.MyFitConstant.SIZE_ID;
 //TODO 트리뷰 롱클릭으로 삭제, 이름변경?
 //TODO 탭레이아웃 뱃지 텍스트 사이즈
 
-//TODO 서치뷰 엔드아이콘 클릭하면 키보드 보이게
-
 //TODO 구현 못한 거
 //이름 변경 시 분신술 쓰는 거(서치뷰, 메인 카테고리)
 
@@ -191,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 v.getGlobalVisibleRect(outRect);
                 if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
                     v.clearFocus();
-                    KeyboardUtil.keyboardShow(this, v);
+                    KeyboardUtil.keyboardHide(this, v);
                 }
             }
         }
