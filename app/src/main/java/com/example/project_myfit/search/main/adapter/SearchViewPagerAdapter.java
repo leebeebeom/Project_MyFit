@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemRecyclerViewBinding;
-import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
+import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
 import com.google.android.material.tabs.TabLayout;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
