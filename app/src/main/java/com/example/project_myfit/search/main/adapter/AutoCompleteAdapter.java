@@ -1,4 +1,4 @@
-package com.example.project_myfit.search_activity.adapter;
+package com.example.project_myfit.search.main.adapter;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
