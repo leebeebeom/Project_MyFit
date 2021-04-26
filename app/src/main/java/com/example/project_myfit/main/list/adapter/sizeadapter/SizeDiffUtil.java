@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.list.adapter.size_adapter;
+package com.example.project_myfit.main.list.adapter.sizeadapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
