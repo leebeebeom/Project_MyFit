@@ -143,6 +143,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
+    private TextInputLayout mAutoCompleteTextLayout;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -167,6 +168,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAutoCompleteTextView = requireActivity().findViewById(R.id.ac_tv_search);
+        mAutoCompleteTextLayout = requireActivity().findViewById(R.id.ac_tv_search_layout);
 
         mBinding.vpSearch.setAdapter(getViewPagerAdapter());
         mBinding.vpSearch.setOffscreenPageLimit(1);
@@ -401,6 +403,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 mAutoCompleteTextView.setSelection(word.length());
                 mAutoCompleteTextView.dismissDropDown();
                 mModel.overLapRecentSearchReInsert(word);
+                mAutoCompleteTextLayout.setEndIconVisible(false);
                 KeyboardUtil.keyboardHide(requireContext(), mAutoCompleteTextView);
             }
 
@@ -431,8 +434,6 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     }
 
     private void autoCompleteTextChangeListener() {
-        TextInputLayout autoCompleteTextLayout = requireActivity().findViewById(R.id.ac_tv_search_layout);
-
         mAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -445,12 +446,12 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                     if (mBinding.vpSearch.getScrollY() == 0)
                         mBinding.fabSearch.setVisibility(View.GONE);
                     else mBinding.fabSearch.setVisibility(View.VISIBLE);
-                    autoCompleteTextLayout.setEndIconVisible(true);
+                    mAutoCompleteTextLayout.setEndIconVisible(true);
                 } else {
                     mBinding.svSearchRecentSearch.scrollTo(0, 0);
                     mBinding.svSearchRecentSearch.setVisibility(View.VISIBLE);
                     mBinding.fabSearch.setVisibility(View.GONE);
-                    autoCompleteTextLayout.setEndIconVisible(false);
+                    mAutoCompleteTextLayout.setEndIconVisible(false);
                     KeyboardUtil.keyboardShow(requireContext(), mAutoCompleteTextView);
                 }
 
