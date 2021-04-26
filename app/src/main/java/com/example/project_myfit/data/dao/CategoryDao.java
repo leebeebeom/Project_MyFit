@@ -15,6 +15,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
     LiveData<List<Category>> getAllCategoryLive();
 
+    @Query("SELECT * FROM Category WHERE isDeleted = 1")
+    LiveData<List<Category>> getAllDeletedCategoryLive();
+
     @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
     List<Category> getAllCategoryList();
 
