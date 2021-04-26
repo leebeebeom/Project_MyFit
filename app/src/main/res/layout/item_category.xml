@@ -77,7 +77,7 @@
                     android:paddingBottom="@dimen/_1sdp">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv__item_category_contents_size"
+                        android:id="@+id/tv_item_category_contents_size"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:alpha="0.6"
