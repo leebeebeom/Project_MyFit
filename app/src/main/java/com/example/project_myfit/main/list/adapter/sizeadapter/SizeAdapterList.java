@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.list.adapter.size_adapter;
+package com.example.project_myfit.main.list.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ItemListRecyclerListBinding;
-import com.example.project_myfit.fragment.list.ListViewModel;
+import com.example.project_myfit.databinding.ItemSizeListBinding;
+import com.example.project_myfit.main.list.ListViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.example.project_myfit.util.adapter.view_holder.SizeListVH;
 import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
@@ -61,7 +61,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeListVH> {
     @NotNull
     @Override
     public SizeListVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemListRecyclerListBinding binding = ItemListRecyclerListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemSizeListBinding binding = ItemSizeListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SizeListVH(binding, mListener);
     }
 
@@ -76,7 +76,7 @@ public class SizeAdapterList extends ListAdapter<Size, SizeListVH> {
 
         Size size = getItem(holder.getLayoutPosition());
         holder.setSize(size);
-        holder.getBinding().itemListListDragHandle.setOnTouchListener((v, event) -> {
+        holder.getBinding().iconItemSizeListDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
                 mIsDragging = true;
                 draggingView(holder);
@@ -86,31 +86,31 @@ public class SizeAdapterList extends ListAdapter<Size, SizeListVH> {
         });
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.listActionModeOn(holder.getBinding().itemListListCardView, holder.getBinding().itemListListCheckBox, mSelectedSizeIdHashSet, size.getId());
+            mAdapterUtil.listActionModeOn(holder.getBinding().cardViewItemSizeList, holder.getBinding().cbItemSizeList, mSelectedSizeIdHashSet, size.getId());
         else if (mActionModeState == ACTION_MODE_OFF) {
-            mAdapterUtil.listActionModeOff(holder.getBinding().itemListListCardView, holder.getBinding().itemListListCheckBox, mSelectedSizeIdHashSet);
+            mAdapterUtil.listActionModeOff(holder.getBinding().cardViewItemSizeList, holder.getBinding().cbItemSizeList, mSelectedSizeIdHashSet);
             new Handler().postDelayed(() -> mActionModeState = 0, 310);
         }
 
-        holder.getBinding().itemListListDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.getBinding().itemListListFavoriteCheckBox.setVisibility(holder.getBinding().itemListListDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-        holder.getBinding().itemListListFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
+        holder.getBinding().iconItemSizeListDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.getBinding().cbItemSizeListFavorite.setVisibility(holder.getBinding().iconItemSizeListDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        holder.getBinding().cbItemSizeListFavorite.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
     private void draggingView(@NotNull SizeListVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.getBinding().itemListListCheckBox.setVisibility(View.INVISIBLE);
-        holder.getBinding().itemListListBrandText.setAlpha(0.4f);
-        holder.getBinding().itemListListNameText.setAlpha(0.5f);
-        holder.getBinding().itemListListImage.setAlpha(0.5f);
+        holder.getBinding().cbItemSizeList.setVisibility(View.INVISIBLE);
+        holder.getBinding().tvItemSizeListBrand.setAlpha(0.4f);
+        holder.getBinding().tvItemSizeListName.setAlpha(0.5f);
+        holder.getBinding().ivItemSizeListPicture.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull SizeListVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.getBinding().itemListListCheckBox.setVisibility(View.VISIBLE);
-        holder.getBinding().itemListListBrandText.setAlpha(0.7f);
-        holder.getBinding().itemListListNameText.setAlpha(0.8f);
-        holder.getBinding().itemListListImage.setAlpha(1f);
+        holder.getBinding().cbItemSizeList.setVisibility(View.VISIBLE);
+        holder.getBinding().tvItemSizeListBrand.setAlpha(0.7f);
+        holder.getBinding().tvItemSizeListName.setAlpha(0.8f);
+        holder.getBinding().ivItemSizeListPicture.setAlpha(1f);
     }
 
     public void onItemMove(int from, int to) {
