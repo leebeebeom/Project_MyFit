@@ -40,7 +40,7 @@ import static com.example.project_myfit.util.MyFitConstant.SIZE_ID;
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
-    private boolean mIsKeyboardShowing;
+    private boolean isKeyboardShowing;
     private int mTopFabOriginVisibility;
 
     @Override
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             Rect r = new Rect();
             rootView.getWindowVisibleDisplayFrame(r);
 
-            int screenHeight = rootView.getHeight();
+            int screenHeight = rootView.getRootView().getHeight();
             int keypadHeight = screenHeight - r.bottom;
 
             if (keypadHeight > screenHeight * 0.15)
@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void keyboardShow(@NotNull ActivityMainBinding binding) {
-        if (!mIsKeyboardShowing) {
-            mIsKeyboardShowing = true;
+        if (!isKeyboardShowing) {
+            isKeyboardShowing = true;
             binding.fabMain.setVisibility(View.INVISIBLE);
             binding.bottomAppBarMain.setVisibility(View.INVISIBLE);
             mTopFabOriginVisibility = binding.fabMainTop.getVisibility();
@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void keyboardHide(@NotNull ActivityMainBinding binding) {
-        if (mIsKeyboardShowing) {
-            mIsKeyboardShowing = false;
+        if (isKeyboardShowing) {
+            isKeyboardShowing = false;
             binding.bottomAppBarMain.setVisibility(View.VISIBLE);
             binding.fabMain.show();
             binding.fabMainTop.setVisibility(mTopFabOriginVisibility);
