@@ -30,7 +30,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.FragmentMainBinding;
-import com.example.project_myfit.databinding.LayoutPopupMainBinding;
+import com.example.project_myfit.databinding.LayoutPopupBinding;
 import com.example.project_myfit.databinding.TitleActionModeBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.main.main.adapter.CategoryAdapter;
@@ -80,7 +80,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     private NavController mNavController;
     private FloatingActionButton mTopFab;
     private SharedPreferences mSortPreferences;
-    private LayoutPopupMainBinding mPopupMenuBinding;
+    private LayoutPopupBinding mPopupMenuBinding;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -156,7 +156,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mActionModeTitleBinding = TitleActionModeBinding.inflate(inflater);
         View view = mBinding.getRoot();
-        mPopupMenuBinding = LayoutPopupMainBinding.inflate(inflater);
+        mPopupMenuBinding = LayoutPopupBinding.inflate(inflater);
         mPopupMenuBinding.tvPopupCreateFolder.setVisibility(View.GONE);
         mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setOutsideTouchable(true);
