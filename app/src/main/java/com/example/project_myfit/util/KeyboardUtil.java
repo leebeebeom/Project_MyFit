@@ -14,6 +14,6 @@ public class KeyboardUtil {
 
     public static void keyboardHide(@NotNull Context context, @NotNull View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
