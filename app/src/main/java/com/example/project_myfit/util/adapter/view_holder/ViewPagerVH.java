@@ -33,15 +33,11 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
     }
 
     public void setNoResult(boolean isEmpty) {
-        if (isEmpty)
-            mBinding.tvItemRvNoResultLayout.setVisibility(View.VISIBLE);
-        else mBinding.tvItemRvNoResultLayout.setVisibility(View.GONE);
+        mBinding.tvItemRvNoResultLayout.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     public void setNoData(boolean isEmpty) {
-        if (isEmpty)
-            mBinding.tvItemRvNoDataLayout.setVisibility(View.VISIBLE);
-        else mBinding.tvItemRvNoDataLayout.setVisibility(View.GONE);
+        mBinding.tvItemRvNoDataLayout.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     public ItemRecyclerViewBinding getBinding() {
