@@ -1,9 +1,7 @@
-package com.example.project_myfit.search_activity.adapter;
+package com.example.project_myfit.search.main.adapter;
 
-import android.annotation.SuppressLint;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ItemViewPagerRecyclerViewBinding;
+import com.example.project_myfit.databinding.ItemSearchRecyclerViewBinding;
+import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 import com.google.android.material.tabs.TabLayout;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
@@ -21,19 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
-import static com.example.project_myfit.util.MyFitConstant.DOWN;
 import static com.example.project_myfit.util.MyFitConstant.ETC;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
-import static com.example.project_myfit.util.MyFitConstant.STOP;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
-import static com.example.project_myfit.util.MyFitConstant.UP;
 
-public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPagerAdapter.ViewPagerVH> {
+public class SearchViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
     private final SearchAdapter[] mSearchAdapterArray;
     private final DragSelectTouchListener mDragSelectListener;
-    private final ViewPagerAutoScrollListener mListener;
+    private final ViewPagerVH.ViewPagerAutoScrollListener mListener;
 
-    public SearchViewPagerAdapter(SearchAdapter[] searchAdapterArray, DragSelectTouchListener dragSelectListener, ViewPagerAutoScrollListener listener) {
+    public SearchViewPagerAdapter(SearchAdapter[] searchAdapterArray, DragSelectTouchListener dragSelectListener,
+                                  ViewPagerVH.ViewPagerAutoScrollListener listener) {
         this.mSearchAdapterArray = searchAdapterArray;
         this.mDragSelectListener = dragSelectListener;
         this.mListener = listener;
@@ -92,7 +89,7 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
     @NotNull
     @Override
     public ViewPagerVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemViewPagerRecyclerViewBinding binding = ItemViewPagerRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemSearchRecyclerViewBinding binding = ItemSearchRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewPagerVH(binding, mListener);
     }
 
@@ -108,45 +105,11 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<SearchViewPager
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        if (holder.mBinding.itemSearchRecyclerView.getAdapter() == null) {
+        if (holder.getBinding().rvItemSearchRv.getAdapter() == null) {
             mSearchAdapterArray[position].setSearchViewPagerVH(holder);
-            holder.mBinding.itemSearchRecyclerView.setAdapter(mSearchAdapterArray[position]);
-            holder.mBinding.itemSearchRecyclerView.addOnItemTouchListener(mDragSelectListener);
+            holder.getBinding().rvItemSearchRv.setAdapter(mSearchAdapterArray[position]);
+            holder.getBinding().rvItemSearchRv.addOnItemTouchListener(mDragSelectListener);
             holder.setNoResult(mSearchAdapterArray[position].getCurrentList().isEmpty());
         }
-    }
-
-    public static class ViewPagerVH extends RecyclerView.ViewHolder {
-        private final ItemViewPagerRecyclerViewBinding mBinding;
-
-        @SuppressLint("ClickableViewAccessibility")
-        public ViewPagerVH(@NotNull ItemViewPagerRecyclerViewBinding binding, ViewPagerAutoScrollListener listener) {
-            super(binding.getRoot());
-            this.mBinding = binding;
-
-            mBinding.itemSearchRecyclerView.setOnTouchListener((v, event) -> {
-                if (event.getRawY() > 2000)
-                    listener.dragAutoScroll(DOWN);
-                else if (event.getRawY() < 250)
-                    listener.dragAutoScroll(UP);
-                else if (event.getRawY() < 2000 && event.getRawY() > 250)
-                    listener.dragAutoScroll(STOP);
-                return false;
-            });
-        }
-
-        public void setNoResult(boolean isEmpty) {
-            if (isEmpty)
-                mBinding.itemViewPagerRecyclerViewNoResultLayout.setVisibility(View.VISIBLE);
-            else mBinding.itemViewPagerRecyclerViewNoResultLayout.setVisibility(View.GONE);
-        }
-
-        public ItemViewPagerRecyclerViewBinding getBinding() {
-            return mBinding;
-        }
-    }
-
-    public interface ViewPagerAutoScrollListener {
-        void dragAutoScroll(int upDown);
     }
 }
