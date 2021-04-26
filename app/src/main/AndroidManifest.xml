@@ -22,8 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_MyFit">
-        <activity android:name=".recycle_bin_activity.RecycleBinActivity" />
-        <activity android:name=".search_activity.SearchActivity" />
+        <activity android:name=".recyclebin.RecycleBinActivity" />
+        <activity android:name=".search.SearchActivity" />
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize">
