@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.main;
+package com.example.project_myfit.main.main;
 
 import android.app.Application;
 
@@ -11,7 +11,7 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.fragment.main.adapter.CategoryAdapter;
+import com.example.project_myfit.main.main.adapter.CategoryAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +54,7 @@ public class MainViewModel extends AndroidViewModel {
 
         for (Category category : mSelectedCategoryList) {
             category.setIsDeleted(true);
+            //TODO check
             childSizeList.addAll(mSizeRepository.getSizeListByParentId(category.getId()));
         }
 
@@ -72,6 +73,7 @@ public class MainViewModel extends AndroidViewModel {
     private List<Folder> findAllChildFolder() {
         List<Folder> topFolderList = new ArrayList<>();
         for (Category category : mSelectedCategoryList)
+            //TODO check
             topFolderList.addAll(mFolderRepository.getFolderListByParentId(category.getId()));
 
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
@@ -83,6 +85,7 @@ public class MainViewModel extends AndroidViewModel {
         List<Folder> childFolderList = new ArrayList<>();
         for (Folder folder : topFolderList) {
             if (!childFolderList.isEmpty()) childFolderList.clear();
+            //TODO check
             childFolderList.addAll(mFolderRepository.getFolderListByParentId(folder.getId()));
             if (!childFolderList.isEmpty()) {
                 allFolderList.addAll(childFolderList);
@@ -99,9 +102,10 @@ public class MainViewModel extends AndroidViewModel {
         return allChildSizeList;
     }
 
-    public void categorySelected(@NotNull Category category, boolean isChecked) {
+    public void categorySelected(@NotNull Category category, boolean isChecked, CategoryAdapter[] categoryAdapterArray) {
         if (isChecked) mSelectedCategoryList.add(category);
         else mSelectedCategoryList.remove(category);
+        categoryAdapterArray[mCurrentItem].categorySelected(category.getId());
         mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
@@ -114,11 +118,11 @@ public class MainViewModel extends AndroidViewModel {
         mCategoryRepository.categoryUpdate(newOrderNumberCategoryList);
     }
 
+    //getter,setter---------------------------------------------------------------------------------
     public MutableLiveData<Integer> getSelectedCategorySizeLive() {
         return mSelectedCategorySizeLive;
     }
 
-    //getter,setter---------------------------------------------------------------------------------
     public List<Category> getSelectedCategoryList() {
         return mSelectedCategoryList;
     }
