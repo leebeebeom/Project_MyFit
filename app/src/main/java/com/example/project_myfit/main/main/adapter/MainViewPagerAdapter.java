@@ -1,6 +1,5 @@
-package com.example.project_myfit.fragment.main.adapter;
+package com.example.project_myfit.main.main.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.databinding.ItemMainRecyclerViewBinding;
-import com.example.project_myfit.fragment.main.MainViewModel;
+import com.example.project_myfit.databinding.ItemRecyclerViewBinding;
+import com.example.project_myfit.main.main.MainViewModel;
 import com.example.project_myfit.util.Sort;
+import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,21 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
-import static com.example.project_myfit.util.MyFitConstant.DOWN;
 import static com.example.project_myfit.util.MyFitConstant.ETC;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
-import static com.example.project_myfit.util.MyFitConstant.STOP;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
-import static com.example.project_myfit.util.MyFitConstant.UP;
 
-public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdapter.ViewPagerVH> {
+public class MainViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
     private final CategoryAdapter[] mCategoryAdapterArray;
-    private final MainDragAutoScrollListener mListener;
+    private final ViewPagerVH.ViewPagerAutoScrollListener mListener;
     private final DragSelectTouchListener mDragSelectListener;
     private final ItemTouchHelper[] mTouchHelperArray;
 
     public MainViewPagerAdapter(CategoryAdapter[] adapterList, DragSelectTouchListener dragSelectListener,
-                                ItemTouchHelper[] touchHelperList, MainDragAutoScrollListener listener) {
+                                ItemTouchHelper[] touchHelperList, ViewPagerVH.ViewPagerAutoScrollListener listener) {
         this.mCategoryAdapterArray = adapterList;
         this.mDragSelectListener = dragSelectListener;
         this.mTouchHelperArray = touchHelperList;
@@ -80,58 +77,26 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<MainViewPagerAdap
     @NotNull
     @Override
     public ViewPagerVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemMainRecyclerViewBinding binding = ItemMainRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemRecyclerViewBinding binding = ItemRecyclerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewPagerVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        if (holder.mBinding.itemMainRecyclerView.getAdapter() == null) {
+        if (holder.getBinding().rvItemRv.getAdapter() == null) {
             mCategoryAdapterArray[position].setViewPagerVH(holder);
 
-            holder.mBinding.itemMainRecyclerView.setAdapter(mCategoryAdapterArray[position]);
+            holder.getBinding().rvItemRv.setAdapter(mCategoryAdapterArray[position]);
 
-            mTouchHelperArray[position].attachToRecyclerView(holder.mBinding.itemMainRecyclerView);
-            holder.mBinding.itemMainRecyclerView.addOnItemTouchListener(mDragSelectListener);
+            mTouchHelperArray[position].attachToRecyclerView(holder.getBinding().rvItemRv);
+            holder.getBinding().rvItemRv.addOnItemTouchListener(mDragSelectListener);
 
-            holder.mBinding.itemMainNoDataLayout.setVisibility(mCategoryAdapterArray[position].getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            holder.getBinding().tvItemRvNoDataLayout.setVisibility(mCategoryAdapterArray[position].getItemCount() == 0 ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public int getItemCount() {
         return 4;
-    }
-
-    public static class ViewPagerVH extends RecyclerView.ViewHolder {
-        private final ItemMainRecyclerViewBinding mBinding;
-
-        @SuppressLint("ClickableViewAccessibility")
-        public ViewPagerVH(@NotNull ItemMainRecyclerViewBinding binding, MainDragAutoScrollListener listener) {
-            super(binding.getRoot());
-            this.mBinding = binding;
-
-            mBinding.itemMainRecyclerView.setOnTouchListener((v, event) -> {
-                if (event.getRawY() > 2000)
-                    listener.dragAutoScroll(DOWN);
-                else if (event.getRawY() < 250)
-                    listener.dragAutoScroll(UP);
-                else if (event.getRawY() < 2000 && event.getRawY() > 250)
-                    listener.dragAutoScroll(STOP);
-                return false;
-            });
-        }
-
-        public void setNoData(boolean isEmpty) {
-            mBinding.itemMainNoDataLayout.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        }
-
-        public ItemMainRecyclerViewBinding getBinding() {
-            return mBinding;
-        }
-    }
-
-    public interface MainDragAutoScrollListener {
-        void dragAutoScroll(int upDownStop);
     }
 }

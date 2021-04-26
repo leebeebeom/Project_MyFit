@@ -19,6 +19,7 @@ import com.example.project_myfit.databinding.ItemCategoryBinding;
 import com.example.project_myfit.main.main.MainViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.example.project_myfit.util.adapter.view_holder.CategoryVH;
+import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +40,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
     private int mActionModeState, mSort;
     private Animation mAnimation;
     private List<Long> mFolderParentIdList, mSizeParentIdList;
-    private MainViewPagerAdapter.MainViewPagerVH mMainViewPagerVH;
+    private ViewPagerVH mMainViewPagerVH;
     private AdapterUtil mAdapterUtil;
     private boolean isDragging;
 
@@ -79,7 +80,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
             mMainViewPagerVH.setNoData(list.isEmpty());
     }
 
-    public void setViewPagerVH(MainViewPagerAdapter.MainViewPagerVH mainViewPagerVH) {
+    public void setViewPagerVH(ViewPagerVH mainViewPagerVH) {
         this.mMainViewPagerVH = mainViewPagerVH;
     }
 
