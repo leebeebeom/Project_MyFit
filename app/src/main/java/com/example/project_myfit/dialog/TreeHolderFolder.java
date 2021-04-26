@@ -50,10 +50,10 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolder(value.folder);
 
-        mBinding.itemTreeFolderContentsSizeText.setText(String.valueOf(mAdapterUtil
-                .getFolderContentsSize(value.folder, mFolderParentIdList, mSizeParentIdList)));
+        mBinding.tvItemTreeFolderContentsSize.setText(String.valueOf(mAdapterUtil
+                .getContentsSize(value.folder.getId(), mFolderParentIdList, mSizeParentIdList)));
 
-        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.itemTreeFolderArrowIcon.getLayoutParams();
+        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.iconItemTreeFolderArrow.getLayoutParams();
         params.leftMargin = value.margin;
 
         //선택된 폴더가 이 폴더 노드라면
@@ -106,21 +106,21 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
         //expandable
         if (!node.getChildren().isEmpty())
-            mBinding.itemTreeFolderFolderIconLayout.setOnClickListener(v -> tView.toggleNode(node));
-        else mBinding.itemTreeFolderArrowIcon.setVisibility(View.INVISIBLE);
+            mBinding.iconItemTreeFolderFolderLayout.setOnClickListener(v -> tView.toggleNode(node));
+        else mBinding.iconItemTreeFolderArrow.setVisibility(View.INVISIBLE);
 
         if (mThisFolder != null && mThisFolder.getId() == value.folder.getId())
-            mBinding.itemTreeFolderCurrentPositionText.setVisibility(View.VISIBLE);
-        else mBinding.itemTreeFolderCurrentPositionText.setVisibility(View.GONE);
+            mBinding.tvItemTreeFolderCurrentPosition.setVisibility(View.VISIBLE);
+        else mBinding.tvItemTreeFolderCurrentPosition.setVisibility(View.GONE);
 
-        mBinding.itemTreeFolderAddIcon.setOnClickListener(v -> mListener.treeViewFolderAddFolderClick(mNode, value));
+        mBinding.iconItemTreeFolderAdd.setOnClickListener(v -> mListener.treeViewFolderAddFolderClick(mNode, value));
         return mBinding.getRoot();
     }
 
     private void setAlpha() {
         if (mIsClickable) {
-            mBinding.itemTreeFolderFolderIconLayout.setAlpha(0.5f);
-            mBinding.itemTreeFolderText.setAlpha(0.5f);
+            mBinding.iconItemTreeFolderFolderLayout.setAlpha(0.5f);
+            mBinding.tvItemTreeFolderFolder.setAlpha(0.5f);
             mIsClickable = false;
         }
     }
@@ -130,8 +130,8 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
     }
 
     public void setIconClickable() {
-        mBinding.itemTreeFolderArrowIcon.setVisibility(View.VISIBLE);
-        mBinding.itemTreeFolderFolderIconLayout.setOnClickListener(v -> tView.toggleNode(mNode));
+        mBinding.iconItemTreeFolderArrow.setVisibility(View.VISIBLE);
+        mBinding.iconItemTreeFolderFolderLayout.setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
     public ItemTreeFolderBinding getBinding() {
@@ -152,8 +152,8 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
 
     @Override
     public void toggle(boolean active) {
-        mBinding.itemTreeFolderArrowIcon.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
-        mBinding.itemTreeFolderFolderIcon.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
+        mBinding.iconItemTreeFolderArrow.setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
+        mBinding.iconItemTreeFolderFolder.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
     public static class FolderTreeHolder {

@@ -59,4 +59,8 @@ public interface FolderDao {
 
     @Update
     void folderUpdate(List<Folder> folderList);
+
+    //TODO check
+    @Query("SELECT * FROM Folder WHERE id = :folderIdList")
+    List<Folder> getFolderListByIdList(List<Long> folderIdList);
 }

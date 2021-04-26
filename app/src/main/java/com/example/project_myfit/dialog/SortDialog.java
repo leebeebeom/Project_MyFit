@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.databinding.SortViewBinding;
+import com.example.project_myfit.databinding.LayoutDialogSortBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 
@@ -42,25 +42,25 @@ public class SortDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph).backStackLiveSetValue(R.id.sortDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sortDialog);
 
-        SortViewBinding binding = SortViewBinding.inflate(getLayoutInflater());
-        MaterialRadioButton[] sortButtons = {binding.dialogSortCustomRadioButton, binding.dialogSortCreateRadioButton, binding.dialogSortCreateReverseRadioButton,
-                binding.dialogSortBrandRadioButton, binding.dialogSortBrandReverseRadioButton, binding.dialogSortNameRadioButton, binding.dialogSortNameReverseRadioButton};
+        LayoutDialogSortBinding binding = LayoutDialogSortBinding.inflate(getLayoutInflater());
+        MaterialRadioButton[] sortButtons = {binding.radioBtnDialogSortCustom, binding.radioBtnDialogSortCreate, binding.radioBtnDialogSortCreateReverse,
+                binding.radioBtnDialogSortBrand, binding.radioBtnDialogSortBrandReverse, binding.radioBtnDialogSortName, binding.radioBtnDialogSortNameReverse};
         addCheckListener(sortButtons);
         sortButtons[mCheckedItem].setChecked(true);
 
         //메인프래그먼트에서 실행 시 브랜드 삭제
         if (mFragmentType.equals(MAIN_FRAGMENT)) {
-            binding.dialogSortBrandRadioButton.setVisibility(View.GONE);
-            binding.dialogSortBrandReverseRadioButton.setVisibility(View.GONE);
+            binding.radioBtnDialogSortBrand.setVisibility(View.GONE);
+            binding.radioBtnDialogSortBrandReverse.setVisibility(View.GONE);
         }
 
-        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
-                .setTitle(R.string.sort)
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialogStyle)
+                .setTitle(R.string.all_sort_order)
                 .setView(binding.getRoot())
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.confirm, (dialog, which) -> dialogUtils.sortConfirmClick(mCheckedItem))
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_confirm, (dialog, which) -> dialogUtils.sortConfirmClick(mCheckedItem))
                 .show();
 
         Window window = alertDialog.getWindow();

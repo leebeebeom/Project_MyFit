@@ -1,4 +1,4 @@
-package com.example.project_myfit.dialog.search_dialog;
+package com.example.project_myfit.dialog.searchdialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -15,19 +15,19 @@ import com.example.project_myfit.dialog.DialogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RecentSearchAllClearDialog extends DialogFragment {
+public class RecentSearchDeleteAllDialog extends DialogFragment {
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.search_nav_gragh)
-                .backStackLiveSetValue(R.id.recentSearchAllClearDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search)
+                .backStackLiveSetValue(R.id.recentSearchDeleteAllDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.recent_search_all_clear));
+        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.recentSearchAllClearClick());
+        positiveButton.setOnClickListener(v -> dialogUtils.recentSearchDeleteAllClick());
 
         return alertDialog;
     }

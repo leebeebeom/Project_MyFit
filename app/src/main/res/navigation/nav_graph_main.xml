@@ -12,10 +12,10 @@
         <action
             android:id="@+id/action_mainFragment_to_listFragment"
             app:destination="@id/listFragment"
-            app:enterAnim="@anim/anim_fragment_slide_in"
+            app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/anim_fragment_slide_out" />
+            app:popExitAnim="@anim/fragment_slide_out" />
         <action
             android:id="@+id/action_mainFragment_to_searchActivity"
             app:destination="@id/searchActivity" />
@@ -51,26 +51,26 @@
         <action
             android:id="@+id/action_listFragment_to_inputOutputFragment"
             app:destination="@id/inputOutputFragment"
-            app:enterAnim="@anim/anim_fragment_slide_in"
+            app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/anim_fragment_slide_out" />
+            app:popExitAnim="@anim/fragment_slide_out" />
         <action
             android:id="@+id/action_listFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/anim_fragment_slide_out"
+            app:exitAnim="@anim/fragment_slide_out"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/anim_fragment_slide_out"
+            app:popExitAnim="@anim/fragment_slide_out"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_listFragment_refresh"
             app:destination="@id/listFragment"
             app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/anim_fragment_slide_out"
+            app:exitAnim="@anim/fragment_slide_out"
             app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/anim_fragment_slide_out" />
+            app:popExitAnim="@anim/fragment_slide_out" />
         <action
             android:id="@+id/action_listFragment_to_searchActivity"
             app:destination="@id/searchActivity" />

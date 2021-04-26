@@ -20,9 +20,9 @@ public class ImageClearDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph).backStackLiveSetValue(R.id.imageClearDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.imageClearDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.image_delete_check));
+        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_image_clear));
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.imageDeleteConfirm());
         return alertDialog;

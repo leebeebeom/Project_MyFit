@@ -16,8 +16,11 @@ import com.example.project_myfit.data.model.Size;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -447,20 +450,29 @@ public class Repository {
             return recentSearch.get();
         }
 
-        public void insertRecentSearch(RecentSearch recentSearch) {
-            new Thread(() -> mRecentSearchDao.insertRecentSearch(recentSearch)).start();
+        public void insertRecentSearch(String wort) {
+            new Thread(() -> mRecentSearchDao.insertRecentSearch(new RecentSearch(wort, getCurrentDate()))).start();
         }
 
         public void deleteRecentSearch(RecentSearch recentSearch) {
             new Thread(() -> mRecentSearchDao.deleteRecentSearch(recentSearch)).start();
         }
 
-        public void deleteOverLapRecentSearch(String word) {
-            new Thread(() -> mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearchByWord(word))).start();
+        public void overLapRecentSearchReInsert(String word) {
+            new Thread(() -> {
+                mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearchByWord(word));
+                mRecentSearchDao.insertRecentSearch(new RecentSearch(word, getCurrentDate()));
+            }).start();
         }
 
-        public void deleteAllRecentSearch(){
+        public void deleteAllRecentSearch() {
             new Thread(mRecentSearchDao::deleteAllRecentSearch).start();
+        }
+
+        @NotNull
+        private String getCurrentDate() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일", Locale.getDefault());
+            return dateFormat.format(new Date(System.currentTimeMillis()));
         }
     }
 }

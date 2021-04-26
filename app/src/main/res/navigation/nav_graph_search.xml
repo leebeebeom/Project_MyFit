@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.project_myfit.search.main.SearchFragment"
-        tools:layout="@layout/fragment_search_main"
+        tools:layout="@layout/fragment_search"
         android:label="SearchFragment">
         <action
             android:id="@+id/action_searchFragment_to_searchSelectedItemDeleteDialog"
@@ -23,8 +23,8 @@
             android:id="@+id/action_searchFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
         <action
-            android:id="@+id/action_searchFragment_to_recentSearchAllClearDialog"
-            app:destination="@id/recentSearchAllClearDialog" />
+            android:id="@+id/action_searchFragment_to_recentSearchDeleteAllDialog"
+            app:destination="@id/recentSearchDeleteAllDialog" />
     </fragment>
     <dialog
         android:id="@+id/searchSelectedItemDeleteDialog"
@@ -142,7 +142,7 @@
             app:argType="long" />
     </activity>
     <dialog
-        android:id="@+id/recentSearchAllClearDialog"
-        android:name="com.example.project_myfit.dialog.searchdialog.RecentSearchAllClearDialog"
-        android:label="RecentSearchAllClearDialog" />
+        android:id="@+id/recentSearchDeleteAllDialog"
+        android:name="com.example.project_myfit.dialog.searchdialog.RecentSearchDeleteAllDialog"
+        android:label="RecentSearchDeleteAllDialog" />
 </navigation>

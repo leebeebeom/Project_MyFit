@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
-import com.example.project_myfit.databinding.TreeViewRootBinding;
+import com.example.project_myfit.databinding.LayoutDialogTreeBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -50,14 +50,14 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mDialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph);
+        mDialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main);
         mThisCategory = mDialogUtils.getDialogViewModel().getCategory(TreeViewDialogArgs.fromBundle(getArguments()).getThisCategoryId());
         mThisFolder = mDialogUtils.getDialogViewModel().getFolder(TreeViewDialogArgs.fromBundle(getArguments()).getThisFolderId());
         mModel.setSelectedItemList(mDialogUtils.getDialogViewModel().getSelectedFolderList(), mDialogUtils.getDialogViewModel().getSelectedSizeList());
 
-        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialog)
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialogStyle)
                 .setView(getDialogView())
-                .setTitle(R.string.tree_view_dialog_title)
+                .setTitle(R.string.tree_title)
                 .create();
 
         Window window = alertDialog.getWindow();
@@ -68,10 +68,10 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
 
     @NotNull
     private View getDialogView() {
-        TreeViewRootBinding binding = TreeViewRootBinding.inflate(getLayoutInflater());
+        LayoutDialogTreeBinding binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
         binding.setParentCategory(mModel.getParentCategory());
-        binding.dialogTreeRoot.addView(getTreeView(), 2);
-        binding.dialogTreeAddCategoryLayout.setOnClickListener(v -> mDialogUtils.treeViewAddCategoryClick(CATEGORY, mModel.getParentCategory(), false));
+        binding.layoutDialogTree.addView(getTreeView(), 2);
+        binding.tvDialogTreeAddCategoryLayout.setOnClickListener(v -> mDialogUtils.treeViewAddCategoryClick(CATEGORY, mModel.getParentCategory(), false));
         return binding.getRoot();
     }
 

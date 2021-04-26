@@ -1,4 +1,4 @@
-package com.example.project_myfit.dialog.search_dialog;
+package com.example.project_myfit.dialog.searchdialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -37,12 +37,12 @@ public class SearchSameNameAddDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.search_nav_gragh).backStackLiveSetValue(R.id.searchSameNameAddDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search).backStackLiveSetValue(R.id.searchSameNameAddDialog);
 
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_category_name_add));
-        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_folder_name_add));
+            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add));
+        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {

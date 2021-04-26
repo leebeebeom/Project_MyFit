@@ -42,7 +42,7 @@ public class NameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph).backStackLiveSetValue(R.id.NameEditDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.nameEditDialog);
 
         Category category = mItemType.equals(CATEGORY) ? dialogUtils.getDialogViewModel().getCategory(mItemId) : null;
         Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getDialogViewModel().getFolder(mItemId) : null;
@@ -56,9 +56,9 @@ public class NameEditDialog extends DialogFragment {
 
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_category_name), finalOldName);
+            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
         else
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.edit_folder_name), finalOldName);
+            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 
@@ -66,14 +66,14 @@ public class NameEditDialog extends DialogFragment {
             InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-            String newName = String.valueOf(mBinding.dialogEditText.getText()).trim();
+            String newName = String.valueOf(mBinding.etDialog.getText()).trim();
             if (category != null)
                 dialogUtils.categoryNameEditConfirmClick(category, newName, mIsParentName, false);
             else if (folder != null)
                 dialogUtils.folderNameEditConfirmCLick(folder, newName, mIsParentName, false);
         });
 
-        mBinding.dialogEditText.setOnEditorActionListener((v, actionId, event) -> {
+        mBinding.etDialog.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
                 positiveButton.callOnClick();
             return false;
@@ -85,6 +85,6 @@ public class NameEditDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(NAME_EDIT_NAME, String.valueOf(mBinding.dialogEditText.getText()));
+        outState.putString(NAME_EDIT_NAME, String.valueOf(mBinding.etDialog.getText()));
     }
 }

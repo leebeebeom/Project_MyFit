@@ -24,7 +24,6 @@ public class SelectedItemTreat {
         mSizeRepository = Repository.getSizeRepository(context);
     }
 
-    //move------------------------------------------------------------------------------------------
     public void folderSizeMove(boolean isSearchView, long targetId, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         if (isSearchView){
             List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
@@ -32,16 +31,12 @@ public class SelectedItemTreat {
             List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
             Folder targetFolder = mFolderRepository.getFolder(targetId);
 
+            if (targetCategory != null) originCategoryList.add(targetCategory);
             categorySetDummy(originCategoryList);
-            if (targetCategory != null) {
-                targetCategory.setDummy(!targetCategory.getDummy());
-                originCategoryList.add(targetCategory);
-            }
+
+            if (targetFolder != null) originFolderList.add(targetFolder);
             folderSetDummy(originFolderList);
-            if (targetFolder != null) {
-                targetFolder.setDummy(!targetFolder.getDummy());
-                originFolderList.add(targetFolder);
-            }
+
             mCategoryRepository.categoryUpdate(originCategoryList);
             mFolderRepository.folderUpdate(originFolderList);
         } else {
@@ -77,6 +72,11 @@ public class SelectedItemTreat {
             originCategoryIdList.add(size.getParentId());
 
         List<Category> originCategoryList = new ArrayList<>();
+        /*
+        TODO
+         CategoryDao - List<Category> getCategoryListByIdList(List<Long> categoryIdList);
+         확인
+         */
         for (long categoryId : originCategoryIdList) {
             Category category = mCategoryRepository.getCategory(categoryId);
             if (category != null)
@@ -92,7 +92,11 @@ public class SelectedItemTreat {
             originFolderIdList.add(folder.getParentId());
         for (Size size : selectedSizeList)
             originFolderIdList.add(size.getParentId());
-
+        /*
+        TODO
+         FolderDao - List<Folder> getFolderListByIdList(List<Long> folderIdList);
+         확인
+         */
         List<Folder> originFolderList = new ArrayList<>();
         for (long folderId : originFolderIdList) {
             Folder folder = mFolderRepository.getFolder(folderId);
@@ -163,7 +167,6 @@ public class SelectedItemTreat {
             allSizeList.addAll(mSizeRepository.getSizeListByParentId(f.getId()));
         }
 
-        //size 따로
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
         getFolderChildList(topFolderList, allFolderList);
         getAllSizeList(allFolderList, allSizeList);

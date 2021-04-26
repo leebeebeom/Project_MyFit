@@ -35,12 +35,12 @@ public class SameNameAddDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.main_nav_graph).backStackLiveSetValue(R.id.sameNameAddDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sameNameAddDialog);
 
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_category_name_add));
-        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.same_folder_name_add));
+            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add));
+        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {

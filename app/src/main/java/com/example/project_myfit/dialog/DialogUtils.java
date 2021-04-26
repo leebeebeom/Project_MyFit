@@ -27,9 +27,9 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.dialog.search_dialog.SearchAddDialogDirections;
-import com.example.project_myfit.dialog.search_dialog.SearchNameEditDialogDirections;
-import com.example.project_myfit.dialog.search_dialog.SearchTreeViewDialogDirections;
+import com.example.project_myfit.dialog.searchdialog.SearchAddDialogDirections;
+import com.example.project_myfit.dialog.searchdialog.SearchNameEditDialogDirections;
+import com.example.project_myfit.dialog.searchdialog.SearchTreeViewDialogDirections;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -44,7 +44,6 @@ import static com.example.project_myfit.util.MyFitConstant.ID;
 import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM_CLICK;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM_CLICK;
@@ -78,13 +77,13 @@ public class DialogUtils {
     @NotNull
     public ItemDialogEditTextBinding getBinding(@Nullable String oldName, @NotNull String itemType) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(mInflater);
-        binding.dialogEditText.requestFocus();
+        binding.etDialog.requestFocus();
         if (itemType.equals(CATEGORY)) {
-            binding.setHint(mContext.getString(R.string.category_name));
-            binding.setPlaceHolder(mContext.getString(R.string.category_name_korean));
+            binding.setHint(mContext.getString(R.string.dialog_hint_category_name));
+            binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_category_name));
         } else if (itemType.equals(FOLDER)) {
-            binding.setHint(mContext.getString(R.string.folder_name));
-            binding.setPlaceHolder(mContext.getString(R.string.folder_name_korean));
+            binding.setHint(mContext.getString(R.string.dialog_hint_folder_name));
+            binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_folder_name));
         }
         if (oldName != null) binding.setSetText(oldName);
         return binding;
@@ -92,11 +91,11 @@ public class DialogUtils {
 
     @NotNull
     public AlertDialog getConfirmDialog(String message) {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext, R.style.myAlertDialog)
-                .setTitle(R.string.confirm)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext, R.style.myAlertDialogStyle)
+                .setTitle(R.string.dialog_confirm)
                 .setMessage(message)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.confirm, null)
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_confirm, null)
                 .show();
         setLayout(dialog.getWindow());
         setTextSize(dialog);
@@ -105,11 +104,11 @@ public class DialogUtils {
 
     @NotNull
     public AlertDialog getEditTextDialog(@NotNull ItemDialogEditTextBinding binding, String title, String oldName) {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext, R.style.myAlertDialog)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext, R.style.myAlertDialogStyle)
                 .setTitle(title)
                 .setView(binding.getRoot())
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.confirm, null)
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_confirm, null)
                 .create();
 
         Window window = dialog.getWindow();
@@ -153,14 +152,14 @@ public class DialogUtils {
 
     private void addTextChangeListener(@NotNull ItemDialogEditTextBinding binding, @NotNull AlertDialog dialog, String oldName) {
         Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        String inputText = String.valueOf(binding.dialogEditText.getText()).trim();
+        String inputText = String.valueOf(binding.etDialog.getText()).trim();
         if (oldName == null)
             positiveButton.setEnabled(!TextUtils.isEmpty(inputText));
         else
             positiveButton.setEnabled(!TextUtils.isEmpty(inputText) && !oldName.equals(inputText));
 
 
-        binding.dialogEditText.addTextChangedListener(new TextWatcher() {
+        binding.etDialog.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -179,10 +178,10 @@ public class DialogUtils {
             }
         });
 
-        binding.dialogEditText.setOnKeyListener((v, keyCode, event) -> {
-            if (String.valueOf(binding.dialogEditText.getText()).length() == 30)
-                binding.dialogEditTextLayout.setError(mContext.getString(R.string.max_length));
-            else binding.dialogEditTextLayout.setErrorEnabled(false);
+        binding.etDialog.setOnKeyListener((v, keyCode, event) -> {
+            if (String.valueOf(binding.etDialog.getText()).length() == 30)
+                binding.etDialogLayout.setError(mContext.getString(R.string.dialog_et_max_length));
+            else binding.etDialogLayout.setErrorEnabled(false);
             return false;
         });
     }
@@ -252,14 +251,14 @@ public class DialogUtils {
     public void sameNameCategoryEditConfirmClick(long categoryId, String categoryName, boolean isParentName, boolean isSearchView) {
         mDialogViewModel.sameNameCategoryEditConfirmClick(categoryId, categoryName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
-        if (!isParentName) mNavController.popBackStack(R.id.NameEditDialog, true);
+        if (!isParentName) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
     public void sameNameFolderEditConfirmClick(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
         mDialogViewModel.sameNameFolderEditConfirmClick(folderId, folderName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
-        if (!isSearchView) mNavController.popBackStack(R.id.NameEditDialog, true);
+        if (!isSearchView) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
@@ -314,8 +313,8 @@ public class DialogUtils {
             mNavController.navigate(SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchItemMoveDialog(selectedItemSize, parentId));
     }
 
-    public void recentSearchAllClearClick() {
-        mNavBackStackEntry.getSavedStateHandle().set(RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK, null);
+    public void recentSearchDeleteAllClick() {
+        mDialogViewModel.recentSearchDeleteAll();
         mNavController.popBackStack();
     }
 }

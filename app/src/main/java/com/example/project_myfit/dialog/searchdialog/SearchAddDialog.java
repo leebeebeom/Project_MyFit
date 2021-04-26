@@ -1,4 +1,4 @@
-package com.example.project_myfit.dialog.search_dialog;
+package com.example.project_myfit.dialog.searchdialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -38,14 +38,14 @@ public class SearchAddDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.search_nav_gragh).backStackLiveSetValue(R.id.searchAddDialog);
+        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search).backStackLiveSetValue(R.id.searchAddDialog);
 
         ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, mItemType);
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_category), null);
+            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.all_add_category), null);
         else
-            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.add_folder), null);
+            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.all_create_folder), null);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 
@@ -53,7 +53,7 @@ public class SearchAddDialog extends DialogFragment {
             InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-            String newName = String.valueOf(binding.dialogEditText.getText()).trim();
+            String newName = String.valueOf(binding.etDialog.getText()).trim();
 
             if (mItemType.equals(CATEGORY))
                 dialogUtils.addCategoryConfirmClick(newName, mParentCategory, true);
