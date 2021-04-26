@@ -38,6 +38,7 @@ import com.example.project_myfit.main.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.LockableScrollView;
 import com.example.project_myfit.util.adapter.DragCallBackList;
 import com.example.project_myfit.util.adapter.view_holder.CategoryVH;
+import com.example.project_myfit.util.adapter.view_holder.ViewPagerVH;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,7 +62,7 @@ import static com.example.project_myfit.util.MyFitConstant.UP;
 
 //TODO 휴지통
 
-public class MainFragment extends Fragment implements MainViewPagerAdapter.MainDragAutoScrollListener, CategoryVH.CategoryVHListener {
+public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoScrollListener, CategoryVH.CategoryVHListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
@@ -195,10 +196,10 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
                 mBinding.svMain.setScrollable(false);
                 isDragSelecting = true;
 
-                MainViewPagerAdapter.MainViewPagerVH mainViewPagerVH = (MainViewPagerAdapter.MainViewPagerVH) ((RecyclerView) mBinding.vpMain.getChildAt(0))
+                ViewPagerVH viewPagerVH = (ViewPagerVH) ((RecyclerView) mBinding.vpMain.getChildAt(0))
                         .findViewHolderForAdapterPosition(mModel.getCurrentItem());
-                if (mainViewPagerVH != null) {
-                    RecyclerView recyclerView = mainViewPagerVH.getBinding().rvItemMainRv;
+                if (viewPagerVH != null) {
+                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemRv;
                     RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
                     if (viewHolder != null) viewHolder.itemView.callOnClick();
                 }
@@ -212,10 +213,10 @@ public class MainFragment extends Fragment implements MainViewPagerAdapter.MainD
 
             @Override
             public void onSelectChange(int i, int i1, boolean b) {
-                MainViewPagerAdapter.MainViewPagerVH mainViewPagerVH = (MainViewPagerAdapter.MainViewPagerVH) ((RecyclerView) mBinding.vpMain.getChildAt(0))
+                ViewPagerVH viewPagerVH = (ViewPagerVH) ((RecyclerView) mBinding.vpMain.getChildAt(0))
                         .findViewHolderForAdapterPosition(mModel.getCurrentItem());
-                if (mainViewPagerVH != null) {
-                    RecyclerView recyclerView = mainViewPagerVH.getBinding().rvItemMainRv;
+                if (viewPagerVH != null) {
+                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemRv;
                     for (int j = i; j <= i1; j++) {
                         RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
                         if (viewHolder != null) viewHolder.itemView.callOnClick();
