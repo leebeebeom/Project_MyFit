@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.list;
+package com.example.project_myfit.main.list;
 
 import android.app.Application;
 
@@ -11,9 +11,9 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.fragment.list.adapter.folder_adapter.FolderAdapter;
-import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterGrid;
-import com.example.project_myfit.fragment.list.adapter.size_adapter.SizeAdapterList;
+import com.example.project_myfit.main.list.adapter.folderadapter.FolderAdapter;
+import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
+import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.util.Sort;
 
 import org.jetbrains.annotations.Contract;
