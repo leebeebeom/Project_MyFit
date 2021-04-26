@@ -199,7 +199,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 ViewPagerVH viewPagerVH = (ViewPagerVH)
                         ((RecyclerView) mBinding.vpSearch.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
-                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemSearchRv;
+                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemRv;
                     RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
                     if (viewHolder != null) viewHolder.itemView.callOnClick();
                 }
@@ -216,7 +216,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 ViewPagerVH viewPagerVH = (ViewPagerVH)
                         ((RecyclerView) mBinding.vpSearch.getChildAt(0)).findViewHolderForAdapterPosition(mModel.getCurrentItem());
                 if (viewPagerVH != null) {
-                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemSearchRv;
+                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemRv;
                     for (int j = i; j <= i1; j++) {
                         RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
                         if (viewHolder != null) viewHolder.itemView.callOnClick();
