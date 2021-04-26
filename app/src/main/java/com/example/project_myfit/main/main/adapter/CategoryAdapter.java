@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.main.adapter;
+package com.example.project_myfit.main.main.adapter;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.databinding.ItemMainRecyclerCategoryBinding;
-import com.example.project_myfit.fragment.main.MainViewModel;
+import com.example.project_myfit.databinding.ItemCategoryBinding;
+import com.example.project_myfit.main.main.MainViewModel;
 import com.example.project_myfit.util.adapter.AdapterUtil;
 import com.example.project_myfit.util.adapter.view_holder.CategoryVH;
 
@@ -31,16 +31,17 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 @SuppressLint("ClickableViewAccessibility")
 public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
+
     private List<Category> mCategoryList, mSelectedCategoryList;
     private final MainViewModel mModel;
     private final HashSet<Long> mSelectedCategoryIdHashSet;
     private final CategoryVH.CategoryVHListener mListener;
     private int mActionModeState, mSort;
     private Animation mAnimation;
-    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
-    private MainViewPagerAdapter.ViewPagerVH mViewPagerVH;
+    private List<Long> mFolderParentIdList, mSizeParentIdList;
+    private MainViewPagerAdapter.MainViewPagerVH mMainViewPagerVH;
     private AdapterUtil mAdapterUtil;
-    private boolean mIsDragging;
+    private boolean isDragging;
 
     public CategoryAdapter(MainViewModel model, CategoryVH.CategoryVHListener listener) {
         super(new DiffUtil.ItemCallback<Category>() {
@@ -67,26 +68,26 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
     }
 
     public void submitList(int sort, @Nullable @org.jetbrains.annotations.Nullable List<Category> list,
-                           List<Long> allFolderFolderId, List<Long> allSizeFolderId) {
+                           List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         super.submitList(list);
         this.mCategoryList = list;
-        this.mFolderFolderIdList = allFolderFolderId;
-        this.mSizeFolderIdList = allSizeFolderId;
+        this.mFolderParentIdList = folderParentIdList;
+        this.mSizeParentIdList = sizeParentIdList;
         this.mSort = sort;
 
-        if (list != null && mViewPagerVH != null)
-            mViewPagerVH.setNoData(list.isEmpty());
+        if (list != null && mMainViewPagerVH != null)
+            mMainViewPagerVH.setNoData(list.isEmpty());
     }
 
-    public void setViewPagerVH(MainViewPagerAdapter.ViewPagerVH viewPagerVH) {
-        this.mViewPagerVH = viewPagerVH;
+    public void setViewPagerVH(MainViewPagerAdapter.MainViewPagerVH mainViewPagerVH) {
+        this.mMainViewPagerVH = mainViewPagerVH;
     }
 
     @NonNull
     @NotNull
     @Override
     public CategoryVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemMainRecyclerCategoryBinding binding = ItemMainRecyclerCategoryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemCategoryBinding binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new CategoryVH(binding, mListener);
     }
 
@@ -101,42 +102,42 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
 
         Category category = getItem(holder.getLayoutPosition());
         holder.setCategory(category);
-        holder.getBinding().itemMainDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
-                mIsDragging = true;
+        holder.getBinding().iconItemCategoryDragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !isDragging) {
+                isDragging = true;
                 mListener.onCategoryDragHandleTouch(holder);
                 draggingView(holder);
             }
             return false;
         });
 
-        holder.getBinding().itemMainContentsSizeText.setText(String.valueOf(mAdapterUtil.
-                getCategoryContentsSize(category, mFolderFolderIdList, mSizeFolderIdList)));
+        holder.getBinding().tvItemCategoryContentsSize.setText(String.valueOf(mAdapterUtil.
+                getContentsSize(category.getId(), mFolderParentIdList, mSizeParentIdList)));
 
         if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.listActionModeOn(holder.getBinding().itemMainCardView, holder.getBinding().itemMainCheckBox,
+            mAdapterUtil.listActionModeOn(holder.getBinding().cardViewItemCategory, holder.getBinding().cbItemCategory,
                     mSelectedCategoryIdHashSet, category.getId());
         else if (mActionModeState == ACTION_MODE_OFF) {
-            mAdapterUtil.listActionModeOff(holder.getBinding().itemMainCardView, holder.getBinding().itemMainCheckBox,
+            mAdapterUtil.listActionModeOff(holder.getBinding().cardViewItemCategory, holder.getBinding().cbItemCategory,
                     mSelectedCategoryIdHashSet);
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
         }
 
-        holder.getBinding().itemMainDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
+        holder.getBinding().iconItemCategoryDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
     }
 
     private void draggingView(@NotNull CategoryVH holder) {
         holder.itemView.setTranslationZ(10);
-        holder.getBinding().itemMainCheckBox.setVisibility(View.INVISIBLE);
-        holder.getBinding().itemMainCategoryText.setAlpha(0.5f);
-        holder.getBinding().itemMainContentsSizeLayout.setAlpha(0.5f);
+        holder.getBinding().cbItemCategory.setVisibility(View.INVISIBLE);
+        holder.getBinding().tvItemCategoryTitle.setAlpha(0.5f);
+        holder.getBinding().tvItemCategoryContentsSizeLayout.setAlpha(0.5f);
     }
 
     private void dropView(@NotNull CategoryVH holder) {
         holder.itemView.setTranslationZ(0);
-        holder.getBinding().itemMainCheckBox.setVisibility(View.VISIBLE);
-        holder.getBinding().itemMainCategoryText.setAlpha(0.8f);
-        holder.getBinding().itemMainContentsSizeLayout.setAlpha(0.8f);
+        holder.getBinding().cbItemCategory.setVisibility(View.VISIBLE);
+        holder.getBinding().tvItemCategoryTitle.setAlpha(0.8f);
+        holder.getBinding().tvItemCategoryContentsSizeLayout.setAlpha(0.8f);
     }
 
     public void onItemMove(int from, int to) {
@@ -148,7 +149,7 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
         mListener.onCategoryDragHandleTouch(viewHolder);
         mModel.categoryItemDrop(mCategoryList);
         dropView((CategoryVH) viewHolder);
-        mIsDragging = false;
+        isDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {
