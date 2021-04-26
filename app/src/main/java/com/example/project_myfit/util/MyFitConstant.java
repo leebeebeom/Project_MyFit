@@ -5,6 +5,8 @@ public class MyFitConstant {
     public static final String CATEGORY = "category";
     public static final String FOLDER = "folder";
     public static final String SIZE = "size";
+    public static final String DAILY_LOOK = "daily look";
+    public static final String WISH_LIST = "wish list";
 
     //key
     public static final String PARENT_ID = "parent_id";
