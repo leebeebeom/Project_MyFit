@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +37,6 @@ public class CategoryAdapter extends ListAdapter<Category, CategoryVH> {
     private final HashSet<Long> mSelectedCategoryIdHashSet;
     private final CategoryVH.CategoryVHListener mListener;
     private int mActionModeState, mSort;
-    private Animation mAnimation;
     private List<Long> mFolderParentIdList, mSizeParentIdList;
     private ViewPagerVH mMainViewPagerVH;
     private AdapterUtil mAdapterUtil;
