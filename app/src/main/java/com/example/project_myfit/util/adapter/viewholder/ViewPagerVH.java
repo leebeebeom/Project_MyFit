@@ -1,4 +1,4 @@
-package com.example.project_myfit.util.adapter.view_holder;
+package com.example.project_myfit.util.adapter.viewholder;
 
 import android.annotation.SuppressLint;
 import android.view.View;
