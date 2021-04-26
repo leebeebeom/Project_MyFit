@@ -105,7 +105,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderGridVH> {
         if (contentsSize == 1)
             holder.getBinding().tvItemFolderGridItems.setText(R.string.item_folder_item);
         else holder.getBinding().tvItemFolderGridItems.setText(R.string.item_folder_items);
-        holder.getBinding().tvItemFolderGridContentsSize.setText(contentsSize);
+        holder.getBinding().tvItemFolderGridContentsSize.setText(String.valueOf(contentsSize));
 
         if (mActionModeState == ACTION_MODE_ON)
             mAdapterUtil.gridActionModeOn(holder.getBinding().cbItemFolderGrid, mSelectedFolderIdHashSet, folder.getId());
