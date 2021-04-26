@@ -5,7 +5,7 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.databinding.ItemSearchRecyclerViewBinding;
+import com.example.project_myfit.databinding.ItemRecyclerViewBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,14 +14,14 @@ import static com.example.project_myfit.util.MyFitConstant.STOP;
 import static com.example.project_myfit.util.MyFitConstant.UP;
 
 public class ViewPagerVH extends RecyclerView.ViewHolder {
-    private final ItemSearchRecyclerViewBinding mBinding;
+    private final ItemRecyclerViewBinding mBinding;
 
     @SuppressLint("ClickableViewAccessibility")
-    public ViewPagerVH(@NotNull ItemSearchRecyclerViewBinding binding, ViewPagerAutoScrollListener listener) {
+    public ViewPagerVH(@NotNull ItemRecyclerViewBinding binding, ViewPagerAutoScrollListener listener) {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        mBinding.rvItemSearchRv.setOnTouchListener((v, event) -> {
+        mBinding.rvItemRv.setOnTouchListener((v, event) -> {
             if (event.getRawY() > 2000)
                 listener.dragAutoScroll(DOWN);
             else if (event.getRawY() < 250)
@@ -34,11 +34,17 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
 
     public void setNoResult(boolean isEmpty) {
         if (isEmpty)
-            mBinding.tvItemSearchRvNoResultLayout.setVisibility(View.VISIBLE);
-        else mBinding.tvItemSearchRvNoResultLayout.setVisibility(View.GONE);
+            mBinding.tvItemRvNoResultLayout.setVisibility(View.VISIBLE);
+        else mBinding.tvItemRvNoResultLayout.setVisibility(View.GONE);
     }
 
-    public ItemSearchRecyclerViewBinding getBinding() {
+    public void setNoData(boolean isEmpty) {
+        if (isEmpty)
+            mBinding.tvItemRvNoDataLayout.setVisibility(View.VISIBLE);
+        else mBinding.tvItemRvNoDataLayout.setVisibility(View.GONE);
+    }
+
+    public ItemRecyclerViewBinding getBinding() {
         return mBinding;
     }
 
