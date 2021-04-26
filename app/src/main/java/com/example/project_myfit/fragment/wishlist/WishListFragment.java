@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.favorite;
+package com.example.project_myfit.fragment.wishlist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
 
-public class FavoriteFragment extends Fragment {
+public class WishListFragment extends Fragment {
 
-    private FavoriteFragmentViewModel mViewModel;
+    private WishListViewModel mViewModel;
 
-    public static FavoriteFragment newInstance() {
-        return new FavoriteFragment();
+    public static WishListFragment newInstance() {
+        return new WishListFragment();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(FavoriteFragmentViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(WishListViewModel.class);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.project_myfit.fragment.Average;
+package com.example.project_myfit.fragment.dialylook;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,12 +13,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.project_myfit.R;
 
 public class
-AverageFragment extends Fragment {
+DailyLookFragment extends Fragment {
 
-    private AverageViewModel mViewModel;
+    private DailyLookViewModel mViewModel;
 
-    public static AverageFragment newInstance() {
-        return new AverageFragment();
+    public static DailyLookFragment newInstance() {
+        return new DailyLookFragment();
     }
 
     @Override
@@ -30,7 +30,7 @@ AverageFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AverageViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(DailyLookViewModel.class);
     }
 
 }
