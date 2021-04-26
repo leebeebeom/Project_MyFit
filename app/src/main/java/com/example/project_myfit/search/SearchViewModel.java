@@ -48,21 +48,6 @@ public class SearchViewModel extends AndroidViewModel {
         mSelectedItemSizeLive.setValue(mSelectedItemList.size());
     }
 
-//    public void sizeSelected(@NotNull Size size, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
-//        searchAdapterArray[mCurrentItem].itemSelected(size.getId());
-//        if (isChecked) mSelectedItemList.add(size);
-//        else mSelectedItemList.remove(size);
-//        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
-//    }
-//
-//    public void folderSelected(@NotNull Folder folder, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
-//        searchAdapterArray[mCurrentItem].itemSelected(folder.getId());
-//        if (isChecked) mSelectedItemList.add(folder);
-//        else mSelectedItemList.remove(folder);
-//        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
-//    }
-
-    //TODO check
     public void itemSelected(Object item, long id, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
         if (isChecked) mSelectedItemList.add(item);
         else mSelectedItemList.remove(item);
