@@ -1,9 +1,10 @@
-package com.example.project_myfit.search_activity.adapter;
+package com.example.project_myfit.search.main.adapter;
 
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -14,12 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.databinding.ItemSearchFolderBinding;
-import com.example.project_myfit.databinding.ItemSearchSizeBinding;
+import com.example.project_myfit.databinding.ItemFolderListBinding;
+import com.example.project_myfit.databinding.ItemSizeListBinding;
 import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.adapter.view_holder.FolderListVH;
+import com.example.project_myfit.util.adapter.view_holder.FolderVHListener;
+import com.example.project_myfit.util.adapter.view_holder.SizeListVH;
+import com.example.project_myfit.util.adapter.view_holder.SizeVHListener;
 import com.example.project_myfit.util.ktw.KoreanTextMatcher;
 import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,21 +31,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
 
 public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> implements Filterable {
-    private List<Object> mOriginList, mSelectedItem;
-    private final SearchAdapterListener mListener;
+    private List<Object> mAllItemList, mSelectedItem;
+    private final SizeVHListener mSizeListener;
+    private final FolderVHListener mFolderListener;
     private int mActionModeState;
     private final HashSet<Long> mSelectedItemIdHashSet;
     private SearchViewPagerAdapter.ViewPagerVH mViewPagerVH;
     private AdapterUtil mFolderAdapterUtil, mSizeAdapterUtil;
 
-    public SearchAdapter(SearchAdapterListener listener) {
+    public SearchAdapter(SizeVHListener sizeVHListener, FolderVHListener folderVHListener) {
         super(new SearchDiffUtil());
-        this.mListener = listener;
+        this.mSizeListener = sizeVHListener;
+        this.mFolderListener = folderVHListener;
         mSelectedItemIdHashSet = new HashSet<>();
         setHasStableIds(true);
     }
@@ -52,13 +59,13 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
 
     @Override
     public long getItemId(int position) {
-        if (getCurrentList().get(position) instanceof Folder)
-            return ((Folder) getCurrentList().get(position)).getId();
-        else return ((Size) getCurrentList().get(position)).getId();
+        if (getItem(position) instanceof Folder)
+            return ((Folder) getItem(position)).getId();
+        else return ((Size) getItem(position)).getId();
     }
 
     public void setItem(List<Object> allItemList, CharSequence word, TabLayout.Tab tab, TypedValue colorControl) {
-        this.mOriginList = allItemList;
+        this.mAllItemList = allItemList;
         getFilter().filter(word, count -> {
             if (tab != null) {
                 if (count == 0) tab.removeBadge();
@@ -74,7 +81,7 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        if (getCurrentList().get(position) instanceof Folder) return 0;
+        if (getItem(position) instanceof Folder) return 0;
         else return 1;
     }
 
@@ -83,11 +90,11 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         if (viewType == 0) {
-            ItemSearchFolderBinding binding = ItemSearchFolderBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-            return new SearchRecyclerFolderVH(binding, mListener);
+            ItemFolderListBinding binding = ItemFolderListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new FolderListVH(binding, mFolderListener);
         } else {
-            ItemSearchSizeBinding binding = ItemSearchSizeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-            return new SearchRecyclerSizeVH(binding, mListener);
+            ItemSizeListBinding binding = ItemSizeListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new SizeListVH(binding, mSizeListener);
         }
     }
 
@@ -103,38 +110,38 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
             mSelectedItem = null;
         }
 
-        if (holder instanceof SearchRecyclerFolderVH) {
+        if (holder instanceof FolderListVH) {
             Folder folder = (Folder) getItem(holder.getLayoutPosition());
-            ((SearchRecyclerFolderVH) holder).setFolder(folder);
+            ((FolderListVH) holder).setFolder(folder);
 
             int amount = 0;
-            for (Object o : mOriginList)
+            for (Object o : mAllItemList)
                 if (o instanceof Folder && ((Folder) o).getParentId() == folder.getId())
                     amount++;
                 else if (o instanceof Size && ((Size) o).getParentId() == folder.getId())
                     amount++;
 
-            ((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchContentsSizeText.setText(String.valueOf(amount));
+            ((FolderListVH) holder).getBinding().tvItemFolderListContentsSize.setText(String.valueOf(amount));
 
             if (mActionModeState == ACTION_MODE_ON)
-                mFolderAdapterUtil.listActionModeOn(((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCardView,
-                        ((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCheckBox, mSelectedItemIdHashSet, folder.getId());
+                mFolderAdapterUtil.listActionModeOn(((FolderListVH) holder).getBinding().cardViewItemFolderList,
+                        ((FolderListVH) holder).getBinding().cbItemFolderList, mSelectedItemIdHashSet, folder.getId());
             else if (mActionModeState == ACTION_MODE_OFF)
-                mFolderAdapterUtil.listActionModeOff(((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCardView,
-                        ((SearchRecyclerFolderVH) holder).mFolderBinding.itemSearchFolderCheckBox, mSelectedItemIdHashSet);
+                mFolderAdapterUtil.listActionModeOff(((FolderListVH) holder).getBinding().cardViewItemFolderList,
+                        ((FolderListVH) holder).getBinding().cbItemFolderList, mSelectedItemIdHashSet);
         } else {
             Size size = (Size) getItem(holder.getLayoutPosition());
-
-            ((SearchRecyclerSizeVH) holder).setSize(size);
+            ((SizeListVH) holder).setSize(size);
 
             if (mActionModeState == ACTION_MODE_ON)
-                mSizeAdapterUtil.listActionModeOn(((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCardView,
-                        ((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCheckBox, mSelectedItemIdHashSet, size.getId());
+                mSizeAdapterUtil.listActionModeOn(((SizeListVH) holder).getBinding().cardViewItemSizeList,
+                        ((SizeListVH) holder).getBinding().cbItemSizeList, mSelectedItemIdHashSet, size.getId());
             else if (mActionModeState == ACTION_MODE_OFF)
-                mSizeAdapterUtil.listActionModeOff(((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCardView,
-                        ((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchSizeCheckBox, mSelectedItemIdHashSet);
+                mSizeAdapterUtil.listActionModeOff(((SizeListVH) holder).getBinding().cardViewItemSizeList,
+                        ((SizeListVH) holder).getBinding().cbItemSizeList, mSelectedItemIdHashSet);
 
-            ((SearchRecyclerSizeVH) holder).mSizeBinding.itemSearchFavoriteCheckBox.setClickable(mActionModeState != ACTION_MODE_ON);
+            ((SizeListVH) holder).getBinding().cbItemSizeListFavorite.setClickable(mActionModeState != ACTION_MODE_ON);
+            ((SizeListVH) holder).getBinding().iconItemSizeListDragHandle.setVisibility(View.GONE);
         }
         if (mActionModeState == ACTION_MODE_OFF)
             new Handler().postDelayed(() -> mActionModeState = 0, 301);
@@ -176,19 +183,20 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
     private class SearchAdapterFilter extends Filter {
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
-            String keyWord = constraint.toString().toLowerCase().replaceAll("\\p{Z}", "");
+            String keyWord = constraint.toString().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "");
             List<Object> filteredList = new ArrayList<>();
+
             if (!TextUtils.isEmpty(keyWord)) {
-                for (Object o : mOriginList)
+                for (Object o : mAllItemList)
                     if (o instanceof Folder) {
                         Folder folder = (Folder) o;
                         if (KoreanTextMatcher.isMatch(folder.getFolderName().toLowerCase().replaceAll("\\p{Z}", ""), keyWord))
-                            filteredList.add((Folder) o);
+                            filteredList.add(folder);
                     } else {
                         Size size = (Size) o;
                         if (KoreanTextMatcher.isMatch(size.getBrand().toLowerCase().replaceAll("\\p{Z}", ""), keyWord) ||
                                 KoreanTextMatcher.isMatch(size.getName().toLowerCase().replaceAll("\\p{Z}", ""), keyWord))
-                            filteredList.add((Size) o);
+                            filteredList.add(size);
                     }
             }
             submitList(filteredList);
@@ -200,68 +208,12 @@ public class SearchAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> 
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if (mViewPagerVH != null)
-                mViewPagerVH.setNoResult(results.count == 0);
+            if (mViewPagerVH != null) mViewPagerVH.setNoResult(results.count == 0);
         }
     }
 
     @Override
     public Filter getFilter() {
         return new SearchAdapterFilter();
-    }
-
-    public static class SearchRecyclerFolderVH extends RecyclerView.ViewHolder {
-        private final ItemSearchFolderBinding mFolderBinding;
-        private Folder mFolder;
-
-        public SearchRecyclerFolderVH(@NotNull ItemSearchFolderBinding folderBinding, SearchAdapterListener listener) {
-            super(folderBinding.getRoot());
-            this.mFolderBinding = folderBinding;
-
-            itemView.setOnClickListener(v -> listener.searchAdapterFolderClick(mFolder, mFolderBinding.itemSearchFolderCheckBox));
-            itemView.setOnLongClickListener(v -> {
-                listener.searchAdapterFolderLongClick(getLayoutPosition());
-                return false;
-            });
-        }
-
-        public void setFolder(Folder folder) {
-            mFolderBinding.setFolder(folder);
-            this.mFolder = folder;
-        }
-    }
-
-    public static class SearchRecyclerSizeVH extends RecyclerView.ViewHolder {
-        private final ItemSearchSizeBinding mSizeBinding;
-        private Size mSize;
-
-        public SearchRecyclerSizeVH(@NotNull ItemSearchSizeBinding sizeBinding, SearchAdapterListener listener) {
-            super(sizeBinding.getRoot());
-            this.mSizeBinding = sizeBinding;
-
-            itemView.setOnClickListener(v -> listener.searchAdapterSizeClick(mSize, mSizeBinding.itemSearchSizeCheckBox));
-            itemView.setOnLongClickListener(v -> {
-                listener.searchAdapterSizeLongClick(getLayoutPosition());
-                return false;
-            });
-            mSizeBinding.itemSearchFavoriteCheckBox.setOnClickListener(v -> listener.searchAdapterFavoriteClick(mSize));
-        }
-
-        public void setSize(Size size) {
-            mSizeBinding.setSize(size);
-            this.mSize = size;
-        }
-    }
-
-    public interface SearchAdapterListener {
-        void searchAdapterSizeClick(Size size, MaterialCheckBox checkBox);
-
-        void searchAdapterSizeLongClick(int position);
-
-        void searchAdapterFavoriteClick(Size size);
-
-        void searchAdapterFolderClick(Folder folder, MaterialCheckBox checkBox);
-
-        void searchAdapterFolderLongClick(int position);
     }
 }
