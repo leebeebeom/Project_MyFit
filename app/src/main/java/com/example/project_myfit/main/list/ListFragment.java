@@ -644,7 +644,7 @@ public class ListFragment extends Fragment implements SizeVHListener {
     }
 
     private void folderAdapterClick() {
-        mFolderAdapter.setOnFolderAdapterListener(new FolderVHListener() {
+        mFolderAdapter.setFolderListener(new FolderVHListener() {
             @Override
             public void onFolderItemViewClick(Folder folder, MaterialCheckBox checkBox) {
                 if (mActionMode == null)

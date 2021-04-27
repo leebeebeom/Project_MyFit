@@ -62,7 +62,7 @@ public class FolderAdapter extends ListAdapter<Folder, FolderGridVH> {
         return getItem(position).getId();
     }
 
-    public void setOnFolderAdapterListener(FolderVHListener listener) {
+    public void setFolderListener(FolderVHListener listener) {
         this.mListener = listener;
     }
 
