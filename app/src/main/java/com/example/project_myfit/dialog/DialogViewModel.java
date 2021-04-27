@@ -43,13 +43,9 @@ public class DialogViewModel extends AndroidViewModel {
         else return mBackStackEntryLive;
     }
 
-    public void backStackEntryLiveSetValue(@NotNull NavBackStackEntry backStackEntry) {
-        mBackStackEntryLive.setValue(backStackEntry);
-    }
-
     public boolean isSameNameCategory(String categoryName, String parentCategory) {
         boolean isSameName = false;
-        List<String> categoryNameList = mCategoryRepository.getCategoryNameListByParentCategory(parentCategory);
+        List<String> categoryNameList = mCategoryRepository.getCategoryNameList(parentCategory);
         for (String name : categoryNameList)
             if (name.equals(categoryName)) {
                 isSameName = true;
@@ -60,7 +56,7 @@ public class DialogViewModel extends AndroidViewModel {
 
     public boolean isSameNameFolder(String folderName, long parentId) {
         boolean isSameName = false;
-        List<String> folderNameList = mFolderRepository.getFolderNameListByParentId(parentId);
+        List<String> folderNameList = mFolderRepository.getFolderNameList(parentId);
         for (String name : folderNameList)
             if (name.equals(folderName)) {
                 isSameName = true;
@@ -92,33 +88,33 @@ public class DialogViewModel extends AndroidViewModel {
         }
     }
 
-    public void categoryNameEditConfirmClick(@NotNull Category category, String categoryName, boolean isParentName) {
+    public void categoryNameEdit(@NotNull Category category, String categoryName, boolean isParentName) {
         if (isParentName) mParentName = categoryName;
         category.setCategoryName(categoryName);
         mCategoryRepository.categoryUpdate(category);
     }
 
-    public void folderNameEditConfirmClick(@NotNull Folder folder, String folderName, boolean isParentName) {
+    public void folderNameEdit(@NotNull Folder folder, String folderName, boolean isParentName) {
         if (isParentName) mParentName = folderName;
         folder.setFolderName(folderName);
         mFolderRepository.folderUpdate(folder);
     }
 
-    public void sameNameCategoryEditConfirmClick(long categoryId, String categoryName, boolean isParentName) {
+    public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName) {
         if (isParentName) mParentName = categoryName;
         Category category = mCategoryRepository.getCategory(categoryId);
         category.setCategoryName(categoryName);
         mCategoryRepository.categoryUpdate(category);
     }
 
-    public void sameNameFolderEditConfirmClick(long parentId, String folderName, boolean isParentName) {
+    public void sameNameFolderEdit(long parentId, String folderName, boolean isParentName) {
         if (isParentName) mParentName = folderName;
         Folder folder = mFolderRepository.getFolder(parentId);
         folder.setFolderName(folderName);
         mFolderRepository.folderUpdate(folder);
     }
 
-    public void deleteConfirmClick(long sizeId) {
+    public void sizeDelete(long sizeId) {
         Size size = Repository.getSizeRepository(getApplication()).getSize(sizeId);
         size.setIsDeleted(true);
         Repository.getSizeRepository(getApplication()).sizeUpdate(size);
@@ -170,13 +166,13 @@ public class DialogViewModel extends AndroidViewModel {
 
     public void orderNumberInit(){
         if (!mIsOrderNumberInit){
-            List<Category> categoryList = mCategoryRepository.getAllCategoryList();
+            List<Category> categoryList = mCategoryRepository.getCategoryList();
             for (int i = 0; i < categoryList.size(); i++)
                 categoryList.get(i).setOrderNumber(i);
-            List<Folder> folderList = mFolderRepository.getAllFolderList();
+            List<Folder> folderList = mFolderRepository.getFolderList();
             for (int i = 0; i < folderList.size(); i++)
                 folderList.get(i).setOrderNumber(i);
-            List<Size> sizeList = Repository.getSizeRepository(getApplication()).getAllSizeList();
+            List<Size> sizeList = Repository.getSizeRepository(getApplication()).getSizeList();
             for (int i = 0; i < sizeList.size(); i++)
                 sizeList.get(i).setOrderNumber(i);
             mCategoryRepository.categoryUpdate(categoryList);
