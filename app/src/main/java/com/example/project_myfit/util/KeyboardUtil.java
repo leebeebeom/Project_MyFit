@@ -17,7 +17,7 @@ public class KeyboardUtil {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void toggle(@NotNull Context context, View view){
+    public static void toggle(@NotNull Context context){
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(0,0);
     }
