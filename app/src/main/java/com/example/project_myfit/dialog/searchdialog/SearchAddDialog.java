@@ -56,8 +56,8 @@ public class SearchAddDialog extends DialogFragment {
             String newName = String.valueOf(binding.etDialog.getText()).trim();
 
             if (mItemType.equals(CATEGORY))
-                dialogUtils.addCategoryConfirmClick(newName, mParentCategory, true);
-            else dialogUtils.addFolderConfirmClick(newName, mParentId, mParentCategory, true);
+                dialogUtils.addCategory(newName, mParentCategory, true);
+            else dialogUtils.addFolder(newName, mParentId, mParentCategory, true);
         });
         return alertDialog;
     }

@@ -47,8 +47,8 @@ public class SearchSameNameAddDialog extends DialogFragment {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
             if (mItemType.equals(CATEGORY))
-                dialogUtils.sameNameCategoryAddConfirmClick(mNewName, mParentCategory, true);
-            else dialogUtils.sameNameFolderAddConfirmClick(mNewName, mParentCategory, mParentId, true);
+                dialogUtils.sameNameCategoryAdd(mNewName, mParentCategory, true);
+            else dialogUtils.sameNameFolderAdd(mNewName, mParentCategory, mParentId, true);
         });
 
         return alertDialog;

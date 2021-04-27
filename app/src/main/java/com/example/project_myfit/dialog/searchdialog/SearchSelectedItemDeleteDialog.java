@@ -36,7 +36,7 @@ public class SearchSelectedItemDeleteDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.selectedItemDeleteConfirmClick());
+        positiveButton.setOnClickListener(v -> dialogUtils.selectedItemDeleteConfirm());
         return alertDialog;
     }
 }

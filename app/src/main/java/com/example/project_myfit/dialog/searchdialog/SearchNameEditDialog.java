@@ -69,9 +69,9 @@ public class SearchNameEditDialog extends DialogFragment {
 
             String newName = String.valueOf(mBinding.etDialog.getText()).trim();
             if (category != null)
-                dialogUtils.categoryNameEditConfirmClick(category, newName, mIsParentName, true);
+                dialogUtils.categoryNameEdit(category, newName, mIsParentName, true);
             else if (folder != null)
-                dialogUtils.folderNameEditConfirmCLick(folder, newName, mIsParentName, true);
+                dialogUtils.folderNameEdit(folder, newName, mIsParentName, true);
         });
         return alertDialog;
     }

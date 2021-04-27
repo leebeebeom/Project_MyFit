@@ -15,7 +15,8 @@ import com.example.project_myfit.dialog.DialogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RecentSearchDeleteAllDialog extends DialogFragment {
+public class
+RecentSearchDeleteAllDialog extends DialogFragment {
 
     @NonNull
     @NotNull
@@ -27,7 +28,7 @@ public class RecentSearchDeleteAllDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.recentSearchDeleteAllClick());
+        positiveButton.setOnClickListener(v -> dialogUtils.recentSearchDeleteAll());
 
         return alertDialog;
     }

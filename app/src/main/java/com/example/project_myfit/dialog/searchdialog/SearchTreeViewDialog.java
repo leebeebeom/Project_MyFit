@@ -25,7 +25,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.TREE_VIEW_STATE;
@@ -68,7 +68,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
         LayoutDialogTreeBinding binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
         binding.setParentCategory(mModel.getParentCategory());
         binding.layoutDialogTree.addView(getTreeView(), 2);
-        binding.tvDialogTreeAddCategoryLayout.setOnClickListener(v -> mDialogUtils.treeViewAddCategoryClick(CATEGORY, mModel.getParentCategory(), true));
+        binding.tvDialogTreeAddCategoryLayout.setOnClickListener(v -> mDialogUtils.treeViewAddCategory(CATEGORY, mModel.getParentCategory(), true));
         return binding.getRoot();
     }
 
@@ -105,7 +105,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
         super.onActivityCreated(savedInstanceState);
         //add category or folder
         mDialogUtils.getDialogViewModel().getBackStackEntryLive().observe(this, navBackStackEntry ->
-                navBackStackEntry.getSavedStateHandle().getLiveData(ADD_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+                navBackStackEntry.getSavedStateHandle().getLiveData(ADD_CONFIRM).observe(navBackStackEntry, o -> {
                     String itemType = (String) o;
                     if (itemType.equals(CATEGORY))
                         addCategoryConfirmClick();
@@ -140,14 +140,14 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
     @Override
     public void treeViewCategoryAddFolderClick(@NotNull TreeNode node, TreeHolderCategory.CategoryTreeHolder value) {
         long parentId = ((TreeHolderCategory) node.getViewHolder()).getCategoryId();
-        mDialogUtils.treeViewAddFolderClick(FOLDER, mModel.getParentCategory(), parentId, true);
+        mDialogUtils.treeViewAddFolder(FOLDER, mModel.getParentCategory(), parentId, true);
         mModel.setClickedNode(node);
     }
 
     @Override
     public void treeViewFolderAddFolderClick(@NotNull TreeNode node, TreeHolderFolder.FolderTreeHolder value) {
         long parentId = ((TreeHolderFolder) node.getViewHolder()).getFolderId();
-        mDialogUtils.treeViewAddFolderClick(FOLDER, mModel.getParentCategory(), parentId, true);
+        mDialogUtils.treeViewAddFolder(FOLDER, mModel.getParentCategory(), parentId, true);
         mModel.setClickedNode(node);
     }
 
