@@ -11,8 +11,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:background="?colorPrimary">
+            android:layout_height="@dimen/_40sdp">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tool_bar_recycle_bin"
@@ -60,7 +59,7 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:defaultNavHost="false"
+            app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph_recycle_bin"
             tools:layout="@layout/fragment_recycle_bin_main" />
 
