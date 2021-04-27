@@ -70,20 +70,18 @@ public class MyFitConstant {
     public static final int SORT_NAME_REVERSE = 6;
 
     //dialog key
-    public static final String ADD_CONFIRM_CLICK = "add confirm click";
-    public static final String NAME_EDIT_CONFIRM_CLICK = "name edit confirm click";
-    public static final String SELECTED_ITEM_DELETE_CONFIRM_CLICK = "selected item deleted confirm click";
-    public static final String SORT_CONFIRM_CLICK = "sort confirm click";
-    public static final String ITEM_MOVE_CONFIRM_CLICK = "item move confirm click";
-    public static final String IMAGE_CLEAR_CONFIRM_CLICK = "image clear confirm click";
-    public static final String SIZE_DELETE_CONFIRM_CLICK = "size delete confirm click";
-    public static final String RECENT_SEARCH_ALL_CLEAR_CONFIRM_CLICK = "recent search all clear confirm click";
-    public static final String GO_BACK_CONFIRM_CLICK = "go back confirm click";
+    public static final String ADD_CONFIRM = "add confirm click";
+    public static final String NAME_EDIT_CONFIRM = "name edit confirm click";
+    public static final String SELECTED_ITEM_DELETE_CONFIRM = "selected item deleted confirm click";
+    public static final String SORT_CONFIRM = "sort confirm click";
+    public static final String ITEM_MOVE_CONFIRM = "item move confirm click";
+    public static final String IMAGE_CLEAR_CONFIRM = "image clear confirm click";
+    public static final String SIZE_DELETE_CONFIRM = "size delete confirm click";
+    public static final String RECENT_SEARCH_ALL_CLEAR_CONFIRM = "recent search all clear confirm click";
+    public static final String GO_BACK_CONFIRM = "go back confirm click";
 
     public static final String NAME_EDIT_NAME = "name edit name";
-
     public static final String FOLDER_TOGGLE = "folder toggle";
-
     public static final String TREE_VIEW_STATE = "state";
 
     //etc
