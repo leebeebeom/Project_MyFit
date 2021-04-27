@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface RecentSearchDao {
-    @Query("SELECT * FROM RecentSearch ORDER BY id DESC")
+    @Query("SELECT * FROM RecentSearch ORDER BY id DESC LIMIT 20")
     LiveData<List<RecentSearch>> getRecentSearchLive();
 
     @Query("SELECT * FROM RecentSearch WHERE word = :word")
