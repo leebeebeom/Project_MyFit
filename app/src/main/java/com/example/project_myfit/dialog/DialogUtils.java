@@ -53,20 +53,18 @@ public class DialogUtils {
     private final LayoutInflater mInflater;
     private final NavController mNavController;
     private final DialogViewModel mDialogViewModel;
-    private final DialogFragment mThisFragment;
     private NavBackStackEntry mNavBackStackEntry;
 
     public DialogUtils(Context context, LayoutInflater inflater, DialogFragment fragment, int navGraphId) {
         this.mContext = context;
         this.mInflater = inflater;
-        this.mThisFragment = fragment;
         this.mNavController = NavHostFragment.findNavController(fragment);
         this.mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(navGraphId)).get(DialogViewModel.class);
     }
 
     public DialogUtils backStackLiveSetValue(int destinationId) {
         mNavBackStackEntry = mNavController.getBackStackEntry(destinationId);
-        mDialogViewModel.backStackEntryLiveSetValue(mNavBackStackEntry);
+        mDialogViewModel.getBackStackEntryLive().setValue(mNavBackStackEntry);
         return this;
     }
 
@@ -186,7 +184,7 @@ public class DialogUtils {
         });
     }
 
-    public void addCategoryConfirmClick(String categoryName, String parentCategory, boolean isSearchView) {
+    public void addCategory(String categoryName, String parentCategory, boolean isSearchView) {
         if (mDialogViewModel.isSameNameCategory(categoryName, parentCategory))
             if (!isSearchView)
                 mNavController.navigate(AddDialogDirections.actionAddDialogToSameNameAddDialog(CATEGORY, parentCategory, 0, categoryName));
@@ -195,11 +193,11 @@ public class DialogUtils {
         else {
             mDialogViewModel.categoryInsert(categoryName, parentCategory);
             mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, CATEGORY);
-            mThisFragment.dismiss();
+            mNavController.popBackStack(R.id.addDialog, true);
         }
     }
 
-    public void addFolderConfirmClick(String folderName, long parentId, String parentCategory, boolean isSearchView) {
+    public void addFolder(String folderName, long parentId, String parentCategory, boolean isSearchView) {
         if (mDialogViewModel.isSameNameFolder(folderName, parentId))
             if (!isSearchView) mNavController.navigate(
                     AddDialogDirections.actionAddDialogToSameNameAddDialog(FOLDER, parentCategory, parentId, folderName));
@@ -208,55 +206,59 @@ public class DialogUtils {
         else {
             mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
             mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, FOLDER);
-            mThisFragment.dismiss();
+            mNavController.popBackStack(R.id.addDialog, true);
         }
     }
 
-    public void sameNameCategoryAddConfirmClick(String categoryName, String parentCategory, boolean isSearchView) {
+    public void sameNameCategoryAdd(String categoryName, String parentCategory, boolean isSearchView) {
         mDialogViewModel.categoryInsert(categoryName, parentCategory);
         mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, CATEGORY);
         if (!isSearchView) mNavController.popBackStack(R.id.addDialog, true);
         else mNavController.popBackStack(R.id.searchAddDialog, true);
     }
 
-    public void sameNameFolderAddConfirmClick(String folderName, String parentCategory, long parentId, boolean isSearchView) {
+    public void sameNameFolderAdd(String folderName, String parentCategory, long parentId, boolean isSearchView) {
         mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
         mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, FOLDER);
         if (!isSearchView) mNavController.popBackStack(R.id.addDialog, true);
         else mNavController.popBackStack(R.id.searchAddDialog, true);
     }
 
-    public void categoryNameEditConfirmClick(@NotNull Category category, String categoryName, boolean isParentName, boolean isSearchView) {
+    public void categoryNameEdit(@NotNull Category category, String categoryName, boolean isParentName, boolean isSearchView) {
         if (mDialogViewModel.isSameNameCategory(categoryName, category.getParentCategory())) {
-            if (!isParentName) mNavController.navigate(NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), categoryName, isParentName));
-            else mNavController.navigate(SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(CATEGORY, category.getId(), categoryName, isParentName));
+            if (!isParentName)
+                mNavController.navigate(NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), categoryName, isParentName));
+            else
+                mNavController.navigate(SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(CATEGORY, category.getId(), categoryName, isParentName));
         } else {
-            mDialogViewModel.categoryNameEditConfirmClick(category, categoryName, isParentName);
+            mDialogViewModel.categoryNameEdit(category, categoryName, isParentName);
             mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
-            mThisFragment.dismiss();
+            mNavController.popBackStack(R.id.nameEditDialog, true);
         }
     }
 
-    public void folderNameEditConfirmCLick(@NotNull Folder folder, String folderName, boolean isParentName, boolean isSearchView) {
+    public void folderNameEdit(@NotNull Folder folder, String folderName, boolean isParentName, boolean isSearchView) {
         if (mDialogViewModel.isSameNameFolder(folderName, folder.getParentId())) {
-            if (!isSearchView) mNavController.navigate(NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), folderName, isParentName));
-            else mNavController.navigate(SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(FOLDER, folder.getId(), folderName, isParentName));
+            if (!isSearchView)
+                mNavController.navigate(NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), folderName, isParentName));
+            else
+                mNavController.navigate(SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(FOLDER, folder.getId(), folderName, isParentName));
         } else {
-            mDialogViewModel.folderNameEditConfirmClick(folder, folderName, isParentName);
+            mDialogViewModel.folderNameEdit(folder, folderName, isParentName);
             mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
-            mThisFragment.dismiss();
+            mNavController.popBackStack(R.id.nameEditDialog, true);
         }
     }
 
-    public void sameNameCategoryEditConfirmClick(long categoryId, String categoryName, boolean isParentName, boolean isSearchView) {
-        mDialogViewModel.sameNameCategoryEditConfirmClick(categoryId, categoryName, isParentName);
+    public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName, boolean isSearchView) {
+        mDialogViewModel.sameNameCategoryEdit(categoryId, categoryName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
         if (!isParentName) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
-    public void sameNameFolderEditConfirmClick(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
-        mDialogViewModel.sameNameFolderEditConfirmClick(folderId, folderName, isParentName);
+    public void sameNameFolderEditC(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
+        mDialogViewModel.sameNameFolderEdit(folderId, folderName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
         if (!isSearchView) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
@@ -268,42 +270,35 @@ public class DialogUtils {
 
     public void selectedItemDeleteConfirmClick() {
         mNavBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM_CLICK, null);
-        mThisFragment.dismiss();
+        mNavController.popBackStack(R.id.selectedItemDeleteDialog, true);
     }
 
     public void deletedConfirmClick(long sizeId) {
-        mDialogViewModel.deleteConfirmClick(sizeId);
+        mDialogViewModel.sizeDelete(sizeId);
         mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM_CLICK, null);
     }
 
     public void goBackConfirmClick() {
         mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM_CLICK, null);
-        mNavController.popBackStack(R.id.inputOutputFragment, true);
     }
 
-    public void imageDeleteConfirm() {
+    public void imageClearConfirm() {
         mNavBackStackEntry.getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM_CLICK, null);
-        mThisFragment.dismiss();
+        mNavController.popBackStack(R.id.imageClearDialog, true);
     }
 
-    public void treeViewAddCategoryClick(String itemType, String parentCategory, boolean isSearchView) {
+    public void treeViewAddCategory(String itemType, String parentCategory, boolean isSearchView) {
         if (!isSearchView)
             mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToAddDialog(itemType, parentCategory, 0));
         else
-        mNavController.navigate(SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchAddDialog(itemType, parentCategory, 0));
+            mNavController.navigate(SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchAddDialog(itemType, parentCategory, 0));
     }
 
-    public void treeViewAddFolderClick(String itemType, String parentCategory, long parentId, boolean isSearchView) {
+    public void treeViewAddFolder(String itemType, String parentCategory, long parentId, boolean isSearchView) {
         if (!isSearchView)
             mNavController.navigate(TreeViewDialogDirections.actionTreeViewDialogToAddDialog(itemType, parentCategory, parentId));
         else
             mNavController.navigate(SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchAddDialog(itemType, parentCategory, parentId));
-    }
-
-    public void itemMoveConfirmClick(long parentId, boolean isSearchView) {
-        mNavBackStackEntry.getSavedStateHandle().set(ITEM_MOVE_CONFIRM_CLICK, parentId);
-        if (!isSearchView) mNavController.popBackStack(R.id.treeViewDialog, true);
-        else mNavController.popBackStack(R.id.searchTreeViewDialog, true);
     }
 
     public void treeViewNodeClick(int selectedItemSize, long parentId, boolean isSearchView) {
@@ -313,8 +308,14 @@ public class DialogUtils {
             mNavController.navigate(SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchItemMoveDialog(selectedItemSize, parentId));
     }
 
-    public void recentSearchDeleteAllClick() {
+    public void itemMove(long parentId, boolean isSearchView) {
+        mNavBackStackEntry.getSavedStateHandle().set(ITEM_MOVE_CONFIRM_CLICK, parentId);
+        if (!isSearchView) mNavController.popBackStack(R.id.treeViewDialog, true);
+        else mNavController.popBackStack(R.id.searchTreeViewDialog, true);
+    }
+
+    public void recentSearchDeleteAll() {
         mDialogViewModel.recentSearchDeleteAll();
-        mNavController.popBackStack();
+        mNavController.popBackStack(R.id.recentSearchDeleteAllDialog, true);
     }
 }
