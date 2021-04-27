@@ -25,7 +25,7 @@ public class GoBackDialog extends DialogFragment {
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_go_back));
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.goBackConfirmClick());
+        positiveButton.setOnClickListener(v -> dialogUtils.goBackConfirm());
         return alertDialog;
     }
 }

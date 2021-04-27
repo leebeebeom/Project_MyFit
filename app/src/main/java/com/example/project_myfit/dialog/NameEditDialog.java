@@ -68,9 +68,9 @@ public class NameEditDialog extends DialogFragment {
 
             String newName = String.valueOf(mBinding.etDialog.getText()).trim();
             if (category != null)
-                dialogUtils.categoryNameEditConfirmClick(category, newName, mIsParentName, false);
+                dialogUtils.categoryNameEdit(category, newName, mIsParentName, false);
             else if (folder != null)
-                dialogUtils.folderNameEditConfirmCLick(folder, newName, mIsParentName, false);
+                dialogUtils.folderNameEdit(folder, newName, mIsParentName, false);
         });
 
         mBinding.etDialog.setOnEditorActionListener((v, actionId, event) -> {

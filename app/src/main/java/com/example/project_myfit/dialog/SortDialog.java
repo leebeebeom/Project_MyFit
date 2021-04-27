@@ -60,7 +60,7 @@ public class SortDialog extends DialogFragment {
                 .setTitle(R.string.all_sort_order)
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.dialog_cancel, null)
-                .setPositiveButton(R.string.dialog_confirm, (dialog, which) -> dialogUtils.sortConfirmClick(mCheckedItem))
+                .setPositiveButton(R.string.dialog_confirm, (dialog, which) -> dialogUtils.sortConfirm(mCheckedItem))
                 .show();
 
         Window window = alertDialog.getWindow();

@@ -56,8 +56,8 @@ public class AddDialog extends DialogFragment {
             String newName = String.valueOf(binding.etDialog.getText()).trim();
 
             if (mItemType.equals(CATEGORY))
-                dialogUtils.addCategoryConfirmClick(newName, mParentCategory, false);
-            else dialogUtils.addFolderConfirmClick(newName, mParentId, mParentCategory, false);
+                dialogUtils.addCategory(newName, mParentCategory, false);
+            else dialogUtils.addFolder(newName, mParentId, mParentCategory, false);
         });
 
         binding.etDialog.setOnEditorActionListener((v, actionId, event) -> {
