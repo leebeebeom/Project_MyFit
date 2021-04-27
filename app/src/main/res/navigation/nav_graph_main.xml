@@ -67,8 +67,8 @@
         <action
             android:id="@+id/action_listFragment_refresh"
             app:destination="@id/listFragment"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_slide_out"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_slide_out" />
         <action
