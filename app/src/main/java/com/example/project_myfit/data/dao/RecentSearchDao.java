@@ -13,10 +13,10 @@ import java.util.List;
 @Dao
 public interface RecentSearchDao {
     @Query("SELECT * FROM RecentSearch ORDER BY id DESC")
-    LiveData<List<RecentSearch>> getAllRecentSearchLive();
+    LiveData<List<RecentSearch>> getRecentSearchLive();
 
     @Query("SELECT * FROM RecentSearch WHERE word = :word")
-    RecentSearch getRecentSearchByWord(String word);
+    RecentSearch getRecentSearch(String word);
 
     @Insert
     void insertRecentSearch(RecentSearch recentSearch);
