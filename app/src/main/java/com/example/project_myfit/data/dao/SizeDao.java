@@ -13,31 +13,31 @@ import java.util.List;
 @Dao
 public interface SizeDao {
     @Query("SELECT * FROM size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
-    LiveData<List<Size>> getAllSizeLive();
+    LiveData<List<Size>> getSizeLive();
 
     @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber DESC")
-    LiveData<List<Size>> getSizeLiveByParentId(long parentId);
+    LiveData<List<Size>> getSizeLive(long parentId);
+
+    @Query("SELECT * FROM Size WHERE isDeleted = 1")
+    LiveData<List<Size>> getDeletedSizeLive();
 
     @Query("SELECT * FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
-    List<Size> getAllSizeList();
+    List<Size> getSizeList();
 
     @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ")
-    List<Size> getSizeListByParentId(long parentId);
+    List<Size> getSizeList(long parentId);
 
     @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Long> getSizeParentIdListByParentCategory(String parentCategory);
+    List<Long> getSizeParentIdList(String parentCategory);
+
+    @Query("SELECT parentId FROM Size WHERE isDeleted =0 AND parentIsDeleted =1")
+    List<Long> getParentDeletedSizeParentIdList();
 
     @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getAllSizeBrandLive();
+    LiveData<List<String>> getSizeBrandLive();
 
     @Query("SELECT name FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getAllSizeNameLive();
-
-    @Query("SELECT brand FROM Size WHERE parentId =:parentId AND isDeleted = 0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getSizeBrandLiveByParentId(long parentId);
-
-    @Query("SELECT name FROM Size WHERE parentId =:parentId AND isDeleted = 0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getSizeNameLiveByParentId(long parentId);
+    LiveData<List<String>> getSizeNameLive();
 
     @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY brand")
     List<String> getSizeBrandList();
