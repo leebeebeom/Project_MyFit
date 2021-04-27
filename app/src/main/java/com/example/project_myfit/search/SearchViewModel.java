@@ -95,15 +95,15 @@ public class SearchViewModel extends AndroidViewModel {
     }
 
     public void overLapRecentSearchReInsert(String word) {
-        mRecentSearchRepository.overLapRecentSearchReInsert(word);
+        mRecentSearchRepository.overLapRecentSearchReInsert(word, false);
     }
 
     public void recentSearchInsert(String word) {
-        mRecentSearchRepository.recentSearchInsert(word);
+        mRecentSearchRepository.recentSearchInsert(word, false);
     }
 
     public LiveData<List<RecentSearch>> getRecentSearchLive() {
-        return mRecentSearchRepository.getRecentSearchLive();
+        return mRecentSearchRepository.getRecentSearchLive(false);
     }
 
     public void recentSearchDelete(RecentSearch recentSearch) {
