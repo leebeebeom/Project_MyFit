@@ -46,10 +46,10 @@ public interface FolderDao {
     List<Long> getParentDeletedFolderParentIdList();
 
     @Query("SELECT * FROM Folder WHERE id = :id")
-    Folder getFolder(long id);
+    LiveData<Folder> getSingleFolderLive(long id);
 
     @Query("SELECT * FROM Folder WHERE id = :id")
-    LiveData<Folder> getSingleFolderLive(long id);
+    Folder getFolder(long id);
 
     @Query("SELECT * FROM Folder ORDER BY id DESC limit 1")
     Folder getLatestFolder();
