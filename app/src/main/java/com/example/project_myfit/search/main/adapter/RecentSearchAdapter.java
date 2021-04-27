@@ -30,7 +30,7 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
         });
     }
 
-    public void setRecentSearchAdapterListener(RecentSearchAdapterListener listener) {
+    public void setRecentSearchListener(RecentSearchAdapterListener listener) {
         this.mListener = listener;
     }
 
