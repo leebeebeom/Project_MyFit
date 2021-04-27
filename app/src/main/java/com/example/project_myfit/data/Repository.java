@@ -466,18 +466,18 @@ public class Repository {
             return mRecentSearchDao.getRecentSearchLive();
         }
 
-        public void insertRecentSearch(String wort) {
-            new Thread(() -> mRecentSearchDao.insertRecentSearch(new RecentSearch(wort, getCurrentDate()))).start();
+        public void recentSearchInsert(String wort) {
+            new Thread(() -> mRecentSearchDao.recentSearchInsert(new RecentSearch(wort, getCurrentDate()))).start();
         }
 
-        public void deleteRecentSearch(RecentSearch recentSearch) {
-            new Thread(() -> mRecentSearchDao.deleteRecentSearch(recentSearch)).start();
+        public void recentSearchDelete(RecentSearch recentSearch) {
+            new Thread(() -> mRecentSearchDao.recentSearchDelete(recentSearch)).start();
         }
 
         public void overLapRecentSearchReInsert(String word) {
             new Thread(() -> {
-                mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearch(word));
-                mRecentSearchDao.insertRecentSearch(new RecentSearch(word, getCurrentDate()));
+                mRecentSearchDao.recentSearchDelete(mRecentSearchDao.getRecentSearch(word));
+                mRecentSearchDao.recentSearchInsert(new RecentSearch(word, getCurrentDate()));
             }).start();
         }
 

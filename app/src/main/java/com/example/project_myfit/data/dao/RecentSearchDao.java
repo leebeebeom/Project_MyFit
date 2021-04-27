@@ -19,10 +19,10 @@ public interface RecentSearchDao {
     RecentSearch getRecentSearch(String word);
 
     @Insert
-    void insertRecentSearch(RecentSearch recentSearch);
+    void recentSearchInsert(RecentSearch recentSearch);
 
     @Delete
-    void deleteRecentSearch(RecentSearch recentSearch);
+    void recentSearchDelete(RecentSearch recentSearch);
 
     @Query("DELETE FROM RecentSearch")
     void deleteAllRecentSearch();
