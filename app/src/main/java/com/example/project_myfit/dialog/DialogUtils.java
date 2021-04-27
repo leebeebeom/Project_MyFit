@@ -35,18 +35,18 @@ import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.ALERT_TITLE;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
-import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.ID;
-import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM;
 
 public class DialogUtils {
     private final Context mContext;
@@ -192,7 +192,7 @@ public class DialogUtils {
                 mNavController.navigate(SearchAddDialogDirections.actionSearchAddDialogToSearchSameNameAddDialog(CATEGORY, parentCategory, 0, categoryName));
         else {
             mDialogViewModel.categoryInsert(categoryName, parentCategory);
-            mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, CATEGORY);
+            mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, CATEGORY);
             mNavController.popBackStack(R.id.addDialog, true);
         }
     }
@@ -205,21 +205,21 @@ public class DialogUtils {
                     SearchAddDialogDirections.actionSearchAddDialogToSearchSameNameAddDialog(FOLDER, parentCategory, parentId, folderName));
         else {
             mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
-            mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, FOLDER);
+            mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, FOLDER);
             mNavController.popBackStack(R.id.addDialog, true);
         }
     }
 
     public void sameNameCategoryAdd(String categoryName, String parentCategory, boolean isSearchView) {
         mDialogViewModel.categoryInsert(categoryName, parentCategory);
-        mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, CATEGORY);
+        mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, CATEGORY);
         if (!isSearchView) mNavController.popBackStack(R.id.addDialog, true);
         else mNavController.popBackStack(R.id.searchAddDialog, true);
     }
 
     public void sameNameFolderAdd(String folderName, String parentCategory, long parentId, boolean isSearchView) {
         mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
-        mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM_CLICK, FOLDER);
+        mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, FOLDER);
         if (!isSearchView) mNavController.popBackStack(R.id.addDialog, true);
         else mNavController.popBackStack(R.id.searchAddDialog, true);
     }
@@ -232,7 +232,7 @@ public class DialogUtils {
                 mNavController.navigate(SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(CATEGORY, category.getId(), categoryName, isParentName));
         } else {
             mDialogViewModel.categoryNameEdit(category, categoryName, isParentName);
-            mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
+            mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
             mNavController.popBackStack(R.id.nameEditDialog, true);
         }
     }
@@ -245,45 +245,45 @@ public class DialogUtils {
                 mNavController.navigate(SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(FOLDER, folder.getId(), folderName, isParentName));
         } else {
             mDialogViewModel.folderNameEdit(folder, folderName, isParentName);
-            mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
+            mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
             mNavController.popBackStack(R.id.nameEditDialog, true);
         }
     }
 
     public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName, boolean isSearchView) {
         mDialogViewModel.sameNameCategoryEdit(categoryId, categoryName, isParentName);
-        mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
+        mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
         if (!isParentName) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
     public void sameNameFolderEdit(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
         mDialogViewModel.sameNameFolderEdit(folderId, folderName, isParentName);
-        mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
+        mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
         if (!isSearchView) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
     public void sortConfirm(int sort) {
-        mNavBackStackEntry.getSavedStateHandle().set(SORT_CONFIRM_CLICK, sort);
+        mNavBackStackEntry.getSavedStateHandle().set(SORT_CONFIRM, sort);
     }
 
     public void selectedItemDeleteConfirm() {
-        mNavBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM_CLICK, null);
+        mNavBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM, null);
         mNavController.popBackStack(R.id.selectedItemDeleteDialog, true);
     }
 
     public void deletedConfirm(long sizeId) {
         mDialogViewModel.sizeDelete(sizeId);
-        mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM_CLICK, null);
+        mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM, null);
     }
 
     public void goBackConfirm() {
-        mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM_CLICK, null);
+        mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM, null);
     }
 
     public void imageClearConfirm() {
-        mNavBackStackEntry.getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM_CLICK, null);
+        mNavBackStackEntry.getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM, null);
         mNavController.popBackStack(R.id.imageClearDialog, true);
     }
 
@@ -309,7 +309,7 @@ public class DialogUtils {
     }
 
     public void itemMove(long parentId, boolean isSearchView) {
-        mNavBackStackEntry.getSavedStateHandle().set(ITEM_MOVE_CONFIRM_CLICK, parentId);
+        mNavBackStackEntry.getSavedStateHandle().set(ITEM_MOVE_CONFIRM, parentId);
         if (!isSearchView) mNavController.popBackStack(R.id.treeViewDialog, true);
         else mNavController.popBackStack(R.id.searchTreeViewDialog, true);
     }
