@@ -39,13 +39,13 @@ public class SearchActivity extends AppCompatActivity {
 
         AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv);
         binding.acTvSearch.setAdapter(autoCompleteAdapter);
-        setAutoCompleteLive(model, autoCompleteAdapter);
+        acLive(model, autoCompleteAdapter);
     }
 
-    private void setAutoCompleteLive(@NotNull SearchViewModel model, AutoCompleteAdapter autoCompleteAdapter) {
-        LiveData<List<String>> folderNameLive = model.getAllFolderNameLive();
-        LiveData<List<String>> sizeBrandLive = model.getAllSizeBrandLive();
-        LiveData<List<String>> sizeNameLive = model.getAllSizeNameLive();
+    private void acLive(@NotNull SearchViewModel model, AutoCompleteAdapter autoCompleteAdapter) {
+        LiveData<List<String>> folderNameLive = model.getFolderNameLive();
+        LiveData<List<String>> sizeBrandLive = model.getSizeBrandLive();
+        LiveData<List<String>> sizeNameLive = model.getSizeNameLive();
 
         MediatorLiveData<List<String>> mediatorLiveData = new MediatorLiveData<>();
         mediatorLiveData.addSource(folderNameLive, mediatorLiveData::setValue);
@@ -58,9 +58,9 @@ public class SearchActivity extends AppCompatActivity {
             autoCompleteHashSet.clear();
             autoCompleteList.clear();
 
-            autoCompleteListAddValue(folderNameLive, autoCompleteHashSet);
-            autoCompleteListAddValue(sizeBrandLive, autoCompleteHashSet);
-            autoCompleteListAddValue(sizeNameLive, autoCompleteHashSet);
+            acListAddValue(folderNameLive, autoCompleteHashSet);
+            acListAddValue(sizeBrandLive, autoCompleteHashSet);
+            acListAddValue(sizeNameLive, autoCompleteHashSet);
 
             autoCompleteList.addAll(autoCompleteHashSet);
             autoCompleteList.sort(String::compareTo);
@@ -69,7 +69,7 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void autoCompleteListAddValue(@NotNull LiveData<List<String>> liveData, HashSet<String> autoCompleteList) {
+    private void acListAddValue(@NotNull LiveData<List<String>> liveData, HashSet<String> autoCompleteList) {
         if (liveData.getValue() != null)
             for (String s : liveData.getValue()) autoCompleteList.add(s.trim());
     }
