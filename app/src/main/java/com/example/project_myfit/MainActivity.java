@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 v.getGlobalVisibleRect(outRect);
                 if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
                     v.clearFocus();
-                    KeyboardUtil.keyboardHide(this, v);
+                    KeyboardUtil.hide(this, v);
                 }
             }
         }
