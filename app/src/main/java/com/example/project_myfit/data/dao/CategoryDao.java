@@ -13,28 +13,28 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
-    LiveData<List<Category>> getAllCategoryLive();
-
-    @Query("SELECT * FROM Category WHERE isDeleted = 1")
-    LiveData<List<Category>> getAllDeletedCategoryLive();
-
-    @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
-    List<Category> getAllCategoryList();
-
-    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = 0 ORDER BY orderNumber")
-    List<Category> getCategoryListByParentCategory(String parentCategory);
-
-    @Query("SELECT categoryName FROM Category WHERE isDeleted = 0 AND parentCategory = :parentCategory")
-    List<String> getCategoryNameListByParentCategory(String parentCategory);
-
-    @Query("SELECT * FROM Category WHERE id = :id")
-    Category getCategory(long id);
+    LiveData<List<Category>> getCategoryLive();
 
     @Query("SELECT * FROM Category WHERE id = :id")
     LiveData<Category> getCategoryLive(long id);
 
-    @Query("SELECT * FROM Category ORDER BY id DESC limit 1")
-    Category getLatestCategory();
+    @Query("SELECT * FROM Category WHERE isDeleted = 1")
+    LiveData<List<Category>> getDeletedCategoryLive();
+
+    @Query("SELECT * FROM Category WHERE isDeleted = 0 ORDER BY orderNumber")
+    List<Category> getCategoryList();
+
+    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = 0 ORDER BY orderNumber")
+    List<Category> getCategoryList(String parentCategory);
+
+    @Query("SELECT categoryName FROM Category WHERE isDeleted = 1")
+    LiveData<List<String>> getDeletedCategoryNameLive();
+
+    @Query("SELECT categoryName FROM Category WHERE isDeleted = 0 AND parentCategory = :parentCategory")
+    List<String> getCategoryNameList(String parentCategory);
+
+    @Query("SELECT * FROM Category WHERE id = :id")
+    Category getCategory(long id);
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
