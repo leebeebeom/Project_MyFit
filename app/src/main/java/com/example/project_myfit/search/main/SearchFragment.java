@@ -174,6 +174,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mBinding.vpSearch.setOffscreenPageLimit(1);
         tabLayoutInit();
         mRecentSearchAdapter = new RecentSearchAdapter();
+        mBinding.rvSearchRecentSearch.setHasFixedSize(true);
         mBinding.rvSearchRecentSearch.setAdapter(mRecentSearchAdapter);
 
         dialogLive();
@@ -335,13 +336,13 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mainScrollChangeListener();
-        recentSearchScrollChangeListener();
         topFabClick();
         vpPageChangeListener();
         recentSearchClick();
         acImeClick();
         acTextChangeListener();
         recentSearchAllClearClick();
+        endIconClick();
 
         actionModeRecreate();
     }
@@ -358,30 +359,16 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void recentSearchScrollChangeListener() {
-        mBinding.svSearchRecentSearch.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (v.getScrollY() != 0) mBinding.fabSearch.show();
-            else mBinding.fabSearch.hide();
-        });
-    }
-
     private void topFabClick() {
         mBinding.fabSearch.setOnClickListener(v -> {
-            if (mBinding.svSearchRecentSearch.getVisibility() != View.VISIBLE)
-                svScrollToTop(mBinding.svSearch);
-            else if (mBinding.svSearchRecentSearch.getVisibility() == View.VISIBLE)
-                svScrollToTop(mBinding.svSearchRecentSearch);
-        });
-    }
-
-    private void svScrollToTop(@NotNull NestedScrollView scrollView) {
-        scrollView.scrollTo(0, 0);
-        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (scrollY != 0) scrollView.scrollTo(0, 0);
-            else {
-                scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                mainScrollChangeListener();
-            }
+            mBinding.svSearch.scrollTo(0, 0);
+            mBinding.svSearch.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                if (scrollY != 0) mBinding.svSearch.scrollTo(0, 0);
+                else {
+                    mBinding.svSearch.setOnScrollChangeListener((View.OnScrollChangeListener) null);
+                    mainScrollChangeListener();
+                }
+            });
         });
     }
 
@@ -452,7 +439,6 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                     mBinding.svSearchRecentSearch.setVisibility(View.VISIBLE);
                     mBinding.fabSearch.setVisibility(View.GONE);
                     mAutoCompleteTextLayout.setEndIconVisible(false);
-                    KeyboardUtil.show(requireContext(), mAutoCompleteTextView);
                 }
 
                 for (int i = 0; i < 4; i++) {
@@ -481,6 +467,14 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     private void recentSearchAllClearClick() {
         mBinding.tvSearchDeleteAll.setOnClickListener(v ->
                 mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchDeleteAllDialog()));
+    }
+
+    private void endIconClick() {
+        mAutoCompleteTextLayout.setEndIconOnClickListener(v -> {
+            mAutoCompleteTextLayout.setEndIconVisible(false);
+            mAutoCompleteTextView.setText("");
+            mAutoCompleteTextView.postDelayed(() -> KeyboardUtil.show(requireContext(), mAutoCompleteTextView), 50);
+        });
     }
 
     private void actionModeRecreate() {
