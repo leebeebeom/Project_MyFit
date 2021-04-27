@@ -63,10 +63,10 @@ import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.ETC;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
-import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
-import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 
@@ -176,10 +176,10 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mRecentSearchAdapter = new RecentSearchAdapter();
         mBinding.rvSearchRecentSearch.setAdapter(mRecentSearchAdapter);
 
-        setDialogLive();
-        setRecentSearchLive();
-        setActionModeTitleLive();
-        setCombineLive();
+        dialogLive();
+        recentSearchLive();
+        actionModeTitleLive();
+        folderSizeLive();
     }
 
     @NotNull
@@ -239,39 +239,39 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         }).attach();
     }
 
-    private void setDialogLive() {
+    private void dialogLive() {
         SelectedItemTreat selectedItemTreat = new SelectedItemTreat(requireContext());
 
         mDialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
             selectedItemDeleteLive(selectedItemTreat, navBackStackEntry);
-            itemMoveDialogLive(selectedItemTreat, navBackStackEntry);
-            nameEditDialogLive(navBackStackEntry);
+            itemMoveLive(selectedItemTreat, navBackStackEntry);
+            nameEditLive(navBackStackEntry);
         });
     }
 
     private void selectedItemDeleteLive(SelectedItemTreat selectedItemTreat, @NotNull NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+        navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
             selectedItemTreat.folderSizeDelete(true, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
             if (mActionMode != null) mActionMode.finish();
         });
     }
 
-    private void itemMoveDialogLive(SelectedItemTreat selectedItemTreat, @NotNull NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(ITEM_MOVE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+    private void itemMoveLive(SelectedItemTreat selectedItemTreat, @NotNull NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(ITEM_MOVE_CONFIRM).observe(navBackStackEntry, o -> {
             long parentId = (long) o;
             selectedItemTreat.folderSizeMove(true, parentId, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
             if (mActionMode != null) mActionMode.finish();
         });
     }
 
-    private void nameEditDialogLive(@NotNull NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+    private void nameEditLive(@NotNull NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM).observe(navBackStackEntry, o -> {
             if (mActionMode != null) mActionMode.finish();
         });
     }
 
-    private void setRecentSearchLive() {
-        mModel.getAllRecentSearchLive().observe(getViewLifecycleOwner(), recentSearchList -> {
+    private void recentSearchLive() {
+        mModel.getRecentSearchLive().observe(getViewLifecycleOwner(), recentSearchList -> {
             mRecentSearchAdapter.submitList(recentSearchList);
 
             if (mRecentSearchStringList == null) mRecentSearchStringList = new ArrayList<>();
@@ -285,7 +285,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void setActionModeTitleLive() {
+    private void actionModeTitleLive() {
         mModel.getSelectedItemSizeLive().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.action_mode_title);
             mActionModeTitleBinding.tvActionModeTitle.setText(title);
@@ -301,9 +301,9 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void setCombineLive() {
-        LiveData<List<Folder>> folderLiveData = mModel.getAllFolderLive();
-        LiveData<List<Size>> sizeLiveData = mModel.getAllSizeLive();
+    private void folderSizeLive() {
+        LiveData<List<Folder>> folderLiveData = mModel.getFolderLive();
+        LiveData<List<Size>> sizeLiveData = mModel.getSizeLive();
 
         MediatorLiveData<Object> combineLiveData = new MediatorLiveData<>();
         combineLiveData.addSource(folderLiveData, combineLiveData::setValue);
@@ -334,19 +334,19 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setMainScrollChangeListener();
-        setRecentSearchScrollListener();
-        fabClickLister();
-        viewPagerChangeListener();
-        recentSearchAdapterClickListener();
-        autoCompleteImeListener();
-        autoCompleteTextChangeListener();
-        recentSearchAllClearClickListener();
+        mainScrollChangeListener();
+        recentSearchScrollChangeListener();
+        topFabClick();
+        vpPageChangeListener();
+        recentSearchClick();
+        acImeClick();
+        acTextChangeListener();
+        recentSearchAllClearClick();
 
         actionModeRecreate();
     }
 
-    private void setMainScrollChangeListener() {
+    private void mainScrollChangeListener() {
         mBinding.svSearch.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (v.getScrollY() != 0) mBinding.fabSearch.show();
             else mBinding.fabSearch.hide();
@@ -358,14 +358,14 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void setRecentSearchScrollListener() {
+    private void recentSearchScrollChangeListener() {
         mBinding.svSearchRecentSearch.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (v.getScrollY() != 0) mBinding.fabSearch.show();
             else mBinding.fabSearch.hide();
         });
     }
 
-    private void fabClickLister() {
+    private void topFabClick() {
         mBinding.fabSearch.setOnClickListener(v -> {
             if (mBinding.svSearchRecentSearch.getVisibility() != View.VISIBLE)
                 svScrollToTop(mBinding.svSearch);
@@ -380,12 +380,12 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
             if (scrollY != 0) scrollView.scrollTo(0, 0);
             else {
                 scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                setMainScrollChangeListener();
+                mainScrollChangeListener();
             }
         });
     }
 
-    private void viewPagerChangeListener() {
+    private void vpPageChangeListener() {
         mBinding.vpSearch.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -395,10 +395,10 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void recentSearchAdapterClickListener() {
-        mRecentSearchAdapter.setRecentSearchAdapterListener(new RecentSearchAdapter.RecentSearchAdapterListener() {
+    private void recentSearchClick() {
+        mRecentSearchAdapter.setRecentSearchListener(new RecentSearchAdapter.RecentSearchAdapterListener() {
             @Override
-            public void recentSearchItemClick(String word) {
+            public void recentSearchItemViewClick(String word) {
                 mAutoCompleteTextView.setText(word);
                 mAutoCompleteTextView.setSelection(word.length());
                 mAutoCompleteTextView.dismissDropDown();
@@ -414,7 +414,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void autoCompleteImeListener() {
+    private void acImeClick() {
         mAutoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 KeyboardUtil.keyboardHide(requireContext(), v);
@@ -433,7 +433,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void autoCompleteTextChangeListener() {
+    private void acTextChangeListener() {
         mAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -478,7 +478,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void recentSearchAllClearClickListener() {
+    private void recentSearchAllClearClick() {
         mBinding.tvSearchDeleteAll.setOnClickListener(v ->
                 mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchDeleteAllDialog()));
     }
