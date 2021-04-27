@@ -170,8 +170,8 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
         mBinding.vpMain.setAdapter(getViewPagerAdapter());
         mBinding.vpMain.setOffscreenPageLimit(1);
-        setDialogLive();
-        setCategoryLive();
+        dialogLive();
+        categoryLive();
         actionModeTitleLive();
     }
 
@@ -227,7 +227,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         return mDragSelectListener;
     }
 
-    private void setDialogLive() {
+    private void dialogLive() {
         DialogViewModel dialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.nav_graph_main))
                 .get(DialogViewModel.class);
         dialogViewModel.orderNumberInit();
@@ -253,7 +253,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
                 SharedPreferences.Editor editor = mSortPreferences.edit();
                 editor.putInt(SORT_MAIN, sort);
                 editor.apply();
-                setCategoryLive();
+                categoryLive();
             }
         });
     }
@@ -265,7 +265,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         });
     }
 
-    public void setCategoryLive() {
+    public void categoryLive() {
         mModel.getCategoryLive().observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel));
     }
 
