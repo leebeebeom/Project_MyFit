@@ -71,7 +71,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getFolderHistory(int sort, @NotNull Folder thisFolder) {
-        List<Folder> allFolderList = Sort.folderSort(sort, mFolderRepository.getFolderListByParentCategory(thisFolder.getParentCategory()));
+        List<Folder> allFolderList = Sort.folderSort(sort, mFolderRepository.getFolderList(thisFolder.getParentCategory()));
         List<Folder> folderHistory = new ArrayList<>();
         folderHistory.add(thisFolder);
         List<Folder> folderHistory2 = getFolderHistory2(allFolderList, folderHistory, thisFolder);
@@ -139,20 +139,20 @@ public class ListViewModel extends AndroidViewModel {
         return mSelectedFolderList.get(0).getId();
     }
 
-    public LiveData<List<Folder>> getFolderLiveByParentId(long parentId) {
-        return mFolderRepository.getFolderLiveByParentId(parentId);
+    public LiveData<List<Folder>> getFolderLive(long parentId) {
+        return mFolderRepository.getFolderLive(parentId);
     }
 
-    public LiveData<List<Size>> getSizeLiveByParentId(long parentId) {
-        return mSizeRepository.getSizeLiveByParentId(parentId);
+    public LiveData<List<Size>> getSizeLive(long parentId) {
+        return mSizeRepository.getSizeLive(parentId);
     }
 
-    public List<Long> getFolderParentIdListByParentCategory(String parentCategory) {
-        return mFolderRepository.getFolderParentIdListByParentCategory(parentCategory);
+    public List<Long> getFolderParentIdList(String parentCategory) {
+        return mFolderRepository.getFolderParentIdList(parentCategory);
     }
 
-    public List<Long> getSizeParentIdListByParentCategory(String parentCategory) {
-        return mSizeRepository.getSizeParentIdListByParentCategory(parentCategory);
+    public List<Long> getSizeParentIdList(String parentCategory) {
+        return mSizeRepository.getSizeParentIdList(parentCategory);
     }
 
     public void sizeFavoriteClick(Size size) {
@@ -183,7 +183,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public LiveData<Folder> getThisFolderLive(long folderId) {
-        return mFolderRepository.getFolderLive(folderId);
+        return mFolderRepository.getSingleFolderLive(folderId);
     }
 
     public List<Folder> getFolderHistory3() {
