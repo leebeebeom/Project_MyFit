@@ -352,7 +352,7 @@ public class ListFragment extends Fragment implements SizeVHListener {
     }
 
     private void thisCategoryLive() {
-        mModel.getCategoryLive(mThisCategoryId).observe(getViewLifecycleOwner(), category -> {
+        mModel.getThisCategoryLive(mThisCategoryId).observe(getViewLifecycleOwner(), category -> {
             mBinding.setCategory(category);
             if (mThisFolderId == 0) setActionBarTitle(category.getCategoryName());
         });
@@ -413,7 +413,7 @@ public class ListFragment extends Fragment implements SizeVHListener {
         if (mFolderLive != null && mFolderLive.hasObservers())
             mFolderLive.removeObservers(getViewLifecycleOwner());
 
-        mFolderLive = mModel.getFolderLiveByParentId(mParentId);
+        mFolderLive = mModel.getFolderLive(mParentId);
         mFolderLive.observe(getViewLifecycleOwner(), folderList -> {
             List<Folder> sortFolderList = Sort.folderSort(mSort, folderList);
 
