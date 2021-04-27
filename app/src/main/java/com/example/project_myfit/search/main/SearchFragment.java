@@ -404,7 +404,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 mAutoCompleteTextView.dismissDropDown();
                 mModel.overLapRecentSearchReInsert(word);
                 mAutoCompleteTextLayout.setEndIconVisible(false);
-                KeyboardUtil.keyboardHide(requireContext(), mAutoCompleteTextView);
+                KeyboardUtil.hide(requireContext(), mAutoCompleteTextView);
             }
 
             @Override
@@ -417,7 +417,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     private void acImeClick() {
         mAutoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                KeyboardUtil.keyboardHide(requireContext(), v);
+                KeyboardUtil.hide(requireContext(), v);
 
                 mAutoCompleteTextView.dismissDropDown();
 
@@ -452,7 +452,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                     mBinding.svSearchRecentSearch.setVisibility(View.VISIBLE);
                     mBinding.fabSearch.setVisibility(View.GONE);
                     mAutoCompleteTextLayout.setEndIconVisible(false);
-                    KeyboardUtil.keyboardShow(requireContext(), mAutoCompleteTextView);
+                    KeyboardUtil.show(requireContext(), mAutoCompleteTextView);
                 }
 
                 for (int i = 0; i < 4; i++) {
