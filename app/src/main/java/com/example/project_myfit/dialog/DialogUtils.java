@@ -257,28 +257,28 @@ public class DialogUtils {
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
-    public void sameNameFolderEditC(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
+    public void sameNameFolderEdit(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
         mDialogViewModel.sameNameFolderEdit(folderId, folderName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM_CLICK, isParentName);
         if (!isSearchView) mNavController.popBackStack(R.id.nameEditDialog, true);
         else mNavController.popBackStack(R.id.searchNameEditDialog, true);
     }
 
-    public void sortConfirmClick(int sort) {
+    public void sortConfirm(int sort) {
         mNavBackStackEntry.getSavedStateHandle().set(SORT_CONFIRM_CLICK, sort);
     }
 
-    public void selectedItemDeleteConfirmClick() {
+    public void selectedItemDeleteConfirm() {
         mNavBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM_CLICK, null);
         mNavController.popBackStack(R.id.selectedItemDeleteDialog, true);
     }
 
-    public void deletedConfirmClick(long sizeId) {
+    public void deletedConfirm(long sizeId) {
         mDialogViewModel.sizeDelete(sizeId);
         mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM_CLICK, null);
     }
 
-    public void goBackConfirmClick() {
+    public void goBackConfirm() {
         mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM_CLICK, null);
     }
 
