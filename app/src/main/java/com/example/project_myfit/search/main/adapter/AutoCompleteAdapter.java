@@ -53,7 +53,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
         return position;
     }
 
-    private class StringFilter extends Filter {
+    private class AutoCompleteAdapterFilter extends Filter {
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
             String keyWord = constraint.toString().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "");
@@ -75,6 +75,6 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public Filter getFilter() {
-        return new StringFilter();
+        return new AutoCompleteAdapterFilter();
     }
 }
