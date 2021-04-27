@@ -52,9 +52,9 @@ import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.DOWN;
 import static com.example.project_myfit.util.MyFitConstant.MAIN_FRAGMENT;
-import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM_CLICK;
-import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_MAIN;
 import static com.example.project_myfit.util.MyFitConstant.STOP;
@@ -82,7 +82,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
-            viewPagerSetEnable(false);
+            viewPagerEnable(false);
 
             mActionMode = mode;
             mActionModeOn = true;
@@ -116,7 +116,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            viewPagerSetEnable(true);
+            viewPagerEnable(true);
 
             mActionMode = null;
             mActionModeOn = false;
@@ -128,7 +128,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         }
     };
 
-    private void viewPagerSetEnable(boolean enable) {
+    private void viewPagerEnable(boolean enable) {
         mBinding.vpMain.setUserInputEnabled(enable);
         mBinding.btnMainTop.setEnabled(enable);
         mBinding.btnMainBottom.setEnabled(enable);
@@ -172,7 +172,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         mBinding.vpMain.setOffscreenPageLimit(1);
         setDialogLive();
         setCategoryLive();
-        selectedItemAmountLive();
+        actionModeTitleLive();
     }
 
     @NotNull
@@ -233,20 +233,20 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         dialogViewModel.orderNumberInit();
 
         dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
-            nameEditDialogLive(navBackStackEntry);
-            sortDialogLive(navBackStackEntry);
+            nameEditLive(navBackStackEntry);
+            sortLive(navBackStackEntry);
             selectedItemDeletedLive(navBackStackEntry);
         });
     }
 
-    private void nameEditDialogLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+    private void nameEditLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM).observe(navBackStackEntry, o -> {
             if (mActionMode != null) mActionMode.finish();
         });
     }
 
-    private void sortDialogLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+    private void sortLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM).observe(navBackStackEntry, o -> {
             int sort = (int) o;
             if (mSort != sort) {
                 mSort = sort;
@@ -259,7 +259,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     }
 
     private void selectedItemDeletedLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+        navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
             mModel.selectedCategoryDelete();
             if (mActionMode != null) mActionMode.finish();
         });
@@ -269,7 +269,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         mModel.getCategoryLive().observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel));
     }
 
-    private void selectedItemAmountLive() {
+    private void actionModeTitleLive() {
         mModel.getSelectedCategorySizeLive().observe(getViewLifecycleOwner(), integer -> {
             String title = integer + getString(R.string.action_mode_title);
             mActionModeTitleBinding.tvActionModeTitle.setText(title);
@@ -285,12 +285,12 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setScrollChangeListener();
-        setButtonClickListener();
-        setViewPagerPageChangeListener();
-        setTopFabClickListener();
-        setPopupMenuClickListener();
-        setFabClickListener();
+        scrollChangeListener();
+        vpPageChangeListener();
+        buttonClick();
+        topFabClick();
+        popupMenuClick();
+        fabClick();
 
         mButtonArray[mModel.getCurrentItem()].setChecked(true);
         if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
@@ -299,7 +299,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         }
     }
 
-    private void setScrollChangeListener() {
+    private void scrollChangeListener() {
         mBinding.svMain.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (v.getScrollY() == 0) mTopFab.hide();
             else mTopFab.show();
@@ -311,7 +311,18 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         });
     }
 
-    private void setButtonClickListener() {
+    private void vpPageChangeListener() {
+        mBinding.vpMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                mBinding.svMain.smoothScrollTo(0, 0);
+                mModel.setCurrentItem(position);
+                mButtonArray[position].setChecked(true);
+            }
+        });
+    }
+
+    private void buttonClick() {
         mButtonArray = new MaterialButton[]{mBinding.btnMainTop, mBinding.btnMainBottom, mBinding.btnMainOuter, mBinding.btnMainEtc};
 
         final ColorStateList textOriginColor = mBinding.btnMainEtc.getTextColors();
@@ -349,18 +360,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         }
     }
 
-    private void setViewPagerPageChangeListener() {
-        mBinding.vpMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                mBinding.svMain.smoothScrollTo(0, 0);
-                mModel.setCurrentItem(position);
-                mButtonArray[position].setChecked(true);
-            }
-        });
-    }
-
-    private void setTopFabClickListener() {
+    private void topFabClick() {
         mTopFab.setOnClickListener(v -> {
             LockableScrollView mainScrollView = mBinding.svMain;
 
@@ -370,13 +370,13 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
                     mainScrollView.scrollTo(0, 0);
                 else {
                     mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                    setScrollChangeListener();
+                    scrollChangeListener();
                 }
             });
         });
     }
 
-    private void setPopupMenuClickListener() {
+    private void popupMenuClick() {
         mPopupMenuBinding.tvPopupAddCategory.setOnClickListener(v -> {
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
             mPopupWindow.dismiss();
@@ -391,7 +391,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         });
     }
 
-    private void setFabClickListener() {
+    private void fabClick() {
         requireActivity().findViewById(R.id.fab_main).setOnClickListener(v -> {
             if (mActionMode != null) mActionMode.finish();
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
@@ -430,7 +430,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     //category adapter------------------------------------------------------------------------------
     @Override
-    public void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox) {
+    public void onCategoryItemViewClick(Category category, MaterialCheckBox checkBox) {
         if (mActionMode == null)
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0, category.getParentCategory()));
         else {
@@ -440,7 +440,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     }
 
     @Override
-    public void onCategoryCardViewLongClick(int position) {
+    public void onCategoryItemViewLongClick(int position) {
         if (mActionMode == null) {
             mModel.getSelectedCategoryList().clear();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
