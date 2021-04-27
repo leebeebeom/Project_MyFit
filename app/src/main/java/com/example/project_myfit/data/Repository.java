@@ -460,22 +460,10 @@ public class Repository {
             mRecentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
         }
 
-        public LiveData<List<RecentSearch>> getAllRecentSearchLive() {
+        public LiveData<List<RecentSearch>> getRecentSearchLive() {
             //order by id
             //used in searchFragment -> recentSearchAdapter
-            return mRecentSearchDao.getAllRecentSearchLive();
-        }
-
-        public RecentSearch getRecentSearchByWord(String word) {
-            AtomicReference<RecentSearch> recentSearch = new AtomicReference<>();
-            Thread thread = new Thread(() -> recentSearch.set(mRecentSearchDao.getRecentSearchByWord(word)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return recentSearch.get();
+            return mRecentSearchDao.getRecentSearchLive();
         }
 
         public void insertRecentSearch(String wort) {
@@ -488,7 +476,7 @@ public class Repository {
 
         public void overLapRecentSearchReInsert(String word) {
             new Thread(() -> {
-                mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearchByWord(word));
+                mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearch(word));
                 mRecentSearchDao.insertRecentSearch(new RecentSearch(word, getCurrentDate()));
             }).start();
         }
