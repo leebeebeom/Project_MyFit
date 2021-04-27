@@ -16,10 +16,10 @@ public class CategoryVH extends RecyclerView.ViewHolder {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onCategoryCardViewClick(mCategory, mBinding.cbItemCategory));
+        itemView.setOnClickListener(v -> listener.onCategoryItemViewClick(mCategory, mBinding.cbItemCategory));
 
         itemView.setOnLongClickListener(v -> {
-            listener.onCategoryCardViewLongClick(getLayoutPosition());
+            listener.onCategoryItemViewLongClick(getLayoutPosition());
             return false;
         });
     }
@@ -34,9 +34,9 @@ public class CategoryVH extends RecyclerView.ViewHolder {
     }
 
     public interface CategoryVHListener {
-        void onCategoryCardViewClick(Category category, MaterialCheckBox checkBox);
+        void onCategoryItemViewClick(Category category, MaterialCheckBox checkBox);
 
-        void onCategoryCardViewLongClick(int position);
+        void onCategoryItemViewLongClick(int position);
 
         void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder);
     }
