@@ -75,22 +75,9 @@ public class BindingAdapter {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_folder).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setClothIcon")
-    public static void setClothIcon(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_cloth).into(imageView);
-    }
-
     @androidx.databinding.BindingAdapter("setDotIcon")
     public static void setDotIcon(@NotNull ImageView imageView, String dummy) {
         dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_dot).into(imageView);
     }
-
-    @androidx.databinding.BindingAdapter("setTreeTriangleIcon")
-    public static void setTreeTriangleIcon(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
-    }
-
 }
