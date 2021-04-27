@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
+            app:cardCornerRadius="@dimen/_4sdp"
             app:cardBackgroundColor="?myCardViewBackground"
             app:cardElevation="@dimen/_2sdp">
 

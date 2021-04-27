@@ -17,7 +17,7 @@
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb_item_folder_list"
             android:layout_width="@dimen/_20sdp"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_8sdp"
             android:alpha="0.8"
@@ -25,36 +25,30 @@
             android:clickable="false"
             android:enabled="false"
             android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:visibility="visible" />
+            android:scaleY="0.7" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_item_folder_list"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_2sdp"
             app:cardBackgroundColor="?myCardViewBackground"
+            app:cardCornerRadius="@dimen/_4sdp"
             app:cardElevation="@dimen/_2sdp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        setFolderIcon="@{folder.folderName}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleY="1.2"
-                        android:scaleX="1.2"
-                        android:alpha="0.8"
-                        tools:src="@drawable/icon_folder" />
-                </FrameLayout>
+                <androidx.appcompat.widget.AppCompatImageView
+                    setFolderIcon="@{folder.folderName}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:alpha="0.8"
+                    tools:src="@drawable/icon_folder" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
