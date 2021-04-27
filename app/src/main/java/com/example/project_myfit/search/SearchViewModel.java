@@ -98,16 +98,16 @@ public class SearchViewModel extends AndroidViewModel {
         mRecentSearchRepository.overLapRecentSearchReInsert(word);
     }
 
-    public void insertRecentSearch(String word) {
-        mRecentSearchRepository.insertRecentSearch(word);
+    public void recentSearchInsert(String word) {
+        mRecentSearchRepository.recentSearchInsert(word);
     }
 
-    public LiveData<List<RecentSearch>> getAllRecentSearchLive() {
-        return mRecentSearchRepository.getAllRecentSearchLive();
+    public LiveData<List<RecentSearch>> getRecentSearchLive() {
+        return mRecentSearchRepository.getRecentSearchLive();
     }
 
-    public void deleteRecentSearch(RecentSearch recentSearch) {
-        mRecentSearchRepository.deleteRecentSearch(recentSearch);
+    public void recentSearchDelete(RecentSearch recentSearch) {
+        mRecentSearchRepository.recentSearchDelete(recentSearch);
     }
 
     public long getSelectedFolderId() {
@@ -115,24 +115,24 @@ public class SearchViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<List<Folder>> getAllFolderLive() {
-        return Repository.getFolderRepository(getApplication()).getAllFolderLive();
+    public LiveData<List<Folder>> getFolderLive() {
+        return Repository.getFolderRepository(getApplication()).getFolderLive();
     }
 
-    public LiveData<List<Size>> getAllSizeLive() {
-        return Repository.getSizeRepository(getApplication()).getAllSizeLive();
+    public LiveData<List<Size>> getSizeLive() {
+        return Repository.getSizeRepository(getApplication()).getSizeLive();
     }
 
-    public LiveData<List<String>> getAllFolderNameLive() {
-        return Repository.getFolderRepository(getApplication()).getAllFolderNameLive();
+    public LiveData<List<String>> getFolderNameLive() {
+        return Repository.getFolderRepository(getApplication()).getFolderNameLive();
     }
 
-    public LiveData<List<String>> getAllSizeBrandLive() {
-        return Repository.getSizeRepository(getApplication()).getAllSizeBrandLive();
+    public LiveData<List<String>> getSizeBrandLive() {
+        return Repository.getSizeRepository(getApplication()).getSizeBrandLive();
     }
 
-    public LiveData<List<String>> getAllSizeNameLive() {
-        return Repository.getSizeRepository(getApplication()).getAllSizeNameLive();
+    public LiveData<List<String>> getSizeNameLive() {
+        return Repository.getSizeRepository(getApplication()).getSizeNameLive();
     }
 
     public List<Object> getSelectedItemList() {

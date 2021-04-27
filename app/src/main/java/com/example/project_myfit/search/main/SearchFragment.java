@@ -409,7 +409,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
 
             @Override
             public void recentSearchDeleteClick(RecentSearch recentSearch) {
-                mModel.deleteRecentSearch(recentSearch);
+                mModel.recentSearchDelete(recentSearch);
             }
         });
     }
@@ -426,7 +426,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 if (!TextUtils.isEmpty(word)) {
                     if (mRecentSearchStringList.contains(word))
                         mModel.overLapRecentSearchReInsert(word);
-                    else mModel.insertRecentSearch(word);
+                    else mModel.recentSearchInsert(word);
                 }
             }
             return true;
