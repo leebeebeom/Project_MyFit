@@ -10,11 +10,12 @@ public class RecentSearch {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String word, date;
+    private boolean isRecycleBin;
 
-
-    public RecentSearch(String word, String date) {
+    public RecentSearch(String word, String date, boolean isRecycleBin) {
         this.word = word;
         this.date = date;
+        this.isRecycleBin = isRecycleBin;
     }
 
     public int getId() {
@@ -39,6 +40,14 @@ public class RecentSearch {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public boolean isRecycleBin() {
+        return isRecycleBin;
+    }
+
+    public void setRecycleBin(boolean recycleBin) {
+        isRecycleBin = recycleBin;
     }
 
     @Override

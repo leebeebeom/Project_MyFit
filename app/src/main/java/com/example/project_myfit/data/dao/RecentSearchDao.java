@@ -12,8 +12,8 @@ import java.util.List;
 
 @Dao
 public interface RecentSearchDao {
-    @Query("SELECT * FROM RecentSearch ORDER BY id DESC LIMIT 20")
-    LiveData<List<RecentSearch>> getRecentSearchLive();
+    @Query("SELECT * FROM RecentSearch WHERE isRecycleBin = :isRecycleBin ORDER BY id DESC LIMIT 20")
+    LiveData<List<RecentSearch>> getRecentSearchLive(boolean isRecycleBin);
 
     @Query("SELECT * FROM RecentSearch WHERE word = :word")
     RecentSearch getRecentSearch(String word);

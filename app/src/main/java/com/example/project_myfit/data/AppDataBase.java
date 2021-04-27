@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
@@ -47,43 +47,15 @@ public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull @NotNull SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE Folder_new(" +
+            database.execSQL("CREATE TABLE RecentSearch_new(" +
                     "id INTEGER PRIMARY KEY NOT NULL," +
-                    "parentId INTEGER NOT NULL," +
-                    "folderName TEXT," +
-                    "parentCategory TEXT," +
-                    "orderNumber INTEGER NOT NULL," +
-                    "isDeleted INTEGER NOT NULL," +
-                    "dummy INTEGER NOT NULL DEFAULT 0," +
-                    "parentIsDeleted INTEGER NOT NULL DEFAULT 0)");
-            database.execSQL("INSERT INTO Folder_new(id, parentId, folderName, parentCategory, orderNumber, isDeleted, dummy, parentIsDeleted)" +
-                    "SELECT id, folderId, folderName, parentCategory, orderNumber, isDeleted, dummy, parentIsDeleted FROM Folder");
-            database.execSQL("DROP TABLE Folder");
-            database.execSQL("ALTER TABLE Folder_new RENAME TO Folder");
-
-            database.execSQL("CREATE TABLE Size_new(" +
-                    "id INTEGER PRIMARY KEY NOT NULL," +
-                    "orderNumber INTEGER NOT NULL," +
-                    "isDeleted INTEGER NOT NULL," +
-                    "parentIsDeleted INTEGER NOT NULL DEFAULT 0," +
-                    "createdTime TEXT," +
-                    "modifiedTime TEXT," +
-                    "imageUri TEXT," +
-                    "brand TEXT," +
-                    "name TEXT," +
-                    "size TEXT," +
-                    "link TEXT," +
-                    "memo TEXT," +
-                    "parentCategory TEXT," +
-                    "parentId INTEGER NOT NULL," +
-                    "isFavorite INTEGER NOT NULL," +
-                    "sizeMap TEXT)");
-            database.execSQL("INSERT INTO Size_new(id, orderNumber, isDeleted, parentIsDeleted,createdTime, modifiedTime, imageUri, brand, name, size, link, memo," +
-                    "parentCategory, parentId, isFavorite, sizeMap)" +
-                    "SELECT id, orderNumber, isDeleted, parentIsDeleted,createdTime, modifiedTime, imageUri, brand, name, size, link, memo, " +
-                    "parentCategory, folderId, isFavorite, sizeMap FROM Size");
-            database.execSQL("DROP TABLE Size");
-            database.execSQL("ALTER TABLE Size_new RENAME TO Size");
+                    "word TEXT," +
+                    "date TEXT," +
+                    "isRecycleBin INTERGER NOT NULL DEFAULT 0)");
+            database.execSQL("INSERT INTO RecentSearch_new(id, word, date)" +
+                    "SELECT id, word, date FROM RecentSearch");
+            database.execSQL("DROP TABLE RecentSearch");
+            database.execSQL("ALTER TABLE RecentSearch_new RENAME TO RecentSearch");
         }
     };
     private static AppDataBase sInstance;
@@ -115,7 +87,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category(17, "기타", MyFitConstant.ETC, 17));
                             Repository.getCategoryRepository(context).categoryInsert(categoryList);
                         }
-                    })
+                    }).addMigrations(MIGRATION_1_2)
                     .build();
         }
         return sInstance;
