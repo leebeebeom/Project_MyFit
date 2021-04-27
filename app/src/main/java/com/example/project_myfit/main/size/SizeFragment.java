@@ -40,12 +40,12 @@ import java.util.List;
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.CROP_REQUEST_CODE;
 import static com.example.project_myfit.util.MyFitConstant.GET_IMAGE_REQUEST_CODE;
-import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.HTTP;
 import static com.example.project_myfit.util.MyFitConstant.HTTPS;
-import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
-import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM_CLICK;
+import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class SizeFragment extends Fragment {
@@ -199,8 +199,8 @@ public class SizeFragment extends Fragment {
         requireActivity().findViewById(R.id.fab_main_top).setVisibility(View.GONE);
         setBrandAutoCompleteList();
 
-        setImageUriLive();
-        setDialogLive();
+        imageUriLive();
+        dialogLive();
     }
 
     private void setBrandAutoCompleteList() {
@@ -212,7 +212,7 @@ public class SizeFragment extends Fragment {
         mBinding.acTvSizeBrand.setAdapter(autoCompleteAdapter);
     }
 
-    private void setImageUriLive() {
+    private void imageUriLive() {
         mModel.getMutableImageUri().observe(getViewLifecycleOwner(), uri -> {
             mBinding.ivSizePicture.setImageURI(uri);
             if (uri != null) mBinding.iconSizeAddImage.setVisibility(View.GONE);
@@ -220,22 +220,22 @@ public class SizeFragment extends Fragment {
         });
     }
 
-    private void setDialogLive() {
+    private void dialogLive() {
         DialogViewModel dialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.nav_graph_main))
                 .get(DialogViewModel.class);
 
         //image clear confirm click
         dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
-            navBackStackEntry.getSavedStateHandle().getLiveData(IMAGE_CLEAR_CONFIRM_CLICK).observe(navBackStackEntry, o ->
+            navBackStackEntry.getSavedStateHandle().getLiveData(IMAGE_CLEAR_CONFIRM).observe(navBackStackEntry, o ->
                     mModel.getMutableImageUri().setValue(null));
 
-            navBackStackEntry.getSavedStateHandle().getLiveData(SIZE_DELETE_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+            navBackStackEntry.getSavedStateHandle().getLiveData(SIZE_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
                 if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
                     requireActivity().finish();
                 else mNavController.popBackStack(R.id.inputOutputFragment, true);
             });
 
-            navBackStackEntry.getSavedStateHandle().getLiveData(GO_BACK_CONFIRM_CLICK).observe(navBackStackEntry, o -> {
+            navBackStackEntry.getSavedStateHandle().getLiveData(GO_BACK_CONFIRM).observe(navBackStackEntry, o -> {
                 if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
                     requireActivity().finish();
                 else mNavController.popBackStack(R.id.inputOutputFragment, true);
@@ -360,8 +360,6 @@ public class SizeFragment extends Fragment {
         super.onDestroyView();
         mBinding = null;
     }
-
-
     //menu------------------------------------------------------------------------------------------
     @Override
     public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
