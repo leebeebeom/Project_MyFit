@@ -12,38 +12,32 @@ import java.util.List;
 
 @Dao
 public interface FolderDao {
-    @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY folderName")
-    LiveData<List<Folder>> getFolderLive();
+    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY folderName")
+    LiveData<List<Folder>> getFolderLive(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
-    LiveData<List<Folder>> getFolderLive(long parentId);
+    @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY orderNumber")
+    LiveData<List<Folder>> getFolderLive(long parentId, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Folder WHERE isDeleted = 1")
-    LiveData<List<Folder>> getDeletedFolderLive();
+    @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY orderNumber")
+    List<Folder> getFolderList(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
-    List<Folder> getFolderList();
+    @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Folder> getFolderList(String parentCategory, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
-    List<Folder> getFolderList(String parentCategory);
+    @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Folder> getFolderList(long parentId, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Folder> getFolderList(long parentId);
+    @Query("SELECT folderName FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIdDeleted")
+    LiveData<List<String>> getFolderNameLive(boolean isDeleted, boolean parentIdDeleted);
 
-    @Query("SELECT folderName FROM Folder WHERE isDeleted =0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getFolderNameLive();
+    @Query("SELECT folderName FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted AND parentId = :parentId")
+    List<String> getFolderNameList(long parentId, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT folderName FROM Folder WHERE isDeleted =1 OR parentIsDeleted =1")
-    LiveData<List<String>> getDeletedFolderNameLive();
+    @Query("SELECT parentId FROM Folder WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Long> getFolderParentIdList(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT folderName FROM Folder WHERE isDeleted = 0 AND parentIsDeleted = 0 AND parentId = :parentId")
-    List<String> getFolderNameList(long parentId);
-
-    @Query("SELECT parentId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Long> getFolderParentIdList(String parentCategory);
-
-    @Query("SELECT parentId FROM Folder WHERE isDeleted AND parentIsDeleted = 1")
-    List<Long> getParentDeletedFolderParentIdList();
+    @Query("SELECT parentId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Long> getFolderParentIdList(String parentCategory, boolean isDeleted, boolean parentIsDeleted);
 
     @Query("SELECT * FROM Folder WHERE id = :id")
     LiveData<Folder> getSingleFolderLive(long id);

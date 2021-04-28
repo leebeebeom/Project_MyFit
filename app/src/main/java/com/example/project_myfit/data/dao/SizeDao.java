@@ -12,35 +12,32 @@ import java.util.List;
 
 @Dao
 public interface SizeDao {
-    @Query("SELECT * FROM size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY name")
-    LiveData<List<Size>> getSizeLive();
+    @Query("SELECT * FROM size WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY name")
+    LiveData<List<Size>> getSizeLive(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber DESC")
-    LiveData<List<Size>> getSizeLive(long parentId);
+    @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY orderNumber DESC")
+    LiveData<List<Size>> getSizeLive(long parentId, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Size WHERE isDeleted = 1")
-    LiveData<List<Size>> getDeletedSizeLive();
+    @Query("SELECT * FROM Size WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY orderNumber")
+    List<Size> getSizeList(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY orderNumber")
-    List<Size> getSizeList();
+    @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Size> getSizeList(long parentId, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT * FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND parentIsDeleted = 0 ")
-    List<Size> getSizeList(long parentId);
+    @Query("SELECT parentId FROM Size WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Long> getSizeParentIdList(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = 0 AND parentIsDeleted = 0")
-    List<Long> getSizeParentIdList(String parentCategory);
+    @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    List<Long> getSizeParentIdList(String parentCategory, boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT parentId FROM Size WHERE isDeleted =0 AND parentIsDeleted =1")
-    List<Long> getParentDeletedSizeParentIdList();
+    @Query("SELECT brand FROM Size WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    LiveData<List<String>> getSizeBrandLive(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getSizeBrandLive();
+    @Query("SELECT name FROM Size WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    LiveData<List<String>> getSizeNameLive(boolean isDeleted, boolean parentIsDeleted);
 
-    @Query("SELECT name FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0")
-    LiveData<List<String>> getSizeNameLive();
-
-    @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND parentIsDeleted = 0 ORDER BY brand")
-    List<String> getSizeBrandList();
+    @Query("SELECT brand FROM Size WHERE isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted ORDER BY brand")
+    List<String> getSizeBrandList(boolean isDeleted, boolean parentIsDeleted);
 
     @Query("SELECT * FROM Size WHERE id = :id")
     Size getSize(long id);
