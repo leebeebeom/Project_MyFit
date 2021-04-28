@@ -155,8 +155,8 @@ public class SelectedItemTreat {
 
         for (Folder f : selectedFolderList) {
             f.setIsDeleted(true);
-            topFolderList.addAll(mFolderRepository.getFolderList(f.getId()));
-            allSizeList.addAll(mSizeRepository.getSizeList(f.getId()));
+            topFolderList.addAll(mFolderRepository.getFolderList(f.getId(), false, false));
+            allSizeList.addAll(mSizeRepository.getSizeList(f.getId(), false, false));
         }
 
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
@@ -176,7 +176,7 @@ public class SelectedItemTreat {
         List<Folder> childFolderList = new ArrayList<>();
         for (Folder f : topFolderList) {
             if (!childFolderList.isEmpty()) childFolderList.clear();
-            childFolderList.addAll(mFolderRepository.getFolderList(f.getId()));
+            childFolderList.addAll(mFolderRepository.getFolderList(f.getId(), false, false));
             if (!childFolderList.isEmpty()) {
                 allFolderList.addAll(childFolderList);
                 getFolderChildList(childFolderList, allFolderList);
@@ -186,7 +186,7 @@ public class SelectedItemTreat {
 
     private void getAllSizeList(@NotNull List<Folder> childFolderList, List<Size> childSizeList) {
         for (Folder folder : childFolderList)
-            childSizeList.addAll(mSizeRepository.getSizeList(folder.getId()));
+            childSizeList.addAll(mSizeRepository.getSizeList(folder.getId(), false, false));
     }
 
     private void deleteSize(@NotNull List<Size> selectedSizeList) {
