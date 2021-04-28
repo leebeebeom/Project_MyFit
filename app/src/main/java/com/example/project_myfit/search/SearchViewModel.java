@@ -117,23 +117,23 @@ public class SearchViewModel extends AndroidViewModel {
 
 
     public LiveData<List<Folder>> getFolderLive() {
-        return Repository.getFolderRepository(getApplication()).getFolderLive();
+        return Repository.getFolderRepository(getApplication()).getFolderLive(false, false);
     }
 
     public LiveData<List<Size>> getSizeLive() {
-        return Repository.getSizeRepository(getApplication()).getSizeLive();
+        return Repository.getSizeRepository(getApplication()).getSizeLive(false, false);
     }
 
     public LiveData<List<String>> getFolderNameLive() {
-        return Repository.getFolderRepository(getApplication()).getFolderNameLive();
+        return Repository.getFolderRepository(getApplication()).getFolderNameLive(false, false);
     }
 
     public LiveData<List<String>> getSizeBrandLive() {
-        return Repository.getSizeRepository(getApplication()).getSizeBrandLive();
+        return Repository.getSizeRepository(getApplication()).getSizeBrandLive(false, false);
     }
 
     public LiveData<List<String>> getSizeNameLive() {
-        return Repository.getSizeRepository(getApplication()).getSizeNameLive();
+        return Repository.getSizeRepository(getApplication()).getSizeNameLive(false, false);
     }
 
     public List<Object> getSelectedItemList() {
