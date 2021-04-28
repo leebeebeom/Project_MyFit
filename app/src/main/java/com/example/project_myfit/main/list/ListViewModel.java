@@ -69,7 +69,7 @@ public class ListViewModel extends AndroidViewModel {
         mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
     }
 
-    public List<Folder> getFolderHistory(int sort, @NotNull Folder thisFolder) {
+    public List<Folder> getFolderHistory(@NotNull Folder thisFolder) {
         List<Folder> allFolderList = mFolderRepository.getFolderList(thisFolder.getParentCategory(), false, false);
         List<Folder> folderHistory = new ArrayList<>();
         folderHistory.add(thisFolder);
