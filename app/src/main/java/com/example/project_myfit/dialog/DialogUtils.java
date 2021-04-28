@@ -38,12 +38,14 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.ALERT_TITLE;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
+import static com.example.project_myfit.util.MyFitConstant.DELETE_FOREVER_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.ID;
 import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.RESTORE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM;
@@ -317,5 +319,15 @@ public class DialogUtils {
     public void recentSearchDeleteAll() {
         mDialogViewModel.recentSearchDeleteAll();
         mNavController.popBackStack(R.id.recentSearchDeleteAllDialog, true);
+    }
+
+    public void restore() {
+        mNavBackStackEntry.getSavedStateHandle().set(RESTORE_CONFIRM, null);
+        mNavController.popBackStack(R.id.restoreDialog, true);
+    }
+
+    public void deleteForever() {
+        mNavBackStackEntry.getSavedStateHandle().set(DELETE_FOREVER_CONFIRM, null);
+        mNavController.popBackStack(R.id.deleteForeverDialog, true);
     }
 }
