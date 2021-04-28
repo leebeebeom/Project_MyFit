@@ -21,6 +21,7 @@ import java.util.List;
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.ETC;
 import static com.example.project_myfit.util.MyFitConstant.OUTER;
+import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_SEARCH;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class SearchViewModel extends AndroidViewModel {
@@ -95,15 +96,15 @@ public class SearchViewModel extends AndroidViewModel {
     }
 
     public void overLapRecentSearchReInsert(String word) {
-        mRecentSearchRepository.overLapRecentSearchReInsert(word, false);
+        mRecentSearchRepository.overLapRecentSearchReInsert(word, RECENT_SEARCH_SEARCH);
     }
 
     public void recentSearchInsert(String word) {
-        mRecentSearchRepository.recentSearchInsert(word, false);
+        mRecentSearchRepository.recentSearchInsert(word, RECENT_SEARCH_SEARCH);
     }
 
     public LiveData<List<RecentSearch>> getRecentSearchLive() {
-        return mRecentSearchRepository.getRecentSearchLive(false);
+        return mRecentSearchRepository.getRecentSearchLive(RECENT_SEARCH_SEARCH);
     }
 
     public void recentSearchDelete(RecentSearch recentSearch) {
