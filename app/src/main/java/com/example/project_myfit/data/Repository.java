@@ -58,25 +58,24 @@ public class Repository {
             mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
         }
 
-        public LiveData<List<Category>> getCategoryLive() {
+        public LiveData<List<Category>> getCategoryLive(boolean isDeleted) {
             //order by orderNumber
-            //used in mainFragment -> viewPagerAdapter(Sort.categorySort)->categoryAdapter
-            return mCategoryDao.getCategoryLive();
+            //used in main -> viewPagerAdapter(Sort.categorySort)-> categoryAdapter
+            //TODO category 에 delete 타임 넣기
+            //used in RecycleBinSearch -> viewPagerAdapter -> recycleBinCategoryAdapter
+            return mCategoryDao.getCategoryLive(isDeleted);
         }
 
         public LiveData<Category> getCategoryLive(long id) {
+            //used in list -> actionBarTitle
             return mCategoryDao.getCategoryLive(id);
         }
 
-        public LiveData<List<Category>> getDeletedCategoryLive() {
-            return mCategoryDao.getDeletedCategoryLive();
-        }
-
-        public List<Category> getCategoryList() {
+        public List<Category> getCategoryList(boolean isDeleted) {
             //order by orderNumber
             //used in orderNumberInit
             List<Category> allCategoryList = new ArrayList<>();
-            Thread thread = new Thread(() -> allCategoryList.addAll(mCategoryDao.getCategoryList()));
+            Thread thread = new Thread(() -> allCategoryList.addAll(mCategoryDao.getCategoryList(isDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -86,29 +85,31 @@ public class Repository {
             return allCategoryList;
         }
 
-        public List<Category> getCategoryList(String parentCategory) {
+        public List<Category> getCategoryList(String parentCategory, boolean isDeleted) {
             //order by orderNumber
-            //used in treeViewModel -> sort.categorySort
-            List<Category> categoryListByParentCategory = new ArrayList<>();
-            Thread thread = new Thread(() -> categoryListByParentCategory.addAll(mCategoryDao.getCategoryList(parentCategory)));
+            //used in treeView -> sort.categorySort
+            List<Category> categoryList = new ArrayList<>();
+            Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, isDeleted)));
             thread.start();
             try {
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return categoryListByParentCategory;
+            return categoryList;
         }
 
-        public LiveData<List<String>> getDeletedCategoryNameLive() {
-            return mCategoryDao.getDeletedCategoryNameLive();
+        public LiveData<List<String>> getCategoryNameLive(boolean isDeleted) {
+            //order by categoryName
+            //used in recycleBin -> autoComplete
+            return mCategoryDao.getCategoryNameLive(isDeleted);
         }
 
-        public List<String> getCategoryNameList(String parentCategory) {
+        public List<String> getCategoryNameList(String parentCategory, boolean isDeleted) {
             //order by id
-            //used in DialogViewModel -> isSameNameCategory
+            //used in dialogViewModel -> isSameNameCategory
             List<String> categoryNameList = new ArrayList<>();
-            Thread thread = new Thread(() -> categoryNameList.addAll(mCategoryDao.getCategoryNameList(parentCategory)));
+            Thread thread = new Thread(() -> categoryNameList.addAll(mCategoryDao.getCategoryNameList(parentCategory, isDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -166,27 +167,25 @@ public class Repository {
             mFolderDao = AppDataBase.getsInstance(context).folderDao();
         }
 
-        public LiveData<List<Folder>> getFolderLive() {
+        public LiveData<List<Folder>> getFolderLive(boolean isDeleted, boolean parentIsDeleted) {
             //order by folderName
             //used in searchFragment
-            return mFolderDao.getFolderLive();
+            //TODO folder 에 delete 타임 넣기
+            //used in recycleBinSearch
+            return mFolderDao.getFolderLive(isDeleted, parentIsDeleted);
         }
 
-        public LiveData<List<Folder>> getFolderLive(long parentId) {
+        public LiveData<List<Folder>> getFolderLive(long parentId, boolean isDeleted, boolean parentIsDeleted) {
             //order by orderNumber
             //used in listFragment
-            return mFolderDao.getFolderLive(parentId);
+            return mFolderDao.getFolderLive(parentId, isDeleted, parentIsDeleted);
         }
 
-        public LiveData<List<Folder>> getDeletedFolderLive() {
-            return mFolderDao.getDeletedFolderLive();
-        }
-
-        public List<Folder> getFolderList() {
+        public List<Folder> getFolderList(boolean isDeleted, boolean parentIsDeleted) {
             //order by orderNumber
             //used in orderNumberInit
             List<Folder> folderList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList()));
+            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -196,12 +195,12 @@ public class Repository {
             return folderList;
         }
 
-        public List<Folder> getFolderList(String parentCategory) {
+        public List<Folder> getFolderList(String parentCategory, boolean isDeleted, boolean parentIsDeleted) {
             //order by orderNumber
             //used in listViewModel -> getFolderHistory(sort.folderSort)
             //used in treeViewDialog -> sort.folderSort
             List<Folder> folderList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentCategory)));
+            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentCategory, isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -211,13 +210,12 @@ public class Repository {
             return folderList;
         }
 
-        public List<Folder> getFolderList(long parentId) {
+        public List<Folder> getFolderList(long parentId, boolean isDeleted, boolean parentIsDeleted) {
             //order by id
             //used in mainFragment -> selectedCategoryDelete
-            //used in listFragment -> selectedItemMove
             //used in selectedItemTreat -> deleteFolder
             List<Folder> folderList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentId)));
+            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentId, isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -227,15 +225,17 @@ public class Repository {
             return folderList;
         }
 
-        public LiveData<List<String>> getFolderNameLive() {
-            return mFolderDao.getFolderNameLive();
+        public LiveData<List<String>> getFolderNameLive(boolean isDeleted, boolean parentIsDeleted) {
+            //order by id
+            //used in searchView -> sort.string -> autoComplete
+            return mFolderDao.getFolderNameLive(isDeleted, parentIsDeleted);
         }
 
-        public List<String> getFolderNameList(long parentId) {
+        public List<String> getFolderNameList(long parentId, boolean isDeleted, boolean parentIsDeleted) {
             //order by id
             //used in DialogViewModel -> isSameNameFolder
             List<String> folderNameList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameList(parentId)));
+            Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameList(parentId, isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -245,13 +245,11 @@ public class Repository {
             return folderNameList;
         }
 
-        public List<Long> getFolderParentIdList(String parentCategory) {
+        public List<Long> getFolderParentIdList(boolean isDeleted, boolean parentIsDeleted) {
             //order by id
-            //used in TreeView -> treeCategoryHolder, treeFolderHolder
-            //used in mainFragment -> categoryAdapter
-            //used in listFragment -> folderAdapter
+            //used in recycleBinSearch
             List<Long> folderParentIdList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(parentCategory)));
+            Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -261,9 +259,13 @@ public class Repository {
             return folderParentIdList;
         }
 
-        public List<Long> getParentDeletedFolderParentIdList() {
+        public List<Long> getFolderParentIdList(String parentCategory, boolean isDeleted, boolean parentIsDeleted) {
+            //order by id
+            //used in TreeView -> treeCategoryHolder, treeFolderHolder
+            //used in mainFragment -> categoryAdapter
+            //used in listFragment -> folderAdapter
             List<Long> folderParentIdList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getParentDeletedFolderParentIdList()));
+            Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(parentCategory, isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -321,27 +323,25 @@ public class Repository {
             mSizeDao = AppDataBase.getsInstance(context).sizeDao();
         }
 
-        public LiveData<List<Size>> getSizeLive() {
+        public LiveData<List<Size>> getSizeLive(boolean isDeleted, boolean parentIsDeleted) {
             //order by name
             //used in searchFragment
-            return mSizeDao.getSizeLive();
+            //TODO size에 delete 타임 넣기
+            //used in recycleBinSearch
+            return mSizeDao.getSizeLive(isDeleted, parentIsDeleted);
         }
 
-        public LiveData<List<Size>> getDeletedSizeLive() {
-            return mSizeDao.getDeletedSizeLive();
-        }
-
-        public LiveData<List<Size>> getSizeLive(long parentId) {
+        public LiveData<List<Size>> getSizeLive(long parentId, boolean isDeleted, boolean parentIsDeleted) {
             //order by orderNumber DESC
             //used in listFragment
-            return mSizeDao.getSizeLive(parentId);
+            return mSizeDao.getSizeLive(parentId, isDeleted, parentIsDeleted);
         }
 
-        public List<Size> getSizeList() {
+        public List<Size> getSizeList(boolean isDeleted, boolean parentIsDeleted) {
             //order by orderNumber
             //used in orderNumberInit
             List<Size> sizeList = new ArrayList<>();
-            Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList()));
+            Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList(isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -351,12 +351,12 @@ public class Repository {
             return sizeList;
         }
 
-        public List<Size> getSizeList(long parentId) {
+        public List<Size> getSizeList(long parentId, boolean isDeleted, boolean parentIsDeleted) {
             //order by id
             //used in mainFragment -> selectCategoryDelete
-            //used in selectedItemTreat -> deleteFolder
+            //used in selectedItemTreat -> deleteSize
             List<Size> sizeList = new ArrayList<>();
-            Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList(parentId)));
+            Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList(parentId, isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -366,13 +366,27 @@ public class Repository {
             return sizeList;
         }
 
-        public List<Long> getSizeParentIdList(String parentCategory) {
+        public List<Long> getSizeParentIdList(boolean isDeleted, boolean parentIsDeleted) {
+            //order by id
+            //used in recycleBinSearch
+            List<Long> sizeParentIdList = new ArrayList<>();
+            Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(isDeleted, parentIsDeleted)));
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return sizeParentIdList;
+        }
+
+        public List<Long> getSizeParentIdList(String parentCategory, boolean isDeleted, boolean parentIsDeleted) {
             //order by id
             //used in TreeView -> treeCategoryHolder, treeFolderHolder
             //used in mainFragment -> categoryAdapter
             //used in listFragment -> folderAdapter
             List<Long> sizeParentIdList = new ArrayList<>();
-            Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(parentCategory)));
+            Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(parentCategory, isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -382,31 +396,23 @@ public class Repository {
             return sizeParentIdList;
         }
 
-        public List<Long> getParentDeletedSizeParentIdList() {
-            List<Long> sizeParentIdList = new ArrayList<>();
-            Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getParentDeletedSizeParentIdList()));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return sizeParentIdList;
+        public LiveData<List<String>> getSizeBrandLive(boolean isDelete, boolean parentIsDeleted) {
+            //order by id
+            //used in searchView -> sort.string -> autoComplete
+            return mSizeDao.getSizeBrandLive(isDelete, parentIsDeleted);
         }
 
-        public LiveData<List<String>> getSizeBrandLive() {
-            return mSizeDao.getSizeBrandLive();
+        public LiveData<List<String>> getSizeNameLive(boolean isDeleted, boolean parentIsDeleted) {
+            //order by id
+            //used in searchView -> sort.string -> autoComplete
+            return mSizeDao.getSizeNameLive(isDeleted, parentIsDeleted);
         }
 
-        public LiveData<List<String>> getSizeNameLive() {
-            return mSizeDao.getSizeNameLive();
-        }
-
-        public List<String> getSizeBrandList() {
+        public List<String> getSizeBrandList(boolean isDeleted, boolean parentIsDeleted) {
             //order by brand
-            //used in inputOutputFragment -> autoCompleteTextView
+            //used in sizeFragment -> brand -> autoComplete
             List<String> brandList = new ArrayList<>();
-            Thread thread = new Thread(() -> brandList.addAll(mSizeDao.getSizeBrandList()));
+            Thread thread = new Thread(() -> brandList.addAll(mSizeDao.getSizeBrandList(isDeleted, parentIsDeleted)));
             thread.start();
             try {
                 thread.join();
@@ -463,6 +469,7 @@ public class Repository {
         public LiveData<List<RecentSearch>> getRecentSearchLive(int type) {
             //order by id
             //used in searchFragment -> recentSearchAdapter
+            //used in recycleBinSearch -> recentSearchAdapter
             return mRecentSearchDao.getRecentSearchLive(type);
         }
 
