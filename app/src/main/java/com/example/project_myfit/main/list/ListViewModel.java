@@ -14,7 +14,6 @@ import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.main.list.adapter.folderadapter.FolderAdapter;
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
-import com.example.project_myfit.util.Sort;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +70,7 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getFolderHistory(int sort, @NotNull Folder thisFolder) {
-        List<Folder> allFolderList = Sort.folderSort(sort, mFolderRepository.getFolderList(thisFolder.getParentCategory()));
+        List<Folder> allFolderList = mFolderRepository.getFolderList(thisFolder.getParentCategory(), false, false);
         List<Folder> folderHistory = new ArrayList<>();
         folderHistory.add(thisFolder);
         List<Folder> folderHistory2 = getFolderHistory2(allFolderList, folderHistory, thisFolder);
@@ -140,19 +139,19 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Folder>> getFolderLive(long parentId) {
-        return mFolderRepository.getFolderLive(parentId);
+        return mFolderRepository.getFolderLive(parentId, false, false);
     }
 
     public LiveData<List<Size>> getSizeLive(long parentId) {
-        return mSizeRepository.getSizeLive(parentId);
+        return mSizeRepository.getSizeLive(parentId, false, false);
     }
 
     public List<Long> getFolderParentIdList(String parentCategory) {
-        return mFolderRepository.getFolderParentIdList(parentCategory);
+        return mFolderRepository.getFolderParentIdList(parentCategory, false, false);
     }
 
     public List<Long> getSizeParentIdList(String parentCategory) {
-        return mSizeRepository.getSizeParentIdList(parentCategory);
+        return mSizeRepository.getSizeParentIdList(parentCategory, false, false);
     }
 
     public void sizeFavoriteClick(Size size) {
