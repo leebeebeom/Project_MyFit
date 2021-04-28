@@ -266,7 +266,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     }
 
     public void categoryLive() {
-        mModel.getCategoryLive().observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel));
+        mModel.getCategoryLive(false).observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel));
     }
 
     private void actionModeTitleLive() {

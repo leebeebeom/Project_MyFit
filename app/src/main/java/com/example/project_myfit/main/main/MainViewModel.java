@@ -54,7 +54,7 @@ public class MainViewModel extends AndroidViewModel {
 
         for (Category category : mSelectedCategoryList) {
             category.setIsDeleted(true);
-            childSizeList.addAll(mSizeRepository.getSizeList(category.getId()));
+            childSizeList.addAll(mSizeRepository.getSizeList(category.getId(), false, false));
         }
 
         List<Folder> childFolderList = findAllChildFolder();
@@ -72,7 +72,7 @@ public class MainViewModel extends AndroidViewModel {
     private List<Folder> findAllChildFolder() {
         List<Folder> topFolderList = new ArrayList<>();
         for (Category category : mSelectedCategoryList)
-            topFolderList.addAll(mFolderRepository.getFolderList(category.getId()));
+            topFolderList.addAll(mFolderRepository.getFolderList(category.getId(), false, false));
 
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
         findAllChildFolder2(topFolderList, allFolderList);
@@ -83,7 +83,7 @@ public class MainViewModel extends AndroidViewModel {
         List<Folder> childFolderList = new ArrayList<>();
         for (Folder folder : topFolderList) {
             if (!childFolderList.isEmpty()) childFolderList.clear();
-            childFolderList.addAll(mFolderRepository.getFolderList(folder.getId()));
+            childFolderList.addAll(mFolderRepository.getFolderList(folder.getId(), false, false));
             if (!childFolderList.isEmpty()) {
                 allFolderList.addAll(childFolderList);
                 findAllChildFolder2(childFolderList, allFolderList);
@@ -95,7 +95,7 @@ public class MainViewModel extends AndroidViewModel {
     private List<Size> findAllChildSize(@NotNull List<Folder> allChildFolderList) {
         List<Size> allChildSizeList = new ArrayList<>();
         for (Folder folder : allChildFolderList)
-            allChildSizeList.addAll(mSizeRepository.getSizeList(folder.getId()));
+            allChildSizeList.addAll(mSizeRepository.getSizeList(folder.getId(), false, false));
         return allChildSizeList;
     }
 
@@ -133,11 +133,11 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public List<Long> getFolderParentIdList(String parentCategory) {
-        return mFolderRepository.getFolderParentIdList(parentCategory);
+        return mFolderRepository.getFolderParentIdList(parentCategory, false, false);
     }
 
     public List<Long> getSizeParentIdList(String parentCategory) {
-        return mSizeRepository.getSizeParentIdList(parentCategory);
+        return mSizeRepository.getSizeParentIdList(parentCategory, false, false);
     }
 
     public int getCurrentItem() {
@@ -162,7 +162,7 @@ public class MainViewModel extends AndroidViewModel {
         return null;
     }
 
-    public LiveData<List<Category>> getCategoryLive() {
-        return mCategoryRepository.getCategoryLive();
+    public LiveData<List<Category>> getCategoryLive(boolean isDeleted) {
+        return mCategoryRepository.getCategoryLive(isDeleted);
     }
 }
