@@ -86,6 +86,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     private DialogViewModel mDialogViewModel;
     private RecentSearchAdapter mRecentSearchAdapter;
     private TypedValue mColorControl;
+    private TextInputLayout mAutoCompleteTextLayout;
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -143,7 +144,6 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
             ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
         }
     };
-    private TextInputLayout mAutoCompleteTextLayout;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -288,8 +288,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
 
     private void actionModeTitleLive() {
         mModel.getSelectedItemSizeLive().observe(getViewLifecycleOwner(), integer -> {
-            String title = integer + getString(R.string.action_mode_title);
-            mActionModeTitleBinding.tvActionModeTitle.setText(title);
+            mActionModeTitleBinding.tvActionModeTitle.setText(getString(R.string.action_mode_title, integer));
 
             if (mActionMode != null) {
                 mEditMenu.setVisible(integer == 1 && mModel.getSelectedItemList().get(0) instanceof Folder);
