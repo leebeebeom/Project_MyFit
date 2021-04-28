@@ -271,8 +271,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     private void actionModeTitleLive() {
         mModel.getSelectedCategorySizeLive().observe(getViewLifecycleOwner(), integer -> {
-            String title = integer + getString(R.string.action_mode_title);
-            mActionModeTitleBinding.tvActionModeTitle.setText(title);
+            mActionModeTitleBinding.tvActionModeTitle.setText(getString(R.string.action_mode_title, integer));
             if (mActionMode != null) {
                 mEditMenu.setVisible(integer == 1);
                 mDeletedMenu.setVisible(integer > 0);

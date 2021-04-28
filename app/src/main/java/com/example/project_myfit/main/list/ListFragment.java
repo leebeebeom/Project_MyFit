@@ -518,8 +518,7 @@ public class ListFragment extends Fragment implements SizeVHListener {
 
     private void actionModeTitleLive() {
         mModel.getSelectedSizeLive().observe(getViewLifecycleOwner(), integer -> {
-            String title = integer + getString(R.string.action_mode_title);
-            mActionModeTitleBinding.tvActionModeTitle.setText(title);
+            mActionModeTitleBinding.tvActionModeTitle.setText(getString(R.string.action_mode_title, integer));
 
             if (mActionMode != null) {
                 mEditMenu.setVisible(integer == 1 && mModel.getSelectedSizeList().size() == 0);
