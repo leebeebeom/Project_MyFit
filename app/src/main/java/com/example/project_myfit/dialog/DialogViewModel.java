@@ -45,7 +45,7 @@ public class DialogViewModel extends AndroidViewModel {
 
     public boolean isSameNameCategory(String categoryName, String parentCategory) {
         boolean isSameName = false;
-        List<String> categoryNameList = mCategoryRepository.getCategoryNameList(parentCategory);
+        List<String> categoryNameList = mCategoryRepository.getCategoryNameList(parentCategory, false);
         for (String name : categoryNameList)
             if (name.equals(categoryName)) {
                 isSameName = true;
@@ -56,7 +56,7 @@ public class DialogViewModel extends AndroidViewModel {
 
     public boolean isSameNameFolder(String folderName, long parentId) {
         boolean isSameName = false;
-        List<String> folderNameList = mFolderRepository.getFolderNameList(parentId);
+        List<String> folderNameList = mFolderRepository.getFolderNameList(parentId, false, false);
         for (String name : folderNameList)
             if (name.equals(folderName)) {
                 isSameName = true;
@@ -166,13 +166,13 @@ public class DialogViewModel extends AndroidViewModel {
 
     public void orderNumberInit(){
         if (!mIsOrderNumberInit){
-            List<Category> categoryList = mCategoryRepository.getCategoryList();
+            List<Category> categoryList = mCategoryRepository.getCategoryList(false);
             for (int i = 0; i < categoryList.size(); i++)
                 categoryList.get(i).setOrderNumber(i);
-            List<Folder> folderList = mFolderRepository.getFolderList();
+            List<Folder> folderList = mFolderRepository.getFolderList(false, false);
             for (int i = 0; i < folderList.size(); i++)
                 folderList.get(i).setOrderNumber(i);
-            List<Size> sizeList = Repository.getSizeRepository(getApplication()).getSizeList();
+            List<Size> sizeList = Repository.getSizeRepository(getApplication()).getSizeList(false, false);
             for (int i = 0; i < sizeList.size(); i++)
                 sizeList.get(i).setOrderNumber(i);
             mCategoryRepository.categoryUpdate(categoryList);
