@@ -58,6 +58,7 @@
     <string name="menu_search">검색</string>
     <string name="menu_edit">수정</string>
     <string name="menu_delete">삭제</string>
+    <string name="menu_restore">복원</string>
     <string name="menu_move">이동</string>
     <string name="menu_favorite">즐겨찾기</string>
     <string name="menu_menu">메뉴</string>
@@ -65,7 +66,7 @@
 
     <string name="list_menu_view_type">보기 방식</string>
 
-    <string name="action_mode_title">개 선택됨.</string>
+    <string name="action_mode_title">%1$d개 선택됨.</string>
 
     <string name="tree_title">이동할 위치를 선택하세요.</string>
     <string name="tree_current_position">(현재 위치)</string>
@@ -101,4 +102,6 @@
     <string name="dialog_message_go_back">저장되지 않았습니다.\n종료하시겠습니까?</string>
     <string name="dialog_message_image_clear">이미지를 삭제하시겠습니까?</string>
     <string name="dialog_message_recent_search_delete_all">최근 검색 목록을 모두 삭제하시겠습니까?</string>
+    <string name="dialog_message_restore">개의 아이템을 복원하시겠습니까?</string>
+    <string name="dialog_message_delete_forever">개의 아이템을 완전 삭제하시겠습니까?\n삭제 후 복구할 수 없습니다.</string>
 </resources>
