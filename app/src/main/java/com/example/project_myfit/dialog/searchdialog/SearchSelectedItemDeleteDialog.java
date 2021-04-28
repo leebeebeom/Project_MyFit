@@ -29,11 +29,9 @@ public class SearchSelectedItemDeleteDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        String message = mSelectedItemSize + getString(R.string.dialog_message_selected_item_delete);
-
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search).backStackLiveSetValue(R.id.searchSelectedItemDeleteDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(message);
+        AlertDialog alertDialog = dialogUtils.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_selected_item_delete));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.selectedItemDeleteConfirm());
