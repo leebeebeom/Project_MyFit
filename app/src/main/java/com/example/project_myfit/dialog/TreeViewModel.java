@@ -163,13 +163,13 @@ public class TreeViewModel extends AndroidViewModel {
 
     public List<Category> getCategoryList() {
         if (mAllCategoryList == null)
-            mAllCategoryList = Sort.categorySort(mMainSort, mCategoryRepository.getCategoryList(mParentCategory));
+            mAllCategoryList = Sort.categorySort(mMainSort, mCategoryRepository.getCategoryList(mParentCategory, false));
         return mAllCategoryList;
     }
 
     public List<Folder> getFolderList() {
         if (mAllFolderList == null)
-            mAllFolderList = Sort.folderSort(mListSort, mFolderRepository.getFolderList(mParentCategory));
+            mAllFolderList = Sort.folderSort(mListSort, mFolderRepository.getFolderList(mParentCategory, false, false));
         return mAllFolderList;
     }
 
@@ -187,13 +187,13 @@ public class TreeViewModel extends AndroidViewModel {
 
     private List<Long> getFolderParentIdList() {
         if (mFolderParentIdList == null)
-            mFolderParentIdList = mFolderRepository.getFolderParentIdList(mParentCategory);
+            mFolderParentIdList = mFolderRepository.getFolderParentIdList(mParentCategory, false, false);
         return mFolderParentIdList;
     }
 
     private List<Long> getSizeParentIdList() {
         if (mSizeParentIdList == null)
-            mSizeParentIdList = Repository.getSizeRepository(getApplication()).getSizeParentIdList(mParentCategory);
+            mSizeParentIdList = Repository.getSizeRepository(getApplication()).getSizeParentIdList(mParentCategory, false, false);
         return mSizeParentIdList;
     }
 
