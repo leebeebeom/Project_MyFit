@@ -341,7 +341,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         recentSearchClick();
         acImeClick();
         acTextChangeListener();
-        recentSearchAllClearClick();
+        recentSearchDeleteAllClick();
         endIconClick();
 
         actionModeRecreate();
@@ -464,8 +464,8 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void recentSearchAllClearClick() {
-        mBinding.tvSearchDeleteAll.setOnClickListener(v ->
+    private void recentSearchDeleteAllClick() {
+        mBinding.tvSearchDeleteAllRecentSearch.setOnClickListener(v ->
                 mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchDeleteAllDialog()));
     }
 
