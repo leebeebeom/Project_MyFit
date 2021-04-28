@@ -460,24 +460,24 @@ public class Repository {
             mRecentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
         }
 
-        public LiveData<List<RecentSearch>> getRecentSearchLive(boolean isRecycleBin) {
+        public LiveData<List<RecentSearch>> getRecentSearchLive(int type) {
             //order by id
             //used in searchFragment -> recentSearchAdapter
-            return mRecentSearchDao.getRecentSearchLive(isRecycleBin);
+            return mRecentSearchDao.getRecentSearchLive(type);
         }
 
-        public void recentSearchInsert(String wort, boolean isRecycleBin) {
-            new Thread(() -> mRecentSearchDao.recentSearchInsert(new RecentSearch(wort, getCurrentDate(), isRecycleBin))).start();
+        public void recentSearchInsert(String wort, int type) {
+            new Thread(() -> mRecentSearchDao.recentSearchInsert(new RecentSearch(wort, getCurrentDate(), type))).start();
         }
 
         public void recentSearchDelete(RecentSearch recentSearch) {
             new Thread(() -> mRecentSearchDao.recentSearchDelete(recentSearch)).start();
         }
 
-        public void overLapRecentSearchReInsert(String word, boolean isRecycleBin) {
+        public void overLapRecentSearchReInsert(String word, int type) {
             new Thread(() -> {
                 mRecentSearchDao.recentSearchDelete(mRecentSearchDao.getRecentSearch(word));
-                mRecentSearchDao.recentSearchInsert(new RecentSearch(word, getCurrentDate(), isRecycleBin));
+                mRecentSearchDao.recentSearchInsert(new RecentSearch(word, getCurrentDate(), type));
             }).start();
         }
 

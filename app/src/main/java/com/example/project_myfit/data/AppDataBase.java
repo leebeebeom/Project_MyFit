@@ -25,23 +25,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
         @Override
         public void migrate(@NonNull @NotNull SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE Category_new(" +
-                    "dummy INTEGER NOT NULL," +
-                    "parentCategory TEXT," +
+            database.execSQL("CREATE TABLE RecentSearch_new(" +
                     "id INTEGER PRIMARY KEY NOT NULL," +
-                    "orderNumber INTEGER NOT NULL," +
-                    "isDeleted INTEGER NOT NULL," +
-                    "categoryName TEXT)");
-            database.execSQL("INSERT INTO Category_new(dummy, parentCategory, id, orderNumber, isDeleted, categoryName)" +
-                    "SELECT dummy, parentCategory, id, orderNumber, isDeleted, categoryName FROM Category");
-            database.execSQL("DROP TABLE Category");
-            database.execSQL("ALTER TABLE Category_new RENAME TO Category");
+                    "word TEXT," +
+                    "date TEXT," +
+                    "type INTERGER NOT NULL DEFAULT 0)");
+            database.execSQL("INSERT INTO RecentSearch_new(id, word, date, type)" +
+                    "SELECT id, word, date, isRecycleBin FROM RecentSearch");
+            database.execSQL("DROP TABLE RecentSearch");
+            database.execSQL("ALTER TABLE RecentSearch_new RENAME TO RecentSearch");
         }
     };
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -87,7 +85,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category(17, "기타", MyFitConstant.ETC, 17));
                             Repository.getCategoryRepository(context).categoryInsert(categoryList);
                         }
-                    }).addMigrations(MIGRATION_1_2)
+                    }).addMigrations(MIGRATION_2_1)
                     .build();
         }
         return sInstance;
