@@ -373,7 +373,7 @@ public class ListFragment extends Fragment implements SizeVHListener {
     }
 
     private void setNavigation(Folder thisFolder) {
-        for (Folder folder : mModel.getFolderHistory(mSort, thisFolder)) {
+        for (Folder folder : mModel.getFolderHistory(thisFolder)) {
             mBinding.layoutListTextNavigation.addView(getArrowIcon());
             mBinding.layoutListTextNavigation.addView(getFolderNameTv(folder));
         }
