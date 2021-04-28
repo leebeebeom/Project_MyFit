@@ -218,7 +218,7 @@ public class SizeViewModel extends AndroidViewModel {
     }
 
     public List<String> getSizeBrandList() {
-        if (mSizeBrandList == null) mSizeBrandList = mSizeRepository.getSizeBrandList();
+        if (mSizeBrandList == null) mSizeBrandList = mSizeRepository.getSizeBrandList(false, false);
         return mSizeBrandList;
     }
 }
