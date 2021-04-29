@@ -1,10 +1,9 @@
 package com.example.project_myfit.dialog.searchdialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.dialog.DialogUtils;
+import com.example.project_myfit.util.KeyboardUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,25 +55,42 @@ public class SearchNameEditDialog extends DialogFragment {
 
         mBinding = dialogUtils.getBinding(oldName, mItemType);
 
+        AlertDialog alertDialog = getDialog(dialogUtils, finalOldName);
+
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveClick(dialogUtils, category, folder, positiveButton);
+        imeClick(positiveButton);
+        return alertDialog;
+    }
+
+    @NotNull
+    private AlertDialog getDialog(DialogUtils dialogUtils, String finalOldName) {
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
             alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
         else
             alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
+        return alertDialog;
+    }
 
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-
+    private void positiveClick(DialogUtils dialogUtils, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
-            InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            KeyboardUtil.hide(requireContext(), v);
 
             String newName = String.valueOf(mBinding.etDialog.getText()).trim();
-            if (category != null)
+
+            if (mItemType.equals(CATEGORY))
                 dialogUtils.categoryNameEdit(category, newName, mIsParentName, true);
-            else if (folder != null)
-                dialogUtils.folderNameEdit(folder, newName, mIsParentName, true);
+            else dialogUtils.folderNameEdit(folder, newName, mIsParentName, true);
         });
-        return alertDialog;
+    }
+
+    private void imeClick(@NotNull Button positiveButton) {
+        positiveButton.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
+                positiveButton.callOnClick();
+            return false;
+        });
     }
 
     @Override
