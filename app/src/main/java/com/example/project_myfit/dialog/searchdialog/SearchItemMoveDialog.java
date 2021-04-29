@@ -37,7 +37,6 @@ public class SearchItemMoveDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.itemMove(mParentId, true));
-
         return alertDialog;
     }
 }
