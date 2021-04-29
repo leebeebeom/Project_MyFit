@@ -39,18 +39,27 @@ public class SearchSameNameAddDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search).backStackLiveSetValue(R.id.searchSameNameAddDialog);
 
+        AlertDialog alertDialog = getDialog(dialogUtils);
+        positiveClick(dialogUtils, alertDialog);
+        return alertDialog;
+    }
+
+    @NotNull
+    private AlertDialog getDialog(DialogUtils dialogUtils) {
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
             alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add));
-        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
+        else
+            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
+        return alertDialog;
+    }
 
+    private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
             if (mItemType.equals(CATEGORY))
                 dialogUtils.sameNameCategoryAdd(mNewName, mParentCategory, true);
             else dialogUtils.sameNameFolderAdd(mNewName, mParentCategory, mParentId, true);
         });
-
-        return alertDialog;
     }
 }

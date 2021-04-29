@@ -40,18 +40,27 @@ public class SearchSameNameEditDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search)
                 .backStackLiveSetValue(R.id.searchSameNameEditDialog);
 
+        AlertDialog alertDialog = getDialog(dialogUtils);
+        positiveClick(dialogUtils, alertDialog);
+        return alertDialog;
+    }
+
+    @NotNull
+    private AlertDialog getDialog(DialogUtils dialogUtils) {
         AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
             alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
-        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
+        else
+            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
+        return alertDialog;
+    }
 
+    private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
             if (mItemType.equals(CATEGORY))
                 dialogUtils.sameNameCategoryEdit(mItemId, mNewName, mIsParentName, true);
             else dialogUtils.sameNameFolderEdit(mItemId, mNewName, mIsParentName, true);
         });
-
-        return alertDialog;
     }
 }
