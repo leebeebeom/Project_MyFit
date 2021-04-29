@@ -17,7 +17,7 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String fromString(Map<String, String> map) {
+    public static String toString(Map<String, String> map) {
         Gson gson = new Gson();
         return gson.toJson(map);
     }

@@ -76,12 +76,7 @@ public class Repository {
             //used in orderNumberInit
             List<Category> allCategoryList = new ArrayList<>();
             Thread thread = new Thread(() -> allCategoryList.addAll(mCategoryDao.getCategoryList(isDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return allCategoryList;
         }
 
@@ -90,12 +85,7 @@ public class Repository {
             //used in treeView -> sort.categorySort
             List<Category> categoryList = new ArrayList<>();
             Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, isDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return categoryList;
         }
 
@@ -110,36 +100,21 @@ public class Repository {
             //used in dialogViewModel -> isSameNameCategory
             List<String> categoryNameList = new ArrayList<>();
             Thread thread = new Thread(() -> categoryNameList.addAll(mCategoryDao.getCategoryNameList(parentCategory, isDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return categoryNameList;
         }
 
         public Category getCategory(long id) {
             AtomicReference<Category> category = new AtomicReference<>();
             Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(id)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return category.get();
         }
 
         public int getCategoryLargestOrderPlus1() {
             AtomicInteger largestOrder = new AtomicInteger();
             Thread thread = new Thread(() -> largestOrder.set(mCategoryDao.getCategoryLargestOrder()));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return largestOrder.get() + 1;
         }
 
@@ -186,12 +161,7 @@ public class Repository {
             //used in orderNumberInit
             List<Folder> folderList = new ArrayList<>();
             Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folderList;
         }
 
@@ -201,12 +171,7 @@ public class Repository {
             //used in treeViewDialog -> sort.folderSort
             List<Folder> folderList = new ArrayList<>();
             Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentCategory, isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folderList;
         }
 
@@ -216,12 +181,7 @@ public class Repository {
             //used in selectedItemTreat -> deleteFolder
             List<Folder> folderList = new ArrayList<>();
             Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentId, isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folderList;
         }
 
@@ -236,12 +196,7 @@ public class Repository {
             //used in DialogViewModel -> isSameNameFolder
             List<String> folderNameList = new ArrayList<>();
             Thread thread = new Thread(() -> folderNameList.addAll(mFolderDao.getFolderNameList(parentId, isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folderNameList;
         }
 
@@ -250,12 +205,7 @@ public class Repository {
             //used in recycleBinSearch
             List<Long> folderParentIdList = new ArrayList<>();
             Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folderParentIdList;
         }
 
@@ -266,12 +216,7 @@ public class Repository {
             //used in listFragment -> folderAdapter
             List<Long> folderParentIdList = new ArrayList<>();
             Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(parentCategory, isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folderParentIdList;
         }
 
@@ -282,24 +227,14 @@ public class Repository {
         public Folder getFolder(long id) {
             AtomicReference<Folder> folder = new AtomicReference<>();
             Thread thread = new Thread(() -> folder.set(mFolderDao.getFolder(id)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return folder.get();
         }
 
         public int getFolderLargestOrderPlus1() {
             AtomicInteger largestOrder = new AtomicInteger();
             Thread thread = new Thread(() -> largestOrder.set(mFolderDao.getFolderLargestOrder()));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return largestOrder.get() + 1;
         }
 
@@ -342,12 +277,7 @@ public class Repository {
             //used in orderNumberInit
             List<Size> sizeList = new ArrayList<>();
             Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList(isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return sizeList;
         }
 
@@ -357,12 +287,7 @@ public class Repository {
             //used in selectedItemTreat -> deleteSize
             List<Size> sizeList = new ArrayList<>();
             Thread thread = new Thread(() -> sizeList.addAll(mSizeDao.getSizeList(parentId, isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return sizeList;
         }
 
@@ -371,12 +296,7 @@ public class Repository {
             //used in recycleBinSearch
             List<Long> sizeParentIdList = new ArrayList<>();
             Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return sizeParentIdList;
         }
 
@@ -387,12 +307,7 @@ public class Repository {
             //used in listFragment -> folderAdapter
             List<Long> sizeParentIdList = new ArrayList<>();
             Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(parentCategory, isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return sizeParentIdList;
         }
 
@@ -413,36 +328,21 @@ public class Repository {
             //used in sizeFragment -> brand -> autoComplete
             List<String> brandList = new ArrayList<>();
             Thread thread = new Thread(() -> brandList.addAll(mSizeDao.getSizeBrandList(isDeleted, parentIsDeleted)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return brandList;
         }
 
         public Size getSize(long id) {
             AtomicReference<Size> size = new AtomicReference<>();
             Thread thread = new Thread(() -> size.set(mSizeDao.getSize(id)));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return size.get();
         }
 
         public int getSizeLargestOrderPlus1() {
             AtomicInteger largestOrder = new AtomicInteger();
             Thread thread = new Thread(() -> largestOrder.set(mSizeDao.getSizeLargestOrder()));
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            start(thread);
             return largestOrder.get() + 1;
         }
 
@@ -496,6 +396,15 @@ public class Repository {
         private String getCurrentDate() {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일", Locale.getDefault());
             return dateFormat.format(new Date(System.currentTimeMillis()));
+        }
+    }
+
+    private static void start(@NotNull Thread thread) {
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
