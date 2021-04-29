@@ -53,6 +53,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
         mModel.setSelectedItemList(mDialogUtils.getDialogViewModel().getSelectedFolderList(), mDialogUtils.getDialogViewModel().getSelectedSizeList());
 
         AlertDialog alertDialog = getAlertDialog();
+
         Window window = alertDialog.getWindow();
         mDialogUtils.setLayout(window);
         mDialogUtils.setTextSize(alertDialog);
@@ -106,6 +107,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
     public void onActivityCreated(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dialogLive(savedInstanceState);
+
         if (savedInstanceState != null)
             mTreeView.restoreState(savedInstanceState.getString(TREE_VIEW_STATE));
     }
@@ -136,19 +138,6 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
             folderAddFolder(savedInstanceState, clickedNode, viewHolder);
     }
 
-    private void folderAddFolder(Bundle savedInstanceState, TreeNode clickedNode, TreeNode.BaseNodeViewHolder<?> viewHolder) {
-        if (savedInstanceState != null) {
-            clickedNode = mModel.findFolderClickedNode(mNodeRoot);
-            viewHolder = clickedNode.getViewHolder();
-        }
-
-        TreeNode addedFolderNode = getFolderNode(mDialogUtils.getDialogViewModel().getAddedFolder(), mModel.getPlusMargin());
-        mTreeView.addNode(clickedNode, addedFolderNode);
-        mTreeView.expandNode(clickedNode);
-
-        mModel.folderAddFolderConfirmClick((TreeHolderFolder) viewHolder);
-    }
-
     private void categoryAddFolder(Bundle savedInstanceState, TreeNode clickedNode, TreeNode.BaseNodeViewHolder<?> viewHolder) {
         if (savedInstanceState != null) {
             clickedNode = mModel.findCategoryClickedNode(mNodeRoot, (TreeHolderCategory) viewHolder);
@@ -160,6 +149,19 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
         mTreeView.expandNode(clickedNode);
 
         mModel.categoryAddFolder((TreeHolderCategory) viewHolder);
+    }
+
+    private void folderAddFolder(Bundle savedInstanceState, TreeNode clickedNode, TreeNode.BaseNodeViewHolder<?> viewHolder) {
+        if (savedInstanceState != null) {
+            clickedNode = mModel.findFolderClickedNode(mNodeRoot);
+            viewHolder = clickedNode.getViewHolder();
+        }
+
+        TreeNode addedFolderNode = getFolderNode(mDialogUtils.getDialogViewModel().getAddedFolder(), mModel.getPlusMargin());
+        mTreeView.addNode(clickedNode, addedFolderNode);
+        mTreeView.expandNode(clickedNode);
+
+        mModel.folderAddFolderConfirmClick((TreeHolderFolder) viewHolder);
     }
 
     @Override

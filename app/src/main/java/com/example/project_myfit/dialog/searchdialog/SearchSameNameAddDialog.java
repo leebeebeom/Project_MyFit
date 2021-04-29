@@ -40,6 +40,7 @@ public class SearchSameNameAddDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search).backStackLiveSetValue(R.id.searchSameNameAddDialog);
 
         AlertDialog alertDialog = getDialog(dialogUtils);
+
         positiveClick(dialogUtils, alertDialog);
         return alertDialog;
     }

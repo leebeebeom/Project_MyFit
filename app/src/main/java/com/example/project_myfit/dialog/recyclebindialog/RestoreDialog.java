@@ -32,6 +32,7 @@ public class RestoreDialog extends DialogFragment {
                 .backStackLiveSetValue(R.id.restoreDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_restore));
+
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.restore());
         return alertDialog;

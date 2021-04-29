@@ -41,6 +41,7 @@ public class SearchSameNameEditDialog extends DialogFragment {
                 .backStackLiveSetValue(R.id.searchSameNameEditDialog);
 
         AlertDialog alertDialog = getDialog(dialogUtils);
+
         positiveClick(dialogUtils, alertDialog);
         return alertDialog;
     }

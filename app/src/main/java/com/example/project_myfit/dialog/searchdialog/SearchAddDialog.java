@@ -40,7 +40,9 @@ public class SearchAddDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search).backStackLiveSetValue(R.id.searchAddDialog);
 
         ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, mItemType);
+
         AlertDialog alertDialog = getDialog(dialogUtils, binding);
+
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveClick(positiveButton, dialogUtils, binding, alertDialog);
         dialogUtils.imeClick(binding, positiveButton);
