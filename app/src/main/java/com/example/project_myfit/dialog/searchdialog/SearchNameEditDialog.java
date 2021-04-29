@@ -65,12 +65,10 @@ public class SearchNameEditDialog extends DialogFragment {
 
     @NotNull
     private AlertDialog getDialog(DialogUtils dialogUtils, String finalOldName) {
-        AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
+            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
         else
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
-        return alertDialog;
+            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
     }
 
     private void positiveClick(DialogUtils dialogUtils, Category category, Folder folder, @NotNull Button positiveButton) {

@@ -48,12 +48,10 @@ public class SearchSameNameEditDialog extends DialogFragment {
 
     @NotNull
     private AlertDialog getDialog(DialogUtils dialogUtils) {
-        AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
+            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
         else
-            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
-        return alertDialog;
+            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
     }
 
     private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
