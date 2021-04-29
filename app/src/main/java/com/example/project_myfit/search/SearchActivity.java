@@ -69,9 +69,9 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void acListAddValue(@NotNull LiveData<List<String>> liveData, HashSet<String> autoCompleteList) {
+    private void acListAddValue(@NotNull LiveData<List<String>> liveData, HashSet<String> autoCompleteHashSet) {
         if (liveData.getValue() != null)
-            for (String s : liveData.getValue()) autoCompleteList.add(s.trim());
+            for (String s : liveData.getValue()) autoCompleteHashSet.add(s.trim());
     }
 
     @Override
