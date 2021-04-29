@@ -129,8 +129,9 @@ public class RecycleBinFolderAdapter extends ListAdapter<Folder, FolderListVH> i
         notifyDataSetChanged();
     }
 
-    public void setSelectedFolderList(List<Folder> selectedFolderList) {
-        this.mSelectedFolderList = selectedFolderList;
+    public void setSelectedFolderList(List<Object> selectedFolderList) {
+        if (mSelectedFolderList == null) mSelectedFolderList = new ArrayList<>();
+        for (Object o : selectedFolderList) mSelectedFolderList.add((Folder) o);
     }
 
     public void folderSelected(long id) {

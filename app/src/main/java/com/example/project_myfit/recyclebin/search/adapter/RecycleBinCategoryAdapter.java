@@ -130,8 +130,9 @@ public class RecycleBinCategoryAdapter extends ListAdapter<Category, CategoryVH>
         notifyDataSetChanged();
     }
 
-    public void setSelectedCategoryList(List<Category> selectedCategoryList) {
-        this.mSelectedCategoryList = selectedCategoryList;
+    public void setSelectedCategoryList(@NotNull List<Object> selectedCategoryList) {
+        if (mSelectedCategoryList == null) mSelectedCategoryList = new ArrayList<>();
+        for (Object o : selectedCategoryList) mSelectedCategoryList.add((Category) o);
     }
 
     public void categorySelected(long id) {

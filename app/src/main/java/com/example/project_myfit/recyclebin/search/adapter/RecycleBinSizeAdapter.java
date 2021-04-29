@@ -124,8 +124,9 @@ public class RecycleBinSizeAdapter extends ListAdapter<Size, SizeListVH> impleme
         notifyDataSetChanged();
     }
 
-    public void setSelectedFolderList(List<Size> selectedSizeList) {
-        this.mSelectedSizeList = selectedSizeList;
+    public void setSelectedFolderList(List<Object> selectedSizeList) {
+        if (mSelectedSizeList == null) mSelectedSizeList = new ArrayList<>();
+        for (Object o : selectedSizeList) mSelectedSizeList.add((Size) o);
     }
 
     public void sizeSelected(long id) {
