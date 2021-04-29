@@ -32,6 +32,7 @@ public class DeleteConfirmDialog extends DialogFragment {
                 .backStackLiveSetValue(R.id.deleteConfirmDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_delete));
+
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.deletedConfirm(mSizeId));
         return alertDialog;

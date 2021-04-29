@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.dialog.DialogUtils;
@@ -19,22 +18,17 @@ import com.example.project_myfit.util.KeyboardUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_NAME;
 
 public class SearchNameEditDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
-    private String mItemType;
-    private boolean mIsParentName;
-    private long mItemId;
+    private long mFolderId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = SearchNameEditDialogArgs.fromBundle(getArguments()).getItemType();
-        mIsParentName = SearchNameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
-        mItemId = SearchNameEditDialogArgs.fromBundle(getArguments()).getItemId();
+        mFolderId = SearchNameEditDialogArgs.fromBundle(getArguments()).getFolderId();
     }
 
     @NonNull
@@ -44,42 +38,31 @@ public class SearchNameEditDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search)
                 .backStackLiveSetValue(R.id.searchNameEditDialog);
 
-        Category category = mItemType.equals(CATEGORY) ? dialogUtils.getDialogViewModel().getCategory(mItemId) : null;
-        Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getDialogViewModel().getFolder(mItemId) : null;
+        Folder folder = dialogUtils.getDialogViewModel().getFolder(mFolderId);
 
-        String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
+        String oldName = folder.getFolderName();
         final String finalOldName = oldName;
 
         //restore
         oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
-        mBinding = dialogUtils.getBinding(oldName, mItemType);
+        mBinding = dialogUtils.getBinding(oldName, FOLDER);
 
-        AlertDialog alertDialog = getDialog(dialogUtils, finalOldName);
+        AlertDialog alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveClick(dialogUtils, category, folder, positiveButton);
+        positiveClick(dialogUtils, folder, positiveButton);
         dialogUtils.imeClick(mBinding, positiveButton);
         return alertDialog;
     }
 
-    @NotNull
-    private AlertDialog getDialog(DialogUtils dialogUtils, String finalOldName) {
-        if (mItemType.equals(CATEGORY))
-            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
-        else
-            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
-    }
-
-    private void positiveClick(DialogUtils dialogUtils, Category category, Folder folder, @NotNull Button positiveButton) {
+    private void positiveClick(DialogUtils dialogUtils, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             KeyboardUtil.hide(requireContext(), v);
 
             String newName = String.valueOf(mBinding.etDialog.getText()).trim();
 
-            if (mItemType.equals(CATEGORY))
-                dialogUtils.categoryNameEdit(category, newName, mIsParentName, true);
-            else dialogUtils.folderNameEdit(folder, newName, mIsParentName, true);
+            dialogUtils.folderNameEdit(folder, newName, false, true);
         });
     }
 

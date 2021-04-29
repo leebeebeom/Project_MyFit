@@ -53,35 +53,33 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding.tvItemTreeCategoryContentsSize.setText(String.valueOf(mAdapterUtil.getContentsSize(value.category.getId(),
                 mFolderParentIdList, mSizeParentIdList)));
 
-        //선택된 폴더가 이 카테고리노드라면
-        if (!mSelectedFolderList.isEmpty())
-            for (Folder selectedFolder : mSelectedFolderList)
-                if (selectedFolder.getParentId() == value.category.getId()) {
-                    setAlpha();
-                    break;
-                }
+        selectedFolderCheck(value);
+        selectedSizeCheck(value);
 
-        //선택된 사이즈가 이 카테고리노드라면
+        setExpandable(node);
+        setCurrentPosition(value);
+
+        mBinding.iconItemTreeCategoryAdd.setOnClickListener(v -> mListener.treeViewCategoryAddFolderClick(node, value));
+
+        return mBinding.getRoot();
+    }
+
+    private void selectedSizeCheck(@NotNull CategoryTreeHolder value) {
         if (!mSelectedSizeList.isEmpty())
             for (Size selectedSize : mSelectedSizeList)
                 if (selectedSize.getParentId() == value.category.getId()) {
                     setAlpha();
                     break;
                 }
+    }
 
-        //expandable
-        if (!node.getChildren().isEmpty())
-            mBinding.iconItemTreeCategoryFolderLayout.setOnClickListener(v -> tView.toggleNode(node));
-        else mBinding.iconItemTreeCategoryArrow.setVisibility(View.INVISIBLE);
-
-        //currentPosition
-        if (mThisFolder == null && mThisCategory != null && mThisCategory.getId() == value.category.getId())
-            mBinding.tvItemTreeCategoryCurrentPosition.setVisibility(View.VISIBLE);
-        else mBinding.tvItemTreeCategoryCurrentPosition.setVisibility(View.GONE);
-
-        mBinding.iconItemTreeCategoryAdd.setOnClickListener(v -> mListener.treeViewCategoryAddFolderClick(node, value));
-
-        return mBinding.getRoot();
+    private void selectedFolderCheck(@NotNull CategoryTreeHolder value) {
+        if (!mSelectedFolderList.isEmpty())
+            for (Folder selectedFolder : mSelectedFolderList)
+                if (selectedFolder.getParentId() == value.category.getId()) {
+                    setAlpha();
+                    break;
+                }
     }
 
     public void setAlpha() {
@@ -90,6 +88,18 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
             mBinding.tvItemTreeCategoryCategory.setAlpha(0.5f);
             mIsClickable = false;
         }
+    }
+
+    private void setExpandable(@NotNull TreeNode node) {
+        if (!node.getChildren().isEmpty())
+            mBinding.iconItemTreeCategoryFolderLayout.setOnClickListener(v -> tView.toggleNode(node));
+        else mBinding.iconItemTreeCategoryArrow.setVisibility(View.INVISIBLE);
+    }
+
+    private void setCurrentPosition(@NotNull CategoryTreeHolder value) {
+        if (mThisFolder == null && mThisCategory != null && mThisCategory.getId() == value.category.getId())
+            mBinding.tvItemTreeCategoryCurrentPosition.setVisibility(View.VISIBLE);
+        else mBinding.tvItemTreeCategoryCurrentPosition.setVisibility(View.GONE);
     }
 
     public boolean isClickable() {

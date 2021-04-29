@@ -1,11 +1,8 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -17,6 +14,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
+import com.example.project_myfit.util.KeyboardUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -54,32 +52,32 @@ public class NameEditDialog extends DialogFragment {
 
         mBinding = dialogUtils.getBinding(oldName, mItemType);
 
-        AlertDialog alertDialog;
-        if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
-        else
-            alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
+        AlertDialog alertDialog = getDialog(dialogUtils, finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveClick(dialogUtils, category, folder, positiveButton);
+        dialogUtils.imeClick(mBinding, positiveButton);
+        return alertDialog;
+    }
 
+    @NotNull
+    private AlertDialog getDialog(DialogUtils dialogUtils, String finalOldName) {
+        if (mItemType.equals(CATEGORY))
+            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
+        else
+            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
+    }
+
+    private void positiveClick(DialogUtils dialogUtils, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
-            InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            KeyboardUtil.hide(requireContext(), v);
 
             String newName = String.valueOf(mBinding.etDialog.getText()).trim();
             if (category != null)
-                dialogUtils.categoryNameEdit(category, newName, mIsParentName, false);
+                dialogUtils.categoryNameEdit(category, newName, mIsParentName);
             else if (folder != null)
                 dialogUtils.folderNameEdit(folder, newName, mIsParentName, false);
         });
-
-        mBinding.etDialog.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
-                positiveButton.callOnClick();
-            return false;
-        });
-
-        return alertDialog;
     }
 
     @Override

@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.GO_BACK_CONFIRM;
+
 public class GoBackDialog extends DialogFragment {
 
     @NonNull
@@ -24,8 +26,10 @@ public class GoBackDialog extends DialogFragment {
                 .backStackLiveSetValue(R.id.goBackDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_go_back));
+
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.goBackConfirm());
+        positiveButton.setOnClickListener(v ->
+                dialogUtils.getBackStackEntry().getSavedStateHandle().set(GO_BACK_CONFIRM, null));
         return alertDialog;
     }
 }

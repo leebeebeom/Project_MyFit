@@ -90,9 +90,9 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
     private TreeNode getNodeRoot() {
         mNodeRoot = TreeNode.root();
 
-        for (Category category : mModel.getCategoryList()) {//카테고리 노드 생성
+        for (Category category : mModel.getCategoryList()) {
             TreeNode categoryTreeNode = getCategoryNode(category);
-            for (Folder folder : mModel.getFolderList()) {//카테고리 노드 속 폴더 노드 생성
+            for (Folder folder : mModel.getFolderList()) {
                 if (category.getId() == folder.getParentId()) {
                     TreeNode folderTreeNode = getFolderNode(folder, mModel.getMargin());
                     categoryTreeNode.addChild(folderTreeNode);
@@ -153,7 +153,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
 
     private void folderAddFolder(Bundle savedInstanceState, TreeNode clickedNode, TreeNode.BaseNodeViewHolder<?> viewHolder) {
         if (savedInstanceState != null) {
-            clickedNode = mModel.findFolderClickedNode(mNodeRoot);
+            clickedNode = mModel.findFolderClickedNode(mNodeRoot, (TreeHolderFolder) viewHolder);
             viewHolder = clickedNode.getViewHolder();
         }
 
@@ -161,7 +161,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
         mTreeView.addNode(clickedNode, addedFolderNode);
         mTreeView.expandNode(clickedNode);
 
-        mModel.folderAddFolderConfirmClick((TreeHolderFolder) viewHolder);
+        mModel.folderAddFolder((TreeHolderFolder) viewHolder);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class SearchTreeViewDialog extends DialogFragment implements TreeNode.Tre
             TreeHolderCategory categoryViewHolder = (TreeHolderCategory) node.getViewHolder();
             if (categoryViewHolder.isClickable())
                 mDialogUtils.treeViewNodeClick(mModel.getSelectedItemSize(), categoryViewHolder.getCategoryId(), true);
-        } else if (node.getViewHolder() instanceof TreeHolderFolder) {//folder node click
+        } else if (node.getViewHolder() instanceof TreeHolderFolder) {
             TreeHolderFolder folderViewHolder = (TreeHolderFolder) node.getViewHolder();
             if (folderViewHolder.isClickable())
                 mDialogUtils.treeViewNodeClick(mModel.getSelectedItemSize(), folderViewHolder.getFolderId(),true);

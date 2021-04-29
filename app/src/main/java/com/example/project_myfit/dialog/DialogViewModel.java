@@ -181,8 +181,4 @@ public class DialogViewModel extends AndroidViewModel {
             mIsOrderNumberInit = true;
         }
     }
-
-    public void recentSearchDeleteAll() {
-        Repository.getRecentSearchRepository(getApplication()).deleteAllRecentSearch();
-    }
 }

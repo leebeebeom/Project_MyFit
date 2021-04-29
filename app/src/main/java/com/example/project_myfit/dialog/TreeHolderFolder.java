@@ -56,7 +56,19 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.iconItemTreeFolderArrow.getLayoutParams();
         params.leftMargin = value.margin;
 
-        //선택된 폴더가 이 폴더 노드라면
+        isSelectedFolder(node, value);
+        parentIsSelectedFolder(node);
+        isSelectedFolderParent(value);
+        isSelectedSizeParent(value);
+        addChildNode(node, value);
+        setExpandable(node);
+        setCurrentPosition(value);
+
+        mBinding.iconItemTreeFolderAdd.setOnClickListener(v -> mListener.treeViewFolderAddFolderClick(mNode, value));
+        return mBinding.getRoot();
+    }
+
+    private void isSelectedFolder(TreeNode node, @NotNull FolderTreeHolder value) {
         for (Folder selectedFolder : mSelectedFolderList) {
             if (selectedFolder.getId() == value.folder.getId()) {
                 setAlpha();
@@ -69,32 +81,36 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
                 break;
             }
         }
+    }
 
-        //부모 노드가 선택된 폴더라면
+    private void parentIsSelectedFolder(@NotNull TreeNode node) {
         if (node.getParent().getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getParent().getViewHolder()).isSelected) {
             setAlpha();
             isSelected = true;
         }
+    }
 
-        //현재위치가 이 노드라면
+    private void isSelectedFolderParent(@NotNull FolderTreeHolder value) {
         if (!mSelectedFolderList.isEmpty())
             for (Folder selectedFolder : mSelectedFolderList)
                 if (selectedFolder.getParentId() == value.folder.getId()) {
                     setAlpha();
                     break;
                 }
+    }
 
-
+    private void isSelectedSizeParent(@NotNull FolderTreeHolder value) {
         if (!mSelectedSizeList.isEmpty())
             for (Size selectedSize : mSelectedSizeList)
                 if (selectedSize.getParentId() == value.folder.getId()) {
                     setAlpha();
                     break;
                 }
+    }
 
-
+    private void addChildNode(TreeNode node, @NotNull FolderTreeHolder value) {
         int margin = (int) context.getResources().getDimension(R.dimen._8sdp);
-        //자식노드 생성
+
         for (Folder folder : mAllFolderList)
             if (value.folder.getId() == folder.getParentId()) {
                 TreeNode treeNode = new TreeNode(new FolderTreeHolder(folder, value.margin + margin))
@@ -102,19 +118,18 @@ public class TreeHolderFolder extends TreeNode.BaseNodeViewHolder<TreeHolderFold
                                 setItems(mSelectedFolderList, mSelectedSizeList, mAllFolderList, mFolderParentIdList, mSizeParentIdList));
                 node.addChild(treeNode);
             }
+    }
 
-
-        //expandable
+    private void setExpandable(@NotNull TreeNode node) {
         if (!node.getChildren().isEmpty())
             mBinding.iconItemTreeFolderFolderLayout.setOnClickListener(v -> tView.toggleNode(node));
         else mBinding.iconItemTreeFolderArrow.setVisibility(View.INVISIBLE);
+    }
 
+    private void setCurrentPosition(@NotNull FolderTreeHolder value) {
         if (mThisFolder != null && mThisFolder.getId() == value.folder.getId())
             mBinding.tvItemTreeFolderCurrentPosition.setVisibility(View.VISIBLE);
         else mBinding.tvItemTreeFolderCurrentPosition.setVisibility(View.GONE);
-
-        mBinding.iconItemTreeFolderAdd.setOnClickListener(v -> mListener.treeViewFolderAddFolderClick(mNode, value));
-        return mBinding.getRoot();
     }
 
     private void setAlpha() {

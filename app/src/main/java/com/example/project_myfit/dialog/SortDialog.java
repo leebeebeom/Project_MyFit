@@ -21,6 +21,7 @@ import static com.example.project_myfit.util.MyFitConstant.MAIN_FRAGMENT;
 import static com.example.project_myfit.util.MyFitConstant.SORT;
 import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND;
 import static com.example.project_myfit.util.MyFitConstant.SORT_BRAND_REVERSE;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CREATE;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CREATE_REVERSE;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
@@ -56,12 +57,7 @@ public class SortDialog extends DialogFragment {
             binding.radioBtnDialogSortBrandReverse.setVisibility(View.GONE);
         }
 
-        AlertDialog alertDialog = new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialogStyle)
-                .setTitle(R.string.all_sort_order)
-                .setView(binding.getRoot())
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .setPositiveButton(R.string.dialog_confirm, (dialog, which) -> dialogUtils.sortConfirm(mCheckedItem))
-                .show();
+        AlertDialog alertDialog = getDialog(dialogUtils, binding);
 
         Window window = alertDialog.getWindow();
         dialogUtils.setLayout(window);
@@ -119,6 +115,16 @@ public class SortDialog extends DialogFragment {
                     if (button != buttonView) button.setChecked(false);
             }
         });
+    }
+
+    private AlertDialog getDialog(DialogUtils dialogUtils, @NotNull LayoutDialogSortBinding binding) {
+        return new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialogStyle)
+                .setTitle(R.string.all_sort_order)
+                .setView(binding.getRoot())
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_confirm, (dialog, which) ->
+                        dialogUtils.getBackStackEntry().getSavedStateHandle().set(SORT_CONFIRM, mCheckedItem))
+                .show();
     }
 
     @Override

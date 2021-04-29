@@ -39,7 +39,9 @@ public class AddDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.addDialog);
 
         ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, mItemType);
+
         AlertDialog alertDialog = getDialog(dialogUtils, binding);
+
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveClick(dialogUtils, binding, positiveButton);
         dialogUtils.imeClick(binding, positiveButton);
@@ -48,12 +50,10 @@ public class AddDialog extends DialogFragment {
 
     @NotNull
     private AlertDialog getDialog(DialogUtils dialogUtils, ItemDialogEditTextBinding binding) {
-        AlertDialog alertDialog;
         if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.all_add_category), null);
+            return dialogUtils.getEditTextDialog(binding, getString(R.string.all_add_category), null);
         else
-            alertDialog = dialogUtils.getEditTextDialog(binding, getString(R.string.all_create_folder), null);
-        return alertDialog;
+            return dialogUtils.getEditTextDialog(binding, getString(R.string.all_create_folder), null);
     }
 
     private void positiveClick(DialogUtils dialogUtils, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {

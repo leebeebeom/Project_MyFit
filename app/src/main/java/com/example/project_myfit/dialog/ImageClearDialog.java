@@ -23,6 +23,7 @@ public class ImageClearDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.imageClearDialog);
 
         AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_image_clear));
+
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> dialogUtils.imageClearConfirm());
         return alertDialog;

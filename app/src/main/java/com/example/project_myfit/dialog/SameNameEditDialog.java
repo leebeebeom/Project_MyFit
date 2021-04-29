@@ -38,19 +38,27 @@ public class SameNameEditDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sameNameEditDialog);
 
-        AlertDialog alertDialog;
-        if (mItemType.equals(CATEGORY))
-            alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
-        else alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
+        AlertDialog alertDialog = getDialog(dialogUtils);
 
+        positiveClick(dialogUtils, alertDialog);
+        return alertDialog;
+    }
+
+    @NotNull
+    private AlertDialog getDialog(DialogUtils dialogUtils) {
+        if (mItemType.equals(CATEGORY))
+            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
+        else
+            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
+    }
+
+    private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
             if (mItemType.equals(CATEGORY))
-                dialogUtils.sameNameCategoryEdit(mItemId, mNewName, mIsParentName, false);
+                dialogUtils.sameNameCategoryEdit(mItemId, mNewName, mIsParentName);
             else
                 dialogUtils.sameNameFolderEdit(mItemId, mNewName, mIsParentName, false);
         });
-
-        return alertDialog;
     }
 }

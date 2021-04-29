@@ -15,22 +15,16 @@ import com.example.project_myfit.dialog.DialogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-
 public class SearchSameNameEditDialog extends DialogFragment {
 
-    private String mItemType;
-    private long mItemId;
+    private long mFolderId;
     private String mNewName;
-    private boolean mIsParentName;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = SearchSameNameEditDialogArgs.fromBundle(getArguments()).getItemType();
-        mItemId = SearchSameNameEditDialogArgs.fromBundle(getArguments()).getItemId();
+        mFolderId = SearchSameNameEditDialogArgs.fromBundle(getArguments()).getFolderId();
         mNewName = SearchSameNameEditDialogArgs.fromBundle(getArguments()).getNewName();
-        mIsParentName = SearchSameNameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
     }
 
     @NonNull
@@ -40,26 +34,14 @@ public class SearchSameNameEditDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search)
                 .backStackLiveSetValue(R.id.searchSameNameEditDialog);
 
-        AlertDialog alertDialog = getDialog(dialogUtils);
+        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
 
         positiveClick(dialogUtils, alertDialog);
         return alertDialog;
     }
 
-    @NotNull
-    private AlertDialog getDialog(DialogUtils dialogUtils) {
-        if (mItemType.equals(CATEGORY))
-            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
-        else
-            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
-    }
-
     private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> {
-            if (mItemType.equals(CATEGORY))
-                dialogUtils.sameNameCategoryEdit(mItemId, mNewName, mIsParentName, true);
-            else dialogUtils.sameNameFolderEdit(mItemId, mNewName, mIsParentName, true);
-        });
+        positiveButton.setOnClickListener(v -> dialogUtils.sameNameFolderEdit(mFolderId, mNewName, false, true));
     }
 }
