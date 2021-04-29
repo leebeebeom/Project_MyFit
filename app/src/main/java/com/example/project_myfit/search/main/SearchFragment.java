@@ -334,7 +334,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mainScrollChangeListener();
+        scrollChangeListener();
         topFabClick();
         vpPageChangeListener();
         recentSearchClick();
@@ -343,10 +343,10 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         recentSearchDeleteAllClick();
         endIconClick();
 
-        actionModeRecreate();
+        actionModeRestore();
     }
 
-    private void mainScrollChangeListener() {
+    private void scrollChangeListener() {
         mBinding.svSearch.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (v.getScrollY() != 0) mBinding.fabSearch.show();
             else mBinding.fabSearch.hide();
@@ -365,7 +365,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 if (scrollY != 0) mBinding.svSearch.scrollTo(0, 0);
                 else {
                     mBinding.svSearch.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                    mainScrollChangeListener();
+                    scrollChangeListener();
                 }
             });
         });
@@ -476,7 +476,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         });
     }
 
-    private void actionModeRecreate() {
+    private void actionModeRestore() {
         if (mModel.isActionModeOn()) {
             mSearchAdapterArray[mModel.getCurrentItem()].setSelectedItem(mModel.getSelectedItemList());
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
