@@ -3,7 +3,6 @@ package com.example.project_myfit.dialog.searchdialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -59,7 +58,7 @@ public class SearchNameEditDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveClick(dialogUtils, category, folder, positiveButton);
-        imeClick(positiveButton);
+        dialogUtils.imeClick(mBinding, positiveButton);
         return alertDialog;
     }
 
@@ -82,14 +81,6 @@ public class SearchNameEditDialog extends DialogFragment {
             if (mItemType.equals(CATEGORY))
                 dialogUtils.categoryNameEdit(category, newName, mIsParentName, true);
             else dialogUtils.folderNameEdit(folder, newName, mIsParentName, true);
-        });
-    }
-
-    private void imeClick(@NotNull Button positiveButton) {
-        positiveButton.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
-                positiveButton.callOnClick();
-            return false;
         });
     }
 
