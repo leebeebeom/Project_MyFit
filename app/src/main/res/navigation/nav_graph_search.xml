@@ -31,7 +31,7 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchSelectedItemDeleteDialog"
         android:label="SearchSelectedItemDeleteDialog">
         <argument
-            android:name="selected_item_size"
+            android:name="selectedItemSize"
             app:argType="integer" />
     </dialog>
     <dialog
@@ -39,7 +39,7 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchTreeViewDialog"
         android:label="SearchTreeViewDialog">
         <argument
-            android:name="parent_category"
+            android:name="parentCategory"
             app:argType="string" />
         <action
             android:id="@+id/action_searchTreeViewDialog_to_searchAddDialog"
@@ -53,13 +53,13 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchAddDialog"
         android:label="SearchAddDialog">
         <argument
-            android:name="item_type"
+            android:name="itemType"
             app:argType="string" />
         <argument
-            android:name="parent_category"
+            android:name="parentCategory"
             app:argType="string" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
         <action
             android:id="@+id/action_searchAddDialog_to_searchSameNameAddDialog"
@@ -70,10 +70,10 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchItemMoveDialog"
         android:label="SearchItemMoveDialog">
         <argument
-            android:name="selected_item_size"
+            android:name="selectedItemSize"
             app:argType="integer" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
     </dialog>
     <dialog
@@ -81,16 +81,16 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchSameNameAddDialog"
         android:label="SearchSameNameAddDialog">
         <argument
-            android:name="item_type"
+            android:name="itemType"
             app:argType="string" />
         <argument
-            android:name="parent_category"
+            android:name="parentCategory"
             app:argType="string" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
         <argument
-            android:name="new_name"
+            android:name="newName"
             app:argType="string" />
     </dialog>
     <dialog
@@ -98,14 +98,8 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchNameEditDialog"
         android:label="SearchNameEditDialog">
         <argument
-            android:name="item_id"
+            android:name="folderId"
             app:argType="long" />
-        <argument
-            android:name="item_type"
-            app:argType="string" />
-        <argument
-            android:name="is_parent_name"
-            app:argType="boolean" />
         <action
             android:id="@+id/action_searchNameEditDialog_to_searchSameNameEditDialog"
             app:destination="@id/searchSameNameEditDialog" />
@@ -115,30 +109,24 @@
         android:name="com.example.project_myfit.dialog.searchdialog.SearchSameNameEditDialog"
         android:label="SearchSameNameEditDialog">
         <argument
-            android:name="item_type"
-            app:argType="string" />
-        <argument
-            android:name="item_id"
+            android:name="folderId"
             app:argType="long" />
         <argument
-            android:name="new_name"
+            android:name="newName"
             app:argType="string" />
-        <argument
-            android:name="is_parent_name"
-            app:argType="boolean" />
     </dialog>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.project_myfit.MainActivity"
         android:label="MainActivity">
         <argument
-            android:name="folder_id"
+            android:name="folderId"
             app:argType="long" />
         <argument
-            android:name="size_id"
+            android:name="sizeId"
             app:argType="long" />
         <argument
-            android:name="parent_id"
+            android:name="parentId"
             app:argType="long" />
     </activity>
     <dialog

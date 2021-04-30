@@ -8,6 +8,47 @@
     <fragment
         android:id="@+id/recycleBinMain"
         android:name="com.example.project_myfit.recyclebin.main.RecycleBinMainFragment"
-        android:label="fragment_recycle_bin_main"
-        tools:layout="@layout/fragment_recycle_bin_main" />
+        tools:layout="@layout/fragment_recycle_bin_main">
+        <action
+            android:id="@+id/action_recycleBinMain_to_recycleBinSearchFragment"
+            app:destination="@id/recycleBinSearch"
+            app:enterAnim="@anim/fragment_slide_in_from_down"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_slide_out_to_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/recycleBinSearch"
+        android:name="com.example.project_myfit.recyclebin.search.RecycleBinSearchFragment"
+        tools:layout="@layout/fragment_recycle_bin_search">
+        <action
+            android:id="@+id/action_recycleBinSearch_to_restoreDialog"
+            app:destination="@id/restoreDialog" />
+        <action
+            android:id="@+id/action_recycleBinSearch_to_deleteForeverDialog"
+            app:destination="@id/deleteForeverDialog" />
+        <action
+            android:id="@+id/action_recycleBinSearch_to_recycleBinRecentSearchDeleteAllDialog"
+            app:destination="@id/recycleBinRecentSearchDeleteAllDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/restoreDialog"
+        android:name="com.example.project_myfit.dialog.recyclebindialog.RestoreDialog"
+        android:label="RestoreDialog">
+        <argument
+            android:name="selectedItemSize"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/deleteForeverDialog"
+        android:name="com.example.project_myfit.dialog.recyclebindialog.DeleteForeverDialog"
+        android:label="DeleteForeverDialog">
+        <argument
+            android:name="selectedItemSize"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/recycleBinRecentSearchDeleteAllDialog"
+        android:name="com.example.project_myfit.dialog.recyclebindialog.RecycleBinRecentSearchDeleteAllDialog"
+        android:label="RecycleBinRecentSearchDeleteAllDialog"/>
 </navigation>
