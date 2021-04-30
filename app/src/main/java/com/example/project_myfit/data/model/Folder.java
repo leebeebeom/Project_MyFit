@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity
-public class Folder {
+public class Folder extends ParentModel {
     @PrimaryKey
     private final long id;
     private final String parentCategory;
@@ -16,6 +16,7 @@ public class Folder {
     private boolean isDeleted, dummy, parentIsDeleted;
 
     public Folder(long id, String folderName, long parentId, int orderNumber, String parentCategory) {
+        super(id);
         this.id = id;
         this.folderName = folderName;
         this.parentId = parentId;

@@ -6,23 +6,25 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity
-public class RecentSearch {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+public class RecentSearch extends ParentModel{
+    @PrimaryKey
+    private long id;
     private String word, date;
     private int type;
 
-    public RecentSearch(String word, String date, int type) {
+    public RecentSearch(long id, String word, String date, int type) {
+        super(id);
+        this.id = id;
         this.word = word;
         this.date = date;
         this.type = type;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long   id) {
         this.id = id;
     }
 

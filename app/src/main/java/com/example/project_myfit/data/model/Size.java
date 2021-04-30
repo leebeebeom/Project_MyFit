@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-public class Size {
-    @PrimaryKey(autoGenerate = true)
+public class Size extends ParentModel{
+    @PrimaryKey
     private long id;
     private int orderNumber;
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
@@ -19,12 +19,16 @@ public class Size {
     private Map<String, String> sizeMap;
 
     @Ignore
-    public Size(String parentCategory) {
+    public Size(long id, String parentCategory) {
+        super(id);
+        this.id = id;
         this.parentCategory = parentCategory;
         sizeMap = new HashMap<>();
     }
 
-    public Size(int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long parentId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
+    public Size(long id, int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long parentId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
+        super(id);
+        this.id = id;
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
         this.modifiedTime = modifiedTime;

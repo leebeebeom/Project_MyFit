@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity
-public class Category {
+public class Category extends ParentModel{
     @PrimaryKey
     private long id;
     private final String parentCategory;
@@ -15,6 +15,7 @@ public class Category {
     private String categoryName;
 
     public Category(long id, String categoryName, String parentCategory, int orderNumber) {
+        super(id);
         this.id = id;
         this.categoryName = categoryName;
         this.parentCategory = parentCategory;
