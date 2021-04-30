@@ -28,20 +28,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:layout_weight="1"
-                android:hint="@string/include_length"
+                android:hint="@string/include_option_1"
                 android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
-                app:shapeAppearance="@style/myEditTextCorner"
-                app:suffixText="cm"
-                app:suffixTextAppearance="@style/myTextSize10sdp">
+                app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_top_outer_length"
+                    android:id="@+id/etOption1"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:text='@={size.sizeMap[constant.LENGTH]}'
+                    android:inputType="text"
+                    android:text='@={size.sizeMap[constant.OPTION1]}'
                     android:textSize="@dimen/_10sdp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,20 +48,66 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/include_shoulder"
+                android:hint="@string/include_option_2"
                 android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
-                app:shapeAppearance="@style/myEditTextCorner"
-                app:suffixText="cm"
-                app:suffixTextAppearance="@style/myTextSize10sdp">
+                app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_top_outer_shoulder"
+                    android:id="@+id/etOption2"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:text='@={size.sizeMap[constant.SHOULDER]}'
+                    android:inputType="text"
+                    android:text='@={size.sizeMap[constant.OPTION2]}'
+                    android:textSize="@dimen/_10sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:hint="@string/include_option_3"
+                android:theme="@style/myEditTextOutlineColor"
+                app:hintTextAppearance="@style/myTextSize8sdp"
+                app:shapeAppearance="@style/myEditTextCorner">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etOption3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:text='@={size.sizeMap[constant.OPTION3]}'
+                    android:textSize="@dimen/_10sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/include_option_4"
+                android:theme="@style/myEditTextOutlineColor"
+                app:hintTextAppearance="@style/myTextSize8sdp"
+                app:shapeAppearance="@style/myEditTextCorner">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etOption4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:text='@={size.sizeMap[constant.OPTION4]}'
                     android:textSize="@dimen/_10sdp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,20 +123,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:layout_weight="1"
-                android:hint="@string/include_chest"
+                android:hint="@string/include_option_5"
                 android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
-                app:shapeAppearance="@style/myEditTextCorner"
-                app:suffixText="cm"
-                app:suffixTextAppearance="@style/myTextSize10sdp">
+                app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_top_outer_chest"
+                    android:id="@+id/etOption5"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:text='@={size.sizeMap[constant.CHEST]}'
+                    android:inputType="text"
+                    android:text='@={size.sizeMap[constant.OPTION5]}'
                     android:textSize="@dimen/_10sdp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,24 +143,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/include_sleeve"
+                android:hint="@string/include_option_6"
                 android:theme="@style/myEditTextOutlineColor"
                 app:hintTextAppearance="@style/myTextSize8sdp"
-                app:shapeAppearance="@style/myEditTextCorner"
-                app:suffixText="cm"
-                app:suffixTextAppearance="@style/myTextSize10sdp">
+                app:shapeAppearance="@style/myEditTextCorner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_top_outer_sleeve"
+                    android:id="@+id/etOption6"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:text='@={size.sizeMap[constant.SLEEVE]}'
+                    android:inputType="text"
+                    android:text='@={size.sizeMap[constant.OPTION6]}'
                     android:textSize="@dimen/_10sdp" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </layout>

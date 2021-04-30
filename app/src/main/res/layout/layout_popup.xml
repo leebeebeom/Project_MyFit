@@ -19,7 +19,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_popup_add_category"
+                    android:id="@+id/tvAddCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
@@ -29,7 +29,7 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_popup_create_folder"
+                    android:id="@+id/tvCreateFolder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
@@ -39,7 +39,7 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_popup_sort_order"
+                    android:id="@+id/tvSortOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
@@ -49,7 +49,7 @@
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_popup_recycle_bin"
+                    android:id="@+id/tvRecycleBin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"

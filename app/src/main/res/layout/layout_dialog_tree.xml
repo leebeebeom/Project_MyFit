@@ -16,7 +16,7 @@
         android:scrollbars="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/layout_dialog_tree"
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -53,7 +53,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/tv_dialog_tree_add_category_layout"
+                android:id="@+id/layoutAddCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

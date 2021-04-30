@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="category"
-            type="com.example.project_myfit.data.model.Category" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +10,7 @@
         tools:context=".main.list.ListFragment">
 
         <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/sv_list"
+            android:id="@+id/sv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -35,7 +28,7 @@
                     android:scrollbars="none">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/layout_list_text_navigation"
+                        android:id="@+id/layoutTextNavigation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
@@ -43,7 +36,7 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/icon_list_home"
+                            android:id="@+id/iconHome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
@@ -58,24 +51,23 @@
                             app:tint="?colorControlNormal" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_list_navigation_category"
+                            android:id="@+id/tvCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
-                            android:text="@{category.categoryName}"
                             android:textSize="@dimen/_11sdp"
                             tools:text="Short Sleeve" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </HorizontalScrollView>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/rv_list_folder_layout"
+                    android:id="@+id/layoutRvFolder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/icon_list_toggle"
+                        android:id="@+id/iconToggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -84,7 +76,7 @@
                         android:src="@drawable/icon_triangle_down" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_list_folder"
+                        android:id="@+id/rvFolder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
@@ -101,7 +93,7 @@
                     android:layout_height="wrap_content">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_list_size"
+                        android:id="@+id/rvSize"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -117,7 +109,7 @@
                         tools:listitem="@layout/item_size_grid" />
 
                     <FrameLayout
-                        android:id="@+id/tv_list_no_data_layout"
+                        android:id="@+id/layoutNoData"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"

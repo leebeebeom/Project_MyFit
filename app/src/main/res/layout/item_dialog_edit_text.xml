@@ -24,7 +24,7 @@
         android:paddingTop="@dimen/_10sdp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/et_dialog_layout"
+            android:id="@+id/layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             app:placeholderTextAppearance="@style/myTextSize11sdp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_dialog"
+                android:id="@+id/et"
                 android:layout_height="@dimen/_36sdp"
                 android:layout_width="match_parent"
                 android:maxLength="30"

@@ -35,7 +35,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_bottom_length"
+                    android:id="@+id/etLength"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -70,7 +70,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_bottom_waist"
+                    android:id="@+id/etWaist"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -92,7 +92,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_bottom_thigh"
+                    android:id="@+id/etThigh"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -121,7 +121,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_bottom_rise"
+                    android:id="@+id/etRise"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"
@@ -143,7 +143,7 @@
                 app:suffixTextAppearance="@style/myTextSize10sdp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_include_bottom_hem"
+                    android:id="@+id/etHem"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:imeOptions="actionNext"

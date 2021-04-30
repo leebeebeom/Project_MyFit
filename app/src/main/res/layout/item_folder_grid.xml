@@ -16,7 +16,6 @@
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_view_item_folder_grid"
             android:layout_gravity="center_horizontal"
             android:layout_width="@dimen/_64sdp"
             android:layout_height="@dimen/_64sdp"
@@ -25,7 +24,7 @@
             app:cardElevation="@dimen/_3sdp">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_item_folder_grid_title"
+                android:id="@+id/tvFolderName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
@@ -37,7 +36,7 @@
                 tools:text="일곱글자까지됨세줄까지됨\n세줄까지됨" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/icon_item_folder_grid_drag_handle"
+                android:id="@+id/iconDragHandle"
                 setDragHandle2="@{folder.folderName}"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
@@ -50,7 +49,7 @@
                 tools:src="@drawable/icon_drag_handle2" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/cb_item_folder_grid"
+                android:id="@+id/cb"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="start"
@@ -67,20 +66,20 @@
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/tv_item_folder_grid_contents_size_layout"
+            android:id="@+id/layoutContentsSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_item_folder_grid_contents_size"
+                android:id="@+id/tvContentsSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_8sdp"
                 tools:text="0" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_item_folder_grid_items"
+                android:id="@+id/tvItems"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_2sdp"

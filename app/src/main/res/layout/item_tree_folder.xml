@@ -21,13 +21,13 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/icon_item_tree_folder_folder_layout"
+                android:id="@+id/layoutFolderIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="@dimen/_4sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/icon_item_tree_folder_arrow"
+                    android:id="@+id/iconArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_16sdp"
@@ -35,7 +35,7 @@
                     app:srcCompat="@drawable/icon_triangle_right" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/icon_item_tree_folder_folder"
+                    android:id="@+id/iconFolder"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:alpha="0.8"
@@ -43,7 +43,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_item_tree_folder_folder"
+                android:id="@+id/tvFolderName"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_8sdp"
@@ -56,7 +56,7 @@
                 tools:text="폴더 1" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_item_tree_folder_current_position"
+                android:id="@+id/tvCurrentPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/_4sdp"
@@ -69,7 +69,7 @@
                 android:visibility="gone" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_item_tree_folder_contents_size"
+                android:id="@+id/tvContentsSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -80,7 +80,7 @@
                 tools:text="20" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/icon_item_tree_folder_add"
+                android:id="@+id/iconAdd"
                 setAddIcon2="@{folder.folderName}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

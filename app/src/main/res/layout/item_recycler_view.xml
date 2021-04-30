@@ -9,7 +9,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_item_rv"
+            android:id="@+id/rv"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,7 +23,7 @@
             tools:listitem="@layout/item_category" />
 
         <FrameLayout
-            android:id="@+id/tv_item_rv_no_result_layout"
+            android:id="@+id/layoutNoResult"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
@@ -41,7 +41,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/tv_item_rv_no_data_layout"
+            android:id="@+id/layoutNoData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"

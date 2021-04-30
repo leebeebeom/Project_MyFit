@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cb_item_folder_list"
+            android:id="@+id/cb"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
             android:scaleY="0.7" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_view_item_folder_list"
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -78,7 +78,7 @@
                         android:paddingBottom="@dimen/_1sdp">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_item_folder_list_contents_size"
+                            android:id="@+id/tvContentsSize"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:alpha="0.6"
