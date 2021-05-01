@@ -12,6 +12,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
+import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -374,7 +375,7 @@ public class Repository {
         }
 
         public void recentSearchInsert(String wort, int type) {
-            new Thread(() -> mRecentSearchDao.recentSearchInsert(new RecentSearch(wort, getCurrentDate(), type))).start();
+            new Thread(() -> mRecentSearchDao.recentSearchInsert(new RecentSearch(CommonUtil.createId(), wort, getCurrentDate(), type))).start();
         }
 
         public void recentSearchDelete(RecentSearch recentSearch) {
@@ -384,7 +385,7 @@ public class Repository {
         public void overLapRecentSearchReInsert(String word, int type) {
             new Thread(() -> {
                 mRecentSearchDao.recentSearchDelete(mRecentSearchDao.getRecentSearch(word));
-                mRecentSearchDao.recentSearchInsert(new RecentSearch(word, getCurrentDate(), type));
+                mRecentSearchDao.recentSearchInsert(new RecentSearch(CommonUtil.createId(), word, getCurrentDate(), type));
             }).start();
         }
 
