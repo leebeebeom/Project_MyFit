@@ -1,6 +1,5 @@
 package com.example.project_myfit;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,10 +14,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
-import com.example.project_myfit.util.KeyboardUtil;
+import com.example.project_myfit.util.CommonUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,39 +35,39 @@ import static com.example.project_myfit.util.MyFitConstant.SIZE_ID;
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
-    private boolean isKeyboardShowing;
     private int mTopFabOriginVisibility;
+    public ActivityMainBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
         MainActivityViewModel model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        setSupportActionBar(binding.toolBarMain);
+        setSupportActionBar(mBinding.toolBar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment_main);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.hostFragmentMain);
         if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment, R.id.dailyLookFragment,
                 R.id.wishListFragment, R.id.settingFragment).build();
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(binding.bottomNavMain, mNavController);
+        NavigationUI.setupWithNavController(mBinding.bottomNav, mNavController);
 
         //바텀네비게이션 뷰 그림자 제거
-        binding.bottomNavMain.setBackgroundTintList(null);
+        mBinding.bottomNav.setBackgroundTintList(null);
         //바텀네비게이션 뷰 정렬
-        binding.bottomNavMain.getMenu().getItem(2).setEnabled(false);
+        mBinding.bottomNav.getMenu().getItem(2).setEnabled(false);
 
         //프래그먼트 변경 리스너
-        destinationChangeListener(binding, actionBar);
+        destinationChangeListener(actionBar);
         //키보드 쇼잉 리스너
-        keyboardShowingListener(binding);
+        keyboardShowingListener();
 
         if (getIntent().getExtras() != null && savedInstanceState == null) {
             if (MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId() != 0)
@@ -80,24 +77,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void destinationChangeListener(@NotNull ActivityMainBinding binding, ActionBar actionBar) {
-        MaterialTextView customTitle = binding.tvMainCustomTitle;
-        FloatingActionButton mainFab = binding.fabMain;
+    private void destinationChangeListener(ActionBar actionBar) {
+        MaterialTextView customTitle = mBinding.tvCustomTitle;
+        FloatingActionButton fab = mBinding.fab;
 
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
-                fabChange(mainFab, R.drawable.icon_search);
+                fabChange(fab, R.drawable.icon_search);
                 customTitle.setVisibility(View.VISIBLE);
                 actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
-                fabChange(mainFab, R.drawable.icon_add);
+                fabChange(fab, R.drawable.icon_add);
                 customTitle.setVisibility(View.GONE);
                 actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
-                fabChange(mainFab, R.drawable.icon_save);
+                fabChange(fab, R.drawable.icon_save);
                 customTitle.setVisibility(View.GONE);
                 actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
@@ -110,37 +107,29 @@ public class MainActivity extends AppCompatActivity {
         fab.show();
     }
 
-    private void keyboardShowingListener(@NotNull ActivityMainBinding binding) {
-        View rootView = binding.getRoot();
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            Rect r = new Rect();
-            rootView.getWindowVisibleDisplayFrame(r);
-
-            int screenHeight = rootView.getRootView().getHeight();
-            int keypadHeight = screenHeight - r.bottom;
-
-            if (keypadHeight > screenHeight * 0.15)
-                keyboardShow(binding);
-            else keyboardHide(binding);
+    private void keyboardShowingListener() {
+        mBinding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if (CommonUtil.isKeyboardShowing(mBinding.getRoot())) keyboardShow();
+            else keyboardHide();
         });
     }
 
-    private void keyboardShow(@NotNull ActivityMainBinding binding) {
-        if (!isKeyboardShowing) {
-            isKeyboardShowing = true;
-            binding.fabMain.setVisibility(View.INVISIBLE);
-            binding.bottomAppBarMain.setVisibility(View.INVISIBLE);
-            mTopFabOriginVisibility = binding.fabMainTop.getVisibility();
-            binding.fabMainTop.setVisibility(View.INVISIBLE);
+    private void keyboardShow() {
+        if (!CommonUtil.isKeyboardShowing) {
+            CommonUtil.isKeyboardShowing = true;
+            mBinding.fab.setVisibility(View.INVISIBLE);
+            mBinding.bottomAppBar.setVisibility(View.INVISIBLE);
+            mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
+            mBinding.fabTop.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void keyboardHide(@NotNull ActivityMainBinding binding) {
-        if (isKeyboardShowing) {
-            isKeyboardShowing = false;
-            binding.bottomAppBarMain.setVisibility(View.VISIBLE);
-            binding.fabMain.show();
-            binding.fabMainTop.setVisibility(mTopFabOriginVisibility);
+    private void keyboardHide() {
+        if (CommonUtil.isKeyboardShowing) {
+            CommonUtil.isKeyboardShowing = false;
+            mBinding.bottomAppBar.setVisibility(View.VISIBLE);
+            mBinding.fab.show();
+            mBinding.fabTop.setVisibility(mTopFabOriginVisibility);
         }
     }
 
@@ -182,17 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof TextInputEditText || v instanceof MaterialAutoCompleteTextView) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
-                    v.clearFocus();
-                    KeyboardUtil.hide(this, v);
-                }
-            }
-        }
+        CommonUtil.editTextLosableFocus(ev, getCurrentFocus(), this);
         return super.dispatchTouchEvent(ev);
     }
 }

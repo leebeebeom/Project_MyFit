@@ -39,12 +39,6 @@ public class MainActivityViewModel extends AndroidViewModel {
         } else return findCategoryId(folder.getParentId());
     }
 
-    public long getParentFolderId(long parentId) {
-        Folder folder = mFolderRepository.getFolder(parentId);
-        if (folder != null) return folder.getId();
-        else return 0;
-    }
-
     public String getParentCategory() {
         return mParentCategory;
     }
