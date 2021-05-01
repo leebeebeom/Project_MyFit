@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.util.KeyboardUtil;
+import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,9 +58,9 @@ public class AddDialog extends DialogFragment {
 
     private void positiveClick(DialogUtils dialogUtils, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
-            KeyboardUtil.hide(requireContext(), v);
+            CommonUtil.keyBoardHide(requireContext(), v);
 
-            String newName = String.valueOf(binding.etDialog.getText()).trim();
+            String newName = String.valueOf(binding.et.getText()).trim();
 
             if (mItemType.equals(CATEGORY))
                 dialogUtils.addCategory(newName, mParentCategory, false);
