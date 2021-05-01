@@ -37,9 +37,9 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
         if (mCategoryAdapter != null)
-            mCategoryAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mCategoryAdapter.itemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         else if (mSizeAdapterList != null)
-            mSizeAdapterList.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mSizeAdapterList.itemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         return true;
     }
 
@@ -51,13 +51,13 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        if (mCategoryAdapter != null) mCategoryAdapter.onItemDrop(viewHolder);
-        else if (mSizeAdapterList != null) mSizeAdapterList.onItemDrop(viewHolder);
+        if (mCategoryAdapter != null) mCategoryAdapter.itemDrop(viewHolder);
+        else if (mSizeAdapterList != null) mSizeAdapterList.itemDrop(viewHolder);
     }
 
     @Override
     public void onChildDraw(@NonNull @NotNull Canvas c, @NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        RecyclerView.ViewHolder previousViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAdapterPosition() - 1);
+        RecyclerView.ViewHolder previousViewHolder = recyclerView.findViewHolderForAdapterPosition(viewHolder.getAbsoluteAdapterPosition() - 1);
         boolean isDraggingUp = dY < 0;
         if (isDraggingUp && previousViewHolder == null) dY = 0;
 
