@@ -46,15 +46,15 @@ public class SortDialog extends DialogFragment {
         DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sortDialog);
 
         LayoutDialogSortBinding binding = LayoutDialogSortBinding.inflate(getLayoutInflater());
-        MaterialRadioButton[] sortButtons = {binding.radioBtnDialogSortCustom, binding.radioBtnDialogSortCreate, binding.radioBtnDialogSortCreateReverse,
-                binding.radioBtnDialogSortBrand, binding.radioBtnDialogSortBrandReverse, binding.radioBtnDialogSortName, binding.radioBtnDialogSortNameReverse};
+        MaterialRadioButton[] sortButtons = {binding.radioBtnCustom, binding.radioBtnCreate, binding.radioBtnCreateReverse,
+                binding.radioBtnBrand, binding.radioBtnBrandReverse, binding.radioBtnName, binding.radioBtnNameReverse};
         addCheckListener(sortButtons);
         sortButtons[mCheckedItem].setChecked(true);
 
         //메인프래그먼트에서 실행 시 브랜드 삭제
         if (mFragmentType.equals(MAIN_FRAGMENT)) {
-            binding.radioBtnDialogSortBrand.setVisibility(View.GONE);
-            binding.radioBtnDialogSortBrandReverse.setVisibility(View.GONE);
+            binding.radioBtnBrand.setVisibility(View.GONE);
+            binding.radioBtnBrandReverse.setVisibility(View.GONE);
         }
 
         AlertDialog alertDialog = getDialog(dialogUtils, binding);
