@@ -11,13 +11,11 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
+import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class DialogViewModel extends AndroidViewModel {
     private final Repository.CategoryRepository mCategoryRepository;
@@ -66,12 +64,12 @@ public class DialogViewModel extends AndroidViewModel {
     }
 
     public void categoryInsert(String categoryName, String parentCategory) {
-        mAddedCategory = new Category(getCurrentTime(), categoryName, parentCategory, mCategoryRepository.getCategoryLargestOrderPlus1());
+        mAddedCategory = new Category(CommonUtil.createId(), categoryName, parentCategory, mCategoryRepository.getCategoryLargestOrderPlus1());
         mCategoryRepository.categoryInsert(mAddedCategory);
     }
 
     public void folderInsert(@NotNull String folderName, long parentId, String parentCategory) {
-        mAddedFolder = new Folder(getCurrentTime(), folderName.trim(), parentId, mFolderRepository.getFolderLargestOrderPlus1(), parentCategory);
+        mAddedFolder = new Folder(CommonUtil.createId(), folderName.trim(), parentId, mFolderRepository.getFolderLargestOrderPlus1(), parentCategory);
         mFolderRepository.folderInsert(mAddedFolder);
         parentSetDummy(parentId);
     }
@@ -131,11 +129,6 @@ public class DialogViewModel extends AndroidViewModel {
 
     public String getParentName() {
         return mParentName;
-    }
-
-    public long getCurrentTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
 
     public void forTreeView(List<Folder> selectedFolderList, List<Size> selectedSizeList, List<Folder> folderHistory) {
