@@ -106,7 +106,6 @@ public class AdapterUtil {
 
     public <T extends ParentModel> void restoreActionMode(@NotNull List<T> selectedItemList, @NotNull HashSet<Long> mSelectedIdHashSet) {
         mSelectedIdHashSet.clear();
-        for (ParentModel model : selectedItemList)
-            mSelectedIdHashSet.add(model.getId());
+        for (ParentModel model : selectedItemList) mSelectedIdHashSet.add(model.getId());
     }
 }
