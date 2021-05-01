@@ -21,7 +21,7 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        mBinding.rvItemRv.setOnTouchListener((v, event) -> {
+        mBinding.rv.setOnTouchListener((v, event) -> {
             if (event.getRawY() > 2000)
                 listener.dragAutoScroll(DOWN);
             else if (event.getRawY() < 250)
@@ -33,11 +33,11 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
     }
 
     public void setNoResult(boolean isEmpty) {
-        mBinding.tvItemRvNoResultLayout.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        mBinding.layoutNoResult.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     public void setNoData(boolean isEmpty) {
-        mBinding.tvItemRvNoDataLayout.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        mBinding.layoutNoData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     public ItemRecyclerViewBinding getBinding() {

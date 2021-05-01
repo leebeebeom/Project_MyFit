@@ -15,14 +15,14 @@ public class SizeListVH extends RecyclerView.ViewHolder {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.cbItemSizeList));
+        itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.cb));
 
         itemView.setOnLongClickListener(v -> {
             listener.onSizeItemViewLongClick(getLayoutPosition());
             return false;
         });
 
-        mBinding.cbItemSizeListFavorite.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
+        mBinding.cbFavorite.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
     }
 
     public void setSize(Size size) {

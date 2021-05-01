@@ -15,14 +15,14 @@ public class SizeGridVH extends RecyclerView.ViewHolder {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.cbItemSizeGrid));
+        itemView.setOnClickListener(v -> listener.onSizeItemViewClick(mSize, mBinding.cb));
 
         itemView.setOnLongClickListener(v -> {
             listener.onSizeItemViewLongClick(getLayoutPosition());
             return false;
         });
 
-        mBinding.cbItemSizeGridFavorite.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
+        mBinding.cbFavorite.setOnClickListener(v -> listener.onSizeFavoriteClick(mSize));
     }
 
     public void setSize(Size size) {
