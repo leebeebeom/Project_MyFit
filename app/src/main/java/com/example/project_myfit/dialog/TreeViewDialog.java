@@ -75,8 +75,8 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     private View getDialogView() {
         LayoutDialogTreeBinding binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
         binding.setParentCategory(mModel.getParentCategory());
-        binding.layoutDialogTree.addView(getTreeView(), 2);
-        binding.tvDialogTreeAddCategoryLayout.setOnClickListener(v -> mDialogUtils.treeViewAddCategory(CATEGORY, mModel.getParentCategory(), false));
+        binding.layout.addView(getTreeView(), 2);
+        binding.layoutAddCategory.setOnClickListener(v -> mDialogUtils.treeViewAddCategory(CATEGORY, mModel.getParentCategory(), false));
         return binding.getRoot();
     }
 
