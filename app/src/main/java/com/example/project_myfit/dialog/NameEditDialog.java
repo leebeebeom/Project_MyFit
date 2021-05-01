@@ -14,7 +14,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.util.KeyboardUtil;
+import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -70,9 +70,10 @@ public class NameEditDialog extends DialogFragment {
 
     private void positiveClick(DialogUtils dialogUtils, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
-            KeyboardUtil.hide(requireContext(), v);
+            CommonUtil.keyBoardHide(requireContext(), v);
 
-            String newName = String.valueOf(mBinding.etDialog.getText()).trim();
+            String newName = String.valueOf(mBinding.et.getText()).trim();
+
             if (category != null)
                 dialogUtils.categoryNameEdit(category, newName, mIsParentName);
             else if (folder != null)
@@ -83,6 +84,6 @@ public class NameEditDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(NAME_EDIT_NAME, String.valueOf(mBinding.etDialog.getText()));
+        outState.putString(NAME_EDIT_NAME, String.valueOf(mBinding.et.getText()));
     }
 }
