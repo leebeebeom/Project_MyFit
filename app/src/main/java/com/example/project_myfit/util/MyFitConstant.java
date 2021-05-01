@@ -13,12 +13,12 @@ public class MyFitConstant {
     public static final int RECENT_SEARCH_WISH_LIST  = 0;
 
     //key
-    public static final String PARENT_ID = "parent_id";
-    public static final String CATEGORY_ID = "category_id";
-    public static final String FOLDER_ID = "folder_id";
-    public static final String SIZE_ID = "size_id";
-    public static final String PARENT_CATEGORY = "parent_category";
-    public static final String THIS_FOLDER_TEXT_VIEW = "this_folder_text_view";
+    public static final String PARENT_ID = "parentId";
+    public static final String CATEGORY_ID = "categoryId";
+    public static final String FOLDER_ID = "folderId";
+    public static final String SIZE_ID = "sizeId";
+    public static final String PARENT_CATEGORY = "parentCategory";
+    public static final String THIS_FOLDER_TEXT_VIEW = "this folder text view";
 
     //fragment type
     public static final String MAIN_FRAGMENT = "main fragment";
