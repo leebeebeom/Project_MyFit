@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
+import com.example.project_myfit.data.model.ParentModel;
 import com.example.project_myfit.data.model.Size;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -103,19 +104,9 @@ public class AdapterUtil {
         return amount;
     }
 
-    public void restoreActionMode(List<?> selectedList, @NotNull HashSet<Long> mSelectedIdHashSet) {
+    public <T extends ParentModel> void restoreActionMode(@NotNull List<T> selectedItemList, @NotNull HashSet<Long> mSelectedIdHashSet) {
         mSelectedIdHashSet.clear();
-        addSelectedId(selectedList, mSelectedIdHashSet);
-    }
-
-    private void addSelectedId(@NotNull List<?> selectedList, HashSet<Long> mSelectedIdHashSet) {
-        for (int i = 0; i < selectedList.size(); i++) {
-            if (selectedList.get(i) instanceof Category)
-                mSelectedIdHashSet.add(((Category) selectedList.get(i)).getId());
-            else if (selectedList.get(i) instanceof Folder)
-                mSelectedIdHashSet.add(((Folder) selectedList.get(i)).getId());
-            else if (selectedList.get(i) instanceof Size)
-                mSelectedIdHashSet.add(((Size) selectedList.get(i)).getId());
-        }
+        for (ParentModel model : selectedItemList)
+            mSelectedIdHashSet.add(model.getId());
     }
 }
