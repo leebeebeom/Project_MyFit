@@ -77,7 +77,7 @@ public class DialogUtils {
     @NotNull
     public ItemDialogEditTextBinding getBinding(@Nullable String oldName, @NotNull String itemType) {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(mInflater);
-        binding.etDialog.requestFocus();
+        binding.et.requestFocus();
         if (itemType.equals(CATEGORY)) {
             binding.setHint(mContext.getString(R.string.dialog_hint_category_name));
             binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_category_name));
@@ -152,14 +152,14 @@ public class DialogUtils {
 
     private void addTextChangeListener(@NotNull ItemDialogEditTextBinding binding, @NotNull AlertDialog dialog, String oldName) {
         Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        String inputText = String.valueOf(binding.etDialog.getText()).trim();
+        String inputText = String.valueOf(binding.et.getText()).trim();
         if (oldName == null)
             positiveButton.setEnabled(!TextUtils.isEmpty(inputText));
         else
             positiveButton.setEnabled(!TextUtils.isEmpty(inputText) && !oldName.equals(inputText));
 
 
-        binding.etDialog.addTextChangedListener(new TextWatcher() {
+        binding.et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -178,10 +178,10 @@ public class DialogUtils {
             }
         });
 
-        binding.etDialog.setOnKeyListener((v, keyCode, event) -> {
-            if (String.valueOf(binding.etDialog.getText()).length() == 30)
-                binding.etDialogLayout.setError(mContext.getString(R.string.dialog_et_max_length));
-            else binding.etDialogLayout.setErrorEnabled(false);
+        binding.et.setOnKeyListener((v, keyCode, event) -> {
+            if (String.valueOf(binding.et.getText()).length() == 30)
+                binding.layout.setError(mContext.getString(R.string.dialog_et_max_length));
+            else binding.layout.setErrorEnabled(false);
             return false;
         });
     }
@@ -230,7 +230,7 @@ public class DialogUtils {
         else {
             mDialogViewModel.categoryNameEdit(category, categoryName, isParentName);
             mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-            mNavController.popBackStack(R.id.nameEditDialog, true);
+            mNavController.popBackStack();
         }
     }
 
@@ -250,7 +250,7 @@ public class DialogUtils {
     public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName) {
         mDialogViewModel.sameNameCategoryEdit(categoryId, categoryName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-        mNavController.popBackStack(R.id.sameNameEditDialog, true);
+        mNavController.popBackStack(R.id.nameEditDialog, true);
     }
 
     public void sameNameFolderEdit(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
@@ -261,7 +261,7 @@ public class DialogUtils {
 
     public void selectedItemDeleteConfirm() {
         mNavBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM, null);
-        mNavController.popBackStack(R.id.selectedItemDeleteDialog, true);
+        mNavController.popBackStack();
     }
 
     public void deletedConfirm(long sizeId) {
@@ -271,7 +271,7 @@ public class DialogUtils {
 
     public void imageClearConfirm() {
         mNavBackStackEntry.getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM, null);
-        mNavController.popBackStack(R.id.imageClearDialog, true);
+        mNavController.popBackStack();
     }
 
     public void treeViewAddCategory(String itemType, String parentCategory, boolean isSearchView) {
@@ -302,21 +302,21 @@ public class DialogUtils {
 
     public void recentSearchDeleteAll() {
         Repository.getRecentSearchRepository(mContext).deleteAllRecentSearch();
-        mNavController.popBackStack(R.id.recentSearchDeleteAllDialog, true);
+        mNavController.popBackStack();
     }
 
     public void restore() {
         mNavBackStackEntry.getSavedStateHandle().set(RESTORE_CONFIRM, null);
-        mNavController.popBackStack(R.id.restoreDialog, true);
+        mNavController.popBackStack();
     }
 
     public void deleteForever() {
         mNavBackStackEntry.getSavedStateHandle().set(DELETE_FOREVER_CONFIRM, null);
-        mNavController.popBackStack(R.id.deleteForeverDialog, true);
+        mNavController.popBackStack();
     }
 
     public void imeClick(@NotNull ItemDialogEditTextBinding binding, Button positiveButton) {
-        binding.etDialog.setOnEditorActionListener((v, actionId, event) -> {
+        binding.et.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
                 positiveButton.callOnClick();
             return false;
