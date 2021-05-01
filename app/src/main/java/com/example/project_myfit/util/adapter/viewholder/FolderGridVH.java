@@ -17,7 +17,7 @@ public class FolderGridVH extends RecyclerView.ViewHolder {
 
         itemView.setOnClickListener(v -> {
             if (mFolder.getId() != -1)
-                listener.onFolderItemViewClick(mFolder, mBinding.cbItemFolderGrid);
+                listener.onFolderItemViewClick(mFolder, mBinding.cb);
         });
 
         itemView.setOnLongClickListener(v -> {

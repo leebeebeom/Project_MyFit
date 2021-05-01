@@ -11,11 +11,11 @@ public class FolderListVH extends RecyclerView.ViewHolder {
     private final ItemFolderListBinding mBinding;
     private Folder mFolder;
 
-    public FolderListVH(@NotNull ItemFolderListBinding folderBinding, FolderVHListener listener) {
-        super(folderBinding.getRoot());
-        this.mBinding = folderBinding;
+    public FolderListVH(@NotNull ItemFolderListBinding binding, FolderVHListener listener) {
+        super(binding.getRoot());
+        this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onFolderItemViewClick(mFolder, mBinding.cbItemFolderList));
+        itemView.setOnClickListener(v -> listener.onFolderItemViewClick(mFolder, mBinding.cb));
         itemView.setOnLongClickListener(v -> {
             listener.onFolderItemViewLongClick(getLayoutPosition());
             return false;
@@ -23,8 +23,8 @@ public class FolderListVH extends RecyclerView.ViewHolder {
     }
 
     public void setFolder(Folder folder) {
-        mBinding.setFolder(folder);
         this.mFolder = folder;
+        mBinding.setFolder(folder);
     }
 
     public ItemFolderListBinding getBinding() {

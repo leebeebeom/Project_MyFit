@@ -16,7 +16,7 @@ public class CategoryVH extends RecyclerView.ViewHolder {
         super(binding.getRoot());
         this.mBinding = binding;
 
-        itemView.setOnClickListener(v -> listener.onCategoryItemViewClick(mCategory, mBinding.cbItemCategory));
+        itemView.setOnClickListener(v -> listener.onCategoryItemViewClick(mCategory, mBinding.cb));
 
         itemView.setOnLongClickListener(v -> {
             listener.onCategoryItemViewLongClick(getLayoutPosition());
