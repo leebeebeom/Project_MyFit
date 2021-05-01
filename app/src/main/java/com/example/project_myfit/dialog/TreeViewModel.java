@@ -16,11 +16,8 @@ import com.unnamed.b.atv.model.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_LIST;
@@ -106,8 +103,8 @@ public class TreeViewModel extends AndroidViewModel {
     public void categoryAddFolder(@NotNull TreeHolderCategory categoryViewHolder) {
         categoryViewHolder.setIconClickable();
 
-        int size = Integer.parseInt(categoryViewHolder.getBinding().tvItemTreeCategoryContentsSize.getText().toString());
-        categoryViewHolder.getBinding().tvItemTreeCategoryContentsSize.setText(String.valueOf(size + 1));
+        int size = Integer.parseInt(categoryViewHolder.getBinding().tvContentsSize.getText().toString());
+        categoryViewHolder.getBinding().tvContentsSize.setText(String.valueOf(size + 1));
 
         Category dummy = categoryViewHolder.getCategory();
         dummy.setDummy(!dummy.getDummy());
@@ -117,8 +114,8 @@ public class TreeViewModel extends AndroidViewModel {
     public void folderAddFolder(@NotNull TreeHolderFolder folderViewHolder) {
         folderViewHolder.setIconClickable();
 
-        int size = Integer.parseInt(folderViewHolder.getBinding().tvItemTreeFolderContentsSize.getText().toString());
-        folderViewHolder.getBinding().tvItemTreeFolderContentsSize.setText(String.valueOf(size + 1));
+        int size = Integer.parseInt(folderViewHolder.getBinding().tvContentsSize.getText().toString());
+        folderViewHolder.getBinding().tvContentsSize.setText(String.valueOf(size + 1));
 
         Folder dummy = folderViewHolder.getFolder();
         dummy.setDummy(!dummy.getDummy());
@@ -190,10 +187,5 @@ public class TreeViewModel extends AndroidViewModel {
         if (mSizeParentIdList == null)
             mSizeParentIdList = Repository.getSizeRepository(getApplication()).getSizeParentIdList(mParentCategory, false, false);
         return mSizeParentIdList;
-    }
-
-    private long getCurrentTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
 }
