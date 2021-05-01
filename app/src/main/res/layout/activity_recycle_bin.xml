@@ -3,65 +3,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".recyclebin.RecycleBinActivity">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/all_recycler_bin_cap"
-                    android:textSize="@dimen/_14sdp"
-                    android:visibility="visible"
-                    app:fontFamily="@font/noto_bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/acTvLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:theme="@style/myEditTextOutlineColor"
-                    android:visibility="gone"
-                    app:endIconMode="clear_text"
-                    app:placeholderText="@string/menu_search"
-                    app:placeholderTextAppearance="@style/myTextSize10sdp"
-                    app:startIconDrawable="@drawable/icon_search">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/acTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_36sdp"
-                        android:background="@android:color/transparent"
-                        android:completionThreshold="1"
-                        android:imeOptions="actionSearch"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:textSize="@dimen/_11sdp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/hostFragmentRecycleBin"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph_recycle_bin"
-            tools:layout="@layout/fragment_recycle_bin_main" />
+            android:orientation="vertical"
+            tools:context=".recyclebin.RecycleBinActivity">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_recycler_bin_cap"
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="visible"
+                        app:fontFamily="@font/noto_bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/acTvLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:theme="@style/myEditTextOutlineColor"
+                        android:visibility="gone"
+                        app:endIconMode="clear_text"
+                        app:placeholderText="@string/menu_search"
+                        app:placeholderTextAppearance="@style/myTextSize10sdp"
+                        app:startIconDrawable="@drawable/icon_search">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/acTv"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_36sdp"
+                            android:background="@android:color/transparent"
+                            android:completionThreshold="1"
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textSize="@dimen/_11sdp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </com.google.android.material.appbar.MaterialToolbar>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/hostFragmentRecycleBin"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_graph_recycle_bin"
+                tools:layout="@layout/fragment_recycle_bin_main" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:src="@drawable/icon_arrow_up"
+            android:visibility="gone"
+            app:backgroundTint="@color/white"
+            app:fabSize="mini"
+            tools:ignore="ContentDescription" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -109,17 +109,5 @@
 
             </FrameLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:src="@drawable/icon_arrow_up"
-            android:visibility="invisible"
-            app:backgroundTint="@color/white"
-            app:fabSize="mini"
-            tools:ignore="ContentDescription" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
