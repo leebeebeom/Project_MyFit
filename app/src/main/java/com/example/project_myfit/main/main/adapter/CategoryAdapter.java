@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.databinding.ItemCategoryBinding;
 import com.example.project_myfit.main.main.MainViewModel;
+import com.example.project_myfit.util.MyFitVariable;
 import com.example.project_myfit.util.adapter.ParentAdapter;
 import com.example.project_myfit.util.adapter.viewholder.CategoryVH;
 import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
@@ -82,8 +83,7 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     @SuppressLint("ClickableViewAccessibility")
     private void dragHandleTouch(@NotNull CategoryVH holder) {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && !isDragging) {
-                isDragging = true;
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 mListener.onCategoryDragHandleTouch(holder);
                 draggingView(holder);
             }
@@ -118,7 +118,6 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     @Override
     public void itemDrop(RecyclerView.ViewHolder viewHolder) {
         super.itemDrop(viewHolder);
-        mListener.onCategoryDragHandleTouch(viewHolder);
         mModel.categoryItemDrop(mCategoryList);
     }
 }

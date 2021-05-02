@@ -28,7 +28,6 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
 
 public abstract class ParentAdapter<T extends ParentModel, VH extends RecyclerView.ViewHolder> extends ListAdapter<T, VH> {
     protected final AdapterUtil mAdapterUtil;
-    protected boolean isDragging;
     private List<T> mSelectedItemList;
     protected int mActionModeState, mSort;
     private final HashSet<Long> mSelectedItemIdHashSet;
@@ -107,7 +106,6 @@ public abstract class ParentAdapter<T extends ParentModel, VH extends RecyclerVi
 
     public void itemDrop(RecyclerView.ViewHolder viewHolder) {
         dropView(viewHolder);
-        isDragging = false;
     }
 
     public void setActionModeState(int actionModeState) {

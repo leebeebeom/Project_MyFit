@@ -330,10 +330,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     @Override
     public void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
-        if (!MyFitVariable.isDragging) {
-            MyFitVariable.isDragging = true;
             mTouchHelperArray[mModel.getCurrentItem()].startDrag(viewHolder);
-        } else MyFitVariable.isDragging = false;
     }
     //----------------------------------------------------------------------------------------------
 
