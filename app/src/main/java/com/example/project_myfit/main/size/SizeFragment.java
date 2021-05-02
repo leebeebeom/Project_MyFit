@@ -20,14 +20,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.project_myfit.MainActivity;
 import com.example.project_myfit.R;
+import com.example.project_myfit.databinding.ActivityMainBinding;
 import com.example.project_myfit.databinding.FragmentSizeBinding;
-import com.example.project_myfit.databinding.IncludeSizeBottomBinding;
-import com.example.project_myfit.databinding.IncludeSizeEtcBinding;
-import com.example.project_myfit.databinding.IncludeSizeTopOuterBinding;
+import com.example.project_myfit.databinding.IncludeBottomBinding;
+import com.example.project_myfit.databinding.IncludeEtcBinding;
+import com.example.project_myfit.databinding.IncludeTopBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.search.main.adapter.AutoCompleteAdapter;
 import com.example.project_myfit.util.MyFitConstant;
@@ -35,6 +38,7 @@ import com.example.project_myfit.util.MyFitConstant;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
@@ -51,13 +55,15 @@ import static com.example.project_myfit.util.MyFitConstant.TOP;
 public class SizeFragment extends Fragment {
     private SizeViewModel mModel;
     private FragmentSizeBinding mBinding;
-    private IncludeSizeTopOuterBinding mTopOuterBinding;
-    private IncludeSizeBottomBinding mBottomBinding;
-    private IncludeSizeEtcBinding mEtcBinding;
+    private ActivityMainBinding mActivityBinding;
+    private IncludeTopBinding mTopBinding;
+    private IncludeBottomBinding mBottomBinding;
+    private IncludeEtcBinding mEtcBinding;
     private NavController mNavController;
     private long mSizeId;
     private String mParentCategory;
     private boolean mIsSearchView;
+    private long mParentId;
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -79,33 +85,33 @@ public class SizeFragment extends Fragment {
     }
 
     private boolean isDefaultInputChanged() {
-        return mModel.getMutableImageUri().getValue() != null ||//이미지 추가
+        return mModel.getImageUriLive().getValue() != null ||//이미지 추가
                 mModel.getSize().isFavorite() ||//favorite 변경
-                !TextUtils.isEmpty(mBinding.acTvSizeBrand.getText()) ||
-                !TextUtils.isEmpty(mBinding.etSizeName.getText()) ||
-                !TextUtils.isEmpty(mBinding.etSizeSize.getText()) ||
-                !TextUtils.isEmpty(mBinding.etSizeLink.getText()) ||
-                !TextUtils.isEmpty(mBinding.etSizeMemo.getText());
+                !TextUtils.isEmpty(mBinding.etBrand.getText()) ||
+                !TextUtils.isEmpty(mBinding.etName.getText()) ||
+                !TextUtils.isEmpty(mBinding.etSize.getText()) ||
+                !TextUtils.isEmpty(mBinding.etLink.getText()) ||
+                !TextUtils.isEmpty(mBinding.etMemo.getText());
     }
 
     private boolean isSizeInputChanged() {
         if (mParentCategory.equals(TOP) || mParentCategory.equals(OUTER)) {
-            return !TextUtils.isEmpty(mTopOuterBinding.etIncludeTopOuterLength.getText()) ||
-                    !TextUtils.isEmpty(mTopOuterBinding.etIncludeTopOuterShoulder.getText()) ||
-                    !TextUtils.isEmpty(mTopOuterBinding.etIncludeTopOuterChest.getText()) ||
-                    !TextUtils.isEmpty(mTopOuterBinding.etIncludeTopOuterSleeve.getText());
+            return !TextUtils.isEmpty(mTopBinding.etLength.getText()) ||
+                    !TextUtils.isEmpty(mTopBinding.etShoulder.getText()) ||
+                    !TextUtils.isEmpty(mTopBinding.etChest.getText()) ||
+                    !TextUtils.isEmpty(mTopBinding.etSleeve.getText());
         } else if (mParentCategory.equals(BOTTOM)) {
-            return !TextUtils.isEmpty(mBottomBinding.etIncludeBottomLength.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.etIncludeBottomWaist.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.etIncludeBottomThigh.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.etIncludeBottomRise.getText()) ||
-                    !TextUtils.isEmpty(mBottomBinding.etIncludeBottomHem.getText());
-        } else return !TextUtils.isEmpty(mEtcBinding.etIncludeEtcOption1.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.etIncludeEtcOption2.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.etIncludeEtcOption3.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.etIncludeEtcOption4.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.etIncludeEtcOption5.getText()) ||
-                !TextUtils.isEmpty(mEtcBinding.etIncludeEtcOption6.getText());
+            return !TextUtils.isEmpty(mBottomBinding.etLength.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.etWaist.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.etThigh.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.etRise.getText()) ||
+                    !TextUtils.isEmpty(mBottomBinding.etHem.getText());
+        } else return !TextUtils.isEmpty(mEtcBinding.etOption1.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.etOption2.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.etOption3.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.etOption4.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.etOption5.getText()) ||
+                !TextUtils.isEmpty(mEtcBinding.etOption6.getText());
     }
 
     private void outputOnBackPressed() {
@@ -119,21 +125,22 @@ public class SizeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long parentId = SizeFragmentArgs.fromBundle(getArguments()).getParentId();
+        mParentId = SizeFragmentArgs.fromBundle(getArguments()).getParentId();
         mSizeId = SizeFragmentArgs.fromBundle(getArguments()).getSizeId();
         mParentCategory = SizeFragmentArgs.fromBundle(getArguments()).getParentCategory();
         mIsSearchView = requireActivity().getIntent().getExtras() != null;
 
         mModel = new ViewModelProvider(this).get(SizeViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
-        mModel.initResources(parentId, mSizeId, mParentCategory);
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mModel.initResources(mParentId, mSizeId, mParentCategory);
         mBinding = FragmentSizeBinding.inflate(inflater);
+        mActivityBinding = ((MainActivity) requireActivity()).mBinding;
         View view = mBinding.getRoot();
         setLayout(inflater);
         setSelection();
@@ -142,44 +149,44 @@ public class SizeFragment extends Fragment {
     }
 
     private void setLayout(LayoutInflater inflater) {
-        mTopOuterBinding = IncludeSizeTopOuterBinding.inflate(inflater);
-        mBottomBinding = IncludeSizeBottomBinding.inflate(inflater);
-        mEtcBinding = IncludeSizeEtcBinding.inflate(inflater);
+        mTopBinding = IncludeTopBinding.inflate(inflater);
+        mBottomBinding = IncludeBottomBinding.inflate(inflater);
+        mEtcBinding = IncludeEtcBinding.inflate(inflater);
 
         if (mParentCategory.equals(MyFitConstant.TOP) || mParentCategory.equals(MyFitConstant.OUTER))
-            mBinding.detailContainerSize.addView(mTopOuterBinding.getRoot());
+            mBinding.container.addView(mTopBinding.getRoot());
         else if (mParentCategory.equals(MyFitConstant.BOTTOM))
-            mBinding.detailContainerSize.addView(mBottomBinding.getRoot());
-        else mBinding.detailContainerSize.addView(mEtcBinding.getRoot());
+            mBinding.container.addView(mBottomBinding.getRoot());
+        else mBinding.container.addView(mEtcBinding.getRoot());
 
-        if (mSizeId != 0) mBinding.timeSizeLayout.setVisibility(View.VISIBLE);
+        if (mSizeId != 0) mBinding.layoutTime.setVisibility(View.VISIBLE);
     }
 
     private void setSelection() {
-        mBinding.acTvSizeBrand.setSelection(mBinding.acTvSizeBrand.length());
-        mBinding.etSizeName.setSelection(mBinding.etSizeName.length());
-        mBinding.etSizeSize.setSelection(mBinding.etSizeSize.length());
-        mBinding.etSizeLink.setSelection(mBinding.etSizeLink.length());
-        mBinding.etSizeMemo.setSelection(mBinding.etSizeMemo.length());
+        mBinding.etBrand.setSelection(mBinding.etBrand.length());
+        mBinding.etName.setSelection(mBinding.etName.length());
+        mBinding.etSize.setSelection(mBinding.etSize.length());
+        mBinding.etLink.setSelection(mBinding.etLink.length());
+        mBinding.etMemo.setSelection(mBinding.etMemo.length());
 
         if (mParentCategory.equals(TOP) || mParentCategory.equals(OUTER)) {
-            mTopOuterBinding.etIncludeTopOuterLength.setSelection(mTopOuterBinding.etIncludeTopOuterLength.length());
-            mTopOuterBinding.etIncludeTopOuterShoulder.setSelection(mTopOuterBinding.etIncludeTopOuterShoulder.length());
-            mTopOuterBinding.etIncludeTopOuterChest.setSelection(mTopOuterBinding.etIncludeTopOuterChest.length());
-            mTopOuterBinding.etIncludeTopOuterSleeve.setSelection(mTopOuterBinding.etIncludeTopOuterSleeve.length());
+            mTopBinding.etLength.setSelection(mTopBinding.etLength.length());
+            mTopBinding.etShoulder.setSelection(mTopBinding.etShoulder.length());
+            mTopBinding.etChest.setSelection(mTopBinding.etChest.length());
+            mTopBinding.etSleeve.setSelection(mTopBinding.etSleeve.length());
         } else if (mParentCategory.equals(BOTTOM)) {
-            mBottomBinding.etIncludeBottomLength.setSelection(mBottomBinding.etIncludeBottomLength.length());
-            mBottomBinding.etIncludeBottomWaist.setSelection(mBottomBinding.etIncludeBottomWaist.length());
-            mBottomBinding.etIncludeBottomThigh.setSelection(mBottomBinding.etIncludeBottomThigh.length());
-            mBottomBinding.etIncludeBottomRise.setSelection(mBottomBinding.etIncludeBottomRise.length());
-            mBottomBinding.etIncludeBottomHem.setSelection(mBottomBinding.etIncludeBottomHem.length());
+            mBottomBinding.etLength.setSelection(mBottomBinding.etLength.length());
+            mBottomBinding.etWaist.setSelection(mBottomBinding.etWaist.length());
+            mBottomBinding.etThigh.setSelection(mBottomBinding.etThigh.length());
+            mBottomBinding.etRise.setSelection(mBottomBinding.etRise.length());
+            mBottomBinding.etHem.setSelection(mBottomBinding.etHem.length());
         } else {
-            mEtcBinding.etIncludeEtcOption1.setSelection(mEtcBinding.etIncludeEtcOption1.length());
-            mEtcBinding.etIncludeEtcOption2.setSelection(mEtcBinding.etIncludeEtcOption2.length());
-            mEtcBinding.etIncludeEtcOption3.setSelection(mEtcBinding.etIncludeEtcOption3.length());
-            mEtcBinding.etIncludeEtcOption4.setSelection(mEtcBinding.etIncludeEtcOption4.length());
-            mEtcBinding.etIncludeEtcOption5.setSelection(mEtcBinding.etIncludeEtcOption5.length());
-            mEtcBinding.etIncludeEtcOption6.setSelection(mEtcBinding.etIncludeEtcOption6.length());
+            mEtcBinding.etOption1.setSelection(mEtcBinding.etOption1.length());
+            mEtcBinding.etOption2.setSelection(mEtcBinding.etOption2.length());
+            mEtcBinding.etOption3.setSelection(mEtcBinding.etOption3.length());
+            mEtcBinding.etOption4.setSelection(mEtcBinding.etOption4.length());
+            mEtcBinding.etOption5.setSelection(mEtcBinding.etOption5.length());
+            mEtcBinding.etOption6.setSelection(mEtcBinding.etOption6.length());
         }
     }
 
@@ -187,7 +194,7 @@ public class SizeFragment extends Fragment {
         mBinding.setSize(mModel.getSize());
 
         if (mParentCategory.equals(TOP) || mParentCategory.equals(OUTER))
-            mTopOuterBinding.setSize(mModel.getSize());
+            mTopBinding.setSize(mModel.getSize());
         else if (mParentCategory.equals(BOTTOM))
             mBottomBinding.setSize(mModel.getSize());
         else mEtcBinding.setSize(mModel.getSize());
@@ -196,7 +203,7 @@ public class SizeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        requireActivity().findViewById(R.id.fab_main_top).setVisibility(View.GONE);
+        mActivityBinding.fabTop.setVisibility(View.GONE);
         setBrandAutoCompleteList();
 
         imageUriLive();
@@ -204,19 +211,21 @@ public class SizeFragment extends Fragment {
     }
 
     private void setBrandAutoCompleteList() {
-        List<String> autoCompleteList = new ArrayList<>();
+        HashSet<String> autoCompleteHashSet = new HashSet<>();
         List<String> brandList = mModel.getSizeBrandList();
         for (String s : brandList)
-            if (!autoCompleteList.contains(s.trim())) autoCompleteList.add(s.trim());
+            autoCompleteHashSet.add(s.trim());
+
+        List<String> autoCompleteList = new ArrayList<>(autoCompleteHashSet);
         AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(requireContext(), R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv, autoCompleteList);
-        mBinding.acTvSizeBrand.setAdapter(autoCompleteAdapter);
+        mBinding.etBrand.setAdapter(autoCompleteAdapter);
     }
 
     private void imageUriLive() {
-        mModel.getMutableImageUri().observe(getViewLifecycleOwner(), uri -> {
-            mBinding.ivSizePicture.setImageURI(uri);
-            if (uri != null) mBinding.iconSizeAddImage.setVisibility(View.GONE);
-            else mBinding.iconSizeAddImage.setVisibility(View.VISIBLE);
+        mModel.getImageUriLive().observe(getViewLifecycleOwner(), uri -> {
+            mBinding.iv.setImageURI(uri);
+            if (uri != null) mBinding.iconAddImage.setVisibility(View.GONE);
+            else mBinding.iconAddImage.setVisibility(View.VISIBLE);
         });
     }
 
@@ -224,22 +233,31 @@ public class SizeFragment extends Fragment {
         DialogViewModel dialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.nav_graph_main))
                 .get(DialogViewModel.class);
 
-        //image clear confirm click
         dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
-            navBackStackEntry.getSavedStateHandle().getLiveData(IMAGE_CLEAR_CONFIRM).observe(navBackStackEntry, o ->
-                    mModel.getMutableImageUri().setValue(null));
+            imageClear(navBackStackEntry);
+            deleted(navBackStackEntry);
+            goBack(navBackStackEntry);
+        });
+    }
 
-            navBackStackEntry.getSavedStateHandle().getLiveData(SIZE_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
-                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
-                    requireActivity().finish();
-                else mNavController.popBackStack(R.id.inputOutputFragment, true);
-            });
+    private void imageClear(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(IMAGE_CLEAR_CONFIRM).observe(navBackStackEntry, o ->
+                mModel.getImageUriLive().setValue(null));
+    }
 
-            navBackStackEntry.getSavedStateHandle().getLiveData(GO_BACK_CONFIRM).observe(navBackStackEntry, o -> {
-                if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
-                    requireActivity().finish();
-                else mNavController.popBackStack(R.id.inputOutputFragment, true);
-            });
+    private void deleted(@NotNull NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(SIZE_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
+            if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
+                requireActivity().finish();
+            else mNavController.popBackStack(R.id.inputOutputFragment, true);
+        });
+    }
+
+    private void goBack(@NotNull NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(GO_BACK_CONFIRM).observe(navBackStackEntry, o -> {
+            if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
+                requireActivity().finish();
+            else mNavController.popBackStack(R.id.inputOutputFragment, true);
         });
     }
 
@@ -254,28 +272,28 @@ public class SizeFragment extends Fragment {
     }
 
     private void brandNameTextChangeListener() {
-        mBinding.acTvSizeBrand.addTextChangedListener(new TextWatcher() {
+        mBinding.etBrand.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) mBinding.acTvSizeBrandLayout.setErrorEnabled(false);
+                if (!TextUtils.isEmpty(s)) mBinding.layoutBrand.setErrorEnabled(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-        mBinding.etSizeName.addTextChangedListener(new TextWatcher() {
+        mBinding.etName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) mBinding.etSizeNameLayout.setErrorEnabled(false);
+                if (!TextUtils.isEmpty(s)) mBinding.layoutName.setErrorEnabled(false);
             }
 
             @Override
@@ -286,7 +304,7 @@ public class SizeFragment extends Fragment {
     }
 
     private void imageClick() {
-        mBinding.ivSizePicture.setOnClickListener(v -> {
+        mBinding.iv.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             if (intent.resolveActivity(requireActivity().getPackageManager()) != null)
@@ -301,7 +319,7 @@ public class SizeFragment extends Fragment {
             //get image result
             if (requestCode == GET_IMAGE_REQUEST_CODE) cropImage(data.getData());
                 //cropImage result
-            else mModel.getMutableImageUri().setValue(data.getData());
+            else mModel.getImageUriLive().setValue(data.getData());
         }
     }
 
@@ -312,16 +330,16 @@ public class SizeFragment extends Fragment {
     }
 
     private void imageLongClick() {
-        mBinding.ivSizePicture.setOnLongClickListener(v -> {
-            if (mModel.getMutableImageUri().getValue() != null)
+        mBinding.iv.setOnLongClickListener(v -> {
+            if (mModel.getImageUriLive().getValue() != null)
                 mNavController.navigate(SizeFragmentDirections.actionInputOutputFragmentToImageClearDialog());
             return true;
         });
     }
 
     private void goButtonClick() {
-        mBinding.btnSizeGo.setOnClickListener(v -> {
-            String link = String.valueOf(mBinding.etSizeLink.getText());
+        mBinding.btnGo.setOnClickListener(v -> {
+            String link = String.valueOf(mBinding.etLink.getText());
             if (!TextUtils.isEmpty(link)) {
                 if (!link.startsWith(HTTPS) && !link.startsWith(HTTP))
                     link = HTTPS + link;
@@ -336,22 +354,21 @@ public class SizeFragment extends Fragment {
     }
 
     private void fabClick() {
-        requireActivity().findViewById(R.id.fab_main).setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mBinding.acTvSizeBrand.getText().toString().trim())
-                    || TextUtils.isEmpty(String.valueOf(mBinding.etSizeName.getText()).trim())) {
-                if (TextUtils.isEmpty(mBinding.acTvSizeBrand.getText().toString().trim()))
-                    mBinding.acTvSizeBrandLayout.setError(getString(R.string.size_brand_necessary_field));
-                if (TextUtils.isEmpty(String.valueOf(mBinding.etSizeName.getText()).trim()))
-                    mBinding.etSizeNameLayout.setError(getString(R.string.size_name_necessary_field));
+        mActivityBinding.fab.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mBinding.etBrand.getText().toString().trim())
+                    || TextUtils.isEmpty(String.valueOf(mBinding.etName.getText()).trim())) {
+                if (TextUtils.isEmpty(mBinding.etBrand.getText().toString().trim()))
+                    mBinding.layoutBrand.setError(getString(R.string.size_brand_necessary_field));
+                if (TextUtils.isEmpty(String.valueOf(mBinding.etName.getText()).trim()))
+                    mBinding.layoutName.setError(getString(R.string.size_name_necessary_field));
             } else {
                 if (mSizeId == 0) mModel.sizeInsert(mIsSearchView);
-                else mModel.update();
+                else mModel.sizeUpdate();
 
                 if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
                     requireActivity().finish();
                 else mNavController.popBackStack();
             }
-
         });
     }
 
