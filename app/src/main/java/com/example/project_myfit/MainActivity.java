@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {w
+    public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {
         CommonUtil.editTextLosableFocus(ev, getCurrentFocus(), this);
         return super.dispatchTouchEvent(ev);
     }
