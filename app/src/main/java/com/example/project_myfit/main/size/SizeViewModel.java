@@ -18,6 +18,7 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
+import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,13 +112,13 @@ public class SizeViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<Uri> getMutableImageUri() {
+    public MutableLiveData<Uri> getImageUriLive() {
         return mMutableLiveImageUri;
     }
 
     public Intent getCropIntent(Uri data) {
         //file name
-        mFileName = "MyFit_" + getCurrentTime("yyyyMMddHHmmss") + ".jpg";
+        mFileName = "MyFit_" + CommonUtil.createId() + ".jpg";
 
         //make file
         mCacheFile = new File(getApplication().getExternalCacheDir(), mFileName);
@@ -144,7 +145,7 @@ public class SizeViewModel extends AndroidViewModel {
 
     public void sizeInsert(boolean mIsSearchView) {
         mNewSize.setOrderNumber(mSizeRepository.getSizeLargestOrderPlus1());
-        mNewSize.setCreatedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
+        mNewSize.setCreatedTime(getCurrentTime());
         mNewSize.setModifiedTime("");
         mNewSize.setImageUri(mMutableLiveImageUri.getValue() == null ? null : getRenameUri());
         mNewSize.setParentId(mParentId);
@@ -164,22 +165,22 @@ public class SizeViewModel extends AndroidViewModel {
         }
     }
 
-    public void update() {
+    public void sizeUpdate() {
         mOriginSize.setImageUri(getOutputFileSavedUri());
-        mOriginSize.setModifiedTime(getCurrentTime(" yyyy년 MM월 dd일 HH:mm:ss"));
+        mOriginSize.setModifiedTime(getCurrentTime());
         mSizeRepository.sizeUpdate(mOriginSize);
     }
 
     public Size getSize( ) {
         if (mOriginSize == null) {
-            if (mNewSize == null) mNewSize = new Size(mParentCategory);
+            if (mNewSize == null) mNewSize = new Size(CommonUtil.createId(), mParentCategory);
             return mNewSize;
         } else return mOriginSize;
     }
 
     @NotNull
-    private String getCurrentTime(String pattern) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+    private String getCurrentTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(" yyyy년 MM월 dd일 HH:mm:ss", Locale.getDefault());
         return dateFormat.format(new Date(System.currentTimeMillis()));
     }
 
