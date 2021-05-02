@@ -15,8 +15,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
 import com.example.project_myfit.util.CommonUtil;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -78,33 +76,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void destinationChangeListener(ActionBar actionBar) {
-        MaterialTextView customTitle = mBinding.tvCustomTitle;
-        FloatingActionButton fab = mBinding.fab;
-
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.mainFragment) {
                 //메인 프래그먼트
-                fabChange(fab, R.drawable.icon_search);
-                customTitle.setVisibility(View.VISIBLE);
+                fabChange(R.drawable.icon_search);
+                mBinding.tvCustomTitle.setVisibility(View.VISIBLE);
                 actionBar.setDisplayShowTitleEnabled(false);//커스텀 타이틀
             } else if (destination.getId() == R.id.listFragment) {
                 //리스트 프래그먼트
-                fabChange(fab, R.drawable.icon_add);
-                customTitle.setVisibility(View.GONE);
+                fabChange(R.drawable.icon_add);
+                mBinding.tvCustomTitle.setVisibility(View.GONE);
                 actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
             } else if (destination.getId() == R.id.inputOutputFragment) {
                 //인풋아웃풋 프래그먼트
-                fabChange(fab, R.drawable.icon_save);
-                customTitle.setVisibility(View.GONE);
+                fabChange(R.drawable.icon_save);
+                mBinding.tvCustomTitle.setVisibility(View.GONE);
                 actionBar.setDisplayShowTitleEnabled(false);//모든 타이틀 숨기기
             }
         });
     }
 
-    private void fabChange(@NotNull FloatingActionButton fab, int resId) {
-        fab.hide();
-        fab.setImageResource(resId);
-        fab.show();
+    private void fabChange(int resId) {
+        mBinding.fab.hide();
+        mBinding.fab.setImageResource(resId);
+        mBinding.fab.show();
     }
 
     private void keyboardShowingListener() {
@@ -133,21 +128,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void searchViewSizeClick(@NotNull MainActivityViewModel model) {
-        long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
-        long sizeId = MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId();
-        String parentCategory = model.getSizeParentCategory(parentId);
-
-        Bundle bundle = new Bundle();
-        bundle.putLong(PARENT_ID, parentId);
-        bundle.putLong(SIZE_ID, sizeId);
-        bundle.putString(PARENT_CATEGORY, parentCategory);
-
-        NavGraph graph = mNavController.getGraph();
-        graph.setStartDestination(R.id.inputOutputFragment);
-        mNavController.setGraph(graph, bundle);
-    }
-
     private void searchViewFolderClick(@NotNull MainActivityViewModel model) {
         long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
         long folderId = MainActivityArgs.fromBundle(getIntent().getExtras()).getFolderId();
@@ -164,13 +144,28 @@ public class MainActivity extends AppCompatActivity {
         mNavController.setGraph(graph, bundle);
     }
 
+    private void searchViewSizeClick(@NotNull MainActivityViewModel model) {
+        long parentId = MainActivityArgs.fromBundle(getIntent().getExtras()).getParentId();
+        long sizeId = MainActivityArgs.fromBundle(getIntent().getExtras()).getSizeId();
+        String parentCategory = model.getSizeParentCategory(parentId);
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(PARENT_ID, parentId);
+        bundle.putLong(SIZE_ID, sizeId);
+        bundle.putString(PARENT_CATEGORY, parentCategory);
+
+        NavGraph graph = mNavController.getGraph();
+        graph.setStartDestination(R.id.inputOutputFragment);
+        mNavController.setGraph(graph, bundle);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
     @Override
-    public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {
+    public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {w
         CommonUtil.editTextLosableFocus(ev, getCurrentFocus(), this);
         return super.dispatchTouchEvent(ev);
     }
