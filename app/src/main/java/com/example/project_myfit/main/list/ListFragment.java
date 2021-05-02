@@ -738,7 +738,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     //size adapter listener-------------------------------------------------------------------------
     @Override
     public void onSizeItemViewClick(Size size, MaterialCheckBox checkBox) {
-        if (mActionMode == null) {
+        if (MyFitVariable.actionMode == null) {
             mNavController.navigate(ListFragmentDirections.actionListFragmentToInputOutputFragment(
                     size.getParentId(), size.getId(), mParentCategory));
         } else {
