@@ -12,7 +12,7 @@ public class DragSelectImpl extends DragSelectTouchListener implements DragSelec
         withSelectListener(this);
     }
 
-    public DragSelectImpl hasScrollView(LockableScrollView scrollView) {
+    public DragSelectImpl setScrollView(LockableScrollView scrollView) {
         this.mScrollView = scrollView;
         return this;
     }
