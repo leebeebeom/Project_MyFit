@@ -1,7 +1,5 @@
 package com.example.project_myfit.main.main;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,13 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -27,204 +22,114 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.project_myfit.MainActivity;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Category;
+import com.example.project_myfit.databinding.ActivityMainBinding;
 import com.example.project_myfit.databinding.FragmentMainBinding;
 import com.example.project_myfit.databinding.LayoutPopupBinding;
-import com.example.project_myfit.databinding.TitleActionModeBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.main.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.main.adapter.MainViewPagerAdapter;
-import com.example.project_myfit.util.LockableScrollView;
+import com.example.project_myfit.util.ActionModeImpl;
+import com.example.project_myfit.util.DragSelectImpl;
+import com.example.project_myfit.util.ListenerUtil;
+import com.example.project_myfit.util.MyFitVariable;
+import com.example.project_myfit.util.PopupWindowImpl;
+import com.example.project_myfit.util.Sort;
 import com.example.project_myfit.util.adapter.DragCallBackList;
 import com.example.project_myfit.util.adapter.viewholder.CategoryVH;
 import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE;
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.util.MyFitConstant.DOWN;
+import static com.example.project_myfit.util.MyFitConstant.ETC;
 import static com.example.project_myfit.util.MyFitConstant.MAIN_FRAGMENT;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.OUTER;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
-import static com.example.project_myfit.util.MyFitConstant.SORT_MAIN;
-import static com.example.project_myfit.util.MyFitConstant.STOP;
-import static com.example.project_myfit.util.MyFitConstant.UP;
+import static com.example.project_myfit.util.MyFitConstant.TOP;
 
-public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoScrollListener, CategoryVH.CategoryVHListener {
+public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoScrollListener, CategoryVH.CategoryVHListener, ActionModeImpl.ActionModeListener, PopupWindowImpl.PopupWindowClickListener {
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
-    private PopupWindow mPopupWindow;
-    private boolean isDragging, mActionModeOn, isDragSelecting, mScrollEnable;
-    private ActionMode mActionMode;
-    private TitleActionModeBinding mActionModeTitleBinding;
-    private MenuItem mEditMenu, mDeletedMenu;
-    private MainViewPagerAdapter mViewPagerAdapter;
+    private ActivityMainBinding mActivityBinding;
+    private PopupWindowImpl mPopupWindow;
     private ItemTouchHelper[] mTouchHelperArray;
     private CategoryAdapter[] mCategoryAdapterArray;
-    private DragSelectTouchListener mDragSelectListener;
     private MaterialButton[] mButtonArray;
-    private int mSort;
     private NavController mNavController;
-    private FloatingActionButton mTopFab;
-    private SharedPreferences mSortPreferences;
-    private LayoutPopupBinding mPopupMenuBinding;
-    private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
-            viewPagerEnable(false);
-
-            mActionMode = mode;
-            mActionModeOn = true;
-
-            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
-            mode.setCustomView(mActionModeTitleBinding.getRoot());
-
-            mCategoryAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_ON);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
-            mActionModeTitleBinding.cbActionModeTitle.setOnClickListener(v ->
-                    mModel.selectAllClick(((MaterialCheckBox) v).isChecked(), mCategoryAdapterArray[mModel.getCurrentItem()]));
-
-            mEditMenu = menu.getItem(0);
-            menu.getItem(1).setVisible(false);
-            mDeletedMenu = menu.getItem(2);
-            return true;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
-            if (item.getItemId() == R.id.menu_action_mode_edit)
-                mNavController.navigate(MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
-            else if (item.getItemId() == R.id.menu_action_mode_delete)
-                mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            viewPagerEnable(true);
-
-            mActionMode = null;
-            mActionModeOn = false;
-
-            mCategoryAdapterArray[mModel.getCurrentItem()].setActionModeState(ACTION_MODE_OFF);
-
-            mActionModeTitleBinding.cbActionModeTitle.setChecked(false);
-            ((ViewGroup) mActionModeTitleBinding.getRoot().getParent()).removeAllViews();
-        }
-    };
-
-    private void viewPagerEnable(boolean enable) {
-        mBinding.vpMain.setUserInputEnabled(enable);
-        mBinding.btnMainTop.setEnabled(enable);
-        mBinding.btnMainBottom.setEnabled(enable);
-        mBinding.btnMainOuter.setEnabled(enable);
-        mBinding.btnMainEtc.setEnabled(enable);
-    }
+    private ActionModeImpl mActionMode;
+    private DragSelectImpl[] mDragSelectListener;
+    private ListenerUtil mListenerUtil;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(MainViewModel.class);
         mNavController = NavHostFragment.findNavController(this);
-
-        mSortPreferences = requireActivity().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
-        mSort = mSortPreferences.getInt(SORT_MAIN, SORT_CUSTOM);
-
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mBinding = FragmentMainBinding.inflate(inflater, container, false);
-        mActionModeTitleBinding = TitleActionModeBinding.inflate(inflater);
+        mBinding = FragmentMainBinding.inflate(inflater);
+
+        mBinding.vp.setAdapter(getViewPagerAdapter());
+        mBinding.vp.setOffscreenPageLimit(1);
+
+        mActivityBinding = ((MainActivity) requireActivity()).mBinding;
+
+        mActionMode = new ActionModeImpl(getLayoutInflater(), R.menu.menu_action_mode, this, mCategoryAdapterArray)
+                .hasViewPager(mBinding.vp, mButtonArray);
+
         View view = mBinding.getRoot();
-        mPopupMenuBinding = LayoutPopupBinding.inflate(inflater);
-        mPopupMenuBinding.tvPopupCreateFolder.setVisibility(View.GONE);
-        mPopupWindow = new PopupWindow(mPopupMenuBinding.getRoot(), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mPopupWindow.setOutsideTouchable(true);
 
+        mButtonArray = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
+
+        LayoutPopupBinding popupMenuBinding = LayoutPopupBinding.inflate(inflater);
+        popupMenuBinding.tvCreateFolder.setVisibility(View.GONE);
+        mPopupWindow = new PopupWindowImpl(popupMenuBinding, this);
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mTopFab = requireActivity().findViewById(R.id.fab_main_top);
-        if (mBinding.svMain.getScrollY() == 0) mTopFab.hide();
-
-        mBinding.vpMain.setAdapter(getViewPagerAdapter());
-        mBinding.vpMain.setOffscreenPageLimit(1);
-        dialogLive();
-        categoryLive();
-        actionModeTitleLive();
     }
 
     @NotNull
     private MainViewPagerAdapter getViewPagerAdapter() {
         mCategoryAdapterArray = new CategoryAdapter[4];
         for (int i = 0; i < 4; i++)
-            mCategoryAdapterArray[i] = new CategoryAdapter(mModel, this);
+            mCategoryAdapterArray[i] = new CategoryAdapter(requireContext(), mModel, this);
 
         mTouchHelperArray = new ItemTouchHelper[4];
         for (int i = 0; i < 4; i++)
             mTouchHelperArray[i] = new ItemTouchHelper(new DragCallBackList(mCategoryAdapterArray[i]));
 
-        return mViewPagerAdapter = new MainViewPagerAdapter(mCategoryAdapterArray, getDragSelectListener(), mTouchHelperArray, this);
+        mDragSelectListener = new DragSelectImpl[4];
+        for (int i = 0; i < mDragSelectListener.length; i++)
+            mDragSelectListener[i] = new DragSelectImpl().hasScrollView(mBinding.sv);
+
+        return new MainViewPagerAdapter(mCategoryAdapterArray, mDragSelectListener, mTouchHelperArray, this);
     }
 
-    private DragSelectTouchListener getDragSelectListener() {
-        DragSelectTouchListener.OnAdvancedDragSelectListener listener = new DragSelectTouchListener.OnAdvancedDragSelectListener() {
-            @Override
-            public void onSelectionStarted(int i) {
-                mBinding.svMain.setScrollable(false);
-                isDragSelecting = true;
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (mBinding.sv.getScrollY() == 0) mActivityBinding.fabTop.hide();
 
-                ViewPagerVH viewPagerVH = (ViewPagerVH) ((RecyclerView) mBinding.vpMain.getChildAt(0))
-                        .findViewHolderForAdapterPosition(mModel.getCurrentItem());
-                if (viewPagerVH != null) {
-                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemRv;
-                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
-                    if (viewHolder != null) viewHolder.itemView.callOnClick();
-                }
-            }
-
-            @Override
-            public void onSelectionFinished(int i) {
-                mBinding.svMain.setScrollable(true);
-                isDragSelecting = false;
-            }
-
-            @Override
-            public void onSelectChange(int i, int i1, boolean b) {
-                ViewPagerVH viewPagerVH = (ViewPagerVH) ((RecyclerView) mBinding.vpMain.getChildAt(0))
-                        .findViewHolderForAdapterPosition(mModel.getCurrentItem());
-                if (viewPagerVH != null) {
-                    RecyclerView recyclerView = viewPagerVH.getBinding().rvItemRv;
-                    for (int j = i; j <= i1; j++) {
-                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
-                        if (viewHolder != null) viewHolder.itemView.callOnClick();
-                    }
-                }
-            }
-        };
-        mDragSelectListener = new DragSelectTouchListener().withSelectListener(listener);
-        return mDragSelectListener;
+        dialogLive();
+        categoryLive();
+        actionModeTitleLive();
     }
 
     private void dialogLive() {
@@ -241,80 +146,80 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     private void nameEditLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM).observe(navBackStackEntry, o -> {
-            if (mActionMode != null) mActionMode.finish();
+            if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
         });
     }
 
     private void sortLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM).observe(navBackStackEntry, o -> {
-            int sort = (int) o;
-            if (mSort != sort) {
-                mSort = sort;
-                SharedPreferences.Editor editor = mSortPreferences.edit();
-                editor.putInt(SORT_MAIN, sort);
-                editor.apply();
-                categoryLive();
-            }
+            if (o instanceof Integer && mModel.sortChanged((Integer) o)) categoryLive();
         });
     }
 
     private void selectedItemDeletedLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
             mModel.selectedCategoryDelete();
-            if (mActionMode != null) mActionMode.finish();
+            if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
         });
     }
 
     public void categoryLive() {
-        mModel.getCategoryLive(false).observe(getViewLifecycleOwner(), categoryList -> mViewPagerAdapter.setItem(mSort, categoryList, mModel));
+        mModel.getCategoryLive(false).observe(getViewLifecycleOwner(), categoryList -> {
+            List<List<Category>> list = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            for (Category category : Sort.categorySort(mModel.getSort(), categoryList)) {
+                switch (category.getParentCategory()) {
+                    case TOP:
+                        list.get(0).add(category);
+                        break;
+                    case BOTTOM:
+                        list.get(1).add(category);
+                        break;
+                    case OUTER:
+                        list.get(2).add(category);
+                        break;
+                    case ETC:
+                        list.get(3).add(category);
+                        break;
+                }
+            }
+
+            String[] parentCategory = {TOP, BOTTOM, OUTER, ETC};
+            for (int i = 0; i < mCategoryAdapterArray.length; i++)
+                mCategoryAdapterArray[i].setItem(mModel.getSort(), list.get(i),
+                        mModel.getFolderParentIdList(parentCategory[i]), mModel.getFolderParentIdList(parentCategory[i]));
+        });
     }
 
     private void actionModeTitleLive() {
         mModel.getSelectedCategorySizeLive().observe(getViewLifecycleOwner(), integer -> {
-            mActionModeTitleBinding.tvActionModeTitle.setText(getString(R.string.action_mode_title, integer));
-            if (mActionMode != null) {
-                mEditMenu.setVisible(integer == 1);
-                mDeletedMenu.setVisible(integer > 0);
-            }
+            if (MyFitVariable.actionMode != null) {
+                mActionMode.getBinding().tvTitle.setText(getString(R.string.action_mode_title, integer));
+                mActionMode.getBinding().cb.setChecked(mCategoryAdapterArray[mModel.getCurrentItem()].getItemCount() == integer);
 
-            mActionModeTitleBinding.cbActionModeTitle.setChecked(mCategoryAdapterArray[mModel.getCurrentItem()].getCurrentList().size() == integer);
+                mActionMode.getMenuItemList().get(0).setVisible(integer == 1);
+                mActionMode.getMenuItemList().get(1).setVisible(false);
+                mActionMode.getMenuItemList().get(2).setVisible(integer > 0);
+            }
         });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        scrollChangeListener();
+        mListenerUtil = new ListenerUtil();
+        mListenerUtil.scrollChangeListener(mBinding.sv, mActivityBinding.fabTop);
+        mListenerUtil.fabTopClick(mBinding.sv, mActivityBinding.fabTop);
         vpPageChangeListener();
         buttonClick();
-        topFabClick();
-        popupMenuClick();
         fabClick();
-
-        mButtonArray[mModel.getCurrentItem()].setChecked(true);
-        if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
-            mCategoryAdapterArray[mModel.getCurrentItem()].setSelectedCategoryList(mModel.getSelectedCategoryList());
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
-        }
-    }
-
-    private void scrollChangeListener() {
-        mBinding.svMain.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (v.getScrollY() == 0) mTopFab.hide();
-            else mTopFab.show();
-
-            if ((isDragSelecting || isDragging) && mScrollEnable && scrollY > oldScrollY)
-                v.postDelayed(() -> v.scrollBy(0, 1), 50);
-            else if ((isDragSelecting || isDragging) && mScrollEnable && scrollY < oldScrollY)
-                v.postDelayed(() -> v.scrollBy(0, -1), 50);
-        });
+        restoreActionMode(savedInstanceState);
     }
 
     private void vpPageChangeListener() {
-        mBinding.vpMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        mBinding.vp.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                mBinding.svMain.smoothScrollTo(0, 0);
+                mBinding.sv.smoothScrollTo(0, 0);
                 mModel.setCurrentItem(position);
                 mButtonArray[position].setChecked(true);
             }
@@ -322,9 +227,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     }
 
     private void buttonClick() {
-        mButtonArray = new MaterialButton[]{mBinding.btnMainTop, mBinding.btnMainBottom, mBinding.btnMainOuter, mBinding.btnMainEtc};
-
-        final ColorStateList textOriginColor = mBinding.btnMainEtc.getTextColors();
+        final ColorStateList textOriginColor = mBinding.btnEtc.getTextColors();
         TypedValue typedValue = new TypedValue();
         requireContext().getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
         int colorControl = typedValue.data;
@@ -332,19 +235,19 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         int colorPrimary = typedValue.data;
 
         //버튼 클릭 시 첫번째 호출
-        mBinding.toggleGroupMain.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+        mBinding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             for (int i = 0; i < 4; i++) {
                 mButtonArray[i].setBackgroundColor(Color.TRANSPARENT);
                 mButtonArray[i].setTextColor(textOriginColor);
             }
 
-            if (checkedId == R.id.btn_main_top && isChecked) {
+            if (checkedId == R.id.btnTop && isChecked) {
                 mButtonArray[0].setBackgroundColor(colorControl);
                 mButtonArray[0].setTextColor(colorPrimary);
-            } else if (checkedId == R.id.btn_main_bottom && isChecked) {
+            } else if (checkedId == R.id.btnBottom && isChecked) {
                 mButtonArray[1].setBackgroundColor(colorControl);
                 mButtonArray[1].setTextColor(colorPrimary);
-            } else if (checkedId == R.id.btn_main_outer && isChecked) {
+            } else if (checkedId == R.id.btnOuter && isChecked) {
                 mButtonArray[2].setBackgroundColor(colorControl);
                 mButtonArray[2].setTextColor(colorPrimary);
             } else {
@@ -355,53 +258,31 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            mButtonArray[i].setOnClickListener(v -> mBinding.vpMain.setCurrentItem(finalI));
+            mButtonArray[i].setOnClickListener(v -> mBinding.vp.setCurrentItem(finalI));
         }
-    }
 
-    private void topFabClick() {
-        mTopFab.setOnClickListener(v -> {
-            LockableScrollView mainScrollView = mBinding.svMain;
-
-            mainScrollView.scrollTo(0, 0);
-            mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                if (scrollY != 0)
-                    mainScrollView.scrollTo(0, 0);
-                else {
-                    mainScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                    scrollChangeListener();
-                }
-            });
-        });
-    }
-
-    private void popupMenuClick() {
-        mPopupMenuBinding.tvPopupAddCategory.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
-            mPopupWindow.dismiss();
-        });
-        mPopupMenuBinding.tvPopupSortOrder.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mSort, MAIN_FRAGMENT));
-            mPopupWindow.dismiss();
-        });
-        mPopupMenuBinding.tvPopupRecycleBin.setOnClickListener(v -> {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToRecycleBinActivity());
-            mPopupWindow.dismiss();
-        });
+        mButtonArray[mModel.getCurrentItem()].setChecked(true);
     }
 
     private void fabClick() {
-        requireActivity().findViewById(R.id.fab_main).setOnClickListener(v -> {
-            if (mActionMode != null) mActionMode.finish();
+        mActivityBinding.fab.setOnClickListener(v -> {
+            if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
         });
+    }
+
+    private void restoreActionMode(@org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean(ACTION_MODE)) {
+            mCategoryAdapterArray[mModel.getCurrentItem()].setSelectedItemList(mModel.getSelectedCategoryList());
+            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionMode);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mActionMode != null) mActionMode.finish();
-        if (mTopFab.getVisibility() == View.VISIBLE) mTopFab.hide();
+        if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
+        if (mActivityBinding.fabTop.getVisibility() == View.VISIBLE) mActivityBinding.fabTop.hide();
     }
 
     @Override
@@ -424,13 +305,13 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(ACTION_MODE, mActionModeOn);
+        outState.putBoolean(ACTION_MODE, MyFitVariable.isActionModeOn);
     }
 
     //category adapter------------------------------------------------------------------------------
     @Override
     public void onCategoryItemViewClick(Category category, MaterialCheckBox checkBox) {
-        if (mActionMode == null)
+        if (MyFitVariable.actionMode == null)
             mNavController.navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0, category.getParentCategory()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
@@ -440,35 +321,58 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     @Override
     public void onCategoryItemViewLongClick(int position) {
-        if (mActionMode == null) {
+        if (MyFitVariable.actionMode == null) {
             mModel.getSelectedCategoryList().clear();
-            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionModeCallback);
+            ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionMode);
         }
-        mDragSelectListener.startDragSelection(position);
+        mDragSelectListener[mModel.getCurrentItem()].startDragSelection(position);
     }
 
     @Override
     public void onCategoryDragHandleTouch(RecyclerView.ViewHolder viewHolder) {
-        if (!isDragging) {
-            isDragging = true;
+        if (!MyFitVariable.isDragging) {
+            MyFitVariable.isDragging = true;
             mTouchHelperArray[mModel.getCurrentItem()].startDrag(viewHolder);
-        } else
-            isDragging = false;
+        } else MyFitVariable.isDragging = false;
     }
     //----------------------------------------------------------------------------------------------
 
     @Override
     public void dragAutoScroll(int upDownStop) {
-        if ((isDragSelecting || isDragging))
-            if (upDownStop == DOWN) {
-                mBinding.svMain.scrollBy(0, 1);
-                mScrollEnable = true;
-            } else if (upDownStop == UP) {
-                mBinding.svMain.scrollBy(0, -1);
-                mScrollEnable = true;
-            } else if (upDownStop == STOP) {
-                mBinding.svMain.scrollBy(0, 0);
-                mScrollEnable = false;
-            }
+        mListenerUtil.autoScroll(mBinding.sv, upDownStop);
+    }
+
+    //action mode-----------------------------------------------------------------------------------
+    @Override
+    public void selectAllClick(boolean isChecked) {
+        mModel.selectAllClick(isChecked, mCategoryAdapterArray);
+    }
+
+    @Override
+    public void actionItemClick(int itemId) {
+        if (itemId == R.id.menu_action_mode_edit)
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
+        else if (itemId == R.id.menu_action_mode_delete)
+            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
+    }
+
+    //popup menu click------------------------------------------------------------------------------
+    @Override
+    public void addCategoryClick() {
+        mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
+    }
+
+    @Override
+    public void createFolderClick() {
+    }
+
+    @Override
+    public void sortClick() {
+        mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mModel.getSort(), MAIN_FRAGMENT));
+    }
+
+    @Override
+    public void recycleBinClick() {
+        mNavController.navigate(MainFragmentDirections.actionMainFragmentToRecycleBinActivity());
     }
 }
