@@ -1,5 +1,6 @@
 package com.example.project_myfit.util;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.widget.NestedScrollView;
@@ -40,7 +41,7 @@ public class ListenerUtil {
 
     }
 
-    public void autoScroll(NestedScrollView scrollView, int upDownStop) {
+    public void viewPagerAutoScroll(NestedScrollView scrollView, int upDownStop) {
         if ((MyFitVariable.isDragSelecting || MyFitVariable.isDragging))
             if (upDownStop == DOWN) {
                 scrollView.scrollBy(0, 1);
@@ -52,5 +53,16 @@ public class ListenerUtil {
                 scrollView.scrollBy(0, 0);
                 MyFitVariable.scrollEnable = false;
             }
+    }
+
+    public void autoScroll(NestedScrollView scrollView, @NotNull MotionEvent event) {
+        if (event.getRawY() > 2000) {
+            scrollView.scrollBy(0, 1);
+            MyFitVariable.scrollEnable = true;
+        } else if (event.getRawY() < 250) {
+            scrollView.scrollBy(0, -1);
+            MyFitVariable.scrollEnable = true;
+        } else if (event.getRawY() < 2000 && event.getRawY() > 250)
+            MyFitVariable.scrollEnable = false;
     }
 }
