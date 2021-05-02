@@ -336,7 +336,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     @Override
     public void dragAutoScroll(int upDownStop) {
-        mListenerUtil.autoScroll(mBinding.sv, upDownStop);
+        mListenerUtil.viewPagerAutoScroll(mBinding.sv, upDownStop);
     }
 
     //action mode-----------------------------------------------------------------------------------
