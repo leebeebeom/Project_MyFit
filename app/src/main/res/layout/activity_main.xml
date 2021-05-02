@@ -85,7 +85,7 @@
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_44sdp"
                 android:src="@drawable/icon_arrow_up"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:backgroundTint="@color/white"
                 app:fabCustomSize="@dimen/_24sdp"
                 app:fabSize="mini"
