@@ -35,12 +35,11 @@ public class ActionModeImpl implements ActionMode.Callback {
     private final int mResId;
     private TabLayout mTabLayout;
 
-    @SafeVarargs
-    public <T extends ParentModel, T2 extends RecyclerView.ViewHolder> ActionModeImpl
-            (LayoutInflater inflater, int resId, ActionModeListener listener, ParentAdapter<T, T2>... parentAdapterArray) {
+    public ActionModeImpl
+            (LayoutInflater inflater, int resId, ActionModeListener listener, ParentAdapter<?, ?>... parentAdapters) {
         this.mBinding = TitleActionModeBinding.inflate(inflater);
         this.mResId = resId;
-        this.mParentAdapterArray = parentAdapterArray;
+        this.mParentAdapterArray = parentAdapters;
         this.mListener = listener;
     }
 
@@ -96,7 +95,7 @@ public class ActionModeImpl implements ActionMode.Callback {
         MyFitVariable.actionMode = mode;
         MyFitVariable.isActionModeOn = actionModeState == ACTION_MODE_ON;
 
-        for (ParentAdapter<? extends ParentModel, ? extends RecyclerView.ViewHolder> parentModelViewHolderParentAdapter : mParentAdapterArray)
+        for (ParentAdapter<?, ?> parentModelViewHolderParentAdapter : mParentAdapterArray)
             parentModelViewHolderParentAdapter.setActionModeState(actionModeState);
     }
 
