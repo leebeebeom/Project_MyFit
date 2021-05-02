@@ -43,7 +43,6 @@ import com.example.project_myfit.main.list.adapter.folderadapter.FolderDragCallB
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.util.ActionModeImpl;
-import com.example.project_myfit.util.DragSelectImpl;
 import com.example.project_myfit.util.ListenerUtil;
 import com.example.project_myfit.util.MyFitVariable;
 import com.example.project_myfit.util.PopupWindowImpl;
@@ -171,7 +170,6 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     private void rvInit() {
         mBinding.rvFolder.setAdapter(mFolderAdapter);
-        DragSelectImpl dragSelectFolder = new DragSelectImpl().hasScrollView(mBinding.sv).setRecyclerView(mBinding.rvFolder);
         mBinding.rvFolder.addOnItemTouchListener(getFolderDragSelectListener());
 
         mBinding.rvSize.setHasFixedSize(true);
