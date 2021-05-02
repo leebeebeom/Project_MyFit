@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.ParentModel;
+import com.example.project_myfit.util.MyFitVariable;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textview.MaterialTextView;
@@ -95,10 +96,12 @@ public abstract class ParentAdapter<T extends ParentModel, VH extends RecyclerVi
     }
 
     protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        MyFitVariable.isDragging = true;
         viewHolder.itemView.setTranslationZ(10);
     }
 
     protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        MyFitVariable.isDragging = false;
         viewHolder.itemView.setTranslationZ(0);
     }
 
