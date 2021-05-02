@@ -1,6 +1,8 @@
 package com.example.project_myfit.main.list;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -22,7 +24,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.example.project_myfit.util.MyFitConstant.FOLDER_TOGGLE;
+import static com.example.project_myfit.util.MyFitConstant.GRIDVIEW;
 import static com.example.project_myfit.util.MyFitConstant.LISTVIEW;
+import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.SORT_LIST;
+import static com.example.project_myfit.util.MyFitConstant.VIEW_TYPE;
 
 public class ListViewModel extends AndroidViewModel {
     private final Repository.FolderRepository mFolderRepository;
@@ -30,10 +37,13 @@ public class ListViewModel extends AndroidViewModel {
     private final MutableLiveData<Integer> mSelectedItemSizeLive;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
-    private boolean mFavoriteView;
+    private boolean mFavoriteView, isFolderToggleOpen;
     private LiveData<Category> mThisCategoryLive;
     private LiveData<Folder> mThisFolderLive;
     private List<Folder> mFolderHistory;
+    private SharedPreferences mViewTypePreference, mSortPreference, mFolderTogglePreference;
+    private int mViewType, mSort;
+
 
     public ListViewModel(@NonNull Application application) {
         super(application);
@@ -42,9 +52,21 @@ public class ListViewModel extends AndroidViewModel {
         mSelectedItemSizeLive = new MutableLiveData<>();
         mSelectedFolderList = new ArrayList<>();
         mSelectedSizeList = new ArrayList<>();
+        preferenceInit();
     }
 
-    public void selectAllClick(boolean isChecked, FolderAdapter folderAdapter, int viewType,
+    private void preferenceInit() {
+        mViewTypePreference = getApplication().getSharedPreferences(VIEW_TYPE, Context.MODE_PRIVATE);
+        mViewType = mViewTypePreference.getInt(VIEW_TYPE, LISTVIEW);
+
+        mSortPreference = getApplication().getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
+        mSort = mSortPreference.getInt(SORT_LIST, SORT_CUSTOM);
+
+        mFolderTogglePreference = getApplication().getSharedPreferences(FOLDER_TOGGLE, Context.MODE_PRIVATE);
+        isFolderToggleOpen = mFolderTogglePreference.getBoolean(FOLDER_TOGGLE, true);
+    }
+
+    public void selectAllClick(boolean isChecked, FolderAdapter folderAdapter,
                                SizeAdapterList sizeAdapterList, SizeAdapterGrid sizeAdapterGrid) {
         if (!mSelectedFolderList.isEmpty()) mSelectedFolderList.clear();
         if (!mSelectedSizeList.isEmpty()) mSelectedSizeList.clear();
@@ -54,7 +76,7 @@ public class ListViewModel extends AndroidViewModel {
             mSelectedFolderList.removeIf(folder -> folder.getId() == -1);
             folderAdapter.selectAll();
 
-            if (viewType == LISTVIEW) {
+            if (mViewType == LISTVIEW) {
                 mSelectedSizeList.addAll(sizeAdapterList.getCurrentList());
                 sizeAdapterList.selectAll();
             } else {
@@ -63,7 +85,7 @@ public class ListViewModel extends AndroidViewModel {
             }
         } else {
             folderAdapter.deselectAll();
-            if (viewType == LISTVIEW) sizeAdapterList.deselectAll();
+            if (mViewType == LISTVIEW) sizeAdapterList.deselectAll();
             else sizeAdapterGrid.deselectAll();
         }
         mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
@@ -89,24 +111,6 @@ public class ListViewModel extends AndroidViewModel {
             }
         }
         return folderHistory;
-    }
-
-    public void folderSelected(@NotNull Folder folder, boolean isChecked, FolderAdapter folderAdapter) {
-        if (folder.getId() != -1) {
-            if (isChecked) mSelectedFolderList.add(folder);
-            else mSelectedFolderList.remove(folder);
-            folderAdapter.folderSelected(folder.getId());
-            mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
-        }
-    }
-
-    public void sizeSelected(Size size, boolean isChecked, SizeAdapterList sizeAdapterList, SizeAdapterGrid sizeAdapterGrid, int viewType) {
-        if (isChecked) mSelectedSizeList.add(size);
-        else mSelectedSizeList.remove(size);
-
-        if (viewType == LISTVIEW) sizeAdapterList.sizeSelected(size.getId());
-        else sizeAdapterGrid.sizeSelected(size.getId());
-        mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
     }
 
     //getter----------------------------------------------------------------------------------------
@@ -192,5 +196,55 @@ public class ListViewModel extends AndroidViewModel {
     public void selectedItemsClear() {
         mSelectedFolderList.clear();
         mSelectedSizeList.clear();
+    }
+
+    public void itemSelected(Object o, boolean isChecked) {
+        if (o instanceof Folder) {
+            if (((Folder) o).getId() != -1) {
+                if (isChecked) mSelectedFolderList.add((Folder) o);
+                else mSelectedFolderList.remove(o);
+            }
+        } else if (o instanceof Size) {
+            if (isChecked) mSelectedSizeList.add((Size) o);
+            else mSelectedSizeList.remove(o);
+        }
+        mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
+    }
+
+    public int getViewType() {
+        return mViewType;
+    }
+
+    public int getSort() {
+        return mSort;
+    }
+
+    public boolean isFolderToggleOpen() {
+        return isFolderToggleOpen;
+    }
+
+    public void folderToggleClick() {
+        isFolderToggleOpen = !isFolderToggleOpen;
+        SharedPreferences.Editor editor = mFolderTogglePreference.edit();
+        editor.putBoolean(FOLDER_TOGGLE, isFolderToggleOpen);
+        editor.apply();
+    }
+
+    public boolean sortChanged(int sort) {
+        if (mSort != sort) {
+            mSort = sort;
+            SharedPreferences.Editor editor = mSortPreference.edit();
+            editor.putInt(SORT_LIST, mSort);
+            editor.apply();
+            return true;
+        } else return false;
+    }
+
+    public int viewTypeClick() {
+        mViewType = mViewType == LISTVIEW ? GRIDVIEW : LISTVIEW;
+        SharedPreferences.Editor editor = mViewTypePreference.edit();
+        editor.putInt(VIEW_TYPE, mViewType);
+        editor.apply();
+        return mViewType;
     }
 }
