@@ -1,45 +1,37 @@
 package com.example.project_myfit.main.list.adapter.folderadapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemFolderGridBinding;
 import com.example.project_myfit.main.list.ListViewModel;
-import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.MyFitVariable;
+import com.example.project_myfit.util.adapter.ParentAdapter;
 import com.example.project_myfit.util.adapter.viewholder.FolderGridVH;
 import com.example.project_myfit.util.adapter.viewholder.FolderVHListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.List;
 
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
-import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.GRIDVIEW;
 
-@SuppressLint("ClickableViewAccessibility")
-public class FolderAdapter extends ListAdapter<Folder, FolderGridVH> {
+public class FolderAdapter extends ParentAdapter<Folder, FolderGridVH> {
     private final ListViewModel mModel;
-    private FolderVHListener mListener;
-    private List<Folder> mFolderList, mSelectedFolderList;
-    private int mActionModeState, mSort;
-    private final HashSet<Long> mSelectedFolderIdHashSet;
-    private List<Long> mFolderFolderIdList, mSizeFolderIdList;
-    private AdapterUtil mAdapterUtil;
-    private boolean mIsDragging;
+    private final FolderVHListener mListener;
+    private List<Folder> mFolderList;
 
-    public FolderAdapter(ListViewModel model) {
+    public FolderAdapter(Context context, ListViewModel model, FolderVHListener listener) {
         super(new DiffUtil.ItemCallback<Folder>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull Folder oldItem, @NonNull @NotNull Folder newItem) {
@@ -51,120 +43,79 @@ public class FolderAdapter extends ListAdapter<Folder, FolderGridVH> {
                 return oldItem.getFolderName().equals(newItem.getFolderName()) &&
                         oldItem.getDummy() == newItem.getDummy();
             }
-        });
+        }, context);
         this.mModel = model;
-        this.mSelectedFolderIdHashSet = new HashSet<>();
-        setHasStableIds(true);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
-
-    public void setFolderListener(FolderVHListener listener) {
         this.mListener = listener;
     }
 
-    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Folder> list, List<Long> folderFolderIdList, List<Long> sizeFolderIdList, int sort) {
-        super.submitList(list);
+    @Override
+    public void setItem(int sort, List<Folder> list, List<Long> folderParentIdList, List<Long> sizeParentIdList) {
+        super.setItem(sort, list, folderParentIdList, sizeParentIdList);
         this.mFolderList = list;
-        this.mFolderFolderIdList = folderFolderIdList;
-        this.mSizeFolderIdList = sizeFolderIdList;
-        this.mSort = sort;
     }
 
     @NonNull
     @NotNull
     @Override
     public FolderGridVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        ItemFolderGridBinding binding = ItemFolderGridBinding.inflate(LayoutInflater.from(parent.getContext()));
+        ItemFolderGridBinding binding = ItemFolderGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new FolderGridVH(binding, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull FolderGridVH holder, int position) {
-        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
-
-        if (mSelectedFolderList != null && !mSelectedFolderList.isEmpty()) {
-            mAdapterUtil.restoreActionMode(mSelectedFolderList, mSelectedFolderIdHashSet);
-            mSelectedFolderList = null;
-        }
-
-        Folder folder = getItem(holder.getLayoutPosition());
+        Folder folder = getItem(position);
         holder.setFolder(folder);
-        holder.getBinding().iconItemFolderGridDragHandle.setOnTouchListener((v, event) -> {
-            if (folder.getId() != -1 && event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
-                mIsDragging = true;
+        setContentsSize(holder.getBinding().tvContentsSize, folder.getId());
+        if (String.valueOf(holder.getBinding().tvContentsSize.getText()).equals("1"))
+            holder.getBinding().tvItems.setText(R.string.item_folder_item);
+        else holder.getBinding().tvItems.setText(R.string.item_folder_items);
+        dragHandleTouch(holder, folder);
+
+        restoreSelectedHashSet();
+        setActionMode(GRIDVIEW, holder.getBinding().cardView, holder.getBinding().cb, folder.getId());
+        dragHandleVisibility(holder.getBinding().iconDragHandle);
+        holder.itemView.setVisibility(folder.getId() == -1 ? View.GONE : View.VISIBLE);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void dragHandleTouch(@NotNull FolderGridVH holder, Folder folder) {
+        holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
+            if (folder.getId() != -1 && event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 mListener.onFolderDragHandleTouch(holder);
                 draggingView(holder);
             }
             return false;
         });
-        int contentsSize = mAdapterUtil.getContentsSize(folder.getId(), mFolderFolderIdList, mSizeFolderIdList);
-        if (contentsSize == 1)
-            holder.getBinding().tvItemFolderGridItems.setText(R.string.item_folder_item);
-        else holder.getBinding().tvItemFolderGridItems.setText(R.string.item_folder_items);
-        holder.getBinding().tvItemFolderGridContentsSize.setText(String.valueOf(contentsSize));
-
-        if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.gridActionModeOn(holder.getBinding().cbItemFolderGrid, mSelectedFolderIdHashSet, folder.getId());
-        else
-            mAdapterUtil.gridActionModeOff(holder.getBinding().cbItemFolderGrid, mSelectedFolderIdHashSet);
-
-        holder.getBinding().iconItemFolderGridDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-
-        holder.itemView.setVisibility(folder.getId() == -1 ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private void draggingView(@NotNull FolderGridVH holder) {
-        holder.itemView.setTranslationZ(10);
-        holder.getBinding().tvItemFolderGridContentsSizeLayout.setVisibility(View.INVISIBLE);
-        holder.getBinding().tvItemFolderGridTitle.setAlpha(0.5f);
-        holder.getBinding().cbItemFolderGrid.setVisibility(View.INVISIBLE);
+    @Override
+    protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.draggingView(viewHolder);
+        FolderGridVH folderGridVH = (FolderGridVH) viewHolder;
+        folderGridVH.getBinding().layoutContentsSize.setVisibility(View.INVISIBLE);
+        folderGridVH.getBinding().tvFolderName.setAlpha(0.5f);
+        folderGridVH.getBinding().cb.setVisibility(View.INVISIBLE);
     }
 
-    private void dropView(@NotNull FolderGridVH holder) {
-        holder.itemView.setTranslationZ(0);
-        holder.getBinding().tvItemFolderGridContentsSizeLayout.setVisibility(View.VISIBLE);
-        holder.getBinding().tvItemFolderGridTitle.setAlpha(1);
-        holder.getBinding().cbItemFolderGrid.setVisibility(View.VISIBLE);
+    @Override
+    protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.dropView(viewHolder);
+        FolderGridVH folderGridVH = (FolderGridVH) viewHolder;
+        folderGridVH.getBinding().layoutContentsSize.setVisibility(View.VISIBLE);
+        folderGridVH.getBinding().tvFolderName.setAlpha(1);
+        folderGridVH.getBinding().cb.setVisibility(View.VISIBLE);
     }
 
-    public void onItemMove(int from, int to) {
+    @Override
+    public void itemMove(int from, int to) {
         mAdapterUtil.itemMove(from, to, mFolderList);
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        mListener.onFolderDragHandleTouch(viewHolder);
+    @Override
+    public void itemDrop(RecyclerView.ViewHolder viewHolder) {
+        super.itemDrop(viewHolder);
         mModel.folderItemDrop(mFolderList);
-        dropView((FolderGridVH) viewHolder);
-        mIsDragging = false;
-    }
-
-    public void setActionModeState(int actionModeState) {
-        this.mActionModeState = actionModeState;
-        notifyDataSetChanged();
-    }
-
-    public void setSelectedFolderList(List<Folder> selectedFolderList) {
-        this.mSelectedFolderList = selectedFolderList;
-    }
-
-    public void folderSelected(long id) {
-        if (!mSelectedFolderIdHashSet.contains(id)) mSelectedFolderIdHashSet.add(id);
-        else mSelectedFolderIdHashSet.remove(id);
-    }
-
-    public void selectAll() {
-        for (Folder f : getCurrentList())
-            mSelectedFolderIdHashSet.add(f.getId());
-        notifyDataSetChanged();
-    }
-
-    public void deselectAll() {
-        mSelectedFolderIdHashSet.clear();
-        notifyDataSetChanged();
     }
 }
