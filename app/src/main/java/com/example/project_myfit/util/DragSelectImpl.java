@@ -25,7 +25,7 @@ public class DragSelectImpl extends DragSelectTouchListener implements DragSelec
     @Override
     public void onSelectionStarted(int i) {
         if (mScrollView != null) mScrollView.setScrollable(false);
-        MyFirVariable.isDragSelecting = true;
+        MyFitVariable.isDragSelecting = true;
 
         RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForLayoutPosition(i);
         if (viewHolder != null) viewHolder.itemView.callOnClick();
@@ -34,7 +34,7 @@ public class DragSelectImpl extends DragSelectTouchListener implements DragSelec
     @Override
     public void onSelectionFinished(int i) {
         if (mScrollView != null) mScrollView.setScrollable(true);
-        MyFirVariable.isDragSelecting = false;
+        MyFitVariable.isDragSelecting = false;
     }
 
     @Override

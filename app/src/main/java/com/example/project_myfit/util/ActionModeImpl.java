@@ -93,8 +93,8 @@ public class ActionModeImpl implements ActionMode.Callback {
     }
 
     private void setActionMode(@Nullable ActionMode mode, int actionModeState) {
-        MyFirVariable.actionMode = mode;
-        MyFirVariable.isActionModeOn = actionModeState == ACTION_MODE_ON;
+        MyFitVariable.actionMode = mode;
+        MyFitVariable.isActionModeOn = actionModeState == ACTION_MODE_ON;
 
         for (ParentAdapter<? extends ParentModel, ? extends RecyclerView.ViewHolder> parentModelViewHolderParentAdapter : mParentAdapterArray)
             parentModelViewHolderParentAdapter.setActionModeState(actionModeState);
