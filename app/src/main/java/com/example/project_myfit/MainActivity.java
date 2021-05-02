@@ -15,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.databinding.ActivityMainBinding;
 import com.example.project_myfit.util.CommonUtil;
+import com.example.project_myfit.util.MyFirVariable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -110,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void keyboardShow() {
-        if (!CommonUtil.isKeyboardShowing) {
-            CommonUtil.isKeyboardShowing = true;
+        if (!MyFirVariable.isKeyboardShowing) {
+            MyFirVariable.isKeyboardShowing = true;
             mBinding.fab.setVisibility(View.INVISIBLE);
             mBinding.bottomAppBar.setVisibility(View.INVISIBLE);
             mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
@@ -120,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void keyboardHide() {
-        if (CommonUtil.isKeyboardShowing) {
-            CommonUtil.isKeyboardShowing = false;
+        if (MyFirVariable.isKeyboardShowing) {
+            MyFirVariable.isKeyboardShowing = false;
             mBinding.bottomAppBar.setVisibility(View.VISIBLE);
             mBinding.fab.show();
             mBinding.fabTop.setVisibility(mTopFabOriginVisibility);
