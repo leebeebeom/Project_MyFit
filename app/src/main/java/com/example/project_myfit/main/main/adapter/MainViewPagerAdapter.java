@@ -1,7 +1,6 @@
 package com.example.project_myfit.main.main.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -50,7 +49,7 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
 
             mTouchHelperArray[position].attachToRecyclerView(holder.getBinding().rv);
             holder.getBinding().rv.addOnItemTouchListener(mDragSelectListenerArray[position].setRecyclerView(holder.getBinding().rv));
-            holder.getBinding().layoutNoData.setVisibility(mCategoryAdapterArray[position].getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            holder.setNoResult(mCategoryAdapterArray[position].getCurrentList().isEmpty());
         }
     }
 
