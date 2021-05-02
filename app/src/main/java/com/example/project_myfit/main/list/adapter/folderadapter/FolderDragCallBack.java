@@ -30,7 +30,6 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        MyFitVariable.isDragging = true;
         mFolderAdapter.itemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         return true;
     }

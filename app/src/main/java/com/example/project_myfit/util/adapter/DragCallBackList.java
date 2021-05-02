@@ -37,7 +37,6 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        MyFitVariable.isDragging = true;
         if (mCategoryAdapter != null)
             mCategoryAdapter.itemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         else if (mSizeAdapterList != null)
