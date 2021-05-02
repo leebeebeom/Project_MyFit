@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.main.main.adapter.CategoryAdapter;
+import com.example.project_myfit.util.MyFitVariable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +37,7 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        MyFitVariable.isDragging = true;
         if (mCategoryAdapter != null)
             mCategoryAdapter.itemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         else if (mSizeAdapterList != null)
@@ -51,6 +53,7 @@ public class DragCallBackList extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
+        MyFitVariable.isDragging = false;
         if (mCategoryAdapter != null) mCategoryAdapter.itemDrop(viewHolder);
         else if (mSizeAdapterList != null) mSizeAdapterList.itemDrop(viewHolder);
     }

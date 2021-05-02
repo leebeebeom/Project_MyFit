@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
+import com.example.project_myfit.util.MyFitVariable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +30,7 @@ public class DragCallBackGrid extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        MyFitVariable.isDragging = true;
         mAdapter.itemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         return true;
     }
@@ -40,6 +42,7 @@ public class DragCallBackGrid extends ItemTouchHelper.Callback {
 
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        MyFitVariable.isDragging = false;
         mAdapter.itemDrop(viewHolder);
     }
 
