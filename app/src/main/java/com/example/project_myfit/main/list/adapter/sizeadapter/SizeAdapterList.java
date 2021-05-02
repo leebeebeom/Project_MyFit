@@ -1,60 +1,44 @@
 package com.example.project_myfit.main.list.adapter.sizeadapter;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemSizeListBinding;
 import com.example.project_myfit.main.list.ListViewModel;
-import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.util.MyFitVariable;
+import com.example.project_myfit.util.adapter.ParentAdapter;
 import com.example.project_myfit.util.adapter.viewholder.SizeListVH;
 import com.example.project_myfit.util.adapter.viewholder.SizeVHListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.List;
 
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
-import static com.example.project_myfit.util.MyFitConstant.SORT_CUSTOM;
+import static com.example.project_myfit.util.MyFitConstant.LISTVIEW;
 
-@SuppressLint("ClickableViewAccessibility")
-public class SizeAdapterList extends ListAdapter<Size, SizeListVH> {
+public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
     private final ListViewModel mModel;
     private final SizeVHListener mListener;
-    private List<Size> mSizeList, mSelectedSizeList;
-    private int mActionModeState, mSort;
-    private final HashSet<Long> mSelectedSizeIdHashSet;
-    private AdapterUtil mAdapterUtil;
-    boolean mIsDragging;
+    private List<Size> mSizeList;
 
-    public SizeAdapterList(ListViewModel model, SizeVHListener listener) {
-        super(new SizeDiffUtil());
+    public SizeAdapterList(Context context, ListViewModel model, SizeVHListener listener) {
+        super(new SizeDiffUtil(), context);
         this.mModel = model;
-        this.mSelectedSizeIdHashSet = new HashSet<>();
         this.mListener = listener;
-        setHasStableIds(true);
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
-
-    public void submitList(@Nullable @org.jetbrains.annotations.Nullable List<Size> list, int sort) {
-        super.submitList(list);
+    public void setItem(int sort, List<Size> list) {
+        super.setItem(sort, list);
         this.mSizeList = list;
-        this.mSort = sort;
     }
 
     @NonNull
@@ -67,86 +51,55 @@ public class SizeAdapterList extends ListAdapter<Size, SizeListVH> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
-        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
-
-        if (mSelectedSizeList != null && !mSelectedSizeList.isEmpty()) {
-            mAdapterUtil.restoreActionMode(mSelectedSizeList, mSelectedSizeIdHashSet);
-            mSelectedSizeList = null;
-        }
-
-        Size size = getItem(holder.getLayoutPosition());
+        Size size = getItem(position);
         holder.setSize(size);
-        holder.getBinding().iconItemSizeListDragHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && !mIsDragging) {
-                mIsDragging = true;
+        dragHandleTouch(holder);
+
+        restoreSelectedHashSet();
+        setActionMode(LISTVIEW, holder.getBinding().cardView, holder.getBinding().cb, size.getId());
+        dragHandleVisibility(holder.getBinding().iconDragHandle);
+        cbFavoriteClickable(holder.getBinding().cbFavorite);
+        holder.getBinding().cbFavorite.setVisibility(holder.getBinding().iconDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void dragHandleTouch(@NotNull SizeListVH holder) {
+        holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 draggingView(holder);
                 mListener.onSizeDragHandleTouch(holder);
             }
             return false;
         });
-
-        if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.listActionModeOn(holder.getBinding().cardViewItemSizeList, holder.getBinding().cbItemSizeList, mSelectedSizeIdHashSet, size.getId());
-        else if (mActionModeState == ACTION_MODE_OFF) {
-            mAdapterUtil.listActionModeOff(holder.getBinding().cardViewItemSizeList, holder.getBinding().cbItemSizeList, mSelectedSizeIdHashSet);
-            new Handler().postDelayed(() -> mActionModeState = 0, 310);
-        }
-
-        holder.getBinding().iconItemSizeListDragHandle.setVisibility(mSort == SORT_CUSTOM && mActionModeState == ACTION_MODE_ON ? View.VISIBLE : View.GONE);
-        holder.getBinding().cbItemSizeListFavorite.setVisibility(holder.getBinding().iconItemSizeListDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-        holder.getBinding().cbItemSizeListFavorite.setClickable(mActionModeState != ACTION_MODE_ON);
     }
 
-    private void draggingView(@NotNull SizeListVH holder) {
-        holder.itemView.setTranslationZ(10);
-        holder.getBinding().cbItemSizeList.setVisibility(View.INVISIBLE);
-        holder.getBinding().tvItemSizeListBrand.setAlpha(0.4f);
-        holder.getBinding().tvItemSizeListName.setAlpha(0.5f);
-        holder.getBinding().ivItemSizeListPicture.setAlpha(0.5f);
+    @Override
+    protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.draggingView(viewHolder);
+        SizeListVH sizeListVH = (SizeListVH) viewHolder;
+        sizeListVH.getBinding().cb.setVisibility(View.INVISIBLE);
+        sizeListVH.getBinding().layoutTv.setAlpha(0.7f);
+        sizeListVH.getBinding().iv.setAlpha(0.5f);
     }
 
-    private void dropView(@NotNull SizeListVH holder) {
-        holder.itemView.setTranslationZ(0);
-        holder.getBinding().cbItemSizeList.setVisibility(View.VISIBLE);
-        holder.getBinding().tvItemSizeListBrand.setAlpha(0.7f);
-        holder.getBinding().tvItemSizeListName.setAlpha(0.8f);
-        holder.getBinding().ivItemSizeListPicture.setAlpha(1f);
+    @Override
+    protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.dropView(viewHolder);
+        SizeListVH sizeListVH = (SizeListVH) viewHolder;
+        sizeListVH.getBinding().cb.setVisibility(View.VISIBLE);
+        sizeListVH.getBinding().layoutTv.setAlpha(1);
+        sizeListVH.getBinding().iv.setAlpha(1f);
     }
 
-    public void onItemMove(int from, int to) {
+    @Override
+    public void itemMove(int from, int to) {
         mAdapterUtil.itemMove(from, to, mSizeList);
         notifyItemMoved(from, to);
     }
 
-    public void onItemDrop(@NotNull RecyclerView.ViewHolder viewHolder) {
-        mListener.onSizeDragHandleTouch(viewHolder);
+    @Override
+    public void itemDrop(RecyclerView.ViewHolder viewHolder) {
+        super.itemDrop(viewHolder);
         mModel.sizeItemDrop(mSizeList);
-        dropView((SizeListVH) viewHolder);
-        mIsDragging = false;
-    }
-
-    public void setActionModeState(int actionModeState) {
-        mActionModeState = actionModeState;
-        notifyDataSetChanged();
-    }
-
-    public void setSelectedSizeList(List<Size> selectedSizeList) {
-        this.mSelectedSizeList = selectedSizeList;
-    }
-
-    public void sizeSelected(long id) {
-        if (!mSelectedSizeIdHashSet.contains(id)) mSelectedSizeIdHashSet.add(id);
-        else mSelectedSizeIdHashSet.remove(id);
-    }
-
-    public void selectAll() {
-        for (Size s : getCurrentList())
-            mSelectedSizeIdHashSet.add(s.getId());
-        notifyDataSetChanged();
-    }
-
-    public void deselectAll() {
-        mSelectedSizeIdHashSet.clear();
-        notifyDataSetChanged();
     }
 }
