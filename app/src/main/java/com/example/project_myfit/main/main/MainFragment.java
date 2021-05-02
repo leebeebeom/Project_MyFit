@@ -117,7 +117,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
         mDragSelectListener = new DragSelectImpl[4];
         for (int i = 0; i < mDragSelectListener.length; i++)
-            mDragSelectListener[i] = new DragSelectImpl().hasScrollView(mBinding.sv);
+            mDragSelectListener[i] = new DragSelectImpl().setScrollView(mBinding.sv);
 
         return new MainViewPagerAdapter(mCategoryAdapterArray, mDragSelectListener, mTouchHelperArray, this);
     }
