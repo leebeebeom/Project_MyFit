@@ -1,6 +1,5 @@
 package com.example.project_myfit.search;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,10 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ActivitySearchBinding;
-import com.example.project_myfit.search.main.adapter.AutoCompleteAdapter;
-import com.example.project_myfit.util.KeyboardUtil;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.project_myfit.search.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.util.CommonUtil;
+import com.example.project_myfit.util.MyFitVariable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,21 +23,50 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
+    public ActivitySearchBinding mBinding;
+    private int mTopFabOriginVisibility;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivitySearchBinding binding = ActivitySearchBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        mBinding = ActivitySearchBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
-        setSupportActionBar(binding.toolBarSearch);
+        setSupportActionBar(mBinding.toolBar);
 
         SearchViewModel model = new ViewModelProvider(this).get(SearchViewModel.class);
 
-        binding.acTvSearch.requestFocus();
+        keyboardShowingListener();
 
+        mBinding.acTv.requestFocus();
         AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv);
-        binding.acTvSearch.setAdapter(autoCompleteAdapter);
+        mBinding.acTv.setAdapter(autoCompleteAdapter);
         acLive(model, autoCompleteAdapter);
+    }
+
+    private void keyboardShowingListener() {
+        View rootView = mBinding.getRoot();
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if (CommonUtil.isKeyboardShowing(rootView))
+                keyboardShowing();
+            else keyboardHide();
+        });
+
+    }
+
+    private void keyboardShowing() {
+        if (!MyFitVariable.isKeyboardShowing) {
+            MyFitVariable.isKeyboardShowing = true;
+            mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
+            mBinding.fabTop.setVisibility(View.GONE);
+        }
+    }
+
+    private void keyboardHide() {
+        if(MyFitVariable.isKeyboardShowing){
+            MyFitVariable.isKeyboardShowing = false;
+            mBinding.fabTop.setVisibility(mTopFabOriginVisibility);
+        }
     }
 
     private void acLive(@NotNull SearchViewModel model, AutoCompleteAdapter autoCompleteAdapter) {
@@ -76,17 +103,7 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof TextInputEditText || v instanceof MaterialAutoCompleteTextView) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
-                    v.clearFocus();
-                    KeyboardUtil.hide(this, v);
-                }
-            }
-        }
+        CommonUtil.editTextLosableFocus(ev, getCurrentFocus(), this);
         return super.dispatchTouchEvent(ev);
     }
 }
