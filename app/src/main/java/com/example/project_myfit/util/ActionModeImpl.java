@@ -26,8 +26,6 @@ import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
 
 public class ActionModeImpl implements ActionMode.Callback {
-    public static ActionMode actionMode;
-    public static boolean isActionModeOn;
     private final TitleActionModeBinding mBinding;
     private final ParentAdapter<? extends ParentModel, ? extends RecyclerView.ViewHolder>[] mParentAdapterArray;
     private final ActionModeListener mListener;
@@ -95,8 +93,8 @@ public class ActionModeImpl implements ActionMode.Callback {
     }
 
     private void setActionMode(@Nullable ActionMode mode, int actionModeState) {
-        actionMode = mode;
-        isActionModeOn = actionModeState == ACTION_MODE_ON;
+        MyFirVariable.actionMode = mode;
+        MyFirVariable.isActionModeOn = actionModeState == ACTION_MODE_ON;
 
         for (ParentAdapter<? extends ParentModel, ? extends RecyclerView.ViewHolder> parentModelViewHolderParentAdapter : mParentAdapterArray)
             parentModelViewHolderParentAdapter.setActionModeState(actionModeState);

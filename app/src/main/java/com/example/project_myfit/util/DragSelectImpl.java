@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 public class DragSelectImpl extends DragSelectTouchListener implements DragSelectTouchListener.OnAdvancedDragSelectListener {
-    public static boolean isDragSelecting;
     private LockableScrollView mScrollView;
     private RecyclerView mRecyclerView;
 
@@ -26,7 +25,7 @@ public class DragSelectImpl extends DragSelectTouchListener implements DragSelec
     @Override
     public void onSelectionStarted(int i) {
         if (mScrollView != null) mScrollView.setScrollable(false);
-        isDragSelecting = true;
+        MyFirVariable.isDragSelecting = true;
 
         RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForLayoutPosition(i);
         if (viewHolder != null) viewHolder.itemView.callOnClick();
@@ -35,7 +34,7 @@ public class DragSelectImpl extends DragSelectTouchListener implements DragSelec
     @Override
     public void onSelectionFinished(int i) {
         if (mScrollView != null) mScrollView.setScrollable(true);
-        isDragSelecting = false;
+        MyFirVariable.isDragSelecting = false;
     }
 
     @Override

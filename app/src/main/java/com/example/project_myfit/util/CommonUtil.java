@@ -19,8 +19,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CommonUtil {
-    public static boolean isKeyboardShowing;
-
     public static void editTextLosableFocus(@NotNull MotionEvent ev, View getCurrentFocus, Context context) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             if (getCurrentFocus instanceof TextInputEditText || getCurrentFocus instanceof MaterialAutoCompleteTextView) {
