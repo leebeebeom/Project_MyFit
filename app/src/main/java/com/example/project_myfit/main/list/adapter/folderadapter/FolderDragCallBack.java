@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project_myfit.util.MyFitVariable;
-
 import org.jetbrains.annotations.NotNull;
 
 public class FolderDragCallBack extends ItemTouchHelper.Callback {
@@ -41,7 +39,6 @@ public class FolderDragCallBack extends ItemTouchHelper.Callback {
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
             viewHolder) {
-        MyFitVariable.isDragging = false;
         mFolderAdapter.itemDrop(viewHolder);
     }
 
