@@ -1,6 +1,7 @@
 package com.example.project_myfit.recyclebin;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,42 +12,68 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ActivityRecycleBinBinding;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
+import com.example.project_myfit.util.CommonUtil;
+import com.example.project_myfit.util.MyFitVariable;
+
+import org.jetbrains.annotations.NotNull;
 
 public class RecycleBinActivity extends AppCompatActivity {
 
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
+    public ActivityRecycleBinBinding mBinding;
+    private int mTopFabOriginVisibility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityRecycleBinBinding binding = ActivityRecycleBinBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        mBinding = ActivityRecycleBinBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
-        setSupportActionBar(binding.toolBarRecycleBin);
+        setSupportActionBar(mBinding.toolBar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.host_fragment_recycle_bin);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.hostFragmentRecycleBin);
         if (navHostFragment != null) mNavController = navHostFragment.getNavController();
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.recycleBinMain).build();
 
-        setDestinationChangeListener();
+        keyboardShowingListener();
+
+        destinationChangeListener();
     }
 
-    private void setDestinationChangeListener() {
-        MaterialTextView materialTextView = findViewById(R.id.tv_recycle_bin_title);
-        TextInputLayout autoCompleteLayout = findViewById(R.id.ac_tv_recycle_bin_search_layout);
+    private void keyboardShowingListener() {
+        mBinding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if (CommonUtil.isKeyboardShowing(mBinding.getRoot()))
+                keyboardShow();
+            else keyboardHide();
+        });
+    }
 
+    private void keyboardShow() {
+        if (!MyFitVariable.isKeyboardShowing) {
+            MyFitVariable.isKeyboardShowing = true;
+            mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
+            mBinding.fabTop.setVisibility(View.GONE);
+        }
+    }
+
+    private void keyboardHide() {
+        if (MyFitVariable.isKeyboardShowing) {
+            MyFitVariable.isKeyboardShowing = false;
+            mBinding.fabTop.setVisibility(mTopFabOriginVisibility);
+        }
+    }
+
+    private void destinationChangeListener() {
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.recycleBinMain) {
-                materialTextView.setVisibility(View.VISIBLE);
-                autoCompleteLayout.setVisibility(View.GONE);
+                mBinding.tvTitle.setVisibility(View.VISIBLE);
+                mBinding.acTvLayout.setVisibility(View.GONE);
             } else if (destination.getId() == R.id.recycleBinSearch) {
-                materialTextView.setVisibility(View.GONE);
-                autoCompleteLayout.setVisibility(View.VISIBLE);
+                mBinding.tvTitle.setVisibility(View.GONE);
+                mBinding.acTvLayout.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -54,5 +81,11 @@ public class RecycleBinActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(@NotNull MotionEvent ev) {
+        CommonUtil.editTextLosableFocus(ev, getCurrentFocus(), this);
+        return super.dispatchTouchEvent(ev);
     }
 }
