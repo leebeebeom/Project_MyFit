@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SelectedItemTreat {
+    private Context mContext;
     private final Repository.CategoryRepository mCategoryRepository;
     private final Repository.FolderRepository mFolderRepository;
     private final Repository.SizeRepository mSizeRepository;
@@ -24,8 +25,74 @@ public class SelectedItemTreat {
         mSizeRepository = Repository.getSizeRepository(context);
     }
 
+    public void categoryTreat(@NotNull List<Category> selectedCategoryList, boolean delete) {
+        List<Folder> topFolderList = new ArrayList<>();
+        List<Folder> allFolderList = new ArrayList<>();
+        List<Size> allSizeList = new ArrayList<>();
+
+
+        for (Category category : selectedCategoryList) {
+            category.setIsDeleted(delete);
+            allSizeList.addAll(mSizeRepository.getSizeList(category.getId(), false, !delete));
+            topFolderList.addAll(mFolderRepository.getFolderList(category.getId(), false, !delete));
+        }
+
+        FinderUtil.findAllChildFolder(topFolderList, allFolderList, !delete, mContext);
+        FinderUtil.findAllChildSize(allFolderList, allSizeList, !delete, mContext);
+
+        for (Folder f : allFolderList) f.setParentIsDeleted(delete);
+        for (Size s : allSizeList) s.setParentIsDeleted(delete);
+
+        mCategoryRepository.categoryUpdate(selectedCategoryList);
+        mFolderRepository.folderUpdate(allFolderList);
+        mSizeRepository.sizeUpdate(allSizeList);
+    }
+
+    public void folderSizeTreat(boolean isSearchView, List<Folder> selectedFolderList, List<Size> selectedSizeList, boolean delete) {
+        if (isSearchView) {
+            List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
+            List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
+
+            categorySetDummy(originCategoryList);
+            folderSetDummy(originFolderList);
+
+            mCategoryRepository.categoryUpdate(originCategoryList);
+            mFolderRepository.folderUpdate(originFolderList);
+        }
+        folderTreat(selectedFolderList, delete);
+        sizeTreat(selectedSizeList, delete);
+    }
+
+    public void folderTreat(@NotNull List<Folder> selectedFolderList, boolean delete) {
+        List<Folder> topFolderList = new ArrayList<>();
+        List<Folder> allFolderList = new ArrayList<>();
+        List<Size> allSizeList = new ArrayList<>();
+
+        for (Folder folder : selectedFolderList) {
+            folder.setIsDeleted(delete);
+            topFolderList.addAll(mFolderRepository.getFolderList(folder.getId(), false, !delete));
+            allSizeList.addAll(mSizeRepository.getSizeList(folder.getId(), false, !delete));
+        }
+
+        FinderUtil.findAllChildFolder(topFolderList, allFolderList, !delete, mContext);
+        FinderUtil.findAllChildSize(allFolderList, allSizeList, !delete, mContext);
+
+
+        for (Folder f : allFolderList) f.setParentIsDeleted(delete);
+        for (Size s : allSizeList) s.setParentIsDeleted(delete);
+
+        selectedFolderList.addAll(allFolderList);
+        mFolderRepository.folderUpdate(selectedFolderList);
+        mSizeRepository.sizeUpdate(allSizeList);
+    }
+
+    public void sizeTreat(@NotNull List<Size> selectedSizeList, boolean delete) {
+        for (Size s : selectedSizeList) s.setIsDeleted(delete);
+        mSizeRepository.sizeUpdate(selectedSizeList);
+    }
+
     public void folderSizeMove(boolean isSearchView, long targetId, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        if (isSearchView){
+        if (isSearchView) {
             List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
             Category targetCategory = mCategoryRepository.getCategory(targetId);
             List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
@@ -66,6 +133,7 @@ public class SelectedItemTreat {
     @NotNull
     private List<Category> getOriginCategoryList(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
         HashSet<Long> originCategoryIdHashSet = new HashSet<>();
+
         for (Folder folder : selectedItemFolder)
             originCategoryIdHashSet.add(folder.getParentId());
         for (Size size : selectedItemSize)
@@ -84,12 +152,14 @@ public class SelectedItemTreat {
     @NotNull
     private List<Folder> getOriginFolderList(@NotNull List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         HashSet<Long> originFolderIdHashSet = new HashSet<>();
+
         for (Folder folder : selectedFolderList)
             originFolderIdHashSet.add(folder.getParentId());
         for (Size size : selectedSizeList)
             originFolderIdHashSet.add(size.getParentId());
 
         List<Folder> originFolderList = new ArrayList<>();
+
         for (long folderId : originFolderIdHashSet) {
             Folder folder = mFolderRepository.getFolder(folderId);
             if (folder != null)
@@ -131,67 +201,4 @@ public class SelectedItemTreat {
     private void folderSetDummy(@NotNull List<Folder> folderList) {
         for (Folder folder : folderList) folder.setDummy(!folder.getDummy());
     }
-    //----------------------------------------------------------------------------------------------
-
-    //delete----------------------------------------------------------------------------------------
-    public void folderSizeDelete(boolean isSearchView, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
-        if (isSearchView) {
-            List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
-            List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
-
-            categorySetDummy(originCategoryList);
-            folderSetDummy(originFolderList);
-
-            mCategoryRepository.categoryUpdate(originCategoryList);
-            mFolderRepository.folderUpdate(originFolderList);
-        }
-        deleteFolder(selectedFolderList);
-        deleteSize(selectedSizeList);
-    }
-
-    private void deleteFolder(@NotNull List<Folder> selectedFolderList) {
-        List<Folder> topFolderList = new ArrayList<>();
-        List<Size> allSizeList = new ArrayList<>();
-
-        for (Folder f : selectedFolderList) {
-            f.setIsDeleted(true);
-            topFolderList.addAll(mFolderRepository.getFolderList(f.getId(), false, false));
-            allSizeList.addAll(mSizeRepository.getSizeList(f.getId(), false, false));
-        }
-
-        List<Folder> allFolderList = new ArrayList<>(topFolderList);
-        getFolderChildList(topFolderList, allFolderList);
-        getAllSizeList(allFolderList, allSizeList);
-
-        for (Folder f : allFolderList) f.setParentIsDeleted(true);
-        for (Size s : allSizeList) s.setParentIsDeleted(true);
-
-        selectedFolderList.addAll(allFolderList);
-
-        mFolderRepository.folderUpdate(selectedFolderList);
-        mSizeRepository.sizeUpdate(allSizeList);
-    }
-
-    private void getFolderChildList(@NotNull List<Folder> topFolderList, List<Folder> allFolderList) {
-        List<Folder> childFolderList = new ArrayList<>();
-        for (Folder f : topFolderList) {
-            if (!childFolderList.isEmpty()) childFolderList.clear();
-            childFolderList.addAll(mFolderRepository.getFolderList(f.getId(), false, false));
-            if (!childFolderList.isEmpty()) {
-                allFolderList.addAll(childFolderList);
-                getFolderChildList(childFolderList, allFolderList);
-            }
-        }
-    }
-
-    private void getAllSizeList(@NotNull List<Folder> childFolderList, List<Size> childSizeList) {
-        for (Folder folder : childFolderList)
-            childSizeList.addAll(mSizeRepository.getSizeList(folder.getId(), false, false));
-    }
-
-    private void deleteSize(@NotNull List<Size> selectedSizeList) {
-        for (Size s : selectedSizeList) s.setIsDeleted(true);
-        mSizeRepository.sizeUpdate(selectedSizeList);
-    }
-    //----------------------------------------------------------------------------------------------
 }
