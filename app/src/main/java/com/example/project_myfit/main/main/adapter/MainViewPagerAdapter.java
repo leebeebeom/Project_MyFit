@@ -49,7 +49,6 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
 
             mTouchHelperArray[position].attachToRecyclerView(holder.getBinding().rv);
             holder.getBinding().rv.addOnItemTouchListener(mDragSelectListenerArray[position].setRecyclerView(holder.getBinding().rv));
-            holder.setNoData(mCategoryAdapterArray[position].getCurrentList().isEmpty());
         }
     }
 
