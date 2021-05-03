@@ -98,7 +98,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mBinding = FragmentSearchBinding.inflate(inflater);
 
         mBinding.vp.setAdapter(getViewPagerAdapter());
-        mBinding.vp.setOffscreenPageLimit(1);
+        mBinding.vp.setOffscreenPageLimit(3);
         tabLayoutInit();
 
         mRecentSearchAdapter = new RecentSearchAdapter(this);
@@ -244,7 +244,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 }
             String[] parentCategory = {TOP, BOTTOM, OUTER, ETC};
             for (int i = 0; i < mFolderAdapterArray.length; i++)
-                mFolderAdapterArray[i].setItem(list.get(0), mModel.getFolderParentIdList(parentCategory[i]), mModel.getSizeParentIdList(parentCategory[i]), mActivityBinding.acTv.getText());
+                mFolderAdapterArray[i].setItem(list.get(i), mModel.getFolderParentIdList(parentCategory[i]), mModel.getSizeParentIdList(parentCategory[i]), mActivityBinding.acTv.getText());
         });
     }
 
@@ -284,6 +284,16 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 for (int i = 0; i < 4; i++) {
                     countArray[i] = countArray[i] + mModel.getSizeFilteredListSizeLive().getValue()[i];
                     CommonUtil.setBadgeCount(mBinding.tabLayout.getTabAt(i), countArray[i], mColorControl);
+                }
+
+                ViewPagerVH[] viewPagerVHArray = new ViewPagerVH[4];
+                RecyclerView viewPager = (RecyclerView) mBinding.vp.getChildAt(0);
+                for (int i = 0; i < viewPagerVHArray.length; i++)
+                    viewPagerVHArray[i] = (ViewPagerVH) viewPager.findViewHolderForAdapterPosition(i);
+
+                for (int i = 0; i < viewPagerVHArray.length; i++) {
+                    if (viewPagerVHArray[i] != null)
+                        viewPagerVHArray[i].setNoResult(countArray[i] == 0);
                 }
             }
         });
