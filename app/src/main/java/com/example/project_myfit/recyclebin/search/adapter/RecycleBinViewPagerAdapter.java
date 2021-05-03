@@ -7,19 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_myfit.databinding.ItemRecyclerViewBinding;
+import com.example.project_myfit.util.DragSelectImpl;
+import com.example.project_myfit.util.adapter.ParentAdapter;
 import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
-import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 import org.jetbrains.annotations.NotNull;
 
 public class RecycleBinViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
-    private final Object[] mAdapterArray;
-    private final DragSelectTouchListener mDragSelectListener;
+    private final ParentAdapter<?, ?>[] mAdapterArray;
+    private final DragSelectImpl[] mDragSelectArray;
     private final ViewPagerVH.ViewPagerAutoScrollListener mListener;
 
-    public RecycleBinViewPagerAdapter(Object[] mAdapterArray, DragSelectTouchListener mDragSelectListener, ViewPagerVH.ViewPagerAutoScrollListener mListener) {
+    public RecycleBinViewPagerAdapter(ParentAdapter<?, ?>[] mAdapterArray, DragSelectImpl[] dragSelectArray, ViewPagerVH.ViewPagerAutoScrollListener mListener) {
         this.mAdapterArray = mAdapterArray;
-        this.mDragSelectListener = mDragSelectListener;
+        this.mDragSelectArray = dragSelectArray;
         this.mListener = mListener;
         setHasStableIds(true);
     }
@@ -39,24 +40,11 @@ public class RecycleBinViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
-        if (holder.getBinding().rvItemRv.getAdapter() == null) {
-            if (position == 0) {
-                RecycleBinCategoryAdapter categoryAdapter = (RecycleBinCategoryAdapter) mAdapterArray[0];
-                categoryAdapter.setViewPagerVH(holder);
-                holder.getBinding().rvItemRv.setAdapter(categoryAdapter);
-                holder.setNoResult(categoryAdapter.getItemCount() == 0);
-            } else if (position == 1) {
-                RecycleBinFolderAdapter folderAdapter = (RecycleBinFolderAdapter) mAdapterArray[1];
-                folderAdapter.setViewPagerVH(holder);
-                holder.getBinding().rvItemRv.setAdapter(folderAdapter);
-                holder.setNoResult(folderAdapter.getItemCount() == 0);
-            } else if (position == 2) {
-                RecycleBinSizeAdapter sizeAdapter = (RecycleBinSizeAdapter) mAdapterArray[2];
-                sizeAdapter.setViewPagerVH(holder);
-                holder.getBinding().rvItemRv.setAdapter(sizeAdapter);
-                holder.setNoResult(sizeAdapter.getItemCount() == 0);
-            }
-            holder.getBinding().rvItemRv.addOnItemTouchListener(mDragSelectListener);
+        if (holder.getBinding().rv.getAdapter() == null) {
+            holder.getBinding().rv.setAdapter(mAdapterArray[position]);
+            mDragSelectArray[position].setRecyclerView(holder.getBinding().rv);
+
+            holder.getBinding().rv.addOnItemTouchListener(mDragSelectArray[position]);
         }
     }
 
