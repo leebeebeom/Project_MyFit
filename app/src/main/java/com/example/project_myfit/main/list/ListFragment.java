@@ -431,7 +431,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     private void selectedItemDeleteLive(SelectedItemTreat selectedItemTreat, @NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
-            selectedItemTreat.folderSizeDelete(false, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
+            selectedItemTreat.folderSizeTreat(false, mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), true);
             if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
         });
     }
