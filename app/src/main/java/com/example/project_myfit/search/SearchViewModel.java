@@ -9,9 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Folder;
+import com.example.project_myfit.data.model.ParentModel;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.search.main.adapter.SearchAdapter;
+import com.example.project_myfit.search.adapter.SearchFolderAdapter;
+import com.example.project_myfit.search.adapter.SearchSizeAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,34 +28,45 @@ import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class SearchViewModel extends AndroidViewModel {
     private final Repository.RecentSearchRepository mRecentSearchRepository;
-    private final List<Object> mSelectedItemList;
+    private List<Folder> mSelectedFolderList;
+    private List<Size> mSelectedSizeList;
     private final MutableLiveData<Integer> mSelectedItemSizeLive;
-    private boolean mActionModeOn;
     private int mCurrentItem;
     private List<String> mSizeBrandList, mSizeNameList;
+    private MutableLiveData<Integer[]> mFolderFilteredSize, mSizeFilteredSize;
 
     public SearchViewModel(@NonNull @NotNull Application application) {
         super(application);
         mRecentSearchRepository = Repository.getRecentSearchRepository(application);
-        mSelectedItemList = new ArrayList<>();
         mSelectedItemSizeLive = new MutableLiveData<>();
     }
 
-    public void selectAllClick(boolean isChecked, SearchAdapter[] searchAdapterArray) {
-        if (!mSelectedItemList.isEmpty()) mSelectedItemList.clear();
+    public void selectAllClick(boolean isChecked, SearchFolderAdapter[] folderAdapterArray,
+                               SearchSizeAdapter[] sizeAdapterArray) {
+        if (!mSelectedFolderList.isEmpty()) mSelectedFolderList.clear();
+        if (!mSelectedSizeList.isEmpty()) mSelectedSizeList.clear();
+
         if (isChecked) {
-            mSelectedItemList.addAll(searchAdapterArray[mCurrentItem].getCurrentList());
-            searchAdapterArray[mCurrentItem].selectAll();
-        } else
-            searchAdapterArray[mCurrentItem].deselectAll();
-        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
+            mSelectedFolderList.addAll(folderAdapterArray[mCurrentItem].getCurrentList());
+            folderAdapterArray[mCurrentItem].selectAll();
+            mSelectedSizeList.addAll(sizeAdapterArray[mCurrentItem].getCurrentList());
+            sizeAdapterArray[mCurrentItem].selectAll();
+        } else {
+            folderAdapterArray[mCurrentItem].deselectAll();
+            sizeAdapterArray[mCurrentItem].deselectAll();
+        }
+        mSelectedItemSizeLive.setValue(mSelectedFolderList.size() + mSelectedSizeList.size());
     }
 
-    public void itemSelected(Object item, long id, boolean isChecked, @NotNull SearchAdapter[] searchAdapterArray) {
-        if (isChecked) mSelectedItemList.add(item);
-        else mSelectedItemList.remove(item);
-        mSelectedItemSizeLive.setValue(mSelectedItemList.size());
-        searchAdapterArray[mCurrentItem].itemSelected(id);
+    public <T extends ParentModel> void itemSelected(T t, boolean isChecked) {
+        if (t instanceof Folder) {
+            if (isChecked) mSelectedFolderList.add((Folder) t);
+            else mSelectedFolderList.remove(t);
+        } else if (t instanceof Size) {
+            if (isChecked) mSelectedSizeList.add((Size) t);
+            else mSelectedSizeList.remove(t);
+        }
+        mSelectedItemSizeLive.setValue(mSelectedFolderList.size() + mSelectedSizeList.size());
     }
 
     public String getParentCategory() {
@@ -76,31 +89,17 @@ public class SearchViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getSelectedFolderList() {
-        List<Folder> selectedFolderList = new ArrayList<>();
-        for (Object o : mSelectedItemList)
-            if (o instanceof Folder) selectedFolderList.add((Folder) o);
-        return selectedFolderList;
+        if (mSelectedFolderList == null) mSelectedFolderList = new ArrayList<>();
+        return mSelectedFolderList;
     }
 
     public List<Size> getSelectedSizeList() {
-        List<Size> selectedSizeList = new ArrayList<>();
-        for (Object o : mSelectedItemList)
-            if (o instanceof Size) selectedSizeList.add((Size) o);
-        return selectedSizeList;
+        if (mSelectedSizeList == null) mSelectedSizeList = new ArrayList<>();
+        return mSelectedSizeList;
     }
 
     public int getSelectedItemSize() {
-        if (mSelectedItemSizeLive.getValue() != null)
-            return mSelectedItemSizeLive.getValue();
-        else return 0;
-    }
-
-    public void overLapRecentSearchReInsert(String word) {
-        mRecentSearchRepository.overLapRecentSearchReInsert(word, RECENT_SEARCH_SEARCH);
-    }
-
-    public void recentSearchInsert(String word) {
-        mRecentSearchRepository.recentSearchInsert(word, RECENT_SEARCH_SEARCH);
+        return mSelectedFolderList.size() + mSelectedSizeList.size();
     }
 
     public LiveData<List<RecentSearch>> getRecentSearchLive() {
@@ -112,9 +111,8 @@ public class SearchViewModel extends AndroidViewModel {
     }
 
     public long getSelectedFolderId() {
-        return ((Folder) mSelectedItemList.get(0)).getId();
+        return mSelectedFolderList.get(0).getId();
     }
-
 
     public LiveData<List<Folder>> getFolderLive() {
         return Repository.getFolderRepository(getApplication()).getFolderLive(false, false);
@@ -136,20 +134,8 @@ public class SearchViewModel extends AndroidViewModel {
         return Repository.getSizeRepository(getApplication()).getSizeNameLive(false, false);
     }
 
-    public List<Object> getSelectedItemList() {
-        return mSelectedItemList;
-    }
-
     public MutableLiveData<Integer> getSelectedItemSizeLive() {
         return mSelectedItemSizeLive;
-    }
-
-    public boolean isActionModeOn() {
-        return mActionModeOn;
-    }
-
-    public void setActionModeOn(boolean mActionModeOn) {
-        this.mActionModeOn = mActionModeOn;
     }
 
     public int getCurrentItem() {
@@ -162,5 +148,25 @@ public class SearchViewModel extends AndroidViewModel {
 
     public void sizeUpdate(Size size) {
         Repository.getSizeRepository(getApplication()).sizeUpdate(size);
+    }
+
+    public List<Long> getFolderParentIdList(String parentCategory) {
+        return Repository.getFolderRepository(getApplication()).getFolderParentIdList(parentCategory, false, false);
+    }
+
+    public List<Long> getSizeParentIdList(String parentCategory) {
+        return Repository.getSizeRepository(getApplication()).getSizeParentIdList(parentCategory, false, false);
+    }
+
+    public MutableLiveData<Integer[]> getFolderFilteredListSizeLive() {
+        Integer[] init = {0,0,0,0};
+        if (mFolderFilteredSize == null) mFolderFilteredSize = new MutableLiveData<>(init);
+        return mFolderFilteredSize;
+    }
+
+    public MutableLiveData<Integer[]> getSizeFilteredListSizeLive() {
+        Integer[] init = {0,0,0,0};
+        if (mSizeFilteredSize == null) mSizeFilteredSize = new MutableLiveData<>(init);
+        return mSizeFilteredSize;
     }
 }

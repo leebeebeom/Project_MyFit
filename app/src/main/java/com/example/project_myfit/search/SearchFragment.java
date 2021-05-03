@@ -273,16 +273,16 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
 
     private void badgeCountLive() {
         MediatorLiveData<Integer[]> badgeCountLive = new MediatorLiveData<>();
-        badgeCountLive.addSource(mModel.getFolderFilteredSizeLive(), badgeCountLive::setValue);
-        badgeCountLive.addSource(mModel.getSizeFilteredSizeLive(), badgeCountLive::setValue);
+        badgeCountLive.addSource(mModel.getFolderFilteredListSizeLive(), badgeCountLive::setValue);
+        badgeCountLive.addSource(mModel.getSizeFilteredListSizeLive(), badgeCountLive::setValue);
         badgeCountLive.observe(getViewLifecycleOwner(), integer -> {
-            if (mModel.getFolderFilteredSizeLive().getValue() != null && mModel.getSizeFilteredSizeLive().getValue() != null) {
+            if (mModel.getFolderFilteredListSizeLive().getValue() != null && mModel.getSizeFilteredListSizeLive().getValue() != null) {
                 Integer[] countArray = new Integer[4];
                 for (int i = 0; i < 4; i++)
-                    countArray[i] = mModel.getFolderFilteredSizeLive().getValue()[i];
+                    countArray[i] = mModel.getFolderFilteredListSizeLive().getValue()[i];
 
                 for (int i = 0; i < 4; i++) {
-                    countArray[i] = countArray[i] + mModel.getSizeFilteredSizeLive().getValue()[i];
+                    countArray[i] = countArray[i] + mModel.getSizeFilteredListSizeLive().getValue()[i];
                     CommonUtil.setBadgeCount(mBinding.tabLayout.getTabAt(i), countArray[i], mColorControl);
                 }
             }
