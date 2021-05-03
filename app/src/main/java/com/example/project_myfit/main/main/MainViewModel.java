@@ -90,7 +90,7 @@ public class MainViewModel extends AndroidViewModel {
         FinderUtil.findAllChildFolder(topFolderList, allFolderList, false, false, getApplication());
         return allFolderList;
     }
-    f
+
     @NotNull
     private List<Size> findAllChildSize(@NotNull List<Folder> allChildFolderList) {
         List<Size> allChildSizeList = new ArrayList<>();
