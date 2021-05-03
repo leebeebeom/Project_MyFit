@@ -288,10 +288,8 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
 
                 ViewPagerVH[] viewPagerVHArray = new ViewPagerVH[4];
                 RecyclerView viewPager = (RecyclerView) mBinding.vp.getChildAt(0);
-                for (int i = 0; i < viewPagerVHArray.length; i++)
-                    viewPagerVHArray[i] = (ViewPagerVH) viewPager.findViewHolderForAdapterPosition(i);
-
                 for (int i = 0; i < viewPagerVHArray.length; i++) {
+                    viewPagerVHArray[i] = (ViewPagerVH) viewPager.findViewHolderForAdapterPosition(i);
                     if (viewPagerVHArray[i] != null)
                         viewPagerVHArray[i].setNoResult(countArray[i] == 0);
                 }
