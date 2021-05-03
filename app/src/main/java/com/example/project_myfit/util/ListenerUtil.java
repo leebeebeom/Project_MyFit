@@ -103,5 +103,12 @@ public class ListenerUtil {
             autoCompleteTextView.postDelayed(() -> CommonUtil.keyBoardShow(context, autoCompleteTextView), 50);
         });
     }
+
+    public void autoCompleteItemClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, Context context) {
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            autoCompleteTextView.clearFocus();
+            CommonUtil.keyBoardHide(context, autoCompleteTextView);
+        });
+    }
 }
 

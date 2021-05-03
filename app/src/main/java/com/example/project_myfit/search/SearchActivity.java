@@ -40,10 +40,6 @@ public class SearchActivity extends AppCompatActivity {
 
         mBinding.acTv.requestFocus();
         AutoCompleteAdapter autoCompleteAdapter = new AutoCompleteAdapter(this, R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv);
-        mBinding.acTv.setOnItemClickListener((parent, view, position, id) -> {
-            mBinding.acTv.clearFocus();
-            CommonUtil.keyBoardHide(this, mBinding.acTv);
-        });
         mBinding.acTv.setAdapter(autoCompleteAdapter);
         acLive(model, autoCompleteAdapter);
     }

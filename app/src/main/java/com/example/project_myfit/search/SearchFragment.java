@@ -304,6 +304,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mListenerUtil.scrollChangeListener(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.fabTopClick(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.autoCompleteEndIconClick(mActivityBinding.acTv, mActivityBinding.acTvLayout, requireContext());
+        mListenerUtil.autoCompleteItemClick(mActivityBinding.acTv, requireContext());
         vpPageChangeListener();
         acImeClick();
         acTextChangeListener();
