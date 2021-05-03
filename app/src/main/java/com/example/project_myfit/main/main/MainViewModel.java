@@ -11,10 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.data.model.Folder;
-import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.main.main.adapter.CategoryAdapter;
-import com.example.project_myfit.util.FinderUtil;
+import com.example.project_myfit.util.SelectedItemTreat;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +35,7 @@ public class MainViewModel extends AndroidViewModel {
     private List<Category> mSelectedCategoryList;
     private int mCurrentItem;
     private int mSort;
+    private SelectedItemTreat mSelectedItemTreat;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -62,41 +61,9 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void selectedCategoryDelete() {
-        List<Size> childSizeList = new ArrayList<>();
-
-        for (Category category : mSelectedCategoryList) {
-            category.setIsDeleted(true);
-            childSizeList.addAll(mSizeRepository.getSizeList(category.getId(), false, false));
-        }
-
-        List<Folder> childFolderList = findAllChildFolder();
-        childSizeList.addAll(findAllChildSize(childFolderList));
-
-        for (Folder f : childFolderList) f.setParentIsDeleted(true);
-        for (Size s : childSizeList) s.setParentIsDeleted(true);
-
-        mCategoryRepository.categoryUpdate(mSelectedCategoryList);
-        mFolderRepository.folderUpdate(childFolderList);
-        mSizeRepository.sizeUpdate(childSizeList);
-    }
-
-    @NotNull
-    private List<Folder> findAllChildFolder() {
-        List<Folder> topFolderList = new ArrayList<>();
-        for (Category category : mSelectedCategoryList)
-            topFolderList.addAll(mFolderRepository.getFolderList(category.getId(), false, false));
-
-        List<Folder> allFolderList = new ArrayList<>(topFolderList);
-        FinderUtil.findAllChildFolder(topFolderList, allFolderList, false, false, getApplication());
-        return allFolderList;
-    }
-
-    @NotNull
-    private List<Size> findAllChildSize(@NotNull List<Folder> allChildFolderList) {
-        List<Size> allChildSizeList = new ArrayList<>();
-        for (Folder folder : allChildFolderList)
-            allChildSizeList.addAll(mSizeRepository.getSizeList(folder.getId(), false, false));
-        return allChildSizeList;
+        if (mSelectedItemTreat == null)
+            mSelectedItemTreat = new SelectedItemTreat(getApplication());
+        mSelectedItemTreat.categoryTreat(mSelectedCategoryList, true);
     }
 
     public void categorySelected(@NotNull Category category, boolean isChecked, CategoryAdapter[] categoryAdapterArray) {
