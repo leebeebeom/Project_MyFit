@@ -176,7 +176,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
 
     private void selectedItemDeleteLive(SelectedItemTreat selectedItemTreat, @NotNull NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
-            selectedItemTreat.folderSizeDelete(true, mModel.getSelectedFolderList(), mModel.getSelectedSizeList());
+            selectedItemTreat.folderSizeTreat(true, mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), true);
             if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
         });
     }
