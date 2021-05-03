@@ -1,8 +1,7 @@
 package com.example.project_myfit.recyclebin.search.adapter;
 
-import android.os.Handler;
+import android.content.Context;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,37 +10,29 @@ import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ItemSizeListBinding;
-import com.example.project_myfit.util.adapter.AdapterUtil;
+import com.example.project_myfit.recyclebin.search.RecycleBinSearchViewModel;
+import com.example.project_myfit.util.adapter.ParentAdapter;
 import com.example.project_myfit.util.adapter.viewholder.SizeListVH;
 import com.example.project_myfit.util.adapter.viewholder.SizeVHListener;
-import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
 import com.example.project_myfit.util.ktw.KoreanTextMatcher;
-import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE_ON;
+import static com.example.project_myfit.util.MyFitConstant.LISTVIEW;
 
-public class RecycleBinSizeAdapter extends ListAdapter<Size, SizeListVH> implements Filterable {
+public class RecycleBinSizeAdapter extends ParentAdapter<Size, SizeListVH> implements Filterable {
     private final SizeVHListener mListener;
-    private final HashSet<Long> mSelectedSizeIdHashSet;
-    private ViewPagerVH mViewPagerVH;
-    private List<Size> mAllSizeList, mSelectedSizeList;
-    private AdapterUtil mAdapterUtil;
-    private int mActionModeState;
+    private final RecycleBinSearchViewModel mModel;
+    private List<Size> mAllSizeList;
 
-    public RecycleBinSizeAdapter(SizeVHListener listener) {
+    public RecycleBinSizeAdapter(Context context, SizeVHListener listener, RecycleBinSearchViewModel model) {
         super(new DiffUtil.ItemCallback<Size>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull Size oldItem, @NonNull @NotNull Size newItem) {
@@ -50,40 +41,26 @@ public class RecycleBinSizeAdapter extends ListAdapter<Size, SizeListVH> impleme
 
             @Override
             public boolean areContentsTheSame(@NonNull @NotNull Size oldItem, @NonNull @NotNull Size newItem) {
-                return oldItem.getBrand().equals(newItem.getBrand());
+                return true;
             }
-        });
-        mListener = listener;
-        mSelectedSizeIdHashSet = new HashSet<>();
-        setHasStableIds(true);
+        }, context);
+        this.mListener = listener;
+        this.mModel = model;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
+    public void setItem(List<Size> list, CharSequence word) {
+        this.mAllSizeList = list;
+        setWord(word);
     }
 
-    public void setViewPagerVH(ViewPagerVH mViewPagerVH) {
-        this.mViewPagerVH = mViewPagerVH;
-    }
-
-    public void setItem(List<Size> sizeList, CharSequence word, TabLayout.Tab tab, TypedValue colorControl) {
-        mAllSizeList = sizeList;
-
+    public void setWord(CharSequence word) {
         getFilter().filter(word, count -> {
-            if (tab != null) {
-                if (count == 0) tab.removeBadge();
-                else {
-                    BadgeDrawable badge = tab.getOrCreateBadge();
-                    badge.setVisible(true);
-                    badge.setNumber(count);
-                    badge.setBackgroundColor(colorControl.data);
-                }
+            if (mModel.getFilteredListSizeLive().getValue() != null) {
+                Integer[] countArray = mModel.getFilteredListSizeLive().getValue();
+                countArray[2] = count;
+                mModel.getFilteredListSizeLive().setValue(countArray);
             }
         });
-
-        if (sizeList != null && mViewPagerVH != null)
-            mViewPagerVH.setNoResult(sizeList.isEmpty());
     }
 
     @NonNull
@@ -96,58 +73,18 @@ public class RecycleBinSizeAdapter extends ListAdapter<Size, SizeListVH> impleme
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
-        if (mAdapterUtil == null) mAdapterUtil = new AdapterUtil(holder.itemView.getContext());
-
-        if (mSelectedSizeList != null && !mSelectedSizeList.isEmpty()) {
-            mAdapterUtil.restoreActionMode(mSelectedSizeList, mSelectedSizeIdHashSet);
-            mSelectedSizeList = null;
-        }
-
         Size size = getItem(position);
         holder.setSize(size);
 
-        if (mActionModeState == ACTION_MODE_ON)
-            mAdapterUtil.listActionModeOn(holder.getBinding().cardViewItemSizeList, holder.getBinding().cbItemSizeList,
-                    mSelectedSizeIdHashSet, size.getId());
-        else if (mActionModeState == ACTION_MODE_OFF) {
-            mAdapterUtil.listActionModeOff(holder.getBinding().cardViewItemSizeList, holder.getBinding().cbItemSizeList,
-                    mSelectedSizeIdHashSet);
-            new Handler().postDelayed(() -> mActionModeState = 0, 301);
-        }
-
-        holder.getBinding().iconItemSizeListDragHandle.setVisibility(View.GONE);
-        holder.getBinding().cbItemSizeListFavorite.setClickable(false);
-    }
-
-    public void setActionModeState(int actionModeState) {
-        mActionModeState = actionModeState;
-        notifyDataSetChanged();
-    }
-
-    public void setSelectedSizeList(List<Object> selectedSizeList) {
-        if (mSelectedSizeList == null) mSelectedSizeList = new ArrayList<>();
-        for (Object o : selectedSizeList) mSelectedSizeList.add((Size) o);
-    }
-
-    public void sizeSelected(long id) {
-        if (!mSelectedSizeIdHashSet.contains(id)) mSelectedSizeIdHashSet.add(id);
-        else mSelectedSizeIdHashSet.remove(id);
-    }
-
-    public void selectAll() {
-        for (Size s : getCurrentList())
-            mSelectedSizeIdHashSet.add(s.getId());
-        notifyDataSetChanged();
-    }
-
-    public void deselectAll() {
-        mSelectedSizeIdHashSet.clear();
-        notifyDataSetChanged();
+        restoreSelectedHashSet();
+        setActionMode(LISTVIEW, holder.getBinding().cardView, holder.getBinding().cb, size.getId());
+        holder.getBinding().iconDragHandle.setVisibility(View.GONE);
+        holder.getBinding().cbFavorite.setClickable(false);
     }
 
     @Override
-    public Filter getFilter() {
-        return new RecycleBinSearchSizeFilter();
+    public void itemMove(int from, int to) {
+
     }
 
     private class RecycleBinSearchSizeFilter extends Filter {
@@ -155,24 +92,30 @@ public class RecycleBinSizeAdapter extends ListAdapter<Size, SizeListVH> impleme
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
             String keyWord = constraint.toString().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "");
+
             List<Size> filteredList = new ArrayList<>();
-            FilterResults filterResults = new FilterResults();
+
             if (!TextUtils.isEmpty(keyWord)) {
                 for (Size size : mAllSizeList) {
                     if (KoreanTextMatcher.isMatch(size.getBrand().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", ""), keyWord))
                         filteredList.add(size);
-                    else if (KoreanTextMatcher.isMatch(size.getSize().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", ""), keyWord))
+                    else if (KoreanTextMatcher.isMatch(size.getName().toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", ""), keyWord))
                         filteredList.add(size);
                 }
             }
             submitList(filteredList);
+            FilterResults filterResults = new FilterResults();
             filterResults.count = filteredList.size();
             return filterResults;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if (mViewPagerVH != null) mViewPagerVH.setNoResult(results.count == 0);
         }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new RecycleBinSearchSizeFilter();
     }
 }
