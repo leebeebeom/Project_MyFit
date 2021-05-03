@@ -14,6 +14,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.main.main.adapter.CategoryAdapter;
+import com.example.project_myfit.util.FinderUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -86,22 +87,10 @@ public class MainViewModel extends AndroidViewModel {
             topFolderList.addAll(mFolderRepository.getFolderList(category.getId(), false, false));
 
         List<Folder> allFolderList = new ArrayList<>(topFolderList);
-        findAllChildFolder2(topFolderList, allFolderList);
+        FinderUtil.findAllChildFolder(topFolderList, allFolderList, false, false, getApplication());
         return allFolderList;
     }
-
-    private void findAllChildFolder2(@NotNull List<Folder> topFolderList, List<Folder> allFolderList) {
-        List<Folder> childFolderList = new ArrayList<>();
-        for (Folder folder : topFolderList) {
-            if (!childFolderList.isEmpty()) childFolderList.clear();
-            childFolderList.addAll(mFolderRepository.getFolderList(folder.getId(), false, false));
-            if (!childFolderList.isEmpty()) {
-                allFolderList.addAll(childFolderList);
-                findAllChildFolder2(childFolderList, allFolderList);
-            }
-        }
-    }
-
+    f
     @NotNull
     private List<Size> findAllChildSize(@NotNull List<Folder> allChildFolderList) {
         List<Size> allChildSizeList = new ArrayList<>();
