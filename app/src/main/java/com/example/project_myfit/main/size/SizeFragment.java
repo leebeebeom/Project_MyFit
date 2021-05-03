@@ -32,7 +32,7 @@ import com.example.project_myfit.databinding.IncludeBottomBinding;
 import com.example.project_myfit.databinding.IncludeEtcBinding;
 import com.example.project_myfit.databinding.IncludeTopBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
-import com.example.project_myfit.search.main.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.search.adapter.AutoCompleteAdapter;
 import com.example.project_myfit.util.MyFitConstant;
 
 import org.jetbrains.annotations.NotNull;
