@@ -9,8 +9,8 @@ public class MyFitConstant {
     public static final String WISH_LIST = "wish list";
     public static final int RECENT_SEARCH_SEARCH  = 0;
     public static final int RECENT_SEARCH_RECYCLE_BIN  = 1;
-    public static final int RECENT_SEARCH_DAILY_LOOK  = 0;
-    public static final int RECENT_SEARCH_WISH_LIST  = 0;
+    public static final int RECENT_SEARCH_DAILY_LOOK  = 2;
+    public static final int RECENT_SEARCH_WISH_LIST  = 3;
 
     //key
     public static final String PARENT_ID = "parentId";

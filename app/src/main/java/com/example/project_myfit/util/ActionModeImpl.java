@@ -121,5 +121,4 @@ public class ActionModeImpl implements ActionMode.Callback {
 
         void actionItemClick(int itemId);
     }
-
 }
