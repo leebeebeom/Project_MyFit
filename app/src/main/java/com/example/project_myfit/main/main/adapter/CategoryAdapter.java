@@ -17,7 +17,6 @@ import com.example.project_myfit.main.main.MainViewModel;
 import com.example.project_myfit.util.MyFitVariable;
 import com.example.project_myfit.util.adapter.ParentAdapter;
 import com.example.project_myfit.util.adapter.viewholder.CategoryVH;
-import com.example.project_myfit.util.adapter.viewholder.ViewPagerVH;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +26,6 @@ import static com.example.project_myfit.util.MyFitConstant.LISTVIEW;
 
 public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     private final MainViewModel mModel;
-    private ViewPagerVH mMainViewPagerVH;
     private final CategoryVH.CategoryVHListener mListener;
     private List<Category> mCategoryList;
 
@@ -52,12 +50,6 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     public void setItem(int sort, List<Category> list, List<Long> folderParentIdList, List<Long> sizeParentIdList) {
         super.setItem(sort, list, folderParentIdList, sizeParentIdList);
         this.mCategoryList = list;
-        if (list != null && mMainViewPagerVH != null)
-            mMainViewPagerVH.setNoData(list.isEmpty());
-    }
-
-    public void setViewPagerVH(ViewPagerVH mainViewPagerVH) {
-        this.mMainViewPagerVH = mainViewPagerVH;
     }
 
     @NonNull

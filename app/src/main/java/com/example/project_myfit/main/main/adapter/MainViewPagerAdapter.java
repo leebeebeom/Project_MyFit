@@ -44,7 +44,6 @@ public class MainViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
         if (holder.getBinding().rv.getAdapter() == null) {
-            mCategoryAdapterArray[position].setViewPagerVH(holder);
             holder.getBinding().rv.setAdapter(mCategoryAdapterArray[position]);
 
             mTouchHelperArray[position].attachToRecyclerView(holder.getBinding().rv);

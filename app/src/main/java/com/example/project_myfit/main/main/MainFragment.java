@@ -88,7 +88,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         mBinding = FragmentMainBinding.inflate(inflater);
 
         mBinding.vp.setAdapter(getViewPagerAdapter());
-        mBinding.vp.setOffscreenPageLimit(1);
+        mBinding.vp.setOffscreenPageLimit(3);
 
         mActivityBinding = ((MainActivity) requireActivity()).mBinding;
 
@@ -184,9 +184,20 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
             }
 
             String[] parentCategory = {TOP, BOTTOM, OUTER, ETC};
-            for (int i = 0; i < mCategoryAdapterArray.length; i++)
+            for (int i = 0; i < mCategoryAdapterArray.length; i++) {
                 mCategoryAdapterArray[i].setItem(mModel.getSort(), list.get(i),
                         mModel.getFolderParentIdList(parentCategory[i]), mModel.getSizeParentIdList(parentCategory[i]));
+            }
+
+            RecyclerView viewPager = (RecyclerView) mBinding.vp.getChildAt(0);
+            ViewPagerVH[] viewPagerVHArray = new ViewPagerVH[4];
+            for (int i = 0; i < viewPagerVHArray.length; i++)
+                viewPagerVHArray[i] = (ViewPagerVH) viewPager.findViewHolderForLayoutPosition(i);
+
+            for (int i = 0; i < viewPagerVHArray.length; i++) {
+                if (viewPagerVHArray[i] != null)
+                    viewPagerVHArray[i].setNoData(list.get(i).isEmpty());
+            }
         });
     }
 
