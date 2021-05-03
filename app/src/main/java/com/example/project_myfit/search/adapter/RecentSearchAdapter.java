@@ -1,4 +1,4 @@
-package com.example.project_myfit.search.main.adapter;
+package com.example.project_myfit.search.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -14,9 +14,9 @@ import com.example.project_myfit.databinding.ItemRecentSearchBinding;
 import org.jetbrains.annotations.NotNull;
 
 public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchAdapter.RecentSearchVH> {
-    private RecentSearchAdapterListener mListener;
+    private final RecentSearchAdapterListener mListener;
 
-    public RecentSearchAdapter() {
+    public RecentSearchAdapter(RecentSearchAdapterListener listener) {
         super(new DiffUtil.ItemCallback<RecentSearch>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull RecentSearch oldItem, @NonNull @NotNull RecentSearch newItem) {
@@ -28,9 +28,6 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
                 return String.valueOf(oldItem.getWord()).equals(String.valueOf(newItem.getWord()));
             }
         });
-    }
-
-    public void setRecentSearchListener(RecentSearchAdapterListener listener) {
         this.mListener = listener;
     }
 
@@ -56,7 +53,7 @@ public class RecentSearchAdapter extends ListAdapter<RecentSearch, RecentSearchA
             this.mBinding = binding;
 
             itemView.setOnClickListener(v -> listener.recentSearchItemViewClick(mRecentSearch.getWord()));
-            binding.iconItemRecentSearchDelete.setOnClickListener(v -> listener.recentSearchDeleteClick(mRecentSearch));
+            binding.iconDelete.setOnClickListener(v -> listener.recentSearchDeleteClick(mRecentSearch));
         }
 
         public void setRecentSearch(RecentSearch recentSearch) {
