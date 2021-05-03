@@ -51,7 +51,6 @@ public class SearchViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
 
             mDragSelectArray[position].setRecyclerView(holder.getBinding().rv);
             holder.getBinding().rv.addOnItemTouchListener(mDragSelectArray[position]);
-            holder.setNoResult(mConcatAdapterArray[position].getAdapters().isEmpty());
         }
     }
 }
