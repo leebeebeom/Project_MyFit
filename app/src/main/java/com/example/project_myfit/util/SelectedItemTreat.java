@@ -30,7 +30,6 @@ public class SelectedItemTreat {
         List<Folder> allFolderList = new ArrayList<>();
         List<Size> allSizeList = new ArrayList<>();
 
-
         for (Category category : selectedCategoryList) {
             category.setIsDeleted(delete);
             allSizeList.addAll(mSizeRepository.getSizeList(category.getId(), false, !delete));
@@ -43,9 +42,29 @@ public class SelectedItemTreat {
         for (Folder f : allFolderList) f.setParentIsDeleted(delete);
         for (Size s : allSizeList) s.setParentIsDeleted(delete);
 
+        if (!delete) orderNumberInit(selectedCategoryList, allFolderList, allSizeList);
+
         mCategoryRepository.categoryUpdate(selectedCategoryList);
         mFolderRepository.folderUpdate(allFolderList);
         mSizeRepository.sizeUpdate(allSizeList);
+    }
+
+    private void orderNumberInit(@NotNull List<Category> selectedCategoryList, List<Folder> allFolderList, List<Size> allSizeList) {
+        int categoryOrderNumber = mCategoryRepository.getCategoryLargestOrderPlus1();
+        int folderOrderNumber = mFolderRepository.getFolderLargestOrderPlus1();
+        int sizeOrderNumber = mSizeRepository.getSizeLargestOrderPlus1();
+        for (Category category : selectedCategoryList) {
+            category.setOrderNumber(categoryOrderNumber);
+            categoryOrderNumber++;
+        }
+        for (Folder folder : allFolderList) {
+            folder.setOrderNumber(folderOrderNumber);
+            folderOrderNumber++;
+        }
+        for (Size size : allSizeList) {
+            size.setOrderNumber(sizeOrderNumber);
+            sizeOrderNumber++;
+        }
     }
 
     public void folderSizeTreat(boolean isSearchView, List<Folder> selectedFolderList, List<Size> selectedSizeList, boolean delete) {
@@ -94,9 +113,9 @@ public class SelectedItemTreat {
     public void folderSizeMove(boolean isSearchView, long targetId, List<Folder> selectedFolderList, List<Size> selectedSizeList) {
         if (isSearchView) {
             List<Category> originCategoryList = getOriginCategoryList(selectedFolderList, selectedSizeList);
-            Category targetCategory = mCategoryRepository.getCategory(targetId);
+            Category targetCategory = mCategoryRepository.getCategory(targetId,false);
             List<Folder> originFolderList = getOriginFolderList(selectedFolderList, selectedSizeList);
-            Folder targetFolder = mFolderRepository.getFolder(targetId);
+            Folder targetFolder = mFolderRepository.getFolder(targetId,false,false);
 
             if (targetCategory != null) originCategoryList.add(targetCategory);
             categorySetDummy(originCategoryList);
@@ -108,9 +127,9 @@ public class SelectedItemTreat {
             mFolderRepository.folderUpdate(originFolderList);
         } else {
             Category originCategory = getOriginCategory(selectedFolderList, selectedSizeList);
-            Category targetCategory = mCategoryRepository.getCategory(targetId);
+            Category targetCategory = mCategoryRepository.getCategory(targetId,false);
             Folder originFolder = getOriginFolder(selectedFolderList, selectedSizeList);
-            Folder targetFolder = mFolderRepository.getFolder(targetId);
+            Folder targetFolder = mFolderRepository.getFolder(targetId,false,false);
 
             List<Category> dummyUpdateCategoryList = new ArrayList<>();
             categorySetDummy(originCategory, dummyUpdateCategoryList);
@@ -142,7 +161,7 @@ public class SelectedItemTreat {
         List<Category> originCategoryList = new ArrayList<>();
 
         for (long categoryId : originCategoryIdHashSet) {
-            Category category = mCategoryRepository.getCategory(categoryId);
+            Category category = mCategoryRepository.getCategory(categoryId,false);
             if (category != null)
                 originCategoryList.add(category);
         }
@@ -161,7 +180,7 @@ public class SelectedItemTreat {
         List<Folder> originFolderList = new ArrayList<>();
 
         for (long folderId : originFolderIdHashSet) {
-            Folder folder = mFolderRepository.getFolder(folderId);
+            Folder folder = mFolderRepository.getFolder(folderId,false,false);
             if (folder != null)
                 originFolderList.add(folder);
         }
@@ -170,14 +189,14 @@ public class SelectedItemTreat {
 
     private Category getOriginCategory(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
         if (!selectedItemFolder.isEmpty())
-            return mCategoryRepository.getCategory(selectedItemFolder.get(0).getParentId());
-        else return mCategoryRepository.getCategory(selectedItemSize.get(0).getParentId());
+            return mCategoryRepository.getCategory(selectedItemFolder.get(0).getParentId(),false);
+        else return mCategoryRepository.getCategory(selectedItemSize.get(0).getParentId(),false);
     }
 
     private Folder getOriginFolder(@NotNull List<Folder> selectedItemFolder, List<Size> selectedItemSize) {
         if (!selectedItemFolder.isEmpty())
-            return mFolderRepository.getFolder(selectedItemFolder.get(0).getParentId());
-        else return mFolderRepository.getFolder(selectedItemSize.get(0).getParentId());
+            return mFolderRepository.getFolder(selectedItemFolder.get(0).getParentId(),false,false);
+        else return mFolderRepository.getFolder(selectedItemSize.get(0).getParentId(),false,false);
     }
 
     private void categorySetDummy(Category category, List<Category> dummyUpdateCategoryList) {
