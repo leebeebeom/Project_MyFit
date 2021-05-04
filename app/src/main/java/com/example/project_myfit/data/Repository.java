@@ -105,9 +105,9 @@ public class Repository {
             return categoryNameList;
         }
 
-        public Category getCategory(long id) {
+        public Category getCategory(long id, boolean isDeleted) {
             AtomicReference<Category> category = new AtomicReference<>();
-            Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(id)));
+            Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(id, isDeleted)));
             start(thread);
             return category.get();
         }
@@ -225,9 +225,9 @@ public class Repository {
             return mFolderDao.getSingleFolderLive(id);
         }
 
-        public Folder getFolder(long id) {
+        public Folder getFolder(long id, boolean isDeleted, boolean parentIsDeleted) {
             AtomicReference<Folder> folder = new AtomicReference<>();
-            Thread thread = new Thread(() -> folder.set(mFolderDao.getFolder(id)));
+            Thread thread = new Thread(() -> folder.set(mFolderDao.getFolder(id, isDeleted, parentIsDeleted)));
             start(thread);
             return folder.get();
         }
