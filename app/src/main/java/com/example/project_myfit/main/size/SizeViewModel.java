@@ -154,12 +154,12 @@ public class SizeViewModel extends AndroidViewModel {
     }
 
     private void parentSetDummy() {
-        Category category = Repository.getCategoryRepository(getApplication()).getCategory(mParentId);
+        Category category = Repository.getCategoryRepository(getApplication()).getCategory(mParentId, false);
         if (category != null){
             category.setDummy(!category.getDummy());
             Repository.getCategoryRepository(getApplication()).categoryUpdate(category);
         }else{
-            Folder folder = Repository.getFolderRepository(getApplication()).getFolder(mParentId);
+            Folder folder = Repository.getFolderRepository(getApplication()).getFolder(mParentId, false,false);
             folder.setDummy(!folder.getDummy());
             Repository.getFolderRepository(getApplication()).folderUpdate(folder);
         }
