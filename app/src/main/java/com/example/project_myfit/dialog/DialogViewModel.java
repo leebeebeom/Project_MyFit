@@ -75,12 +75,12 @@ public class DialogViewModel extends AndroidViewModel {
     }
 
     private void parentSetDummy(long parentId) {
-        Category parentCategory = mCategoryRepository.getCategory(parentId);
+        Category parentCategory = mCategoryRepository.getCategory(parentId, false);
         if (parentCategory != null) {
             parentCategory.setDummy(!parentCategory.getDummy());
             mCategoryRepository.categoryUpdate(parentCategory);
         } else {
-            Folder parentFolder = mFolderRepository.getFolder(parentId);
+            Folder parentFolder = mFolderRepository.getFolder(parentId, false, false);
             parentFolder.setDummy(!parentFolder.getDummy());
             mFolderRepository.folderUpdate(parentFolder);
         }
@@ -100,14 +100,14 @@ public class DialogViewModel extends AndroidViewModel {
 
     public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName) {
         if (isParentName) mParentName = categoryName;
-        Category category = mCategoryRepository.getCategory(categoryId);
+        Category category = mCategoryRepository.getCategory(categoryId, false);
         category.setCategoryName(categoryName);
         mCategoryRepository.categoryUpdate(category);
     }
 
     public void sameNameFolderEdit(long parentId, String folderName, boolean isParentName) {
         if (isParentName) mParentName = folderName;
-        Folder folder = mFolderRepository.getFolder(parentId);
+        Folder folder = mFolderRepository.getFolder(parentId, false,false);
         folder.setFolderName(folderName);
         mFolderRepository.folderUpdate(folder);
     }
@@ -120,11 +120,11 @@ public class DialogViewModel extends AndroidViewModel {
     }
 
     public Category getCategory(long categoryId) {
-        return mCategoryRepository.getCategory(categoryId);
+        return mCategoryRepository.getCategory(categoryId,false);
     }
 
     public Folder getFolder(long folderId) {
-        return mFolderRepository.getFolder(folderId);
+        return mFolderRepository.getFolder(folderId,false,false);
     }
 
     public String getParentName() {
