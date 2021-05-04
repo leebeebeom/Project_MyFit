@@ -113,6 +113,68 @@ public class ListViewModel extends AndroidViewModel {
         return folderHistory;
     }
 
+    public void folderItemDrop(@NotNull List<Folder> newOrderNumberFolderList) {
+        List<Folder> newSelectedFolderList = new ArrayList<>();
+        for (Folder folder : newOrderNumberFolderList)
+            if (mSelectedFolderList.contains(folder) && folder.getId() != -1)
+                newSelectedFolderList.add(folder);
+        mSelectedFolderList = newSelectedFolderList;
+
+        mFolderRepository.folderUpdate(newOrderNumberFolderList);
+    }
+
+    public void sizeItemDrop(@NotNull List<Size> newOrderNumberSizeList) {
+        List<Size> newSelectedSizeList = new ArrayList<>();
+        for (Size size : newOrderNumberSizeList)
+            if (mSelectedSizeList.contains(size)) newSelectedSizeList.add(size);
+        mSelectedSizeList = newSelectedSizeList;
+
+        mSizeRepository.sizeUpdate(newOrderNumberSizeList);
+    }
+
+    public void selectedItemsClear() {
+        mSelectedFolderList.clear();
+        mSelectedSizeList.clear();
+    }
+
+    public void itemSelected(Object o, boolean isChecked) {
+        if (o instanceof Folder) {
+            if (((Folder) o).getId() != -1) {
+                if (isChecked) mSelectedFolderList.add((Folder) o);
+                else mSelectedFolderList.remove(o);
+            }
+        } else if (o instanceof Size) {
+            if (isChecked) mSelectedSizeList.add((Size) o);
+            else mSelectedSizeList.remove(o);
+        }
+        mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
+    }
+
+    public void folderToggleClick() {
+        isFolderToggleOpen = !isFolderToggleOpen;
+        SharedPreferences.Editor editor = mFolderTogglePreference.edit();
+        editor.putBoolean(FOLDER_TOGGLE, isFolderToggleOpen);
+        editor.apply();
+    }
+
+    public boolean sortChanged(int sort) {
+        if (mSort != sort) {
+            mSort = sort;
+            SharedPreferences.Editor editor = mSortPreference.edit();
+            editor.putInt(SORT_LIST, mSort);
+            editor.apply();
+            return true;
+        } else return false;
+    }
+
+    public int viewTypeClick() {
+        mViewType = mViewType == LISTVIEW ? GRIDVIEW : LISTVIEW;
+        SharedPreferences.Editor editor = mViewTypePreference.edit();
+        editor.putInt(VIEW_TYPE, mViewType);
+        editor.apply();
+        return mViewType;
+    }
+
     //getter----------------------------------------------------------------------------------------
     public MutableLiveData<Integer> getSelectedSizeLive() {
         return mSelectedItemSizeLive;
@@ -162,25 +224,6 @@ public class ListViewModel extends AndroidViewModel {
         mSizeRepository.sizeUpdate(size);
     }
 
-    public void folderItemDrop(@NotNull List<Folder> newOrderNumberFolderList) {
-        List<Folder> newSelectedFolderList = new ArrayList<>();
-        for (Folder folder : newOrderNumberFolderList)
-            if (mSelectedFolderList.contains(folder) && folder.getId() != -1)
-                newSelectedFolderList.add(folder);
-        mSelectedFolderList = newSelectedFolderList;
-
-        mFolderRepository.folderUpdate(newOrderNumberFolderList);
-    }
-
-    public void sizeItemDrop(@NotNull List<Size> newOrderNumberSizeList) {
-        List<Size> newSelectedSizeList = new ArrayList<>();
-        for (Size size : newOrderNumberSizeList)
-            if (mSelectedSizeList.contains(size)) newSelectedSizeList.add(size);
-        mSelectedSizeList = newSelectedSizeList;
-
-        mSizeRepository.sizeUpdate(newOrderNumberSizeList);
-    }
-
     public LiveData<Category> getThisCategoryLive(long categoryId) {
         return Repository.getCategoryRepository(getApplication()).getCategoryLive(categoryId);
     }
@@ -193,24 +236,6 @@ public class ListViewModel extends AndroidViewModel {
         return mFolderHistory;
     }
 
-    public void selectedItemsClear() {
-        mSelectedFolderList.clear();
-        mSelectedSizeList.clear();
-    }
-
-    public void itemSelected(Object o, boolean isChecked) {
-        if (o instanceof Folder) {
-            if (((Folder) o).getId() != -1) {
-                if (isChecked) mSelectedFolderList.add((Folder) o);
-                else mSelectedFolderList.remove(o);
-            }
-        } else if (o instanceof Size) {
-            if (isChecked) mSelectedSizeList.add((Size) o);
-            else mSelectedSizeList.remove(o);
-        }
-        mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
-    }
-
     public int getViewType() {
         return mViewType;
     }
@@ -221,30 +246,5 @@ public class ListViewModel extends AndroidViewModel {
 
     public boolean isFolderToggleOpen() {
         return isFolderToggleOpen;
-    }
-
-    public void folderToggleClick() {
-        isFolderToggleOpen = !isFolderToggleOpen;
-        SharedPreferences.Editor editor = mFolderTogglePreference.edit();
-        editor.putBoolean(FOLDER_TOGGLE, isFolderToggleOpen);
-        editor.apply();
-    }
-
-    public boolean sortChanged(int sort) {
-        if (mSort != sort) {
-            mSort = sort;
-            SharedPreferences.Editor editor = mSortPreference.edit();
-            editor.putInt(SORT_LIST, mSort);
-            editor.apply();
-            return true;
-        } else return false;
-    }
-
-    public int viewTypeClick() {
-        mViewType = mViewType == LISTVIEW ? GRIDVIEW : LISTVIEW;
-        SharedPreferences.Editor editor = mViewTypePreference.edit();
-        editor.putInt(VIEW_TYPE, mViewType);
-        editor.apply();
-        return mViewType;
     }
 }
