@@ -23,7 +23,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public long getCategoryId(long parentId) {
-        Category category = mCategoryRepository.getCategory(parentId);
+        Category category = mCategoryRepository.getCategory(parentId, false);
         if (category != null) {
             mParentCategory = category.getParentCategory();
             return category.getId();
@@ -31,8 +31,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private long findCategoryId(long parentId) {
-        Folder folder = mFolderRepository.getFolder(parentId);
-        Category category = mCategoryRepository.getCategory(folder.getParentId());
+        Folder folder = mFolderRepository.getFolder(parentId, false, false);
+        Category category = mCategoryRepository.getCategory(folder.getParentId(), false);
         if (category != null) {
             mParentCategory = category.getParentCategory();
             return category.getId();
@@ -44,8 +44,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public String getSizeParentCategory(long parentId) {
-        Category category = mCategoryRepository.getCategory(parentId);
+        Category category = mCategoryRepository.getCategory(parentId, false);
         if (category != null) return category.getParentCategory();
-        else return mFolderRepository.getFolder(parentId).getParentCategory();
+        else return mFolderRepository.getFolder(parentId, false, false).getParentCategory();
     }
 }
