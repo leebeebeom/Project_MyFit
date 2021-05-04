@@ -82,6 +82,16 @@ public class MainViewModel extends AndroidViewModel {
         mCategoryRepository.categoryUpdate(newOrderNumberCategoryList);
     }
 
+    public boolean sortChanged(int sort) {
+        if (mSort != sort) {
+            mSort = sort;
+            SharedPreferences.Editor editor = mSortPreferences.edit();
+            editor.putInt(SORT_MAIN, sort);
+            editor.apply();
+            return true;
+        } else return false;
+    }
+
     //getter,setter---------------------------------------------------------------------------------
     public MutableLiveData<Integer> getSelectedCategorySizeLive() {
         return mSelectedCategorySizeLive;
@@ -136,15 +146,5 @@ public class MainViewModel extends AndroidViewModel {
 
     public int getSort() {
         return mSort;
-    }
-
-    public boolean sortChanged(int sort) {
-        if (mSort != sort) {
-            mSort = sort;
-            SharedPreferences.Editor editor = mSortPreferences.edit();
-            editor.putInt(SORT_MAIN, sort);
-            editor.apply();
-            return true;
-        } else return false;
     }
 }
