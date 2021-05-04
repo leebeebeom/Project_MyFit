@@ -8,7 +8,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +30,7 @@ import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.databinding.ActivityRecycleBinBinding;
 import com.example.project_myfit.databinding.FragmentRecycleBinSearchBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
+import com.example.project_myfit.dialog.recyclebindialog.RestoreDialogDirections;
 import com.example.project_myfit.recyclebin.RecycleBinActivity;
 import com.example.project_myfit.recyclebin.search.adapter.RecycleBinCategoryAdapter;
 import com.example.project_myfit.recyclebin.search.adapter.RecycleBinFolderAdapter;
@@ -74,7 +74,6 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
     private RecycleBinSearchViewModel mModel;
     private TypedValue mColorControl;
     private RecentSearchAdapter mRecentSearchAdapter;
-    private List<String> mRecentSearchStringList;
     private DialogViewModel mDialogViewModel;
     private DragSelectImpl[] mDragSelectArray;
     private ActionModeImpl mActionMode;
@@ -181,8 +180,12 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
 
     private void restoreLive(@NotNull NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(RESTORE_CONFIRM).observe(navBackStackEntry, o -> {
-            mModel.restore();
-            if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
+            if (mModel.restore())
+                mNavController.navigate(RestoreDialogDirections.actionRestoreDialogToNoParentDialog(mModel.getNoParentNameList()));
+            else {
+                mNavController.popBackStack();
+                if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
+            }
         });
     }
 
@@ -209,11 +212,6 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
     private void recentSearchLive() {
         mModel.getRecentSearchLive().observe(getViewLifecycleOwner(), recentSearchList -> {
             mRecentSearchAdapter.submitList(recentSearchList);
-
-            if (mRecentSearchStringList == null) mRecentSearchStringList = new ArrayList<>();
-            if (!mRecentSearchStringList.isEmpty()) mRecentSearchStringList.clear();
-            for (RecentSearch recentSearch : recentSearchList)
-                mRecentSearchStringList.add(recentSearch.getWord());
 
             if (recentSearchList.isEmpty())
                 mBinding.layoutNoResult.setVisibility(View.VISIBLE);
@@ -278,10 +276,10 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
         mListenerUtil.scrollChangeListener(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.fabTopClick(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.autoCompleteEndIconClick(mActivityBinding.acTv, mActivityBinding.acTvLayout, requireContext());
-        mListenerUtil.autoCompleteItemClick(mActivityBinding.acTv, requireContext());
+        mListenerUtil.autoCompleteItemClick(mActivityBinding.acTv, RECENT_SEARCH_RECYCLE_BIN, requireContext());
+        mListenerUtil.autoCompleteImeClick(mActivityBinding.acTv, RECENT_SEARCH_RECYCLE_BIN,requireContext());
         pagerChangeListener();
         acTextChangeListener();
-        acImeClick();
         recentSearchAllDeleteClick();
 
         actionModeRestore(savedInstanceState);
@@ -294,25 +292,6 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
                 mBinding.sv.smoothScrollTo(0, 0);
                 mModel.setCurrentItem(position);
             }
-        });
-    }
-
-    private void acImeClick() {
-        mActivityBinding.acTv.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                CommonUtil.keyBoardHide(requireContext(), v);
-
-                mActivityBinding.acTv.dismissDropDown();
-
-                String word = mActivityBinding.acTv.getText().toString().trim();
-                //검색어 중복시 지우고 맨 위로
-                if (!TextUtils.isEmpty(word)) {
-                    if (mRecentSearchStringList.contains(word))
-                        mModel.overLapRecentSearchReInsert(word);
-                    else mModel.recentSearchInsert(word);
-                }
-            }
-            return true;
         });
     }
 
