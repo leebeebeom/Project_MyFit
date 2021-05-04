@@ -33,7 +33,7 @@ public class ListenerUtil {
         });
     }
 
-    public void fabTopClick(NestedScrollView scrollView, FloatingActionButton fabTop) {
+    public void fabTopClick(NestedScrollView scrollView, @NotNull FloatingActionButton fabTop) {
         fabTop.setOnClickListener(v -> {
             scrollView.scrollTo(0, 0);
             scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -104,10 +104,20 @@ public class ListenerUtil {
         });
     }
 
-    public void autoCompleteItemClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, Context context) {
+    public void autoCompleteItemClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
+        Repository.RecentSearchRepository recentSearchRepository = Repository.getRecentSearchRepository(context);
+
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             autoCompleteTextView.clearFocus();
             CommonUtil.keyBoardHide(context, autoCompleteTextView);
+
+            List<String> recentSearchStringList = recentSearchRepository.getRecentSearchStringList();
+
+            String word = String.valueOf(autoCompleteTextView.getText());
+
+            if (recentSearchStringList.contains(word))
+                recentSearchRepository.overLapRecentSearchReInsert(word, recentSearchType);
+            else recentSearchRepository.recentSearchInsert(word, recentSearchType);
         });
     }
 }
