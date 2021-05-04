@@ -49,21 +49,29 @@ public class SelectedItemTreat {
         mSizeRepository.sizeUpdate(allSizeList);
     }
 
-    private void orderNumberInit(@NotNull List<Category> selectedCategoryList, List<Folder> allFolderList, List<Size> allSizeList) {
-        int categoryOrderNumber = mCategoryRepository.getCategoryLargestOrderPlus1();
-        int folderOrderNumber = mFolderRepository.getFolderLargestOrderPlus1();
-        int sizeOrderNumber = mSizeRepository.getSizeLargestOrderPlus1();
-        for (Category category : selectedCategoryList) {
-            category.setOrderNumber(categoryOrderNumber);
-            categoryOrderNumber++;
+    private void orderNumberInit(List<Category> selectedCategoryList, List<Folder> allFolderList, List<Size> allSizeList) {
+        if (selectedCategoryList != null) {
+            int categoryOrderNumber = mCategoryRepository.getCategoryLargestOrderPlus1();
+            for (Category category : selectedCategoryList) {
+                category.setOrderNumber(categoryOrderNumber);
+                categoryOrderNumber++;
+            }
         }
-        for (Folder folder : allFolderList) {
-            folder.setOrderNumber(folderOrderNumber);
-            folderOrderNumber++;
+
+        if (allFolderList != null) {
+            int folderOrderNumber = mFolderRepository.getFolderLargestOrderPlus1();
+            for (Folder folder : allFolderList) {
+                folder.setOrderNumber(folderOrderNumber);
+                folderOrderNumber++;
+            }
         }
-        for (Size size : allSizeList) {
-            size.setOrderNumber(sizeOrderNumber);
-            sizeOrderNumber++;
+
+        if (allSizeList != null) {
+            int sizeOrderNumber = mSizeRepository.getSizeLargestOrderPlus1();
+            for (Size size : allSizeList) {
+                size.setOrderNumber(sizeOrderNumber);
+                sizeOrderNumber++;
+            }
         }
     }
 
@@ -96,6 +104,7 @@ public class SelectedItemTreat {
         FinderUtil.findAllChildFolder(topFolderList, allFolderList, !delete, mContext);
         FinderUtil.findAllChildSize(allFolderList, allSizeList, !delete, mContext);
 
+        if (!delete) orderNumberInit(null, allFolderList, allSizeList);
 
         for (Folder f : allFolderList) f.setParentIsDeleted(delete);
         for (Size s : allSizeList) s.setParentIsDeleted(delete);
