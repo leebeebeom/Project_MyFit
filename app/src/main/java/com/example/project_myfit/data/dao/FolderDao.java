@@ -42,8 +42,8 @@ public interface FolderDao {
     @Query("SELECT * FROM Folder WHERE id = :id")
     LiveData<Folder> getSingleFolderLive(long id);
 
-    @Query("SELECT * FROM Folder WHERE id = :id")
-    Folder getFolder(long id);
+    @Query("SELECT * FROM Folder WHERE id = :id AND isDeleted = :isDeleted AND parentIsDeleted = :parentIsDeleted")
+    Folder getFolder(long id, boolean isDeleted, boolean parentIsDeleted);
 
     @Query("SELECT * FROM Folder ORDER BY id DESC limit 1")
     Folder getLatestFolder();
