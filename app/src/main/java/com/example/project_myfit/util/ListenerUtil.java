@@ -14,8 +14,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 import static com.example.project_myfit.util.MyFitConstant.DOWN;
 import static com.example.project_myfit.util.MyFitConstant.STOP;
 import static com.example.project_myfit.util.MyFitConstant.UP;
@@ -79,21 +77,18 @@ public class ListenerUtil {
         autoCompleteTextView.dismissDropDown();
         textInputLayout.setEndIconVisible(false);
         CommonUtil.keyBoardHide(context, autoCompleteTextView);
-        Repository.getRecentSearchRepository(context).overLapRecentSearchReInsert(word, type);
+        Repository.getRecentSearchRepository(context).recentSearchInsert(word,type);
     }
 
-    public void autoCompleteImeClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, Context context, List<String> recentSearchStringList, int type) {
+    public void autoCompleteImeClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, Context context, int recentSearchType) {
         CommonUtil.keyBoardHide(context, autoCompleteTextView);
 
         autoCompleteTextView.dismissDropDown();
 
         String word = autoCompleteTextView.getText().toString().trim();
-        //검색어 중복시 지우고 맨 위로
-        if (!TextUtils.isEmpty(word)) {
-            if (recentSearchStringList.contains(word))
-                Repository.getRecentSearchRepository(context).overLapRecentSearchReInsert(word, type);
-            else Repository.getRecentSearchRepository(context).recentSearchInsert(word, type);
-        }
+
+        if (!TextUtils.isEmpty(word))
+            Repository.getRecentSearchRepository(context).recentSearchInsert(word, recentSearchType);
     }
 
     public void autoCompleteEndIconClick(MaterialAutoCompleteTextView autoCompleteTextView, @NotNull TextInputLayout textInputLayout, Context context) {
@@ -105,19 +100,12 @@ public class ListenerUtil {
     }
 
     public void autoCompleteItemClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
-        Repository.RecentSearchRepository recentSearchRepository = Repository.getRecentSearchRepository(context);
-
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             autoCompleteTextView.clearFocus();
             CommonUtil.keyBoardHide(context, autoCompleteTextView);
 
-            List<String> recentSearchStringList = recentSearchRepository.getRecentSearchStringList();
-
             String word = String.valueOf(autoCompleteTextView.getText());
-
-            if (recentSearchStringList.contains(word))
-                recentSearchRepository.overLapRecentSearchReInsert(word, recentSearchType);
-            else recentSearchRepository.recentSearchInsert(word, recentSearchType);
+            Repository.getRecentSearchRepository(context).recentSearchInsert(word, recentSearchType);
         });
     }
 }
