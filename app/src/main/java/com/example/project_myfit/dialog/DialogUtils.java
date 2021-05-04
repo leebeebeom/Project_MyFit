@@ -307,7 +307,6 @@ public class DialogUtils {
 
     public void restore() {
         mNavBackStackEntry.getSavedStateHandle().set(RESTORE_CONFIRM, null);
-        mNavController.popBackStack();
     }
 
     public void deleteForever() {
