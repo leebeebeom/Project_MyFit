@@ -50,6 +50,7 @@ public class RecycleBinCategoryAdapter extends ParentAdapter<Category, CategoryV
     public void setItem(List<Category> list, List<Long> folderParentIdList, List<Long> sizeParentIdList, CharSequence word) {
         super.setItem(folderParentIdList, sizeParentIdList);
         this.mAllCategoryList = list;
+        setWord(word);
     }
 
     public void setWord(CharSequence word) {
