@@ -374,19 +374,17 @@ public class Repository {
             return mRecentSearchDao.getRecentSearchLive(type);
         }
 
-        public void recentSearchInsert(String wort, int type) {
-            new Thread(() -> mRecentSearchDao.recentSearchInsert(new RecentSearch(CommonUtil.createId(), wort, getCurrentDate(), type))).start();
+        public void recentSearchInsert(String word, int type) {
+            new Thread(() -> {
+                List<String> recentSearchStringList = mRecentSearchDao.getRecentSearchStringList();
+                if (recentSearchStringList.contains(word))
+                    mRecentSearchDao.recentSearchDelete(mRecentSearchDao.getRecentSearch(word));
+                mRecentSearchDao.recentSearchInsert(new RecentSearch(CommonUtil.createId(), word, getCurrentDate(), type));
+            }).start();
         }
 
         public void recentSearchDelete(RecentSearch recentSearch) {
             new Thread(() -> mRecentSearchDao.recentSearchDelete(recentSearch)).start();
-        }
-
-        public void overLapRecentSearchReInsert(String word, int type) {
-            new Thread(() -> {
-                mRecentSearchDao.recentSearchDelete(mRecentSearchDao.getRecentSearch(word));
-                mRecentSearchDao.recentSearchInsert(new RecentSearch(CommonUtil.createId(), word, getCurrentDate(), type));
-            }).start();
         }
 
         public void deleteAllRecentSearch() {
