@@ -8,7 +8,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -299,8 +298,8 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mListenerUtil.fabTopClick(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.autoCompleteEndIconClick(mActivityBinding.acTv, mActivityBinding.acTvLayout, requireContext());
         mListenerUtil.autoCompleteItemClick(mActivityBinding.acTv, RECENT_SEARCH_SEARCH, requireContext());
+        mListenerUtil.autoCompleteImeClick(mActivityBinding.acTv, RECENT_SEARCH_SEARCH, requireActivity());
         vpPageChangeListener();
-        acImeClick();
         acTextChangeListener();
         recentSearchDeleteAllClick();
 
@@ -314,14 +313,6 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                 mBinding.sv.smoothScrollTo(0, 0);
                 mModel.setCurrentItem(position);
             }
-        });
-    }
-
-    private void acImeClick() {
-        mActivityBinding.acTv.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH)
-                mListenerUtil.autoCompleteImeClick(mActivityBinding.acTv, requireContext(), RECENT_SEARCH_SEARCH);
-            return true;
         });
     }
 
