@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.core.widget.NestedScrollView;
 
@@ -77,18 +78,23 @@ public class ListenerUtil {
         autoCompleteTextView.dismissDropDown();
         textInputLayout.setEndIconVisible(false);
         CommonUtil.keyBoardHide(context, autoCompleteTextView);
-        Repository.getRecentSearchRepository(context).recentSearchInsert(word,type);
+        Repository.getRecentSearchRepository(context).recentSearchInsert(word, type);
     }
 
-    public void autoCompleteImeClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, Context context, int recentSearchType) {
-        CommonUtil.keyBoardHide(context, autoCompleteTextView);
+    public void autoCompleteImeClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
+        autoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                CommonUtil.keyBoardHide(context, autoCompleteTextView);
 
-        autoCompleteTextView.dismissDropDown();
+                autoCompleteTextView.dismissDropDown();
 
-        String word = autoCompleteTextView.getText().toString().trim();
+                String word = autoCompleteTextView.getText().toString().trim();
 
-        if (!TextUtils.isEmpty(word))
-            Repository.getRecentSearchRepository(context).recentSearchInsert(word, recentSearchType);
+                if (!TextUtils.isEmpty(word))
+                    Repository.getRecentSearchRepository(context).recentSearchInsert(word, recentSearchType);
+            }
+            return false;
+        });
     }
 
     public void autoCompleteEndIconClick(MaterialAutoCompleteTextView autoCompleteTextView, @NotNull TextInputLayout textInputLayout, Context context) {
