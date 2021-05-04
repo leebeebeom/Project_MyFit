@@ -69,7 +69,6 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     private SearchViewModel mModel;
     private FragmentSearchBinding mBinding;
     private ActivitySearchBinding mActivityBinding;
-    private List<String> mRecentSearchStringList;
     private boolean mAutoScrollEnable;
     private NavController mNavController;
     private DialogViewModel mDialogViewModel;
@@ -199,11 +198,6 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mModel.getRecentSearchLive().observe(getViewLifecycleOwner(), recentSearchList -> {
             mRecentSearchAdapter.submitList(recentSearchList);
 
-            if (mRecentSearchStringList == null) mRecentSearchStringList = new ArrayList<>();
-            if (!mRecentSearchStringList.isEmpty()) mRecentSearchStringList.clear();
-            for (RecentSearch recentSearch : recentSearchList)
-                mRecentSearchStringList.add(recentSearch.getWord());
-
             if (recentSearchList.isEmpty())
                 mBinding.layoutNoResult.setVisibility(View.VISIBLE);
             else mBinding.layoutNoResult.setVisibility(View.GONE);
@@ -304,7 +298,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
         mListenerUtil.scrollChangeListener(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.fabTopClick(mBinding.sv, mActivityBinding.fabTop);
         mListenerUtil.autoCompleteEndIconClick(mActivityBinding.acTv, mActivityBinding.acTvLayout, requireContext());
-        mListenerUtil.autoCompleteItemClick(mActivityBinding.acTv, requireContext());
+        mListenerUtil.autoCompleteItemClick(mActivityBinding.acTv, RECENT_SEARCH_SEARCH, requireContext());
         vpPageChangeListener();
         acImeClick();
         acTextChangeListener();
@@ -326,7 +320,7 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     private void acImeClick() {
         mActivityBinding.acTv.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH)
-                mListenerUtil.autoCompleteImeClick(mActivityBinding.acTv, requireContext(), mRecentSearchStringList, RECENT_SEARCH_SEARCH);
+                mListenerUtil.autoCompleteImeClick(mActivityBinding.acTv, requireContext(), RECENT_SEARCH_SEARCH);
             return true;
         });
     }
