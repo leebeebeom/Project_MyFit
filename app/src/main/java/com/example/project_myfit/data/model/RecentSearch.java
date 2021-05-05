@@ -14,7 +14,7 @@ public class RecentSearch extends ParentModel{
     private final String parentCategory;
 
     public RecentSearch(long id, String word, String date, int type) {
-        super(id, null);
+        super(id,-1, null);
         this.id = id;
         this.word = word;
         this.date = date;

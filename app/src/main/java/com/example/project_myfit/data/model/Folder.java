@@ -16,7 +16,7 @@ public class Folder extends ParentModel {
     private boolean isDeleted, dummy, parentIsDeleted;
 
     public Folder(long id, String folderName, long parentId, int orderNumber, String parentCategory) {
-        super(id,parentCategory);
+        super(id, parentId, parentCategory);
         this.id = id;
         this.folderName = folderName;
         this.parentId = parentId;
