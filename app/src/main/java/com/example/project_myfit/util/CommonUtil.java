@@ -7,6 +7,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -71,5 +74,10 @@ public class CommonUtil {
                 badge.setBackgroundColor(colorControl.data);
             }
         }
+    }
+
+    public static void navigate(@NotNull NavController navController, int originResId, NavDirections action) {
+        if (navController.getCurrentBackStackEntry() == navController.getBackStackEntry(originResId))
+            navController.navigate(action);
     }
 }
