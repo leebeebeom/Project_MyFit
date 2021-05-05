@@ -43,6 +43,7 @@ import com.example.project_myfit.main.list.adapter.folderadapter.FolderDragCallB
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
 import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
 import com.example.project_myfit.util.ActionModeImpl;
+import com.example.project_myfit.util.CommonUtil;
 import com.example.project_myfit.util.ListenerUtil;
 import com.example.project_myfit.util.MyFitVariable;
 import com.example.project_myfit.util.PopupWindowImpl;
@@ -334,7 +335,9 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mNavigationTextViewSize);
         textView.setText(folder.getFolderName());
         if (mThisFolderId != folder.getId()) {
-            textView.setOnClickListener(v -> mNavController.navigate(ListFragmentDirections.actionListFragmentRefresh(mThisCategoryId, folder.getId(), mParentCategory)));
+            textView.setOnClickListener(v ->
+                    CommonUtil.navigate(mNavController, R.id.listFragment,
+                            ListFragmentDirections.actionListFragmentRefresh(mThisCategoryId, folder.getId(), mParentCategory)));
         } else textView.setTag(THIS_FOLDER_TEXT_VIEW);
         textView.setMaxLines(1);
         return textView;
@@ -498,20 +501,22 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     private void fabClick() {
         mActivityBinding.fab.setOnClickListener(v ->
-                mNavController.navigate(
-                        ListFragmentDirections.actionListFragmentToInputOutputFragment(mParentId, 0, mParentCategory)));
+                CommonUtil.navigate(mNavController, R.id.listFragment,
+                        ListFragmentDirections.actionListFragmentToSizeFragment(mParentId, 0, mParentCategory)));
     }
 
     private void textNavigationClick() {
         mBinding.iconHome.setOnClickListener(v -> {
             if (isSearchView)
-                mNavController.navigate(ListFragmentDirections.actionListFragmentToMainFragment());
+                CommonUtil.navigate(mNavController, R.id.listFragment,
+                        ListFragmentDirections.actionListFragmentToMainFragment());
             else mNavController.popBackStack(R.id.mainFragment, false);
         });
 
         mBinding.tvCategory.setOnClickListener(v -> {
             if (mThisFolderId != 0)
-                mNavController.navigate(ListFragmentDirections.actionListFragmentRefresh(mThisCategoryId, 0, mParentCategory));
+                CommonUtil.navigate(mNavController, R.id.listFragment,
+                        ListFragmentDirections.actionListFragmentRefresh(mThisCategoryId, 0, mParentCategory));
         });
     }
 
@@ -737,8 +742,8 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     @Override
     public void onSizeItemViewClick(Size size, MaterialCheckBox checkBox) {
         if (MyFitVariable.actionMode == null) {
-            mNavController.navigate(ListFragmentDirections.actionListFragmentToInputOutputFragment(
-                    size.getParentId(), size.getId(), mParentCategory));
+            CommonUtil.navigate(mNavController, R.id.listFragment,
+                    ListFragmentDirections.actionListFragmentToSizeFragment(size.getParentId(), size.getId(), mParentCategory));
         } else {
             checkBox.setChecked(!checkBox.isChecked());
             if (mModel.getViewType() == LISTVIEW) mSizeAdapterList.itemSelected(size.getId());
@@ -771,7 +776,8 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     @Override
     public void onFolderItemViewClick(Folder folder, MaterialCheckBox checkBox) {
         if (MyFitVariable.actionMode == null)
-            mNavController.navigate(ListFragmentDirections.actionListFragmentRefresh(mThisCategoryId, folder.getId(), mParentCategory));
+            CommonUtil.navigate(mNavController, R.id.listFragment,
+                    ListFragmentDirections.actionListFragmentRefresh(mThisCategoryId, folder.getId(), mParentCategory));
         else {
             checkBox.setChecked(!checkBox.isChecked());
             mFolderAdapter.itemSelected(folder.getId());
@@ -831,7 +837,8 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
             sizeLive();
             return true;
         } else if (item.getItemId() == R.id.menu_list_search) {
-            mNavController.navigate(ListFragmentDirections.actionListFragmentToSearchActivity());
+            CommonUtil.navigate(mNavController, R.id.listFragment,
+                    ListFragmentDirections.actionListFragmentToSearchActivity());
             return true;
         } else if (isSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
             requireActivity().finish();
@@ -853,12 +860,15 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     @Override
     public void actionItemClick(int itemId) {
         if (itemId == R.id.menu_action_mode_edit)
-            mNavController.navigate(ListFragmentDirections.actionListFragmentToNameEditDialog(mModel.getSelectedFolderId(), FOLDER, false));
+            CommonUtil.navigate(mNavController, R.id.listFragment,
+                    ListFragmentDirections.actionListFragmentToNameEditDialog(mModel.getSelectedFolderId(), FOLDER, false));
         else if (itemId == R.id.menu_action_mode_move) {
             mDialogViewModel.forTreeView(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), mModel.getFolderHistory3());
-            mNavController.navigate(ListFragmentDirections.actionListFragmentToTreeViewDialog(mParentCategory, mThisCategoryId, mThisFolderId));
+            CommonUtil.navigate(mNavController, R.id.listFragment,
+                    ListFragmentDirections.actionListFragmentToTreeViewDialog(mParentCategory, mThisCategoryId, mThisFolderId));
         } else if (itemId == R.id.menu_action_mode_delete)
-            mNavController.navigate(ListFragmentDirections.actionListFragmentToSelectedItemDeleteDialog(mModel.getSelectedItemSize()));
+            CommonUtil.navigate(mNavController, R.id.listFragment,
+                    ListFragmentDirections.actionListFragmentToSelectedItemDeleteDialog(mModel.getSelectedItemSize()));
     }
 
     //popup menu click------------------------------------------------------------------------------
@@ -868,16 +878,19 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     @Override
     public void createFolderClick() {
-        mNavController.navigate(ListFragmentDirections.actionListFragmentToAddDialog(FOLDER, mParentCategory, mParentId));
+        CommonUtil.navigate(mNavController, R.id.listFragment,
+                ListFragmentDirections.actionListFragmentToAddDialog(FOLDER, mParentCategory, mParentId));
     }
 
     @Override
     public void sortClick() {
-        mNavController.navigate(ListFragmentDirections.actionListFragmentToSortDialog(mModel.getSort(), LIST_FRAGMENT));
+        CommonUtil.navigate(mNavController, R.id.listFragment,
+                ListFragmentDirections.actionListFragmentToSortDialog(mModel.getSort(), LIST_FRAGMENT));
     }
 
     @Override
     public void recycleBinClick() {
-        mNavController.navigate(ListFragmentDirections.actionListFragmentToRecycleBinActivity());
+        CommonUtil.navigate(mNavController, R.id.listFragment,
+                ListFragmentDirections.actionListFragmentToRecycleBinActivity());
     }
 }
