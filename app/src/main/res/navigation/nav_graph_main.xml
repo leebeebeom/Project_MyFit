@@ -114,7 +114,7 @@
             android:id="@+id/action_sizeFragment_to_goBackDialog"
             app:destination="@id/goBackDialog" />
         <action
-            android:id="@+id/action_sizeFragment_to_imagdeClearDialog"
+            android:id="@+id/action_sizeFragment_to_imageClearDialog"
             app:destination="@id/imageClearDialog" />
 
     </fragment>
