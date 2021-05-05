@@ -235,9 +235,9 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
                     default:
                         list.get(3).add(folder);
                 }
-            String[] parentCategory = {TOP, BOTTOM, OUTER, ETC};
             for (int i = 0; i < mFolderAdapterArray.length; i++)
-                mFolderAdapterArray[i].setItem(list.get(i), mModel.getFolderParentIdList(parentCategory[i]), mModel.getSizeParentIdList(parentCategory[i]), mActivityBinding.acTv.getText());
+                mFolderAdapterArray[i].setItem(list.get(i), mModel.getFolderParentIdList(MyFitVariable.parentCategoryArray[i]),
+                        mModel.getSizeParentIdList(MyFitVariable.parentCategoryArray[i]), mActivityBinding.acTv.getText());
         });
     }
 
