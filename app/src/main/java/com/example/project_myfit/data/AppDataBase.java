@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
@@ -35,9 +35,10 @@ public abstract class AppDataBase extends RoomDatabase {
                     "id INTEGER PRIMARY KEY NOT NULL," +
                     "word TEXT," +
                     "date TEXT," +
-                    "type INTERGER NOT NULL DEFAULT 0)");
+                    "type INTERGER NOT NULL DEFAULT 0," +
+                    "parentCategory TEXT DEFAULT NULL)");
             database.execSQL("INSERT INTO RecentSearch_new(id, word, date, type)" +
-                    "SELECT id, word, date, isRecycleBin FROM RecentSearch");
+                    "SELECT id, word, date, type FROM RecentSearch");
             database.execSQL("DROP TABLE RecentSearch");
             database.execSQL("ALTER TABLE RecentSearch_new RENAME TO RecentSearch");
         }
@@ -85,7 +86,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category(17, "기타", MyFitConstant.ETC, 17));
                             Repository.getCategoryRepository(context).categoryInsert(categoryList);
                         }
-                    })
+                    }).addMigrations(MIGRATION_2_1)
                     .build();
         }
         return sInstance;

@@ -11,6 +11,7 @@ public class RecentSearch extends ParentModel{
     private long id;
     private String word, date;
     private int type;
+    private final String parentCategory;
 
     public RecentSearch(long id, String word, String date, int type) {
         super(id, null);
@@ -18,6 +19,7 @@ public class RecentSearch extends ParentModel{
         this.word = word;
         this.date = date;
         this.type = type;
+        this.parentCategory = null;
     }
 
     public long getId() {
@@ -50,6 +52,11 @@ public class RecentSearch extends ParentModel{
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String getParentCategory() {
+        return parentCategory;
     }
 
     @Override

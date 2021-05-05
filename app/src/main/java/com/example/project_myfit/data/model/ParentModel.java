@@ -2,7 +2,7 @@ package com.example.project_myfit.data.model;
 
 public class ParentModel {
     private final long id;
-    private final String parentCategory;
+    private String parentCategory;
 
     public ParentModel(long id, String parentCategory) {
         this.id = id;
@@ -11,6 +11,10 @@ public class ParentModel {
 
     public long getId() {
         return id;
+    }
+
+    public void setParentCategory(String parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
     public String getParentCategory() {
