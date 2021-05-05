@@ -32,6 +32,7 @@ import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.main.main.adapter.CategoryAdapter;
 import com.example.project_myfit.main.main.adapter.MainViewPagerAdapter;
 import com.example.project_myfit.util.ActionModeImpl;
+import com.example.project_myfit.util.CommonUtil;
 import com.example.project_myfit.util.DragSelectImpl;
 import com.example.project_myfit.util.ListenerUtil;
 import com.example.project_myfit.util.MyFitVariable;
@@ -278,7 +279,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     private void fabClick() {
         mActivityBinding.fab.setOnClickListener(v -> {
             if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
+            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.actionMainFragmentToSearchActivity());
         });
     }
 
@@ -307,7 +308,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
             mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menu_main_popup));
             return true;
         } else if (item.getItemId() == R.id.menu_main_search) {
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSearchActivity());
+            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.actionMainFragmentToSearchActivity());
             return true;
         }
         return false;
