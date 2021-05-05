@@ -350,7 +350,8 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
 
     private void recentSearchDeleteAllClick() {
         mBinding.tvDeleteAll.setOnClickListener(v ->
-                mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToRecentSearchDeleteAllDialog()));
+                CommonUtil.navigate(mNavController, R.id.searchFragment,
+                        SearchFragmentDirections.actionSearchFragmentToRecentSearchDeleteAllDialog()));
     }
 
     private void actionModeRestore(Bundle savedInstanceState) {
@@ -377,8 +378,9 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     @Override
     public void onFolderItemViewClick(Folder folder, MaterialCheckBox checkBox) {
         if (MyFitVariable.actionMode == null)
-            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToMainActivity(
-                    folder.getId(), 0, folder.getParentId()));
+            CommonUtil.navigate(mNavController, R.id.searchFragment,
+                    SearchFragmentDirections.actionSearchFragmentToMainActivity(
+                            folder.getId(), 0, folder.getParentId()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
             mFolderAdapterArray[mModel.getCurrentItem()].itemSelected(folder.getId());
@@ -399,7 +401,8 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     @Override
     public void onSizeItemViewClick(Size size, MaterialCheckBox checkBox) {
         if (MyFitVariable.actionMode == null)
-            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToMainActivity(0, size.getId(), size.getParentId()));
+            CommonUtil.navigate(mNavController, R.id.searchFragment,
+                    SearchFragmentDirections.actionSearchFragmentToMainActivity(0, size.getId(), size.getParentId()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
             mSizeAdapterArray[mModel.getCurrentItem()].itemSelected(size.getId());
@@ -440,12 +443,15 @@ public class SearchFragment extends Fragment implements ViewPagerVH.ViewPagerAut
     @Override
     public void actionItemClick(int itemId) {
         if (itemId == R.id.menu_action_mode_delete)
-            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchSelectedItemDeleteDialog(mModel.getSelectedItemSize()));
+            CommonUtil.navigate(mNavController, R.id.searchFragment,
+                    SearchFragmentDirections.actionSearchFragmentToSearchSelectedItemDeleteDialog(mModel.getSelectedItemSize()));
         else if (itemId == R.id.menu_action_mode_move) {
             mDialogViewModel.forTreeView(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), null);
-            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchTreeViewDialog(mModel.getParentCategory()));
+            CommonUtil.navigate(mNavController, R.id.searchFragment,
+                    SearchFragmentDirections.actionSearchFragmentToSearchTreeViewDialog(mModel.getParentCategory()));
         } else
-            mNavController.navigate(SearchFragmentDirections.actionSearchFragmentToSearchNameEditDialog(mModel.getSelectedFolderId()));
+            CommonUtil.navigate(mNavController, R.id.searchFragment,
+                    SearchFragmentDirections.actionSearchFragmentToSearchNameEditDialog(mModel.getSelectedFolderId()));
     }
 
     //recent search adapter listener----------------------------------------------------------------
