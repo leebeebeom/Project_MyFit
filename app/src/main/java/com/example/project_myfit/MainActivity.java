@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 fabChange(R.drawable.icon_add);
                 mBinding.tvCustomTitle.setVisibility(View.GONE);
                 actionBar.setDisplayShowTitleEnabled(true);//커스텀 타이틀 GONE
-            } else if (destination.getId() == R.id.inputOutputFragment) {
+            } else if (destination.getId() == R.id.sizeFragment) {
                 //인풋아웃풋 프래그먼트
                 fabChange(R.drawable.icon_save);
                 mBinding.tvCustomTitle.setVisibility(View.GONE);
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString(PARENT_CATEGORY, parentCategory);
 
         NavGraph graph = mNavController.getGraph();
-        graph.setStartDestination(R.id.inputOutputFragment);
+        graph.setStartDestination(R.id.sizeFragment);
         mNavController.setGraph(graph, bundle);
     }
 
