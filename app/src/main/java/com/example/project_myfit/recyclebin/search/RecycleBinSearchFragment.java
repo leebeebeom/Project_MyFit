@@ -59,6 +59,7 @@ import java.util.List;
 
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE;
 import static com.example.project_myfit.util.MyFitConstant.DELETE_FOREVER_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.NO_PARENT_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.RECENT_SEARCH_RECYCLE_BIN;
 import static com.example.project_myfit.util.MyFitConstant.RESTORE_CONFIRM;
 
@@ -174,6 +175,7 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
     private void dialogLive() {
         mDialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
             restoreLive(navBackStackEntry);
+            noParentList(navBackStackEntry);
             deleteForeverLive(navBackStackEntry);
         });
     }
@@ -181,11 +183,18 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
     private void restoreLive(@NotNull NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(RESTORE_CONFIRM).observe(navBackStackEntry, o -> {
             if (mModel.restore())
-                mNavController.navigate(RestoreDialogDirections.actionRestoreDialogToNoParentDialog(mModel.getNoParentNameList()));
+                CommonUtil.navigate(mNavController, R.id.restoreDialog,
+                        RestoreDialogDirections.actionRestoreDialogToNoParentDialog(mModel.getNoParentNameList()));
             else {
                 mNavController.popBackStack();
                 if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
             }
+        });
+    }
+
+    private void noParentList(@NotNull NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(NO_PARENT_CONFIRM).observe(navBackStackEntry, o -> {
+
         });
     }
 
@@ -329,7 +338,8 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
 
     private void recentSearchAllDeleteClick() {
         mBinding.tvDeleteAll.setOnClickListener(v ->
-                mNavController.navigate(RecycleBinSearchFragmentDirections.actionRecycleBinSearchToRecycleBinRecentSearchDeleteAllDialog()));
+                CommonUtil.navigate(mNavController, R.id.recycleBinSearch,
+                        RecycleBinSearchFragmentDirections.actionRecycleBinSearchToRecycleBinRecentSearchDeleteAllDialog()));
     }
 
     private void actionModeRestore(Bundle savedInstanceState) {
@@ -485,8 +495,10 @@ public class RecycleBinSearchFragment extends Fragment implements CategoryVH.Cat
     @Override
     public void actionItemClick(int itemId) {
         if (itemId == R.id.menu_action_mode_recycle_bin_restore)
-            mNavController.navigate(RecycleBinSearchFragmentDirections.actionRecycleBinSearchToRestoreDialog(mModel.getSelectedItemSize()));
+            CommonUtil.navigate(mNavController, R.id.recycleBinSearch,
+                    RecycleBinSearchFragmentDirections.actionRecycleBinSearchToRestoreDialog(mModel.getSelectedItemSize()));
         else if (itemId == R.id.menu_action_mode_recycle_bin_delete_forever)
-            mNavController.navigate(RecycleBinSearchFragmentDirections.actionRecycleBinSearchToDeleteForeverDialog(mModel.getSelectedItemSize()));
+            CommonUtil.navigate(mNavController, R.id.recycleBinSearch,
+                    RecycleBinSearchFragmentDirections.actionRecycleBinSearchToDeleteForeverDialog(mModel.getSelectedItemSize()));
     }
 }
