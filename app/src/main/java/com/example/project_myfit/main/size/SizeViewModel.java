@@ -15,10 +15,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.data.Repository;
-import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.util.CommonUtil;
+import com.example.project_myfit.util.DummyUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -150,19 +149,7 @@ public class SizeViewModel extends AndroidViewModel {
         mNewSize.setImageUri(mMutableLiveImageUri.getValue() == null ? null : getRenameUri());
         mNewSize.setParentId(mParentId);
         mSizeRepository.sizeInsert(mNewSize);
-        if (mIsSearchView) parentSetDummy();
-    }
-
-    private void parentSetDummy() {
-        Category category = Repository.getCategoryRepository(getApplication()).getCategory(mParentId, false);
-        if (category != null){
-            category.setDummy(!category.getDummy());
-            Repository.getCategoryRepository(getApplication()).categoryUpdate(category);
-        }else{
-            Folder folder = Repository.getFolderRepository(getApplication()).getFolder(mParentId, false,false);
-            folder.setDummy(!folder.getDummy());
-            Repository.getFolderRepository(getApplication()).folderUpdate(folder);
-        }
+        if (mIsSearchView) DummyUtil.setDummy(mParentId,getApplication());
     }
 
     public void sizeUpdate() {
