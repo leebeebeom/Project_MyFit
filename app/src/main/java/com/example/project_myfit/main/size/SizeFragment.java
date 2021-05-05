@@ -33,6 +33,7 @@ import com.example.project_myfit.databinding.IncludeEtcBinding;
 import com.example.project_myfit.databinding.IncludeTopBinding;
 import com.example.project_myfit.dialog.DialogViewModel;
 import com.example.project_myfit.search.adapter.AutoCompleteAdapter;
+import com.example.project_myfit.util.CommonUtil;
 import com.example.project_myfit.util.MyFitConstant;
 
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +81,7 @@ public class SizeFragment extends Fragment {
 
     private void inputOnBackPressed() {
         if (isDefaultInputChanged() || isSizeInputChanged())
-            mNavController.navigate(SizeFragmentDirections.actionInputOutputFragmentToGoBackDialog());
+            CommonUtil.navigate(mNavController, R.id.sizeFragment, SizeFragmentDirections.actionSizeFragmentToGoBackDialog());
         else mNavController.popBackStack();
     }
 
@@ -116,7 +117,7 @@ public class SizeFragment extends Fragment {
 
     private void outputOnBackPressed() {
         if (mModel.getCompareResult())
-            mNavController.navigate(SizeFragmentDirections.actionInputOutputFragmentToGoBackDialog());
+            mNavController.navigate(SizeFragmentDirections.actionSizeFragmentToGoBackDialog());
         else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
             requireActivity().finish();
         else mNavController.popBackStack();
@@ -249,7 +250,7 @@ public class SizeFragment extends Fragment {
         navBackStackEntry.getSavedStateHandle().getLiveData(SIZE_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
             if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
                 requireActivity().finish();
-            else mNavController.popBackStack(R.id.inputOutputFragment, true);
+            else mNavController.popBackStack(R.id.sizeFragment, true);
         });
     }
 
@@ -257,7 +258,7 @@ public class SizeFragment extends Fragment {
         navBackStackEntry.getSavedStateHandle().getLiveData(GO_BACK_CONFIRM).observe(navBackStackEntry, o -> {
             if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
                 requireActivity().finish();
-            else mNavController.popBackStack(R.id.inputOutputFragment, true);
+            else mNavController.popBackStack(R.id.sizeFragment, true);
         });
     }
 
@@ -332,7 +333,7 @@ public class SizeFragment extends Fragment {
     private void imageLongClick() {
         mBinding.iv.setOnLongClickListener(v -> {
             if (mModel.getImageUriLive().getValue() != null)
-                mNavController.navigate(SizeFragmentDirections.actionInputOutputFragmentToImageClearDialog());
+                mNavController.navigate(SizeFragmentDirections.actionSizeFragmentToImageClearDialog());
             return true;
         });
     }
@@ -393,7 +394,7 @@ public class SizeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         if (item.getItemId() == R.id.menu_size_delete) {
-            mNavController.navigate(SizeFragmentDirections.actionInputOutputFragmentToDeleteConfirmDialog(mSizeId));
+            mNavController.navigate(SizeFragmentDirections.actionSizeFragmentToDeleteConfirmDialog(mSizeId));
             return true;
         } else if (item.getItemId() == R.id.menu_size_favorite) {
             mModel.getSize().setFavorite(!mModel.getSize().isFavorite());
