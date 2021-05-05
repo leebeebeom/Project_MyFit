@@ -184,10 +184,9 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
                 }
             }
 
-            String[] parentCategory = {TOP, BOTTOM, OUTER, ETC};
             for (int i = 0; i < mCategoryAdapterArray.length; i++) {
                 mCategoryAdapterArray[i].setItem(mModel.getSort(), list.get(i),
-                        mModel.getFolderParentIdList(parentCategory[i]), mModel.getSizeParentIdList(parentCategory[i]));
+                        mModel.getFolderParentIdList(MyFitVariable.parentCategoryArray[i]), mModel.getSizeParentIdList(MyFitVariable.parentCategoryArray[i]));
             }
 
             RecyclerView viewPager = (RecyclerView) mBinding.vp.getChildAt(0);
