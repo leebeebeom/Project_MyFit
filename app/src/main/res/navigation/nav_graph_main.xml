@@ -49,8 +49,8 @@
             android:name="parentCategory"
             app:argType="string" />
         <action
-            android:id="@+id/action_listFragment_to_inputOutputFragment"
-            app:destination="@id/inputOutputFragment"
+            android:id="@+id/action_listFragment_to_sizeFragment"
+            app:destination="@id/sizeFragment"
             app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
@@ -94,7 +94,7 @@
             app:destination="@id/recycleBinActivity" />
     </fragment>
     <fragment
-        android:id="@+id/inputOutputFragment"
+        android:id="@+id/sizeFragment"
         android:name="com.example.project_myfit.main.size.SizeFragment"
         android:label=""
         tools:layout="@layout/fragment_size">
@@ -108,13 +108,13 @@
             android:name="parentCategory"
             app:argType="string" />
         <action
-            android:id="@+id/action_inputOutputFragment_to_deleteConfirmDialog"
+            android:id="@+id/action_sizeFragment_to_deleteConfirmDialog"
             app:destination="@id/deleteConfirmDialog" />
         <action
-            android:id="@+id/action_inputOutputFragment_to_goBackDialog"
+            android:id="@+id/action_sizeFragment_to_goBackDialog"
             app:destination="@id/goBackDialog" />
         <action
-            android:id="@+id/action_inputOutputFragment_to_imageClearDialog"
+            android:id="@+id/action_sizeFragment_to_imasigeClearDialog"
             app:destination="@id/imageClearDialog" />
 
     </fragment>
