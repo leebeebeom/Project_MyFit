@@ -112,6 +112,13 @@ public class Repository {
             return category.get();
         }
 
+        public String getCategoryName(String categoryName, String parentCategory) {
+            AtomicReference<String> name = new AtomicReference<>();
+            Thread thread = new Thread(() -> name.set(categoryName));
+            start(thread);
+            return name.get();
+        }
+
         public int getCategoryLargestOrderPlus1() {
             AtomicInteger largestOrder = new AtomicInteger();
             Thread thread = new Thread(() -> largestOrder.set(mCategoryDao.getCategoryLargestOrder()));
