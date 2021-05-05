@@ -13,7 +13,7 @@ public class RecentSearch extends ParentModel{
     private int type;
 
     public RecentSearch(long id, String word, String date, int type) {
-        super(id);
+        super(id, null);
         this.id = id;
         this.word = word;
         this.date = date;

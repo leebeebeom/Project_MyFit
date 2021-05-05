@@ -15,7 +15,7 @@ public class Category extends ParentModel{
     private String categoryName;
 
     public Category(long id, String categoryName, String parentCategory, int orderNumber) {
-        super(id);
+        super(id, parentCategory);
         this.id = id;
         this.categoryName = categoryName;
         this.parentCategory = parentCategory;

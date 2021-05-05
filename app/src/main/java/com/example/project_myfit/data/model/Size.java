@@ -20,14 +20,14 @@ public class Size extends ParentModel{
 
     @Ignore
     public Size(long id, String parentCategory) {
-        super(id);
+        super(id, parentCategory);
         this.id = id;
         this.parentCategory = parentCategory;
         sizeMap = new HashMap<>();
     }
 
     public Size(long id, int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long parentId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
-        super(id);
+        super(id,parentCategory);
         this.id = id;
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
