@@ -112,9 +112,9 @@ public class Repository {
             return category.get();
         }
 
-        public Category getCategory(String categoryName, String parentCategory) {
+        public Category getCategory(String categoryName, String parentCategory, boolean isDeleted) {
             AtomicReference<Category> category = new AtomicReference<>();
-            Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(categoryName, parentCategory)));
+            Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(categoryName, parentCategory, isDeleted)));
             start(thread);
             return category.get();
         }

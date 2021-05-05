@@ -33,8 +33,8 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE id = :id AND isDeleted = :isDeleted")
     Category getCategory(long id, boolean isDeleted);
 
-    @Query("SELECT * FROM category WHERE categoryName = :categoryName AND parentCategory = :parentCategory")
-    Category getCategory(String categoryName, String parentCategory);
+    @Query("SELECT * FROM category WHERE categoryName = :categoryName AND parentCategory = :parentCategory AND isDeleted = :isDeleted")
+    Category getCategory(String categoryName, String parentCategory, boolean isDeleted);
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
