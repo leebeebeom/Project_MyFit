@@ -15,6 +15,9 @@ public interface RecentSearchDao {
     @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY id DESC LIMIT 20")
     LiveData<List<RecentSearch>> getRecentSearchLive(int type);
 
+    @Query("SELECT word FROM RecentSearch")
+    List<String> getRecentSearchStringList();
+
     @Query("SELECT * FROM RecentSearch WHERE word = :word")
     RecentSearch getRecentSearch(String word);
 
