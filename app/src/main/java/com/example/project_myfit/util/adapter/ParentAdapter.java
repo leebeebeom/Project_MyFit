@@ -83,10 +83,8 @@ public abstract class ParentAdapter<T extends ParentModel, VH extends RecyclerVi
     private void listActionMode(MaterialCardView cardView, MaterialCheckBox checkBox, long id) {
         if (mActionModeState == ACTION_MODE_ON)
             mAdapterUtil.listActionModeOn(cardView, checkBox, mSelectedItemIdHashSet, id);
-        else if (mActionModeState == ACTION_MODE_OFF) {
+        else if (mActionModeState == ACTION_MODE_OFF)
             mAdapterUtil.listActionModeOff(cardView, checkBox, mSelectedItemIdHashSet);
-            new Handler().postDelayed(() -> mActionModeState = 0, 301);
-        }
     }
 
     private void gridActionMode(MaterialCheckBox checkBox, long id) {
@@ -114,6 +112,8 @@ public abstract class ParentAdapter<T extends ParentModel, VH extends RecyclerVi
     public void setActionModeState(int actionModeState) {
         mActionModeState = actionModeState;
         notifyDataSetChanged();
+        if (actionModeState == ACTION_MODE_OFF)
+            new Handler().postDelayed(() -> mActionModeState = 0, 301);
     }
 
     public void setSelectedItemList(List<T> selectedItemList) {
