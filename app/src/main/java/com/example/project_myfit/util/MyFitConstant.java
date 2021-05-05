@@ -87,6 +87,7 @@ public class MyFitConstant {
     public static final String DELETE_FOREVER_CONFIRM = "delete forever confirm";
 
     public static final String NAME_EDIT_NAME = "name edit name";
+    public static final String RESTORE_ADD_CATEGORY = "restore add category";
     public static final String FOLDER_TOGGLE = "folder toggle";
     public static final String TREE_VIEW_STATE = "state";
 
