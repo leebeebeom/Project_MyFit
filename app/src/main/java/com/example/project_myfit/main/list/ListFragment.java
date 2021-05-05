@@ -146,7 +146,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
         View view = mBinding.getRoot();
 
-        mActionMode = new ActionModeImpl(inflater, R.menu.menu_action_mode, this, mFolderAdapter, mSizeAdapterGrid, mSizeAdapterGrid);
+        mActionMode = new ActionModeImpl(inflater, R.menu.menu_action_mode, this, mFolderAdapter, mSizeAdapterList, mSizeAdapterGrid);
 
         LayoutPopupBinding binding = LayoutPopupBinding.inflate(inflater);
         binding.tvAddCategory.setVisibility(View.GONE);
