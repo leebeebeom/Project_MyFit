@@ -324,7 +324,8 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     @Override
     public void onCategoryItemViewClick(Category category, MaterialCheckBox checkBox) {
         if (MyFitVariable.actionMode == null)
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0, category.getParentCategory()));
+            CommonUtil.navigate(mNavController, R.id.mainFragment,
+                    MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0, category.getParentCategory()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
             mModel.categorySelected(category, checkBox.isChecked(), mCategoryAdapterArray);
@@ -360,15 +361,18 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     @Override
     public void actionItemClick(int itemId) {
         if (itemId == R.id.menu_action_mode_edit)
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
+            CommonUtil.navigate(mNavController, R.id.mainFragment,
+                    MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
         else if (itemId == R.id.menu_action_mode_delete)
-            mNavController.navigate(MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
+            CommonUtil.navigate(mNavController, R.id.mainFragment,
+                    MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
     }
 
     //popup menu click------------------------------------------------------------------------------
     @Override
     public void addCategoryClick() {
-        mNavController.navigate(MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
+        CommonUtil.navigate(mNavController, R.id.mainFragment,
+                MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
     }
 
     @Override
@@ -377,11 +381,13 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
     @Override
     public void sortClick() {
-        mNavController.navigate(MainFragmentDirections.actionMainFragmentToSortDialog(mModel.getSort(), MAIN_FRAGMENT));
+        CommonUtil.navigate(mNavController, R.id.mainFragment,
+                MainFragmentDirections.actionMainFragmentToSortDialog(mModel.getSort(), MAIN_FRAGMENT));
     }
 
     @Override
     public void recycleBinClick() {
-        mNavController.navigate(MainFragmentDirections.actionMainFragmentToRecycleBinActivity());
+        CommonUtil.navigate(mNavController, R.id.mainFragment,
+                MainFragmentDirections.actionMainFragmentToRecycleBinActivity());
     }
 }
