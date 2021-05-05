@@ -117,7 +117,8 @@ public class SizeFragment extends Fragment {
 
     private void outputOnBackPressed() {
         if (mModel.getCompareResult())
-            mNavController.navigate(SizeFragmentDirections.actionSizeFragmentToGoBackDialog());
+            CommonUtil.navigate(mNavController, R.id.sizeFragment,
+                    SizeFragmentDirections.actionSizeFragmentToGoBackDialog());
         else if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
             requireActivity().finish();
         else mNavController.popBackStack();
@@ -333,7 +334,8 @@ public class SizeFragment extends Fragment {
     private void imageLongClick() {
         mBinding.iv.setOnLongClickListener(v -> {
             if (mModel.getImageUriLive().getValue() != null)
-                mNavController.navigate(SizeFragmentDirections.actionSizeFragmentToImageClearDialog());
+                CommonUtil.navigate(mNavController, R.id.sizeFragment,
+                        SizeFragmentDirections.actionSizeFragmentToImageClearDialog());
             return true;
         });
     }
@@ -394,7 +396,8 @@ public class SizeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         if (item.getItemId() == R.id.menu_size_delete) {
-            mNavController.navigate(SizeFragmentDirections.actionSizeFragmentToDeleteConfirmDialog(mSizeId));
+            CommonUtil.navigate(mNavController, R.id.sizeFragment,
+                    SizeFragmentDirections.actionSizeFragmentToDeleteConfirmDialog(mSizeId));
             return true;
         } else if (item.getItemId() == R.id.menu_size_favorite) {
             mModel.getSize().setFavorite(!mModel.getSize().isFavorite());
