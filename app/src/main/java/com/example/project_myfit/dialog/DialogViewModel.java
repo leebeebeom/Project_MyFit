@@ -12,6 +12,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.util.CommonUtil;
+import com.example.project_myfit.util.DummyUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -71,19 +72,7 @@ public class DialogViewModel extends AndroidViewModel {
     public void folderInsert(@NotNull String folderName, long parentId, String parentCategory) {
         mAddedFolder = new Folder(CommonUtil.createId(), folderName.trim(), parentId, mFolderRepository.getFolderLargestOrderPlus1(), parentCategory);
         mFolderRepository.folderInsert(mAddedFolder);
-        parentSetDummy(parentId);
-    }
-
-    private void parentSetDummy(long parentId) {
-        Category parentCategory = mCategoryRepository.getCategory(parentId, false);
-        if (parentCategory != null) {
-            parentCategory.setDummy(!parentCategory.getDummy());
-            mCategoryRepository.categoryUpdate(parentCategory);
-        } else {
-            Folder parentFolder = mFolderRepository.getFolder(parentId, false, false);
-            parentFolder.setDummy(!parentFolder.getDummy());
-            mFolderRepository.folderUpdate(parentFolder);
-        }
+        DummyUtil.setDummy(parentId, getApplication());
     }
 
     public void categoryNameEdit(@NotNull Category category, String categoryName, boolean isParentName) {
@@ -116,7 +105,7 @@ public class DialogViewModel extends AndroidViewModel {
         Size size = Repository.getSizeRepository(getApplication()).getSize(sizeId);
         size.setIsDeleted(true);
         Repository.getSizeRepository(getApplication()).sizeUpdate(size);
-        parentSetDummy(size.getParentId());
+        DummyUtil.setDummy(size.getParentId(), getApplication());
     }
 
     public Category getCategory(long categoryId) {
