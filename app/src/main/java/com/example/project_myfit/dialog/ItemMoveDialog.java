@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
+
 public class ItemMoveDialog extends DialogFragment {
 
     private int mSelectedItemSize;
@@ -37,7 +39,10 @@ public class ItemMoveDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_item_move));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.itemMove(mParentId));
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(ITEM_MOVE_CONFIRM, mParentId);
+            dialogUtil.getNavController().popBackStack(R.id.treeViewDialog, true);
+        });
         return alertDialog;
     }
 }
