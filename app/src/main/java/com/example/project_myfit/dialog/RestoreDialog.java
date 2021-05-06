@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.RESTORE_CONFIRM;
+
 public class RestoreDialog extends DialogFragment {
     private int mSelectedItemSize, mNavGraphId;
 
@@ -34,7 +36,8 @@ public class RestoreDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_restore));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.restore());
+        positiveButton.setOnClickListener(v ->
+                dialogUtil.getBackStackEntry().getSavedStateHandle().set(RESTORE_CONFIRM, null));
         return alertDialog;
     }
 }
