@@ -10,29 +10,29 @@
         android:name="com.example.project_myfit.main.main.MainFragment"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragment_to_listFragment"
+            android:id="@+id/toListFragment"
             app:destination="@id/listFragment"
             app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_slide_out" />
         <action
-            android:id="@+id/action_mainFragment_to_searchActivity"
+            android:id="@+id/toSearchActivity"
             app:destination="@id/searchActivity" />
         <action
-            android:id="@+id/action_mainFragment_to_addDialog"
+            android:id="@+id/toAddDialog"
             app:destination="@id/addDialog" />
         <action
-            android:id="@+id/action_mainFragment_to_nameEditDialog"
-            app:destination="@id/nameEditDialog" />
+            android:id="@+id/toEditNameDialog"
+            app:destination="@id/editNameDialog" />
         <action
-            android:id="@+id/action_mainFragment_to_selectedItemDeleteDialog"
-            app:destination="@id/selectedItemDeleteDialog" />
+            android:id="@+id/toDeleteSelectedItemDialog"
+            app:destination="@id/deleteSelectedItemDialog" />
         <action
-            android:id="@+id/action_mainFragment_to_sortDialog"
+            android:id="@+id/toSortDialog"
             app:destination="@id/sortDialog" />
         <action
-            android:id="@+id/action_mainFragment_to_recycleBinActivity"
+            android:id="@+id/toRecycleBinActivity"
             app:destination="@id/recycleBinActivity" />
     </fragment>
     <fragment
@@ -49,14 +49,14 @@
             android:name="parentCategory"
             app:argType="string" />
         <action
-            android:id="@+id/action_listFragment_to_sizeFragment"
+            android:id="@+id/toSizeFragment"
             app:destination="@id/sizeFragment"
             app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_slide_out" />
         <action
-            android:id="@+id/action_listFragment_to_mainFragment"
+            android:id="@+id/toMainFragment"
             app:destination="@id/mainFragment"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_slide_out"
@@ -65,32 +65,32 @@
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_listFragment_refresh"
+            android:id="@+id/listFragmentRefresh"
             app:destination="@id/listFragment"
             app:enterAnim="@anim/fragment_slide_in"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_slide_out" />
         <action
-            android:id="@+id/action_listFragment_to_searchActivity"
+            android:id="@+id/toSearchActivity"
             app:destination="@id/searchActivity" />
         <action
-            android:id="@+id/action_listFragment_to_selectedItemDeleteDialog"
-            app:destination="@id/selectedItemDeleteDialog" />
+            android:id="@+id/toDeleteSelectedItemDialog"
+            app:destination="@id/deleteSelectedItemDialog" />
         <action
-            android:id="@+id/action_listFragment_to_nameEditDialog"
-            app:destination="@id/nameEditDialog" />
+            android:id="@+id/toEditNameDialog"
+            app:destination="@id/editNameDialog" />
         <action
-            android:id="@+id/action_listFragment_to_sortDialog"
+            android:id="@+id/toSortDialog"
             app:destination="@id/sortDialog" />
         <action
-            android:id="@+id/action_listFragment_to_treeViewDialog"
+            android:id="@+id/toTreeViewDialog"
             app:destination="@id/treeViewDialog" />
         <action
-            android:id="@+id/action_listFragment_to_addDialog"
+            android:id="@+id/toAddDialog"
             app:destination="@id/addDialog" />
         <action
-            android:id="@+id/action_listFragment_to_RecycleBinActivity"
+            android:id="@+id/toRecycleBinActivity"
             app:destination="@id/recycleBinActivity" />
     </fragment>
     <fragment
@@ -108,14 +108,14 @@
             android:name="parentCategory"
             app:argType="string" />
         <action
-            android:id="@+id/action_sizeFragment_to_deleteConfirmDialog"
-            app:destination="@id/deleteConfirmDialog" />
+            android:id="@+id/toSizeDeleteDialog"
+            app:destination="@id/SizeDeleteDialog" />
         <action
-            android:id="@+id/action_sizeFragment_to_goBackDialog"
+            android:id="@+id/toGoBackDialog"
             app:destination="@id/goBackDialog" />
         <action
-            android:id="@+id/action_sizeFragment_to_imageClearDialog"
-            app:destination="@id/imageClearDialog" />
+            android:id="@+id/toDeleteImageDialog"
+            app:destination="@id/deleteImageDialog" />
 
     </fragment>
     <activity
@@ -130,40 +130,49 @@
         android:label="AddDialog">
         <argument
             android:name="itemType"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="parentCategory"
             app:argType="string" />
         <argument
             android:name="parentId"
             app:argType="long" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_addDialog_to_sameNameAddDialog"
-            app:destination="@id/sameNameAddDialog" />
+            android:id="@+id/toAddSameNameDialog"
+            app:destination="@id/addSameNameDialog" />
     </dialog>
     <dialog
-        android:id="@+id/nameEditDialog"
-        android:name="com.example.project_myfit.dialog.NameEditDialog"
-        android:label="NameEditDialog">
+        android:id="@+id/editNameDialog"
+        android:name="com.example.project_myfit.dialog.EditNameDialog"
+        android:label="EditNameDialog">
         <argument
             android:name="itemId"
             app:argType="long" />
         <argument
             android:name="itemType"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="isParentName"
             app:argType="boolean" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_nameEditDialog_to_sameNameEditDialog"
-            app:destination="@id/sameNameEditDialog" />
+            android:id="@+id/toEditSameNameDialog"
+            app:destination="@id/editSameNameDialog" />
     </dialog>
     <dialog
-        android:id="@+id/selectedItemDeleteDialog"
-        android:name="com.example.project_myfit.dialog.SelectedItemDeleteDialog"
-        android:label="SelectedItemDeleteDialog">
+        android:id="@+id/deleteSelectedItemDialog"
+        android:name="com.example.project_myfit.dialog.DeleteSelectedItemDialog"
+        android:label="mRepository.getCategoryRepository()Dialog">
         <argument
             android:name="selectedItemSize"
+            app:argType="integer" />
+        <argument
+            android:name="navGraphId"
             app:argType="integer" />
     </dialog>
     <dialog
@@ -176,14 +185,17 @@
         <argument
             android:name="fragmentType"
             app:argType="string" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
     </dialog>
     <dialog
-        android:id="@+id/sameNameAddDialog"
-        android:name="com.example.project_myfit.dialog.SameNameAddDialog"
-        android:label="SameNameAddDialog">
+        android:id="@+id/addSameNameDialog"
+        android:name="com.example.project_myfit.dialog.AddSameNameDialog"
+        android:label="AddSameNameDialog">
         <argument
             android:name="itemType"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="parentCategory"
             app:argType="string" />
@@ -191,8 +203,11 @@
             android:name="parentId"
             app:argType="long" />
         <argument
-            android:name="new_name"
+            android:name="name"
             app:argType="string" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
     </dialog>
     <dialog
         android:id="@+id/treeViewDialog"
@@ -207,20 +222,23 @@
         <argument
             android:name="thisFolderId"
             app:argType="long" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_treeViewDialog_to_addDialog"
+            android:id="@+id/toAddDialog"
             app:destination="@id/addDialog" />
         <action
-            android:id="@+id/action_treeViewDialog_to_itemMoveDialog"
-            app:destination="@id/itemMoveDialog" />
+            android:id="@+id/toMoveDialog"
+            app:destination="@id/moveDialog" />
     </dialog>
     <dialog
-        android:id="@+id/sameNameEditDialog"
-        android:name="com.example.project_myfit.dialog.SameNameEditDialog"
-        android:label="SameNameEditDialog">
+        android:id="@+id/editSameNameDialog"
+        android:name="com.example.project_myfit.dialog.EditSameNameDialog"
+        android:label="EditSameNameDialog">
         <argument
             android:name="itemType"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="itemId"
             app:argType="long" />
@@ -230,38 +248,54 @@
         <argument
             android:name="isParentName"
             app:argType="boolean" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
     </dialog>
     <dialog
-        android:id="@+id/itemMoveDialog"
-        android:name="com.example.project_myfit.dialog.ItemMoveDialog"
-        android:label="ItemMoveDialog">
+        android:id="@+id/moveDialog"
+        android:name="com.example.project_myfit.dialog.MoveDialog"
+        android:label="MoveDialog">
         <argument
             android:name="selectedItemSize"
             app:argType="integer" />
         <argument
             android:name="parentId"
             app:argType="long" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
     </dialog>
     <dialog
-        android:id="@+id/deleteConfirmDialog"
-        android:name="com.example.project_myfit.dialog.DeleteConfirmDialog"
-        android:label="DeleteConfirmDialog" >
+        android:id="@+id/SizeDeleteDialog"
+        android:name="com.example.project_myfit.dialog.SizeDeleteDialog"
+        android:label="SizeDeleteDialog">
         <argument
             android:name="sizeId"
             app:argType="long" />
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
     </dialog>
     <dialog
         android:id="@+id/goBackDialog"
         android:name="com.example.project_myfit.dialog.GoBackDialog"
-        android:label="GoBackDialog" />
+        android:label="GoBackDialog">
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
+    </dialog>
     <dialog
-        android:id="@+id/imageClearDialog"
-        android:name="com.example.project_myfit.dialog.ImageClearDialog"
-        android:label="ImageClearDialog" />
+        android:id="@+id/deleteImageDialog"
+        android:name="com.example.project_myfit.dialog.DeleteImageDialog"
+        android:label="DeleteImageDialog">
+        <argument
+            android:name="navGraphId"
+            app:argType="integer" />
+    </dialog>
     <activity
         android:id="@+id/recycleBinActivity"
         android:name="com.example.project_myfit.recyclebin.RecycleBinActivity"
         android:label="activityRecycleBin"
         tools:layout="@layout/activity_recycle_bin" />
-    <!--    Dialog-->
 </navigation>
