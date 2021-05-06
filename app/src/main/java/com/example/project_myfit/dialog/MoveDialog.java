@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
 
-public class ItemMoveDialog extends DialogFragment {
+public class MoveDialog extends DialogFragment {
 
     private int mSelectedItemSize;
     private long mParentId;
@@ -25,16 +25,16 @@ public class ItemMoveDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSelectedItemSize = ItemMoveDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        mParentId = ItemMoveDialogArgs.fromBundle(getArguments()).getParentId();
-        mNavGraphId = ItemMoveDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mSelectedItemSize = MoveDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
+        mParentId = MoveDialogArgs.fromBundle(getArguments()).getParentId();
+        mNavGraphId = MoveDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.itemMoveDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.moveDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_item_move));
 
