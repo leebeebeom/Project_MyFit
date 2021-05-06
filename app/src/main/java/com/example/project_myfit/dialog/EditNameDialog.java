@@ -41,7 +41,7 @@ public class EditNameDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.nameEditDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.editNameDialog);
 
         Category category = mItemType == CATEGORY ?
                 dialogUtil.getDialogViewModel().getCategory(mItemId) : null;
@@ -74,12 +74,12 @@ public class EditNameDialog extends DialogFragment {
 
             if (category != null) {
                 if (dialogUtil.getDialogViewModel().isSameNameCategory(newName, category.getParentCategory()))
-                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
+                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.editNameDialog,
                             EditNameDialogDirections.toEditSameNameDialog(CATEGORY, category.getId(), newName, mIsParentName, mNavGraphId));
                 else dialogUtil.editCategoryName(category, newName, mIsParentName);
             } else {
                 if (dialogUtil.getDialogViewModel().isSameNameFolder(newName, folder.getParentId()))
-                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
+                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.editNameDialog,
                             EditNameDialogDirections.toEditSameNameDialog(FOLDER, folder.getId(), newName, mIsParentName, mNavGraphId));
                 dialogUtil.editFolderName(folder, newName, mIsParentName);
             }
