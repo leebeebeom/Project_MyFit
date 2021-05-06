@@ -53,20 +53,20 @@ public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
     public void onBindViewHolder(@NonNull @NotNull SizeListVH holder, int position) {
         Size size = getItem(position);
         holder.setSize(size);
-        dragHandleTouch(holder);
+        setDragHandleTouchListener(holder);
 
         restoreSelectedHashSet();
         setActionMode(LISTVIEW, holder.getBinding().cardView, holder.getBinding().cb, size.getId());
-        dragHandleVisibility(holder.getBinding().iconDragHandle);
-        cbFavoriteClickable(holder.getBinding().cbFavorite);
+        setDragHandleVisibility(holder.getBinding().iconDragHandle);
+        setFavoriteClickable(holder.getBinding().cbFavorite);
         holder.getBinding().cbFavorite.setVisibility(holder.getBinding().iconDragHandle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void dragHandleTouch(@NotNull SizeListVH holder) {
+    private void setDragHandleTouchListener(@NotNull SizeListVH holder) {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
-                draggingView(holder);
+                setDraggingView(holder);
                 mListener.onSizeDragHandleTouch(holder);
             }
             return false;
@@ -74,8 +74,8 @@ public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
     }
 
     @Override
-    protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.draggingView(viewHolder);
+    protected void setDraggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDraggingView(viewHolder);
         SizeListVH sizeListVH = (SizeListVH) viewHolder;
         sizeListVH.getBinding().cb.setVisibility(View.INVISIBLE);
         sizeListVH.getBinding().layoutTv.setAlpha(0.7f);
@@ -83,8 +83,8 @@ public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
     }
 
     @Override
-    protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.dropView(viewHolder);
+    protected void setDropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDropView(viewHolder);
         SizeListVH sizeListVH = (SizeListVH) viewHolder;
         sizeListVH.getBinding().cb.setVisibility(View.VISIBLE);
         sizeListVH.getBinding().layoutTv.setAlpha(1);
@@ -92,14 +92,14 @@ public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
     }
 
     @Override
-    public void itemMove(int from, int to) {
+    public void moveItem(int from, int to) {
         mAdapterUtil.itemMove(from, to, mSizeList);
         notifyItemMoved(from, to);
     }
 
     @Override
-    public void itemDrop(RecyclerView.ViewHolder viewHolder) {
-        super.itemDrop(viewHolder);
+    public void dropItem(RecyclerView.ViewHolder viewHolder) {
+        super.dropItem(viewHolder);
         mModel.sizeItemDrop(mSizeList);
     }
 }

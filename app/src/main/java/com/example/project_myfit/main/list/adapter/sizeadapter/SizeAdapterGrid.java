@@ -52,28 +52,28 @@ public class SizeAdapterGrid extends ParentAdapter<Size, SizeGridVH> {
     public void onBindViewHolder(@NonNull @NotNull SizeGridVH holder, int position) {
         Size size = getItem(position);
         holder.setSize(size);
-        dragHandleTouch(holder);
+        setDragHandleTouchListener(holder);
 
         restoreSelectedHashSet();
         setActionMode(GRIDVIEW, holder.getBinding().cardView, holder.getBinding().cb, size.getId());
-        dragHandleVisibility(holder.getBinding().iconDragHandle);
-        cbFavoriteClickable(holder.getBinding().cbFavorite);
+        setDragHandleVisibility(holder.getBinding().iconDragHandle);
+        setFavoriteClickable(holder.getBinding().cbFavorite);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void dragHandleTouch(@NotNull SizeGridVH holder) {
+    private void setDragHandleTouchListener(@NotNull SizeGridVH holder) {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 mListener.onSizeDragHandleTouch(holder);
-                draggingView(holder);
+                setDraggingView(holder);
             }
             return false;
         });
     }
 
     @Override
-    protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.draggingView(viewHolder);
+    protected void setDraggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDraggingView(viewHolder);
         SizeGridVH sizeGridVH = (SizeGridVH) viewHolder;
         sizeGridVH.getBinding().iv.setAlpha(0.5f);
         sizeGridVH.getBinding().layoutContents.setAlpha(0.7f);
@@ -81,8 +81,8 @@ public class SizeAdapterGrid extends ParentAdapter<Size, SizeGridVH> {
     }
 
     @Override
-    protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.dropView(viewHolder);
+    protected void setDropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDropView(viewHolder);
         SizeGridVH sizeGridVH = (SizeGridVH) viewHolder;
         sizeGridVH.getBinding().iv.setAlpha(1f);
         sizeGridVH.getBinding().layoutContents.setAlpha(1);
@@ -90,14 +90,14 @@ public class SizeAdapterGrid extends ParentAdapter<Size, SizeGridVH> {
     }
 
     @Override
-    public void itemMove(int from, int to) {
+    public void moveItem(int from, int to) {
         mAdapterUtil.itemMove(from, to, mSizeList);
         notifyItemMoved(from, to);
     }
 
     @Override
-    public void itemDrop(RecyclerView.ViewHolder viewHolder) {
-        super.itemDrop(viewHolder);
+    public void dropItem(RecyclerView.ViewHolder viewHolder) {
+        super.dropItem(viewHolder);
         mModel.sizeItemDrop(mSizeList);
     }
 }
