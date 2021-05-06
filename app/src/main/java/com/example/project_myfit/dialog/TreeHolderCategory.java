@@ -46,15 +46,15 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     @Override
-    public View createNodeView(TreeNode node, @NotNull CategoryTreeValue value) {
+    public View createNodeView(@NotNull TreeNode node, @NotNull CategoryTreeValue value) {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
         mBinding.tvContentsSize.setText(String.valueOf(mAdapterUtil.getContentsSize(value.category.getId(),
                 mFolderParentIdList, mSizeParentIdList)));
 
-        isSelectedFolderPosition(value);
-        isSelectedSizePosition(value);
+        if (isSelectedFolderParent(value)) setAlpha();
+        if (isSelectedSizeParent(value)) setAlpha();
 
         if (!node.getChildren().isEmpty())
             mBinding.layoutFolderIcon.setOnClickListener(v -> tView.toggleNode(node));
@@ -69,22 +69,20 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         return mBinding.getRoot();
     }
 
-    private void isSelectedFolderPosition(@NotNull CategoryTreeValue value) {
+    private boolean isSelectedFolderParent(@NotNull CategoryTreeValue value) {
         if (!mSelectedFolderList.isEmpty())
             for (Folder selectedFolder : mSelectedFolderList)
-                if (selectedFolder.getParentId() == value.category.getId()) {
-                    setAlpha();
-                    break;
-                }
+                if (selectedFolder.getParentId() == value.category.getId())
+                    return true;
+        return false;
     }
 
-    private void isSelectedSizePosition(@NotNull CategoryTreeValue value) {
+    private boolean isSelectedSizeParent(@NotNull CategoryTreeValue value) {
         if (!mSelectedSizeList.isEmpty())
             for (Size selectedSize : mSelectedSizeList)
-                if (selectedSize.getParentId() == value.category.getId()) {
-                    setAlpha();
-                    break;
-                }
+                if (selectedSize.getParentId() == value.category.getId())
+                    return true;
+        return false;
     }
 
     public void setAlpha() {
