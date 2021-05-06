@@ -36,7 +36,19 @@ public class DeleteConfirmDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_delete));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.deletedConfirm(mSizeId));
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getDialogViewModel().sizeDelete(mSizeId);
+        /*
+        TODO
+        서치뷰에서 삭제 시 액티비티 종료 되는지 and 백스택 쌓였을때 뒤로가기 되는지
+        사이즈 프래그먼트에서 프래그먼트 종료 되는지
+        정상 종료 안될시
+
+        sizeFragment -> dialogLive -> delete 복구
+         */
+//        mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM, null);
+            dialogUtil.getNavController().popBackStack(R.id.sizeFragment, true);
+        });
         return alertDialog;
     }
 }
