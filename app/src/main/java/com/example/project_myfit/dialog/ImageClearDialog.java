@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
+
 public class ImageClearDialog extends DialogFragment {
 
     private int mNavGraphId;
@@ -33,7 +35,10 @@ public class ImageClearDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_image_clear));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.imageClearConfirm());
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM, null);
+            dialogUtil.getNavController().popBackStack();
+        });
         return alertDialog;
     }
 }
