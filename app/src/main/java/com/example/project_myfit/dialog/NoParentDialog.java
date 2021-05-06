@@ -1,4 +1,4 @@
-package com.example.project_myfit.dialog.recyclebindialog;
+package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -11,41 +11,43 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.dialog.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.NO_PARENT_CONFIRM;
-
 public class NoParentDialog extends DialogFragment {
     private String[] noParentNameArray;
+    private int mNavGraphId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         noParentNameArray = NoParentDialogArgs.fromBundle(getArguments()).getNoParentNameList();
+        mNavGraphId = NoParentDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_recycle_bin)
-                .backStackLiveSetValue(R.id.noParentDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId)
+                .setValueBackStackLive(R.id.noParentDialog);
 
+        String message = getMessage();
+        AlertDialog alertDialog = dialogUtil.getConfirmDialog(message);
+
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(v -> dialogUtil.noParentConfirm());
+        return alertDialog;
+    }
+
+    @NotNull
+    private String getMessage() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < noParentNameArray.length; i++) {
-            if (i != noParentNameArray.length -1)
+            if (i != noParentNameArray.length - 1)
                 stringBuilder.append(noParentNameArray[i]).append(", ");
             else stringBuilder.append(noParentNameArray[i]);
         }
-
-        stringBuilder.append(getString(R.string.dialog_message_no_parent));
-
-        AlertDialog alertDialog = dialogUtil.getConfirmDialog(stringBuilder.toString());
-
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.getBackStackEntry().getSavedStateHandle().set(NO_PARENT_CONFIRM, null));
-        return alertDialog;
+        return stringBuilder.append(getString(R.string.dialog_message_no_parent)).toString();
     }
 }
