@@ -20,7 +20,7 @@ import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 
 public class AddDialog extends DialogFragment {
 
-    private String mItemType;
+    private int mItemType, mNavGraphId;
     private String mParentCategory;
     private long mParentId;
 
@@ -30,17 +30,18 @@ public class AddDialog extends DialogFragment {
         mItemType = AddDialogArgs.fromBundle(getArguments()).getItemType();
         mParentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
         mParentId = AddDialogArgs.fromBundle(getArguments()).getParentId();
+        mNavGraphId = AddDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.addDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.addDialog);
 
-        ItemDialogEditTextBinding binding = dialogUtil.getBinding(null, mItemType);
-
-        AlertDialog alertDialog = getDialog(dialogUtil, binding);
+        ItemDialogEditTextBinding binding = mItemType == CATEGORY ? dialogUtil.getCategoryBinding() : dialogUtil.getFolderBinding();
+        AlertDialog alertDialog = mItemType == CATEGORY ?
+                dialogUtil.getAddDialog(binding, getString(R.string.all_add_category)) : dialogUtil.getAddDialog(binding, getString(R.string.all_create_folder));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveClick(dialogUtil, binding, positiveButton);
@@ -48,23 +49,15 @@ public class AddDialog extends DialogFragment {
         return alertDialog;
     }
 
-    @NotNull
-    private AlertDialog getDialog(DialogUtil dialogUtil, ItemDialogEditTextBinding binding) {
-        if (mItemType.equals(CATEGORY))
-            return dialogUtil.getEditTextDialog(binding, getString(R.string.all_add_category), null);
-        else
-            return dialogUtil.getEditTextDialog(binding, getString(R.string.all_create_folder), null);
-    }
-
     private void positiveClick(DialogUtil dialogUtil, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             CommonUtil.keyBoardHide(requireContext(), v);
 
-            String newName = String.valueOf(binding.et.getText()).trim();
+            String name = String.valueOf(binding.et.getText()).trim();
 
-            if (mItemType.equals(CATEGORY))
-                dialogUtil.addCategory(newName, mParentCategory, false);
-            else dialogUtil.addFolder(newName, mParentId, mParentCategory, false);
+            if (mItemType == CATEGORY)
+                dialogUtil.addCategory(name, mParentCategory, mNavGraphId);
+            else dialogUtil.addFolder(name, mParentId, mParentCategory, mNavGraphId);
         });
     }
 }
