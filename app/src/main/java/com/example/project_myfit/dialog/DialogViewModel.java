@@ -24,7 +24,7 @@ public class DialogViewModel extends AndroidViewModel {
     private String mParentName;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
-    private List<Folder> mFolderHistory;
+    private List<Folder> mFolderPath;
     private Category mAddedCategory;
     private Folder mAddedFolder;
     private DummyUtil mDummyUtil;
@@ -110,7 +110,7 @@ public class DialogViewModel extends AndroidViewModel {
     public void setTreeViewResources(List<Folder> selectedFolderList, List<Size> selectedSizeList, List<Folder> folderHistory) {
         mSelectedFolderList = selectedFolderList;
         mSelectedSizeList = selectedSizeList;
-        mFolderHistory = folderHistory;
+        mFolderPath = folderHistory;
     }
 
     public List<Folder> getSelectedFolderList() {
@@ -122,7 +122,7 @@ public class DialogViewModel extends AndroidViewModel {
     }
 
     public List<Folder> getFolderHistory() {
-        return mFolderHistory;
+        return mFolderPath;
     }
 
     public Category getAddedCategory() {
