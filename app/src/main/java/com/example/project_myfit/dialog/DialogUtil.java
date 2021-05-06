@@ -232,13 +232,13 @@ public class DialogUtil {
     public void editCategoryName(@NotNull Category category, String newCategoryName, boolean isParentName) {
         mDialogViewModel.editCategoryName(category, newCategoryName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-        mNavController.popBackStack(R.id.nameEditDialog, true);
+        mNavController.popBackStack(R.id.editNameDialog, true);
     }
 
     public void editFolderName(@NotNull Folder folder, String newFolderName, boolean isParentName) {
         mDialogViewModel.editFolderName(folder, newFolderName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-        mNavController.popBackStack(R.id.nameEditDialog, true);
+        mNavController.popBackStack(R.id.editNameDialog, true);
     }
 
     public void setOnImeClickListener(@NotNull ItemDialogEditTextBinding binding, Button positiveButton) {
