@@ -45,7 +45,7 @@ public class AddDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveClick(dialogUtil, binding, positiveButton);
-        dialogUtil.imeClick(binding, positiveButton);
+        dialogUtil.setOnImeClickListener(binding, positiveButton);
         return alertDialog;
     }
 
