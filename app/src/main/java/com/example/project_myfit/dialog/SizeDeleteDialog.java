@@ -31,7 +31,7 @@ public class SizeDeleteDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId)
-                .setValueBackStackLive(R.id.deleteConfirmDialog);
+                .setValueBackStackLive(R.id.SizeDeleteDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_delete));
 
