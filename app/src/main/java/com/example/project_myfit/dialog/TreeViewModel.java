@@ -24,8 +24,7 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_LIST;
 import static com.example.project_myfit.util.MyFitConstant.SORT_MAIN;
 
 public class TreeViewModel extends AndroidViewModel {
-    private final Repository.CategoryRepository mCategoryRepository;
-    private final Repository.FolderRepository mFolderRepository;
+    private final Repository mRepository;
     private String mParentCategory;
     private List<Folder> mFolderList, mSelectedFolderList;
     private List<Size> mSelectedSizeList;
@@ -36,8 +35,7 @@ public class TreeViewModel extends AndroidViewModel {
 
     public TreeViewModel(@NonNull @NotNull Application application) {
         super(application);
-        mCategoryRepository = Repository.getCategoryRepository(application);
-        mFolderRepository = Repository.getFolderRepository(application);
+        mRepository = new Repository(application);
         mMargin = (int) application.getResources().getDimension(R.dimen._12sdp);
         mMainSort = getApplication().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE).getInt(SORT_MAIN, SORT_CUSTOM);
         mListSort = getApplication().getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE).getInt(SORT_LIST, SORT_CUSTOM);
@@ -108,7 +106,7 @@ public class TreeViewModel extends AndroidViewModel {
 
         Category dummy = categoryViewHolder.getCategory();
         dummy.setDummy(!dummy.getDummy());
-        mCategoryRepository.categoryUpdate(dummy);
+        mRepository.getCategoryRepository().categoryUpdate(dummy);
     }
 
     public void folderAddFolder(@NotNull TreeHolderFolder folderViewHolder) {
@@ -119,7 +117,7 @@ public class TreeViewModel extends AndroidViewModel {
 
         Folder dummy = folderViewHolder.getFolder();
         dummy.setDummy(!dummy.getDummy());
-        mFolderRepository.folderUpdate(dummy);
+        mRepository.getFolderRepository().folderUpdate(dummy);
     }
 
     public void treeViewDestroy() {
@@ -155,13 +153,13 @@ public class TreeViewModel extends AndroidViewModel {
 
     public List<Category> getCategoryList() {
         if (mCategoryList == null)
-            mCategoryList = Sort.categorySort(mMainSort, mCategoryRepository.getCategoryList(mParentCategory, false));
+            mCategoryList = Sort.categorySort(mMainSort, mRepository.getCategoryRepository().getCategoryList(mParentCategory, false));
         return mCategoryList;
     }
 
     public List<Folder> getFolderList() {
         if (mFolderList == null)
-            mFolderList = Sort.folderSort(mListSort, mFolderRepository.getFolderList(mParentCategory, false, false));
+            mFolderList = Sort.folderSort(mListSort, mRepository.getFolderRepository().getFolderList(mParentCategory, false, false));
         return mFolderList;
     }
 
@@ -179,13 +177,13 @@ public class TreeViewModel extends AndroidViewModel {
 
     private List<Long> getFolderParentIdList() {
         if (mFolderParentIdList == null)
-            mFolderParentIdList = mFolderRepository.getFolderParentIdList(mParentCategory, false, false);
+            mFolderParentIdList = mRepository.getFolderRepository().getFolderParentIdList(mParentCategory, false, false);
         return mFolderParentIdList;
     }
 
     private List<Long> getSizeParentIdList() {
         if (mSizeParentIdList == null)
-            mSizeParentIdList = Repository.getSizeRepository(getApplication()).getSizeParentIdList(mParentCategory, false, false);
+            mSizeParentIdList = mRepository.getSizeRepository().getSizeParentIdList(mParentCategory, false, false);
         return mSizeParentIdList;
     }
 }
