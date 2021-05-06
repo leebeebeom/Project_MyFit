@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
+
 public class SelectedItemDeleteDialog extends DialogFragment {
 
     private int mSelectedItemSize;
@@ -35,7 +37,10 @@ public class SelectedItemDeleteDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_selected_item_delete));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.selectedItemDeleteConfirm());
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM, null);
+            dialogUtil.getNavController().popBackStack();
+        });
         return alertDialog;
     }
 }
