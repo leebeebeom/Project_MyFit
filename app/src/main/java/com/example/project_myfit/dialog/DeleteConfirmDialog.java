@@ -37,7 +37,7 @@ public class DeleteConfirmDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            dialogUtil.getDialogViewModel().sizeDelete(mSizeId);
+            dialogUtil.getDialogViewModel().deleteSize(mSizeId);
         /*
         TODO
         서치뷰에서 삭제 시 액티비티 종료 되는지 and 백스택 쌓였을때 뒤로가기 되는지

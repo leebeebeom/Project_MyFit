@@ -218,13 +218,13 @@ public class DialogUtil {
     }
 
     public void addCategory(String categoryName, String parentCategory) {
-        mDialogViewModel.categoryInsert(categoryName, parentCategory);
+        mDialogViewModel.insertCategory(categoryName, parentCategory);
         mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, CATEGORY);
         mNavController.popBackStack(R.id.addDialog, true);
     }
 
     public void addFolder(String folderName, long parentId, String parentCategory) {
-        mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
+        mDialogViewModel.insertFolder(folderName, parentId, parentCategory);
         mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, FOLDER);
         mNavController.popBackStack(R.id.addDialog, true);
     }
