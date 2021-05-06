@@ -19,8 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class DialogViewModel extends AndroidViewModel {
-    private final Repository.CategoryRepository mCategoryRepository;
-    private final Repository.FolderRepository mFolderRepository;
+    private final Repository mRepository;
     private MutableLiveData<NavBackStackEntry> mBackStackEntryLive;
     private String mParentName;
     private List<Folder> mSelectedFolderList;
@@ -28,12 +27,12 @@ public class DialogViewModel extends AndroidViewModel {
     private List<Folder> mFolderHistory;
     private Category mAddedCategory;
     private Folder mAddedFolder;
+    private DummyUtil mDummyUtil;
     private boolean mIsOrderNumberInit;
 
     public DialogViewModel(@NonNull @NotNull Application application) {
         super(application);
-        mCategoryRepository = Repository.getCategoryRepository(application);
-        mFolderRepository = Repository.getFolderRepository(application);
+        this.mRepository = new Repository(getApplication());
     }
 
     public MutableLiveData<NavBackStackEntry> getBackStackEntryLive() {
@@ -44,7 +43,7 @@ public class DialogViewModel extends AndroidViewModel {
 
     public boolean isSameNameCategory(String categoryName, String parentCategory) {
         boolean isSameName = false;
-        List<String> categoryNameList = mCategoryRepository.getCategoryNameList(parentCategory, false);
+        List<String> categoryNameList = mRepository.getCategoryRepository().getCategoryNameList(parentCategory, false);
         for (String name : categoryNameList)
             if (name.equals(categoryName)) {
                 isSameName = true;
@@ -55,7 +54,7 @@ public class DialogViewModel extends AndroidViewModel {
 
     public boolean isSameNameFolder(String folderName, long parentId) {
         boolean isSameName = false;
-        List<String> folderNameList = mFolderRepository.getFolderNameList(parentId, false, false);
+        List<String> folderNameList = mRepository.getFolderRepository().getFolderNameList(parentId, false, false);
         for (String name : folderNameList)
             if (name.equals(folderName)) {
                 isSameName = true;
@@ -64,63 +63,51 @@ public class DialogViewModel extends AndroidViewModel {
         return isSameName;
     }
 
-    public void categoryInsert(String categoryName, String parentCategory) {
-        mAddedCategory = new Category(CommonUtil.createId(), categoryName, parentCategory, mCategoryRepository.getCategoryLargestOrderPlus1());
-        mCategoryRepository.categoryInsert(mAddedCategory);
+    public void insertCategory(String categoryName, String parentCategory) {
+        mAddedCategory = new Category(CommonUtil.createId(), categoryName, parentCategory, mRepository.getCategoryRepository().getCategoryLargestOrderPlus1());
+        mRepository.getCategoryRepository().categoryInsert(mAddedCategory);
     }
 
-    public void folderInsert(@NotNull String folderName, long parentId, String parentCategory) {
-        mAddedFolder = new Folder(CommonUtil.createId(), folderName.trim(), parentId, mFolderRepository.getFolderLargestOrderPlus1(), parentCategory);
-        mFolderRepository.folderInsert(mAddedFolder);
-        DummyUtil.setDummy(parentId, getApplication());
+    public void insertFolder(@NotNull String folderName, long parentId, String parentCategory) {
+        mAddedFolder = new Folder(CommonUtil.createId(), folderName.trim(), parentId, mRepository.getFolderRepository().getFolderLargestOrderPlus1(), parentCategory);
+        mRepository.getFolderRepository().folderInsert(mAddedFolder);
+        if (mDummyUtil == null) mDummyUtil = new DummyUtil(getApplication());
+        mDummyUtil.setDummy(parentId);
     }
 
-    public void categoryNameEdit(@NotNull Category category, String categoryName, boolean isParentName) {
+    public void editCategoryName(@NotNull Category category, String categoryName, boolean isParentName) {
         if (isParentName) mParentName = categoryName;
         category.setCategoryName(categoryName);
-        mCategoryRepository.categoryUpdate(category);
+        mRepository.getCategoryRepository().categoryUpdate(category);
     }
 
-    public void folderNameEdit(@NotNull Folder folder, String folderName, boolean isParentName) {
+    public void editFolderName(@NotNull Folder folder, String folderName, boolean isParentName) {
         if (isParentName) mParentName = folderName;
         folder.setFolderName(folderName);
-        mFolderRepository.folderUpdate(folder);
+        mRepository.getFolderRepository().folderUpdate(folder);
     }
 
-    public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName) {
-        if (isParentName) mParentName = categoryName;
-        Category category = mCategoryRepository.getCategory(categoryId, false);
-        category.setCategoryName(categoryName);
-        mCategoryRepository.categoryUpdate(category);
-    }
-
-    public void sameNameFolderEdit(long parentId, String folderName, boolean isParentName) {
-        if (isParentName) mParentName = folderName;
-        Folder folder = mFolderRepository.getFolder(parentId, false,false);
-        folder.setFolderName(folderName);
-        mFolderRepository.folderUpdate(folder);
-    }
-
-    public void sizeDelete(long sizeId) {
-        Size size = Repository.getSizeRepository(getApplication()).getSize(sizeId);
+    public void deleteSize(long sizeId) {
+        Size size = mRepository.getSizeRepository().getSize(sizeId);
         size.setIsDeleted(true);
-        Repository.getSizeRepository(getApplication()).sizeUpdate(size);
-        DummyUtil.setDummy(size.getParentId(), getApplication());
+        mRepository.getSizeRepository().sizeUpdate(size);
+        if (mDummyUtil == null) mDummyUtil = new DummyUtil(getApplication());
+        mDummyUtil.setDummy(size.getParentId());
     }
 
     public Category getCategory(long categoryId) {
-        return mCategoryRepository.getCategory(categoryId,false);
+        return mRepository.getCategoryRepository().getCategory(categoryId, false);
     }
 
     public Folder getFolder(long folderId) {
-        return mFolderRepository.getFolder(folderId,false,false);
+        return mRepository.getFolderRepository().getFolder(folderId, false, false);
     }
 
     public String getParentName() {
         return mParentName;
     }
 
-    public void forTreeView(List<Folder> selectedFolderList, List<Size> selectedSizeList, List<Folder> folderHistory) {
+    public void setTreeViewResources(List<Folder> selectedFolderList, List<Size> selectedSizeList, List<Folder> folderHistory) {
         mSelectedFolderList = selectedFolderList;
         mSelectedSizeList = selectedSizeList;
         mFolderHistory = folderHistory;
@@ -147,20 +134,24 @@ public class DialogViewModel extends AndroidViewModel {
     }
 
     public void orderNumberInit(){
-        if (!mIsOrderNumberInit){
-            List<Category> categoryList = mCategoryRepository.getCategoryList(false);
+        if (!mIsOrderNumberInit) {
+            List<Category> categoryList = mRepository.getCategoryRepository().getCategoryList(false);
             for (int i = 0; i < categoryList.size(); i++)
                 categoryList.get(i).setOrderNumber(i);
-            List<Folder> folderList = mFolderRepository.getFolderList(false, false);
+            List<Folder> folderList = mRepository.getFolderRepository().getFolderList(false, false);
             for (int i = 0; i < folderList.size(); i++)
                 folderList.get(i).setOrderNumber(i);
-            List<Size> sizeList = Repository.getSizeRepository(getApplication()).getSizeList(false, false);
+            List<Size> sizeList = mRepository.getSizeRepository().getSizeList(false, false);
             for (int i = 0; i < sizeList.size(); i++)
                 sizeList.get(i).setOrderNumber(i);
-            mCategoryRepository.categoryUpdate(categoryList);
-            mFolderRepository.folderUpdate(folderList);
-            Repository.getSizeRepository(getApplication()).sizeUpdate(sizeList);
+            mRepository.getCategoryRepository().categoryUpdate(categoryList);
+            mRepository.getFolderRepository().folderUpdate(folderList);
+            mRepository.getSizeRepository().sizeUpdate(sizeList);
             mIsOrderNumberInit = true;
         }
+    }
+
+    public void recentSearchDeleteAll() {
+        mRepository.getRecentSearchRepository().deleteAllRecentSearch();
     }
 }
