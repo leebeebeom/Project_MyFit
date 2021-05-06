@@ -181,7 +181,7 @@ public class Repository {
 
         public List<Folder> getFolderList(String parentCategory, boolean isDeleted, boolean parentIsDeleted) {
             //order by orderNumber
-            //used in listViewModel -> getFolderHistory
+            //used in listViewModel -> getFolderPath
             //used in treeViewDialog -> sort.folderSort
             List<Folder> folderList = new ArrayList<>();
             Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentCategory, isDeleted, parentIsDeleted)));
