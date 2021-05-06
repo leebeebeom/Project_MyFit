@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
@@ -46,15 +46,8 @@ public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull @NotNull SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE RecentSearch_new(" +
-                    "id INTEGER PRIMARY KEY NOT NULL," +
-                    "word TEXT," +
-                    "date TEXT," +
-                    "isRecycleBin INTERGER NOT NULL DEFAULT 0)");
-            database.execSQL("INSERT INTO RecentSearch_new(id, word, date)" +
-                    "SELECT id, word, date FROM RecentSearch");
-            database.execSQL("DROP TABLE RecentSearch");
-            database.execSQL("ALTER TABLE RecentSearch_new RENAME TO RecentSearch");
+            database.execSQL("ALTER TABLE RecentSearch ADD COLUMN parentId INTEGER NOT NULL DEFAULT -1");
+            database.execSQL("ALTER TABLE Category ADD COLUMN parentId INTEGER NOT NULL DEFAULT -1");
         }
     };
     private static AppDataBase sInstance;
@@ -86,7 +79,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category(17, "기타", MyFitConstant.ETC, 17));
                             Repository.getCategoryRepository(context).categoryInsert(categoryList);
                         }
-                    }).addMigrations(MIGRATION_2_1)
+                    }).addMigrations(MIGRATION_1_2)
                     .build();
         }
         return sInstance;
