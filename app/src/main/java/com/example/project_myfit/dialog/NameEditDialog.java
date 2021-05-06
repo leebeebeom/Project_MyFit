@@ -61,20 +61,28 @@ public class NameEditDialog extends DialogFragment {
                 dialogUtil.getEditDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveClick(dialogUtil, category, folder, positiveButton);
+        setPositiveClickListener(dialogUtil, category, folder, positiveButton);
         dialogUtil.setOnImeClickListener(mBinding, positiveButton);
         return alertDialog;
     }
 
-    private void positiveClick(DialogUtil dialogUtil, Category category, Folder folder, @NotNull Button positiveButton) {
+    private void setPositiveClickListener(DialogUtil dialogUtil, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             CommonUtil.keyBoardHide(requireContext(), v);
 
             String newName = String.valueOf(mBinding.et.getText()).trim();
 
-            if (category != null)
-                dialogUtil.categoryNameEdit(category, newName, mIsParentName, mNavGraphId);
-            else dialogUtil.folderNameEdit(folder, newName, mIsParentName, mNavGraphId);
+            if (category != null) {
+                if (dialogUtil.getDialogViewModel().isSameNameCategory(newName, category.getParentCategory()))
+                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
+                            NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), newName, mIsParentName, mNavGraphId));
+                else dialogUtil.categoryNameEdit(category, newName, mIsParentName);
+            } else {
+                if (dialogUtil.getDialogViewModel().isSameNameFolder(newName, folder.getParentId()))
+                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
+                            NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), newName, mIsParentName, mNavGraphId));
+                dialogUtil.folderNameEdit(folder, newName, mIsParentName);
+            }
         });
     }
 
