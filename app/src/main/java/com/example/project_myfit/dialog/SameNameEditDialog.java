@@ -58,7 +58,7 @@ public class SameNameEditDialog extends DialogFragment {
 
     private void setPositiveClickListener(DialogUtil dialogUtil, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
-            if (mItemType == CATEGORY)
+            if (category != null)
                 dialogUtil.editCategoryName(category, mNewName, mIsParentName);
             else dialogUtil.editFolderName(folder, mNewName, mIsParentName);
         });
