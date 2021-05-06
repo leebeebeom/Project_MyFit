@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 
-public class SameNameAddDialog extends DialogFragment {
+public class AddSameNameDialog extends DialogFragment {
     private int mItemType, mNavGraphId;
     private String mParentCategory;
     private long mParentId;
@@ -25,18 +25,18 @@ public class SameNameAddDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = SameNameAddDialogArgs.fromBundle(getArguments()).getItemType();
-        mParentCategory = SameNameAddDialogArgs.fromBundle(getArguments()).getParentCategory();
-        mParentId = SameNameAddDialogArgs.fromBundle(getArguments()).getParentId();
-        mName = SameNameAddDialogArgs.fromBundle(getArguments()).getName();
-        mNavGraphId = SameNameAddDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mItemType = AddSameNameDialogArgs.fromBundle(getArguments()).getItemType();
+        mParentCategory = AddSameNameDialogArgs.fromBundle(getArguments()).getParentCategory();
+        mParentId = AddSameNameDialogArgs.fromBundle(getArguments()).getParentId();
+        mName = AddSameNameDialogArgs.fromBundle(getArguments()).getName();
+        mNavGraphId = AddSameNameDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.sameNameAddDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.addSameNameDialog);
 
         AlertDialog alertDialog = mItemType == CATEGORY ?
                 dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add)) :

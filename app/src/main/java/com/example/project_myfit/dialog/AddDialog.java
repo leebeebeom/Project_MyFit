@@ -59,12 +59,12 @@ public class AddDialog extends DialogFragment {
             if (mItemType == CATEGORY) {
                 if (dialogUtil.getDialogViewModel().isSameNameCategory(name, mParentCategory))
                     CommonUtil.navigate(dialogUtil.getNavController(), R.id.addDialog,
-                            AddDialogDirections.actionAddDialogToSameNameAddDialog(CATEGORY, mParentCategory, 0, name, mNavGraphId));
+                            AddDialogDirections.toAddSameNameDialog(CATEGORY, mParentCategory, 0, name, mNavGraphId));
                 else dialogUtil.addCategory(name, mParentCategory);
             } else {
                 if (dialogUtil.getDialogViewModel().isSameNameFolder(name, mParentId))
                     CommonUtil.navigate(dialogUtil.getNavController(), R.id.addDialog,
-                            AddDialogDirections.actionAddDialogToSameNameAddDialog(FOLDER, mParentCategory, mParentId, name, mNavGraphId));
+                            AddDialogDirections.toAddSameNameDialog(FOLDER, mParentCategory, mParentId, name, mNavGraphId));
                 else dialogUtil.addFolder(name, mParentId, mParentCategory);
             }
         });
