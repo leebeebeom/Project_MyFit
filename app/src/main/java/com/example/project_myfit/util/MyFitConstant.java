@@ -2,15 +2,16 @@ package com.example.project_myfit.util;
 
 public class MyFitConstant {
     //type
-    public static final String CATEGORY = "category";
-    public static final String FOLDER = "folder";
-    public static final String SIZE = "size";
-    public static final String DAILY_LOOK = "daily look";
-    public static final String WISH_LIST = "wish list";
-    public static final int RECENT_SEARCH_SEARCH  = 0;
-    public static final int RECENT_SEARCH_RECYCLE_BIN  = 1;
-    public static final int RECENT_SEARCH_DAILY_LOOK  = 2;
-    public static final int RECENT_SEARCH_WISH_LIST  = 3;
+    public static final int CATEGORY = 0;
+    public static final int FOLDER = 1;
+    public static final int SIZE = 2;
+    public static final int DAILY_LOOK = 3;
+    public static final int WISH_LIST = 4;
+
+    public static final int RECENT_SEARCH_SEARCH = 0;
+    public static final int RECENT_SEARCH_RECYCLE_BIN = 1;
+    public static final int RECENT_SEARCH_DAILY_LOOK = 2;
+    public static final int RECENT_SEARCH_WISH_LIST = 3;
 
     //key
     public static final String PARENT_ID = "parentId";
@@ -21,8 +22,8 @@ public class MyFitConstant {
     public static final String THIS_FOLDER_TEXT_VIEW = "this folder text view";
 
     //fragment type
-    public static final String MAIN_FRAGMENT = "main fragment";
-    public static final String LIST_FRAGMENT = "list fragment";
+    public static final int MAIN_FRAGMENT = 0;
+    public static final int LIST_FRAGMENT = 1;
 
     //parent category
     public static final String TOP = "TOP";
@@ -32,7 +33,7 @@ public class MyFitConstant {
 
     //size
     public static final String LENGTH = "length";
-    public static final String BOTTOM_LENGTH = "bottom_length";
+    public static final String BOTTOM_LENGTH = "bottom length";
     public static final String SHOULDER = "shoulder";
     public static final String CHEST = "chest";
     public static final String SLEEVE = "sleeve";
@@ -75,19 +76,19 @@ public class MyFitConstant {
 
     //dialog key
     public static final String ADD_CONFIRM = "add confirm";
-    public static final String NAME_EDIT_CONFIRM = "name edit confirm";
-    public static final String SELECTED_ITEM_DELETE_CONFIRM = "selected item deleted confirm";
+    public static final String EDIT_NAME_CONFIRM = "name edit confirm";
+    public static final String DELETE_SELECTED_ITEM_CONFIRM = "selected item deleted confirm";
     public static final String SORT_CONFIRM = "sort confirm";
-    public static final String ITEM_MOVE_CONFIRM = "item move confirm";
-    public static final String IMAGE_CLEAR_CONFIRM = "image clear confirm";
-    public static final String SIZE_DELETE_CONFIRM = "size delete confirm";
-    public static final String RECENT_SEARCH_ALL_CLEAR_CONFIRM = "recent search all clear confirm";
+    public static final String MOVE_ITEM_CONFIRM = "item move confirm";
+    public static final String DELETE_IMAGE_CONFIRM = "image clear confirm";
+    public static final String DELETE_SIZE_CONFIRM = "size delete confirm";
+    public static final String DELETE_ALL_RECENT_SEARCH_CONFIRM = "recent search all clear confirm";
     public static final String GO_BACK_CONFIRM = "go back confirm";
     public static final String RESTORE_CONFIRM = "restore confirm";
     public static final String DELETE_FOREVER_CONFIRM = "delete forever confirm";
+    public static final String NO_PARENT_CONFIRM = "no parent confirm";
 
-    public static final String NAME_EDIT_NAME = "name edit name";
-    public static final String RESTORE_ADD_CATEGORY = "restore add category";
+    public static final String EDIT_NAME = "name edit name";
     public static final String FOLDER_TOGGLE = "folder toggle";
     public static final String TREE_VIEW_STATE = "state";
 
