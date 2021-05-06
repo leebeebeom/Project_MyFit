@@ -40,14 +40,14 @@ public interface CategoryDao {
     int getCategoryLargestOrder();
 
     @Insert
-    void categoryInsert(Category category);
+    void insertCategory(Category category);
 
     @Insert
-    void categoryInsert(List<Category> categoryList);
+    void insertCategory(List<Category> categoryList);
 
     @Update
-    void categoryUpdate(Category category);
+    void updateCategory(Category category);
 
     @Update
-    void categoryUpdate(List<Category> categoryList);
+    void updateCategory(List<Category> categoryList);
 }

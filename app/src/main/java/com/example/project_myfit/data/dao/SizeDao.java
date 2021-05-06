@@ -46,11 +46,11 @@ public interface SizeDao {
     int getSizeLargestOrder();
 
     @Insert
-    void sizeInsert(Size size);
+    void insertSize(Size size);
 
     @Update
-    void sizeUpdate(Size size);
+    void updateSize(Size size);
 
     @Update
-    void sizeUpdate(List<Size> sizeList);
+    void updateSize(List<Size> sizeList);
 }

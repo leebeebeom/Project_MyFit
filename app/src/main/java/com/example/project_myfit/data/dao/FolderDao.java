@@ -52,11 +52,11 @@ public interface FolderDao {
     int getFolderLargestOrder();
 
     @Insert
-    void folderInsert(Folder folder);
+    void insertFolder(Folder folder);
 
     @Update
-    void folderUpdate(Folder folder);
+    void updateFolder(Folder folder);
 
     @Update
-    void folderUpdate(List<Folder> folderList);
+    void updateFolder(List<Folder> folderList);
 }
