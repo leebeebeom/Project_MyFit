@@ -241,11 +241,11 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     public void onClick(@NotNull TreeNode node, Object value) {
         if (node.getViewHolder() instanceof TreeHolderCategory && ((TreeHolderCategory) node.getViewHolder()).isClickable()) {
             CommonUtil.navigate(mDialogUtil.getNavController(), R.id.treeViewDialog,
-                    TreeViewDialogDirections.actionTreeViewDialogToItemMoveDialog(
+                    TreeViewDialogDirections.toMoveDialog(
                             mModel.getSelectedItemSize(), ((TreeHolderCategory) node.getViewHolder()).getCategoryId(), mNavGraphId));
         } else if (node.getViewHolder() instanceof TreeHolderFolder && ((TreeHolderFolder) node.getViewHolder()).isClickable())
             CommonUtil.navigate(mDialogUtil.getNavController(), R.id.treeViewDialog,
-                    TreeViewDialogDirections.actionTreeViewDialogToItemMoveDialog(
+                    TreeViewDialogDirections.toMoveDialog(
                             mModel.getSelectedItemSize(), ((TreeHolderFolder) node.getViewHolder()).getFolderId(), mNavGraphId));
     }
 
