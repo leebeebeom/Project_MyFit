@@ -184,7 +184,7 @@
             app:argType="integer" />
         <argument
             android:name="fragmentType"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="navGraphId"
             app:argType="integer" />
