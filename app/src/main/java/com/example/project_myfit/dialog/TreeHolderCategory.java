@@ -53,8 +53,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding.tvContentsSize.setText(String.valueOf(mAdapterUtil.getContentsSize(value.category.getId(),
                 mFolderParentIdList, mSizeParentIdList)));
 
-        if (isSelectedFolderParent(value)) setAlpha();
-        if (mIsClickable && isSelectedSizeParent(value)) setAlpha();
+        if (isSelectedFolderParent(value) || isSelectedSizeParent(value)) setAlpha();
 
         if (!node.getChildren().isEmpty())
             mBinding.layoutFolderIcon.setOnClickListener(v -> tView.toggleNode(node));
