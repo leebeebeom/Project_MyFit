@@ -14,7 +14,7 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DeleteConfirmDialog extends DialogFragment {
+public class SizeDeleteDialog extends DialogFragment {
 
     private long mSizeId;
     private int mNavGraphId;
@@ -22,8 +22,8 @@ public class DeleteConfirmDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSizeId = DeleteConfirmDialogArgs.fromBundle(getArguments()).getSizeId();
-        mNavGraphId = DeleteConfirmDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mSizeId = SizeDeleteDialogArgs.fromBundle(getArguments()).getSizeId();
+        mNavGraphId = SizeDeleteDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
