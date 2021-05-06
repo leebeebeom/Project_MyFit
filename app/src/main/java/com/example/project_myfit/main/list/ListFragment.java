@@ -311,7 +311,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     }
 
     private void setTextNavigation(Folder thisFolder) {
-        for (Folder folder : mModel.getFolderHistory(thisFolder)) {
+        for (Folder folder : mModel.getFolderPath(thisFolder)) {
             mBinding.layoutTextNavigation.addView(getArrowIcon());
             mBinding.layoutTextNavigation.addView(getFolderNameTv(folder));
         }
@@ -878,7 +878,22 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     //action mode-----------------------------------------------------------------------------------
     @Override
     public void selectAllClick(boolean isChecked) {
-        mModel.selectAllClick(isChecked, mFolderAdapter, mSizeAdapterList, mSizeAdapterGrid);
+        mModel.selectedItemsClear();
+        if (isChecked) {
+            mFolderAdapter.selectAll();
+            if (mModel.getViewType() == LISTVIEW) {
+                mSizeAdapterList.selectAll();
+                mModel.selectAll(mFolderAdapter.getCurrentList(), mSizeAdapterList.getCurrentList());
+            } else {
+                mSizeAdapterGrid.selectAll();
+                mModel.selectAll(mFolderAdapter.getCurrentList(), mSizeAdapterGrid.getCurrentList());
+            }
+        } else {
+            mFolderAdapter.deselectAll();
+            if (mModel.getViewType() == LISTVIEW) mSizeAdapterList.deselectAll();
+            else mSizeAdapterGrid.deselectAll();
+        }
+        mModel.setSelectedItemSizeLive();
     }
 
     @Override
@@ -887,7 +902,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
             CommonUtil.navigate(mNavController, R.id.listFragment,
                     ListFragmentDirections.toEditNameDialog(mModel.getSelectedFolderId(), FOLDER, false, R.id.nav_graph_main));
         else if (itemId == R.id.menu_action_mode_move) {
-            mDialogViewModel.setTreeViewResources(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), mModel.getFolderHistory3());
+            mDialogViewModel.setTreeViewResources(mModel.getSelectedFolderList(), mModel.getSelectedSizeList(), mModel.getFolderPathComplete());
             CommonUtil.navigate(mNavController, R.id.listFragment,
                     ListFragmentDirections.toTreeViewDialog(mParentCategory, mThisCategoryId, mThisFolderId, R.id.nav_graph_main));
         } else if (itemId == R.id.menu_action_mode_delete)
