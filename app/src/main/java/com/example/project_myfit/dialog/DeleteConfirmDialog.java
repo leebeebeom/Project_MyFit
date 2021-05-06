@@ -17,19 +17,21 @@ import org.jetbrains.annotations.NotNull;
 public class DeleteConfirmDialog extends DialogFragment {
 
     private long mSizeId;
+    private int mNavGraphId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSizeId = DeleteConfirmDialogArgs.fromBundle(getArguments()).getSizeId();
+        mNavGraphId = DeleteConfirmDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main)
-                .backStackLiveSetValue(R.id.deleteConfirmDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId)
+                .setValueBackStackLive(R.id.deleteConfirmDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_delete));
 
