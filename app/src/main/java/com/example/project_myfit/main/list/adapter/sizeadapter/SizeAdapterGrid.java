@@ -64,7 +64,7 @@ public class SizeAdapterGrid extends ParentAdapter<Size, SizeGridVH> {
     private void setDragHandleTouchListener(@NotNull SizeGridVH holder) {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
-                mListener.onSizeDragHandleTouch(holder);
+                mListener.sizeDragHandleTouch(holder);
                 setDraggingView(holder);
             }
             return false;
@@ -98,6 +98,6 @@ public class SizeAdapterGrid extends ParentAdapter<Size, SizeGridVH> {
     @Override
     public void dropItem(RecyclerView.ViewHolder viewHolder) {
         super.dropItem(viewHolder);
-        mModel.sizeItemDrop(mSizeList);
+        mModel.sizeItemDropped(mSizeList);
     }
 }

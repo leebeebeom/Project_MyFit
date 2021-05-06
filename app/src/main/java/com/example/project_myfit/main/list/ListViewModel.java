@@ -13,11 +13,7 @@ import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.main.list.adapter.folderadapter.FolderAdapter;
-import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterGrid;
-import com.example.project_myfit.main.list.adapter.sizeadapter.SizeAdapterList;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -32,30 +28,26 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_LIST;
 import static com.example.project_myfit.util.MyFitConstant.VIEW_TYPE;
 
 public class ListViewModel extends AndroidViewModel {
-    private final Repository.FolderRepository mFolderRepository;
-    private final Repository.SizeRepository mSizeRepository;
+    private final Repository mRepository;
     private final MutableLiveData<Integer> mSelectedItemSizeLive;
     private List<Folder> mSelectedFolderList;
     private List<Size> mSelectedSizeList;
     private boolean mFavoriteView, isFolderToggleOpen;
     private LiveData<Category> mThisCategoryLive;
     private LiveData<Folder> mThisFolderLive;
-    private List<Folder> mFolderHistory;
+    private List<Folder> mFolderPath;
     private SharedPreferences mViewTypePreference, mSortPreference, mFolderTogglePreference;
     private int mViewType, mSort;
 
 
     public ListViewModel(@NonNull Application application) {
         super(application);
-        mFolderRepository = Repository.getFolderRepository(application);
-        mSizeRepository = Repository.getSizeRepository(application);
+        mRepository = new Repository(application);
         mSelectedItemSizeLive = new MutableLiveData<>();
-        mSelectedFolderList = new ArrayList<>();
-        mSelectedSizeList = new ArrayList<>();
-        preferenceInit();
+        initPreference();
     }
 
-    private void preferenceInit() {
+    private void initPreference() {
         mViewTypePreference = getApplication().getSharedPreferences(VIEW_TYPE, Context.MODE_PRIVATE);
         mViewType = mViewTypePreference.getInt(VIEW_TYPE, LISTVIEW);
 
@@ -66,117 +58,89 @@ public class ListViewModel extends AndroidViewModel {
         isFolderToggleOpen = mFolderTogglePreference.getBoolean(FOLDER_TOGGLE, true);
     }
 
-    public void selectAllClick(boolean isChecked, FolderAdapter folderAdapter,
-                               SizeAdapterList sizeAdapterList, SizeAdapterGrid sizeAdapterGrid) {
-        if (!mSelectedFolderList.isEmpty()) mSelectedFolderList.clear();
-        if (!mSelectedSizeList.isEmpty()) mSelectedSizeList.clear();
-
-        if (isChecked) {
-            mSelectedFolderList.addAll(folderAdapter.getCurrentList());
-            mSelectedFolderList.removeIf(folder -> folder.getId() == -1);
-            folderAdapter.selectAll();
-
-            if (mViewType == LISTVIEW) {
-                mSelectedSizeList.addAll(sizeAdapterList.getCurrentList());
-                sizeAdapterList.selectAll();
-            } else {
-                mSelectedSizeList.addAll(sizeAdapterGrid.getCurrentList());
-                sizeAdapterGrid.selectAll();
-            }
-        } else {
-            folderAdapter.deselectAll();
-            if (mViewType == LISTVIEW) sizeAdapterList.deselectAll();
-            else sizeAdapterGrid.deselectAll();
-        }
-        mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
+    public void selectAll(List<Folder> allFolderList, List<Size> allSizeList) {
+        mSelectedFolderList.addAll(allFolderList);
+        mSelectedFolderList.removeIf(folder -> folder.getId() == -1);
+        mSelectedSizeList.addAll(allSizeList);
     }
 
-    public List<Folder> getFolderHistory(@NotNull Folder thisFolder) {
-        List<Folder> allFolderList = mFolderRepository.getFolderList(thisFolder.getParentCategory(), false, false);
-        List<Folder> folderHistory = new ArrayList<>();
-        folderHistory.add(thisFolder);
-        List<Folder> folderHistory2 = getFolderHistory2(allFolderList, folderHistory, thisFolder);
-        Collections.reverse(folderHistory2);
-        mFolderHistory = folderHistory2;
-        return mFolderHistory;
+    public List<Folder> getFolderPath(@NotNull Folder thisFolder) {
+        List<Folder> allFolderList = mRepository.getFolderRepository().getFolderList(thisFolder.getParentCategory(), false, false);
+        mFolderPath = new ArrayList<>();
+        mFolderPath.add(thisFolder);
+        completeFolderPath(allFolderList, mFolderPath, thisFolder);
+        Collections.reverse(mFolderPath);
+        return mFolderPath;
     }
 
-    @Contract("_, _, _ -> param2")
-    private List<Folder> getFolderHistory2(@NotNull List<Folder> allFolderList, List<Folder> folderHistory, Folder thisFolder) {
+    private void completeFolderPath(@NotNull List<Folder> allFolderList, List<Folder> folderPath, Folder thisFolder) {
         for (Folder parentFolder : allFolderList) {
             if (thisFolder != null && parentFolder.getId() == thisFolder.getParentId()) {
-                folderHistory.add(parentFolder);
-                getFolderHistory2(allFolderList, folderHistory, parentFolder);
+                folderPath.add(parentFolder);
+                completeFolderPath(allFolderList, folderPath, parentFolder);
                 break;
             }
         }
-        return folderHistory;
     }
 
-    public void folderItemDrop(@NotNull List<Folder> newOrderNumberFolderList) {
+    public void folderItemDropped(@NotNull List<Folder> newOrderNumberFolderList) {
         List<Folder> newSelectedFolderList = new ArrayList<>();
         for (Folder folder : newOrderNumberFolderList)
             if (mSelectedFolderList.contains(folder) && folder.getId() != -1)
                 newSelectedFolderList.add(folder);
         mSelectedFolderList = newSelectedFolderList;
 
-        mFolderRepository.folderUpdate(newOrderNumberFolderList);
+        mRepository.getFolderRepository().updateFolder(newOrderNumberFolderList);
     }
 
-    public void sizeItemDrop(@NotNull List<Size> newOrderNumberSizeList) {
+    public void sizeItemDropped(@NotNull List<Size> newOrderNumberSizeList) {
         List<Size> newSelectedSizeList = new ArrayList<>();
         for (Size size : newOrderNumberSizeList)
             if (mSelectedSizeList.contains(size)) newSelectedSizeList.add(size);
         mSelectedSizeList = newSelectedSizeList;
 
-        mSizeRepository.sizeUpdate(newOrderNumberSizeList);
+        mRepository.getSizeRepository().updateSize(newOrderNumberSizeList);
     }
 
-    public void selectedItemsClear() {
+    public void clearSelectedItems() {
+        if (mSelectedFolderList == null) mSelectedFolderList = new ArrayList<>();
+        if (mSelectedSizeList == null) mSelectedSizeList = new ArrayList<>();
+
         mSelectedFolderList.clear();
         mSelectedSizeList.clear();
     }
 
-    public void itemSelected(Object o, boolean isChecked) {
-        if (o instanceof Folder) {
-            if (((Folder) o).getId() != -1) {
-                if (isChecked) mSelectedFolderList.add((Folder) o);
-                else mSelectedFolderList.remove(o);
-            }
-        } else if (o instanceof Size) {
-            if (isChecked) mSelectedSizeList.add((Size) o);
-            else mSelectedSizeList.remove(o);
-        }
+    public void setSelectedItemSizeLiveValue() {
         mSelectedItemSizeLive.setValue(mSelectedSizeList.size() + mSelectedFolderList.size());
     }
 
-    public void folderToggleClick() {
+    public void changeFolderToggleState() {
         isFolderToggleOpen = !isFolderToggleOpen;
         SharedPreferences.Editor editor = mFolderTogglePreference.edit();
         editor.putBoolean(FOLDER_TOGGLE, isFolderToggleOpen);
         editor.apply();
     }
 
-    public boolean sortChanged(int sort) {
-        if (mSort != sort) {
-            mSort = sort;
-            SharedPreferences.Editor editor = mSortPreference.edit();
-            editor.putInt(SORT_LIST, mSort);
-            editor.apply();
-            return true;
-        } else return false;
+    public void changeSort(int sort) {
+        mSort = sort;
+        SharedPreferences.Editor editor = mSortPreference.edit();
+        editor.putInt(SORT_LIST, mSort);
+        editor.apply();
     }
 
-    public int viewTypeClick() {
+    public void changeViewType() {
         mViewType = mViewType == LISTVIEW ? GRIDVIEW : LISTVIEW;
         SharedPreferences.Editor editor = mViewTypePreference.edit();
         editor.putInt(VIEW_TYPE, mViewType);
         editor.apply();
-        return mViewType;
+    }
+
+    public void updateSize(Size size) {
+        mRepository.getSizeRepository().updateSize(size);
     }
 
     //getter----------------------------------------------------------------------------------------
-    public MutableLiveData<Integer> getSelectedSizeLive() {
+    public MutableLiveData<Integer> getSelectedItemSizeLive() {
         return mSelectedItemSizeLive;
     }
 
@@ -205,35 +169,31 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Folder>> getFolderLive(long parentId) {
-        return mFolderRepository.getFolderLive(parentId, false, false);
+        return mRepository.getFolderRepository().getFolderLive(parentId, false, false);
     }
 
     public LiveData<List<Size>> getSizeLive(long parentId) {
-        return mSizeRepository.getSizeLive(parentId, false, false);
+        return mRepository.getSizeRepository().getSizeLive(parentId, false, false);
     }
 
     public List<Long> getFolderParentIdList(String parentCategory) {
-        return mFolderRepository.getFolderParentIdList(parentCategory, false, false);
+        return mRepository.getFolderRepository().getFolderParentIdList(parentCategory, false, false);
     }
 
     public List<Long> getSizeParentIdList(String parentCategory) {
-        return mSizeRepository.getSizeParentIdList(parentCategory, false, false);
-    }
-
-    public void sizeFavoriteClick(Size size) {
-        mSizeRepository.sizeUpdate(size);
+        return mRepository.getSizeRepository().getSizeParentIdList(parentCategory, false, false);
     }
 
     public LiveData<Category> getThisCategoryLive(long categoryId) {
-        return Repository.getCategoryRepository(getApplication()).getCategoryLive(categoryId);
+        return mRepository.getCategoryRepository().getCategoryLive(categoryId);
     }
 
     public LiveData<Folder> getThisFolderLive(long folderId) {
-        return mFolderRepository.getSingleFolderLive(folderId);
+        return mRepository.getFolderRepository().getSingleFolderLive(folderId);
     }
 
-    public List<Folder> getFolderHistory3() {
-        return mFolderHistory;
+    public List<Folder> getFolderPathComplete() {
+        return mFolderPath;
     }
 
     public int getViewType() {

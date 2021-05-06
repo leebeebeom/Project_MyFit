@@ -67,7 +67,7 @@ public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 setDraggingView(holder);
-                mListener.onSizeDragHandleTouch(holder);
+                mListener.sizeDragHandleTouch(holder);
             }
             return false;
         });
@@ -100,6 +100,6 @@ public class SizeAdapterList extends ParentAdapter<Size, SizeListVH> {
     @Override
     public void dropItem(RecyclerView.ViewHolder viewHolder) {
         super.dropItem(viewHolder);
-        mModel.sizeItemDrop(mSizeList);
+        mModel.sizeItemDropped(mSizeList);
     }
 }

@@ -442,7 +442,8 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     private void observeSortLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM).observe(navBackStackEntry, o -> {
-            if (o instanceof Integer && mModel.sortChanged((Integer) o)) {
+            if (o instanceof Integer && (Integer) o != mModel.getSort()) {
+                mModel.changeSort((Integer) o);
                 observeFolderLive();
                 observeSizeLive();
             }
@@ -500,7 +501,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     private void setFolderToggleIconClickListener() {
         mBinding.iconToggle.setOnClickListener(v -> {
-            mModel.folderToggleClick();
+            mModel.changeFolderToggleState();
             if (mModel.isFolderToggleOpen()) openFolderLayout();
             else closeFolderLayout();
         });
@@ -763,7 +764,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
                 mModel.getSelectedSizeList().add(size);
             else mModel.getSelectedSizeList().remove(size);
 
-            mModel.setSelectedItemSizeLive();
+            mModel.setSelectedItemSizeLiveValue();
         }
     }
 
@@ -784,7 +785,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     @Override
     public void sizeFavoriteClick(Size size) {
-        mModel.sizeFavoriteClick(size);
+        mModel.updateSize(size);
     }
 
     //folder adapter click--------------------------------------------------------------------------
@@ -801,7 +802,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
             if (checkBox.isChecked())
                 mModel.getSelectedFolderList().add(folder);
             else mModel.getSelectedFolderList().remove(folder);
-            mModel.setSelectedItemSizeLive();
+            mModel.setSelectedItemSizeLiveValue();
         }
     }
 
@@ -820,7 +821,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
 
     private void actionModeStart() {
         if (MyFitVariable.actionMode == null) {
-            mModel.selectedItemsClear();
+            mModel.clearSelectedItems();
             ((AppCompatActivity) requireActivity()).startSupportActionMode(mActionMode);
         }
     }
@@ -843,7 +844,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         if (item.getItemId() == R.id.menu_list_view_type) {
-            mModel.viewTypeClick();
+            mModel.changeViewType();
             if (mModel.getViewType() == LISTVIEW) {
                 initSizeRecyclerViewGrid();
                 item.setIcon(R.drawable.icon_grid);
@@ -878,7 +879,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
     //action mode-----------------------------------------------------------------------------------
     @Override
     public void selectAllClick(boolean isChecked) {
-        mModel.selectedItemsClear();
+        mModel.clearSelectedItems();
         if (isChecked) {
             mFolderAdapter.selectAll();
             if (mModel.getViewType() == LISTVIEW) {
@@ -893,7 +894,7 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
             if (mModel.getViewType() == LISTVIEW) mSizeAdapterList.deselectAll();
             else mSizeAdapterGrid.deselectAll();
         }
-        mModel.setSelectedItemSizeLive();
+        mModel.setSelectedItemSizeLiveValue();
     }
 
     @Override
