@@ -70,28 +70,28 @@ public class FolderAdapter extends ParentAdapter<Folder, FolderGridVH> {
         if (String.valueOf(holder.getBinding().tvContentsSize.getText()).equals("1"))
             holder.getBinding().tvItems.setText(R.string.item_folder_item);
         else holder.getBinding().tvItems.setText(R.string.item_folder_items);
-        dragHandleTouch(holder, folder);
+        setDragHandleTouchListener(holder, folder);
 
         restoreSelectedHashSet();
         setActionMode(GRIDVIEW, holder.getBinding().cardView, holder.getBinding().cb, folder.getId());
-        dragHandleVisibility(holder.getBinding().iconDragHandle);
+        setDragHandleVisibility(holder.getBinding().iconDragHandle);
         holder.itemView.setVisibility(folder.getId() == -1 ? View.GONE : View.VISIBLE);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void dragHandleTouch(@NotNull FolderGridVH holder, Folder folder) {
+    private void setDragHandleTouchListener(@NotNull FolderGridVH holder, Folder folder) {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
             if (folder.getId() != -1 && event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 mListener.onFolderDragHandleTouch(holder);
-                draggingView(holder);
+                setDraggingView(holder);
             }
             return false;
         });
     }
 
     @Override
-    protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.draggingView(viewHolder);
+    protected void setDraggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDraggingView(viewHolder);
         FolderGridVH folderGridVH = (FolderGridVH) viewHolder;
         folderGridVH.getBinding().layoutContentsSize.setVisibility(View.INVISIBLE);
         folderGridVH.getBinding().tvFolderName.setAlpha(0.5f);
@@ -99,8 +99,8 @@ public class FolderAdapter extends ParentAdapter<Folder, FolderGridVH> {
     }
 
     @Override
-    protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.dropView(viewHolder);
+    protected void setDropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDropView(viewHolder);
         FolderGridVH folderGridVH = (FolderGridVH) viewHolder;
         folderGridVH.getBinding().layoutContentsSize.setVisibility(View.VISIBLE);
         folderGridVH.getBinding().tvFolderName.setAlpha(1);
@@ -108,14 +108,14 @@ public class FolderAdapter extends ParentAdapter<Folder, FolderGridVH> {
     }
 
     @Override
-    public void itemMove(int from, int to) {
+    public void moveItem(int from, int to) {
         mAdapterUtil.itemMove(from, to, mFolderList);
         notifyItemMoved(from, to);
     }
 
     @Override
-    public void itemDrop(RecyclerView.ViewHolder viewHolder) {
-        super.itemDrop(viewHolder);
+    public void dropItem(RecyclerView.ViewHolder viewHolder) {
+        super.dropItem(viewHolder);
         mModel.folderItemDrop(mFolderList);
     }
 }
