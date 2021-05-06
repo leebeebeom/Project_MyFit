@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeHolder> {
+public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCategory.CategoryTreeValue> {
 
-    private final TreeViewCategoryFolderAddListener mListener;
+    private final TreeHolderListener mListener;
     private List<Size> mSelectedSizeList;
     private List<Folder> mSelectedFolderList;
     private List<Long> mFolderParentIdList, mSizeParentIdList;
@@ -28,7 +28,7 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     private final Category mThisCategory;
     private final Folder mThisFolder;
 
-    public TreeHolderCategory(Context context, TreeViewCategoryFolderAddListener listener, Category thisCategory, Folder thisFolder) {
+    public TreeHolderCategory(Context context, TreeHolderListener listener, Category thisCategory, Folder thisFolder) {
         super(context);
         this.mListener = listener;
         this.mThisCategory = thisCategory;
@@ -46,37 +46,42 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     @Override
-    public View createNodeView(TreeNode node, @NotNull CategoryTreeHolder value) {
+    public View createNodeView(TreeNode node, @NotNull CategoryTreeValue value) {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategory(value.category);
 
         mBinding.tvContentsSize.setText(String.valueOf(mAdapterUtil.getContentsSize(value.category.getId(),
                 mFolderParentIdList, mSizeParentIdList)));
 
-        selectedFolderCheck(value);
-        selectedSizeCheck(value);
+        isSelectedFolderPosition(value);
+        isSelectedSizePosition(value);
 
-        setExpandable(node);
-        setCurrentPosition(value);
+        if (!node.getChildren().isEmpty())
+            mBinding.layoutFolderIcon.setOnClickListener(v -> tView.toggleNode(node));
+        else mBinding.iconArrow.setVisibility(View.INVISIBLE);
 
-        mBinding.iconAdd.setOnClickListener(v -> mListener.treeViewCategoryAddFolderClick(node, value));
+        if (mThisFolder == null && mThisCategory != null && mThisCategory.getId() == value.category.getId())
+            mBinding.tvCurrentPosition.setVisibility(View.VISIBLE);
+        else mBinding.tvCurrentPosition.setVisibility(View.GONE);
+
+        mBinding.iconAdd.setOnClickListener(v -> mListener.addFolderIconClick(node, value.category.getId()));
 
         return mBinding.getRoot();
     }
 
-    private void selectedSizeCheck(@NotNull CategoryTreeHolder value) {
-        if (!mSelectedSizeList.isEmpty())
-            for (Size selectedSize : mSelectedSizeList)
-                if (selectedSize.getParentId() == value.category.getId()) {
+    private void isSelectedFolderPosition(@NotNull CategoryTreeValue value) {
+        if (!mSelectedFolderList.isEmpty())
+            for (Folder selectedFolder : mSelectedFolderList)
+                if (selectedFolder.getParentId() == value.category.getId()) {
                     setAlpha();
                     break;
                 }
     }
 
-    private void selectedFolderCheck(@NotNull CategoryTreeHolder value) {
-        if (!mSelectedFolderList.isEmpty())
-            for (Folder selectedFolder : mSelectedFolderList)
-                if (selectedFolder.getParentId() == value.category.getId()) {
+    private void isSelectedSizePosition(@NotNull CategoryTreeValue value) {
+        if (!mSelectedSizeList.isEmpty())
+            for (Size selectedSize : mSelectedSizeList)
+                if (selectedSize.getParentId() == value.category.getId()) {
                     setAlpha();
                     break;
                 }
@@ -88,18 +93,6 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
             mBinding.tvCategoryName.setAlpha(0.5f);
             mIsClickable = false;
         }
-    }
-
-    private void setExpandable(@NotNull TreeNode node) {
-        if (!node.getChildren().isEmpty())
-            mBinding.layoutFolderIcon.setOnClickListener(v -> tView.toggleNode(node));
-        else mBinding.iconArrow.setVisibility(View.INVISIBLE);
-    }
-
-    private void setCurrentPosition(@NotNull CategoryTreeHolder value) {
-        if (mThisFolder == null && mThisCategory != null && mThisCategory.getId() == value.category.getId())
-            mBinding.tvCurrentPosition.setVisibility(View.VISIBLE);
-        else mBinding.tvCurrentPosition.setVisibility(View.GONE);
     }
 
     public boolean isClickable() {
@@ -116,11 +109,11 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
     }
 
     public Category getCategory() {
-        return ((CategoryTreeHolder) mNode.getValue()).category;
+        return ((CategoryTreeValue) mNode.getValue()).category;
     }
 
     public long getCategoryId() {
-        return ((CategoryTreeHolder) mNode.getValue()).category.getId();
+        return ((CategoryTreeValue) mNode.getValue()).category.getId();
     }
 
     @Override
@@ -129,15 +122,11 @@ public class TreeHolderCategory extends TreeNode.BaseNodeViewHolder<TreeHolderCa
         mBinding.iconFolder.setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
-    public static class CategoryTreeHolder {
+    public static class CategoryTreeValue {
         private final Category category;
 
-        public CategoryTreeHolder(Category category) {
+        public CategoryTreeValue(Category category) {
             this.category = category;
         }
-    }
-
-    public interface TreeViewCategoryFolderAddListener {
-        void treeViewCategoryAddFolderClick(TreeNode node, TreeHolderCategory.CategoryTreeHolder value);
     }
 }
