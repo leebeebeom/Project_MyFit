@@ -77,7 +77,7 @@ public abstract class AppDataBase extends RoomDatabase {
                             categoryList.add(new Category(15, "안경", MyFitConstant.ETC, 15));
                             categoryList.add(new Category(16, "목걸이", MyFitConstant.ETC, 16));
                             categoryList.add(new Category(17, "기타", MyFitConstant.ETC, 17));
-                            Repository.getCategoryRepository(context).categoryInsert(categoryList);
+                            new Repository(context).getCategoryRepository().insertCategory(categoryList);
                         }
                     }).addMigrations(MIGRATION_1_2)
                     .build();
