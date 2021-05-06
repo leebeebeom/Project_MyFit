@@ -76,12 +76,12 @@ public class NameEditDialog extends DialogFragment {
                 if (dialogUtil.getDialogViewModel().isSameNameCategory(newName, category.getParentCategory()))
                     CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
                             NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), newName, mIsParentName, mNavGraphId));
-                else dialogUtil.categoryNameEdit(category, newName, mIsParentName);
+                else dialogUtil.editCategoryName(category, newName, mIsParentName);
             } else {
                 if (dialogUtil.getDialogViewModel().isSameNameFolder(newName, folder.getParentId()))
                     CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
                             NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), newName, mIsParentName, mNavGraphId));
-                dialogUtil.folderNameEdit(folder, newName, mIsParentName);
+                dialogUtil.editFolderName(folder, newName, mIsParentName);
             }
         });
     }
