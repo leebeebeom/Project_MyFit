@@ -34,7 +34,17 @@ public class GoBackDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_go_back));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.goBackConfirm());
+        positiveButton.setOnClickListener(v -> {
+            //        mNavBackStackEntry.getSavedStateHandle().set(GO_BACK_CONFIRM, null);
+        /*
+        TODO
+        서치뷰에서 복귀 시 액티비티 종료 되는지 and 백스택 쌓였을때 뒤로가기 되는지
+        사이즈 프래그먼트에서 프래그먼트 종료 되는지
+        정상 종료 안될시
+        sizeFragment -> dialogLive -> goBack 복구
+         */
+            dialogUtil.getNavController().popBackStack(R.id.sizeFragment, true);
+        });
         return alertDialog;
     }
 }
