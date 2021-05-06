@@ -30,7 +30,7 @@ public class DeleteImageDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.imageClearDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.deleteImageDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_image_clear));
 
