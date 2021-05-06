@@ -17,6 +17,7 @@ import com.example.project_myfit.util.CommonUtil;
 import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
+import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 
 public class AddDialog extends DialogFragment {
 
@@ -44,20 +45,28 @@ public class AddDialog extends DialogFragment {
                 dialogUtil.getAddDialog(binding, getString(R.string.all_add_category)) : dialogUtil.getAddDialog(binding, getString(R.string.all_create_folder));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveClick(dialogUtil, binding, positiveButton);
+        setPositiveClickListener(dialogUtil, binding, positiveButton);
         dialogUtil.setOnImeClickListener(binding, positiveButton);
         return alertDialog;
     }
 
-    private void positiveClick(DialogUtil dialogUtil, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
+    private void setPositiveClickListener(DialogUtil dialogUtil, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             CommonUtil.keyBoardHide(requireContext(), v);
 
             String name = String.valueOf(binding.et.getText()).trim();
 
-            if (mItemType == CATEGORY)
-                dialogUtil.addCategory(name, mParentCategory, mNavGraphId);
-            else dialogUtil.addFolder(name, mParentId, mParentCategory, mNavGraphId);
+            if (mItemType == CATEGORY) {
+                if (dialogUtil.getDialogViewModel().isSameNameCategory(name, mParentCategory))
+                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.addDialog,
+                            AddDialogDirections.actionAddDialogToSameNameAddDialog(CATEGORY, mParentCategory, 0, name, mNavGraphId));
+                else dialogUtil.addCategory(name, mParentCategory);
+            } else {
+                if (dialogUtil.getDialogViewModel().isSameNameFolder(name, mParentId))
+                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.addDialog,
+                            AddDialogDirections.actionAddDialogToSameNameAddDialog(FOLDER, mParentCategory, mParentId, name, mNavGraphId));
+                else dialogUtil.addFolder(name, mParentId, mParentCategory);
+            }
         });
     }
 }
