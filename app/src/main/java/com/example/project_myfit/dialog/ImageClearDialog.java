@@ -16,11 +16,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class ImageClearDialog extends DialogFragment {
 
+    private int mNavGraphId;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mNavGraphId = ImageClearDialogArgs.fromBundle(getArguments()).getNavGraphId();
+    }
+
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.imageClearDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.imageClearDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_image_clear));
 
