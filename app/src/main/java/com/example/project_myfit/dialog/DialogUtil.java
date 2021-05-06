@@ -2,6 +2,7 @@ package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.text.Editable;
@@ -10,12 +11,10 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -25,13 +24,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.dialog.searchdialog.SearchAddDialogDirections;
-import com.example.project_myfit.dialog.searchdialog.SearchNameEditDialogDirections;
-import com.example.project_myfit.dialog.searchdialog.SearchTreeViewDialogDirections;
 import com.example.project_myfit.util.CommonUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
@@ -41,15 +36,9 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.ALERT_TITLE;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.util.MyFitConstant.DELETE_FOREVER_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.ID;
-import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.RESTORE_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM;
 
 public class DialogUtil {
     private final Context mContext;
@@ -63,7 +52,7 @@ public class DialogUtil {
         this.mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(navGraphId)).get(DialogViewModel.class);
     }
 
-    public DialogUtil backStackLiveSetValue(int destinationId) {
+    public DialogUtil setValueBackStackLive(int destinationId) {
         mNavBackStackEntry = mNavController.getBackStackEntry(destinationId);
         mDialogViewModel.getBackStackEntryLive().setValue(mNavBackStackEntry);
         return this;
@@ -73,19 +62,115 @@ public class DialogUtil {
         return mDialogViewModel;
     }
 
+    public NavController getNavController() {
+        return mNavController;
+    }
+
+    public ItemDialogEditTextBinding getCategoryBinding() {
+        com.example.project_myfit.databinding.ItemDialogEditTextBinding binding = getBinding();
+        binding.setHint(mContext.getString(R.string.dialog_hint_category_name));
+        binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_category_name));
+        return binding;
+    }
+
+    public ItemDialogEditTextBinding getFolderBinding() {
+        ItemDialogEditTextBinding binding = getBinding();
+        binding.setHint(mContext.getString(R.string.dialog_hint_folder_name));
+        binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_folder_name));
+        return binding;
+    }
+
     @NotNull
-    public ItemDialogEditTextBinding getBinding(@Nullable String oldName, @NotNull String itemType) {
+    private ItemDialogEditTextBinding getBinding() {
         ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(mContext));
         binding.et.requestFocus();
-        if (itemType.equals(CATEGORY)) {
-            binding.setHint(mContext.getString(R.string.dialog_hint_category_name));
-            binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_category_name));
-        } else if (itemType.equals(FOLDER)) {
-            binding.setHint(mContext.getString(R.string.dialog_hint_folder_name));
-            binding.setPlaceHolder(mContext.getString(R.string.dialog_place_holder_folder_name));
-        }
-        if (oldName != null) binding.setSetText(oldName);
         return binding;
+    }
+
+    public AlertDialog getAddDialog(ItemDialogEditTextBinding binding, String title) {
+        AlertDialog dialog = getEditTextDialog(binding, title);
+
+        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
+        String inputText = String.valueOf(binding.et.getText()).trim();
+        positiveButton.setEnabled(!TextUtils.isEmpty(inputText));
+
+        addTextChangeListener(positiveButton, binding);
+        return dialog;
+    }
+
+    private void addTextChangeListener(Button positiveButton, @NotNull ItemDialogEditTextBinding binding) {
+        binding.et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                positiveButton.setEnabled(!TextUtils.isEmpty(s));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    public AlertDialog getEditDialog(ItemDialogEditTextBinding binding, String title, String oldName) {
+        AlertDialog dialog = getEditTextDialog(binding, title);
+
+        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
+        String inputText = String.valueOf(binding.et.getText()).trim();
+        positiveButton.setEnabled(!TextUtils.isEmpty(inputText) && !oldName.equals(inputText));
+
+        addTextChangeListener(positiveButton, binding, oldName);
+        return dialog;
+    }
+
+    private void addTextChangeListener(Button positiveButton, @NotNull ItemDialogEditTextBinding binding, String oldName) {
+        binding.et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                positiveButton.setEnabled(!TextUtils.isEmpty(s) && !oldName.equals(String.valueOf(s).trim()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    @NotNull
+    private AlertDialog getEditTextDialog(@NotNull ItemDialogEditTextBinding binding, String title) {
+        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext, R.style.myAlertDialogStyle)
+                .setTitle(title)
+                .setView(binding.getRoot())
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_confirm, null)
+                .create();
+
+        CommonUtil.keyBoardShow(mContext, binding.et);
+        setBackground(dialog.getWindow());
+        dialog.show();
+        setTextSize(dialog);
+        setOnKeyListener(binding);
+        return dialog;
+    }
+
+    private void setOnKeyListener(@NotNull ItemDialogEditTextBinding binding) {
+        binding.et.setOnKeyListener((v, keyCode, event) -> {
+            if (String.valueOf(binding.et.getText()).length() == 30)
+                binding.layout.setError(mContext.getString(R.string.dialog_et_max_length));
+            else binding.layout.setErrorEnabled(false);
+            return false;
+        });
     }
 
     @NotNull
@@ -96,33 +181,16 @@ public class DialogUtil {
                 .setNegativeButton(R.string.dialog_cancel, null)
                 .setPositiveButton(R.string.dialog_confirm, null)
                 .show();
-        setLayout(dialog.getWindow());
+
+        setBackground(dialog.getWindow());
         setTextSize(dialog);
         return dialog;
     }
 
-    @NotNull
-    public AlertDialog getEditTextDialog(@NotNull ItemDialogEditTextBinding binding, String title, String oldName) {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(mContext, R.style.myAlertDialogStyle)
-                .setTitle(title)
-                .setView(binding.getRoot())
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .setPositiveButton(R.string.dialog_confirm, null)
-                .create();
-
-        Window window = dialog.getWindow();
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        setLayout(window);
-        dialog.show();
-        setTextSize(dialog);
-        addTextChangeListener(binding, dialog, oldName);
-        return dialog;
-    }
-
-    public void setLayout(@NotNull Window window) {
+    public void setBackground(@NotNull Window window) {
         int margin = (int) mContext.getResources().getDimension(R.dimen._20sdp);
-        Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.tree_view_dialog_background);
-        InsetDrawable inset = new InsetDrawable(drawable, margin);
+        Drawable dialogBackground = ContextCompat.getDrawable(mContext, R.drawable.tree_view_dialog_background);
+        InsetDrawable inset = new InsetDrawable(dialogBackground, margin);
         window.setBackgroundDrawable(inset);
     }
 
@@ -149,194 +217,36 @@ public class DialogUtil {
         }
     }
 
-    private void addTextChangeListener(@NotNull ItemDialogEditTextBinding binding, @NotNull AlertDialog dialog, String oldName) {
-        Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        String inputText = String.valueOf(binding.et.getText()).trim();
-        if (oldName == null)
-            positiveButton.setEnabled(!TextUtils.isEmpty(inputText));
-        else
-            positiveButton.setEnabled(!TextUtils.isEmpty(inputText) && !oldName.equals(inputText));
-
-
-        binding.et.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (oldName == null)
-                    positiveButton.setEnabled(!TextUtils.isEmpty(String.valueOf(s).trim()));
-                else
-                    positiveButton.setEnabled(!TextUtils.isEmpty(String.valueOf(s).trim()) && !oldName.equals(String.valueOf(s).trim()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        binding.et.setOnKeyListener((v, keyCode, event) -> {
-            if (String.valueOf(binding.et.getText()).length() == 30)
-                binding.layout.setError(mContext.getString(R.string.dialog_et_max_length));
-            else binding.layout.setErrorEnabled(false);
-            return false;
-        });
-    }
-
-    public void addCategory(String categoryName, String parentCategory, boolean isSearchView) {
-        if (mDialogViewModel.isSameNameCategory(categoryName, parentCategory))
-            if (!isSearchView)
-                CommonUtil.navigate(mNavController, R.id.addDialog,
-                        AddDialogDirections.actionAddDialogToSameNameAddDialog(CATEGORY, parentCategory, 0, categoryName));
-             else
-                CommonUtil.navigate(mNavController, R.id.addDialog,
-                        SearchAddDialogDirections.actionSearchAddDialogToSearchSameNameAddDialog(CATEGORY, parentCategory, 0, categoryName));
-        else {
-            mDialogViewModel.categoryInsert(categoryName, parentCategory);
-            mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, CATEGORY);
-            popBackStack(isSearchView, R.id.addDialog, R.id.searchAddDialog);
-        }
-    }
-
-    public void addFolder(String folderName, long parentId, String parentCategory, boolean isSearchView) {
-        if (mDialogViewModel.isSameNameFolder(folderName, parentId))
-            if (!isSearchView)
-                CommonUtil.navigate(mNavController, R.id.addDialog,
-                    AddDialogDirections.actionAddDialogToSameNameAddDialog(FOLDER, parentCategory, parentId, folderName));
-            else
-                CommonUtil.navigate(mNavController, R.id.addDialog,
-                        SearchAddDialogDirections.actionSearchAddDialogToSearchSameNameAddDialog(FOLDER, parentCategory, parentId, folderName));
-        else {
-            mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
-            mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, FOLDER);
-            popBackStack(isSearchView, R.id.addDialog, R.id.searchAddDialog);
-        }
-    }
-
-    public void sameNameCategoryAdd(String categoryName, String parentCategory, boolean isSearchView) {
+    public void addCategory(String categoryName, String parentCategory) {
         mDialogViewModel.categoryInsert(categoryName, parentCategory);
         mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, CATEGORY);
-        popBackStack(isSearchView, R.id.addDialog, R.id.searchAddDialog);
+        mNavController.popBackStack(R.id.addDialog, true);
     }
 
-    public void sameNameFolderAdd(String folderName, String parentCategory, long parentId, boolean isSearchView) {
+    public void addFolder(String folderName, long parentId, String parentCategory) {
         mDialogViewModel.folderInsert(folderName, parentId, parentCategory);
         mNavBackStackEntry.getSavedStateHandle().set(ADD_CONFIRM, FOLDER);
-        popBackStack(isSearchView, R.id.addDialog, R.id.searchAddDialog);
+        mNavController.popBackStack(R.id.addDialog, true);
     }
 
-    public void categoryNameEdit(@NotNull Category category, String categoryName, boolean isParentName) {
-        if (mDialogViewModel.isSameNameCategory(categoryName, category.getParentCategory()))
-            CommonUtil.navigate(mNavController, R.id.nameEditDialog,
-                    NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), categoryName, isParentName));
-        else {
-            mDialogViewModel.categoryNameEdit(category, categoryName, isParentName);
-            mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-            mNavController.popBackStack();
-        }
-    }
-
-    public void folderNameEdit(@NotNull Folder folder, String folderName, boolean isParentName, boolean isSearchView) {
-        if (mDialogViewModel.isSameNameFolder(folderName, folder.getParentId())) {
-            if (!isSearchView)
-                CommonUtil.navigate(mNavController, R.id.nameEditDialog,
-                        NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), folderName, isParentName));
-            else
-                CommonUtil.navigate(mNavController, R.id.nameEditDialog,
-                        SearchNameEditDialogDirections.actionSearchNameEditDialogToSearchSameNameEditDialog(folder.getId(), folderName));
-        } else {
-            mDialogViewModel.folderNameEdit(folder, folderName, isParentName);
-            mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-            popBackStack(isSearchView, R.id.nameEditDialog, R.id.searchNameEditDialog);
-        }
-    }
-
-    public void sameNameCategoryEdit(long categoryId, String categoryName, boolean isParentName) {
-        mDialogViewModel.sameNameCategoryEdit(categoryId, categoryName, isParentName);
+    public void editCategoryName(@NotNull Category category, String newCategoryName, boolean isParentName) {
+        mDialogViewModel.editCategoryName(category, newCategoryName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
         mNavController.popBackStack(R.id.nameEditDialog, true);
     }
 
-    public void sameNameFolderEdit(long folderId, String folderName, boolean isParentName, boolean isSearchView) {
-        mDialogViewModel.sameNameFolderEdit(folderId, folderName, isParentName);
+    public void editFolderName(@NotNull Folder folder, String newFolderName, boolean isParentName) {
+        mDialogViewModel.editFolderName(folder, newFolderName, isParentName);
         mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
-        popBackStack(isSearchView, R.id.nameEditDialog, R.id.searchNameEditDialog);
+        mNavController.popBackStack(R.id.nameEditDialog, true);
     }
 
-    public void selectedItemDeleteConfirm() {
-        mNavBackStackEntry.getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM, null);
-        mNavController.popBackStack();
-    }
-
-    public void deletedConfirm(long sizeId) {
-        mDialogViewModel.sizeDelete(sizeId);
-        mNavBackStackEntry.getSavedStateHandle().set(SIZE_DELETE_CONFIRM, null);
-    }
-
-    public void imageClearConfirm() {
-        mNavBackStackEntry.getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM, null);
-        mNavController.popBackStack();
-    }
-
-    public void treeViewAddCategory(String itemType, String parentCategory, boolean isSearchView) {
-        if (!isSearchView)
-            CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                    TreeViewDialogDirections.actionTreeViewDialogToAddDialog(itemType, parentCategory, 0));
-        else
-            CommonUtil.navigate(mNavController, R.id.searchTreeViewDialog,
-                    SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchAddDialog(itemType, parentCategory, 0));
-    }
-
-    public void treeViewAddFolder(String itemType, String parentCategory, long parentId, boolean isSearchView) {
-        if (!isSearchView)
-            CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                    TreeViewDialogDirections.actionTreeViewDialogToAddDialog(itemType, parentCategory, parentId));
-        else
-            CommonUtil.navigate(mNavController, R.id.searchTreeViewDialog,
-                    SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchAddDialog(itemType, parentCategory, parentId));
-    }
-
-    public void treeViewNodeClick(int selectedItemSize, long parentId, boolean isSearchView) {
-        if (!isSearchView)
-            CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                    TreeViewDialogDirections.actionTreeViewDialogToItemMoveDialog(selectedItemSize, parentId));
-        else
-            CommonUtil.navigate(mNavController, R.id.searchTreeViewDialog,
-                    SearchTreeViewDialogDirections.actionSearchTreeViewDialogToSearchItemMoveDialog(selectedItemSize, parentId));
-    }
-
-    public void itemMove(long parentId, boolean isSearchView) {
-        mNavBackStackEntry.getSavedStateHandle().set(ITEM_MOVE_CONFIRM, parentId);
-        popBackStack(isSearchView, R.id.treeViewDialog, R.id.searchTreeViewDialog);
-    }
-
-    public void recentSearchDeleteAll() {
-        Repository.getRecentSearchRepository(mContext).deleteAllRecentSearch();
-        mNavController.popBackStack();
-    }
-
-    public void restore() {
-        mNavBackStackEntry.getSavedStateHandle().set(RESTORE_CONFIRM, null);
-    }
-
-    public void deleteForever() {
-        mNavBackStackEntry.getSavedStateHandle().set(DELETE_FOREVER_CONFIRM, null);
-        mNavController.popBackStack();
-    }
-
-    public void imeClick(@NotNull ItemDialogEditTextBinding binding, Button positiveButton) {
+    public void setOnImeClickListener(@NotNull ItemDialogEditTextBinding binding, Button positiveButton) {
         binding.et.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE && positiveButton.isEnabled())
                 positiveButton.callOnClick();
             return false;
         });
-    }
-
-    private void popBackStack(boolean isSearchView, int notSearch, int search) {
-        if (!isSearchView) mNavController.popBackStack(notSearch, true);
-        else mNavController.popBackStack(search, true);
     }
 
     public NavBackStackEntry getBackStackEntry() {
