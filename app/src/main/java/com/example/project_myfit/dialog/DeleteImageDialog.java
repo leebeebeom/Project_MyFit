@@ -14,7 +14,7 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.DELETE_IMAGE_CONFIRM;
 
 public class DeleteImageDialog extends DialogFragment {
 
@@ -36,7 +36,7 @@ public class DeleteImageDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            dialogUtil.getBackStackEntry().getSavedStateHandle().set(IMAGE_CLEAR_CONFIRM, null);
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(DELETE_IMAGE_CONFIRM, null);
             dialogUtil.getNavController().popBackStack();
         });
         return alertDialog;

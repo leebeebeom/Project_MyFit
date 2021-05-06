@@ -14,7 +14,7 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.ITEM_MOVE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.MOVE_ITEM_CONFIRM;
 
 public class MoveDialog extends DialogFragment {
 
@@ -40,7 +40,7 @@ public class MoveDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            dialogUtil.getBackStackEntry().getSavedStateHandle().set(ITEM_MOVE_CONFIRM, mParentId);
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(MOVE_ITEM_CONFIRM, mParentId);
             dialogUtil.getNavController().popBackStack(R.id.treeViewDialog, true);
         });
         return alertDialog;

@@ -14,7 +14,7 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.DELETE_SELECTED_ITEM_CONFIRM;
 
 public class DeleteSelectedItemDialog extends DialogFragment {
 
@@ -38,7 +38,7 @@ public class DeleteSelectedItemDialog extends DialogFragment {
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            dialogUtil.getBackStackEntry().getSavedStateHandle().set(SELECTED_ITEM_DELETE_CONFIRM, null);
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(DELETE_SELECTED_ITEM_CONFIRM, null);
             dialogUtil.getNavController().popBackStack();
         });
         return alertDialog;

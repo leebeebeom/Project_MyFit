@@ -38,7 +38,7 @@ import static com.example.project_myfit.util.MyFitConstant.ALERT_TITLE;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.ID;
-import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.EDIT_NAME_CONFIRM;
 
 public class DialogUtil {
     private final Context mContext;
@@ -231,13 +231,13 @@ public class DialogUtil {
 
     public void editCategoryName(@NotNull Category category, String newCategoryName, boolean isParentName) {
         mDialogViewModel.editCategoryName(category, newCategoryName, isParentName);
-        mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
+        mNavBackStackEntry.getSavedStateHandle().set(EDIT_NAME_CONFIRM, isParentName);
         mNavController.popBackStack(R.id.editNameDialog, true);
     }
 
     public void editFolderName(@NotNull Folder folder, String newFolderName, boolean isParentName) {
         mDialogViewModel.editFolderName(folder, newFolderName, isParentName);
-        mNavBackStackEntry.getSavedStateHandle().set(NAME_EDIT_CONFIRM, isParentName);
+        mNavBackStackEntry.getSavedStateHandle().set(EDIT_NAME_CONFIRM, isParentName);
         mNavController.popBackStack(R.id.editNameDialog, true);
     }
 

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
-import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_NAME;
+import static com.example.project_myfit.util.MyFitConstant.EDIT_NAME;
 
 public class EditNameDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
@@ -51,7 +51,7 @@ public class EditNameDialog extends DialogFragment {
         String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
         final String finalOldName = oldName;
         //입력된 이름 리스토어
-        oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
+        oldName = savedInstanceState != null ? savedInstanceState.getString(EDIT_NAME) : oldName;
 
         mBinding = mItemType == CATEGORY ? dialogUtil.getCategoryBinding() : dialogUtil.getFolderBinding();
         mBinding.et.setText(oldName);
@@ -89,6 +89,6 @@ public class EditNameDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(NAME_EDIT_NAME, String.valueOf(mBinding.et.getText()));
+        outState.putString(EDIT_NAME, String.valueOf(mBinding.et.getText()));
     }
 }
