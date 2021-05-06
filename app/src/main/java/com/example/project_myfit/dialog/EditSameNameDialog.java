@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 
-public class SameNameEditDialog extends DialogFragment {
+public class EditSameNameDialog extends DialogFragment {
 
     private int mItemType, mNavGraphId;
     private long mItemId;
@@ -29,18 +29,18 @@ public class SameNameEditDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = SameNameEditDialogArgs.fromBundle(getArguments()).getItemType();
-        mItemId = SameNameEditDialogArgs.fromBundle(getArguments()).getItemId();
-        mNewName = SameNameEditDialogArgs.fromBundle(getArguments()).getNewName();
-        mIsParentName = SameNameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
-        mNavGraphId = SameNameEditDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mItemType = EditSameNameDialogArgs.fromBundle(getArguments()).getItemType();
+        mItemId = EditSameNameDialogArgs.fromBundle(getArguments()).getItemId();
+        mNewName = EditSameNameDialogArgs.fromBundle(getArguments()).getNewName();
+        mIsParentName = EditSameNameDialogArgs.fromBundle(getArguments()).getIsParentName();
+        mNavGraphId = EditSameNameDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.sameNameEditDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.editSameNameDialog);
 
         Category category = mItemType == CATEGORY ?
                 dialogUtil.getDialogViewModel().getCategory(mItemId) : null;
