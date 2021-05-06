@@ -14,14 +14,14 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RecentSearchDeleteAllDialog extends DialogFragment {
+public class DeleteAllRecentSearchDialog extends DialogFragment {
 
     private int mNavGraphId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNavGraphId = RecentSearchDeleteAllDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mNavGraphId = DeleteAllRecentSearchDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
@@ -29,7 +29,7 @@ public class RecentSearchDeleteAllDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId)
-                .setValueBackStackLive(R.id.recentSearchDeleteAllDialog);
+                .setValueBackStackLive(R.id.deleteAllRecentSearchDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all));
 
