@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.NO_PARENT_CONFIRM;
+
 public class NoParentDialog extends DialogFragment {
     private String[] noParentNameArray;
     private int mNavGraphId;
@@ -36,7 +38,10 @@ public class NoParentDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(message);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.noParentConfirm());
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(NO_PARENT_CONFIRM, null);
+            dialogUtil.getNavController().popBackStack(R.id.restoreDialog, true);
+        });
         return alertDialog;
     }
 
