@@ -29,7 +29,7 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.util.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
-    private int mCheckedItem;
+    private int mCheckedItem, mNavGraphId;
     private String mFragmentType;
 
     @Override
@@ -37,13 +37,14 @@ public class SortDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         mCheckedItem = savedInstanceState == null ? SortDialogArgs.fromBundle(getArguments()).getSort() : savedInstanceState.getInt(SORT);
         mFragmentType = SortDialogArgs.fromBundle(getArguments()).getFragmentType();
+        mNavGraphId = SortDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sortDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.sortDialog);
 
         LayoutDialogSortBinding binding = LayoutDialogSortBinding.inflate(getLayoutInflater());
         MaterialRadioButton[] sortButtons = {binding.radioBtnCustom, binding.radioBtnCreate, binding.radioBtnCreateReverse,
@@ -60,61 +61,25 @@ public class SortDialog extends DialogFragment {
         AlertDialog alertDialog = getDialog(dialogUtil, binding);
 
         Window window = alertDialog.getWindow();
-        dialogUtil.setLayout(window);
+        dialogUtil.setBackground(window);
         dialogUtil.setTextSize(alertDialog);
         return alertDialog;
     }
 
     private void addCheckListener(@NotNull MaterialRadioButton[] buttons) {
-        buttons[0].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_CUSTOM;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
-        buttons[1].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_CREATE;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
-        buttons[2].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_CREATE_REVERSE;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
-        buttons[3].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_BRAND;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
-        buttons[4].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_BRAND_REVERSE;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
-        buttons[5].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_NAME;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
-        buttons[6].setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mCheckedItem = SORT_NAME_REVERSE;
-                for (MaterialRadioButton button : buttons)
-                    if (button != buttonView) button.setChecked(false);
-            }
-        });
+        int[] buttonConstantArray = {SORT_CUSTOM, SORT_CREATE, SORT_CREATE_REVERSE, SORT_BRAND, SORT_BRAND_REVERSE,
+                SORT_NAME, SORT_NAME_REVERSE};
+
+        for (int i = 0; i < buttons.length; i++) {
+            int finalI = i;
+            buttons[i].setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    mCheckedItem = buttonConstantArray[finalI];
+                    for (MaterialRadioButton button : buttons)
+                        if (button != buttonView) button.setChecked(false);
+                }
+            });
+        }
     }
 
     private AlertDialog getDialog(DialogUtil dialogUtil, @NotNull LayoutDialogSortBinding binding) {
