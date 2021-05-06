@@ -77,12 +77,11 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     @NotNull
     private View getDialogView() {
         LayoutDialogTreeBinding binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
-        String category = " " + mModel.getParentCategory();
-        binding.tvCategory.setText(category);
+        binding.setParentCategory(mModel.getParentCategory());
         binding.layout.addView(getTreeView(), 2);
         binding.layoutAddCategory.setOnClickListener(v ->
                 CommonUtil.navigate(mDialogUtil.getNavController(), R.id.treeViewDialog,
-                        TreeViewDialogDirections.actionTreeViewDialogToAddDialog(CATEGORY, mModel.getParentCategory(), 0, mNavGraphId)));
+                        TreeViewDialogDirections.toAddDialog(CATEGORY, mModel.getParentCategory(), 0, mNavGraphId)));
         return binding.getRoot();
     }
 
@@ -252,7 +251,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     @Override
     public void addFolderIconClick(@NotNull TreeNode node, long parentId) {
         CommonUtil.navigate(mDialogUtil.getNavController(), R.id.treeViewDialog,
-                TreeViewDialogDirections.actionTreeViewDialogToAddDialog(FOLDER, mModel.getParentCategory(), parentId, mNavGraphId));
+                TreeViewDialogDirections.toAddDialog(FOLDER, mModel.getParentCategory(), parentId, mNavGraphId));
         mModel.setClickedNode(node);
     }
 
