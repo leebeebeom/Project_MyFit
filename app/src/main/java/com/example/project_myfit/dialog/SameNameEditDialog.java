@@ -36,29 +36,29 @@ public class SameNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sameNameEditDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sameNameEditDialog);
 
-        AlertDialog alertDialog = getDialog(dialogUtils);
+        AlertDialog alertDialog = getDialog(dialogUtil);
 
-        positiveClick(dialogUtils, alertDialog);
+        positiveClick(dialogUtil, alertDialog);
         return alertDialog;
     }
 
     @NotNull
-    private AlertDialog getDialog(DialogUtils dialogUtils) {
+    private AlertDialog getDialog(DialogUtil dialogUtil) {
         if (mItemType.equals(CATEGORY))
-            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
+            return dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_edit));
         else
-            return dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
+            return dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
     }
 
-    private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
+    private void positiveClick(DialogUtil dialogUtil, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
             if (mItemType.equals(CATEGORY))
-                dialogUtils.sameNameCategoryEdit(mItemId, mNewName, mIsParentName);
+                dialogUtil.sameNameCategoryEdit(mItemId, mNewName, mIsParentName);
             else
-                dialogUtils.sameNameFolderEdit(mItemId, mNewName, mIsParentName, false);
+                dialogUtil.sameNameFolderEdit(mItemId, mNewName, mIsParentName, false);
         });
     }
 }

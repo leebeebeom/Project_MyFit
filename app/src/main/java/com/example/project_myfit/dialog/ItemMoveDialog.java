@@ -30,12 +30,12 @@ public class ItemMoveDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.itemMoveDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.itemMoveDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_item_move));
+        AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_item_move));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.itemMove(mParentId, false));
+        positiveButton.setOnClickListener(v -> dialogUtil.itemMove(mParentId, false));
         return alertDialog;
     }
 }

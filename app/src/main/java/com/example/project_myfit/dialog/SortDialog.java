@@ -43,7 +43,7 @@ public class SortDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sortDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sortDialog);
 
         LayoutDialogSortBinding binding = LayoutDialogSortBinding.inflate(getLayoutInflater());
         MaterialRadioButton[] sortButtons = {binding.radioBtnCustom, binding.radioBtnCreate, binding.radioBtnCreateReverse,
@@ -57,11 +57,11 @@ public class SortDialog extends DialogFragment {
             binding.radioBtnBrandReverse.setVisibility(View.GONE);
         }
 
-        AlertDialog alertDialog = getDialog(dialogUtils, binding);
+        AlertDialog alertDialog = getDialog(dialogUtil, binding);
 
         Window window = alertDialog.getWindow();
-        dialogUtils.setLayout(window);
-        dialogUtils.setTextSize(alertDialog);
+        dialogUtil.setLayout(window);
+        dialogUtil.setTextSize(alertDialog);
         return alertDialog;
     }
 
@@ -117,13 +117,13 @@ public class SortDialog extends DialogFragment {
         });
     }
 
-    private AlertDialog getDialog(DialogUtils dialogUtils, @NotNull LayoutDialogSortBinding binding) {
+    private AlertDialog getDialog(DialogUtil dialogUtil, @NotNull LayoutDialogSortBinding binding) {
         return new MaterialAlertDialogBuilder(requireContext(), R.style.myAlertDialogStyle)
                 .setTitle(R.string.all_sort_order)
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.dialog_cancel, null)
                 .setPositiveButton(R.string.dialog_confirm, (dialog, which) ->
-                        dialogUtils.getBackStackEntry().getSavedStateHandle().set(SORT_CONFIRM, mCheckedItem))
+                        dialogUtil.getBackStackEntry().getSavedStateHandle().set(SORT_CONFIRM, mCheckedItem))
                 .show();
     }
 

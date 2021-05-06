@@ -34,7 +34,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     private TreeViewModel mModel;
     private TreeNode mNodeRoot;
     private AndroidTreeView mTreeView;
-    private DialogUtils mDialogUtils;
+    private DialogUtil mDialogUtil;
     private Category mThisCategory;
     private Folder mThisFolder;
     private boolean mCategoryAdded;
@@ -50,16 +50,16 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mDialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main);
-        mThisCategory = mDialogUtils.getDialogViewModel().getCategory(TreeViewDialogArgs.fromBundle(getArguments()).getThisCategoryId());
-        mThisFolder = mDialogUtils.getDialogViewModel().getFolder(TreeViewDialogArgs.fromBundle(getArguments()).getThisFolderId());
-        mModel.setSelectedItemList(mDialogUtils.getDialogViewModel().getSelectedFolderList(), mDialogUtils.getDialogViewModel().getSelectedSizeList());
+        mDialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main);
+        mThisCategory = mDialogUtil.getDialogViewModel().getCategory(TreeViewDialogArgs.fromBundle(getArguments()).getThisCategoryId());
+        mThisFolder = mDialogUtil.getDialogViewModel().getFolder(TreeViewDialogArgs.fromBundle(getArguments()).getThisFolderId());
+        mModel.setSelectedItemList(mDialogUtil.getDialogViewModel().getSelectedFolderList(), mDialogUtil.getDialogViewModel().getSelectedSizeList());
 
         AlertDialog alertDialog = getAlertDialog();
 
         Window window = alertDialog.getWindow();
-        mDialogUtils.setLayout(window);
-        mDialogUtils.setTextSize(alertDialog);
+        mDialogUtil.setLayout(window);
+        mDialogUtil.setTextSize(alertDialog);
         return alertDialog;
     }
 
@@ -76,7 +76,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
         LayoutDialogTreeBinding binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
         binding.setParentCategory(mModel.getParentCategory());
         binding.layout.addView(getTreeView(), 2);
-        binding.layoutAddCategory.setOnClickListener(v -> mDialogUtils.treeViewAddCategory(CATEGORY, mModel.getParentCategory(), false));
+        binding.layoutAddCategory.setOnClickListener(v -> mDialogUtil.treeViewAddCategory(CATEGORY, mModel.getParentCategory(), false));
         return binding.getRoot();
     }
 
@@ -117,7 +117,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     }
 
     private void dialogLive(@org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mDialogUtils.getDialogViewModel().getBackStackEntryLive().observe(this, navBackStackEntry ->
+        mDialogUtil.getDialogViewModel().getBackStackEntryLive().observe(this, navBackStackEntry ->
                 navBackStackEntry.getSavedStateHandle().getLiveData(ADD_CONFIRM).observe(navBackStackEntry, o -> {
                     String itemType = (String) o;
                     if (itemType.equals(CATEGORY))
@@ -128,7 +128,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     }
 
     private void addCategoryConfirmClick() {
-        TreeNode addedCategoryNode = getCategoryNode(mDialogUtils.getDialogViewModel().getAddedCategory());
+        TreeNode addedCategoryNode = getCategoryNode(mDialogUtil.getDialogViewModel().getAddedCategory());
         mTreeView.addNode(mNodeRoot, addedCategoryNode);
     }
 
@@ -148,7 +148,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
             viewHolder = clickedNode.getViewHolder();
         }
 
-        TreeNode addedFolderNode = getFolderNode(mDialogUtils.getDialogViewModel().getAddedFolder(), mModel.getMargin());
+        TreeNode addedFolderNode = getFolderNode(mDialogUtil.getDialogViewModel().getAddedFolder(), mModel.getMargin());
         mTreeView.addNode(clickedNode, addedFolderNode);
         mTreeView.expandNode(clickedNode);
 
@@ -161,7 +161,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
             viewHolder = clickedNode.getViewHolder();
         }
 
-        TreeNode addedFolderNode = getFolderNode(mDialogUtils.getDialogViewModel().getAddedFolder(), mModel.getPlusMargin());
+        TreeNode addedFolderNode = getFolderNode(mDialogUtil.getDialogViewModel().getAddedFolder(), mModel.getPlusMargin());
         mTreeView.addNode(clickedNode, addedFolderNode);
         mTreeView.expandNode(clickedNode);
 
@@ -199,7 +199,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     public void expandingFolderNode(@NotNull List<TreeNode> topFolderNodeList) {
         for (TreeNode folderNode : topFolderNodeList) {
             TreeHolderFolder folderViewHolder = (TreeHolderFolder) folderNode.getViewHolder();
-            for (Folder folder : mDialogUtils.getDialogViewModel().getFolderHistory())
+            for (Folder folder : mDialogUtil.getDialogViewModel().getFolderHistory())
                 if (folderViewHolder.getFolderId() == folder.getId() && !folderNode.getChildren().isEmpty()) {
                     mTreeView.expandNode(folderNode);
                     expandingFolderNode(folderNode.getChildren());
@@ -219,25 +219,25 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
         if (node.getViewHolder() instanceof TreeHolderCategory) {
             TreeHolderCategory categoryViewHolder = (TreeHolderCategory) node.getViewHolder();
             if (categoryViewHolder.isClickable())
-                mDialogUtils.treeViewNodeClick(mModel.getSelectedItemSize(), categoryViewHolder.getCategoryId(), false);
+                mDialogUtil.treeViewNodeClick(mModel.getSelectedItemSize(), categoryViewHolder.getCategoryId(), false);
         } else if (node.getViewHolder() instanceof TreeHolderFolder) {
             TreeHolderFolder folderViewHolder = (TreeHolderFolder) node.getViewHolder();
             if (folderViewHolder.isClickable())
-                mDialogUtils.treeViewNodeClick(mModel.getSelectedItemSize(), folderViewHolder.getFolderId(), false);
+                mDialogUtil.treeViewNodeClick(mModel.getSelectedItemSize(), folderViewHolder.getFolderId(), false);
         }
     }
 
     @Override
     public void treeViewCategoryAddFolderClick(@NotNull TreeNode node, TreeHolderCategory.CategoryTreeHolder value) {
         long parentId = ((TreeHolderCategory) node.getViewHolder()).getCategoryId();
-        mDialogUtils.treeViewAddFolder(FOLDER, mModel.getParentCategory(), parentId, false);
+        mDialogUtil.treeViewAddFolder(FOLDER, mModel.getParentCategory(), parentId, false);
         mModel.setClickedNode(node);
     }
 
     @Override
     public void treeViewFolderAddFolderClick(@NotNull TreeNode node, TreeHolderFolder.FolderTreeHolder value) {
         long parentId = ((TreeHolderFolder) node.getViewHolder()).getFolderId();
-        mDialogUtils.treeViewAddFolder(FOLDER, mModel.getParentCategory(), parentId, false);
+        mDialogUtil.treeViewAddFolder(FOLDER, mModel.getParentCategory(), parentId, false);
         mModel.setClickedNode(node);
     }
 

@@ -36,35 +36,35 @@ public class AddDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.addDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.addDialog);
 
-        ItemDialogEditTextBinding binding = dialogUtils.getBinding(null, mItemType);
+        ItemDialogEditTextBinding binding = dialogUtil.getBinding(null, mItemType);
 
-        AlertDialog alertDialog = getDialog(dialogUtils, binding);
+        AlertDialog alertDialog = getDialog(dialogUtil, binding);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveClick(dialogUtils, binding, positiveButton);
-        dialogUtils.imeClick(binding, positiveButton);
+        positiveClick(dialogUtil, binding, positiveButton);
+        dialogUtil.imeClick(binding, positiveButton);
         return alertDialog;
     }
 
     @NotNull
-    private AlertDialog getDialog(DialogUtils dialogUtils, ItemDialogEditTextBinding binding) {
+    private AlertDialog getDialog(DialogUtil dialogUtil, ItemDialogEditTextBinding binding) {
         if (mItemType.equals(CATEGORY))
-            return dialogUtils.getEditTextDialog(binding, getString(R.string.all_add_category), null);
+            return dialogUtil.getEditTextDialog(binding, getString(R.string.all_add_category), null);
         else
-            return dialogUtils.getEditTextDialog(binding, getString(R.string.all_create_folder), null);
+            return dialogUtil.getEditTextDialog(binding, getString(R.string.all_create_folder), null);
     }
 
-    private void positiveClick(DialogUtils dialogUtils, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
+    private void positiveClick(DialogUtil dialogUtil, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             CommonUtil.keyBoardHide(requireContext(), v);
 
             String newName = String.valueOf(binding.et.getText()).trim();
 
             if (mItemType.equals(CATEGORY))
-                dialogUtils.addCategory(newName, mParentCategory, false);
-            else dialogUtils.addFolder(newName, mParentId, mParentCategory, false);
+                dialogUtil.addCategory(newName, mParentCategory, false);
+            else dialogUtil.addFolder(newName, mParentId, mParentCategory, false);
         });
     }
 }

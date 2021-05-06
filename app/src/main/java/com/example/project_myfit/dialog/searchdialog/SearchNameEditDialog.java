@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.project_myfit.R;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
-import com.example.project_myfit.dialog.DialogUtils;
+import com.example.project_myfit.dialog.DialogUtil;
 import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +35,10 @@ public class SearchNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search)
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_search)
                 .backStackLiveSetValue(R.id.searchNameEditDialog);
 
-        Folder folder = dialogUtils.getDialogViewModel().getFolder(mFolderId);
+        Folder folder = dialogUtil.getDialogViewModel().getFolder(mFolderId);
 
         String oldName = folder.getFolderName();
         final String finalOldName = oldName;
@@ -46,23 +46,23 @@ public class SearchNameEditDialog extends DialogFragment {
         //restore
         oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
-        mBinding = dialogUtils.getBinding(oldName, FOLDER);
+        mBinding = dialogUtil.getBinding(oldName, FOLDER);
 
-        AlertDialog alertDialog = dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
+        AlertDialog alertDialog = dialogUtil.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveClick(dialogUtils, folder, positiveButton);
-        dialogUtils.imeClick(mBinding, positiveButton);
+        positiveClick(dialogUtil, folder, positiveButton);
+        dialogUtil.imeClick(mBinding, positiveButton);
         return alertDialog;
     }
 
-    private void positiveClick(DialogUtils dialogUtils, Folder folder, @NotNull Button positiveButton) {
+    private void positiveClick(DialogUtil dialogUtil, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             CommonUtil.keyBoardHide(requireContext(), v);
 
             String newName = String.valueOf(mBinding.et.getText()).trim();
 
-            dialogUtils.folderNameEdit(folder, newName, false, true);
+            dialogUtil.folderNameEdit(folder, newName, false, true);
         });
     }
 

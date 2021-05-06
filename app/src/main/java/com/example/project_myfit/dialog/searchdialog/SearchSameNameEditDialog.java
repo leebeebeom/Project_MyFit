@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.dialog.DialogUtils;
+import com.example.project_myfit.dialog.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,17 +31,17 @@ public class SearchSameNameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_search)
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_search)
                 .backStackLiveSetValue(R.id.searchSameNameEditDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
+        AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
 
-        positiveClick(dialogUtils, alertDialog);
+        positiveClick(dialogUtil, alertDialog);
         return alertDialog;
     }
 
-    private void positiveClick(DialogUtils dialogUtils, @NotNull AlertDialog alertDialog) {
+    private void positiveClick(DialogUtil dialogUtil, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.sameNameFolderEdit(mFolderId, mNewName, false, true));
+        positiveButton.setOnClickListener(v -> dialogUtil.sameNameFolderEdit(mFolderId, mNewName, false, true));
     }
 }

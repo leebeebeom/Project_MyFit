@@ -22,14 +22,14 @@ public class GoBackDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main)
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main)
                 .backStackLiveSetValue(R.id.goBackDialog);
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(getString(R.string.dialog_message_go_back));
+        AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_go_back));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v ->
-                dialogUtils.getBackStackEntry().getSavedStateHandle().set(GO_BACK_CONFIRM, null));
+                dialogUtil.getBackStackEntry().getSavedStateHandle().set(GO_BACK_CONFIRM, null));
         return alertDialog;
     }
 }

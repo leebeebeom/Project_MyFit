@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.project_myfit.R;
-import com.example.project_myfit.dialog.DialogUtils;
+import com.example.project_myfit.dialog.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ public class NoParentDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_recycle_bin)
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_recycle_bin)
                 .backStackLiveSetValue(R.id.noParentDialog);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -42,10 +42,10 @@ public class NoParentDialog extends DialogFragment {
 
         stringBuilder.append(getString(R.string.dialog_message_no_parent));
 
-        AlertDialog alertDialog = dialogUtils.getConfirmDialog(stringBuilder.toString());
+        AlertDialog alertDialog = dialogUtil.getConfirmDialog(stringBuilder.toString());
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtils.getBackStackEntry().getSavedStateHandle().set(NO_PARENT_CONFIRM, null));
+        positiveButton.setOnClickListener(v -> dialogUtil.getBackStackEntry().getSavedStateHandle().set(NO_PARENT_CONFIRM, null));
         return alertDialog;
     }
 }

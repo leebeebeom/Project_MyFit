@@ -51,21 +51,19 @@ import static com.example.project_myfit.util.MyFitConstant.RESTORE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SIZE_DELETE_CONFIRM;
 
-public class DialogUtils {
+public class DialogUtil {
     private final Context mContext;
-    private final LayoutInflater mInflater;
     private final NavController mNavController;
     private final DialogViewModel mDialogViewModel;
     private NavBackStackEntry mNavBackStackEntry;
 
-    public DialogUtils(Context context, LayoutInflater inflater, DialogFragment fragment, int navGraphId) {
+    public DialogUtil(Context context, DialogFragment fragment, int navGraphId) {
         this.mContext = context;
-        this.mInflater = inflater;
         this.mNavController = NavHostFragment.findNavController(fragment);
         this.mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(navGraphId)).get(DialogViewModel.class);
     }
 
-    public DialogUtils backStackLiveSetValue(int destinationId) {
+    public DialogUtil backStackLiveSetValue(int destinationId) {
         mNavBackStackEntry = mNavController.getBackStackEntry(destinationId);
         mDialogViewModel.getBackStackEntryLive().setValue(mNavBackStackEntry);
         return this;
@@ -77,7 +75,7 @@ public class DialogUtils {
 
     @NotNull
     public ItemDialogEditTextBinding getBinding(@Nullable String oldName, @NotNull String itemType) {
-        ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(mInflater);
+        ItemDialogEditTextBinding binding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(mContext));
         binding.et.requestFocus();
         if (itemType.equals(CATEGORY)) {
             binding.setHint(mContext.getString(R.string.dialog_hint_category_name));

@@ -40,44 +40,44 @@ public class NameEditDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtils dialogUtils = new DialogUtils(requireContext(), getLayoutInflater(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.nameEditDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.nameEditDialog);
 
-        Category category = mItemType.equals(CATEGORY) ? dialogUtils.getDialogViewModel().getCategory(mItemId) : null;
-        Folder folder = mItemType.equals(FOLDER) ? dialogUtils.getDialogViewModel().getFolder(mItemId) : null;
+        Category category = mItemType.equals(CATEGORY) ? dialogUtil.getDialogViewModel().getCategory(mItemId) : null;
+        Folder folder = mItemType.equals(FOLDER) ? dialogUtil.getDialogViewModel().getFolder(mItemId) : null;
 
         String oldName = category != null ? category.getCategoryName() : folder != null ? folder.getFolderName() : null;
         final String finalOldName = oldName;
         //입력된 이름 리스토어
         oldName = savedInstanceState != null ? savedInstanceState.getString(NAME_EDIT_NAME) : oldName;
 
-        mBinding = dialogUtils.getBinding(oldName, mItemType);
+        mBinding = dialogUtil.getBinding(oldName, mItemType);
 
-        AlertDialog alertDialog = getDialog(dialogUtils, finalOldName);
+        AlertDialog alertDialog = getDialog(dialogUtil, finalOldName);
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveClick(dialogUtils, category, folder, positiveButton);
-        dialogUtils.imeClick(mBinding, positiveButton);
+        positiveClick(dialogUtil, category, folder, positiveButton);
+        dialogUtil.imeClick(mBinding, positiveButton);
         return alertDialog;
     }
 
     @NotNull
-    private AlertDialog getDialog(DialogUtils dialogUtils, String finalOldName) {
+    private AlertDialog getDialog(DialogUtil dialogUtil, String finalOldName) {
         if (mItemType.equals(CATEGORY))
-            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
+            return dialogUtil.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_category_name), finalOldName);
         else
-            return dialogUtils.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
+            return dialogUtil.getEditTextDialog(mBinding, getString(R.string.dialog_title_edit_folder_name), finalOldName);
     }
 
-    private void positiveClick(DialogUtils dialogUtils, Category category, Folder folder, @NotNull Button positiveButton) {
+    private void positiveClick(DialogUtil dialogUtil, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             CommonUtil.keyBoardHide(requireContext(), v);
 
             String newName = String.valueOf(mBinding.et.getText()).trim();
 
             if (category != null)
-                dialogUtils.categoryNameEdit(category, newName, mIsParentName);
+                dialogUtil.categoryNameEdit(category, newName, mIsParentName);
             else if (folder != null)
-                dialogUtils.folderNameEdit(folder, newName, mIsParentName, false);
+                dialogUtil.folderNameEdit(folder, newName, mIsParentName, false);
         });
     }
 
