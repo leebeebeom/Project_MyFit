@@ -29,8 +29,7 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_NAME;
 import static com.example.project_myfit.util.MyFitConstant.SORT_NAME_REVERSE;
 
 public class SortDialog extends DialogFragment {
-    private int mCheckedItem, mNavGraphId;
-    private String mFragmentType;
+    private int mCheckedItem, mNavGraphId, mFragmentType;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -53,7 +52,7 @@ public class SortDialog extends DialogFragment {
         sortButtons[mCheckedItem].setChecked(true);
 
         //메인프래그먼트에서 실행 시 브랜드 삭제
-        if (mFragmentType.equals(MAIN_FRAGMENT)) {
+        if (mFragmentType == MAIN_FRAGMENT) {
             binding.radioBtnBrand.setVisibility(View.GONE);
             binding.radioBtnBrandReverse.setVisibility(View.GONE);
         }
