@@ -14,7 +14,6 @@ import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
 import com.example.project_myfit.util.CommonUtil;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -28,34 +27,41 @@ import java.util.concurrent.atomic.AtomicReference;
 //TODO ASyncTask 대안 찾기
 
 public class Repository {
-    @NotNull
-    @Contract("_ -> new")
-    public static CategoryRepository getCategoryRepository(Context context) {
-        return new CategoryRepository(context);
+    private final Context mContext;
+    private CategoryRepository mCategoryRepository;
+    private FolderRepository mFolderRepository;
+    private SizeRepository mSizeRepository;
+    private RecentSearchRepository mRecentSearchRepository;
+
+    public Repository(Context context) {
+        this.mContext = context;
     }
 
-    @NotNull
-    @Contract("_ -> new")
-    public static FolderRepository getFolderRepository(Context context) {
-        return new FolderRepository(context);
+    public CategoryRepository getCategoryRepository() {
+        if (mCategoryRepository == null) mCategoryRepository = new CategoryRepository(mContext);
+        return mCategoryRepository;
     }
 
-    @NotNull
-    @Contract("_ -> new")
-    public static SizeRepository getSizeRepository(Context context) {
-        return new SizeRepository(context);
+    public FolderRepository getFolderRepository() {
+        if (mFolderRepository == null) mFolderRepository = new FolderRepository(mContext);
+        return mFolderRepository;
     }
 
-    @NotNull
-    @Contract("_ -> new")
-    public static RecentSearchRepository getRecentSearchRepository(Context context) {
-        return new RecentSearchRepository(context);
+    public SizeRepository getSizeRepository() {
+        if (mSizeRepository == null) mSizeRepository = new SizeRepository(mContext);
+        return mSizeRepository;
+    }
+
+    public RecentSearchRepository getRecentSearchRepository() {
+        if (mRecentSearchRepository == null)
+            mRecentSearchRepository = new RecentSearchRepository(mContext);
+        return mRecentSearchRepository;
     }
 
     public static class CategoryRepository {
         private final CategoryDao mCategoryDao;
 
-        public CategoryRepository(Context context) {
+        private CategoryRepository(Context context) {
             mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
         }
 
@@ -146,7 +152,7 @@ public class Repository {
     public static class FolderRepository {
         private final FolderDao mFolderDao;
 
-        public FolderRepository(Context context) {
+        private FolderRepository(Context context) {
             mFolderDao = AppDataBase.getsInstance(context).folderDao();
         }
 
@@ -262,7 +268,7 @@ public class Repository {
     public static class SizeRepository {
         private final SizeDao mSizeDao;
 
-        public SizeRepository(Context context) {
+        private SizeRepository(Context context) {
             mSizeDao = AppDataBase.getsInstance(context).sizeDao();
         }
 
@@ -370,7 +376,7 @@ public class Repository {
     public static class RecentSearchRepository {
         private final RecentSearchDao mRecentSearchDao;
 
-        public RecentSearchRepository(Context context) {
+        private RecentSearchRepository(Context context) {
             mRecentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
         }
 
