@@ -133,19 +133,19 @@ public class Repository {
         }
 
         public void insertCategory(Category category) {
-            new Thread(() -> mCategoryDao.categoryInsert(category)).start();
+            new Thread(() -> mCategoryDao.insertCategory(category)).start();
         }
 
         public void insertCategory(List<Category> categoryList) {
-            new Thread(() -> mCategoryDao.categoryInsert(categoryList)).start();
+            new Thread(() -> mCategoryDao.insertCategory(categoryList)).start();
         }
 
         public void updateCategory(@NotNull List<Category> categoryList) {
-            new Thread(() -> mCategoryDao.categoryUpdate(categoryList)).start();
+            new Thread(() -> mCategoryDao.updateCategory(categoryList)).start();
         }
 
         public void updateCategory(Category category) {
-            new Thread(() -> mCategoryDao.categoryUpdate(category)).start();
+            new Thread(() -> mCategoryDao.updateCategory(category)).start();
         }
     }
 
@@ -253,15 +253,15 @@ public class Repository {
         }
 
         public void insertFolder(Folder folder) {
-            new Thread(() -> mFolderDao.folderInsert(folder)).start();
+            new Thread(() -> mFolderDao.insertFolder(folder)).start();
         }
 
         public void updateFolder(Folder folder) {
-            new Thread(() -> mFolderDao.folderUpdate(folder)).start();
+            new Thread(() -> mFolderDao.updateFolder(folder)).start();
         }
 
         public void updateFolder(@NotNull List<Folder> folderList) {
-            new Thread(() -> mFolderDao.folderUpdate(folderList)).start();
+            new Thread(() -> mFolderDao.updateFolder(folderList)).start();
         }
     }
 
@@ -361,15 +361,15 @@ public class Repository {
         }
 
         public void insertSize(Size size) {
-            new Thread(() -> mSizeDao.sizeInsert(size)).start();
+            new Thread(() -> mSizeDao.insertSize(size)).start();
         }
 
         public void updateSize(Size size) {
-            new Thread(() -> mSizeDao.sizeUpdate(size)).start();
+            new Thread(() -> mSizeDao.updateSize(size)).start();
         }
 
         public void updateSize(List<Size> sizeList) {
-            new Thread(() -> mSizeDao.sizeUpdate(sizeList)).start();
+            new Thread(() -> mSizeDao.updateSize(sizeList)).start();
         }
     }
 
@@ -391,13 +391,13 @@ public class Repository {
             new Thread(() -> {
                 List<String> recentSearchStringList = mRecentSearchDao.getRecentSearchStringList();
                 if (recentSearchStringList.contains(word))
-                    mRecentSearchDao.recentSearchDelete(mRecentSearchDao.getRecentSearch(word));
-                mRecentSearchDao.recentSearchInsert(new RecentSearch(CommonUtil.createId(), word, getCurrentDate(), type));
+                    mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearch(word));
+                mRecentSearchDao.insertRecentSearch(new RecentSearch(CommonUtil.createId(), word, getCurrentDate(), type));
             }).start();
         }
 
         public void deleteRecentSearch(RecentSearch recentSearch) {
-            new Thread(() -> mRecentSearchDao.recentSearchDelete(recentSearch)).start();
+            new Thread(() -> mRecentSearchDao.deleteRecentSearch(recentSearch)).start();
         }
 
         public void deleteAllRecentSearch() {
