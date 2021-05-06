@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 
 public class SameNameAddDialog extends DialogFragment {
-    private String mItemType;
+    private int mItemType, mNavGraphId;
     private String mParentCategory;
     private long mParentId;
     private String mNewName;
@@ -29,34 +29,28 @@ public class SameNameAddDialog extends DialogFragment {
         mParentCategory = SameNameAddDialogArgs.fromBundle(getArguments()).getParentCategory();
         mParentId = SameNameAddDialogArgs.fromBundle(getArguments()).getParentId();
         mNewName = SameNameAddDialogArgs.fromBundle(getArguments()).getNewName();
+        mNavGraphId = SameNameAddDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, R.id.nav_graph_main).backStackLiveSetValue(R.id.sameNameAddDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.sameNameAddDialog);
 
-        AlertDialog alertDialog = getDialog(dialogUtil);
-
+        AlertDialog alertDialog = mItemType == CATEGORY ?
+                dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add)) :
+                dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
         positiveClick(dialogUtil, alertDialog);
         return alertDialog;
-    }
-
-    @NotNull
-    private AlertDialog getDialog(DialogUtil dialogUtil) {
-        if (mItemType.equals(CATEGORY))
-            return dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add));
-        else
-            return dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
     }
 
     private void positiveClick(DialogUtil dialogUtil, @NotNull AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
-            if (mItemType.equals(CATEGORY))
-                dialogUtil.sameNameCategoryAdd(mNewName, mParentCategory, false);
-            else dialogUtil.sameNameFolderAdd(mNewName, mParentCategory, mParentId, false);
+            if (mItemType == CATEGORY)
+                dialogUtil.sameNameCategoryAdd(mNewName, mParentCategory);
+            else dialogUtil.sameNameFolderAdd(mNewName, mParentCategory, mParentId);
         });
     }
 }
