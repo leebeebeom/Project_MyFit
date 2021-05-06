@@ -14,6 +14,8 @@ import com.example.project_myfit.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.DELETE_FOREVER_CONFIRM;
+
 public class DeleteForeverDialog extends DialogFragment {
     private int mSelectedItemSize, mNavGraphId;
 
@@ -34,7 +36,10 @@ public class DeleteForeverDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_delete_forever));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.deleteForever());
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getBackStackEntry().getSavedStateHandle().set(DELETE_FOREVER_CONFIRM, null);
+            dialogUtil.getNavController().popBackStack();
+        });
         return alertDialog;
     }
 }
