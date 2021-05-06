@@ -65,12 +65,12 @@ public class DialogViewModel extends AndroidViewModel {
 
     public void insertCategory(String categoryName, String parentCategory) {
         mAddedCategory = new Category(CommonUtil.createId(), categoryName, parentCategory, mRepository.getCategoryRepository().getCategoryLargestOrderPlus1());
-        mRepository.getCategoryRepository().categoryInsert(mAddedCategory);
+        mRepository.getCategoryRepository().insertCategory(mAddedCategory);
     }
 
     public void insertFolder(@NotNull String folderName, long parentId, String parentCategory) {
         mAddedFolder = new Folder(CommonUtil.createId(), folderName.trim(), parentId, mRepository.getFolderRepository().getFolderLargestOrderPlus1(), parentCategory);
-        mRepository.getFolderRepository().folderInsert(mAddedFolder);
+        mRepository.getFolderRepository().insertFolder(mAddedFolder);
         if (mDummyUtil == null) mDummyUtil = new DummyUtil(getApplication());
         mDummyUtil.setDummy(parentId);
     }
@@ -78,19 +78,19 @@ public class DialogViewModel extends AndroidViewModel {
     public void editCategoryName(@NotNull Category category, String categoryName, boolean isParentName) {
         if (isParentName) mParentName = categoryName;
         category.setCategoryName(categoryName);
-        mRepository.getCategoryRepository().categoryUpdate(category);
+        mRepository.getCategoryRepository().updateCategory(category);
     }
 
     public void editFolderName(@NotNull Folder folder, String folderName, boolean isParentName) {
         if (isParentName) mParentName = folderName;
         folder.setFolderName(folderName);
-        mRepository.getFolderRepository().folderUpdate(folder);
+        mRepository.getFolderRepository().updateFolder(folder);
     }
 
     public void deleteSize(long sizeId) {
         Size size = mRepository.getSizeRepository().getSize(sizeId);
         size.setIsDeleted(true);
-        mRepository.getSizeRepository().sizeUpdate(size);
+        mRepository.getSizeRepository().updateSize(size);
         if (mDummyUtil == null) mDummyUtil = new DummyUtil(getApplication());
         mDummyUtil.setDummy(size.getParentId());
     }
@@ -144,9 +144,9 @@ public class DialogViewModel extends AndroidViewModel {
             List<Size> sizeList = mRepository.getSizeRepository().getSizeList(false, false);
             for (int i = 0; i < sizeList.size(); i++)
                 sizeList.get(i).setOrderNumber(i);
-            mRepository.getCategoryRepository().categoryUpdate(categoryList);
-            mRepository.getFolderRepository().folderUpdate(folderList);
-            mRepository.getSizeRepository().sizeUpdate(sizeList);
+            mRepository.getCategoryRepository().updateCategory(categoryList);
+            mRepository.getFolderRepository().updateFolder(folderList);
+            mRepository.getSizeRepository().updateSize(sizeList);
             mIsOrderNumberInit = true;
         }
     }
