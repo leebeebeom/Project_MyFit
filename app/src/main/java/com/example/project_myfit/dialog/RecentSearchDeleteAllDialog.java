@@ -34,7 +34,10 @@ public class RecentSearchDeleteAllDialog extends DialogFragment {
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> dialogUtil.recentSearchDeleteAll());
+        positiveButton.setOnClickListener(v -> {
+            dialogUtil.getDialogViewModel().recentSearchDeleteAll();
+            dialogUtil.getNavController().popBackStack();
+        });
         return alertDialog;
     }
 }
