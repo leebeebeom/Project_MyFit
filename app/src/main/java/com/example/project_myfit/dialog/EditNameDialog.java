@@ -22,7 +22,7 @@ import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_NAME;
 
-public class NameEditDialog extends DialogFragment {
+public class EditNameDialog extends DialogFragment {
     private ItemDialogEditTextBinding mBinding;
     private int mItemType, mNavGraphId;
     private boolean mIsParentName;
@@ -31,10 +31,10 @@ public class NameEditDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = NameEditDialogArgs.fromBundle(getArguments()).getItemType();
-        mIsParentName = NameEditDialogArgs.fromBundle(getArguments()).getIsParentName();
-        mItemId = NameEditDialogArgs.fromBundle(getArguments()).getItemId();
-        mNavGraphId = NameEditDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mItemType = EditNameDialogArgs.fromBundle(getArguments()).getItemType();
+        mIsParentName = EditNameDialogArgs.fromBundle(getArguments()).getIsParentName();
+        mItemId = EditNameDialogArgs.fromBundle(getArguments()).getItemId();
+        mNavGraphId = EditNameDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
@@ -75,12 +75,12 @@ public class NameEditDialog extends DialogFragment {
             if (category != null) {
                 if (dialogUtil.getDialogViewModel().isSameNameCategory(newName, category.getParentCategory()))
                     CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
-                            NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), newName, mIsParentName, mNavGraphId));
+                            EditNameDialogDirections.actionNameEditDialogToSameNameEditDialog(CATEGORY, category.getId(), newName, mIsParentName, mNavGraphId));
                 else dialogUtil.editCategoryName(category, newName, mIsParentName);
             } else {
                 if (dialogUtil.getDialogViewModel().isSameNameFolder(newName, folder.getParentId()))
                     CommonUtil.navigate(dialogUtil.getNavController(), R.id.nameEditDialog,
-                            NameEditDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), newName, mIsParentName, mNavGraphId));
+                            EditNameDialogDirections.actionNameEditDialogToSameNameEditDialog(FOLDER, folder.getId(), newName, mIsParentName, mNavGraphId));
                 dialogUtil.editFolderName(folder, newName, mIsParentName);
             }
         });
