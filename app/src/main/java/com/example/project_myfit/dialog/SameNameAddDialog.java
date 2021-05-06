@@ -20,7 +20,7 @@ public class SameNameAddDialog extends DialogFragment {
     private int mItemType, mNavGraphId;
     private String mParentCategory;
     private long mParentId;
-    private String mNewName;
+    private String mName;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class SameNameAddDialog extends DialogFragment {
         mItemType = SameNameAddDialogArgs.fromBundle(getArguments()).getItemType();
         mParentCategory = SameNameAddDialogArgs.fromBundle(getArguments()).getParentCategory();
         mParentId = SameNameAddDialogArgs.fromBundle(getArguments()).getParentId();
-        mNewName = SameNameAddDialogArgs.fromBundle(getArguments()).getNewName();
+        mName = SameNameAddDialogArgs.fromBundle(getArguments()).getName();
         mNavGraphId = SameNameAddDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
@@ -41,16 +41,16 @@ public class SameNameAddDialog extends DialogFragment {
         AlertDialog alertDialog = mItemType == CATEGORY ?
                 dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add)) :
                 dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
-        positiveClick(dialogUtil, alertDialog);
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        setPositiveClickListener(dialogUtil, positiveButton);
         return alertDialog;
     }
 
-    private void positiveClick(DialogUtil dialogUtil, @NotNull AlertDialog alertDialog) {
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+    private void setPositiveClickListener(DialogUtil dialogUtil, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             if (mItemType == CATEGORY)
-                dialogUtil.sameNameCategoryAdd(mNewName, mParentCategory);
-            else dialogUtil.sameNameFolderAdd(mNewName, mParentCategory, mParentId);
+                dialogUtil.addCategory(mName, mParentCategory);
+            else dialogUtil.addFolder(mName, mParentId, mParentCategory);
         });
     }
 }
