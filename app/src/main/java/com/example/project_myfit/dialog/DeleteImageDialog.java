@@ -16,14 +16,14 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.IMAGE_CLEAR_CONFIRM;
 
-public class ImageClearDialog extends DialogFragment {
+public class DeleteImageDialog extends DialogFragment {
 
     private int mNavGraphId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNavGraphId = ImageClearDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mNavGraphId = DeleteImageDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
