@@ -151,7 +151,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
 
     private void categoryAddFolderNode(Bundle savedInstanceState, TreeNode clickedNode, TreeHolderCategory categoryViewHolder) {
         if (savedInstanceState != null) {
-            clickedNode = mModel.findCategoryClickedNode(mNodeRoot, (TreeHolderCategory) categoryViewHolder);
+            clickedNode = mModel.findCategoryClickedNode(mNodeRoot, categoryViewHolder);
             categoryViewHolder = (TreeHolderCategory) clickedNode.getViewHolder();
         }
 
@@ -162,22 +162,23 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
         categoryViewHolder.setIconClickable();
 
         if (mDummyUtil == null) mDummyUtil = new DummyUtil(requireContext());
-        mDummyUtil.setCategoryDummy(((TreeHolderCategory) categoryViewHolder).getCategory());
+        mDummyUtil.setCategoryDummy(categoryViewHolder.getCategory());
     }
 
     private void folderAddFolder(Bundle savedInstanceState, TreeNode clickedNode, TreeHolderFolder folderViewHolder) {
         if (savedInstanceState != null) {
-            clickedNode = mModel.findFolderClickedNode(mNodeRoot, (TreeHolderFolder) folderViewHolder);
+            clickedNode = mModel.findFolderClickedNode(mNodeRoot, folderViewHolder);
             folderViewHolder = (TreeHolderFolder) clickedNode.getViewHolder();
         }
 
-        TreeNode addedFolderNode = getFolderNode(mDialogUtil.getDialogViewModel().getAddedFolder(), mModel.getPlusMargin());
+        int margin = (int) (folderViewHolder.getMargin() + getResources().getDimension(R.dimen._8sdp));
+        TreeNode addedFolderNode = getFolderNode(mDialogUtil.getDialogViewModel().getAddedFolder(), margin);
         addNode(clickedNode, addedFolderNode);
         folderViewHolder.setIconClickable();
         setContentsSize(folderViewHolder.getBinding().tvContentsSize);
 
         if (mDummyUtil == null) mDummyUtil = new DummyUtil(requireContext());
-        mDummyUtil.setFolderDummy(((TreeHolderFolder) folderViewHolder).getFolder());
+        mDummyUtil.setFolderDummy(folderViewHolder.getFolder());
     }
 
     private void addNode(TreeNode clickedNode, TreeNode addedNode) {
@@ -257,11 +258,11 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
 
     private TreeNode getCategoryNode(Category category) {
         return new TreeNode(new TreeHolderCategory.CategoryTreeValue(category))
-                .setViewHolder(mModel.getCategoryViewHolder(new TreeHolderCategory(requireContext(), this, mThisCategory, mThisFolder)));
+                .setViewHolder(mModel.setCategoryViewHolderItem(new TreeHolderCategory(requireContext(), this, mThisCategory, mThisFolder)));
     }
 
     private TreeNode getFolderNode(Folder folder, int margin) {
         return new TreeNode(new TreeHolderFolder.FolderTreeHolder(folder, margin))
-                .setViewHolder(mModel.getFolderViewHolder(new TreeHolderFolder(requireContext(), this, mThisFolder)));
+                .setViewHolder(mModel.setFolderViewHolderItem(new TreeHolderFolder(requireContext(), this, mThisFolder)));
     }
 }
