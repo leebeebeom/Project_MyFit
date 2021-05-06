@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
 
-public class SelectedItemDeleteDialog extends DialogFragment {
+public class DeleteSelectedItemDialog extends DialogFragment {
 
     private int mSelectedItemSize;
     private int mNavGraphId;
@@ -24,15 +24,15 @@ public class SelectedItemDeleteDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSelectedItemSize = SelectedItemDeleteDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        mNavGraphId = SelectedItemDeleteDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mSelectedItemSize = DeleteSelectedItemDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
+        mNavGraphId = DeleteSelectedItemDialogArgs.fromBundle(getArguments()).getNavGraphId();
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.selectedItemDeleteDialog);
+        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.deleteSelectedItemDialog);
 
         AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_selected_item_delete));
 
