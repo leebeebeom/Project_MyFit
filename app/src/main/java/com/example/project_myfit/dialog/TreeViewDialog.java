@@ -221,7 +221,7 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
     public void expandingFolderNode(@NotNull List<TreeNode> topFolderNodeList) {
         for (TreeNode folderNode : topFolderNodeList) {
             TreeHolderFolder folderViewHolder = (TreeHolderFolder) folderNode.getViewHolder();
-            for (Folder folder : mDialogUtil.getDialogViewModel().getFolderHistory())
+            for (Folder folder : mDialogUtil.getDialogViewModel().getFolderPath())
                 if (folderViewHolder.getFolderId() == folder.getId() && !folderNode.getChildren().isEmpty()) {
                     mTreeView.expandNode(folderNode);
                     expandingFolderNode(folderNode.getChildren());
