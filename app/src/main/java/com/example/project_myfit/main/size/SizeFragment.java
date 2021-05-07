@@ -343,8 +343,8 @@ public class SizeFragment extends Fragment {
                 if (TextUtils.isEmpty(String.valueOf(mBinding.etName.getText()).trim()))
                     mBinding.layoutName.setError(getString(R.string.size_name_necessary_field));
             } else {
-                if (mSizeId == 0) mModel.sizeInsert(mIsSearchView);
-                else mModel.sizeUpdate();
+                if (mSizeId == 0) mModel.insertSize(mIsSearchView);
+                else mModel.updateSize();
 
                 if (mIsSearchView && getParentFragmentManager().getBackStackEntryCount() == 0)
                     requireActivity().finish();
