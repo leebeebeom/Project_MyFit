@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
-import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.BOTTOM_LENGTH;
 import static com.example.project_myfit.util.MyFitConstant.CHEST;
 import static com.example.project_myfit.util.MyFitConstant.HEM;
@@ -40,73 +39,60 @@ import static com.example.project_myfit.util.MyFitConstant.OPTION3;
 import static com.example.project_myfit.util.MyFitConstant.OPTION4;
 import static com.example.project_myfit.util.MyFitConstant.OPTION5;
 import static com.example.project_myfit.util.MyFitConstant.OPTION6;
-import static com.example.project_myfit.util.MyFitConstant.OUTER;
 import static com.example.project_myfit.util.MyFitConstant.RISE;
 import static com.example.project_myfit.util.MyFitConstant.SHOULDER;
 import static com.example.project_myfit.util.MyFitConstant.SLEEVE;
 import static com.example.project_myfit.util.MyFitConstant.THIGH;
-import static com.example.project_myfit.util.MyFitConstant.TOP;
 import static com.example.project_myfit.util.MyFitConstant.WAIST;
 
 public class SizeViewModel extends AndroidViewModel {
-    private final Repository.SizeRepository mSizeRepository;
-    private Size mCompareSize, mNewSize;
+    private final Repository mRepository;
+    private Size mCompareSize, mNewSize, mOriginSize;
     private final MutableLiveData<Uri> mMutableLiveImageUri;
     private File mCacheFile;
     private String mFileName, mParentCategory;
     private long mParentId;
-    private Size mOriginSize;
     private List<String> mSizeBrandList;
+    private DummyUtil mDummyUtil;
 
     public SizeViewModel(@NonNull Application application) {
         super(application);
-        mSizeRepository = Repository.getSizeRepository(getApplication());
+        mRepository = new Repository(application);
         mMutableLiveImageUri = new MutableLiveData<>();
     }
 
-    public boolean getCompareResult() {
-        return isDefaultOutputChanged() || isSizeOutputChanged();
-    }
-
-    private boolean isDefaultOutputChanged() {
+    public boolean isOutputContentsChanged() {
         return !String.valueOf(mCompareSize.getImageUri()).equals(String.valueOf(mMutableLiveImageUri.getValue())) ||
                 !mOriginSize.isFavorite() == mCompareSize.isFavorite() ||
                 !String.valueOf(mOriginSize.getBrand()).equals(String.valueOf(mCompareSize.getBrand())) ||
                 !String.valueOf(mOriginSize.getName()).equals(String.valueOf(mCompareSize.getName())) ||
                 !String.valueOf(mOriginSize.getSize()).equals(String.valueOf(mCompareSize.getSize())) ||
                 !String.valueOf(mOriginSize.getLink()).equals(String.valueOf(mCompareSize.getLink())) ||
-                !String.valueOf(mOriginSize.getMemo()).equals(String.valueOf(mCompareSize.getMemo()));
-    }
-
-    private boolean isSizeOutputChanged() {
-        if (mParentCategory.equals(TOP) || mParentCategory.equals(OUTER)) {
-            return !String.valueOf(mOriginSize.getSizeMap().get(LENGTH)).equals(String.valueOf(mCompareSize.getSizeMap().get(LENGTH))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(SHOULDER)).equals(String.valueOf(mCompareSize.getSizeMap().get(SHOULDER))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(CHEST)).equals(String.valueOf(mCompareSize.getSizeMap().get(CHEST))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(SLEEVE)).equals(String.valueOf(mCompareSize.getSizeMap().get(SLEEVE)));
-        } else if (mParentCategory.equals(BOTTOM)) {
-            return !String.valueOf(mOriginSize.getSizeMap().get(BOTTOM_LENGTH)).equals(String.valueOf(mCompareSize.getSizeMap().get(BOTTOM_LENGTH))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(WAIST)).equals(String.valueOf(mCompareSize.getSizeMap().get(WAIST))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(THIGH)).equals(String.valueOf(mCompareSize.getSizeMap().get(THIGH))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(RISE)).equals(String.valueOf(mCompareSize.getSizeMap().get(RISE))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(HEM)).equals(String.valueOf(mCompareSize.getSizeMap().get(HEM)));
-        } else {
-            return !String.valueOf(mOriginSize.getSizeMap().get(OPTION1)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION1))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(OPTION2)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION2))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(OPTION3)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION3))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(OPTION4)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION4))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(OPTION5)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION5))) ||
-                    !String.valueOf(mOriginSize.getSizeMap().get(OPTION6)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION6)));
-        }
+                !String.valueOf(mOriginSize.getMemo()).equals(String.valueOf(mCompareSize.getMemo())) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(LENGTH)).equals(String.valueOf(mCompareSize.getSizeMap().get(LENGTH))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(SHOULDER)).equals(String.valueOf(mCompareSize.getSizeMap().get(SHOULDER))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(CHEST)).equals(String.valueOf(mCompareSize.getSizeMap().get(CHEST))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(SLEEVE)).equals(String.valueOf(mCompareSize.getSizeMap().get(SLEEVE))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(BOTTOM_LENGTH)).equals(String.valueOf(mCompareSize.getSizeMap().get(BOTTOM_LENGTH))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(WAIST)).equals(String.valueOf(mCompareSize.getSizeMap().get(WAIST))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(THIGH)).equals(String.valueOf(mCompareSize.getSizeMap().get(THIGH))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(RISE)).equals(String.valueOf(mCompareSize.getSizeMap().get(RISE))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(HEM)).equals(String.valueOf(mCompareSize.getSizeMap().get(HEM))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(OPTION1)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION1))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(OPTION2)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION2))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(OPTION3)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION3))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(OPTION4)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION4))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(OPTION5)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION5))) ||
+                !String.valueOf(mOriginSize.getSizeMap().get(OPTION6)).equals(String.valueOf(mCompareSize.getSizeMap().get(OPTION6)));
     }
 
     public void initResources(long parentId, long sizeId, String parentCategory) {
-        this.mOriginSize = mSizeRepository.getSize(sizeId);
+        this.mOriginSize = mRepository.getSizeRepository().getSize(sizeId);
         this.mParentCategory = parentCategory;
         this.mParentId = parentId;
 
         if (mOriginSize != null) {
-            mCompareSize = mSizeRepository.getSize(sizeId);
+            mCompareSize = mRepository.getSizeRepository().getSize(sizeId);
             mMutableLiveImageUri.setValue(mOriginSize.getImageUri() != null ? Uri.parse(mOriginSize.getImageUri()) : null);
         }
     }
@@ -122,16 +108,10 @@ public class SizeViewModel extends AndroidViewModel {
         //make file
         mCacheFile = new File(getApplication().getExternalCacheDir(), mFileName);
 
-        //Uri uri = Uri.fromFile(mCacheFile); <- No
+        //Uri uri = Uri.fromFile(mCacheFile); <- not working
         Uri uri = FileProvider.getUriForFile(getApplication(), "com.example.project_myfit.provider", mCacheFile);
 
-        Intent intent = new Intent("com.android.camera.action.CROP")
-                .setDataAndType(data, "image/*")
-                .setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .putExtra("aspectX", 3)
-                .putExtra("aspectY", 4)
-                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        Intent intent = getIntent(data, uri);
 
         //grant
         List<ResolveInfo> resolveInfoList = getApplication().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -142,20 +122,33 @@ public class SizeViewModel extends AndroidViewModel {
         return intent;
     }
 
-    public void sizeInsert(boolean mIsSearchView) {
-        mNewSize.setOrderNumber(mSizeRepository.getSizeLargestOrderPlus1());
+    private Intent getIntent(Uri data, Uri uri) {
+        return new Intent("com.android.camera.action.CROP")
+                .setDataAndType(data, "image/*")
+                .setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .putExtra("aspectX", 3)
+                .putExtra("aspectY", 4)
+                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
+    }
+
+    public void insertSize(boolean mIsSearchView) {
+        mNewSize.setOrderNumber(mRepository.getSizeRepository().getSizeLargestOrderPlus1());
         mNewSize.setCreatedTime(getCurrentTime());
         mNewSize.setModifiedTime("");
         mNewSize.setImageUri(mMutableLiveImageUri.getValue() == null ? null : getRenameUri());
         mNewSize.setParentId(mParentId);
-        mSizeRepository.sizeInsert(mNewSize);
-        if (mIsSearchView) DummyUtil.setDummy(mParentId,getApplication());
+        mRepository.getSizeRepository().insertSize(mNewSize);
+        if (mIsSearchView) {
+            if (mDummyUtil == null) mDummyUtil = new DummyUtil(mRepository);
+            mDummyUtil.setDummy(mParentId);
+        }
     }
 
-    public void sizeUpdate() {
+    public void updateSize() {
         mOriginSize.setImageUri(getOutputFileSavedUri());
         mOriginSize.setModifiedTime(getCurrentTime());
-        mSizeRepository.sizeUpdate(mOriginSize);
+        mRepository.getSizeRepository().updateSize(mOriginSize);
     }
 
     public Size getSize( ) {
@@ -206,7 +199,7 @@ public class SizeViewModel extends AndroidViewModel {
     }
 
     public List<String> getSizeBrandList() {
-        if (mSizeBrandList == null) mSizeBrandList = mSizeRepository.getSizeBrandList(false, false);
+        if (mSizeBrandList == null) mSizeBrandList = mRepository.getSizeRepository().getSizeBrandList(false, false);
         return mSizeBrandList;
     }
 }
