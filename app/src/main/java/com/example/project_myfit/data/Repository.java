@@ -390,10 +390,17 @@ public class Repository {
         public void insertRecentSearch(String word, int type) {
             new Thread(() -> {
                 List<String> recentSearchStringList = mRecentSearchDao.getRecentSearchStringList();
-                if (recentSearchStringList.contains(word))
-                    mRecentSearchDao.deleteRecentSearch(mRecentSearchDao.getRecentSearch(word));
+                if (isOverLap(word)) {
+                    RecentSearch overLappedRecentSearch = mRecentSearchDao.getRecentSearch(word);
+                    mRecentSearchDao.deleteRecentSearch(overLappedRecentSearch);
+                }
                 mRecentSearchDao.insertRecentSearch(new RecentSearch(CommonUtil.createId(), word, getCurrentDate(), type));
             }).start();
+        }
+
+        private boolean isOverLap(String word) {
+            List<String> recentSearchStringList = mRecentSearchDao.getRecentSearchStringList();
+            return recentSearchStringList.contains(word);
         }
 
         public void deleteRecentSearch(RecentSearch recentSearch) {
