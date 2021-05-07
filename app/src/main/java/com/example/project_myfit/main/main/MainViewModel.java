@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.project_myfit.data.Repository;
 import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.main.main.adapter.CategoryAdapter;
 import com.example.project_myfit.util.SelectedItemTreat;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +26,7 @@ import static com.example.project_myfit.util.MyFitConstant.SORT_MAIN;
 import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class MainViewModel extends AndroidViewModel {
-    private final Repository.CategoryRepository mCategoryRepository;
-    private final Repository.FolderRepository mFolderRepository;
-    private final Repository.SizeRepository mSizeRepository;
+    private final Repository mRepository;
     private final MutableLiveData<Integer> mSelectedCategorySizeLive;
     private final SharedPreferences mSortPreferences;
     private List<Category> mSelectedCategoryList;
@@ -39,57 +36,36 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        mCategoryRepository = Repository.getCategoryRepository(application);
-        mFolderRepository = Repository.getFolderRepository(application);
-        mSizeRepository = Repository.getSizeRepository(application);
-
+        mRepository = new Repository(application);
         mSelectedCategorySizeLive = new MutableLiveData<>();
-
         mSortPreferences = getApplication().getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
         mSort = mSortPreferences.getInt(SORT_MAIN, SORT_CUSTOM);
     }
 
-    public void selectAllClick(boolean isChecked, @NotNull CategoryAdapter[] categoryAdapterArray) {
-        CategoryAdapter categoryAdapter = categoryAdapterArray[mCurrentItem];
-
-        if (!mSelectedCategoryList.isEmpty()) mSelectedCategoryList.clear();
-        if (isChecked) {
-            mSelectedCategoryList.addAll(categoryAdapter.getCurrentList());
-            categoryAdapter.selectAll();
-        } else categoryAdapter.deselectAll();
-        mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
-    }
-
-    public void selectedCategoryDelete() {
+    public void deleteSelectedCategory() {
         if (mSelectedItemTreat == null)
             mSelectedItemTreat = new SelectedItemTreat(getApplication());
         mSelectedItemTreat.categoryTreat(mSelectedCategoryList, true);
     }
 
-    public void categorySelected(@NotNull Category category, boolean isChecked, CategoryAdapter[] categoryAdapterArray) {
-        if (isChecked) mSelectedCategoryList.add(category);
-        else mSelectedCategoryList.remove(category);
-        categoryAdapterArray[mCurrentItem].itemSelected(category.getId());
+    public void setSelectedCategorySizeLiveValue() {
         mSelectedCategorySizeLive.setValue(mSelectedCategoryList.size());
     }
 
-    public void categoryItemDrop(@NotNull List<Category> newOrderNumberCategoryList) {
+    public void updateNewOrderCategoryList(@NotNull List<Category> newOrderNumberCategoryList) {
         List<Category> newSelectedCategoryList = new ArrayList<>();
         for (Category category : newOrderNumberCategoryList)
             if (mSelectedCategoryList.contains(category)) newSelectedCategoryList.add(category);
         mSelectedCategoryList = newSelectedCategoryList;
 
-        mCategoryRepository.categoryUpdate(newOrderNumberCategoryList);
+        mRepository.getCategoryRepository().updateCategory(newOrderNumberCategoryList);
     }
 
-    public boolean sortChanged(int sort) {
-        if (mSort != sort) {
-            mSort = sort;
-            SharedPreferences.Editor editor = mSortPreferences.edit();
-            editor.putInt(SORT_MAIN, sort);
-            editor.apply();
-            return true;
-        } else return false;
+    public void changeSort(int sort) {
+        mSort = sort;
+        SharedPreferences.Editor editor = mSortPreferences.edit();
+        editor.putInt(SORT_MAIN, sort);
+        editor.apply();
     }
 
     //getter,setter---------------------------------------------------------------------------------
@@ -102,20 +78,13 @@ public class MainViewModel extends AndroidViewModel {
         return mSelectedCategoryList;
     }
 
-    public long getSelectedCategoryId() {
-        return mSelectedCategoryList.get(0).getId();
-    }
-
-    public int getSelectedCategorySize() {
-        return mSelectedCategoryList.size();
-    }
 
     public List<Long> getFolderParentIdList(String parentCategory) {
-        return mFolderRepository.getFolderParentIdList(parentCategory, false, false);
+        return mRepository.getFolderRepository().getFolderParentIdList(parentCategory, false, false);
     }
 
     public List<Long> getSizeParentIdList(String parentCategory) {
-        return mSizeRepository.getSizeParentIdList(parentCategory, false, false);
+        return mRepository.getSizeRepository().getSizeParentIdList(parentCategory, false, false);
     }
 
     public int getCurrentItem() {
@@ -141,7 +110,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Category>> getCategoryLive(boolean isDeleted) {
-        return mCategoryRepository.getCategoryLive(isDeleted);
+        return mRepository.getCategoryRepository().getCategoryLive(isDeleted);
     }
 
     public int getSort() {

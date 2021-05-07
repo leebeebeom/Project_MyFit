@@ -372,10 +372,10 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     public void actionItemClick(int itemId) {
         if (itemId == R.id.menu_action_mode_edit)
             CommonUtil.navigate(mNavController, R.id.mainFragment,
-                    MainFragmentDirections.toEditNameDialog(mModel.getSelectedCategoryId(), CATEGORY, false, R.id.nav_graph_main));
+                    MainFragmentDirections.toEditNameDialog(mModel.getSelectedCategoryList().get(0).getId(), CATEGORY, false, R.id.nav_graph_main));
         else if (itemId == R.id.menu_action_mode_delete)
             CommonUtil.navigate(mNavController, R.id.mainFragment,
-                    MainFragmentDirections.toDeleteSelectedItemDialog(mModel.getSelectedCategorySize(), R.id.nav_graph_main));
+                    MainFragmentDirections.toDeleteSelectedItemDialog(mModel.getSelectedCategoryList().size(), R.id.nav_graph_main));
     }
 
     //popup menu click------------------------------------------------------------------------------

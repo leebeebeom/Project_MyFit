@@ -110,6 +110,6 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     @Override
     public void dropItem(RecyclerView.ViewHolder viewHolder) {
         super.dropItem(viewHolder);
-        mModel.categoryItemDrop(mCategoryList);
+        mModel.updateNewOrderCategoryList(mCategoryList);
     }
 }
