@@ -47,19 +47,15 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.project_myfit.util.MyFitConstant.ACTION_MODE;
-import static com.example.project_myfit.util.MyFitConstant.BOTTOM;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.util.MyFitConstant.ETC;
+import static com.example.project_myfit.util.MyFitConstant.DELETE_SELECTED_ITEM_CONFIRM;
+import static com.example.project_myfit.util.MyFitConstant.EDIT_NAME_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.MAIN_FRAGMENT;
-import static com.example.project_myfit.util.MyFitConstant.NAME_EDIT_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.OUTER;
-import static com.example.project_myfit.util.MyFitConstant.SELECTED_ITEM_DELETE_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.SORT_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.TOP;
 
 public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoScrollListener, CategoryVH.CategoryVHListener, ActionModeImpl.ActionModeListener, PopupWindowImpl.PopupWindowClickListener {
 
@@ -74,6 +70,9 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     private ActionModeImpl mActionMode;
     private DragSelectImpl[] mDragSelectListener;
     private ListenerUtil mListenerUtil;
+    private ColorStateList mTextOriginColor;
+    private int mColorControl;
+    private int mColorPrimary;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -93,17 +92,14 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
 
         mActivityBinding = ((MainActivity) requireActivity()).mBinding;
 
+        mButtonArray = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
         mActionMode = new ActionModeImpl(getLayoutInflater(), R.menu.menu_action_mode, this, mCategoryAdapterArray)
                 .hasViewPager(mBinding.vp, mButtonArray);
 
-        View view = mBinding.getRoot();
-
-        mButtonArray = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
-
-        LayoutPopupBinding popupMenuBinding = LayoutPopupBinding.inflate(inflater);
-        popupMenuBinding.tvCreateFolder.setVisibility(View.GONE);
-        mPopupWindow = new PopupWindowImpl(popupMenuBinding, this);
-        return view;
+        LayoutPopupBinding popupBinding = LayoutPopupBinding.inflate(inflater);
+        popupBinding.tvCreateFolder.setVisibility(View.GONE);
+        mPopupWindow = new PopupWindowImpl(popupBinding, this);
+        return mBinding.getRoot();
     }
 
     @NotNull
@@ -128,80 +124,72 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         super.onViewCreated(view, savedInstanceState);
         if (mBinding.sv.getScrollY() == 0) mActivityBinding.fabTop.hide();
 
-        dialogLive();
-        categoryLive();
-        actionModeTitleLive();
+        observeDialogLive();
+        observeCategoryLive();
+        observeSelectedItemSizeLive();
     }
 
-    private void dialogLive() {
-        DialogViewModel dialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.nav_graph_main))
-                .get(DialogViewModel.class);
+    private void observeDialogLive() {
+        DialogViewModel dialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(R.id.nav_graph_main)).get(DialogViewModel.class);
         dialogViewModel.orderNumberInit();
 
         dialogViewModel.getBackStackEntryLive().observe(getViewLifecycleOwner(), navBackStackEntry -> {
-            nameEditLive(navBackStackEntry);
-            sortLive(navBackStackEntry);
-            selectedItemDeletedLive(navBackStackEntry);
+            observeEditNameLive(navBackStackEntry);
+            observeSortLive(navBackStackEntry);
+            observeDeleteSelectedItemLive(navBackStackEntry);
         });
     }
 
-    private void nameEditLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(NAME_EDIT_CONFIRM).observe(navBackStackEntry, o -> {
+    private void observeEditNameLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(EDIT_NAME_CONFIRM).observe(navBackStackEntry, o -> {
             if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
         });
     }
 
-    private void sortLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+    private void observeSortLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
         navBackStackEntry.getSavedStateHandle().getLiveData(SORT_CONFIRM).observe(navBackStackEntry, o -> {
-            if (o instanceof Integer && mModel.sortChanged((Integer) o)) categoryLive();
+            if (o instanceof Integer && (Integer) o != mModel.getSort()) {
+                mModel.changeSort((Integer) o);
+                observeCategoryLive();
+            }
         });
     }
 
-    private void selectedItemDeletedLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
-        navBackStackEntry.getSavedStateHandle().getLiveData(SELECTED_ITEM_DELETE_CONFIRM).observe(navBackStackEntry, o -> {
-            mModel.selectedCategoryDelete();
+    private void observeDeleteSelectedItemLive(@NotNull androidx.navigation.NavBackStackEntry navBackStackEntry) {
+        navBackStackEntry.getSavedStateHandle().getLiveData(DELETE_SELECTED_ITEM_CONFIRM).observe(navBackStackEntry, o -> {
+            mModel.deleteSelectedCategory();
             if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
         });
     }
 
-    public void categoryLive() {
+    public void observeCategoryLive() {
         mModel.getCategoryLive(false).observe(getViewLifecycleOwner(), categoryList -> {
-            List<List<Category>> list = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            for (Category category : Sort.categorySort(mModel.getSort(), categoryList)) {
-                switch (category.getParentCategory()) {
-                    case TOP:
-                        list.get(0).add(category);
-                        break;
-                    case BOTTOM:
-                        list.get(1).add(category);
-                        break;
-                    case OUTER:
-                        list.get(2).add(category);
-                        break;
-                    case ETC:
-                        list.get(3).add(category);
-                        break;
-                }
+
+            List<Category> sortedList = Sort.categorySort(mModel.getSort(), categoryList);
+            List<List<Category>> categorizedList = new ArrayList<>(4);
+            for (int i = 0; i < 4; i++) {
+                int finalI = i;
+                categorizedList.add(sortedList.stream()
+                        .filter(category -> category.getParentCategory().equals(MyFitVariable.parentCategoryArray[finalI]))
+                        .collect(Collectors.toList()));
             }
 
-            for (int i = 0; i < mCategoryAdapterArray.length; i++) {
-                mCategoryAdapterArray[i].setItem(mModel.getSort(), list.get(i),
+            for (int i = 0; i < mCategoryAdapterArray.length; i++)
+                mCategoryAdapterArray[i].setItem(mModel.getSort(), categorizedList.get(i),
                         mModel.getFolderParentIdList(MyFitVariable.parentCategoryArray[i]), mModel.getSizeParentIdList(MyFitVariable.parentCategoryArray[i]));
-            }
 
             RecyclerView viewPager = (RecyclerView) mBinding.vp.getChildAt(0);
             ViewPagerVH[] viewPagerVHArray = new ViewPagerVH[4];
             for (int i = 0; i < viewPagerVHArray.length; i++)
                 viewPagerVHArray[i] = (ViewPagerVH) viewPager.findViewHolderForLayoutPosition(i);
 
-            for (int i = 0; i < viewPagerVHArray.length; i++) {
+            for (int i = 0; i < viewPagerVHArray.length; i++)
                 if (viewPagerVHArray[i] != null)
-                    viewPagerVHArray[i].setNoData(list.get(i).isEmpty());
-            }
+                    viewPagerVHArray[i].setNoData(categorizedList.get(i).isEmpty());
         });
     }
 
-    private void actionModeTitleLive() {
+    private void observeSelectedItemSizeLive() {
         mModel.getSelectedCategorySizeLive().observe(getViewLifecycleOwner(), integer -> {
             if (MyFitVariable.actionMode != null) {
                 mActionMode.getBinding().tvTitle.setText(getString(R.string.action_mode_title, integer));
@@ -218,15 +206,17 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListenerUtil = new ListenerUtil();
-        mListenerUtil.scrollChangeListener(mBinding.sv, mActivityBinding.fabTop);
-        mListenerUtil.fabTopClick(mBinding.sv, mActivityBinding.fabTop);
-        vpPageChangeListener();
-        buttonClick();
-        fabClick();
+        mListenerUtil.setScrollChangeListener(mBinding.sv, mActivityBinding.fabTop);
+        mListenerUtil.setFabTopClickListener(mBinding.sv, mActivityBinding.fabTop);
+        setVpPageChangeListener();
+        setToggleGroupCheckedListener();
+        setButtonClickListener();
+        mButtonArray[mModel.getCurrentItem()].setChecked(true);
+        setFabClickListener();
         restoreActionMode(savedInstanceState);
     }
 
-    private void vpPageChangeListener() {
+    private void setVpPageChangeListener() {
         mBinding.vp.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -237,48 +227,55 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
         });
     }
 
-    private void buttonClick() {
-        final ColorStateList textOriginColor = mBinding.btnEtc.getTextColors();
-        TypedValue typedValue = new TypedValue();
-        requireContext().getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-        int colorControl = typedValue.data;
-        requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-        int colorPrimary = typedValue.data;
+    private void setToggleGroupCheckedListener() {
+        if (mTextOriginColor == null) mTextOriginColor = mBinding.btnEtc.getTextColors();
+
+        if (mColorControl == 0 || mColorPrimary == 0) {
+            TypedValue typedValue = new TypedValue();
+            if (mColorControl == 0) {
+                requireContext().getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+                mColorControl = typedValue.data;
+            }
+            if (mColorPrimary == 0) {
+                requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+                mColorPrimary = typedValue.data;
+            }
+        }
 
         //버튼 클릭 시 첫번째 호출
         mBinding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             for (int i = 0; i < 4; i++) {
                 mButtonArray[i].setBackgroundColor(Color.TRANSPARENT);
-                mButtonArray[i].setTextColor(textOriginColor);
+                mButtonArray[i].setTextColor(mTextOriginColor);
             }
 
             if (checkedId == R.id.btnTop && isChecked) {
-                mButtonArray[0].setBackgroundColor(colorControl);
-                mButtonArray[0].setTextColor(colorPrimary);
+                mButtonArray[0].setBackgroundColor(mColorControl);
+                mButtonArray[0].setTextColor(mColorPrimary);
             } else if (checkedId == R.id.btnBottom && isChecked) {
-                mButtonArray[1].setBackgroundColor(colorControl);
-                mButtonArray[1].setTextColor(colorPrimary);
+                mButtonArray[1].setBackgroundColor(mColorControl);
+                mButtonArray[1].setTextColor(mColorPrimary);
             } else if (checkedId == R.id.btnOuter && isChecked) {
-                mButtonArray[2].setBackgroundColor(colorControl);
-                mButtonArray[2].setTextColor(colorPrimary);
-            } else {
-                mButtonArray[3].setBackgroundColor(colorControl);
-                mButtonArray[3].setTextColor(colorPrimary);
+                mButtonArray[2].setBackgroundColor(mColorControl);
+                mButtonArray[2].setTextColor(mColorPrimary);
+            } else if (checkedId == R.id.btnEtc && isChecked) {
+                mButtonArray[3].setBackgroundColor(mColorControl);
+                mButtonArray[3].setTextColor(mColorPrimary);
             }
         });
+    }
 
+    private void setButtonClickListener() {
         for (int i = 0; i < 4; i++) {
             int finalI = i;
             mButtonArray[i].setOnClickListener(v -> mBinding.vp.setCurrentItem(finalI));
         }
-
-        mButtonArray[mModel.getCurrentItem()].setChecked(true);
     }
 
-    private void fabClick() {
+    private void setFabClickListener() {
         mActivityBinding.fab.setOnClickListener(v -> {
             if (MyFitVariable.actionMode != null) MyFitVariable.actionMode.finish();
-            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.actionMainFragmentToSearchActivity());
+            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.toSearchActivity());
         });
     }
 
@@ -307,7 +304,7 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
             mPopupWindow.showAsDropDown(requireActivity().findViewById(R.id.menu_main_popup));
             return true;
         } else if (item.getItemId() == R.id.menu_main_search) {
-            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.actionMainFragmentToSearchActivity());
+            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.toSearchActivity());
             return true;
         }
         return false;
@@ -324,10 +321,16 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     public void onCategoryItemViewClick(Category category, MaterialCheckBox checkBox) {
         if (MyFitVariable.actionMode == null)
             CommonUtil.navigate(mNavController, R.id.mainFragment,
-                    MainFragmentDirections.actionMainFragmentToListFragment(category.getId(), 0, category.getParentCategory()));
+                    MainFragmentDirections.toListFragment(category.getId(), 0, category.getParentCategory()));
         else {
             checkBox.setChecked(!checkBox.isChecked());
-            mModel.categorySelected(category, checkBox.isChecked(), mCategoryAdapterArray);
+
+            if (checkBox.isChecked())
+                mModel.getSelectedCategoryList().add(category);
+            else mModel.getSelectedCategoryList().remove(category);
+
+            mCategoryAdapterArray[mModel.getCurrentItem()].itemSelected(category.getId());
+            mModel.setSelectedCategorySizeLiveValue();
         }
     }
 
@@ -354,24 +357,32 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     //action mode-----------------------------------------------------------------------------------
     @Override
     public void selectAllClick(boolean isChecked) {
-        mModel.selectAllClick(isChecked, mCategoryAdapterArray);
+        CategoryAdapter categoryAdapter = mCategoryAdapterArray[mModel.getCurrentItem()];
+        mModel.getSelectedCategoryList().clear();
+
+        if (isChecked) {
+            mModel.getSelectedCategoryList().addAll(categoryAdapter.getCurrentList());
+            categoryAdapter.selectAll();
+        } else categoryAdapter.deselectAll();
+
+        mModel.setSelectedCategorySizeLiveValue();
     }
 
     @Override
     public void actionItemClick(int itemId) {
         if (itemId == R.id.menu_action_mode_edit)
             CommonUtil.navigate(mNavController, R.id.mainFragment,
-                    MainFragmentDirections.actionMainFragmentToNameEditDialog(mModel.getSelectedCategoryId(), CATEGORY, false));
+                    MainFragmentDirections.toEditNameDialog(mModel.getSelectedCategoryId(), CATEGORY, false, R.id.nav_graph_main));
         else if (itemId == R.id.menu_action_mode_delete)
             CommonUtil.navigate(mNavController, R.id.mainFragment,
-                    MainFragmentDirections.actionMainFragmentToSelectedItemDeleteDialog(mModel.getSelectedCategorySize()));
+                    MainFragmentDirections.toDeleteSelectedItemDialog(mModel.getSelectedCategorySize(), R.id.nav_graph_main));
     }
 
     //popup menu click------------------------------------------------------------------------------
     @Override
     public void addCategoryClick() {
         CommonUtil.navigate(mNavController, R.id.mainFragment,
-                MainFragmentDirections.actionMainFragmentToAddDialog(CATEGORY, mModel.getParentCategory(), 0));
+                MainFragmentDirections.toAddDialog(CATEGORY, mModel.getParentCategory(), 0, R.id.nav_graph_main));
     }
 
     @Override
@@ -381,12 +392,12 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
     @Override
     public void sortClick() {
         CommonUtil.navigate(mNavController, R.id.mainFragment,
-                MainFragmentDirections.actionMainFragmentToSortDialog(mModel.getSort(), MAIN_FRAGMENT));
+                MainFragmentDirections.toSortDialog(mModel.getSort(), MAIN_FRAGMENT, R.id.nav_graph_main));
     }
 
     @Override
     public void recycleBinClick() {
         CommonUtil.navigate(mNavController, R.id.mainFragment,
-                MainFragmentDirections.actionMainFragmentToRecycleBinActivity());
+                MainFragmentDirections.toRecycleBinActivity());
     }
 }
