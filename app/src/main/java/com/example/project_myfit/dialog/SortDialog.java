@@ -48,7 +48,7 @@ public class SortDialog extends DialogFragment {
         LayoutDialogSortBinding binding = LayoutDialogSortBinding.inflate(getLayoutInflater());
         MaterialRadioButton[] sortButtons = {binding.radioBtnCustom, binding.radioBtnCreate, binding.radioBtnCreateReverse,
                 binding.radioBtnBrand, binding.radioBtnBrandReverse, binding.radioBtnName, binding.radioBtnNameReverse};
-        addCheckListener(sortButtons);
+        addRadioButtonCheckListener(sortButtons);
         sortButtons[mCheckedItem].setChecked(true);
 
         //메인프래그먼트에서 실행 시 브랜드 삭제
@@ -65,7 +65,7 @@ public class SortDialog extends DialogFragment {
         return alertDialog;
     }
 
-    private void addCheckListener(@NotNull MaterialRadioButton[] buttons) {
+    private void addRadioButtonCheckListener(@NotNull MaterialRadioButton[] buttons) {
         int[] buttonConstantArray = {SORT_CUSTOM, SORT_CREATE, SORT_CREATE_REVERSE, SORT_BRAND, SORT_BRAND_REVERSE,
                 SORT_NAME, SORT_NAME_REVERSE};
 

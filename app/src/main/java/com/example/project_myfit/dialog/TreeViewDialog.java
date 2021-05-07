@@ -129,23 +129,21 @@ public class TreeViewDialog extends DialogFragment implements TreeNode.TreeNodeC
                     int itemType = (int) o;
                     if (itemType == CATEGORY)
                         addCategoryNode();
-                    else addFolderNode(savedInstanceState);
+                    else {
+                        TreeNode clickedNode = mModel.getClickedNode();
+                        TreeNode.BaseNodeViewHolder<?> viewHolder = clickedNode.getViewHolder();
+
+                        if (viewHolder instanceof TreeHolderCategory)
+                            categoryAddFolderNode(savedInstanceState, clickedNode, (TreeHolderCategory) viewHolder);
+                        else if (viewHolder instanceof TreeHolderFolder)
+                            folderAddFolder(savedInstanceState, clickedNode, (TreeHolderFolder) viewHolder);
+                    }
                 }));
     }
 
     private void addCategoryNode() {
         TreeNode addedCategoryNode = getCategoryNode(mDialogUtil.getDialogViewModel().getAddedCategory());
         mTreeView.addNode(mNodeRoot, addedCategoryNode);
-    }
-
-    private void addFolderNode(Bundle savedInstanceState) {
-        TreeNode clickedNode = mModel.getClickedNode();
-        TreeNode.BaseNodeViewHolder<?> viewHolder = clickedNode.getViewHolder();
-
-        if (viewHolder instanceof TreeHolderCategory)
-            categoryAddFolderNode(savedInstanceState, clickedNode, (TreeHolderCategory) viewHolder);
-        else if (viewHolder instanceof TreeHolderFolder)
-            folderAddFolder(savedInstanceState, clickedNode, (TreeHolderFolder) viewHolder);
     }
 
     private void categoryAddFolderNode(Bundle savedInstanceState, TreeNode clickedNode, TreeHolderCategory categoryViewHolder) {

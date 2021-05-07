@@ -52,15 +52,11 @@ public class EditSameNameDialog extends DialogFragment {
                 dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_edit));
 
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        setPositiveClickListener(dialogUtil, category, folder, positiveButton);
-        return alertDialog;
-    }
-
-    private void setPositiveClickListener(DialogUtil dialogUtil, Category category, Folder folder, @NotNull Button positiveButton) {
         positiveButton.setOnClickListener(v -> {
             if (category != null)
                 dialogUtil.editCategoryName(category, mNewName, mIsParentName);
-            else dialogUtil.editFolderName(folder, mNewName, mIsParentName);
+            else if (folder != null) dialogUtil.editFolderName(folder, mNewName, mIsParentName);
         });
+        return alertDialog;
     }
 }

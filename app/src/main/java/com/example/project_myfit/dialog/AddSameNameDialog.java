@@ -41,16 +41,13 @@ public class AddSameNameDialog extends DialogFragment {
         AlertDialog alertDialog = mItemType == CATEGORY ?
                 dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add)) :
                 dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        setPositiveClickListener(dialogUtil, positiveButton);
-        return alertDialog;
-    }
 
-    private void setPositiveClickListener(DialogUtil dialogUtil, @NotNull Button positiveButton) {
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(v -> {
             if (mItemType == CATEGORY)
                 dialogUtil.addCategory(mName, mParentCategory);
             else dialogUtil.addFolder(mName, mParentId, mParentCategory);
         });
+        return alertDialog;
     }
 }
