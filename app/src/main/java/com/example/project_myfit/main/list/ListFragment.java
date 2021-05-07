@@ -252,13 +252,17 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
         textView.setAlpha(0.9f);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mNavigationTextViewSize);
         textView.setText(folder.getFolderName());
-        if (mThisFolderId != folder.getId()) {
-            textView.setOnClickListener(v ->
-                    CommonUtil.navigate(mNavController, R.id.listFragment,
-                            ListFragmentDirections.listFragmentRefresh(mThisCategoryId, folder.getId(), mParentCategory)));
-        } else textView.setTag(THIS_FOLDER_TEXT_VIEW);
+        if (mThisFolderId != folder.getId())
+            setTextNavigationTvClickListener(textView, folder);
+        else textView.setTag(THIS_FOLDER_TEXT_VIEW);
         textView.setMaxLines(1);
         return textView;
+    }
+
+    private void setTextNavigationTvClickListener(@NotNull MaterialTextView textView, Folder folder) {
+        textView.setOnClickListener(v ->
+                CommonUtil.navigate(mNavController, R.id.listFragment,
+                        ListFragmentDirections.listFragmentRefresh(mThisCategoryId, folder.getId(), mParentCategory)));
     }
 
     private void setActionBarTitle(String title) {
