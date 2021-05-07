@@ -249,20 +249,20 @@ public class MainFragment extends Fragment implements ViewPagerVH.ViewPagerAutoS
                 mButtonArray[i].setTextColor(mTextOriginColor);
             }
 
-            if (checkedId == R.id.btnTop && isChecked) {
-                mButtonArray[0].setBackgroundColor(mColorControl);
-                mButtonArray[0].setTextColor(mColorPrimary);
-            } else if (checkedId == R.id.btnBottom && isChecked) {
-                mButtonArray[1].setBackgroundColor(mColorControl);
-                mButtonArray[1].setTextColor(mColorPrimary);
-            } else if (checkedId == R.id.btnOuter && isChecked) {
-                mButtonArray[2].setBackgroundColor(mColorControl);
-                mButtonArray[2].setTextColor(mColorPrimary);
-            } else if (checkedId == R.id.btnEtc && isChecked) {
-                mButtonArray[3].setBackgroundColor(mColorControl);
-                mButtonArray[3].setTextColor(mColorPrimary);
-            }
+            if (checkedId == R.id.btnTop && isChecked)
+                setButtonCheckedColor(0);
+            else if (checkedId == R.id.btnBottom && isChecked)
+                setButtonCheckedColor(1);
+            else if (checkedId == R.id.btnOuter && isChecked)
+                setButtonCheckedColor(2);
+            else if (checkedId == R.id.btnEtc && isChecked)
+                setButtonCheckedColor(3);
         });
+    }
+
+    private void setButtonCheckedColor(int i) {
+        mButtonArray[i].setBackgroundColor(mColorControl);
+        mButtonArray[i].setTextColor(mColorPrimary);
     }
 
     private void setButtonClickListener() {
