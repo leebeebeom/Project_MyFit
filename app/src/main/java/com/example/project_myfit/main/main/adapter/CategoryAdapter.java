@@ -65,27 +65,27 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
         Category category = getItem(position);
         holder.setCategory(category);
         setContentsSize(holder.getBinding().tvContentsSize, category.getId());
-        dragHandleTouch(holder);
+        setDragHandleTouchListener(holder);
 
         restoreSelectedHashSet();
         setActionMode(LISTVIEW, holder.getBinding().cardView, holder.getBinding().cb, category.getId());
-        dragHandleVisibility(holder.getBinding().iconDragHandle);
+        setDragHandleVisibility(holder.getBinding().iconDragHandle);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void dragHandleTouch(@NotNull CategoryVH holder) {
+    private void setDragHandleTouchListener(@NotNull CategoryVH holder) {
         holder.getBinding().iconDragHandle.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !MyFitVariable.isDragging) {
                 mListener.onCategoryDragHandleTouch(holder);
-                draggingView(holder);
+                setDraggingView(holder);
             }
             return false;
         });
     }
 
     @Override
-    protected void draggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.draggingView(viewHolder);
+    protected void setDraggingView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDraggingView(viewHolder);
         CategoryVH categoryVH = (CategoryVH) viewHolder;
         categoryVH.getBinding().cb.setVisibility(View.INVISIBLE);
         categoryVH.getBinding().tvCategoryName.setAlpha(0.5f);
@@ -93,8 +93,8 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     }
 
     @Override
-    protected void dropView(@NotNull RecyclerView.ViewHolder viewHolder) {
-        super.dropView(viewHolder);
+    protected void setDropView(@NotNull RecyclerView.ViewHolder viewHolder) {
+        super.setDropView(viewHolder);
         CategoryVH categoryVH = (CategoryVH) viewHolder;
         categoryVH.getBinding().cb.setVisibility(View.VISIBLE);
         categoryVH.getBinding().tvCategoryName.setAlpha(0.8f);
@@ -102,14 +102,14 @@ public class CategoryAdapter extends ParentAdapter<Category, CategoryVH> {
     }
 
     @Override
-    public void itemMove(int from, int to) {
+    public void moveItem(int from, int to) {
         mAdapterUtil.itemMove(from, to, mCategoryList);
         notifyItemMoved(from, to);
     }
 
     @Override
-    public void itemDrop(RecyclerView.ViewHolder viewHolder) {
-        super.itemDrop(viewHolder);
+    public void dropItem(RecyclerView.ViewHolder viewHolder) {
+        super.dropItem(viewHolder);
         mModel.categoryItemDrop(mCategoryList);
     }
 }
