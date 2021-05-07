@@ -83,7 +83,7 @@ public class ListViewModel extends AndroidViewModel {
         }
     }
 
-    public void folderItemDropped(@NotNull List<Folder> newOrderNumberFolderList) {
+    public void updateNewOrderFolderList(@NotNull List<Folder> newOrderNumberFolderList) {
         List<Folder> newSelectedFolderList = new ArrayList<>();
         for (Folder folder : newOrderNumberFolderList)
             if (mSelectedFolderList.contains(folder) && folder.getId() != -1)
@@ -93,7 +93,7 @@ public class ListViewModel extends AndroidViewModel {
         mRepository.getFolderRepository().updateFolder(newOrderNumberFolderList);
     }
 
-    public void sizeItemDropped(@NotNull List<Size> newOrderNumberSizeList) {
+    public void updateNewOrderSizeList(@NotNull List<Size> newOrderNumberSizeList) {
         List<Size> newSelectedSizeList = new ArrayList<>();
         for (Size size : newOrderNumberSizeList)
             if (mSelectedSizeList.contains(size)) newSelectedSizeList.add(size);

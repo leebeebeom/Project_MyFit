@@ -116,6 +116,6 @@ public class FolderAdapter extends ParentAdapter<Folder, FolderGridVH> {
     @Override
     public void dropItem(RecyclerView.ViewHolder viewHolder) {
         super.dropItem(viewHolder);
-        mModel.folderItemDropped(mFolderList);
+        mModel.updateNewOrderFolderList(mFolderList);
     }
 }

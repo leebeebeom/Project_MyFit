@@ -98,6 +98,6 @@ public class SizeAdapterGrid extends ParentAdapter<Size, SizeGridVH> {
     @Override
     public void dropItem(RecyclerView.ViewHolder viewHolder) {
         super.dropItem(viewHolder);
-        mModel.sizeItemDropped(mSizeList);
+        mModel.updateNewOrderSizeList(mSizeList);
     }
 }
