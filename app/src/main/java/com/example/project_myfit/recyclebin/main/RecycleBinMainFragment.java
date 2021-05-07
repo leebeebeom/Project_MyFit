@@ -7,34 +7,36 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.FragmentRecycleBinMainBinding;
+import com.example.project_myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 public class RecycleBinMainFragment extends Fragment {
 
-    private FragmentRecycleBinMainBinding mBinding;
+    private NavController mNavController;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mNavController = NavHostFragment.findNavController(this);
     }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mBinding = FragmentRecycleBinMainBinding.inflate(inflater);
-        View view = mBinding.getRoot();
-        return view;
+        FragmentRecycleBinMainBinding binding = FragmentRecycleBinMainBinding.inflate(inflater);
+        return binding.getRoot();
     }
 
     @Override
@@ -45,7 +47,7 @@ public class RecycleBinMainFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         if (item.getItemId() == R.id.menu_recycle_bin_search) {
-            Toast.makeText(requireContext(), "검색 클릭", Toast.LENGTH_SHORT).show();
+            CommonUtil.navigate(mNavController, R.id.recycleBinMain, RecycleBinMainFragmentDirections.toRecycleBinSearchFragment());
             return true;
         }
         return false;
