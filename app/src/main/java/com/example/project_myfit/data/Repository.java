@@ -398,6 +398,13 @@ public class Repository {
             return recentSearchStringList;
         }
 
+        public RecentSearch getRecentSearch(String word){
+            AtomicReference<RecentSearch> recentSearch = new AtomicReference<>();
+            Thread thread = new Thread(() -> recentSearch.set(mRecentSearchDao.getRecentSearch(word)));
+            start(thread);
+            return recentSearch.get();
+        }
+
         public void deleteRecentSearch(RecentSearch recentSearch) {
             new Thread(() -> mRecentSearchDao.deleteRecentSearch(recentSearch)).start();
         }
