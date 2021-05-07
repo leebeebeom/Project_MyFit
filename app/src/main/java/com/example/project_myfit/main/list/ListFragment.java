@@ -278,9 +278,9 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
                 return;
             } else mBinding.layoutRvFolder.setVisibility(View.VISIBLE);
 
-            List<Folder> sortFolderList = Sort.folderSort(mModel.getSort(), folderList);
+            List<Folder> sortedFolderList = Sort.folderSort(mModel.getSort(), folderList);
 
-            int size = sortFolderList.size();
+            int size = sortedFolderList.size();
             if (size % 4 == 1)
                 addDummyFolder(folderList, 3);
             else if (size % 4 == 2)
@@ -311,10 +311,10 @@ public class ListFragment extends Fragment implements SizeVHListener, ActionMode
                 return;
             } else mBinding.layoutNoData.setVisibility(View.GONE);
 
-            List<Size> sortSizeList = Sort.sizeSort(mModel.getSort(), sizeList);
+            List<Size> sortedSizeList = Sort.sizeSort(mModel.getSort(), sizeList);
 
             if (mModel.isFavoriteView())
-                sortSizeList.removeIf(size -> !size.isFavorite());
+                sortedSizeList.removeIf(size -> !size.isFavorite());
 
             mSizeAdapterList.setItem(mModel.getSort(), sizeList);
             mSizeAdapterGrid.setItem(mModel.getSort(), sizeList);
