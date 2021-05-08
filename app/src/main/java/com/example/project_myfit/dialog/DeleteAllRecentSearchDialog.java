@@ -47,6 +47,7 @@ public class DeleteAllRecentSearchDialog extends ParentDialogFragment {
     protected View.OnClickListener getPositiveButtonClickListener() {
         return v -> {
             mDialogViewModel.recentSearchDeleteAll();
+            setBackStackStateHandleValue();
             mNavController.popBackStack();
         };
     }
@@ -63,6 +64,6 @@ public class DeleteAllRecentSearchDialog extends ParentDialogFragment {
 
     @Override
     protected void setBackStackStateHandleValue() {
-        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.DELETE_ALL_RECENT_SEARCH_CONFIRM.name(), null);
+        getBackStackEntry().getSavedStateHandle().set(Constant.DialogBackStackStateHandleKey.DELETE_ALL_RECENT_SEARCH_CONFIRM.name(), null);
     }
 }
