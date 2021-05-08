@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -17,8 +18,6 @@ import com.example.project_myfit.util.Constant;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
 
 public class AddDialog extends ParentDialogFragment {
 
@@ -121,12 +120,12 @@ public class AddDialog extends ParentDialogFragment {
 
     @Override
     protected void setBackStackEntryLiveValue() {
-        mDialogViewModel.getBackStackEntryLive().setValue(mNavController.getBackStackEntry(R.id.addDialog));
+        mDialogViewModel.getBackStackEntryLive().setValue(getBackStackEntry());
     }
 
     @Override
     protected void setBackStackStateHandle() {
-        mNavController.getBackStackEntry(R.id.addDialog).getSavedStateHandle().set(ADD_CONFIRM, null);
+        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.ADD_CONFIRM.name(), null);
     }
 
     private boolean doesSameNameCategoryExist(String categoryName) {
@@ -140,5 +139,10 @@ public class AddDialog extends ParentDialogFragment {
     private void navigateAddSameNameDialog(String itemName) {
         CommonUtil.navigate(mNavController, R.id.addDialog,
                 AddDialogDirections.toAddSameNameDialog(mItemTypeIndex, mParentCategoryIndex, mParentId, itemName));
+    }
+
+    @NotNull
+    private NavBackStackEntry getBackStackEntry() {
+        return mNavController.getBackStackEntry(R.id.addDialog);
     }
 }
