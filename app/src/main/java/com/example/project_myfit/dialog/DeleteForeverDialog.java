@@ -1,45 +1,71 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
+import com.example.project_myfit.util.Constant;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.DELETE_FOREVER_CONFIRM;
-
-public class DeleteForeverDialog extends DialogFragment {
-    private int mSelectedItemSize, mNavGraphId;
+public class DeleteForeverDialog extends ParentDialogFragment {
+    private int mSelectedItemSize;
+    private NavController mNavController;
+    private DialogViewModel mDialogViewModel;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSelectedItemSize = DeleteForeverDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        mNavGraphId = DeleteForeverDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mNavController = NavHostFragment.findNavController(this);
+        mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(mNavController.getGraph().getId()))
+                .get(DialogViewModel.class);
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId)
-                .setValueBackStackLive(R.id.deleteForeverDialog);
+        return new DialogBuilder(requireContext())
+                .setTitle(getString(R.string.dialog_confirm))
+                .setMessage(mSelectedItemSize + getString(R.string.dialog_message_delete_forever))
+                .setBackgroundDrawable()
+                .setTitleTextSize()
+                .setMessageTextSize()
+                .setMessageTopPadding()
+                .setButtonTextSize()
+                .setPositiveButtonClickListener(getPositiveButtonClickListener())
+                .create();
+    }
 
-        AlertDialog alertDialog = dialogUtil.getConfirmDialog(mSelectedItemSize + getString(R.string.dialog_message_delete_forever));
+    @Override
+    protected NavBackStackEntry getBackStackEntry() {
+        return mNavController.getBackStackEntry(R.id.deleteForeverDialog);
+    }
 
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> {
-            dialogUtil.getBackStackEntry().getSavedStateHandle().set(DELETE_FOREVER_CONFIRM, null);
-            dialogUtil.getNavController().popBackStack();
-        });
-        return alertDialog;
+    @Override
+    protected void setBackStackEntryLiveValue() {
+        mDialogViewModel.getBackStackEntryLive().setValue(getBackStackEntry());
+    }
+
+    @Override
+    protected void setBackStackStateHandleValue() {
+        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.DELETE_FOREVER_CONFIRM.name(), null);
+    }
+
+    @Override
+    protected View.OnClickListener getPositiveButtonClickListener() {
+        return v -> {
+            setBackStackEntryLiveValue();
+            mNavController.popBackStack();
+        };
     }
 }
