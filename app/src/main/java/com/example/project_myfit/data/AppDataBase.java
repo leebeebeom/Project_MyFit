@@ -18,6 +18,7 @@ import com.example.project_myfit.data.model.Category;
 import com.example.project_myfit.data.model.Folder;
 import com.example.project_myfit.data.model.RecentSearch;
 import com.example.project_myfit.data.model.Size;
+import com.example.project_myfit.util.CommonUtil;
 import com.example.project_myfit.util.Constant;
 
 import org.jetbrains.annotations.NotNull;
@@ -112,23 +113,25 @@ public abstract class AppDataBase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             List<Category> categoryList = new ArrayList<>();
-                            categoryList.add(new Category(1, "반팔", Constant.ParentCategory.TOP.ordinal(), 1));
-                            categoryList.add(new Category(2, "긴팔", Constant.ParentCategory.TOP.ordinal(), 2));
-                            categoryList.add(new Category(3, "니트", Constant.ParentCategory.TOP.ordinal(), 3));
-                            categoryList.add(new Category(4, "후드", Constant.ParentCategory.TOP.ordinal(), 4));
-                            categoryList.add(new Category(5, "셔츠", Constant.ParentCategory.TOP.ordinal(), 5));
-                            categoryList.add(new Category(6, "청바지", Constant.ParentCategory.BOTTOM.ordinal(), 6));
-                            categoryList.add(new Category(7, "슬랙스", Constant.ParentCategory.BOTTOM.ordinal(), 7));
-                            categoryList.add(new Category(8, "반바지", Constant.ParentCategory.BOTTOM.ordinal(), 8));
-                            categoryList.add(new Category(9, "트랙 팬츠", Constant.ParentCategory.BOTTOM.ordinal(), 9));
-                            categoryList.add(new Category(10, "Ma-1", Constant.ParentCategory.OUTER.ordinal(), 10));
-                            categoryList.add(new Category(11, "패딩", Constant.ParentCategory.OUTER.ordinal(), 11));
-                            categoryList.add(new Category(12, "야상", Constant.ParentCategory.OUTER.ordinal(), 12));
-                            categoryList.add(new Category(13, "후드 집업", Constant.ParentCategory.OUTER.ordinal(), 13));
-                            categoryList.add(new Category(14, "신발", Constant.ParentCategory.ETC.ordinal(), 14));
-                            categoryList.add(new Category(15, "안경", Constant.ParentCategory.ETC.ordinal(), 15));
-                            categoryList.add(new Category(16, "목걸이", Constant.ParentCategory.ETC.ordinal(), 16));
-                            categoryList.add(new Category(17, "기타", Constant.ParentCategory.ETC.ordinal(), 17));
+                            long id = CommonUtil.createId();
+                            //TODO test
+                            categoryList.add(new Category(id++, "반팔", Constant.ParentCategory.TOP.ordinal(), 1));
+                            categoryList.add(new Category(id++, "긴팔", Constant.ParentCategory.TOP.ordinal(), 2));
+                            categoryList.add(new Category(id++, "니트", Constant.ParentCategory.TOP.ordinal(), 3));
+                            categoryList.add(new Category(id++, "후드", Constant.ParentCategory.TOP.ordinal(), 4));
+                            categoryList.add(new Category(id++, "셔츠", Constant.ParentCategory.TOP.ordinal(), 5));
+                            categoryList.add(new Category(id++, "청바지", Constant.ParentCategory.BOTTOM.ordinal(), 6));
+                            categoryList.add(new Category(id++, "슬랙스", Constant.ParentCategory.BOTTOM.ordinal(), 7));
+                            categoryList.add(new Category(id++, "반바지", Constant.ParentCategory.BOTTOM.ordinal(), 8));
+                            categoryList.add(new Category(id++, "트랙 팬츠", Constant.ParentCategory.BOTTOM.ordinal(), 9));
+                            categoryList.add(new Category(id++, "Ma-1", Constant.ParentCategory.OUTER.ordinal(), 10));
+                            categoryList.add(new Category(id++, "패딩", Constant.ParentCategory.OUTER.ordinal(), 11));
+                            categoryList.add(new Category(id++, "야상", Constant.ParentCategory.OUTER.ordinal(), 12));
+                            categoryList.add(new Category(id++, "후드 집업", Constant.ParentCategory.OUTER.ordinal(), 13));
+                            categoryList.add(new Category(id++, "신발", Constant.ParentCategory.ETC.ordinal(), 14));
+                            categoryList.add(new Category(id++, "안경", Constant.ParentCategory.ETC.ordinal(), 15));
+                            categoryList.add(new Category(id++, "목걸이", Constant.ParentCategory.ETC.ordinal(), 16));
+                            categoryList.add(new Category(id, "기타", Constant.ParentCategory.ETC.ordinal(), 17));
                             new Repository(context).getCategoryRepository().insertCategory(categoryList);
                         }
                     }).addMigrations(MIGRATION_2_1)
