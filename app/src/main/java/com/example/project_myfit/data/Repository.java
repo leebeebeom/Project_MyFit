@@ -87,11 +87,11 @@ public class Repository {
             return allCategoryList;
         }
 
-        public List<Category> getCategoryList(int parentCategory, boolean isDeleted) {
+        public List<Category> getCategoryList(int parentCategoryIndex, boolean isDeleted) {
             //order by orderNumber
             //used in treeView -> sort.categorySort
             List<Category> categoryList = new ArrayList<>();
-            Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategory, isDeleted)));
+            Thread thread = new Thread(() -> categoryList.addAll(mCategoryDao.getCategoryList(parentCategoryIndex, isDeleted)));
             start(thread);
             return categoryList;
         }
@@ -102,11 +102,11 @@ public class Repository {
             return mCategoryDao.getCategoryNameLive(isDeleted);
         }
 
-        public List<String> getCategoryNameList(int parentCategory, boolean isDeleted) {
+        public List<String> getCategoryNameList(int parentCategoryIndex, boolean isDeleted) {
             //order by id
             //used in dialogViewModel -> isSameNameCategory
             List<String> categoryNameList = new ArrayList<>();
-            Thread thread = new Thread(() -> categoryNameList.addAll(mCategoryDao.getCategoryNameList(parentCategory, isDeleted)));
+            Thread thread = new Thread(() -> categoryNameList.addAll(mCategoryDao.getCategoryNameList(parentCategoryIndex, isDeleted)));
             start(thread);
             return categoryNameList;
         }
@@ -118,9 +118,9 @@ public class Repository {
             return category.get();
         }
 
-        public Category getCategory(String categoryName, int parentCategory, boolean isDeleted) {
+        public Category getCategory(String categoryName, int parentCategoryIndex, boolean isDeleted) {
             AtomicReference<Category> category = new AtomicReference<>();
-            Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(categoryName, parentCategory, isDeleted)));
+            Thread thread = new Thread(() -> category.set(mCategoryDao.getCategory(categoryName, parentCategoryIndex, isDeleted)));
             start(thread);
             return category.get();
         }
@@ -132,9 +132,9 @@ public class Repository {
             return largestOrder.get() + 1;
         }
 
-        public void insertCategory(String categoryName, int parentCategory) {
+        public void insertCategory(String categoryName, int parentCategoryIndex) {
             new Thread(() -> {
-                Category category = new Category(CommonUtil.createId(), categoryName, parentCategory, mCategoryDao.getCategoryLargestOrder() + 1);
+                Category category = new Category(CommonUtil.createId(), categoryName, parentCategoryIndex, mCategoryDao.getCategoryLargestOrder() + 1);
                 mCategoryDao.insertCategory(category);
             }).start();
         }
@@ -182,12 +182,12 @@ public class Repository {
             return folderList;
         }
 
-        public List<Folder> getFolderList(int parentCategory, boolean isDeleted, boolean isParentDeleted) {
+        public List<Folder> getFolderList(int parentCategoryIndex, boolean isDeleted, boolean isParentDeleted) {
             //order by orderNumber
             //used in listViewModel -> getFolderPath
             //used in treeViewDialog -> sort.folderSort
             List<Folder> folderList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentCategory, isDeleted, isParentDeleted)));
+            Thread thread = new Thread(() -> folderList.addAll(mFolderDao.getFolderList(parentCategoryIndex, isDeleted, isParentDeleted)));
             start(thread);
             return folderList;
         }
@@ -226,13 +226,13 @@ public class Repository {
             return folderParentIdList;
         }
 
-        public List<Long> getFolderParentIdList(int parentCategory, boolean isDeleted, boolean isParentDeleted) {
+        public List<Long> getFolderParentIdList(int parentCategoryIndex, boolean isDeleted, boolean isParentDeleted) {
             //order by id
             //used in TreeView -> treeCategoryHolder, treeFolderHolder
             //used in mainFragment -> categoryAdapter
             //used in listFragment -> folderAdapter
             List<Long> folderParentIdList = new ArrayList<>();
-            Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(parentCategory, isDeleted, isParentDeleted)));
+            Thread thread = new Thread(() -> folderParentIdList.addAll(mFolderDao.getFolderParentIdList(parentCategoryIndex, isDeleted, isParentDeleted)));
             start(thread);
             return folderParentIdList;
         }
@@ -255,9 +255,9 @@ public class Repository {
             return largestOrder.get() + 1;
         }
 
-        public void insertFolder(String folderName, long parentId, int parentCategory) {
+        public void insertFolder(String folderName, long parentId, int parentCategoryIndex) {
             new Thread(() -> {
-                Folder folder = new Folder(CommonUtil.createId(), folderName, parentId, mFolderDao.getFolderLargestOrder() + 1, parentCategory);
+                Folder folder = new Folder(CommonUtil.createId(), folderName, parentId, mFolderDao.getFolderLargestOrder() + 1, parentCategoryIndex);
                 mFolderDao.insertFolder(folder);
             }).start();
         }
@@ -320,13 +320,13 @@ public class Repository {
             return sizeParentIdList;
         }
 
-        public List<Long> getSizeParentIdList(int parentCategory, boolean isDeleted, boolean isParentDeleted) {
+        public List<Long> getSizeParentIdList(int parentCategoryIndex, boolean isDeleted, boolean isParentDeleted) {
             //order by id
             //used in TreeView -> treeCategoryHolder, treeFolderHolder
             //used in mainFragment -> categoryAdapter
             //used in listFragment -> folderAdapter
             List<Long> sizeParentIdList = new ArrayList<>();
-            Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(parentCategory, isDeleted, isParentDeleted)));
+            Thread thread = new Thread(() -> sizeParentIdList.addAll(mSizeDao.getSizeParentIdList(parentCategoryIndex, isDeleted, isParentDeleted)));
             start(thread);
             return sizeParentIdList;
         }
