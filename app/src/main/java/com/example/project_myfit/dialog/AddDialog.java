@@ -129,6 +129,11 @@ public class AddDialog extends ParentDialogFragment {
         return mNavController.getBackStackEntry(R.id.addDialog);
     }
 
+    @Override
+    protected View.OnClickListener getPositiveButtonClickListener() {
+        return null;
+    }
+
     @NotNull
     private String getEditTextInputText() {
         return String.valueOf(mBinding.et.getText());

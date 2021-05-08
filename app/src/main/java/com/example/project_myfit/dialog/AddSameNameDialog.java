@@ -14,7 +14,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.project_myfit.R;
 import com.example.project_myfit.util.Constant;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class AddSameNameDialog extends ParentDialogFragment {
@@ -58,8 +57,7 @@ public class AddSameNameDialog extends ParentDialogFragment {
     }
 
     @NotNull
-    @Contract(pure = true)
-    private View.OnClickListener getPositiveButtonClickListener() {
+    protected View.OnClickListener getPositiveButtonClickListener() {
         return v -> {
             if (isItemTypeCategory())
                 mDialogViewModel.insertCategory(mItemName, mParentCategoryIndex);
