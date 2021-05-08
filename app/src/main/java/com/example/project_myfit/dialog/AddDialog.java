@@ -1,72 +1,144 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.util.CommonUtil;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
 import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-import static com.example.project_myfit.util.MyFitConstant.FOLDER;
 
-public class AddDialog extends DialogFragment {
+public class AddDialog extends ParentDialogFragment {
 
-    private int mItemType, mNavGraphId;
-    private String mParentCategory;
+    private String mParentCategory, mDialogTitle, mEditTextHint, mEditTextPlaceHolder;
     private long mParentId;
+    private NavController mNavController;
+    private DialogViewModel mDialogViewModel;
+    private View.OnClickListener mPositiveButtonClickListener;
+    private ItemDialogEditTextBinding mBinding;
+    private int mItemType;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItemType = AddDialogArgs.fromBundle(getArguments()).getItemType();
+        //TODO 이눔으로 인덱스 받기
         mParentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
         mParentId = AddDialogArgs.fromBundle(getArguments()).getParentId();
-        mNavGraphId = AddDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mNavController = NavHostFragment.findNavController(this);
+        mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(mNavController.getGraph().getId())).get(DialogViewModel.class);
+
+        if (mItemType == CATEGORY) {
+            mEditTextHint = getString(R.string.dialog_hint_category_name);
+            mEditTextPlaceHolder = getString(R.string.dialog_place_holder_category_name);
+            mDialogTitle = getString(R.string.all_add_category);
+            mPositiveButtonClickListener = getCategoryPositiveClickListener();
+        } else {
+            mEditTextHint = getString(R.string.dialog_hint_folder_name);
+            mEditTextPlaceHolder = getString(R.string.dialog_place_holder_folder_name);
+            mDialogTitle = getString(R.string.all_create_folder);
+            mPositiveButtonClickListener = getFolderPositiveClickListener();
+        }
+    }
+
+    @NotNull
+    @Contract(pure = true)
+    private View.OnClickListener getCategoryPositiveClickListener() {
+        return v -> {
+            CommonUtil.keyBoardHide(requireContext(), v);
+
+            String categoryName = getEditTextInputText();
+
+            if (isSameNameCategory(categoryName))
+                navigateAddSameNameDialog(categoryName);
+            else {
+                mDialogViewModel.insertCategory(categoryName, mParentCategory);
+                setBackStackStateHandle();
+                mNavController.popBackStack();
+            }
+        };
+    }
+
+
+    @NotNull
+    @Contract(pure = true)
+    private View.OnClickListener getFolderPositiveClickListener() {
+        return v -> {
+            CommonUtil.keyBoardHide(requireContext(), v);
+
+            String folderName = getEditTextInputText();
+
+            if (isSameNameFolder(folderName)) {
+                navigateAddSameNameDialog(folderName);
+            } else {
+                mDialogViewModel.insertFolder(folderName, mParentId, mParentCategory);
+                setBackStackStateHandle();
+                mNavController.popBackStack();
+            }
+        };
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.addDialog);
+        mBinding = new DialogBindingBuilder(getLayoutInflater())
+                .setRequestFocus()
+                .setHint(mEditTextHint)
+                .setPlaceHolder(mEditTextPlaceHolder)
+                .showErrorIfMoreThan30Characters(requireContext())
+                .create();
 
-        ItemDialogEditTextBinding binding = mItemType == CATEGORY ? dialogUtil.getCategoryBinding() : dialogUtil.getFolderBinding();
-        AlertDialog alertDialog = mItemType == CATEGORY ?
-                dialogUtil.getAddDialog(binding, getString(R.string.all_add_category)) : dialogUtil.getAddDialog(binding, getString(R.string.all_create_folder));
-
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        setPositiveClickListener(dialogUtil, binding, positiveButton);
-        dialogUtil.setOnImeClickListener(binding, positiveButton);
-        return alertDialog;
+        return new DialogBuilder.EditTextDialogBuilder(requireContext())
+                .setTitle(mDialogTitle)
+                .setView(mBinding.getRoot())
+                .setBackgroundDrawable()
+                .setAllTextSize()
+                .setPositiveButtonEnabledByIsTextEmpty(getEditTextInputText())
+                .setPositiveButtonEnabledByIsChangedTextEmpty(mBinding.et)
+                .showKeyboard()
+                .setPositiveButtonClickListener(mPositiveButtonClickListener)
+                .setPositiveButtonCallOnClickWhenImeClick(mBinding.et)
+                .create();
     }
 
-    private void setPositiveClickListener(DialogUtil dialogUtil, ItemDialogEditTextBinding binding, @NotNull Button positiveButton) {
-        positiveButton.setOnClickListener(v -> {
-            CommonUtil.keyBoardHide(requireContext(), v);
+    @NotNull
+    private String getEditTextInputText() {
+        return String.valueOf(mBinding.et.getText());
+    }
 
-            String name = String.valueOf(binding.et.getText()).trim();
+    @Override
+    protected void setBackStackEntryLiveValue() {
+        mDialogViewModel.getBackStackEntryLive().setValue(mNavController.getBackStackEntry(R.id.addDialog));
+    }
 
-            if (mItemType == CATEGORY) {
-                if (dialogUtil.getDialogViewModel().isSameNameCategory(name, mParentCategory))
-                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.addDialog,
-                            AddDialogDirections.toAddSameNameDialog(CATEGORY, mParentCategory, 0, name, mNavGraphId));
-                else dialogUtil.addCategory(name, mParentCategory);
-            } else {
-                if (dialogUtil.getDialogViewModel().isSameNameFolder(name, mParentId))
-                    CommonUtil.navigate(dialogUtil.getNavController(), R.id.addDialog,
-                            AddDialogDirections.toAddSameNameDialog(FOLDER, mParentCategory, mParentId, name, mNavGraphId));
-                else dialogUtil.addFolder(name, mParentId, mParentCategory);
-            }
-        });
+    @Override
+    protected void setBackStackStateHandle() {
+        mNavController.getBackStackEntry(R.id.addDialog).getSavedStateHandle().set(ADD_CONFIRM, null);
+    }
+
+    private boolean isSameNameCategory(String categoryName) {
+        return mDialogViewModel.isSameNameCategory(categoryName, mParentCategory);
+    }
+
+    private boolean isSameNameFolder(String folderName) {
+        return mDialogViewModel.isSameNameFolder(folderName, mParentId);
+    }
+
+    private void navigateAddSameNameDialog(String itemName) {
+        CommonUtil.navigate(mNavController, R.id.addDialog,
+                AddDialogDirections.toAddSameNameDialog(mItemType, mParentCategory, mParentId, itemName));
     }
 }
