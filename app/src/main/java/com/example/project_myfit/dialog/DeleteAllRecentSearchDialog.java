@@ -39,6 +39,7 @@ public class DeleteAllRecentSearchDialog extends ParentDialogFragment {
                 .setBackgroundDrawable()
                 .setTitleTextSize()
                 .setMessageTextSize()
+                .setMessageTopPadding()
                 .setButtonTextSize()
                 .setPositiveButtonClickListener(getPositiveButtonClickListener())
                 .create();
