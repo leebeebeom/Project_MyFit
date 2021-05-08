@@ -22,19 +22,19 @@ public interface CategoryDao {
     List<Category> getCategoryList(boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryList(String parentCategory, boolean isDeleted);
+    List<Category> getCategoryList(int parentCategory, boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted")
     LiveData<List<String>> getCategoryNameLive(boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted AND parentCategory = :parentCategory")
-    List<String> getCategoryNameList(String parentCategory, boolean isDeleted);
+    List<String> getCategoryNameList(int parentCategory, boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE id = :id AND isDeleted = :isDeleted")
     Category getCategory(long id, boolean isDeleted);
 
     @Query("SELECT * FROM category WHERE categoryName = :categoryName AND parentCategory = :parentCategory AND isDeleted = :isDeleted")
-    Category getCategory(String categoryName, String parentCategory, boolean isDeleted);
+    Category getCategory(String categoryName, int parentCategory, boolean isDeleted);
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();
