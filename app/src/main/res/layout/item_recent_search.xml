@@ -19,15 +19,17 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/_6sdp"
             android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:alpha="0.6"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:alpha="0.7"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
             tools:src="@drawable/icon_recent_search" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_4sdp"
-            android:alpha="0.7"
+            android:alpha="0.8"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxWidth="@dimen/_220sdp"
@@ -35,7 +37,7 @@
             android:paddingBottom="@dimen/_1sdp"
             android:text="@{recentSearch.word}"
             android:textSize="@dimen/_10sdp"
-            tools:text="안녕하세a여" />
+            tools:text="안녕하세여" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -47,9 +49,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="@dimen/_6sdp"
-                android:alpha="0.7"
+                android:alpha="0.8"
                 android:text="@{recentSearch.date}"
-                android:textSize="@dimen/_7sdp"
+                android:textSize="@dimen/_8sdp"
                 tools:text="02월 13일" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -58,11 +60,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:alpha="0.6"
+                android:alpha="0.8"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/_8sdp"
-                android:scaleX="1.1"
-                android:scaleY="1.1"
                 tools:src="@drawable/icon_close" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
