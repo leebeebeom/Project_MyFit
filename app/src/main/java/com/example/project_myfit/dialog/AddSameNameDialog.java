@@ -1,53 +1,90 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
+import com.example.project_myfit.util.Constant;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
-
-public class AddSameNameDialog extends DialogFragment {
-    private int mItemType, mNavGraphId;
-    private String mParentCategory;
+public class AddSameNameDialog extends ParentDialogFragment {
     private long mParentId;
-    private String mName;
+    private String mItemName;
+    private int mItemTypeIndex, mParentCategoryIndex;
+    private NavController mNavController;
+    private DialogViewModel mDialogViewModel;
+    private String mDialogMessage;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = AddSameNameDialogArgs.fromBundle(getArguments()).getItemType();
-        mParentCategory = AddSameNameDialogArgs.fromBundle(getArguments()).getParentCategory();
+        mItemTypeIndex = AddSameNameDialogArgs.fromBundle(getArguments()).getItemTypeIndex();
+        mParentCategoryIndex = AddSameNameDialogArgs.fromBundle(getArguments()).getParentCategoryIndex();
+        mItemName = AddSameNameDialogArgs.fromBundle(getArguments()).getItemName();
         mParentId = AddSameNameDialogArgs.fromBundle(getArguments()).getParentId();
-        mName = AddSameNameDialogArgs.fromBundle(getArguments()).getName();
-        mNavGraphId = AddSameNameDialogArgs.fromBundle(getArguments()).getNavGraphId();
-    }
+        mNavController = NavHostFragment.findNavController(this);
+        mDialogViewModel = new ViewModelProvider(
+                mNavController.getViewModelStoreOwner(mNavController.getGraph().getId())).get(DialogViewModel.class);
 
+        if (isItemTypeCategory())
+            mDialogMessage = getString(R.string.dialog_message_same_category_name_add);
+        else mDialogMessage = getString(R.string.dialog_message_same_folder_name_add);
+
+    }
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.addSameNameDialog);
+        return new DialogBuilder(requireContext())
+                .setTitle(getString(R.string.dialog_confirm))
+                .setMessage(mDialogMessage)
+                .setBackgroundDrawable()
+                .setTitleTextSize()
+                .setMessageTextSize()
+                .setButtonTextSize()
+                .setMessageTopPadding()
+                .setPositiveButtonClickListener(getPositiveButtonClickListener())
+                .create();
+    }
 
-        AlertDialog alertDialog = mItemType == CATEGORY ?
-                dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_category_name_add)) :
-                dialogUtil.getConfirmDialog(getString(R.string.dialog_message_same_folder_name_add));
+    @NotNull
+    @Contract(pure = true)
+    private View.OnClickListener getPositiveButtonClickListener() {
+        return v -> {
+            if (isItemTypeCategory())
+                mDialogViewModel.insertCategory(mItemName, mParentCategoryIndex);
+            else mDialogViewModel.insertFolder(mItemName, mParentId, mParentCategoryIndex);
+            setBackStackStateHandleValue();
+            mNavController.popBackStack(R.id.addDialog, true);
+        };
+    }
 
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> {
-            if (mItemType == CATEGORY)
-                dialogUtil.addCategory(mName, mParentCategory);
-            else dialogUtil.addFolder(mName, mParentId, mParentCategory);
-        });
-        return alertDialog;
+    @Override
+    protected void setBackStackEntryLiveValue() {
+        mDialogViewModel.getBackStackEntryLive().setValue(getBackStackEntry());
+    }
+
+    @Override
+    protected void setBackStackStateHandleValue() {
+        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.ADD_SAME_NAME_CONFIRM.name(), null);
+    }
+
+    @Override
+    protected NavBackStackEntry getBackStackEntry() {
+        return mNavController.getBackStackEntry(R.id.addSameNameDialog);
+    }
+
+    private boolean isItemTypeCategory() {
+        return mItemTypeIndex == Constant.ItemType.CATEGORY.ordinal();
     }
 }
