@@ -56,7 +56,7 @@ public class DeleteForeverDialog extends ParentDialogFragment {
 
     @Override
     protected void setBackStackStateHandleValue() {
-        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.DELETE_FOREVER_CONFIRM.name(), null);
+        getBackStackEntry().getSavedStateHandle().set(Constant.DialogBackStackStateHandleKey.DELETE_FOREVER_CONFIRM.name(), null);
     }
 
     @Override
