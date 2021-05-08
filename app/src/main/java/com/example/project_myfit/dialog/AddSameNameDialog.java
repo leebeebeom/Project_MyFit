@@ -11,7 +11,6 @@ import androidx.navigation.NavController;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.util.Constant;
-import com.example.project_myfit.util.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,8 +29,8 @@ public class AddSameNameDialog extends ParentDialogFragment {
         mParentCategoryIndex = AddSameNameDialogArgs.fromBundle(getArguments()).getParentCategoryIndex();
         mItemName = AddSameNameDialogArgs.fromBundle(getArguments()).getItemName();
         mParentId = AddSameNameDialogArgs.fromBundle(getArguments()).getParentId();
-        mNavController = DialogUtil.getNavController(this);
-        mDialogViewModel = DialogUtil.getDialogViewModel(mNavController);
+        mNavController = getNavController(this);
+        mDialogViewModel = getDialogViewModel(mNavController);
 
         if (isItemTypeCategory())
             mDialogMessage = getString(R.string.dialog_message_same_category_name_add);

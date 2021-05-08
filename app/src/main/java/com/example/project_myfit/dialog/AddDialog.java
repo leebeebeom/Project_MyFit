@@ -13,7 +13,6 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.util.CommonUtil;
 import com.example.project_myfit.util.Constant;
-import com.example.project_myfit.util.DialogUtil;
 import com.example.project_myfit.util.KeyBoardUtil;
 
 import org.jetbrains.annotations.Contract;
@@ -36,8 +35,8 @@ public class AddDialog extends ParentDialogFragment {
         mItemTypeIndex = AddDialogArgs.fromBundle(getArguments()).getItemTypeIndex();
         mParentCategoryIndex = AddDialogArgs.fromBundle(getArguments()).getParentCategoryIndex();
         mParentId = AddDialogArgs.fromBundle(getArguments()).getParentId();
-        mNavController = DialogUtil.getNavController(this);
-        mDialogViewModel = DialogUtil.getDialogViewModel(mNavController);
+        mNavController = getNavController(this);
+        mDialogViewModel = getDialogViewModel(mNavController);
 
         if (isItemTypeCategory()) {
             mEditTextHint = getString(R.string.dialog_hint_category_name);
