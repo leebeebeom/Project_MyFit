@@ -120,7 +120,7 @@ public class AddDialog extends ParentDialogFragment {
 
     @Override
     protected void setBackStackStateHandleValue() {
-        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.ADD_CONFIRM.name(), null);
+        getBackStackEntry().getSavedStateHandle().set(Constant.DialogBackStackStateHandleKey.ADD_CONFIRM.name(), null);
     }
 
     @Override
