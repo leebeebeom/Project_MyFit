@@ -11,7 +11,6 @@ import androidx.navigation.NavController;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.util.Constant;
-import com.example.project_myfit.util.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +22,8 @@ public class DeleteImageDialog extends ParentDialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNavController = DialogUtil.getNavController(this);
-        mDialogViewModel = DialogUtil.getDialogViewModel(mNavController);
+        mNavController = getNavController(this);
+        mDialogViewModel = getDialogViewModel(mNavController);
     }
 
     @NonNull
