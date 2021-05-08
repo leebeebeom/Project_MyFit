@@ -27,8 +27,8 @@ public interface SizeDao {
     @Query("SELECT parentId FROM Size WHERE isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
     List<Long> getSizeParentIdList(boolean isDeleted, boolean isParentDeleted);
 
-    @Query("SELECT parentId FROM Size WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
-    List<Long> getSizeParentIdList(int parentCategory, boolean isDeleted, boolean isParentDeleted);
+    @Query("SELECT parentId FROM Size WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
+    List<Long> getSizeParentIdList(int parentCategoryIndex, boolean isDeleted, boolean isParentDeleted);
 
     @Query("SELECT brand FROM Size WHERE isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
     LiveData<List<String>> getSizeBrandLive(boolean isDeleted, boolean isParentDeleted);

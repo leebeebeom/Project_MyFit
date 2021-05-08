@@ -21,20 +21,20 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
     List<Category> getCategoryList(boolean isDeleted);
 
-    @Query("SELECT * FROM Category WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryList(int parentCategory, boolean isDeleted);
+    @Query("SELECT * FROM Category WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted ORDER BY orderNumber")
+    List<Category> getCategoryList(int parentCategoryIndex, boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted")
     LiveData<List<String>> getCategoryNameLive(boolean isDeleted);
 
-    @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted AND parentCategory = :parentCategory")
-    List<String> getCategoryNameList(int parentCategory, boolean isDeleted);
+    @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted AND parentCategoryIndex = :parentCategoryIndex")
+    List<String> getCategoryNameList(int parentCategoryIndex, boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE id = :id AND isDeleted = :isDeleted")
     Category getCategory(long id, boolean isDeleted);
 
-    @Query("SELECT * FROM category WHERE categoryName = :categoryName AND parentCategory = :parentCategory AND isDeleted = :isDeleted")
-    Category getCategory(String categoryName, int parentCategory, boolean isDeleted);
+    @Query("SELECT * FROM category WHERE categoryName = :categoryName AND parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted")
+    Category getCategory(String categoryName, int parentCategoryIndex, boolean isDeleted);
 
     @Query("SELECT max(orderNumber) FROM Category")
     int getCategoryLargestOrder();

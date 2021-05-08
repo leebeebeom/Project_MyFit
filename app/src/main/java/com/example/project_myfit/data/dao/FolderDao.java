@@ -21,8 +21,8 @@ public interface FolderDao {
     @Query("SELECT * FROM Folder WHERE isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted ORDER BY orderNumber")
     List<Folder> getFolderList(boolean isDeleted, boolean isParentDeleted);
 
-    @Query("SELECT * FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
-    List<Folder> getFolderList(int parentCategory, boolean isDeleted, boolean isParentDeleted);
+    @Query("SELECT * FROM Folder WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
+    List<Folder> getFolderList(int parentCategoryIndex, boolean isDeleted, boolean isParentDeleted);
 
     @Query("SELECT * FROM Folder WHERE parentId = :parentId AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
     List<Folder> getFolderList(long parentId, boolean isDeleted, boolean isParentDeleted);
@@ -36,8 +36,8 @@ public interface FolderDao {
     @Query("SELECT parentId FROM Folder WHERE isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
     List<Long> getFolderParentIdList(boolean isDeleted, boolean isParentDeleted);
 
-    @Query("SELECT parentId FROM Folder WHERE parentCategory = :parentCategory AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
-    List<Long> getFolderParentIdList(int parentCategory, boolean isDeleted, boolean isParentDeleted);
+    @Query("SELECT parentId FROM Folder WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted AND isParentDeleted = :isParentDeleted")
+    List<Long> getFolderParentIdList(int parentCategoryIndex, boolean isDeleted, boolean isParentDeleted);
 
     @Query("SELECT * FROM Folder WHERE id = :id")
     LiveData<Folder> getSingleFolderLive(long id);
