@@ -151,12 +151,12 @@ public class Size extends ParentModel{
         this.sizeMap = sizeMap;
     }
 
-    public boolean getIsDeleted() {
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public int getParentCategory() {
