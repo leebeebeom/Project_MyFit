@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class DeleteAllRecentSearchDialog extends ParentDialogFragment {
 
-
     private NavController mNavController;
     private DialogViewModel mDialogViewModel;
 
