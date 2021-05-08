@@ -72,7 +72,7 @@ public class AddSameNameDialog extends ParentDialogFragment {
 
     @Override
     protected void setBackStackStateHandleValue() {
-        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.ADD_SAME_NAME_CONFIRM.name(), null);
+        getBackStackEntry().getSavedStateHandle().set(Constant.DialogBackStackStateHandleKey.ADD_SAME_NAME_CONFIRM.name(), null);
     }
 
     @Override
