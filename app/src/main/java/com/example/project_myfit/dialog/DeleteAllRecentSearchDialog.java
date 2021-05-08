@@ -1,43 +1,70 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
+import com.example.project_myfit.util.Constant;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DeleteAllRecentSearchDialog extends DialogFragment {
+public class DeleteAllRecentSearchDialog extends ParentDialogFragment {
 
-    private int mNavGraphId;
+
+    private NavController mNavController;
+    private DialogViewModel mDialogViewModel;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNavGraphId = DeleteAllRecentSearchDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mNavController = NavHostFragment.findNavController(this);
+        mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(mNavController.getGraph().getId()))
+                .get(DialogViewModel.class);
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId)
-                .setValueBackStackLive(R.id.deleteAllRecentSearchDialog);
+        return new DialogBuilder(requireContext())
+                .setTitle(getString(R.string.dialog_confirm))
+                .setMessage(getString(R.string.dialog_message_recent_search_delete_all))
+                .setBackgroundDrawable()
+                .setTitleTextSize()
+                .setMessageTextSize()
+                .setButtonTextSize()
+                .setPositiveButtonClickListener(getPositiveButtonClickListener())
+                .create();
+    }
 
-        AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all));
+    @Override
+    protected View.OnClickListener getPositiveButtonClickListener() {
+        return v -> {
+            mDialogViewModel.recentSearchDeleteAll();
+            mNavController.popBackStack();
+        };
+    }
 
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> {
-            dialogUtil.getDialogViewModel().recentSearchDeleteAll();
-            dialogUtil.getNavController().popBackStack();
-        });
-        return alertDialog;
+    @Override
+    protected NavBackStackEntry getBackStackEntry() {
+        return mNavController.getBackStackEntry(R.id.deleteAllRecentSearchDialog);
+    }
+
+    @Override
+    protected void setBackStackEntryLiveValue() {
+        mDialogViewModel.getBackStackEntryLive().setValue(getBackStackEntry());
+    }
+
+    @Override
+    protected void setBackStackStateHandleValue() {
+        getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.DELETE_ALL_RECENT_SEARCH_CONFIRM.name(), null);
     }
 }
