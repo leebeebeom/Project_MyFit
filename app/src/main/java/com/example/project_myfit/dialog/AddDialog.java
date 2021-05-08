@@ -15,6 +15,7 @@ import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.util.CommonUtil;
 import com.example.project_myfit.util.Constant;
+import com.example.project_myfit.util.KeyBoardUtil;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ public class AddDialog extends ParentDialogFragment {
     private View.OnClickListener mPositiveButtonClickListener;
     private ItemDialogEditTextBinding mBinding;
     private int mItemTypeIndex, mParentCategoryIndex;
+    private KeyBoardUtil mKeyBoardUtil;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class AddDialog extends ParentDialogFragment {
         mNavController = NavHostFragment.findNavController(this);
         mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(mNavController.getGraph().getId())).get(DialogViewModel.class);
 
-        if (mItemTypeIndex == Constant.ItemType.CATEGORY.ordinal()) {
+        if (isItemTypeCategory()) {
             mEditTextHint = getString(R.string.dialog_hint_category_name);
             mEditTextPlaceHolder = getString(R.string.dialog_place_holder_category_name);
             mDialogTitle = getString(R.string.all_add_category);
@@ -55,7 +57,7 @@ public class AddDialog extends ParentDialogFragment {
     @Contract(pure = true)
     private View.OnClickListener getCategoryPositiveClickListener() {
         return v -> {
-            CommonUtil.keyBoardHide(requireContext(), v);
+            hideKeyBoard(v);
 
             String categoryName = getEditTextInputText();
 
@@ -63,18 +65,17 @@ public class AddDialog extends ParentDialogFragment {
                 navigateAddSameNameDialog(categoryName);
             else {
                 mDialogViewModel.insertCategory(categoryName, mParentCategoryIndex);
-                setBackStackStateHandle();
+                setBackStackStateHandleValue();
                 mNavController.popBackStack();
             }
         };
     }
 
-
     @NotNull
     @Contract(pure = true)
     private View.OnClickListener getFolderPositiveClickListener() {
         return v -> {
-            CommonUtil.keyBoardHide(requireContext(), v);
+            hideKeyBoard(v);
 
             String folderName = getEditTextInputText();
 
@@ -82,7 +83,7 @@ public class AddDialog extends ParentDialogFragment {
                 navigateAddSameNameDialog(folderName);
             } else {
                 mDialogViewModel.insertFolder(folderName, mParentId, mParentCategoryIndex);
-                setBackStackStateHandle();
+                setBackStackStateHandleValue();
                 mNavController.popBackStack();
             }
         };
@@ -99,7 +100,7 @@ public class AddDialog extends ParentDialogFragment {
                 .showErrorIfMoreThan30Characters(requireContext())
                 .create();
 
-        return new DialogBuilder.EditTextDialogBuilder(requireContext())
+        return new DialogBuilder(requireContext())
                 .setTitle(mDialogTitle)
                 .setView(mBinding.getRoot())
                 .setBackgroundDrawable()
@@ -119,7 +120,7 @@ public class AddDialog extends ParentDialogFragment {
     }
 
     @Override
-    protected void setBackStackStateHandle() {
+    protected void setBackStackStateHandleValue() {
         getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.ADD_CONFIRM.name(), null);
     }
 
@@ -146,4 +147,12 @@ public class AddDialog extends ParentDialogFragment {
                 AddDialogDirections.toAddSameNameDialog(mItemTypeIndex, mParentCategoryIndex, mParentId, itemName));
     }
 
+    private boolean isItemTypeCategory() {
+        return mItemTypeIndex == Constant.ItemType.CATEGORY.ordinal();
+    }
+
+    private void hideKeyBoard(View v) {
+        if (mKeyBoardUtil == null) mKeyBoardUtil = new KeyBoardUtil(requireContext());
+        mKeyBoardUtil.hideKeyBoard(v);
+    }
 }
