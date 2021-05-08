@@ -13,34 +13,33 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.project_myfit.R;
 import com.example.project_myfit.databinding.ItemDialogEditTextBinding;
 import com.example.project_myfit.util.CommonUtil;
+import com.example.project_myfit.util.Constant;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import static com.example.project_myfit.util.MyFitConstant.ADD_CONFIRM;
-import static com.example.project_myfit.util.MyFitConstant.CATEGORY;
 
 public class AddDialog extends ParentDialogFragment {
 
-    private String mParentCategory, mDialogTitle, mEditTextHint, mEditTextPlaceHolder;
+    private String mDialogTitle, mEditTextHint, mEditTextPlaceHolder;
     private long mParentId;
     private NavController mNavController;
     private DialogViewModel mDialogViewModel;
     private View.OnClickListener mPositiveButtonClickListener;
     private ItemDialogEditTextBinding mBinding;
-    private int mItemType;
+    private int mItemTypeIndex, mParentCategoryIndex;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItemType = AddDialogArgs.fromBundle(getArguments()).getItemType();
-        //TODO 이눔으로 인덱스 받기
-        mParentCategory = AddDialogArgs.fromBundle(getArguments()).getParentCategory();
+        mItemTypeIndex = AddDialogArgs.fromBundle(getArguments()).getItemTypeIndex();
+        mParentCategoryIndex = AddDialogArgs.fromBundle(getArguments()).getParentCategoryIndex();
         mParentId = AddDialogArgs.fromBundle(getArguments()).getParentId();
         mNavController = NavHostFragment.findNavController(this);
         mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(mNavController.getGraph().getId())).get(DialogViewModel.class);
 
-        if (mItemType == CATEGORY) {
+        if (mItemTypeIndex == Constant.ItemType.CATEGORY.ordinal()) {
             mEditTextHint = getString(R.string.dialog_hint_category_name);
             mEditTextPlaceHolder = getString(R.string.dialog_place_holder_category_name);
             mDialogTitle = getString(R.string.all_add_category);
@@ -61,10 +60,10 @@ public class AddDialog extends ParentDialogFragment {
 
             String categoryName = getEditTextInputText();
 
-            if (isSameNameCategory(categoryName))
+            if (doesSameNameCategoryExist(categoryName))
                 navigateAddSameNameDialog(categoryName);
             else {
-                mDialogViewModel.insertCategory(categoryName, mParentCategory);
+                mDialogViewModel.insertCategory(categoryName, mParentCategoryIndex);
                 setBackStackStateHandle();
                 mNavController.popBackStack();
             }
@@ -80,10 +79,10 @@ public class AddDialog extends ParentDialogFragment {
 
             String folderName = getEditTextInputText();
 
-            if (isSameNameFolder(folderName)) {
+            if (doesSameNameFolderExist(folderName)) {
                 navigateAddSameNameDialog(folderName);
             } else {
-                mDialogViewModel.insertFolder(folderName, mParentId, mParentCategory);
+                mDialogViewModel.insertFolder(folderName, mParentId, mParentCategoryIndex);
                 setBackStackStateHandle();
                 mNavController.popBackStack();
             }
@@ -105,7 +104,8 @@ public class AddDialog extends ParentDialogFragment {
                 .setTitle(mDialogTitle)
                 .setView(mBinding.getRoot())
                 .setBackgroundDrawable()
-                .setAllTextSize()
+                .setTitleTextSize()
+                .setButtonTextSize()
                 .setPositiveButtonEnabledByIsTextEmpty(getEditTextInputText())
                 .setPositiveButtonEnabledByIsChangedTextEmpty(mBinding.et)
                 .showKeyboard()
@@ -129,16 +129,16 @@ public class AddDialog extends ParentDialogFragment {
         mNavController.getBackStackEntry(R.id.addDialog).getSavedStateHandle().set(ADD_CONFIRM, null);
     }
 
-    private boolean isSameNameCategory(String categoryName) {
-        return mDialogViewModel.isSameNameCategory(categoryName, mParentCategory);
+    private boolean doesSameNameCategoryExist(String categoryName) {
+        return mDialogViewModel.doesSameNameCategoryExist(categoryName, mParentCategoryIndex);
     }
 
-    private boolean isSameNameFolder(String folderName) {
-        return mDialogViewModel.isSameNameFolder(folderName, mParentId);
+    private boolean doesSameNameFolderExist(String folderName) {
+        return mDialogViewModel.doesSameNameFolderExist(folderName, mParentId);
     }
 
     private void navigateAddSameNameDialog(String itemName) {
         CommonUtil.navigate(mNavController, R.id.addDialog,
-                AddDialogDirections.toAddSameNameDialog(mItemType, mParentCategory, mParentId, itemName));
+                AddDialogDirections.toAddSameNameDialog(mItemTypeIndex, mParentCategoryIndex, mParentId, itemName));
     }
 }
