@@ -3,12 +3,12 @@ package com.example.project_myfit.data.model;
 public class ParentModel {
     private final long id;
     private long parentId;
-    private int parentCategory;
+    private int parentCategoryIndex;
 
-    public ParentModel(long id, long parentId, int parentCategory) {
+    public ParentModel(long id, long parentId, int parentCategoryIndex) {
         this.id = id;
         this.parentId = parentId;
-        this.parentCategory = parentCategory;
+        this.parentCategoryIndex = parentCategoryIndex;
     }
 
     public long getId() {
@@ -23,11 +23,11 @@ public class ParentModel {
         return parentId;
     }
 
-    public int getParentCategory() {
-        return parentCategory;
+    public int getParentCategoryIndex() {
+        return parentCategoryIndex;
     }
 
-    public void setParentCategory(int parentCategory) {
-        this.parentCategory = parentCategory;
+    public void setParentCategoryIndex(int parentCategoryIndex) {
+        this.parentCategoryIndex = parentCategoryIndex;
     }
 }

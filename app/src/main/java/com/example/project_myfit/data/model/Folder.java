@@ -9,19 +9,19 @@ import java.util.Objects;
 public class Folder extends ParentModel {
     @PrimaryKey
     private final long id;
-    private final int parentCategory;
+    private final int parentCategoryIndex;
     private long parentId;
     private String folderName;
     private int orderNumber;
     private boolean isDeleted, dummy, isParentDeleted;
 
-    public Folder(long id, String folderName, long parentId, int orderNumber, int parentCategory) {
-        super(id, parentId, parentCategory);
+    public Folder(long id, String folderName, long parentId, int orderNumber, int parentCategoryIndex) {
+        super(id, parentId, parentCategoryIndex);
         this.id = id;
         this.folderName = folderName;
         this.parentId = parentId;
         this.orderNumber = orderNumber;
-        this.parentCategory = parentCategory;
+        this.parentCategoryIndex = parentCategoryIndex;
     }
 
     public long getId() {
@@ -68,8 +68,8 @@ public class Folder extends ParentModel {
         isDeleted = deleted;
     }
 
-    public int getParentCategory() {
-        return parentCategory;
+    public int getParentCategoryIndex() {
+        return parentCategoryIndex;
     }
 
     public boolean isParentDeleted() {

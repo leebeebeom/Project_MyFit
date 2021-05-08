@@ -9,16 +9,16 @@ import java.util.Objects;
 public class Category extends ParentModel{
     @PrimaryKey
     private long id;
-    private final int parentCategory;
+    private final int parentCategoryIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
     private String categoryName;
 
-    public Category(long id, String categoryName, int parentCategory, int orderNumber) {
-        super(id, -1, parentCategory);
+    public Category(long id, String categoryName, int parentCategoryIndex, int orderNumber) {
+        super(id, -1, parentCategoryIndex);
         this.id = id;
         this.categoryName = categoryName;
-        this.parentCategory = parentCategory;
+        this.parentCategoryIndex = parentCategoryIndex;
         this.orderNumber = orderNumber;
     }
 
@@ -38,8 +38,8 @@ public class Category extends ParentModel{
         this.categoryName = categoryName;
     }
 
-    public int getParentCategory() {
-        return parentCategory;
+    public int getParentCategoryIndex() {
+        return parentCategoryIndex;
     }
 
     public int getOrderNumber() {

@@ -53,7 +53,7 @@ public class RecentSearch extends ParentModel{
     }
 
     @Override
-    public int getParentCategory() {
+    public int getParentCategoryIndex() {
         return -1;
     }
 

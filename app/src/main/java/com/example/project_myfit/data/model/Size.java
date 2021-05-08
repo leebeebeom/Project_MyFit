@@ -13,24 +13,24 @@ public class Size extends ParentModel{
     @PrimaryKey
     private long id;
     private int orderNumber;
-    private final int parentCategory;
+    private final int parentCategoryIndex;
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
     private long parentId;
     private boolean isFavorite, isDeleted, isParentDeleted;
     private Map<String, String> sizeMap;
 
     @Ignore
-    public Size(long id, int parentCategory) {
-        super(id, -1, parentCategory);
+    public Size(long id, int parentCategoryIndex) {
+        super(id, -1, parentCategoryIndex);
         this.id = id;
-        this.parentCategory = parentCategory;
+        this.parentCategoryIndex = parentCategoryIndex;
         sizeMap = new HashMap<>();
     }
 
     public Size(long id, int orderNumber, String createdTime, String modifiedTime, String imageUri,
                 String brand, String name, String size, String link, String memo, long parentId,
-                boolean isFavorite, Map<String, String> sizeMap, int parentCategory) {
-        super(id, parentId, parentCategory);
+                boolean isFavorite, Map<String, String> sizeMap, int parentCategoryIndex) {
+        super(id, parentId, parentCategoryIndex);
         this.id = id;
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
@@ -44,7 +44,7 @@ public class Size extends ParentModel{
         this.parentId = parentId;
         this.isFavorite = isFavorite;
         this.sizeMap = sizeMap;
-        this.parentCategory = parentCategory;
+        this.parentCategoryIndex = parentCategoryIndex;
     }
 
     public long getId() {
@@ -159,8 +159,8 @@ public class Size extends ParentModel{
         isDeleted = deleted;
     }
 
-    public int getParentCategory() {
-        return parentCategory;
+    public int getParentCategoryIndex() {
+        return parentCategoryIndex;
     }
 
     public boolean isParentDeleted() {
