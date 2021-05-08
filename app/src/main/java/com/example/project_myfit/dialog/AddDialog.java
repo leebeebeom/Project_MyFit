@@ -113,11 +113,6 @@ public class AddDialog extends ParentDialogFragment {
                 .create();
     }
 
-    @NotNull
-    private String getEditTextInputText() {
-        return String.valueOf(mBinding.et.getText());
-    }
-
     @Override
     protected void setBackStackEntryLiveValue() {
         mDialogViewModel.getBackStackEntryLive().setValue(getBackStackEntry());
@@ -126,6 +121,16 @@ public class AddDialog extends ParentDialogFragment {
     @Override
     protected void setBackStackStateHandle() {
         getBackStackEntry().getSavedStateHandle().set(Constant.BackStackStateHandleKey.ADD_CONFIRM.name(), null);
+    }
+
+    @Override
+    protected NavBackStackEntry getBackStackEntry() {
+        return mNavController.getBackStackEntry(R.id.addDialog);
+    }
+
+    @NotNull
+    private String getEditTextInputText() {
+        return String.valueOf(mBinding.et.getText());
     }
 
     private boolean doesSameNameCategoryExist(String categoryName) {
@@ -141,8 +146,4 @@ public class AddDialog extends ParentDialogFragment {
                 AddDialogDirections.toAddSameNameDialog(mItemTypeIndex, mParentCategoryIndex, mParentId, itemName));
     }
 
-    @NotNull
-    private NavBackStackEntry getBackStackEntry() {
-        return mNavController.getBackStackEntry(R.id.addDialog);
-    }
 }
