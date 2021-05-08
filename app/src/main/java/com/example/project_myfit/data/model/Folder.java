@@ -9,13 +9,13 @@ import java.util.Objects;
 public class Folder extends ParentModel {
     @PrimaryKey
     private final long id;
-    private final String parentCategory;
+    private final int parentCategory;
     private long parentId;
     private String folderName;
     private int orderNumber;
-    private boolean isDeleted, dummy, parentIsDeleted;
+    private boolean isDeleted, dummy, isParentDeleted;
 
-    public Folder(long id, String folderName, long parentId, int orderNumber, String parentCategory) {
+    public Folder(long id, String folderName, long parentId, int orderNumber, int parentCategory) {
         super(id, parentId, parentCategory);
         this.id = id;
         this.folderName = folderName;
@@ -68,16 +68,16 @@ public class Folder extends ParentModel {
         this.isDeleted = isDeleted;
     }
 
-    public String getParentCategory() {
+    public int getParentCategory() {
         return parentCategory;
     }
 
-    public boolean getParentIsDeleted() {
-        return parentIsDeleted;
+    public boolean isParentDeleted() {
+        return isParentDeleted;
     }
 
-    public void setParentIsDeleted(boolean parentIsDeleted) {
-        this.parentIsDeleted = parentIsDeleted;
+    public void setParentDeleted(boolean parentDeleted) {
+        this.isParentDeleted = parentDeleted;
     }
 
     @Override

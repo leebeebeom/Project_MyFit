@@ -13,20 +13,23 @@ public class Size extends ParentModel{
     @PrimaryKey
     private long id;
     private int orderNumber;
-    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo, parentCategory;
+    private final int parentCategory;
+    private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
     private long parentId;
-    private boolean isFavorite, isDeleted, parentIsDeleted;
+    private boolean isFavorite, isDeleted, isParentDeleted;
     private Map<String, String> sizeMap;
 
     @Ignore
-    public Size(long id, String parentCategory) {
+    public Size(long id, int parentCategory) {
         super(id, -1, parentCategory);
         this.id = id;
         this.parentCategory = parentCategory;
         sizeMap = new HashMap<>();
     }
 
-    public Size(long id, int orderNumber, String createdTime, String modifiedTime, String imageUri, String brand, String name, String size, String link, String memo, long parentId, boolean isFavorite, Map<String, String> sizeMap, String parentCategory) {
+    public Size(long id, int orderNumber, String createdTime, String modifiedTime, String imageUri,
+                String brand, String name, String size, String link, String memo, long parentId,
+                boolean isFavorite, Map<String, String> sizeMap, int parentCategory) {
         super(id, parentId, parentCategory);
         this.id = id;
         this.orderNumber = orderNumber;
@@ -156,20 +159,16 @@ public class Size extends ParentModel{
         this.isDeleted = isDeleted;
     }
 
-    public String getParentCategory() {
+    public int getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(String parentCategory) {
-        this.parentCategory = parentCategory;
+    public boolean isParentDeleted() {
+        return isParentDeleted;
     }
 
-    public boolean getParentIsDeleted() {
-        return parentIsDeleted;
-    }
-
-    public void setParentIsDeleted(boolean parentIsDeleted) {
-        this.parentIsDeleted = parentIsDeleted;
+    public void setParentDeleted(boolean parentDeleted) {
+        this.isParentDeleted = parentDeleted;
     }
 
     @Override

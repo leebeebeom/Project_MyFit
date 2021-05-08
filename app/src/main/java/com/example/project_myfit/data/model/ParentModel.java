@@ -3,9 +3,9 @@ package com.example.project_myfit.data.model;
 public class ParentModel {
     private final long id;
     private long parentId;
-    private String parentCategory;
+    private int parentCategory;
 
-    public ParentModel(long id, long parentId, String parentCategory) {
+    public ParentModel(long id, long parentId, int parentCategory) {
         this.id = id;
         this.parentId = parentId;
         this.parentCategory = parentCategory;
@@ -23,11 +23,11 @@ public class ParentModel {
         return parentId;
     }
 
-    public void setParentCategory(String parentCategory) {
-        this.parentCategory = parentCategory;
+    public int getParentCategory() {
+        return parentCategory;
     }
 
-    public String getParentCategory() {
-        return parentCategory;
+    public void setParentCategory(int parentCategory) {
+        this.parentCategory = parentCategory;
     }
 }

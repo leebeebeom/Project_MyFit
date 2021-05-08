@@ -9,13 +9,13 @@ import java.util.Objects;
 public class Category extends ParentModel{
     @PrimaryKey
     private long id;
-    private final String parentCategory;
+    private final int parentCategory;
     private int orderNumber;
     private boolean isDeleted, dummy;
     private String categoryName;
 
-    public Category(long id, String categoryName, String parentCategory, int orderNumber) {
-        super(id,-1, parentCategory);
+    public Category(long id, String categoryName, int parentCategory, int orderNumber) {
+        super(id, -1, parentCategory);
         this.id = id;
         this.categoryName = categoryName;
         this.parentCategory = parentCategory;
@@ -38,7 +38,7 @@ public class Category extends ParentModel{
         this.categoryName = categoryName;
     }
 
-    public String getParentCategory() {
+    public int getParentCategory() {
         return parentCategory;
     }
 
