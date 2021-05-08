@@ -6,13 +6,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project_myfit.R;
 import com.example.project_myfit.util.Constant;
+import com.example.project_myfit.util.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,9 +24,8 @@ public class DeleteForeverDialog extends ParentDialogFragment {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSelectedItemSize = DeleteForeverDialogArgs.fromBundle(getArguments()).getSelectedItemSize();
-        mNavController = NavHostFragment.findNavController(this);
-        mDialogViewModel = new ViewModelProvider(mNavController.getViewModelStoreOwner(mNavController.getGraph().getId()))
-                .get(DialogViewModel.class);
+        mNavController = DialogUtil.getNavController(this);
+        mDialogViewModel = DialogUtil.getDialogViewModel(mNavController);
     }
 
     @NonNull
