@@ -255,8 +255,11 @@ public class Repository {
             return largestOrder.get() + 1;
         }
 
-        public void insertFolder(Folder folder) {
-            new Thread(() -> mFolderDao.insertFolder(folder)).start();
+        public void insertFolder(String folderName, long parentId, int parentCategory) {
+            new Thread(() -> {
+                Folder folder = new Folder(CommonUtil.createId(), folderName, parentId, mFolderDao.getFolderLargestOrder() + 1, parentCategory);
+                mFolderDao.insertFolder(folder);
+            }).start();
         }
 
         public void updateFolder(Folder folder) {
