@@ -1,44 +1,68 @@
 package com.example.project_myfit.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
 
 import com.example.project_myfit.R;
+import com.example.project_myfit.util.Constant;
+import com.example.project_myfit.util.DialogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.DELETE_IMAGE_CONFIRM;
+public class DeleteImageDialog extends ParentDialogFragment {
 
-public class DeleteImageDialog extends DialogFragment {
-
-    private int mNavGraphId;
+    private NavController mNavController;
+    private DialogViewModel mDialogViewModel;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNavGraphId = DeleteImageDialogArgs.fromBundle(getArguments()).getNavGraphId();
+        mNavController = DialogUtil.getNavController(this);
+        mDialogViewModel = DialogUtil.getDialogViewModel(mNavController);
     }
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        DialogUtil dialogUtil = new DialogUtil(requireContext(), this, mNavGraphId).setValueBackStackLive(R.id.deleteImageDialog);
+        return new DialogBuilder(requireContext())
+                .setTitle(getString(R.string.dialog_confirm))
+                .setMessage(getString(R.string.dialog_message_image_clear))
+                .setBackgroundDrawable()
+                .setTitleTextSize()
+                .setMessageTextSize()
+                .setMessageTopPadding()
+                .setButtonTextSize()
+                .setPositiveButtonClickListener(getPositiveButtonClickListener())
+                .create();
+    }
 
-        AlertDialog alertDialog = dialogUtil.getConfirmDialog(getString(R.string.dialog_message_image_clear));
+    @Override
+    protected NavBackStackEntry getBackStackEntry() {
+        return mNavController.getBackStackEntry(R.id.deleteImageDialog);
+    }
 
-        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(v -> {
-            dialogUtil.getBackStackEntry().getSavedStateHandle().set(DELETE_IMAGE_CONFIRM, null);
-            dialogUtil.getNavController().popBackStack();
-        });
-        return alertDialog;
+    @Override
+    protected void setBackStackEntryLiveValue() {
+        mDialogViewModel.getBackStackEntryLive().setValue(getBackStackEntry());
+    }
+
+    @Override
+    protected void setBackStackStateHandleValue() {
+        getBackStackEntry().getSavedStateHandle().set(Constant.DialogBackStackStateHandleKey.DELETE_IMAGE_CONFIRM.name(), null);
+    }
+
+    @Override
+    protected View.OnClickListener getPositiveButtonClickListener() {
+        return v -> {
+            setBackStackStateHandleValue();
+            mNavController.popBackStack();
+        };
     }
 }
