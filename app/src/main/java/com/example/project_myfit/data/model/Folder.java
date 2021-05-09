@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity
-public class Folder extends ParentModel {
+public class Folder implements Model {
     @PrimaryKey
     private final long id;
     private final int parentCategoryIndex;
@@ -16,7 +16,6 @@ public class Folder extends ParentModel {
     private boolean isDeleted, dummy, isParentDeleted;
 
     public Folder(long id, String folderName, long parentId, int orderNumber, int parentCategoryIndex) {
-        super(id, parentId, parentCategoryIndex);
         this.id = id;
         this.folderName = folderName;
         this.parentId = parentId;
@@ -24,6 +23,7 @@ public class Folder extends ParentModel {
         this.parentCategoryIndex = parentCategoryIndex;
     }
 
+    @Override
     public long getId() {
         return id;
     }
@@ -36,6 +36,7 @@ public class Folder extends ParentModel {
         this.folderName = folderName;
     }
 
+    @Override
     public long getParentId() {
         return parentId;
     }
@@ -68,6 +69,7 @@ public class Folder extends ParentModel {
         isDeleted = deleted;
     }
 
+    @Override
     public int getParentCategoryIndex() {
         return parentCategoryIndex;
     }

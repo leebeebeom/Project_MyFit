@@ -6,42 +6,30 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity
-public class RecentSearch extends ParentModel{
+public class RecentSearch implements Model {
     @PrimaryKey
-    private long id;
-    private String word, date;
+    private final long id;
+    private final String word, date;
     private int type;
 
     public RecentSearch(long id, String word, String date, int type) {
-        super(id,-1, -1);
         this.id = id;
         this.word = word;
         this.date = date;
         this.type = type;
     }
 
+    @Override
     public long getId() {
         return id;
-    }
-
-    public void setId(long   id) {
-        this.id = id;
     }
 
     public String getWord() {
         return word;
     }
 
-    public void setWord(String word) {
-        this.word = word;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public int getType() {
@@ -54,6 +42,11 @@ public class RecentSearch extends ParentModel{
 
     @Override
     public int getParentCategoryIndex() {
+        return -1;
+    }
+
+    @Override
+    public long getParentId() {
         return -1;
     }
 

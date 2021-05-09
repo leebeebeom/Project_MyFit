@@ -6,28 +6,24 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity
-public class Category extends ParentModel{
+public class Category implements Model {
     @PrimaryKey
-    private long id;
+    private final long id;
     private final int parentCategoryIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
     private String categoryName;
 
     public Category(long id, String categoryName, int parentCategoryIndex, int orderNumber) {
-        super(id, -1, parentCategoryIndex);
         this.id = id;
         this.categoryName = categoryName;
         this.parentCategoryIndex = parentCategoryIndex;
         this.orderNumber = orderNumber;
     }
 
+    @Override
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getCategoryName() {
@@ -38,6 +34,7 @@ public class Category extends ParentModel{
         this.categoryName = categoryName;
     }
 
+    @Override
     public int getParentCategoryIndex() {
         return parentCategoryIndex;
     }
@@ -64,6 +61,11 @@ public class Category extends ParentModel{
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    @Override
+    public long getParentId() {
+        return -1;
     }
 
     @Override

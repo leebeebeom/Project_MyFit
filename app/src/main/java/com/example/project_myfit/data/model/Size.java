@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-public class Size extends ParentModel{
+public class Size implements Model {
     @PrimaryKey
-    private long id;
+    private final long id;
     private int orderNumber;
     private final int parentCategoryIndex;
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
@@ -21,7 +21,6 @@ public class Size extends ParentModel{
 
     @Ignore
     public Size(long id, int parentCategoryIndex) {
-        super(id, -1, parentCategoryIndex);
         this.id = id;
         this.parentCategoryIndex = parentCategoryIndex;
         sizeMap = new HashMap<>();
@@ -30,7 +29,6 @@ public class Size extends ParentModel{
     public Size(long id, int orderNumber, String createdTime, String modifiedTime, String imageUri,
                 String brand, String name, String size, String link, String memo, long parentId,
                 boolean isFavorite, Map<String, String> sizeMap, int parentCategoryIndex) {
-        super(id, parentId, parentCategoryIndex);
         this.id = id;
         this.orderNumber = orderNumber;
         this.createdTime = createdTime;
@@ -47,12 +45,9 @@ public class Size extends ParentModel{
         this.parentCategoryIndex = parentCategoryIndex;
     }
 
+    @Override
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getOrderNumber() {
@@ -127,6 +122,7 @@ public class Size extends ParentModel{
         this.memo = memo;
     }
 
+    @Override
     public long getParentId() {
         return parentId;
     }
@@ -159,6 +155,7 @@ public class Size extends ParentModel{
         isDeleted = deleted;
     }
 
+    @Override
     public int getParentCategoryIndex() {
         return parentCategoryIndex;
     }
