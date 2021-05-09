@@ -1,4 +1,4 @@
-package com.example.project_myfit.data.dao;
+package com.example.project_myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -12,23 +12,26 @@ import java.util.List;
 
 @Dao
 public interface CategoryDao {
-    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
-    LiveData<List<Category>> getCategoryLive(boolean isDeleted);
+    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted")
+    LiveData<Category[]> getCategoriesLive(boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE id = :id")
-    LiveData<Category> getCategoryLive(long id);
+    LiveData<Category> getCategoriesLive(long id);
 
-    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryList(boolean isDeleted);
+    @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted")
+    Category[] getCategories(boolean isDeleted);
 
-    @Query("SELECT * FROM Category WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted ORDER BY orderNumber")
-    List<Category> getCategoryList(int parentCategoryIndex, boolean isDeleted);
+    @Query("SELECT * FROM Category WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = :isDeleted")
+    Category[] getCategories(int parentCategoryIndex, boolean isDeleted);
+
+    @Query("SELECT * FROM Category WHERE id IN (:categoryIdArray) AND isDeleted =:isDeleted")
+    List<Category> getCategories(long[] categoryIdArray, boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted")
     LiveData<List<String>> getCategoryNameLive(boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted AND parentCategoryIndex = :parentCategoryIndex")
-    List<String> getCategoryNameList(int parentCategoryIndex, boolean isDeleted);
+    String[] getCategoryNames(int parentCategoryIndex, boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE id = :id AND isDeleted = :isDeleted")
     Category getCategory(long id, boolean isDeleted);
@@ -40,14 +43,20 @@ public interface CategoryDao {
     int getCategoryLargestOrder();
 
     @Insert
-    void insertCategory(Category category);
+    long insertCategory(Category category);
 
     @Insert
-    void insertCategory(List<Category> categoryList);
+    long insertCategory(List<Category> categoryList);
+
+    @Insert
+    long insertCategory(Category[] categoryArray);
 
     @Update
     void updateCategory(Category category);
 
     @Update
     void updateCategory(List<Category> categoryList);
+
+    @Update
+    void updateCategory(Category[] categoryArray);
 }
