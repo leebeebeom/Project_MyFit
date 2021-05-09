@@ -1,4 +1,4 @@
-package com.example.project_myfit.data.dao;
+package com.example.project_myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,21 +8,19 @@ import androidx.room.Query;
 
 import com.example.project_myfit.data.model.RecentSearch;
 
-import java.util.List;
-
 @Dao
 public interface RecentSearchDao {
     @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY id DESC LIMIT 20")
-    LiveData<List<RecentSearch>> getRecentSearchLive(int type);
+    LiveData<RecentSearch[]> getRecentSearchesLive(int type);
 
     @Query("SELECT word FROM RecentSearch")
-    List<String> getRecentSearchStringList();
+    String[] getRecentSearchStrings();
 
     @Query("SELECT * FROM RecentSearch WHERE word = :word")
     RecentSearch getRecentSearch(String word);
 
     @Insert
-    void insertRecentSearch(RecentSearch recentSearch);
+    long insertRecentSearch(RecentSearch recentSearch);
 
     @Delete
     void deleteRecentSearch(RecentSearch recentSearch);

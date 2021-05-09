@@ -16,7 +16,7 @@ public interface CategoryDao {
     LiveData<Category[]> getCategoriesLive(boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE id = :id")
-    LiveData<Category> getCategoriesLive(long id);
+    LiveData<Category> getCategoryLive(long id);
 
     @Query("SELECT * FROM Category WHERE isDeleted = :isDeleted")
     Category[] getCategories(boolean isDeleted);
@@ -25,10 +25,10 @@ public interface CategoryDao {
     Category[] getCategories(int parentCategoryIndex, boolean isDeleted);
 
     @Query("SELECT * FROM Category WHERE id IN (:categoryIdArray) AND isDeleted =:isDeleted")
-    List<Category> getCategories(long[] categoryIdArray, boolean isDeleted);
+    Category[] getCategories(long[] categoryIdArray, boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted")
-    LiveData<List<String>> getCategoryNameLive(boolean isDeleted);
+    LiveData<String[]> getCategoryNamesLive(boolean isDeleted);
 
     @Query("SELECT categoryName FROM Category WHERE isDeleted = :isDeleted AND parentCategoryIndex = :parentCategoryIndex")
     String[] getCategoryNames(int parentCategoryIndex, boolean isDeleted);
@@ -46,17 +46,17 @@ public interface CategoryDao {
     long insertCategory(Category category);
 
     @Insert
-    long insertCategory(List<Category> categoryList);
+    long insertCategory(List<Category> categories);
 
     @Insert
-    long insertCategory(Category[] categoryArray);
+    long insertCategory(Category[] categories);
 
     @Update
     void updateCategory(Category category);
 
     @Update
-    void updateCategory(List<Category> categoryList);
+    void updateCategory(List<Category> categories);
 
     @Update
-    void updateCategory(Category[] categoryArray);
+    void updateCategory(Category[] categories);
 }
