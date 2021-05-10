@@ -2,6 +2,8 @@ package com.example.myfit.data.model;
 
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 public class DefaultInfo {
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -44,5 +46,18 @@ public class DefaultInfo {
 
     public void setDummy(boolean dummy) {
         this.dummy = dummy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultInfo)) return false;
+        DefaultInfo that = (DefaultInfo) o;
+        return getId() == that.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

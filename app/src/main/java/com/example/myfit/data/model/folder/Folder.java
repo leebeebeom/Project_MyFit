@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.DefaultInfo;
 
-import java.util.Objects;
-
 @Entity
 public class Folder extends BaseModel {
     private String name;
@@ -41,18 +39,5 @@ public class Folder extends BaseModel {
 
     public void setParentDeleted(boolean parentDeleted) {
         isParentDeleted = parentDeleted;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Folder)) return false;
-        Folder folder = (Folder) o;
-        return getId() == folder.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }

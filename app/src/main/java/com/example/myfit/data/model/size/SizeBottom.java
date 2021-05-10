@@ -4,8 +4,6 @@ import androidx.room.Entity;
 
 import com.example.myfit.data.model.DefaultInfo;
 
-import java.util.Objects;
-
 @Entity
 public class SizeBottom extends BaseSize {
     private String length, waist, thigh, rise, hem;
@@ -52,19 +50,6 @@ public class SizeBottom extends BaseSize {
 
     public void setHem(String hem) {
         this.hem = hem;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SizeBottom)) return false;
-        SizeBottom sizeBottom = (SizeBottom) o;
-        return getId() == sizeBottom.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }
 
