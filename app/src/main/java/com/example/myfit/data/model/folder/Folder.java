@@ -27,12 +27,10 @@ public class Folder extends BaseModel {
         this.name = name;
     }
 
-    @Override
     public long getParentId() {
         return parentId;
     }
 
-    @Override
     public void setParentId(long parentId) {
         this.parentId = parentId;
     }
