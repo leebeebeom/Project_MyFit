@@ -8,42 +8,42 @@ import java.util.Objects;
 
 public class BaseModel {
     @Embedded
-    private final DefaultInfo defaultInfo;
+    private final BaseInfo baseInfo;
 
-    public BaseModel(@NotNull DefaultInfo defaultInfo) {
-        this.defaultInfo = defaultInfo;
+    public BaseModel(@NotNull BaseInfo baseInfo) {
+        this.baseInfo = baseInfo;
     }
 
     public long getId() {
-        return defaultInfo.getId();
+        return baseInfo.getId();
     }
 
     public byte getParentCategoryIndex() {
-        return defaultInfo.getParentCategoryIndex();
+        return baseInfo.getParentCategoryIndex();
     }
 
     public int getOrderNumber() {
-        return defaultInfo.getOrderNumber();
+        return baseInfo.getOrderNumber();
     }
 
     public void setOrderNumber(int orderNumber) {
-        this.defaultInfo.setOrderNumber(orderNumber);
+        this.baseInfo.setOrderNumber(orderNumber);
     }
 
     public boolean isDeleted() {
-        return defaultInfo.isDeleted();
+        return baseInfo.isDeleted();
     }
 
     public void setDeleted(boolean deleted) {
-        this.defaultInfo.setDeleted(deleted);
+        this.baseInfo.setDeleted(deleted);
     }
 
     public boolean isDummy() {
-        return defaultInfo.isDummy();
+        return baseInfo.isDummy();
     }
 
     public void setDummy() {
-        this.defaultInfo.setDummy(!isDummy());
+        this.baseInfo.setDummy(!isDummy());
     }
 
     @Override
@@ -51,11 +51,11 @@ public class BaseModel {
         if (this == o) return true;
         if (!(o instanceof BaseModel)) return false;
         BaseModel baseModel = (BaseModel) o;
-        return defaultInfo.equals(baseModel.defaultInfo);
+        return baseInfo.equals(baseModel.baseInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(defaultInfo);
+        return Objects.hash(baseInfo);
     }
 }
