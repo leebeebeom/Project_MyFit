@@ -8,7 +8,7 @@ public class RecentSearch extends BaseModel {
     private final int type;
 
     public RecentSearch(String word, String date, int type) {
-        super(new DefaultInfo((byte) -1, -1));
+        super(new BaseInfo((byte) -1, -1));
         this.word = word;
         this.date = date;
         this.type = type;
@@ -25,6 +25,4 @@ public class RecentSearch extends BaseModel {
     public int getType() {
         return type;
     }
-
-
 }
