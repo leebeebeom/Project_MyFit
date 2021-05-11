@@ -3,7 +3,7 @@ package com.example.myfit.data.model.folder;
 import androidx.room.Entity;
 
 import com.example.myfit.data.model.BaseModel;
-import com.example.myfit.data.model.DefaultInfo;
+import com.example.myfit.data.model.BaseInfo;
 
 @Entity
 public class Folder extends BaseModel {
@@ -11,8 +11,8 @@ public class Folder extends BaseModel {
     private long parentId;
     private boolean isParentDeleted;
 
-    public Folder(DefaultInfo defaultInfo, String name, long parentId) {
-        super(defaultInfo);
+    public Folder(BaseInfo baseInfo, String name, long parentId) {
+        super(baseInfo);
         this.name = name;
         this.parentId = parentId;
     }
