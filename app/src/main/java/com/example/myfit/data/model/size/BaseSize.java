@@ -1,10 +1,12 @@
 package com.example.myfit.data.model.size;
 
 import androidx.room.Embedded;
+import androidx.room.Entity;
 
 import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.DefaultInfo;
 
+@Entity
 public class BaseSize extends BaseModel {
     @Embedded
     private final DefaultSizeInfo defaultSizeInfo;
