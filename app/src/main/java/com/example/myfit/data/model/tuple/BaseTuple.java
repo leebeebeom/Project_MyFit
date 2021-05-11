@@ -1,4 +1,4 @@
-package com.example.myfit.data.model;
+package com.example.myfit.data.model.tuple;
 
 public class BaseTuple {
     private final long id;

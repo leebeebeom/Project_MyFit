@@ -1,6 +1,6 @@
 package com.example.myfit.data.model.size;
 
-import com.example.myfit.data.model.BaseTuple;
+import com.example.myfit.data.model.tuple.BaseTuple;
 
 public class SizeTuple extends BaseTuple {
     private String imageUri, brand;
