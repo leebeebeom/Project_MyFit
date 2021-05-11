@@ -4,14 +4,14 @@ import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
-public class DefaultInfo {
+public class BaseInfo {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private final byte parentCategoryIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
 
-    public DefaultInfo(byte parentCategoryIndex, int orderNumber) {
+    public BaseInfo(byte parentCategoryIndex, int orderNumber) {
         this.parentCategoryIndex = parentCategoryIndex;
         this.orderNumber = orderNumber;
     }
@@ -51,9 +51,9 @@ public class DefaultInfo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultInfo)) return false;
-        DefaultInfo that = (DefaultInfo) o;
-        return getId() == that.getId();
+        if (!(o instanceof BaseInfo)) return false;
+        BaseInfo baseInfo = (BaseInfo) o;
+        return getId() == baseInfo.getId();
     }
 
     @Override
