@@ -1,6 +1,6 @@
 package com.example.myfit.data.model.size;
 
-public class DefaultSizeInfo {
+public class BaseSizeInfo {
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
     private boolean isFavorite;
 
