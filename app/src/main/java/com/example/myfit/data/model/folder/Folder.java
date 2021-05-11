@@ -2,14 +2,15 @@ package com.example.myfit.data.model.folder;
 
 import androidx.room.Entity;
 
-import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.BaseInfo;
+import com.example.myfit.data.model.BaseModel;
 
 @Entity
 public class Folder extends BaseModel {
     private String name;
     private long parentId;
     private boolean isParentDeleted;
+    private int contestSize;
 
     public Folder(BaseInfo baseInfo, String name, long parentId) {
         super(baseInfo);
@@ -39,5 +40,13 @@ public class Folder extends BaseModel {
 
     public void setParentDeleted(boolean parentDeleted) {
         isParentDeleted = parentDeleted;
+    }
+
+    public int getContestSize() {
+        return contestSize;
+    }
+
+    public void setContestSize(int contestSize) {
+        this.contestSize = contestSize;
     }
 }
