@@ -60,7 +60,7 @@ public abstract class CategoryDao extends BaseDao<Category> {
         mediatorLiveData.addSource(categoriesLive, categories -> {
             clearCategoriesList(categoriesList);
             setCategoryContentsSize(categories, getFolderParentIds(), getSizeParentIds());
-            sortByParentCategory(categories, categoriesList);
+            sortByParentIndex(categories, categoriesList);
             mediatorLiveData.setValue(categoriesList);
         });
 
@@ -68,7 +68,7 @@ public abstract class CategoryDao extends BaseDao<Category> {
             clearCategoriesList(categoriesList);
             List<Category> categories = getCategories(categoriesLive);
             setCategoryContentsSize(categories, folderParentIds, getSizeParentIds());
-            sortByParentCategory(categories, categoriesList);
+            sortByParentIndex(categories, categoriesList);
             mediatorLiveData.setValue(categoriesList);
         });
 
@@ -76,7 +76,7 @@ public abstract class CategoryDao extends BaseDao<Category> {
             clearCategoriesList(categoriesList);
             List<Category> categories = getCategories(categoriesLive);
             setCategoryContentsSize(categories, getFolderParentIds(), sizeParentId);
-            sortByParentCategory(categories, categoriesList);
+            sortByParentIndex(categories, categoriesList);
             mediatorLiveData.setValue(categoriesList);
         });
         return mediatorLiveData;
@@ -110,9 +110,9 @@ public abstract class CategoryDao extends BaseDao<Category> {
         }
     }
 
-    private void sortByParentCategory(List<Category> categories, List<List<Category>> categoriesList) {
+    private void sortByParentIndex(List<Category> categories, List<List<Category>> categoriesList) {
         try {
-            categories.forEach(category -> categoriesList.get(category.getParentCategoryIndex()).add(category));
+            categories.forEach(category -> categoriesList.get(category.getParentIndex()).add(category));
         } catch (NullPointerException e) {
             logError(e);
         }
@@ -128,28 +128,26 @@ public abstract class CategoryDao extends BaseDao<Category> {
     @Query("SELECT id, orderNumber FROM Category WHERE isDeleted = 0")
     public abstract List<OrderNumberTuple> getCategoryOrderNumberTuple();
 
-    public List<List<Category>> getCategoriesListByParentCategory(byte parentCategoryIndex) {
-        List<Category> categories = getCategoriesByParentCategory(parentCategoryIndex);
-        List<List<Category>> categoriesList = new ArrayList<>(4);
+    public List<Category> getCategoriesByParentIndex(byte parentIndex) {
+        List<Category> categories = getCategoriesByParentIndex2(parentIndex);
         setCategoryContentsSize(categories, getFolderParentIds(), getSizeParentIds());
-        sortByParentCategory(categories, categoriesList);
-        return categoriesList;
+        return categories;
     }
 
-    @Query("SELECT * FROM Category WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = 0")
-    protected abstract List<Category> getCategoriesByParentCategory(int parentCategoryIndex);
+    @Query("SELECT * FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
+    protected abstract List<Category> getCategoriesByParentIndex2(byte parentIndex);
 
     @Query("SELECT name FROM Category WHERE isDeleted = 0")
     public abstract LiveData<List<String>> getCategoryNamesLive();
 
-    @Query("SELECT name FROM Category WHERE parentCategoryIndex = :parentCategoryIndex AND isDeleted = 0 ")
-    public abstract List<String> getCategoryNamesByParentCategory(int parentCategoryIndex);
+    @Query("SELECT name FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0 ")
+    public abstract List<String> getCategoryNamesByParentIndex(byte parentIndex);
 
     @Query("SELECT * FROM Category WHERE id = :id AND isDeleted = 0")
     public abstract Category getCategoryById(long id);
 
-    @Query("SELECT EXISTS(SELECT * FROM Category WHERE name =:categoryName AND parentCategoryIndex=:parentCategoryIndex AND isDeleted= 0)")
-    public abstract boolean doesThisCategoryExistByName(String categoryName, int parentCategoryIndex);
+    @Query("SELECT EXISTS(SELECT * FROM Category WHERE name =:categoryName AND parentIndex=:parentIndex AND isDeleted= 0)")
+    public abstract boolean doesThisCategoryExistByName(String categoryName, byte parentIndex);
 
     @Query("SELECT EXISTS(SELECT * FROM Category WHERE name =:categoryName AND isDeleted= 0)")
     public abstract boolean[] doesThisCategoryExistByName(String categoryName);
