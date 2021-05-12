@@ -7,12 +7,12 @@ import java.util.Objects;
 public class BaseInfo {
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private final byte parentCategoryIndex;
+    private final byte parentIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
 
-    public BaseInfo(byte parentCategoryIndex, int orderNumber) {
-        this.parentCategoryIndex = parentCategoryIndex;
+    public BaseInfo(byte parentIndex, int orderNumber) {
+        this.parentIndex = parentIndex;
         this.orderNumber = orderNumber;
     }
 
@@ -20,8 +20,8 @@ public class BaseInfo {
         return id;
     }
 
-    public byte getParentCategoryIndex() {
-        return parentCategoryIndex;
+    public byte getParentIndex() {
+        return parentIndex;
     }
 
     public int getOrderNumber() {
