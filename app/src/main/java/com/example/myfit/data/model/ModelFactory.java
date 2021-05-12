@@ -10,29 +10,29 @@ import org.jetbrains.annotations.NotNull;
 public class ModelFactory {
     @NotNull
     @Contract("_, _, _ -> new")
-    public static Category makeCategory(byte parentCategoryIndex, int orderNumber, String categoryName) {
-        BaseInfo defaultCategoryInfo = createDefaultInfo(parentCategoryIndex, orderNumber);
+    public static Category makeCategory(byte parentIndex, int orderNumber, String categoryName) {
+        BaseInfo defaultCategoryInfo = createDefaultInfo(parentIndex, orderNumber);
         return new Category(defaultCategoryInfo, categoryName);
     }
 
     @NotNull
     @Contract("_, _, _, _ -> new")
-    public static Folder makeFolder(byte parentCategoryIndex, int orderNumber, String folderName, long parentId) {
-        BaseInfo defaultFolderInfo = createDefaultInfo(parentCategoryIndex, orderNumber);
+    public static Folder makeFolder(byte parentIndex, int orderNumber, String folderName, long parentId) {
+        BaseInfo defaultFolderInfo = createDefaultInfo(parentIndex, orderNumber);
         return new Folder(defaultFolderInfo, folderName, parentId);
     }
 
     @NotNull
     @Contract("_, _, _ -> new")
-    public static Size makeSize(byte parentCategoryIndex, int orderNumber, long parentId) {
-        BaseInfo defaultSizeInfo = createDefaultInfo(parentCategoryIndex, orderNumber);
+    public static Size makeSize(byte parentIndex, int orderNumber, long parentId) {
+        BaseInfo defaultSizeInfo = createDefaultInfo(parentIndex, orderNumber);
         return new Size(defaultSizeInfo, parentId);
     }
 
 
     @NotNull
     @Contract(value = "_, _ -> new", pure = true)
-    private static BaseInfo createDefaultInfo(byte parentCategoryIndex, int orderNumber) {
-        return new BaseInfo(parentCategoryIndex, orderNumber);
+    private static BaseInfo createDefaultInfo(byte parentIndex, int orderNumber) {
+        return new BaseInfo(parentIndex, orderNumber);
     }
 }

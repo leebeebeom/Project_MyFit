@@ -18,8 +18,8 @@ public class BaseModel {
         return baseInfo.getId();
     }
 
-    public byte getParentCategoryIndex() {
-        return baseInfo.getParentCategoryIndex();
+    public byte getParentIndex() {
+        return baseInfo.getParentIndex();
     }
 
     public int getOrderNumber() {
