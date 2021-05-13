@@ -3,13 +3,14 @@ package com.example.myfit.data.model.folder;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 
 import java.util.List;
 
 public class FolderDeletedTuple {
     @Embedded
-    private ParentDeletedTuple folderParentDeletedTuple;
+    private DeletedTuple folderParentDeletedTuple;
 
     @Relation(
             parentColumn = "id",
