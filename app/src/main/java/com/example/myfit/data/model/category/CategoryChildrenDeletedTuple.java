@@ -10,7 +10,7 @@ import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 
 import java.util.List;
 
-public class CategoryDeletedTuple {
+public class CategoryChildrenDeletedTuple {
     @Embedded
     private DeletedTuple categoryDeletedTuple;
 
