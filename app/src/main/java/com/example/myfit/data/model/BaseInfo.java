@@ -4,7 +4,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 //TODO delete 타임 넣기
-public class 썌BaseInfo {
+public class BaseInfo {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private final byte parentIndex;
