@@ -3,27 +3,16 @@ package com.example.myfit.data.model.folder;
 import androidx.room.Entity;
 
 import com.example.myfit.data.model.BaseInfo;
-import com.example.myfit.data.model.BaseModel;
+import com.example.myfit.data.model.category.Category;
 
 @Entity
-public class Folder extends BaseModel {
-    private String name;
+public class Folder extends Category {
     private long parentId;
     private boolean isParentDeleted;
-    private int contestSize;
 
     public Folder(BaseInfo baseInfo, String name, long parentId) {
-        super(baseInfo);
-        this.name = name;
+        super(baseInfo, name);
         this.parentId = parentId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public long getParentId() {
@@ -40,13 +29,5 @@ public class Folder extends BaseModel {
 
     public void setParentDeleted(boolean parentDeleted) {
         isParentDeleted = parentDeleted;
-    }
-
-    public int getContestSize() {
-        return contestSize;
-    }
-
-    public void setContestSize(int contestSize) {
-        this.contestSize = contestSize;
     }
 }
