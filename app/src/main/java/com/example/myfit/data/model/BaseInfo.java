@@ -3,8 +3,8 @@ package com.example.myfit.data.model;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
-
-public class BaseInfo {
+//TODO delete 타임 넣기
+public class 썌BaseInfo {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private final byte parentIndex;
