@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import com.example.myfit.data.model.BaseInfo;
 import com.example.myfit.data.model.BaseModel;
 
-@Entity
+@Entity(primaryKeys = "id")
 public class Category extends BaseModel {
     private String name;
     private int contentsSize;
