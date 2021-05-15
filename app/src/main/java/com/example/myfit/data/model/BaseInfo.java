@@ -1,7 +1,5 @@
 package com.example.myfit.data.model;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 //TODO delete 타임 넣기
 public class BaseInfo {
@@ -56,16 +54,5 @@ public class BaseInfo {
     @Override
     public int hashCode() {
         return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), isDummy());
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return "BaseInfo{" +
-                "parentIndex=" + parentIndex +
-                ", orderNumber=" + orderNumber +
-                ", isDeleted=" + isDeleted +
-                ", dummy=" + dummy +
-                '}';
     }
 }
