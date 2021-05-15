@@ -37,21 +37,21 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
         return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedCategoryTuplesLive(isDeleted, sort));
     }
 
+    //to recycleBin search
     @Override
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(boolean isDeleted, String keyWord) {
-        return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getSearchCategoryTuplesList(isDeleted, sort, keyWord));
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(String keyWord) {
+        return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getSearchCategoryTuplesList(sort, keyWord));
     }
 
     //to treeView(disposable)
     @Override
-    public LiveData<List<CategoryFolderTuple>> getCategoryTuplesByParentIndex(byte parentIndex, boolean isDeleted) {
+    public LiveData<List<CategoryFolderTuple>> getCategoryTuplesByParentIndex(byte parentIndex) {
         MutableLiveData<List<CategoryFolderTuple>> categoryTuplesLive = new MutableLiveData<>();
-
         //TODO text
         new Thread(() -> {
             try {
                 int sort = getMainSort();
-                List<CategoryFolderTuple> categoryTuples = categoryDao.getCategoryTuplesByParentIndex(parentIndex, sort, isDeleted);
+                List<CategoryFolderTuple> categoryTuples = categoryDao.getCategoryTuplesByParentIndex(parentIndex, sort);
                 categoryTuplesLive.postValue(categoryTuples);
             } catch (Exception e) {
                 logE(e);
@@ -62,12 +62,12 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
 
     //to treeView
     @Override
-    public LiveData<CategoryFolderTuple> getCategoryTupleById(long id, boolean isDeleted) {
+    public LiveData<CategoryFolderTuple> getCategoryTupleById(long id) {
         //TODO 테스트
         MutableLiveData<CategoryFolderTuple> categoryTupleLive = new MutableLiveData<>();
         new Thread(() -> {
             try {
-                CategoryFolderTuple categoryTuple = categoryDao.getCategoryTupleById(id, isDeleted);
+                CategoryFolderTuple categoryTuple = categoryDao.getCategoryTupleById(id);
                 categoryTupleLive.postValue(categoryTuple);
             } catch (Exception e) {
                 logE(e);
