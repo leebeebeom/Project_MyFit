@@ -118,7 +118,6 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE id = :id AND isDeleted = 0 AND isParentDeleted = 0")
     protected abstract CategoryFolderTuple getFolderTupleById2(long id);
 
-
     //to list
     @Query("SELECT * FROM Folder WHERE id = :id")
     public abstract LiveData<Folder> getFolderLiveById(long id);
@@ -225,7 +224,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
         LiveData<Folder> getFolderLiveById(long id);
 
-        public long insertFolder(String name, long parentId, byte parentIndex);
+        long insertFolder(String name, long parentId, byte parentIndex);
 
         void updateFolder(long id, String name);
 
