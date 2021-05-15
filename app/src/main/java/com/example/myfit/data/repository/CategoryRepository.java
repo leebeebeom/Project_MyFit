@@ -21,19 +21,20 @@ import java.util.List;
 
 public class CategoryRepository extends BaseRepository implements CategoryDao.CategoryDaoInterFace {
     private final SharedPreferences mainSortPreference;
-    private final IntegerSharedPreferenceLiveData mainSortPreferenceLive;
     private final CategoryDao categoryDao;
 
     public CategoryRepository(@NotNull Context context) {
         super(context);
         categoryDao = AppDataBase.getsInstance(context).categoryDao();
         mainSortPreference = context.getSharedPreferences(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
-        mainSortPreferenceLive = new IntegerSharedPreferenceLiveData(mainSortPreference, Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 
     //to main, recycleBin
     @Override
     public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive() {
+        IntegerSharedPreferenceLiveData mainSortPreferenceLive =
+                new IntegerSharedPreferenceLiveData(mainSortPreference, Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
+
         return Transformations.switchMap(mainSortPreferenceLive, categoryDao::getClassifiedCategoryTuplesLive);
     }
 
@@ -151,7 +152,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
     }
 
     private Integer getMainSort() {
-        return mainSortPreferenceLive.getValueFromPreferences(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
+        return mainSortPreference.getInt(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 }
 
