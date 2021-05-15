@@ -19,6 +19,7 @@ import com.example.myfit.data.model.folder.FolderDeletedRelation;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
+import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,16 +42,21 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         this.appDataBase = AppDataBase.getsInstance(context);
     }
 
-    //to main, recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(boolean isDeleted, int sort) {
-        LiveData<List<CategoryFolderTuple>> categoryTuplesLive = this.getCategoryTuplesLive(isDeleted);
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(categoryTuplesLive, isDeleted);
+    //to main
+    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(int sort) {
+        LiveData<List<CategoryFolderTuple>> categoryTuplesLive = this.getCategoryTuplesLive(false);
+        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(categoryTuplesLive, false);
 
         return getClassifiedCategoryTuplesLive(categoryTuplesLive, contentsSizesLive, sort);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted")
-    protected abstract LiveData<List<CategoryFolderTuple>> getCategoryTuplesLive(boolean isDeleted);
+    //to recycleBin
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedCategoryTuplesLive() {
+        LiveData<List<CategoryFolderTuple>> categoryTuplesLive = this.getCategoryTuplesLive(true);
+        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(categoryTuplesLive, true);
+
+        return getClassifiedCategoryTuplesLive(categoryTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+    }
 
     @NotNull
     private LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(LiveData<List<CategoryFolderTuple>> categoryTuplesLive,
@@ -64,13 +70,16 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         });
     }
 
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted")
+    protected abstract LiveData<List<CategoryFolderTuple>> getCategoryTuplesLive(boolean isDeleted);
+
 
     //to recycleBin search (maybe searchView?)
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(int sort, String keyWord) {
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(String keyWord) {
         LiveData<List<CategoryFolderTuple>> searchCategoryTuplesLive = getSearchCategoryTuplesLive(keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchCategoryTuplesLive, true);
 
-        return getClassifiedCategoryTuplesLive(searchCategoryTuplesLive, contentsSizesLive, sort);
+        return getClassifiedCategoryTuplesLive(searchCategoryTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = 1 AND name LIKE :keyWord")
@@ -142,10 +151,10 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     public void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted) {
         CategoryDeletedRelation[] categoryDeletedRelations = this.getCategoryDeletedRelationsByIds(categoryIds, !isDeleted);
         DeletedTuple[] categoryDeletedTuples = super.getCategoryDeletedTuples(categoryDeletedRelations);
-        setDeletedTuples(categoryDeletedTuples, !isDeleted);
-        updateDeletedTuples(categoryDeletedTuples);
+        super.setDeletedTuples(categoryDeletedTuples, !isDeleted);
+        this.updateDeletedTuples(categoryDeletedTuples);
 
-        setChildrenParentDeleted(categoryDeletedRelations, isDeleted);
+        this.setChildrenParentDeleted(categoryDeletedRelations, isDeleted);
     }
 
 
@@ -153,15 +162,15 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         if (folderDao == null) folderDao = appDataBase.folderDao();
         if (sizeDao == null) sizeDao = appDataBase.sizeDao();
 
-        LinkedList<ParentDeletedTuple> childFolderParentDeletedTuples = getCategoryChildFolderParentDeletedTuples(categoryDeletedTupleWithChildren);
-        long[] childFolderIds = getParentTuplesIds(childFolderParentDeletedTuples);
+        LinkedList<ParentDeletedTuple> childFolderParentDeletedTuples = super.getCategoryChildFolderParentDeletedTuples(categoryDeletedTupleWithChildren);
+        long[] childFolderIds = super.getParentTuplesIds(childFolderParentDeletedTuples);
         //childFolderParentDeletedTuples -> allChildFolderParentDeletedTuples
-        addAllChildFolderParentDeletedTuples(childFolderIds, childFolderParentDeletedTuples, !isDeleted);
+        this.addAllChildFolderParentDeletedTuples(childFolderIds, childFolderParentDeletedTuples, !isDeleted);
 
-        LinkedList<ParentDeletedTuple> childSizeParentDeletedTuples = getCategoryChildSizeParentDeletedTuples(categoryDeletedTupleWithChildren);
-        long[] allFolderIds = getParentTuplesIds(childFolderParentDeletedTuples);
+        LinkedList<ParentDeletedTuple> childSizeParentDeletedTuples = super.getCategoryChildSizeParentDeletedTuples(categoryDeletedTupleWithChildren);
+        long[] allFolderIds = super.getParentTuplesIds(childFolderParentDeletedTuples);
         //categoryChildSizesParentDeletedTuples -> allChildSizeParentDeletedTuples
-        addAllChildSizeParentDeletedTuples(allFolderIds, childSizeParentDeletedTuples, !isDeleted);
+        this.addAllChildSizeParentDeletedTuples(allFolderIds, childSizeParentDeletedTuples, !isDeleted);
 
         super.setParentDeletedTuples(childFolderParentDeletedTuples, isDeleted);
         super.setParentDeletedTuples(childSizeParentDeletedTuples, isDeleted);
@@ -213,7 +222,9 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
 
     public interface CategoryDaoInterFace {
-        LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(boolean isDeleted);
+        LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive();
+
+        LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedCategoryTuplesLive();
 
         LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(String keyWord);
 
