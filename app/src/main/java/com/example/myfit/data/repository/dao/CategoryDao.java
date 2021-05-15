@@ -82,7 +82,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     public List<CategoryFolderTuple> getCategoryTuplesByParentIndex(byte parentIndex, int sort) {
         List<CategoryFolderTuple> categoryTuples = this.getCategoryTuplesByParentIndex2(parentIndex);
         long[] categoryIds = super.getItemIds(categoryTuples);
-        int[] contentsSizes = getContentsSizesByParentIds(categoryIds, false);
+        int[] contentsSizes = getContentsSizesByParentIds(categoryIds);
         super.setContentsSize(categoryTuples, contentsSizes);
         return super.orderCategoryFolderTuples(sort, categoryTuples);
     }
@@ -95,7 +95,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     //to treeView
     public CategoryFolderTuple getCategoryTupleById(long id) {
         CategoryFolderTuple categoryTuple = this.getCategoryTupleById2(id);
-        int contentsSize = getContentsSizeByParentId(id, false);
+        int contentsSize = getContentsSizeByParentId(id);
         categoryTuple.setContentsSize(contentsSize);
         return categoryTuple;
     }

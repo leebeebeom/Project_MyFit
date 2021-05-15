@@ -95,6 +95,12 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
                 .toArray(DeletedTuple[]::new);
     }
 
+    protected DeletedTuple[] getFolderDeletedTuples(FolderDeletedRelation[] folderDeletedTupleWithChildren) {
+        return Arrays.stream(folderDeletedTupleWithChildren)
+                .map(FolderDeletedRelation::getFolderDeletedTuple)
+                .toArray(DeletedTuple[]::new);
+    }
+
     @NotNull
     protected LinkedList<ParentDeletedTuple> getCategoryChildFolderParentDeletedTuples(CategoryDeletedRelation[] categoryDeletedTupleWithChildren) {
         return Arrays.stream(categoryDeletedTupleWithChildren)
@@ -154,13 +160,13 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
             "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = :isParentDeleted))")
     protected abstract LiveData<int[]> getContentsSizesLiveByParentIds(long[] parentIds, boolean isParentDeleted);
 
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = :isParentDeleted))")
-    protected abstract int[] getContentsSizesByParentIds(long[] parentIds, boolean isParentDeleted);
+    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = 0) + " +
+            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = 0))")
+    protected abstract int[] getContentsSizesByParentIds(long[] parentIds);
 
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId = :parentId AND isDeleted =0 AND isParentDeleted = :isParentDeleted))")
-    protected abstract int getContentsSizeByParentId(long parentId, boolean isParentDeleted);
+    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0) + " +
+            "(SELECT COUNT(parentId) FROM Size WHERE parentId = :parentId AND isDeleted =0 AND isParentDeleted = 0))")
+    protected abstract int getContentsSizeByParentId(long parentId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insert(T item);
