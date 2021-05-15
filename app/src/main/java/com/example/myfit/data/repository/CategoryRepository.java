@@ -33,14 +33,19 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
 
     //to main, recycleBin
     @Override
-    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(boolean isDeleted) {
-        return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedCategoryTuplesLive(isDeleted, sort));
+    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive() {
+        return Transformations.switchMap(mainSortPreferenceLive, categoryDao::getClassifiedCategoryTuplesLive);
+    }
+
+    @Override
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedCategoryTuplesLive() {
+        return categoryDao.getDeletedClassifiedCategoryTuplesLive();
     }
 
     //to recycleBin search
     @Override
     public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(String keyWord) {
-        return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getSearchCategoryTuplesList(sort, keyWord));
+        return categoryDao.getSearchCategoryTuplesList(keyWord);
     }
 
     //to treeView(disposable)
