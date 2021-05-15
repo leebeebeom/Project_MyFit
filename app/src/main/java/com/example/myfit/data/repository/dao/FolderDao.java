@@ -104,12 +104,12 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
     //to treeView (disposable)
     @Transaction
-    public List<CategoryFolderTuple> getFolderTuplesByParentIndex(byte parentIndex) {
+    public List<CategoryFolderTuple> getFolderTuplesByParentIndex(byte parentIndex, int sort) {
         List<CategoryFolderTuple> folderTuples = this.getFolderTuplesByParentIndex2(parentIndex);
         long[] folderIds = super.getItemIds(folderTuples);
         int[] folderContentsSize = getContentsSizesByParentIds(folderIds);
         super.setContentsSize(folderTuples, folderContentsSize);
-        return folderTuples;
+        return super.orderCategoryFolderTuples(sort, folderTuples);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
@@ -174,7 +174,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         LinkedList<ParentDeletedTuple> folderChildParentDeletedTuples = this.getFolderChildFolderParentDeletedTuples(folderDeletedTupleWithChildren);
         long[] folderChildFolderIds = super.getParentTuplesIds(folderChildParentDeletedTuples);
         //folderChildParentDeletedTuples -> allChildFolderParentDeletedTuples
-        this.addAllChildParentDeletedTuples(folderChildFolderIds, folderChildParentDeletedTuples, isDeleted);
+        this.addAllChildParentDeletedTuples(folderChildFolderIds, folderChildParentDeletedTuples, !isDeleted);
 
         long[] allFolderIds = super.getParentTuplesIds(folderChildParentDeletedTuples);
         List<ParentDeletedTuple> allChildSizeParentDeletedTuple = sizeDao.getSizeParentDeletedTuplesByParentIds(allFolderIds, !isDeleted);
@@ -209,7 +209,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     protected abstract void updateTuple(CategoryFolderTuple folderTuple);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
-    public abstract void updateTuples(List<CategoryFolderTuple> folderTuple);
+    public abstract void updateTuples(LinkedList<CategoryFolderTuple> folderTuple);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
@@ -233,22 +233,22 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
         LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyWord);
 
-        List<CategoryFolderTuple> getFolderTuplesByParentIndex(byte parentIndex);
+        LiveData<List<CategoryFolderTuple>> getFolderTuplesByParentIndex(byte parentIndex);
 
-        CategoryFolderTuple getFolderTupleById(long id);
+        LiveData<CategoryFolderTuple> getFolderTupleById(long id);
 
         LiveData<Folder> getFolderLiveById(long id);
 
-        long insertFolder(String name, long parentId, byte parentIndex);
+        LiveData<Long> insertFolder(String name, long parentId, byte parentIndex);
 
         void updateFolder(long id, String name);
 
-        void updateFolders(List<CategoryFolderTuple> folderTuple);
+        void updateFolders(LinkedList<CategoryFolderTuple> folderTuple);
 
         void moveFolders(long targetId, long[] folderIds);
 
         void deleteOrRestoreFolders(long[] folderIds, boolean isDeleted);
 
-        boolean isExistingFolderName(String folderName, long parentId);
+        LiveData<Boolean> isExistingFolderName(String folderName, long parentId);
     }
 }
