@@ -62,14 +62,14 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
     //to list
     public LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId(long parentId, int sort) {
-        LiveData<List<CategoryFolderTuple>> folderTuplesLive = this.getFolderTuplesLiveByParentId2(parentId);
+        LiveData<List<CategoryFolderTuple>> folderTuplesLive = this.getFolderTuplesLiveByParentId(parentId);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, false);
 
         return this.getFolderTuplesLive(folderTuplesLive, contentsSizesLive, sort);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId2(long parentId);
+    protected abstract LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId(long parentId);
 
     @NotNull
     private LiveData<List<CategoryFolderTuple>> getFolderTuplesLive(LiveData<List<CategoryFolderTuple>> folderTuplesLive,
@@ -83,11 +83,11 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     }
 
     //to searchView
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord, int sort) {
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord) {
         LiveData<List<CategoryFolderTuple>> folderTuplesLive = getSearchFolderTuplesLive(false, keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, false);
 
-        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, sort);
+        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
     }
 
     //to recycleBin search
@@ -95,7 +95,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         LiveData<List<CategoryFolderTuple>> folderTuplesLive = getSearchFolderTuplesLive(true, keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, true);
 
-        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
     }
 
 
@@ -105,7 +105,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     //to treeView (disposable)
     @Transaction
     public List<CategoryFolderTuple> getFolderTuplesByParentIndex(byte parentIndex, int sort) {
-        List<CategoryFolderTuple> folderTuples = this.getFolderTuplesByParentIndex2(parentIndex);
+        List<CategoryFolderTuple> folderTuples = this.getFolderTuplesByParentIndex(parentIndex);
         long[] folderIds = super.getItemIds(folderTuples);
         int[] folderContentsSize = getContentsSizesByParentIds(folderIds);
         super.setContentsSize(folderTuples, folderContentsSize);
@@ -113,7 +113,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract List<CategoryFolderTuple> getFolderTuplesByParentIndex2(byte parentIndex);
+    protected abstract List<CategoryFolderTuple> getFolderTuplesByParentIndex(byte parentIndex);
 
     @Transaction
     //to treeView
