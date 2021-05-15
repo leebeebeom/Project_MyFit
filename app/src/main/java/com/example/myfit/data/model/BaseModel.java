@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class BaseModel {
     @Embedded
-    private  BaseInfo baseInfo;
+    private BaseInfo baseInfo;
 
     public BaseModel(@NotNull BaseInfo baseInfo) {
         this.baseInfo = baseInfo;
