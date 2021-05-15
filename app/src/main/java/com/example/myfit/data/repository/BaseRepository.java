@@ -49,9 +49,13 @@ public class BaseRepository implements BaseDao.BaseDaoInterFace {
     public LiveData<Boolean[]> isExistingParents(long ids) {
         MutableLiveData<Boolean[]> isExistingParentsLive = new MutableLiveData<>();
         new Thread(() -> {
-            Boolean[] existingParents = baseDao.isExistingParents(ids);
-            isExistingParentsLive.postValue(existingParents);
-        });
+            try {
+                Boolean[] existingParents = baseDao.isExistingParents(ids);
+                isExistingParentsLive.postValue(existingParents);
+            } catch (Exception e) {
+                logE(e);
+            }
+        }).start();
         return isExistingParentsLive;
     }
 
