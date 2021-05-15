@@ -6,12 +6,13 @@ import androidx.room.Entity;
 import com.example.myfit.data.model.BaseInfo;
 import com.example.myfit.data.model.BaseModel;
 
-@Entity
+
+@Entity(primaryKeys = "id")
 public class Size extends BaseModel {
     @Embedded
-    private final BaseSizeInfo baseSizeInfo;
+    private BaseSizeInfo baseSizeInfo;
     @Embedded
-    private final DetailSizeInfo detailSizeInfo;
+    private DetailSizeInfo detailSizeInfo;
     private long parentId;
     private boolean isParentDeleted;
 
@@ -156,5 +157,21 @@ public class Size extends BaseModel {
 
     public void setSixthInfo(String sixthInfo) {
         this.detailSizeInfo.setSixthInfo(sixthInfo);
+    }
+
+    public BaseSizeInfo getBaseSizeInfo() {
+        return baseSizeInfo;
+    }
+
+    public DetailSizeInfo getDetailSizeInfo() {
+        return detailSizeInfo;
+    }
+
+    public void setBaseSizeInfo(BaseSizeInfo baseSizeInfo) {
+        this.baseSizeInfo = baseSizeInfo;
+    }
+
+    public void setDetailSizeInfo(DetailSizeInfo detailSizeInfo) {
+        this.detailSizeInfo = detailSizeInfo;
     }
 }
