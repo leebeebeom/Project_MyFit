@@ -17,6 +17,7 @@ import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
+import com.example.myfit.util.SortUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +82,7 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     }
 
     protected void logE(NullPointerException e) {
-        Log.e("에러", "Null Pointer Exception" + e, e);
+        Log.e("에러", "Null Pointer Exception" + e.getMessage(), e);
     }
 
     protected void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
@@ -130,6 +131,25 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    protected List<List<CategoryFolderTuple>> orderCategoryFolderTuplesList(int sort, List<List<CategoryFolderTuple>> categoryFolderTuplesList) {
+        try {
+            categoryFolderTuplesList
+                    .forEach(categoryFolderTuples -> SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuples));
+        } catch (NullPointerException e) {
+            logE(e);
+        }
+        return categoryFolderTuplesList;
+    }
+
+    protected List<CategoryFolderTuple> orderCategoryFolderTuples(int sort, List<CategoryFolderTuple> categoryFolderTuplesList) {
+        try {
+            SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuplesList);
+        } catch (NullPointerException e) {
+            logE(e);
+        }
+        return categoryFolderTuplesList;
+    }
+
     @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
             "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = :isParentDeleted))")
     protected abstract LiveData<int[]> getContentsSizesLiveByParentIds(long[] parentIds, boolean isParentDeleted);
@@ -146,7 +166,7 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     public abstract long insert(T item);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract long[] insert(T[] items);
+    public abstract Long[] insert(T[] items);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(T item);
