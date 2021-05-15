@@ -195,16 +195,16 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     protected abstract int getContentsSizeByParentId(long parentId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract long insert(T item);
+    protected abstract long insert(T item);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract Long[] insert(T[] items);
+    protected abstract Long[] insert(T[] items);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void update(T item);
+    protected abstract void update(T item);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void update(List<T> items);
+    protected abstract void update(List<T> items);
 
     @Query("SELECT EXISTS(SELECT id FROM Category WHERE id IN (:ids) AND isDeleted = 0)+" +
             "(SELECT id FROM Folder WHERE id IN (:ids) AND isDeleted = 0 AND isParentDeleted = 0)")
