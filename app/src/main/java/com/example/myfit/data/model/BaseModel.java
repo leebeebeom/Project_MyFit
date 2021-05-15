@@ -1,12 +1,15 @@
 package com.example.myfit.data.model;
 
 import androidx.room.Embedded;
+import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class BaseModel {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     @Embedded
     private BaseInfo baseInfo;
 
@@ -15,7 +18,11 @@ public class BaseModel {
     }
 
     public long getId() {
-        return baseInfo.getId();
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public byte getParentIndex() {
@@ -59,11 +66,12 @@ public class BaseModel {
         if (this == o) return true;
         if (!(o instanceof BaseModel)) return false;
         BaseModel baseModel = (BaseModel) o;
-        return baseInfo.equals(baseModel.baseInfo);
+        return getId() == baseModel.getId() &&
+                getBaseInfo().equals(baseModel.getBaseInfo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(baseInfo);
+        return Objects.hash(getId(), getBaseInfo());
     }
 }
