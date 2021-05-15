@@ -61,6 +61,14 @@ public class BaseModel {
         this.baseInfo = baseInfo;
     }
 
+    public long getDeletedTime() {
+        return baseInfo.getDeletedTime();
+    }
+
+    public void setDeletedTime(long deletedTime) {
+        this.baseInfo.setDeletedTime(deletedTime);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
