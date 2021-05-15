@@ -151,7 +151,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     public void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted) {
         CategoryDeletedRelation[] categoryDeletedRelations = this.getCategoryDeletedRelationsByIds(categoryIds, !isDeleted);
         DeletedTuple[] categoryDeletedTuples = super.getCategoryDeletedTuples(categoryDeletedRelations);
-        super.setDeletedTuples(categoryDeletedTuples, !isDeleted);
+        super.setDeletedTuples(categoryDeletedTuples, isDeleted);
         this.updateDeletedTuples(categoryDeletedTuples);
 
         this.setChildrenParentDeleted(categoryDeletedRelations, isDeleted);
