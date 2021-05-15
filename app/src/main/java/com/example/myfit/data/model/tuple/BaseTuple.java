@@ -1,23 +1,17 @@
 package com.example.myfit.data.model.tuple;
 
 public class BaseTuple {
-    private final long id;
-    private final byte parentCategoryIndex;
+    private long id;
+    private byte parentIndex;
     private int orderNumber;
-    private boolean dummy;
     private String name;
-
-    public BaseTuple(long id, byte parentCategoryIndex) {
-        this.id = id;
-        this.parentCategoryIndex = parentCategoryIndex;
-    }
 
     public long getId() {
         return id;
     }
 
-    public byte getParentCategoryIndex() {
-        return parentCategoryIndex;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getOrderNumber() {
@@ -28,12 +22,12 @@ public class BaseTuple {
         this.orderNumber = orderNumber;
     }
 
-    public boolean isDummy() {
-        return dummy;
+    public byte getParentIndex() {
+        return parentIndex;
     }
 
-    public void setDummy(boolean dummy) {
-        this.dummy = dummy;
+    public void setParentIndex(byte parentIndex) {
+        this.parentIndex = parentIndex;
     }
 
     public String getName() {
