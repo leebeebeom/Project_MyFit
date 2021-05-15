@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import com.example.myfit.data.model.BaseInfo;
 import com.example.myfit.data.model.BaseModel;
 
+import java.util.Objects;
+
 @Entity(primaryKeys = "id")
 public class Category extends BaseModel {
     private String name;
@@ -29,5 +31,20 @@ public class Category extends BaseModel {
 
     public void setContentsSize(int contentsSize) {
         this.contentsSize = contentsSize;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        if (!super.equals(o)) return false;
+        Category category = (Category) o;
+        return getContentsSize() == category.getContentsSize() &&
+                getName().equals(category.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getName(), getContentsSize());
     }
 }

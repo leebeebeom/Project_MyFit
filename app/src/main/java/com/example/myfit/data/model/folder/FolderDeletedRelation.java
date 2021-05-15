@@ -7,6 +7,7 @@ import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FolderDeletedRelation {
     @Embedded
@@ -44,5 +45,19 @@ public class FolderDeletedRelation {
 
     public void setChildFolderParentDeletedTuples(List<ParentDeletedTuple> childFolderParentDeletedTuples) {
         this.childFolderParentDeletedTuples = childFolderParentDeletedTuples;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FolderDeletedRelation)) return false;
+        FolderDeletedRelation that = (FolderDeletedRelation) o;
+        return getFolderDeletedTuple().equals(that.getFolderDeletedTuple()) &&
+                getChildFolderParentDeletedTuples().equals(that.getChildFolderParentDeletedTuples());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getFolderDeletedTuple(), getChildFolderParentDeletedTuples());
     }
 }

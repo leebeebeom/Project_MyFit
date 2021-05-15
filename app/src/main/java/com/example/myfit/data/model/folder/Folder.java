@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import com.example.myfit.data.model.BaseInfo;
 import com.example.myfit.data.model.category.Category;
 
+import java.util.Objects;
+
 @Entity
 public class Folder extends Category {
     private long parentId;
@@ -29,5 +31,20 @@ public class Folder extends Category {
 
     public void setParentDeleted(boolean parentDeleted) {
         isParentDeleted = parentDeleted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Folder)) return false;
+        if (!super.equals(o)) return false;
+        Folder folder = (Folder) o;
+        return getParentId() == folder.getParentId() &&
+                isParentDeleted() == folder.isParentDeleted();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getParentId(), isParentDeleted());
     }
 }
