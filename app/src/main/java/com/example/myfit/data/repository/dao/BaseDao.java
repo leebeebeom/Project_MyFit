@@ -19,13 +19,17 @@ import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 import com.example.myfit.util.SortUtil;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Dao
@@ -112,6 +116,28 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     protected void setDeletedTuples(DeletedTuple[] deletedTuples, boolean isDeleted) {
         Arrays.stream(deletedTuples)
                 .forEach(deletedTuple -> deletedTuple.setDeleted(isDeleted));
+
+        if (isDeleted) setDeletedTime(deletedTuples);
+        else clearDeletedTime(deletedTuples);
+    }
+
+    @Contract(pure = true)
+    private void setDeletedTime(@NotNull DeletedTuple[] deletedTuples) {
+        long currentTime = getCurrentTime();
+        int count = deletedTuples.length;
+        for (DeletedTuple deletedTuple : deletedTuples) {
+            deletedTuple.setDeletedTime(currentTime);
+            currentTime++;
+        }
+    }
+
+    private long getCurrentTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+        return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
+    }
+
+    private void clearDeletedTime(DeletedTuple[] deletedTuples) {
+        Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(0));
     }
 
     protected long[] getParentTuplesIds(@NotNull LinkedList<ParentDeletedTuple> parentDeletedTuples) {
