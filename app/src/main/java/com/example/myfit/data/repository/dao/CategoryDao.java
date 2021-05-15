@@ -231,6 +231,8 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
         void updateCategory(long id, String name);
 
+        void updateCategories(LinkedList<CategoryFolderTuple> categoryTuples);
+
         void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted);
 
         LiveData<Boolean> isExistingCategoryName(String categoryName, byte parentIndex);

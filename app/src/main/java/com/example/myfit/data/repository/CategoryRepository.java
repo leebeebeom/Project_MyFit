@@ -113,6 +113,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
     }
 
     //from adapter drag drop
+    @Override
     public void updateCategories(LinkedList<CategoryFolderTuple> categoryTuples) {
         new Thread(() -> categoryDao.updateTuples(categoryTuples)).start();
     }
