@@ -211,6 +211,14 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     protected abstract void updateParentIdTuples(ParentIdTuple[] parentIdTuples);
 
+    //from addFolder dialog
+    @Query("SELECT EXISTS(SELECT name, parentId FROM Folder WHERE name =:folderName AND parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0)")
+    public abstract boolean isExistingFolderName(String folderName, long parentId);
+
+    //from restore dialog restore category
+    @Query("SELECT EXISTS(SELECT id FROM Folder WHERE id IN (:ids) AND isDeleted = 0 AND isParentDeleted = 0)")
+    public abstract Boolean[] isExistingFolders(long[] ids);
+
     public interface FolderDaoInterface {
         LiveData<List<List<CategoryFolderTuple>>> getClassifiedFolderTuplesLive(int sort);
 
@@ -228,11 +236,14 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
         void updateFolder(long id, String name);
 
-        void updateTuples(List<CategoryFolderTuple> folderTuple);
+        void updateFolders(List<CategoryFolderTuple> folderTuple);
 
         void moveFolders(long targetId, long[] folderIds);
 
         void deleteOrRestoreFolders(long[] folderIds, boolean isDeleted);
 
+        boolean isExistingFolderName(String folderName, long parentId);
+
+        Boolean[] isExistingFolders(long[] ids);
     }
 }
