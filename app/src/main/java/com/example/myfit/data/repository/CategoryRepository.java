@@ -143,6 +143,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
         return existCategoryLive;
     }
 
+    //from deleteSelectedItems, restore dialog
     @Override
     public void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted) {
         new Thread(() -> categoryDao.deleteOrRestoreCategories(categoryIds, isDeleted)).start();
