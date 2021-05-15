@@ -42,32 +42,35 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     }
 
     //to main, recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(boolean isDeleted) {
+    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(boolean isDeleted, int sort) {
         LiveData<List<CategoryFolderTuple>> categoryTuplesLive = getCategoryTuplesLive(isDeleted);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(categoryTuplesLive, isDeleted);
 
-        return getClassifiedCategoryTuplesLive(categoryTuplesLive, contentsSizesLive);
+        return getClassifiedCategoryTuplesLive(categoryTuplesLive, contentsSizesLive, sort);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted")
     protected abstract LiveData<List<CategoryFolderTuple>> getCategoryTuplesLive(boolean isDeleted);
 
     @NotNull
-    private LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(LiveData<List<CategoryFolderTuple>> categoryTuplesLive, LiveData<int[]> contentsSizesLive) {
+    private LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive(LiveData<List<CategoryFolderTuple>> categoryTuplesLive,
+                                                                                      LiveData<int[]> contentsSizesLive,
+                                                                                      int sort) {
         return Transformations.map(contentsSizesLive, contentsSizes -> {
             List<CategoryFolderTuple> categoryTuples = categoryTuplesLive.getValue();
             super.setContentsSize(categoryTuples, contentsSizes);
-            return super.getClassifiedListByParentIndex(categoryTuples);
+            List<List<CategoryFolderTuple>> classifiedList = super.getClassifiedListByParentIndex(categoryTuples);
+            return super.orderCategoryFolderTuplesList(sort, classifiedList);
         });
     }
 
 
     //to recycleBin search (maybe searchView?)
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(boolean isDeleted, String keyWord) {
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(boolean isDeleted, int sort, String keyWord) {
         LiveData<List<CategoryFolderTuple>> searchCategoryTuplesLive = getSearchCategoryTuplesLive(isDeleted, keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchCategoryTuplesLive, isDeleted);
 
-        return getClassifiedCategoryTuplesLive(searchCategoryTuplesLive, contentsSizesLive);
+        return getClassifiedCategoryTuplesLive(searchCategoryTuplesLive, contentsSizesLive, sort);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted AND name LIKE :keyWord")
@@ -76,12 +79,12 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Transaction
     //to treeView (disposable)
-    public List<CategoryFolderTuple> getCategoryTuplesByParentIndex(byte parentIndex, boolean isDeleted) {
+    public List<CategoryFolderTuple> getCategoryTuplesByParentIndex(byte parentIndex, int sort, boolean isDeleted) {
         List<CategoryFolderTuple> categoryTuples = this.getCategoryTuplesByParentIndex2(parentIndex, isDeleted);
         long[] categoryIds = super.getItemIds(categoryTuples);
         int[] contentsSizes = getContentsSizesByParentIds(categoryIds, isDeleted);
         super.setContentsSize(categoryTuples, contentsSizes);
-        return categoryTuples;
+        return super.orderCategoryFolderTuples(sort, categoryTuples);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE parentIndex = :parentIndex AND isDeleted = :isDeleted")
@@ -110,7 +113,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Transaction
     //from restore Dialog
-    public long[] insertRestoreCategories(@NotNull byte[] parentIndex) {
+    public Long[] insertRestoreCategories(@NotNull byte[] parentIndex) {
         String restoreCategoryName = context.getString(R.string.restore_category_name);
         int orderNumber = getCategoryLargestOrderNumber() + 1;
 
@@ -202,10 +205,13 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     //from restore dialog
     @Query("SELECT EXISTS(SELECT id FROM Category WHERE id IN (:ids) AND isDeleted = 0)")
-    public abstract boolean isExistingCategories(long[] ids);
+    public abstract Boolean[] isExistingCategories(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void updateTuple(CategoryFolderTuple categoryTuple);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
+    public abstract void updateTuples(LinkedList<CategoryFolderTuple> categoryTuples);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
@@ -215,20 +221,20 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
         LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(boolean isDeleted, String keyWord);
 
-        List<CategoryFolderTuple> getCategoryTuplesByParentIndex(byte parentIndex, boolean isDeleted);
+        LiveData<List<CategoryFolderTuple>> getCategoryTuplesByParentIndex(byte parentIndex, boolean isDeleted);
 
-        CategoryFolderTuple getCategoryTupleById(long id, boolean isDeleted);
+        LiveData<CategoryFolderTuple> getCategoryTupleById(long id, boolean isDeleted);
 
-        long insertCategory(String categoryName, byte parentIndex);
+        LiveData<Long> insertCategory(String categoryName, byte parentIndex);
 
-        long[] insertRestoreCategories(@NotNull byte[] parentIndex);
+        LiveData<Long[]> insertRestoreCategories(@NotNull byte[] parentIndex);
 
         void updateCategory(long id, String name);
 
         void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted);
 
-        boolean isExistingCategoryName(String categoryName, byte parentIndex);
+        LiveData<Boolean> isExistingCategoryName(String categoryName, byte parentIndex);
 
-        boolean isExistingCategories(long[] ids);
+        LiveData<Boolean[]> isExistingCategories(long[] ids);
     }
 }
