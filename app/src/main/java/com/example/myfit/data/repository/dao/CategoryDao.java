@@ -79,7 +79,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         LiveData<List<CategoryFolderTuple>> searchCategoryTuplesLive = getSearchCategoryTuplesLive(keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchCategoryTuplesLive, true);
 
-        return getClassifiedCategoryTuplesLive(searchCategoryTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+        return getClassifiedCategoryTuplesLive(searchCategoryTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = 1 AND name LIKE :keyWord")
@@ -89,7 +89,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Transaction
     //to treeView (disposable)
     public List<CategoryFolderTuple> getCategoryTuplesByParentIndex(byte parentIndex, int sort) {
-        List<CategoryFolderTuple> categoryTuples = this.getCategoryTuplesByParentIndex2(parentIndex);
+        List<CategoryFolderTuple> categoryTuples = this.getCategoryTuplesByParentIndex(parentIndex);
         long[] categoryIds = super.getItemIds(categoryTuples);
         int[] contentsSizes = getContentsSizesByParentIds(categoryIds);
         super.setContentsSize(categoryTuples, contentsSizes);
@@ -97,7 +97,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
-    protected abstract List<CategoryFolderTuple> getCategoryTuplesByParentIndex2(byte parentIndex);
+    protected abstract List<CategoryFolderTuple> getCategoryTuplesByParentIndex(byte parentIndex);
 
 
     @Transaction
