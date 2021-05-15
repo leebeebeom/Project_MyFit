@@ -180,10 +180,16 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(List<T> items);
 
+    @Query("SELECT EXISTS(SELECT id FROM Category WHERE id IN (:ids) AND isDeleted = 0)+" +
+            "(SELECT id FROM Folder WHERE id IN (:ids) AND isDeleted = 0 AND isParentDeleted = 0)")
+    public abstract boolean[] isExistingParents(long ids);
+
     public interface BaseDaoInterFace {
         LiveData<List<String>> getAutoCompleteWordsLive();
 
         LiveData<List<String>> getDeletedAutoCompleteWordsLive();
+
+        boolean[] isExistingParents(long ids);
     }
 
 }
