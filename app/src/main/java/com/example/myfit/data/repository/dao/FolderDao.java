@@ -16,6 +16,7 @@ import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,17 +36,16 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         this.appDataBase = appDataBase;
     }
 
-    //TODO search
     //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedFolderTuplesLive(int sort) {
-        LiveData<List<CategoryFolderTuple>> folderTuplesLive = this.getFolderTuplesLive();
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedFolderTuplesLive() {
+        LiveData<List<CategoryFolderTuple>> folderTuplesLive = this.getDeletedFolderTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, true);
 
-        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, sort);
+        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE isDeleted = 1 AND isParentDeleted = 0")
-    protected abstract LiveData<List<CategoryFolderTuple>> getFolderTuplesLive();
+    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedFolderTuplesLive();
 
     @NotNull
     private LiveData<List<List<CategoryFolderTuple>>> getClassifiedFolderTuplesLive(LiveData<List<CategoryFolderTuple>> folderTuplesLive,
@@ -82,13 +82,22 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         });
     }
 
-    //to searchView, recycleBin Search
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(boolean isDeleted, String keyWord, int sort) {
-        LiveData<List<CategoryFolderTuple>> folderTuplesLive = getSearchFolderTuplesLive(isDeleted, keyWord);
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, isDeleted);
+    //to searchView
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord, int sort) {
+        LiveData<List<CategoryFolderTuple>> folderTuplesLive = getSearchFolderTuplesLive(false, keyWord);
+        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, false);
 
         return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, sort);
     }
+
+    //to recycleBin search
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyWord) {
+        LiveData<List<CategoryFolderTuple>> folderTuplesLive = getSearchFolderTuplesLive(true, keyWord);
+        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(folderTuplesLive, true);
+
+        return this.getClassifiedFolderTuplesLive(folderTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+    }
+
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name LIKE :keyWord")
     protected abstract LiveData<List<CategoryFolderTuple>> getSearchFolderTuplesLive(boolean isDeleted, String keyWord);
@@ -216,11 +225,13 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     public abstract boolean isExistingFolderName(String folderName, long parentId);
 
     public interface FolderDaoInterface {
-        LiveData<List<List<CategoryFolderTuple>>> getClassifiedFolderTuplesLive(int sort);
+        LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedFolderTuplesLive();
 
-        LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId(long parentId, int sort);
+        LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId(long parentId);
 
-        LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(boolean isDeleted, String keyWord, int sort);
+        LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord);
+
+        LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyWord);
 
         List<CategoryFolderTuple> getFolderTuplesByParentIndex(byte parentIndex);
 
