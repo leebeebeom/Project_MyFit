@@ -1,5 +1,7 @@
 package com.example.myfit.data.model.tuple;
 
+import java.util.Objects;
+
 public class BaseTuple {
     private long id;
     private byte parentIndex;
@@ -36,5 +38,21 @@ public class BaseTuple {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseTuple)) return false;
+        BaseTuple baseTuple = (BaseTuple) o;
+        return getId() == baseTuple.getId() &&
+                getParentIndex() == baseTuple.getParentIndex() &&
+                getOrderNumber() == baseTuple.getOrderNumber() &&
+                getName().equals(baseTuple.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getParentIndex(), getOrderNumber(), getName());
     }
 }
