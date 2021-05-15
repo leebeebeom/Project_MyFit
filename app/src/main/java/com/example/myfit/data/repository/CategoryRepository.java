@@ -62,7 +62,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
             } catch (Exception e) {
                 logE(e);
             }
-        });
+        }).start();
         return categoryTuplesLive;
     }
 
@@ -78,7 +78,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
             } catch (Exception e) {
                 logE(e);
             }
-        });
+        }).start();
         return categoryTupleLive;
     }
 
@@ -93,7 +93,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
             } catch (Exception e) {
                 logE(e);
             }
-        });
+        }).start();
         return insertIdLive;
     }
 
@@ -108,7 +108,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
             } catch (Exception e) {
                 logE(e);
             }
-        });
+        }).start();
         return insertIdsLive;
     }
 
@@ -135,7 +135,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
             } catch (Exception e) {
                 logE(e);
             }
-        });
+        }).start();
         return existCategoryNameLive;
     }
 
@@ -151,6 +151,7 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
         editor.apply();
     }
 
+    @NotNull
     private Integer getMainSort() {
         return mainSortPreference.getInt(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
     }
