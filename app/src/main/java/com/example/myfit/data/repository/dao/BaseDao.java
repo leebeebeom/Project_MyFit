@@ -17,6 +17,7 @@ import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,15 +61,18 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         }
     }
 
-    protected List<LinkedList<R>> getClassifiedListByParentIndex(List<R> tuples) {
+    protected List<List<R>> getClassifiedListByParentIndex(List<R> tuples) {
         List<LinkedList<R>> classifiedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+        List<List<R>> classifiedList2 = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         try {
             tuples.forEach(tuple -> classifiedList.get(tuple.getParentIndex()).add(tuple));
+            for (int i = 0; i < 4; i++) classifiedList2.get(i).addAll(classifiedList2.get(i));
         } catch (NullPointerException e) {
             logE(e);
         }
-        return classifiedList;
+
+        return classifiedList2;
     }
 
     protected void logE(NullPointerException e) {
