@@ -2,7 +2,7 @@ package com.example.myfit.data.model;
 
 import androidx.room.Entity;
 
-@Entity
+@Entity(primaryKeys = "id")
 public class RecentSearch extends BaseModel {
     private final String word, date;
     private final int type;
