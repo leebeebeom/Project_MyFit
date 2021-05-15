@@ -133,17 +133,6 @@ public class CategoryRepository extends BaseRepository implements CategoryDao.Ca
         return existCategoryNameLive;
     }
 
-    //from restore dialog
-    @Override
-    public LiveData<Boolean[]> isExistingCategories(long[] ids) {
-        MutableLiveData<Boolean[]> existCategoryLive = new MutableLiveData<>();
-        new Thread(() -> {
-            Boolean[] isExists = categoryDao.isExistingCategories(ids);
-            existCategoryLive.postValue(isExists);
-        });
-        return existCategoryLive;
-    }
-
     //from deleteSelectedItems, restore dialog
     @Override
     public void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted) {

@@ -203,10 +203,6 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:categoryName AND parentIndex=:parentIndex AND isDeleted = 0)")
     public abstract boolean isExistingCategoryName(String categoryName, byte parentIndex);
 
-    //from restore dialog restore category
-    @Query("SELECT EXISTS(SELECT id FROM Category WHERE id IN (:ids) AND isDeleted = 0)")
-    public abstract Boolean[] isExistingCategories(long[] ids);
-
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void updateTuple(CategoryFolderTuple categoryTuple);
 
@@ -236,7 +232,5 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted);
 
         LiveData<Boolean> isExistingCategoryName(String categoryName, byte parentIndex);
-
-        LiveData<Boolean[]> isExistingCategories(long[] ids);
     }
 }
