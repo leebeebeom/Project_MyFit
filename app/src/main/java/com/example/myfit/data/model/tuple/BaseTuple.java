@@ -7,6 +7,7 @@ public class BaseTuple {
     private byte parentIndex;
     private int orderNumber;
     private String name;
+    private long deletedTime;
 
     public long getId() {
         return id;
@@ -40,6 +41,14 @@ public class BaseTuple {
         this.name = name;
     }
 
+    public long getDeletedTime() {
+        return deletedTime;
+    }
+
+    public void setDeletedTime(long deletedTime) {
+        this.deletedTime = deletedTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,11 +57,12 @@ public class BaseTuple {
         return getId() == baseTuple.getId() &&
                 getParentIndex() == baseTuple.getParentIndex() &&
                 getOrderNumber() == baseTuple.getOrderNumber() &&
+                getDeletedTime() == baseTuple.getDeletedTime() &&
                 getName().equals(baseTuple.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getParentIndex(), getOrderNumber(), getName());
+        return Objects.hash(getId(), getParentIndex(), getOrderNumber(), getName(), getDeletedTime());
     }
 }
