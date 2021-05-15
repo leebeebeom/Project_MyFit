@@ -49,8 +49,7 @@ public class FolderRepository extends BaseRepository implements FolderDao.Folder
     @Override
     //to search
     public LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord) {
-        IntegerSharedPreferenceLiveData listSortPreferenceLive = getListSortPreferenceLive();
-        return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getSearchFolderTuplesListLive(keyWord, sort));
+        return folderDao.getSearchFolderTuplesListLive(keyWord);
     }
 
     @NotNull
