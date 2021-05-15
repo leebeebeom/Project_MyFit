@@ -4,6 +4,10 @@ public class DeletedTuple {
     private long id;
     private boolean isDeleted;
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
