@@ -1,12 +1,10 @@
 package com.example.myfit.data.model;
 
-import androidx.room.PrimaryKey;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 //TODO delete 타임 넣기
 public class BaseInfo {
-    @PrimaryKey(autoGenerate = true)
-    private long id;
     private final byte parentIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
@@ -14,14 +12,6 @@ public class BaseInfo {
     public BaseInfo(byte parentIndex, int orderNumber) {
         this.parentIndex = parentIndex;
         this.orderNumber = orderNumber;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public byte getParentIndex() {
@@ -57,11 +47,25 @@ public class BaseInfo {
         if (this == o) return true;
         if (!(o instanceof BaseInfo)) return false;
         BaseInfo baseInfo = (BaseInfo) o;
-        return getId() == baseInfo.getId();
+        return getParentIndex() == baseInfo.getParentIndex() &&
+                getOrderNumber() == baseInfo.getOrderNumber() &&
+                isDeleted() == baseInfo.isDeleted() &&
+                isDummy() == baseInfo.isDummy();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), isDummy());
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "BaseInfo{" +
+                "parentIndex=" + parentIndex +
+                ", orderNumber=" + orderNumber +
+                ", isDeleted=" + isDeleted +
+                ", dummy=" + dummy +
+                '}';
     }
 }
