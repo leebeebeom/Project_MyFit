@@ -11,16 +11,21 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.myfit.data.model.BaseModel;
+import com.example.myfit.data.model.category.CategoryDeletedRelation;
+import com.example.myfit.data.model.folder.FolderDeletedRelation;
 import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
+import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Dao
 public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
@@ -51,7 +56,7 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         return tuples.stream().mapToLong(BaseTuple::getId).toArray();
     }
 
-    protected void setItemsContentsSize(List<CategoryFolderTuple> items, int[] contentsSizes) {
+    protected void setContentsSize(List<CategoryFolderTuple> items, int[] contentsSizes) {
         try {
             int itemsSize = items.size();
             for (int i = 0; i < itemsSize; i++)
@@ -81,6 +86,48 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
 
     protected void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
         parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(isParentDeleted));
+    }
+
+    protected DeletedTuple[] getCategoryDeletedTuples(CategoryDeletedRelation[] categoryDeletedRelations) {
+        return Arrays.stream(categoryDeletedRelations)
+                .map(CategoryDeletedRelation::getCategoryDeletedTuple)
+                .toArray(DeletedTuple[]::new);
+    }
+
+    @NotNull
+    protected LinkedList<ParentDeletedTuple> getCategoryChildFolderParentDeletedTuples(CategoryDeletedRelation[] categoryDeletedTupleWithChildren) {
+        return Arrays.stream(categoryDeletedTupleWithChildren)
+                .map(CategoryDeletedRelation::getChildFolderParentDeletedTuples)
+                .flatMap(Collection::parallelStream)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    protected void setDeletedTuples(DeletedTuple[] deletedTuples, boolean isDeleted) {
+        Arrays.stream(deletedTuples)
+                .forEach(deletedTuple -> deletedTuple.setDeleted(isDeleted));
+    }
+
+    protected long[] getParentTuplesIds(@NotNull LinkedList<ParentDeletedTuple> parentDeletedTuples) {
+        return parentDeletedTuples.stream()
+                .mapToLong(ParentDeletedTuple::getId)
+                .toArray();
+    }
+
+    @NotNull
+    protected LinkedList<ParentDeletedTuple> getFolderChildFolderParentDeletedTuples(FolderDeletedRelation[] folderDeletedTupleWithChildren) {
+        return Arrays.stream(folderDeletedTupleWithChildren)
+                .map(FolderDeletedRelation::getChildFolderParentDeletedTuples)
+                .flatMap(Collection::parallelStream)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @NotNull
+    protected LinkedList<ParentDeletedTuple> getCategoryChildSizeParentDeletedTuples(CategoryDeletedRelation[] categoryDeletedTupleWithChildren) {
+        return Arrays.stream(categoryDeletedTupleWithChildren)
+                .filter(CategoryDeletedRelation::areChildSizesNotEmpty)
+                .map(CategoryDeletedRelation::getChildSizeParentDeletedTuples)
+                .flatMap(Collection::parallelStream)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
