@@ -6,6 +6,7 @@ public class BaseInfo {
     private final byte parentIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
+    private long deletedTime;
 
     public BaseInfo(byte parentIndex, int orderNumber) {
         this.parentIndex = parentIndex;
@@ -40,6 +41,14 @@ public class BaseInfo {
         this.dummy = dummy;
     }
 
+    public long getDeletedTime() {
+        return deletedTime;
+    }
+
+    public void setDeletedTime(long deletedTime) {
+        this.deletedTime = deletedTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,11 +57,12 @@ public class BaseInfo {
         return getParentIndex() == baseInfo.getParentIndex() &&
                 getOrderNumber() == baseInfo.getOrderNumber() &&
                 isDeleted() == baseInfo.isDeleted() &&
-                isDummy() == baseInfo.isDummy();
+                isDummy() == baseInfo.isDummy() &&
+                getDeletedTime() == baseInfo.getDeletedTime();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), isDummy());
+        return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), isDummy(), getDeletedTime());
     }
 }
