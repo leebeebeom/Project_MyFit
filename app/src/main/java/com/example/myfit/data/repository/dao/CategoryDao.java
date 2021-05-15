@@ -149,22 +149,22 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     }
 
 
-    private void setChildrenParentDeleted(CategoryDeletedRelation[] categoryDeletedTupleWithChildren, boolean isParentDeleted) {
+    private void setChildrenParentDeleted(CategoryDeletedRelation[] categoryDeletedTupleWithChildren, boolean isDeleted) {
         if (folderDao == null) folderDao = appDataBase.folderDao();
         if (sizeDao == null) sizeDao = appDataBase.sizeDao();
 
         LinkedList<ParentDeletedTuple> childFolderParentDeletedTuples = getCategoryChildFolderParentDeletedTuples(categoryDeletedTupleWithChildren);
         long[] childFolderIds = getParentTuplesIds(childFolderParentDeletedTuples);
         //childFolderParentDeletedTuples -> allChildFolderParentDeletedTuples
-        addAllChildFolderParentDeletedTuples(childFolderIds, childFolderParentDeletedTuples, isParentDeleted);
+        addAllChildFolderParentDeletedTuples(childFolderIds, childFolderParentDeletedTuples, !isDeleted);
 
         LinkedList<ParentDeletedTuple> childSizeParentDeletedTuples = getCategoryChildSizeParentDeletedTuples(categoryDeletedTupleWithChildren);
         long[] allFolderIds = getParentTuplesIds(childFolderParentDeletedTuples);
         //categoryChildSizesParentDeletedTuples -> allChildSizeParentDeletedTuples
-        addAllChildSizeParentDeletedTuples(allFolderIds, childSizeParentDeletedTuples, isParentDeleted);
+        addAllChildSizeParentDeletedTuples(allFolderIds, childSizeParentDeletedTuples, !isDeleted);
 
-        super.setParentDeletedTuples(childFolderParentDeletedTuples, !isParentDeleted);
-        super.setParentDeletedTuples(childSizeParentDeletedTuples, !isParentDeleted);
+        super.setParentDeletedTuples(childFolderParentDeletedTuples, isDeleted);
+        super.setParentDeletedTuples(childSizeParentDeletedTuples, isDeleted);
         folderDao.updateParentDeletedTuples(childFolderParentDeletedTuples);
         sizeDao.updateParentDeletedTuples(childFolderParentDeletedTuples);
     }
@@ -175,8 +175,8 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
      */
     private void addAllChildFolderParentDeletedTuples(long[] categoryChildFolderIds,
                                                       @NotNull LinkedList<ParentDeletedTuple> childFolderParentDeletedTuples,
-                                                      boolean isParentDeleted) {
-        FolderDeletedRelation[] childFolderDeletedRelation = folderDao.getFolderDeleteRelationByParentIds(categoryChildFolderIds, isParentDeleted);
+                                                      boolean isDeleteDenial) {
+        FolderDeletedRelation[] childFolderDeletedRelation = folderDao.getFolderDeleteRelationByParentIds(categoryChildFolderIds, isDeleteDenial);
 
         LinkedList<ParentDeletedTuple> folderChildFolderParentDeletedTuples = getFolderChildFolderParentDeletedTuples(childFolderDeletedRelation);
         childFolderParentDeletedTuples.addAll(folderChildFolderParentDeletedTuples);
@@ -186,14 +186,14 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
                 .forEach(folderDeletedRelation ->
                         addAllChildFolderParentDeletedTuples(folderDeletedRelation.getChildFolderIds(),
                                 childFolderParentDeletedTuples,
-                                isParentDeleted));
+                                isDeleteDenial));
     }
 
     /**
      * @param childrenSizeParentDeletedTuples -> allChildSizeParentDeletedTuples
      */
-    private void addAllChildSizeParentDeletedTuples(long[] allChildrenFolderIds, @NotNull LinkedList<ParentDeletedTuple> childrenSizeParentDeletedTuples, boolean isParentDeleted) {
-        childrenSizeParentDeletedTuples.addAll(sizeDao.getSizeParentDeletedTuplesByParentIds(allChildrenFolderIds, isParentDeleted));
+    private void addAllChildSizeParentDeletedTuples(long[] allChildrenFolderIds, @NotNull LinkedList<ParentDeletedTuple> childrenSizeParentDeletedTuples, boolean isDeletedDeniel) {
+        childrenSizeParentDeletedTuples.addAll(sizeDao.getSizeParentDeletedTuplesByParentIds(allChildrenFolderIds, isDeletedDeniel));
     }
 
     @Query("SELECT id,isDeleted FROM Category WHERE id IN (:ids) AND isDeleted = :isDeleted")
