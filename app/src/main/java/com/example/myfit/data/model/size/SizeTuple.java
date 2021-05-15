@@ -2,6 +2,8 @@ package com.example.myfit.data.model.size;
 
 import com.example.myfit.data.model.tuple.BaseTuple;
 
+import java.util.Objects;
+
 public class SizeTuple extends BaseTuple {
     private String brand, imageUri;
     private boolean isFavorite;
@@ -28,5 +30,21 @@ public class SizeTuple extends BaseTuple {
 
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SizeTuple)) return false;
+        if (!super.equals(o)) return false;
+        SizeTuple sizeTuple = (SizeTuple) o;
+        return isFavorite() == sizeTuple.isFavorite() &&
+                getBrand().equals(sizeTuple.getBrand()) &&
+                Objects.equals(getImageUri(), sizeTuple.getImageUri());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getBrand(), getImageUri(), isFavorite());
     }
 }

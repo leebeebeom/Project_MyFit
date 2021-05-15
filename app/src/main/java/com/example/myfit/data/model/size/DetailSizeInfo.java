@@ -1,5 +1,7 @@
 package com.example.myfit.data.model.size;
 
+import java.util.Objects;
+
 public class DetailSizeInfo {
     private String firstInfo, secondInfo, thirdInfo, fourthInfo, fifthInfo, sixthInfo;
 
@@ -49,5 +51,23 @@ public class DetailSizeInfo {
 
     public void setSixthInfo(String sixthInfo) {
         this.sixthInfo = sixthInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DetailSizeInfo)) return false;
+        DetailSizeInfo that = (DetailSizeInfo) o;
+        return Objects.equals(getFirstInfo(), that.getFirstInfo()) &&
+                Objects.equals(getSecondInfo(), that.getSecondInfo()) &&
+                Objects.equals(getThirdInfo(), that.getThirdInfo()) &&
+                Objects.equals(getFourthInfo(), that.getFourthInfo()) &&
+                Objects.equals(getFifthInfo(), that.getFifthInfo()) &&
+                Objects.equals(getSixthInfo(), that.getSixthInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getFirstInfo(), getSecondInfo(), getThirdInfo(), getFourthInfo(), getFifthInfo(), getSixthInfo());
     }
 }

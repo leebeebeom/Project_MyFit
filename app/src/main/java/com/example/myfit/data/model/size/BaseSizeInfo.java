@@ -1,5 +1,7 @@
 package com.example.myfit.data.model.size;
 
+import java.util.Objects;
+
 public class BaseSizeInfo {
     private String createdTime, modifiedTime, imageUri, brand, name, size, link, memo;
     private boolean isFavorite;
@@ -74,5 +76,26 @@ public class BaseSizeInfo {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseSizeInfo)) return false;
+        BaseSizeInfo that = (BaseSizeInfo) o;
+        return isFavorite() == that.isFavorite() &&
+                getCreatedTime().equals(that.getCreatedTime()) &&
+                Objects.equals(getModifiedTime(), that.getModifiedTime()) &&
+                Objects.equals(getImageUri(), that.getImageUri()) &&
+                getBrand().equals(that.getBrand()) &&
+                getName().equals(that.getName()) &&
+                Objects.equals(getSize(), that.getSize()) &&
+                Objects.equals(getLink(), that.getLink()) &&
+                Objects.equals(getMemo(), that.getMemo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCreatedTime(), getModifiedTime(), getImageUri(), getBrand(), getName(), getSize(), getLink(), getMemo(), isFavorite());
     }
 }

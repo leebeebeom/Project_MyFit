@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import com.example.myfit.data.model.BaseInfo;
 import com.example.myfit.data.model.BaseModel;
 
+import java.util.Objects;
+
 
 @Entity(primaryKeys = "id")
 public class Size extends BaseModel {
@@ -173,5 +175,22 @@ public class Size extends BaseModel {
 
     public void setDetailSizeInfo(DetailSizeInfo detailSizeInfo) {
         this.detailSizeInfo = detailSizeInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Size)) return false;
+        if (!super.equals(o)) return false;
+        Size size = (Size) o;
+        return getParentId() == size.getParentId() &&
+                isParentDeleted() == size.isParentDeleted() &&
+                Objects.equals(getBaseSizeInfo(), size.getBaseSizeInfo()) &&
+                Objects.equals(getDetailSizeInfo(), size.getDetailSizeInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getBaseSizeInfo(), getDetailSizeInfo(), getParentId(), isParentDeleted());
     }
 }
