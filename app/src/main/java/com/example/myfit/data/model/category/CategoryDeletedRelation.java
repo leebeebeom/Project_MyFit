@@ -10,7 +10,7 @@ import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 
 import java.util.List;
 
-public class CategoryDeletedTuple {
+public class CategoryDeletedRelation {
     @Embedded
     private DeletedTuple categoryDeletedTuple;
 
@@ -30,8 +30,8 @@ public class CategoryDeletedTuple {
         return categoryDeletedTuple;
     }
 
-    public void setCategoryDeleted() {
-        categoryDeletedTuple.setDeleted(true);
+    public void setCategoryDeleted(boolean isDeleted) {
+        categoryDeletedTuple.setDeleted(isDeleted);
     }
 
     public long[] getChildFolderIds() {
@@ -52,5 +52,17 @@ public class CategoryDeletedTuple {
 
     public List<ParentDeletedTuple> getChildSizeParentDeletedTuples() {
         return childSizeParentDeletedTuples;
+    }
+
+    public void setCategoryDeletedTuple(DeletedTuple categoryDeletedTuple) {
+        this.categoryDeletedTuple = categoryDeletedTuple;
+    }
+
+    public void setChildFolderParentDeletedTuples(List<ParentDeletedTuple> childFolderParentDeletedTuples) {
+        this.childFolderParentDeletedTuples = childFolderParentDeletedTuples;
+    }
+
+    public void setChildSizeParentDeletedTuples(List<ParentDeletedTuple> childSizeParentDeletedTuples) {
+        this.childSizeParentDeletedTuples = childSizeParentDeletedTuples;
     }
 }
