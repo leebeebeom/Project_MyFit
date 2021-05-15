@@ -10,7 +10,6 @@ import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.repository.dao.BaseDao;
-import com.example.myfit.util.SortUtil;
 
 import java.util.List;
 
@@ -45,20 +44,7 @@ public class BaseRepository implements BaseDao.BaseDaoInterFace {
         });
     }
 
-    protected void orderCategoryFolderTuplesList(int sort, List<List<CategoryFolderTuple>> categoryFolderTuplesList) {
-        try {
-            categoryFolderTuplesList
-                    .forEach(categoryFolderTuples -> SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuples));
-        } catch (NullPointerException e) {
-            Log.e("에러", "orderCategoryTuplesList: Null Point Exception");
-        }
-    }
-
-    protected void orderCategoryFolderTuples(int sort, List<CategoryFolderTuple> categoryFolderTuplesList) {
-        try {
-            SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuplesList);
-        } catch (NullPointerException e) {
-            Log.e("에러", "orderCategoryTuplesList: Null Point Exception");
-        }
+    protected void logE(Exception e) {
+        Log.e("에러", "logE: " + e.getMessage(), e);
     }
 }
