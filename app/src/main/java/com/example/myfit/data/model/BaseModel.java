@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class BaseModel {
     @Embedded
-    private final BaseInfo baseInfo;
+    private  BaseInfo baseInfo;
 
     public BaseModel(@NotNull BaseInfo baseInfo) {
         this.baseInfo = baseInfo;
@@ -44,6 +44,14 @@ public class BaseModel {
 
     public void setDummy() {
         this.baseInfo.setDummy(!isDummy());
+    }
+
+    public BaseInfo getBaseInfo() {
+        return baseInfo;
+    }
+
+    public void setBaseInfo(BaseInfo baseInfo) {
+        this.baseInfo = baseInfo;
     }
 
     @Override
