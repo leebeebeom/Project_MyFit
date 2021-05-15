@@ -62,7 +62,7 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
             int itemsSize = items.size();
             for (int i = 0; i < itemsSize; i++)
                 items.get(i).setContentsSize(contentsSizes[i]);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             logE(e);
         }
     }
@@ -81,8 +81,8 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         return classifiedList2;
     }
 
-    protected void logE(NullPointerException e) {
-        Log.e("에러", "Null Pointer Exception" + e.getMessage(), e);
+    protected void logE(Exception e) {
+        Log.e("에러", "Exception " + e.getMessage(), e);
     }
 
     protected void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
