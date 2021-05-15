@@ -189,7 +189,7 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
 
         LiveData<List<String>> getDeletedAutoCompleteWordsLive();
 
-        fLiveData<Boolean[]> isExistingParents(long ids);
+        LiveData<Boolean[]> isExistingParents(long ids);
     }
 
 }

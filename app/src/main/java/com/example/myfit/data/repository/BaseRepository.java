@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.AppDataBase;
@@ -42,6 +43,16 @@ public class BaseRepository implements BaseDao.BaseDaoInterFace {
             deletedAutoCompleteWords.sort(String::compareTo);
             return deletedAutoCompleteWords;
         });
+    }
+
+    @Override
+    public LiveData<Boolean[]> isExistingParents(long ids) {
+        MutableLiveData<Boolean[]> isExistingParentsLive = new MutableLiveData<>();
+        new Thread(() -> {
+            Boolean[] existingParents = baseDao.isExistingParents(ids);
+            isExistingParentsLive.postValue(existingParents);
+        });
+        return isExistingParentsLive;
     }
 
     protected void logE(Exception e) {
