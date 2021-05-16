@@ -83,9 +83,9 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Transaction
     //from addCategory Dialog
-    public long insert(String categoryName, byte parentIndex) {
+    public long insert(String name, byte parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
-        Category category = ModelFactory.makeCategory(categoryName, parentIndex, orderNumber);
+        Category category = ModelFactory.makeCategory(name, parentIndex, orderNumber);
         return insert(category);
     }
 
@@ -121,14 +121,18 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void update(CategoryFolderTuple categoryTuple);
 
+    //from adapter drag drop
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
+    public abstract void update(LinkedList<CategoryFolderTuple> categoryTuples);
+
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] categoryIds, boolean isDeleted) {
-        DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(categoryIds);
+    public void deleteOrRestore(long[] ids, boolean isDeleted) {
+        DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples, isDeleted);
         this.update(deletedTuples);
 
-        this.setChildrenParentDeleted(categoryIds, isDeleted);
+        this.setChildrenParentDeleted(ids, isDeleted);
     }
 
     @Query("SELECT id, isDeleted FROM Category WHERE id IN (:ids)")
@@ -138,10 +142,6 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     protected abstract void update(DeletedTuple[] deletedTuples);
 
     //from addCategory dialog
-    @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:categoryName AND parentIndex=:parentIndex AND isDeleted = 0)")
-    public abstract boolean isExistingName(String categoryName, byte parentIndex);
-
-    //from adapter drag drop
-    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void update(LinkedList<CategoryFolderTuple> categoryTuples);
+    @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND isDeleted = 0)")
+    public abstract boolean isExistingName(String name, byte parentIndex);
 }
