@@ -141,28 +141,4 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     public abstract void update(LinkedList<CategoryFolderTuple> categoryTuples);
-
-    public interface CategoryDaoInterFace {
-        LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive();
-
-        LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedCategoryTuplesLive();
-
-        LiveData<List<List<CategoryFolderTuple>>> getSearchCategoryTuplesList(String keyWord);
-
-        LiveData<List<CategoryFolderTuple>> getCategoryTuplesByParentIndex(byte parentIndex);
-
-        LiveData<CategoryFolderTuple> getCategoryTupleById(long id);
-
-        LiveData<Long> insertCategory(String categoryName, byte parentIndex);
-
-        LiveData<Long[]> insertRestoreCategories(@NotNull byte[] parentIndex);
-
-        void updateCategory(long id, String name);
-
-        void updateCategories(LinkedList<CategoryFolderTuple> categoryTuples);
-
-        void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted);
-
-        LiveData<Boolean> isExistingCategoryName(String categoryName, byte parentIndex);
-    }
 }

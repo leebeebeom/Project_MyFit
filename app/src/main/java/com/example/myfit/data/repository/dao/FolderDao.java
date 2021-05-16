@@ -18,7 +18,6 @@ import com.example.myfit.util.constant.SortValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 @Dao
@@ -158,32 +157,4 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     //from addFolder dialog
     @Query("SELECT EXISTS(SELECT name, parentId FROM Folder WHERE name =:folderName AND parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0)")
     public abstract boolean isExistingFolderName(String folderName, long parentId);
-
-    public interface FolderDaoInterface {
-        LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedFolderTuplesLive();
-
-        LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId(long parentId);
-
-        LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord);
-
-        LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyWord);
-
-        LiveData<List<CategoryFolderTuple>> getFolderTuplesByParentIndex(byte parentIndex);
-
-        LiveData<CategoryFolderTuple> getFolderTupleById(long id);
-
-        LiveData<Folder> getFolderLiveById(long id);
-
-        LiveData<Long> insertFolder(String name, long parentId, byte parentIndex);
-
-        void updateFolder(long id, String name);
-
-        void updateFolders(LinkedList<CategoryFolderTuple> folderTuple);
-
-        void moveFolders(long targetId, long[] folderIds);
-
-        void deleteOrRestoreFolders(long[] folderIds, boolean isDeleted);
-
-        LiveData<Boolean> isExistingFolderName(String folderName, long parentId);
-    }
 }
