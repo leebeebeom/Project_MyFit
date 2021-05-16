@@ -134,6 +134,9 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(Size size);
+
     @Query("SELECT max(orderNumber) FROM Size")
     public abstract int getSizeLargestOrder();
 }
