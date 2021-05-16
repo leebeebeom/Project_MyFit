@@ -204,10 +204,4 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     protected abstract long insert(T item);
 
-    public interface BaseDaoInterFace {
-        LiveData<List<String>> getAutoCompleteWordsLive();
-
-        LiveData<List<String>> getDeletedAutoCompleteWordsLive();
-    }
-
 }
