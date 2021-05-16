@@ -73,7 +73,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
-    public abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
+    protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
 
     //to search
     public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(String keyWord) {
@@ -92,7 +92,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
             "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand LIKE :keyWord ORDER BY name")
     protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean isDeleted, String keyWord);
 
-    //to sizeFragment
+    //to sizeFragment(disposable)
     public List<String> getBrands() {
         List<String> brands = this.getBrands2();
         brands.sort(String::compareTo);
@@ -105,6 +105,15 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     //to sizeFragment
     @Query("SELECT * FROM Size WHERE id = :id")
     public abstract Size getSizeById(long id);
+
+    public void insertSize(@NotNull Size size) {
+        int orderNumber = getLargestOrder() + 1;
+        size.setOrderNumber(orderNumber);
+        insert(size);
+    }
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(Size size);
 
     @Transaction
     //from move dialog
@@ -135,9 +144,6 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void update(Size size);
-
     @Query("SELECT max(orderNumber) FROM Size")
-    public abstract int getSizeLargestOrder();
+    protected abstract int getLargestOrder();
 }
