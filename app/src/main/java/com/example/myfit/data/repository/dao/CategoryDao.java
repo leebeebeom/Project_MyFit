@@ -3,7 +3,6 @@ package com.example.myfit.data.repository.dao;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -45,7 +44,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         LiveData<List<CategoryFolderTuple>> tuplesLive = this.getTuplesLive(false);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
 
-        return getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
+        return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
     //to recycleBin
@@ -53,31 +52,18 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getTuplesLive(true);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
 
-        return getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted")
     protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLive(boolean isDeleted);
-
-    @NotNull
-    private LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryFolderTuple>> tuplesLive,
-                                                                              LiveData<int[]> contentsSizesLive,
-                                                                              int sort) {
-        return Transformations.map(contentsSizesLive, contentsSizes -> {
-            List<CategoryFolderTuple> tuples = tuplesLive.getValue();
-            super.setContentsSize(tuples, contentsSizes);
-            super.orderTuples(sort, tuples);
-            return super.getClassifiedTuplesByParentIndex(tuples);
-        });
-    }
-
 
     //to recycleBin search (maybe searchView?)
     public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive(String keyWord) {
         LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getSearchTuplesLive(keyWord, true);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
-        return getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
+        return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted AND name LIKE :keyWord")
