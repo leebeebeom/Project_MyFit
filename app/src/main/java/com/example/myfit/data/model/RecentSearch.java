@@ -1,19 +1,29 @@
 package com.example.myfit.data.model;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
 @Entity
-public class RecentSearch extends BaseModel {
+public class RecentSearch {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     private final String word, date;
     private final int type;
 
     public RecentSearch(String word, String date, int type) {
-        super(new BaseInfo((byte) -1, -1));
         this.word = word;
         this.date = date;
         this.type = type;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getWord() {
@@ -32,15 +42,15 @@ public class RecentSearch extends BaseModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RecentSearch)) return false;
-        if (!super.equals(o)) return false;
         RecentSearch that = (RecentSearch) o;
-        return getType() == that.getType() &&
+        return getId() == that.getId() &&
+                getType() == that.getType() &&
                 getWord().equals(that.getWord()) &&
                 getDate().equals(that.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getWord(), getDate(), getType());
+        return Objects.hash(getId(), getWord(), getDate(), getType());
     }
 }
