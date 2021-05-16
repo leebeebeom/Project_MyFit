@@ -123,16 +123,16 @@ public class CategoryRepository extends BaseRepository {
 
     //from addCategory Dialog
     public LiveData<Boolean> isExistingName(String name, byte parentIndex) {
-        MutableLiveData<Boolean> existCategoryNameLive = new MutableLiveData<>();
+        MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
             try {
                 boolean isExistName = categoryDao.isExistingName(name, parentIndex);
-                existCategoryNameLive.postValue(isExistName);
+                isExistNameLive.postValue(isExistName);
             } catch (Exception e) {
                 logE(e);
             }
         }).start();
-        return existCategoryNameLive;
+        return isExistNameLive;
     }
 
     public void setMainSortPreferenceValue(int sort) {
