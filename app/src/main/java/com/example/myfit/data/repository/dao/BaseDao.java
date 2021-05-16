@@ -57,6 +57,18 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         return tuples.stream().mapToLong(BaseTuple::getId).toArray();
     }
 
+    @NotNull
+    protected LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryFolderTuple>> tuplesLive,
+                                                                              LiveData<int[]> contentsSizesLive,
+                                                                              int sort) {
+        return Transformations.map(contentsSizesLive, contentsSizes -> {
+            List<CategoryFolderTuple> tuples = tuplesLive.getValue();
+            setContentsSize(tuples, contentsSizes);
+            orderTuples(sort, tuples);
+            return getClassifiedTuplesByParentIndex(tuples);
+        });
+    }
+
     protected void setContentsSize(List<CategoryFolderTuple> items, int[] contentsSizes) {
         try {
             int itemsSize = items.size();
@@ -67,9 +79,17 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         }
     }
 
-    protected List<List<R>> getClassifiedTuplesByParentIndex(List<R> tuples) {
-        List<LinkedList<R>> classifiedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-        List<List<R>> classifiedList2 = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    protected void orderTuples(int sort, List<CategoryFolderTuple> categoryFolderTuplesList) {
+        try {
+            SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuplesList);
+        } catch (NullPointerException e) {
+            logE(e);
+        }
+    }
+
+    protected List<List<CategoryFolderTuple>> getClassifiedTuplesByParentIndex(List<CategoryFolderTuple> tuples) {
+        List<LinkedList<CategoryFolderTuple>> classifiedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+        List<List<CategoryFolderTuple>> classifiedList2 = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         try {
             tuples.forEach(tuple -> classifiedList.get(tuple.getParentIndex()).add(tuple));
@@ -114,14 +134,6 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
 
     private void clearDeletedTime(DeletedTuple[] deletedTuples) {
         Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(0));
-    }
-
-    protected void orderTuples(int sort, List<CategoryFolderTuple> categoryFolderTuplesList) {
-        try {
-            SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuplesList);
-        } catch (NullPointerException e) {
-            logE(e);
-        }
     }
 
     protected void orderSizeTuples(int sort, List<SizeTuple> sizeTuples) {
