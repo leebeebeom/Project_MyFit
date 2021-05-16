@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public abstract class RecentSearchDao {
     @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY date DESC LIMIT 20")
-    protected abstract LiveData<List<RecentSearch>> getLiveByType(byte type);
+    public abstract LiveData<List<RecentSearch>> getLiveByType(byte type);
 
     @Transaction
     public void insert(String word, byte type) {
@@ -35,7 +35,7 @@ public abstract class RecentSearchDao {
     protected abstract void insert(RecentSearch recentSearch);
 
     @Delete
-    protected abstract void delete(RecentSearch recentSearch);
+    public abstract void delete(RecentSearch recentSearch);
 
     @Query("DELETE FROM RecentSearch")
     public abstract void deleteAllRecentSearch();
