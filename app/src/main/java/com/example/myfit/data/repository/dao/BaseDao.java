@@ -8,8 +8,11 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.myfit.data.model.BaseModel;
+import com.example.myfit.data.model.folder.Folder;
+import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
@@ -57,10 +60,14 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         return tuples.stream().mapToLong(BaseTuple::getId).toArray();
     }
 
+    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
+            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted))")
+    protected abstract LiveData<int[]> getContentsSizesLiveByParentIds(long[] parentIds, boolean isParentDeleted);
+
     @NotNull
     protected LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryFolderTuple>> tuplesLive,
-                                                                              LiveData<int[]> contentsSizesLive,
-                                                                              int sort) {
+                                                                                LiveData<int[]> contentsSizesLive,
+                                                                                int sort) {
         return Transformations.map(contentsSizesLive, contentsSizes -> {
             List<CategoryFolderTuple> tuples = tuplesLive.getValue();
             setContentsSize(tuples, contentsSizes);
@@ -87,26 +94,31 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         }
     }
 
-    protected List<List<CategoryFolderTuple>> getClassifiedTuplesByParentIndex(List<CategoryFolderTuple> tuples) {
-        List<LinkedList<CategoryFolderTuple>> classifiedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-        List<List<CategoryFolderTuple>> classifiedList2 = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    protected void orderSizeTuples(int sort, List<SizeTuple> sizeTuples) {
+        try {
+            SortUtil.orderSizeTuples(sort, sizeTuples);
+        } catch (NullPointerException e) {
+            logE(e);
+        }
+    }
+
+    @NotNull
+    private List<List<CategoryFolderTuple>> getClassifiedTuplesByParentIndex(List<CategoryFolderTuple> tuples) {
+        List<LinkedList<CategoryFolderTuple>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+        List<List<CategoryFolderTuple>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         try {
-            tuples.forEach(tuple -> classifiedList.get(tuple.getParentIndex()).add(tuple));
-            for (int i = 0; i < 4; i++) classifiedList2.get(i).addAll(classifiedList2.get(i));
+            tuples.forEach(tuple -> classifiedLinkedList.get(tuple.getParentIndex()).add(tuple));
+            for (int i = 0; i < 4; i++) classifiedList.get(i).addAll(classifiedLinkedList.get(i));
         } catch (NullPointerException e) {
             logE(e);
         }
 
-        return classifiedList2;
+        return classifiedList;
     }
 
     protected void logE(Exception e) {
         Log.e("에러", "Exception " + e.getMessage(), e);
-    }
-
-    protected void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
-        parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(isParentDeleted));
     }
 
     protected void setDeletedTuples(DeletedTuple[] deletedTuples, boolean isDeleted) {
@@ -121,10 +133,7 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     private void setDeletedTime(@NotNull DeletedTuple[] deletedTuples) {
         long currentTime = getCurrentTime();
         int count = deletedTuples.length;
-        for (DeletedTuple deletedTuple : deletedTuples) {
-            deletedTuple.setDeletedTime(currentTime);
-            currentTime++;
-        }
+        Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(currentTime));
     }
 
     private long getCurrentTime() {
@@ -136,17 +145,52 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(0));
     }
 
-    protected void orderSizeTuples(int sort, List<SizeTuple> sizeTuples) {
-        try {
-            SortUtil.orderSizeTuples(sort, sizeTuples);
-        } catch (NullPointerException e) {
-            logE(e);
+    protected void setChildrenParentDeleted(long[] categoryIds, boolean isDeleted) {
+        LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
+        addAllChildFolderParentDeletedTuples(categoryIds, allFolderParentDeletedTuples);
+
+        LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = new LinkedList<>(this.getSizeParentDeletedTuplesByParentIds(categoryIds));
+        long[] allFolderIds = allFolderParentDeletedTuples.stream()
+                .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
+                .mapToLong(ParentDeletedTuple::getId).toArray();
+        addAllChildSizeParentDeletedTuples(allFolderIds, allSizeParentDeletedTuples);
+
+        setParentDeletedTuples(allFolderParentDeletedTuples, isDeleted);
+        setParentDeletedTuples(allSizeParentDeletedTuples, isDeleted);
+        updateFolderParentDeletedTuples(allFolderParentDeletedTuples);
+        updateSizeParentDeletedTuples(allSizeParentDeletedTuples);
+    }
+
+    protected void addAllChildFolderParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
+        List<ParentDeletedTuple> childFolderParentDeletedTuples = this.getFolderParentDeletedTuplesByParentIds(parentIds);
+        if (!childFolderParentDeletedTuples.isEmpty()) {
+            allParentDeletedTuples.addAll(childFolderParentDeletedTuples);
+            long[] childFolderIds = childFolderParentDeletedTuples.stream()
+                    .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
+                    .mapToLong(ParentDeletedTuple::getId).toArray();
+            addAllChildFolderParentDeletedTuples(childFolderIds, allParentDeletedTuples);
         }
     }
 
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = :isParentDeleted))")
-    protected abstract LiveData<int[]> getContentsSizesLiveByParentIds(long[] parentIds, boolean isParentDeleted);
+    @Query("SELECT id, isParentDeleted FROM Folder WHERE parentId IN (:parentIds)")
+    protected abstract List<ParentDeletedTuple> getFolderParentDeletedTuplesByParentIds(long[] parentIds);
+
+    protected void addAllChildSizeParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
+        allParentDeletedTuples.addAll(getSizeParentDeletedTuplesByParentIds(parentIds));
+    }
+
+    @Query("SELECT id, isParentDeleted FROM Size WHERE parentId IN(:parentIds)")
+    protected abstract List<ParentDeletedTuple> getSizeParentDeletedTuplesByParentIds(long[] parentIds);
+
+    protected void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
+        parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(isParentDeleted));
+    }
+
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
+    protected abstract void updateFolderParentDeletedTuples(List<ParentDeletedTuple> parentDeletedTuples);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
+    protected abstract void updateSizeParentDeletedTuples(List<ParentDeletedTuple> parentDeletedTuples);
 
     @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = 0) + " +
             "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = 0))")
