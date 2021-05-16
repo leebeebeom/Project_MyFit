@@ -13,12 +13,9 @@ import com.example.myfit.data.repository.dao.BaseDao;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class BaseRepository {
     private final BaseDao<Category, CategoryFolderTuple> baseDao;
 
-    @Inject
     public BaseRepository(Context context) {
         AppDataBase appDataBase = AppDataBase.getsInstance(context);
         baseDao = appDataBase.baseDao();
