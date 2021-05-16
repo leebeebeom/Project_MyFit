@@ -5,28 +5,38 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
+import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.RecentSearch;
 
 import java.util.List;
 
 @Dao
-public interface RecentSearchDao {
-    @Query("SELECT * FROM RecentSearch WHERE type = :type LIMIT 20")
-    LiveData<List<RecentSearch>> getRecentSearchesLiveByType(int type);
+public abstract class RecentSearchDao {
+    @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY date DESC LIMIT 20")
+    protected abstract LiveData<List<RecentSearch>> getLiveByType(byte type);
 
-    @Query("SELECT word FROM RecentSearch")
-    List<String> getRecentSearchStrings();
+    @Transaction
+    public void insert(String word, byte type) {
+        if (isExistingWord(word, type)) delete(word);
 
-    @Query("SELECT * FROM RecentSearch WHERE word = :word")
-    RecentSearch getRecentSearchByWord(String word);
+        RecentSearch recentSearch = ModelFactory.makeRecentSearch(word, type);
+        insert(recentSearch);
+    }
+
+    @Query("SELECT EXISTS(SELECT word FROM RecentSearch WHERE word = :word AND type = :type)")
+    protected abstract boolean isExistingWord(String word, byte type);
+
+    @Query("DELETE FROM RecentSearch WHERE word = :word")
+    protected abstract void delete(String word);
 
     @Insert
-    long insertRecentSearch(RecentSearch recentSearch);
+    protected abstract void insert(RecentSearch recentSearch);
 
     @Delete
-    void deleteRecentSearch(RecentSearch recentSearch);
+    protected abstract void delete(RecentSearch recentSearch);
 
     @Query("DELETE FROM RecentSearch")
-    void deleteAllRecentSearch();
+    public abstract void deleteAllRecentSearch();
 }
