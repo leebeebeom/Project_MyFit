@@ -107,6 +107,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     public abstract LiveData<Folder> getSingleLiveById(long id);
 
     @Transaction
+    //from addFolder dialog
     public long insert(String name, long parentId, byte parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Folder folder = ModelFactory.makeFolder(name, parentId, parentIndex, orderNumber);
@@ -115,7 +116,9 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
     @Query("SELECT max(orderNumber) FROM Folder")
     protected abstract int getLargestOrderNumber();
+
     @Transaction
+    //from editFolderName dialog
     public void update(long id, String name) {
         CategoryFolderTuple tuple = this.getTupleById2(id);
         tuple.setName(name);
@@ -125,9 +128,14 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     protected abstract void update(CategoryFolderTuple tuple);
 
+    //from adapter drag drop
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
+    public abstract void update(List<CategoryFolderTuple> tuples);
+
     @Transaction
-    public void move(long targetId, long[] folderIds) {
-        ParentIdTuple[] parentIdTuples = this.getParentIdTuplesByIds(folderIds);
+    //from move dialog
+    public void move(long targetId, long[] ids) {
+        ParentIdTuple[] parentIdTuples = this.getParentIdTuplesByIds(ids);
         Arrays.stream(parentIdTuples)
                 .forEach(parentIdTuple -> parentIdTuple.setParentId(targetId));
         this.update(parentIdTuples);
@@ -140,12 +148,13 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     protected abstract void update(ParentIdTuple[] parentIdTuples);
 
     @Transaction
-    public void deleteOrRestore(long[] folderIds, boolean isDeleted) {
-        DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(folderIds);
+    //from delete, restore dialog
+    public void deleteOrRestore(long[] ids, boolean isDeleted) {
+        DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples, isDeleted);
         this.update(deletedTuples);
 
-        super.setChildrenParentDeleted(folderIds, isDeleted);
+        super.setChildrenParentDeleted(ids, isDeleted);
     }
 
     @Query("SELECT id, isDeleted FROM Folder WHERE id IN (:ids)")
@@ -155,6 +164,6 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     protected abstract void update(DeletedTuple[] deletedTuples);
 
     //from addFolder dialog
-    @Query("SELECT EXISTS(SELECT name, parentId FROM Folder WHERE name =:folderName AND parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0)")
-    public abstract boolean isExistingFolderName(String folderName, long parentId);
+    @Query("SELECT EXISTS(SELECT name, parentId FROM Folder WHERE name =:name AND parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0)")
+    public abstract boolean isExistingName(String name, long parentId);
 }
