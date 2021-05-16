@@ -1,7 +1,5 @@
 package com.example.myfit.data.repository.dao;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -10,13 +8,10 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.R;
-import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
-import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,20 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 @Dao
 public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple> {
-    private FolderDao folderDao;
-    private SizeDao sizeDao;
-    private final AppDataBase appDataBase;
-    private final Context context;
-
-    @Inject
-    public CategoryDao(Context context) {
-        this.context = context;
-        this.appDataBase = AppDataBase.getsInstance(context);
-    }
 
     //to main
     public LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(int sort) {
@@ -69,7 +52,6 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted AND name LIKE :keyWord")
     protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(String keyWord, boolean isDeleted);
 
-
     @Transaction
     //to treeView (disposable)
     public List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
@@ -83,7 +65,6 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
     protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
-
 
     @Transaction
     //to treeView
@@ -111,7 +92,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Transaction
     //from restore Dialog
     public Long[] insertRestoreCategories(@NotNull byte[] parentIndex) {
-        String name = context.getString(R.string.restore_category_name);
+        String name = "복구됨";
         int orderNumber = this.getLargestOrderNumber() + 1;
 
         int count = parentIndex.length;
@@ -128,7 +109,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Transaction
     //from nameEdit dialog
-    public void updateCategory(long id, String name) {
+    public void update(long id, String name) {
         CategoryFolderTuple tuple = this.getTupleById2(id);
         tuple.setName(name);
         this.update(tuple);
@@ -152,41 +133,6 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void update(DeletedTuple[] deletedTuples);
-
-    private void setChildrenParentDeleted(long[] categoryIds, boolean isDeleted) {
-        if (folderDao == null) folderDao = appDataBase.folderDao();
-        if (sizeDao == null) sizeDao = appDataBase.sizeDao();
-
-        LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
-        this.addAllChildFolderParentDeletedTuples(categoryIds, allFolderParentDeletedTuples);
-
-        LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = new LinkedList<>(sizeDao.getParentDeletedTuplesByParentIds(categoryIds));
-        long[] allFolderIds = allFolderParentDeletedTuples.stream()
-                .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
-                .mapToLong(ParentDeletedTuple::getId).toArray();
-        //categoryChildSizesParentDeletedTuples -> allChildSizeParentDeletedTuples
-        this.addAllChildSizeParentDeletedTuples(allFolderIds, allSizeParentDeletedTuples);
-
-        super.setParentDeletedTuples(allFolderParentDeletedTuples, isDeleted);
-        super.setParentDeletedTuples(allSizeParentDeletedTuples, isDeleted);
-        folderDao.update(allFolderParentDeletedTuples);
-        sizeDao.update(allSizeParentDeletedTuples);
-    }
-
-    private void addAllChildFolderParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
-        List<ParentDeletedTuple> childFolderParentDeletedTuples = folderDao.getParentDeletedTuplesByParentIds(parentIds);
-        if (!childFolderParentDeletedTuples.isEmpty()) {
-            allParentDeletedTuples.addAll(childFolderParentDeletedTuples);
-            long[] childFolderIds = childFolderParentDeletedTuples.stream()
-                    .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
-                    .mapToLong(ParentDeletedTuple::getId).toArray();
-            addAllChildFolderParentDeletedTuples(childFolderIds, allParentDeletedTuples);
-        }
-    }
-
-    private void addAllChildSizeParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
-        allParentDeletedTuples.addAll(sizeDao.getParentDeletedTuplesByParentIds(parentIds));
-    }
 
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:categoryName AND parentIndex=:parentIndex AND isDeleted = 0)")
