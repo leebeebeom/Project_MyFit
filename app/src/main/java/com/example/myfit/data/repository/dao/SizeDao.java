@@ -5,6 +5,7 @@ import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.myfit.data.model.size.Size;
@@ -107,6 +108,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     @Query("SELECT * FROM Size WHERE id = :id")
     public abstract Size getSizeById(long id);
 
+    @Transaction
     //from move dialog
     public void move(long targetId, long[] ids) {
         ParentIdTuple[] parentIdTuples = this.getParentIdTuples(ids);
@@ -121,6 +123,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void update(ParentIdTuple[] parentIdTuples);
 
+    @Transaction
     //from selectedItemDelete, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         DeletedTuple[] sizeDeletedTuples = getDeletedTuples(ids);
