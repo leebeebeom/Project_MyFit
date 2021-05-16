@@ -73,12 +73,12 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Transaction
     //to treeView (disposable)
     public List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
-        List<CategoryFolderTuple> categoryTuples = this.getTuplesByParentIndex(parentIndex);
-        long[] categoryIds = super.getItemIds(categoryTuples);
-        int[] contentsSizes = getContentsSizesByParentIds(categoryIds);
-        super.setContentsSize(categoryTuples, contentsSizes);
-        super.orderTuples(sort, categoryTuples);
-        return categoryTuples;
+        List<CategoryFolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
+        long[] ids = super.getItemIds(tuples);
+        int[] contentsSizes = getContentsSizesByParentIds(ids);
+        super.setContentsSize(tuples, contentsSizes);
+        super.orderTuples(sort, tuples);
+        return tuples;
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
@@ -88,10 +88,10 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Transaction
     //to treeView
     public CategoryFolderTuple getTupleById(long id) {
-        CategoryFolderTuple categoryTuple = this.getTupleById2(id);
+        CategoryFolderTuple tuple = this.getTupleById2(id);
         int contentsSize = getContentsSizeByParentId(id);
-        categoryTuple.setContentsSize(contentsSize);
-        return categoryTuple;
+        tuple.setContentsSize(contentsSize);
+        return tuple;
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE id = :id AND isDeleted = 0")
@@ -99,7 +99,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     @Transaction
     //from addCategory Dialog
-    public long insertCategory(String categoryName, byte parentIndex) {
+    public long insert(String categoryName, byte parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Category category = ModelFactory.makeCategory(categoryName, parentIndex, orderNumber);
         return insert(category);
@@ -111,13 +111,13 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Transaction
     //from restore Dialog
     public Long[] insertRestoreCategories(@NotNull byte[] parentIndex) {
-        String restoreCategoryName = context.getString(R.string.restore_category_name);
+        String name = context.getString(R.string.restore_category_name);
         int orderNumber = this.getLargestOrderNumber() + 1;
 
         int count = parentIndex.length;
         Category[] categories = new Category[count];
         for (int i = 0; i < count; i++) {
-            categories[i] = ModelFactory.makeCategory(restoreCategoryName, parentIndex[i], orderNumber);
+            categories[i] = ModelFactory.makeCategory(name, parentIndex[i], orderNumber);
             orderNumber++;
         }
         return this.insert(categories);
@@ -129,20 +129,20 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     @Transaction
     //from nameEdit dialog
     public void updateCategory(long id, String name) {
-        CategoryFolderTuple categoryTuple = this.getTupleById2(id);
-        categoryTuple.setName(name);
-        this.updateTuple(categoryTuple);
+        CategoryFolderTuple tuple = this.getTupleById2(id);
+        tuple.setName(name);
+        this.update(tuple);
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    protected abstract void updateTuple(CategoryFolderTuple categoryTuple);
+    protected abstract void update(CategoryFolderTuple categoryTuple);
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestoreCategories(long[] categoryIds, boolean isDeleted) {
-        DeletedTuple[] categoryDeletedTuples = this.getDeletedTuplesByIds(categoryIds);
-        super.setDeletedTuples(categoryDeletedTuples, isDeleted);
-        this.updateDeletedTuples(categoryDeletedTuples);
+    public void deleteOrRestore(long[] categoryIds, boolean isDeleted) {
+        DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(categoryIds);
+        super.setDeletedTuples(deletedTuples, isDeleted);
+        this.update(deletedTuples);
 
         this.setChildrenParentDeleted(categoryIds, isDeleted);
     }
@@ -151,7 +151,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     protected abstract DeletedTuple[] getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
+    protected abstract void update(DeletedTuple[] deletedTuples);
 
     private void setChildrenParentDeleted(long[] categoryIds, boolean isDeleted) {
         if (folderDao == null) folderDao = appDataBase.folderDao();
@@ -169,8 +169,8 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
         super.setParentDeletedTuples(allFolderParentDeletedTuples, isDeleted);
         super.setParentDeletedTuples(allSizeParentDeletedTuples, isDeleted);
-        folderDao.updateParentDeletedTuples(allFolderParentDeletedTuples);
-        sizeDao.updateParentDeletedTuples(allSizeParentDeletedTuples);
+        folderDao.update(allFolderParentDeletedTuples);
+        sizeDao.update(allSizeParentDeletedTuples);
     }
 
     private void addAllChildFolderParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
@@ -190,11 +190,11 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:categoryName AND parentIndex=:parentIndex AND isDeleted = 0)")
-    public abstract boolean isExistingCategoryName(String categoryName, byte parentIndex);
+    public abstract boolean isExistingName(String categoryName, byte parentIndex);
 
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void updateTuples(LinkedList<CategoryFolderTuple> categoryTuples);
+    public abstract void update(LinkedList<CategoryFolderTuple> categoryTuples);
 
     public interface CategoryDaoInterFace {
         LiveData<List<List<CategoryFolderTuple>>> getClassifiedCategoryTuplesLive();
