@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class BaseRepository implements BaseDao.BaseDaoInterFace {
+public class BaseRepository {
     private final BaseDao<Category, CategoryFolderTuple> baseDao;
 
     @Inject
@@ -24,7 +24,6 @@ public class BaseRepository implements BaseDao.BaseDaoInterFace {
         baseDao = appDataBase.baseDao();
     }
 
-    @Override
     public LiveData<List<String>> getAutoCompleteWordsLive() {
         LiveData<List<String>> autoCompleteListWordsLive = baseDao.getAutoCompleteWordsLive();
 
@@ -34,7 +33,6 @@ public class BaseRepository implements BaseDao.BaseDaoInterFace {
         });
     }
 
-    @Override
     public LiveData<List<String>> getDeletedAutoCompleteWordsLive() {
         LiveData<List<String>> deletedAutoCompleteWordsLive = baseDao.getDeletedAutoCompleteWordsLive();
 
