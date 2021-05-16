@@ -15,98 +15,83 @@ import com.example.myfit.util.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.constant.SortValue;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-public class FolderRepository extends BaseRepository implements FolderDao.FolderDaoInterface {
+public class FolderRepository extends BaseRepository {
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
 
-    @Inject
     public FolderRepository(Context context) {
         super(context);
         this.folderDao = AppDataBase.getsInstance(context).folderDao();
-        listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
+        this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 
-    @Override
     //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedFolderTuplesLive() {
-        return folderDao.getDeletedClassifiedFolderTuplesLive();
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
+        return folderDao.getDeletedClassifiedTuplesLive();
     }
 
-    @Override
     //to list
-    public LiveData<List<CategoryFolderTuple>> getFolderTuplesLiveByParentId(long parentId) {
-        IntegerSharedPreferenceLiveData listSortPreferenceLive = getListSortPreferenceLive();
-        return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getFolderTuplesLiveByParentId(parentId, sort));
+    public LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId) {
+        IntegerSharedPreferenceLiveData listSortPreferenceLive =
+                new IntegerSharedPreferenceLiveData(listSortPreference, Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
+        return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getTuplesLiveByParentId(parentId, sort));
     }
 
-    @Override
-    //to search
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchFolderTuplesListLive(String keyWord) {
-        return folderDao.getSearchFolderTuplesListLive(keyWord);
+    //to searchView
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchTuplesListLive(String keyWord) {
+        return folderDao.getSearchTuplesListLive(keyWord);
     }
 
-    @NotNull
-    private IntegerSharedPreferenceLiveData getListSortPreferenceLive() {
-        return new IntegerSharedPreferenceLiveData(listSortPreference, Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyword) {
+        return folderDao.getDeletedSearchFolderTuplesListLive(keyword);
     }
 
-    @Override
-    //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyWord) {
-        return folderDao.getDeletedSearchFolderTuplesListLive(keyWord);
-    }
-
-    @Override
     //to treeView(disposable)
-    public LiveData<List<CategoryFolderTuple>> getFolderTuplesByParentIndex(byte parentIndex) {
-        MutableLiveData<List<CategoryFolderTuple>> folderTuplesLive = new MutableLiveData<>();
+    public LiveData<List<CategoryFolderTuple>> getTuplesByParentIndex(byte parentIndex) {
+        MutableLiveData<List<CategoryFolderTuple>> tuplesLive = new MutableLiveData<>();
+        //TODO test
         new Thread(() -> {
             try {
-                int sort = getListSort();
-                List<CategoryFolderTuple> folderTuples = folderDao.getFolderTuplesByParentIndex(parentIndex, sort);
-                folderTuplesLive.postValue(folderTuples);
+                int sort = getSort();
+                List<CategoryFolderTuple> folderTuples = folderDao.getTuplesByParentIndex(parentIndex, sort);
+                tuplesLive.postValue(folderTuples);
             } catch (Exception e) {
                 logE(e);
             }
-        });
-        return folderTuplesLive;
+        }).start();
+        return tuplesLive;
     }
 
-    @Override
     //to treeView(disposable)
-    public LiveData<CategoryFolderTuple> getFolderTupleById(long id) {
+    public LiveData<CategoryFolderTuple> getTupleById(long id) {
         MutableLiveData<CategoryFolderTuple> folderTupleLive = new MutableLiveData<>();
+        //TODO test
         new Thread(() -> {
             try {
-                CategoryFolderTuple folderTuple = folderDao.getFolderTupleById(id);
+                CategoryFolderTuple folderTuple = folderDao.getTupleById(id);
                 folderTupleLive.postValue(folderTuple);
             } catch (Exception e) {
                 logE(e);
             }
-        });
+        }).start();
         return folderTupleLive;
     }
 
-    @Override
     //to list
-    public LiveData<Folder> getFolderLiveById(long id) {
-        return folderDao.getFolderLiveById(id);
+    public LiveData<Folder> getSingleLiveById(long id) {
+        return folderDao.getSingleLiveById(id);
     }
 
-    @Override
     //from addFolder dialog
-    public LiveData<Long> insertFolder(String name, long parentId, byte parentIndex) {
+    public LiveData<Long> insert(String name, long parentId, byte parentIndex) {
         MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
+        //TODO test
         new Thread(() -> {
             try {
-                long insertId = folderDao.insertFolder(name, parentId, parentIndex);
+                long insertId = folderDao.insert(name, parentId, parentIndex);
                 insertIdLive.postValue(insertId);
             } catch (Exception e) {
                 logE(e);
@@ -115,43 +100,38 @@ public class FolderRepository extends BaseRepository implements FolderDao.Folder
         return insertIdLive;
     }
 
-    @Override
     //from editFolderName dialog
-    public void updateFolder(long id, String name) {
-        new Thread(() -> folderDao.updateFolder(id, name)).start();
+    public void update(long id, String name) {
+        new Thread(() -> folderDao.update(id, name)).start();
     }
 
-    @Override
     //from adapter drag drop
     public void updateFolders(LinkedList<CategoryFolderTuple> folderTuple) {
-        new Thread(() -> folderDao.updateTuples(folderTuple)).start();
+        new Thread(() -> folderDao.update(folderTuple)).start();
     }
 
-    @Override
     //from move dialog
-    public void moveFolders(long targetId, long[] folderIds) {
-        new Thread(() -> folderDao.moveFolders(targetId, folderIds)).start();
+    public void move(long targetId, long[] ids) {
+        new Thread(() -> folderDao.move(targetId, ids)).start();
     }
 
-    @Override
     //from deleteSelectedItems, restore dialog
-    public void deleteOrRestoreFolders(long[] folderIds, boolean isDeleted) {
-        new Thread(() -> folderDao.deleteOrRestoreFolders(folderIds, isDeleted)).start();
+    public void deleteOrRestore(long[] ids, boolean isDeleted) {
+        new Thread(() -> folderDao.deleteOrRestore(ids, isDeleted)).start();
     }
 
-    @Override
     //from addFolder dialog
-    public LiveData<Boolean> isExistingFolderName(String folderName, long parentId) {
-        MutableLiveData<Boolean> existFolderNameLive = new MutableLiveData<>();
+    public LiveData<Boolean> isExistingName(String name, long parentId) {
+        MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
             try {
-                boolean isExistCategoryName = folderDao.isExistingFolderName(folderName, parentId);
-                existFolderNameLive.postValue(isExistCategoryName);
+                boolean isExistName = folderDao.isExistingName(name, parentId);
+                isExistNameLive.postValue(isExistName);
             } catch (Exception e) {
                 logE(e);
             }
         }).start();
-        return existFolderNameLive;
+        return isExistNameLive;
     }
 
     public void setListSortPreferenceValue(int sort) {
@@ -160,7 +140,7 @@ public class FolderRepository extends BaseRepository implements FolderDao.Folder
         editor.apply();
     }
 
-    private int getListSort() {
+    private int getSort() {
         return listSortPreference.getInt(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 }
