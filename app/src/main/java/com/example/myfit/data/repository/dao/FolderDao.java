@@ -13,7 +13,6 @@ import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
-import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,14 +24,14 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
 
     //to recycleBin
     public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getTuplesLive(true);
+        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
 
-        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE isDeleted = :isDeleted")
-    protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLive(boolean isDeleted);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
 
     //to list
     public LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId, int sort) {
@@ -62,7 +61,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         LiveData<List<CategoryFolderTuple>> searchTuplesLive = this.getSearchTuplesLive(false, keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchTuplesLive, false);
 
-        return this.getClassifiedTuplesLive(searchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
+        return this.getClassifiedTuplesLive(searchTuplesLive, contentsSizesLive);
     }
 
     //to recycleBin search
@@ -70,10 +69,11 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = this.getSearchTuplesLive(true, keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
-        return this.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
+        return this.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name LIKE :keyWord")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder " +
+            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name LIKE :keyWord ORDER BY name")
     protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(boolean isDeleted, String keyWord);
 
     //to treeView (disposable)

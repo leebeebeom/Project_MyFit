@@ -75,6 +75,16 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         });
     }
 
+    @NotNull
+    protected LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryFolderTuple>> tuplesLive,
+                                                                                LiveData<int[]> contentsSizesLive) {
+        return Transformations.map(contentsSizesLive, contentsSizes -> {
+            List<CategoryFolderTuple> tuples = tuplesLive.getValue();
+            setContentsSize(tuples, contentsSizes);
+            return getClassifiedTuplesByParentIndex(tuples);
+        });
+    }
+
     protected void setContentsSize(List<CategoryFolderTuple> items, int[] contentsSizes) {
         try {
             int itemsSize = items.size();

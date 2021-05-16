@@ -24,24 +24,27 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
 
     //to main
     public LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(int sort) {
-        LiveData<List<CategoryFolderTuple>> tuplesLive = this.getTuplesLive(false);
+        LiveData<List<CategoryFolderTuple>> tuplesLive = this.getTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
 
         return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = 0")
+    protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLive();
+
     //to recycleBin
     public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getTuplesLive(true);
+        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
 
-        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive, SortValue.SORT_DELETED.getValue());
+        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted")
-    protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLive(boolean isDeleted);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
 
-    //to recycleBin search (maybe searchView?)
+    //to recycleBin search
     public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive(String keyWord) {
         LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getSearchTuplesLive(keyWord, true);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
@@ -49,7 +52,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted AND name LIKE :keyWord")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted AND name LIKE :keyWord ORDER BY name")
     protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(String keyWord, boolean isDeleted);
 
     @Transaction

@@ -13,7 +13,6 @@ import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.util.SortUtil;
-import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,18 +28,16 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<SizeTuple>> tuplesLive = this.getDeletedTuplesLive();
 
-        return getClassifiedTuplesLive(SortValue.SORT_DELETED.getValue(), tuplesLive);
+        return getClassifiedTuplesLive(tuplesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size WHERE isDeleted = 0 AND isParentDeleted = 0 ")
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size " +
+            "WHERE isDeleted = 1 AND isParentDeleted = 0 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
     @NotNull
-    private LiveData<List<List<SizeTuple>>> getClassifiedTuplesLive(int sort, LiveData<List<SizeTuple>> tuplesLive) {
-        return Transformations.map(tuplesLive, tuples -> {
-            this.orderSizeTuples(sort, tuples);
-            return this.getClassifiedSizeTuplesByParentIndex(tuples);
-        });
+    private LiveData<List<List<SizeTuple>>> getClassifiedTuplesLive(LiveData<List<SizeTuple>> tuplesLive) {
+        return Transformations.map(tuplesLive, this::getClassifiedSizeTuplesByParentIndex);
     }
 
     private void orderSizeTuples(int sort, List<SizeTuple> tuples) {
@@ -82,16 +79,17 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(String keyWord) {
         LiveData<List<SizeTuple>> tuplesLive = getSearchTuplesLive2(false, keyWord);
 
-        return getClassifiedTuplesLive(SortValue.SORT_NAME.getValue(), tuplesLive);
+        return getClassifiedTuplesLive(tuplesLive);
     }
 
     //to recycleBin search
     public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive(String keyWord) {
         LiveData<List<SizeTuple>> deletedTuplesLive = getSearchTuplesLive2(true, keyWord);
-        return getClassifiedTuplesLive(SortValue.SORT_NAME.getValue(), deletedTuplesLive);
+        return getClassifiedTuplesLive(deletedTuplesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand LIKE :keyWord")
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size " +
+            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand LIKE :keyWord ORDER BY name")
     protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean isDeleted, String keyWord);
 
     //to sizeFragment
