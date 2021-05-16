@@ -33,20 +33,6 @@ import java.util.Locale;
 @Dao
 public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
 
-    //to searchView
-    @Query("SELECT(SELECT name FROM Category WHERE isDeleted = 0) + " +
-            "(SELECT name FROM Folder WHERE isDeleted = 0 AND isParentDeleted = 0) + " +
-            "(SELECT name FROM Size WHERE isDeleted = 0 AND isParentDeleted = 0) + " +
-            "(SELECT brand FROM Size WHERE isDeleted = 0 AND isParentDeleted = 0)")
-    public abstract LiveData<List<String>> getAutoCompleteWordsLive();
-
-    //to recycleBin search
-    @Query("SELECT(SELECT name FROM Category WHERE isDeleted = 1) + " +
-            "(SELECT name FROM Folder WHERE isDeleted = 1) + " +
-            "(SELECT name FROM Size WHERE isDeleted = 1) + " +
-            "(SELECT brand FROM Size WHERE isDeleted = 1)")
-    public abstract LiveData<List<String>> getDeletedAutoCompleteWordsLive();
-
     @NotNull
     protected LiveData<int[]> getContentsSizesLive(LiveData<List<R>> tuplesLive, boolean isParentDeleted) {
         return Transformations.switchMap(tuplesLive, tuples -> {
