@@ -2,6 +2,7 @@ package com.example.myfit.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,12 +20,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CategoryRepository extends BaseRepository {
+public class CategoryRepository {
     private final SharedPreferences mainSortPreference;
     private final CategoryDao categoryDao;
 
     public CategoryRepository(@NotNull Context context) {
-        super(context);
         categoryDao = AppDataBase.getsInstance(context).categoryDao();
         mainSortPreference = context.getSharedPreferences(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
     }
@@ -144,6 +144,10 @@ public class CategoryRepository extends BaseRepository {
     @NotNull
     private Integer getSort() {
         return mainSortPreference.getInt(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
+    }
+
+    private void logE(Exception e) {
+        Log.e("에러", "logE: " + e.getMessage(), e);
     }
 }
 
