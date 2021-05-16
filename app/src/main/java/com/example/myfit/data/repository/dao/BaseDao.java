@@ -13,7 +13,6 @@ import androidx.room.Update;
 import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.size.Size;
-import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
@@ -89,14 +88,6 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     protected void orderTuples(int sort, List<CategoryFolderTuple> categoryFolderTuplesList) {
         try {
             SortUtil.orderCategoryFolderTuples(sort, categoryFolderTuplesList);
-        } catch (NullPointerException e) {
-            logE(e);
-        }
-    }
-
-    protected void orderSizeTuples(int sort, List<SizeTuple> sizeTuples) {
-        try {
-            SortUtil.orderSizeTuples(sort, sizeTuples);
         } catch (NullPointerException e) {
             logE(e);
         }
