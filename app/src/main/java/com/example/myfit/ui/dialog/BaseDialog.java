@@ -1,8 +1,8 @@
 package com.example.myfit.ui.dialog;
 
-import android.app.AlertDialog;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 public abstract class BaseDialog extends DialogFragment {
