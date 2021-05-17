@@ -3,6 +3,7 @@ package com.example.myfit.data.repository.dao;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Dao
-public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
+public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //to recycleBin
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
@@ -31,7 +32,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
         return getClassifiedTuplesLive(tuplesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size " +
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
             "WHERE isDeleted = 1 AND isParentDeleted = 0 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
@@ -72,7 +73,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
         });
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
     protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
 
     //to search
@@ -88,7 +89,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
         return getClassifiedTuplesLive(deletedTuplesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite FROM Size " +
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
             "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand LIKE :keyWord ORDER BY name")
     protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean isDeleted, String keyWord);
 
@@ -109,11 +110,14 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
     public void insertSize(@NotNull Size size) {
         int orderNumber = getLargestOrder() + 1;
         size.setOrderNumber(orderNumber);
-        insert(size);
+        this.insert(size);
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(Size size);
+
+    @Insert
+    protected abstract long insert(Size size);
 
     @Transaction
     //from move dialog
@@ -138,7 +142,7 @@ public abstract class SizeDao extends BaseDao<Size, SizeTuple> {
         this.updateDeletedTuples(sizeDeletedTuples);
     }
 
-    @Query("SELECT id, isDeleted FROM Size WHERE id IN (:ids)")
+    @Query("SELECT id, isDeleted, deletedTime FROM Size WHERE id IN (:ids)")
     protected abstract DeletedTuple[] getDeletedTuples(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
