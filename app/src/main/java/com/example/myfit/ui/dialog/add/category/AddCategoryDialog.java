@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
@@ -17,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.R;
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
+import com.example.myfit.ui.dialog.BaseDialog;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
 import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.util.CommonUtil;
@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddCategoryDialog extends DialogFragment {
+public class AddCategoryDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
@@ -74,7 +74,8 @@ public class AddCategoryDialog extends DialogFragment {
         return getAlertDialog();
     }
 
-    private AlertDialog getAlertDialog() {
+    @Override
+    protected AlertDialog getAlertDialog() {
         return dialogBuilder
                 .makeEditTextDialog(getString(R.string.all_add_category), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
@@ -91,7 +92,8 @@ public class AddCategoryDialog extends DialogFragment {
 
     @NotNull
     @Contract(pure = true)
-    private View.OnClickListener getPositiveClickListener() {
+    @Override
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentIndex);

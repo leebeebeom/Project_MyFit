@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.R;
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
+import com.example.myfit.ui.dialog.BaseDialog;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
 import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.util.CommonUtil;
@@ -29,7 +30,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddFolderDialog extends DialogFragment {
+public class AddFolderDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
@@ -72,7 +73,8 @@ public class AddFolderDialog extends DialogFragment {
         return getAlertDialog();
     }
 
-    private Dialog getAlertDialog() {
+    @Override
+    protected AlertDialog getAlertDialog() {
         return dialogBuilder
                 .makeEditTextDialog(getString(R.string.all_create_folder), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
@@ -89,7 +91,8 @@ public class AddFolderDialog extends DialogFragment {
 
     @NotNull
     @Contract(pure = true)
-    private View.OnClickListener getPositiveClickListener() {
+    @Override
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getFolderId();
             byte parentIndex = (byte) AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();

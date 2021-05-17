@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
@@ -15,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.BaseDialog;
 import com.example.myfit.ui.dialog.DialogBuilder;
 
 import org.jetbrains.annotations.Contract;
@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddSameCategoryNameDialog extends DialogFragment {
+public class AddSameCategoryNameDialog extends BaseDialog {
     @Inject
     DialogBuilder dialogBuilder;
     private NavController navController;
@@ -46,7 +46,8 @@ public class AddSameCategoryNameDialog extends DialogFragment {
         return getAlertDialog();
     }
 
-    private AlertDialog getAlertDialog() {
+    @Override
+    protected AlertDialog getAlertDialog() {
         return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_same_category_name_add))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
@@ -54,7 +55,8 @@ public class AddSameCategoryNameDialog extends DialogFragment {
 
     @NotNull
     @Contract(pure = true)
-    private View.OnClickListener getPositiveClickListener() {
+    @Override
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             model.insert();
             navController.popBackStack(R.id.addCategoryDialog, true);
