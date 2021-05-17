@@ -20,6 +20,7 @@ import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
 import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.util.CommonUtil;
+import com.example.myfit.util.KeyBoardUtil;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,16 @@ public class AddCategoryDialog extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        model.getIsExistingLive().observe(this, isExisting -> {
+            if (isExisting != null && isExisting) {
+                navigateToAddSameCategoryNameDialog();
+                KeyBoardUtil.hideKeyBoard(binding.et);
+            } else if (isExisting != null) {
+                model.insert();
+                dismiss();
+            }
+        });
+
         return getAlertDialog();
     }
 
@@ -65,19 +76,6 @@ public class AddCategoryDialog extends DialogFragment {
                 .setPositiveEnabledByIsChangedTextEmpty(binding.et)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
                 .create();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        model.getIsExistingLive().observe(this, isExisting -> {
-            if (isExisting != null && isExisting) {
-                navigateToAddSameCategoryNameDialog();
-            } else if (isExisting != null) {
-                model.insert();
-                dismiss();
-            }
-        });
     }
 
     private void navigateToAddSameCategoryNameDialog() {
