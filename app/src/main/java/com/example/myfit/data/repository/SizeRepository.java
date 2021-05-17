@@ -53,12 +53,8 @@ public class SizeRepository {
     public LiveData<List<String>> getBrands() {
         MutableLiveData<List<String>> brandsLive = new MutableLiveData<>();
         new Thread(() -> {
-            try {
                 List<String> brands = sizeDao.getBrands();
                 brandsLive.postValue(brands);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return brandsLive;
     }
@@ -67,12 +63,8 @@ public class SizeRepository {
     public LiveData<Size> getSizeById(long id) {
         MutableLiveData<Size> sizeLive = new MutableLiveData<>();
         new Thread(() -> {
-            try {
                 Size size = sizeDao.getSizeById(id);
                 sizeLive.postValue(size);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return sizeLive;
     }

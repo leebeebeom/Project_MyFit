@@ -54,13 +54,9 @@ public class FolderRepository {
         MutableLiveData<List<CategoryFolderTuple>> tuplesLive = new MutableLiveData<>();
         //TODO test
         new Thread(() -> {
-            try {
                 int sort = getSort();
                 List<CategoryFolderTuple> folderTuples = folderDao.getTuplesByParentIndex(parentIndex, sort);
                 tuplesLive.postValue(folderTuples);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return tuplesLive;
     }
@@ -70,12 +66,8 @@ public class FolderRepository {
         MutableLiveData<CategoryFolderTuple> folderTupleLive = new MutableLiveData<>();
         //TODO test
         new Thread(() -> {
-            try {
                 CategoryFolderTuple folderTuple = folderDao.getTupleById(id);
                 folderTupleLive.postValue(folderTuple);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return folderTupleLive;
     }
@@ -90,12 +82,8 @@ public class FolderRepository {
         MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
         //TODO test
         new Thread(() -> {
-            try {
                 long insertId = folderDao.insert(name, parentId, parentIndex);
                 insertIdLive.postValue(insertId);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return insertIdLive;
     }
@@ -124,12 +112,8 @@ public class FolderRepository {
     public LiveData<Boolean> isExistingName(String name, long parentId) {
         MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
-            try {
                 boolean isExistName = folderDao.isExistingName(name, parentId);
                 isExistNameLive.postValue(isExistName);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return isExistNameLive;
     }

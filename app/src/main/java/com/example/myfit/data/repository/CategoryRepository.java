@@ -52,13 +52,9 @@ public class CategoryRepository {
         MutableLiveData<List<CategoryFolderTuple>> tuplesLive = new MutableLiveData<>();
         //TODO test
         new Thread(() -> {
-            try {
                 int sort = getSort();
                 List<CategoryFolderTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
                 tuplesLive.postValue(tuples);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return tuplesLive;
     }
@@ -68,12 +64,8 @@ public class CategoryRepository {
         MutableLiveData<CategoryFolderTuple> categoryTupleLive = new MutableLiveData<>();
         //TODO test
         new Thread(() -> {
-            try {
                 CategoryFolderTuple tuple = categoryDao.getTupleById(id);
                 categoryTupleLive.postValue(tuple);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return categoryTupleLive;
     }
@@ -82,12 +74,8 @@ public class CategoryRepository {
     public LiveData<Long> insert(String name, byte parentIndex) {
         MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
         new Thread(() -> {
-            try {
                 long insertId = categoryDao.insert(name, parentIndex);
                 insertIdLive.postValue(insertId);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return insertIdLive;
     }
@@ -96,12 +84,8 @@ public class CategoryRepository {
     public LiveData<Long[]> insertRestoreCategories(@NotNull byte[] parentIndex) {
         MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
-            try {
                 Long[] insertIds = categoryDao.insertRestoreCategories(parentIndex);
                 insertIdsLive.postValue(insertIds);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return insertIdsLive;
     }
