@@ -3,6 +3,7 @@ package com.example.myfit.data.repository.dao;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Dao
-public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
+public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
 
     //to recycleBin
     public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
@@ -30,7 +31,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
 
     //to list
@@ -41,7 +42,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         return this.getOrderedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
     protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId);
 
     @NotNull
@@ -72,7 +73,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         return this.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder " +
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder " +
             "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name LIKE :keyWord ORDER BY name")
     protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(boolean isDeleted, String keyWord);
 
@@ -87,7 +88,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         return tuples;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
     protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
 
     @Transaction
@@ -99,7 +100,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Folder WHERE id = :id AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE id = :id AND isDeleted = 0 AND isParentDeleted = 0")
     protected abstract CategoryFolderTuple getTupleById2(long id);
 
     //to list
@@ -111,11 +112,14 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
     public long insert(String name, long parentId, byte parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Folder folder = ModelFactory.makeFolder(name, parentId, parentIndex, orderNumber);
-        return insert(folder);
+        return this.insert(folder);
     }
 
     @Query("SELECT max(orderNumber) FROM Folder")
     protected abstract int getLargestOrderNumber();
+
+    @Insert
+    protected abstract long insert(Folder folder);
 
     @Transaction
     //from editFolderName dialog
@@ -157,7 +161,7 @@ public abstract class FolderDao extends BaseDao<Folder, CategoryFolderTuple> {
         super.setChildrenParentDeleted(ids, isDeleted);
     }
 
-    @Query("SELECT id, isDeleted FROM Folder WHERE id IN (:ids)")
+    @Query("SELECT id, isDeleted, deletedTime FROM Folder WHERE id IN (:ids)")
     protected abstract DeletedTuple[] getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
