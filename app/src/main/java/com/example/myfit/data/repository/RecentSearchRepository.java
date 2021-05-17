@@ -33,6 +33,6 @@ public class RecentSearchRepository {
     }
 
     public void deleteAll() {
-        new Thread(recentSearchDao::deleteAllRecentSearch).start();
+        new Thread(recentSearchDao::deleteAll).start();
     }
 }
