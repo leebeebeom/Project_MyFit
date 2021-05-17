@@ -15,19 +15,14 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.R;
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.DialogBuilder;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class AddSameFolderNameDialog extends BaseDialog {
-    @Inject
-    DialogBuilder dialogBuilder;
     private NavController navController;
     private AddFolderDialogViewModel model;
 

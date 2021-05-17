@@ -18,7 +18,6 @@ import com.example.myfit.R;
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
-import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.util.CommonUtil;
 import com.example.myfit.util.KeyBoardUtil;
 
@@ -34,8 +33,6 @@ public class AddCategoryDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
-    @Inject
-    DialogBuilder dialogBuilder;
     private NavController navController;
     private AddCategoryDialogViewModel model;
     private ItemDialogEditTextBinding binding;
