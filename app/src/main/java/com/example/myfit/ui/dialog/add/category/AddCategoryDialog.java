@@ -8,7 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
@@ -40,9 +42,8 @@ public class AddCategoryDialog extends DialogFragment {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-        model = new ViewModelProvider(navController.getViewModelStoreOwner(navController.getGraph().getId())).get(AddCategoryDialogViewModel.class);
-        byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
-        model.setParentIndex(parentIndex);
+        NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
+        model = new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(AddCategoryDialogViewModel.class);
         binding = dialogBindingBuilder
                 .setHint(getString(R.string.dialog_hint_category_name))
                 .setPlaceHolder(getString(R.string.dialog_place_holder_category_name))
@@ -71,7 +72,7 @@ public class AddCategoryDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         model.getIsExistingLive().observe(this, isExisting -> {
             if (isExisting != null && isExisting) {
-                navigateToAddSameNameCategoryDialog();
+                navigateToAddSameCategoryNameDialog();
             } else if (isExisting != null) {
                 model.insert();
                 dismiss();
@@ -79,7 +80,7 @@ public class AddCategoryDialog extends DialogFragment {
         });
     }
 
-    private void navigateToAddSameNameCategoryDialog() {
+    private void navigateToAddSameCategoryNameDialog() {
         NavDirections action = AddCategoryDialogDirections.toAddSameCategoryNameDialog();
         CommonUtil.navigate(navController, R.id.addCategoryDialog, action);
     }
@@ -87,7 +88,10 @@ public class AddCategoryDialog extends DialogFragment {
     @NotNull
     @Contract(pure = true)
     private View.OnClickListener getPositiveClickListener() {
-        return v -> model.queryIsExistingName(getInputText());
+        return v -> {
+            byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
+            model.queryIsExistingName(getInputText(), parentIndex);
+        };
     }
 
     @NotNull
