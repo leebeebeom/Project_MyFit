@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Dao
-public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple> {
+public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
 
     //to main
     public LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(int sort) {
@@ -30,7 +30,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 0")
     protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLive();
 
     //to recycleBin
@@ -41,19 +41,19 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
 
     //to recycleBin search
     public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive(String keyWord) {
-        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getSearchTuplesLive(keyWord, true);
+        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2(keyWord);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE isDeleted = :isDeleted AND name LIKE :keyWord ORDER BY name")
-    protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(String keyWord, boolean isDeleted);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 AND name LIKE :keyWord ORDER BY name")
+    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedSearchTuplesLive2(String keyWord);
 
     @Transaction
     //to treeView (disposable)
@@ -66,7 +66,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         return tuples;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
     protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
 
     @Transaction
@@ -78,7 +78,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize FROM Category WHERE id = :id AND isDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE id = :id AND isDeleted = 0")
     protected abstract CategoryFolderTuple getTupleById2(long id);
 
     @Transaction
@@ -86,11 +86,14 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     public long insert(String name, byte parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Category category = ModelFactory.makeCategory(name, parentIndex, orderNumber);
-        return insert(category);
+        return this.insert(category);
     }
 
     @Query("SELECT max(orderNumber) FROM Category")
     protected abstract int getLargestOrderNumber();
+
+    @Insert
+    protected abstract long insert(Category category);
 
     @Transaction
     //from restore Dialog
@@ -135,7 +138,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
         this.setChildrenParentDeleted(ids, isDeleted);
     }
 
-    @Query("SELECT id, isDeleted FROM Category WHERE id IN (:ids)")
+    @Query("SELECT id, isDeleted, deletedTime FROM Category WHERE id IN (:ids)")
     protected abstract DeletedTuple[] getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
