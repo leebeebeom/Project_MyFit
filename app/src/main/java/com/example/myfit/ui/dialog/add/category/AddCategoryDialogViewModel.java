@@ -27,9 +27,10 @@ public class AddCategoryDialogViewModel extends ViewModel {
         this.savedStateHandle = savedStateHandle;
     }
 
-    public void queryIsExistingName(String name) {
+    public void queryIsExistingName(String name, byte parentIndex) {
         this.name = name;
-        isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME), name2 -> categoryRepository.isExistingName((String) name2, parentIndex));
+        this.parentIndex = parentIndex;
+        isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME), name2 -> categoryRepository.isExistingName((String) name2, this.parentIndex));
         savedStateHandle.set(CATEGORY_NAME, name);
     }
 
@@ -39,9 +40,5 @@ public class AddCategoryDialogViewModel extends ViewModel {
 
     public LiveData<Boolean> getIsExistingLive() {
         return isExistingLive;
-    }
-
-    public void setParentIndex(byte parentIndex) {
-        this.parentIndex = parentIndex;
     }
 }
