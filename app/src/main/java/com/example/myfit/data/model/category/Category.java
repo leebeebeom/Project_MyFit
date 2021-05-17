@@ -7,7 +7,7 @@ import com.example.myfit.data.model.BaseModel;
 
 import java.util.Objects;
 
-@Entity(primaryKeys = "id")
+@Entity
 public class Category extends BaseModel {
     private String name;
     private int contentsSize;
