@@ -1,6 +1,8 @@
 package com.example.myfit.ui.dialog.add.category;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -20,14 +22,16 @@ public class AddCategoryDialogViewModel extends ViewModel {
     private final SavedStateHandle savedStateHandle;
     private byte parentIndex;
     private String name;
-    private final LiveData<Boolean> isExistingLive;
+    private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
 
     @Inject
     public AddCategoryDialogViewModel(@NotNull SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
         this.savedStateHandle = savedStateHandle;
-        isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME),
-                name -> categoryRepository.isExistingName((String) name, this.parentIndex));
+
+        LiveData<Boolean> isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME), name ->
+                categoryRepository.isExistingName((String) name, this.parentIndex));
+        isExistingMutable.addSource(isExistingLive, isExistingMutable::setValue);
     }
 
     public void queryIsExistingName(String name, byte parentIndex) {
@@ -40,7 +44,7 @@ public class AddCategoryDialogViewModel extends ViewModel {
         categoryRepository.insert(name, parentIndex);
     }
 
-    public LiveData<Boolean> getIsExistingLive() {
-        return isExistingLive;
+    public MutableLiveData<Boolean> getIsExistingLive() {
+        return isExistingMutable;
     }
 }
