@@ -8,8 +8,7 @@ import com.example.myfit.data.model.BaseModel;
 
 import java.util.Objects;
 
-
-@Entity(primaryKeys = "id")
+@Entity
 public class Size extends BaseModel {
     @Embedded
     private BaseSizeInfo baseSizeInfo;
