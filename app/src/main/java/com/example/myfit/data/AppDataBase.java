@@ -1,4 +1,4 @@
-package com.example.project_myfit.data;
+package com.example.myfit.data;
 
 import android.content.Context;
 
@@ -10,24 +10,24 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.project_myfit.data.dao.CategoryDao;
-import com.example.project_myfit.data.dao.FolderDao;
-import com.example.project_myfit.data.dao.RecentSearchDao;
-import com.example.project_myfit.data.dao.SizeDao;
-import com.example.project_myfit.data.model.Category;
-import com.example.project_myfit.data.model.Folder;
-import com.example.project_myfit.data.model.RecentSearch;
-import com.example.project_myfit.data.model.Size;
-import com.example.project_myfit.util.CommonUtil;
-import com.example.project_myfit.util.Constant;
+import com.example.myfit.data.model.ModelFactory;
+import com.example.myfit.data.model.RecentSearch;
+import com.example.myfit.data.model.category.Category;
+import com.example.myfit.data.model.folder.Folder;
+import com.example.myfit.data.model.size.Size;
+import com.example.myfit.data.model.tuple.CategoryFolderTuple;
+import com.example.myfit.data.repository.CategoryRepository;
+import com.example.myfit.data.repository.dao.BaseDao;
+import com.example.myfit.data.repository.dao.CategoryDao;
+import com.example.myfit.data.repository.dao.FolderDao;
+import com.example.myfit.data.repository.dao.RecentSearchDao;
+import com.example.myfit.data.repository.dao.SizeDao;
+import com.example.myfit.util.constant.ParentCategory;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
-@TypeConverters({Converters.class})
+@TypeConverters({Converter.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
         @Override
@@ -109,38 +109,42 @@ public abstract class AppDataBase extends RoomDatabase {
 
     public synchronized static AppDataBase getsInstance(Context context) {
         if (sInstance == null) {
-            sInstance = Room.databaseBuilder(context, AppDataBase.class, "db")
+            sInstance = Room.databaseBuilder(context, AppDataBase.class, "myFit.db")
                     .addCallback(new Callback() {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
-                            List<Category> categoryList = new ArrayList<>();
-                            long id = CommonUtil.createId();
+                            Category[] categories = new Category[17];
                             //TODO test
-                            categoryList.add(new Category(id++, "반팔", Constant.ParentCategory.TOP.ordinal(), 1));
-                            categoryList.add(new Category(id++, "긴팔", Constant.ParentCategory.TOP.ordinal(), 2));
-                            categoryList.add(new Category(id++, "니트", Constant.ParentCategory.TOP.ordinal(), 3));
-                            categoryList.add(new Category(id++, "후드", Constant.ParentCategory.TOP.ordinal(), 4));
-                            categoryList.add(new Category(id++, "셔츠", Constant.ParentCategory.TOP.ordinal(), 5));
-                            categoryList.add(new Category(id++, "청바지", Constant.ParentCategory.BOTTOM.ordinal(), 6));
-                            categoryList.add(new Category(id++, "슬랙스", Constant.ParentCategory.BOTTOM.ordinal(), 7));
-                            categoryList.add(new Category(id++, "반바지", Constant.ParentCategory.BOTTOM.ordinal(), 8));
-                            categoryList.add(new Category(id++, "트랙 팬츠", Constant.ParentCategory.BOTTOM.ordinal(), 9));
-                            categoryList.add(new Category(id++, "Ma-1", Constant.ParentCategory.OUTER.ordinal(), 10));
-                            categoryList.add(new Category(id++, "패딩", Constant.ParentCategory.OUTER.ordinal(), 11));
-                            categoryList.add(new Category(id++, "야상", Constant.ParentCategory.OUTER.ordinal(), 12));
-                            categoryList.add(new Category(id++, "후드 집업", Constant.ParentCategory.OUTER.ordinal(), 13));
-                            categoryList.add(new Category(id++, "신발", Constant.ParentCategory.ETC.ordinal(), 14));
-                            categoryList.add(new Category(id++, "안경", Constant.ParentCategory.ETC.ordinal(), 15));
-                            categoryList.add(new Category(id++, "목걸이", Constant.ParentCategory.ETC.ordinal(), 16));
-                            categoryList.add(new Category(id, "기타", Constant.ParentCategory.ETC.ordinal(), 17));
-                            new Repository(context).getCategoryRepository().insertCategory(categoryList);
+                            categories[0] = ModelFactory.makeCategory("반팔", ParentCategory.TOP.getIndex(), 1);
+                            categories[1] = ModelFactory.makeCategory("긴팔", ParentCategory.TOP.getIndex(), 2);
+                            categories[2] = ModelFactory.makeCategory("니트", ParentCategory.TOP.getIndex(), 3);
+                            categories[3] = ModelFactory.makeCategory("후드", ParentCategory.TOP.getIndex(), 4);
+                            categories[4] = ModelFactory.makeCategory("셔츠", ParentCategory.TOP.getIndex(), 5);
+
+                            categories[5] = ModelFactory.makeCategory("청바지", ParentCategory.BOTTOM.getIndex(), 6);
+                            categories[6] = ModelFactory.makeCategory("슬랙스", ParentCategory.BOTTOM.getIndex(), 7);
+                            categories[7] = ModelFactory.makeCategory("반바지", ParentCategory.BOTTOM.getIndex(), 8);
+
+                            categories[8] = ModelFactory.makeCategory("Ma-1", ParentCategory.OUTER.getIndex(), 9);
+                            categories[9] = ModelFactory.makeCategory("패딩", ParentCategory.OUTER.getIndex(), 10);
+                            categories[10] = ModelFactory.makeCategory("야상", ParentCategory.OUTER.getIndex(), 11);
+                            categories[11] = ModelFactory.makeCategory("후드 집업", ParentCategory.OUTER.getIndex(), 12);
+
+                            categories[12] = ModelFactory.makeCategory("신발", ParentCategory.ETC.getIndex(), 13);
+                            categories[13] = ModelFactory.makeCategory("안경", ParentCategory.ETC.getIndex(), 14);
+                            categories[14] = ModelFactory.makeCategory("목걸이", ParentCategory.ETC.getIndex(), 15);
+                            categories[15] = ModelFactory.makeCategory("기타", ParentCategory.ETC.getIndex(), 16);
+
+                            new CategoryRepository(context).insert(categories);
                         }
-                    }).addMigrations(MIGRATION_1_2)
+                    })
                     .build();
         }
         return sInstance;
     }
+
+    public abstract BaseDao<Category, CategoryFolderTuple> baseDao();
 
     public abstract CategoryDao categoryDao();
 
