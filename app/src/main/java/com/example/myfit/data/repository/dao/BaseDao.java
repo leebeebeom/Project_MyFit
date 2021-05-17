@@ -5,12 +5,10 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.tuple.BaseTuple;
@@ -31,17 +29,17 @@ import java.util.List;
 import java.util.Locale;
 
 @Dao
-public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
+public abstract class BaseDao<T extends BaseTuple> {
 
     @NotNull
-    protected LiveData<int[]> getContentsSizesLive(LiveData<List<R>> tuplesLive, boolean isParentDeleted) {
+    protected LiveData<int[]> getContentsSizesLive(LiveData<List<T>> tuplesLive, boolean isParentDeleted) {
         return Transformations.switchMap(tuplesLive, tuples -> {
             long[] itemIds = getItemIds(tuples);
             return getContentsSizesLiveByParentIds(itemIds, isParentDeleted);
         });
     }
 
-    protected long[] getItemIds(@NotNull List<R> tuples) {
+    protected long[] getItemIds(@NotNull List<T> tuples) {
         return tuples.stream().mapToLong(BaseTuple::getId).toArray();
     }
 
@@ -119,7 +117,6 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     @Contract(pure = true)
     private void setDeletedTime(@NotNull DeletedTuple[] deletedTuples) {
         long currentTime = getCurrentTime();
-        int count = deletedTuples.length;
         Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(currentTime));
     }
 
@@ -159,14 +156,14 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
         }
     }
 
-    @Query("SELECT id, isParentDeleted FROM Folder WHERE parentId IN (:parentIds)")
+    @Query("SELECT id, isDeleted ,isParentDeleted FROM Folder WHERE parentId IN (:parentIds)")
     protected abstract List<ParentDeletedTuple> getFolderParentDeletedTuplesByParentIds(long[] parentIds);
 
     protected void addAllChildSizeParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
         allParentDeletedTuples.addAll(getSizeParentDeletedTuplesByParentIds(parentIds));
     }
 
-    @Query("SELECT id, isParentDeleted FROM Size WHERE parentId IN(:parentIds)")
+    @Query("SELECT id, isDeleted, isParentDeleted FROM Size WHERE parentId IN(:parentIds)")
     protected abstract List<ParentDeletedTuple> getSizeParentDeletedTuplesByParentIds(long[] parentIds);
 
     protected void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
@@ -186,8 +183,4 @@ public abstract class BaseDao<T extends BaseModel, R extends BaseTuple> {
     @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0) + " +
             "(SELECT COUNT(parentId) FROM Size WHERE parentId = :parentId AND isDeleted =0 AND isParentDeleted = 0))")
     protected abstract int getContentsSizeByParentId(long parentId);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    protected abstract long insert(T item);
-
 }
