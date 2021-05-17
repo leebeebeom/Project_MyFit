@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -76,6 +77,11 @@ dependencies {
 
     //treeView
     implementation 'com.github.bmelnychuk:atv:1.2.9'
+
+    //hilt
+    implementation 'com.google.dagger:hilt-android:2.35.1'
+    annotationProcessor 'com.google.dagger:hilt-compiler:2.35.1'
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
 
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
 }
