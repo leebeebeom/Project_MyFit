@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.AppDataBase;
+import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
 import com.example.myfit.util.IntegerSharedPreferenceLiveData;
@@ -19,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class CategoryRepository {
     private final SharedPreferences mainSortPreference;
@@ -79,6 +82,11 @@ public class CategoryRepository {
         }).start();
         return insertIdLive;
     }
+
+    @Inject
+    public void insert(Category[] categories){
+        new Thread(() -> categoryDao.insert(categories)).start();
+    };
 
     //from restore dialog(disposable)
     public LiveData<Long[]> insertRestoreCategories(@NotNull byte[] parentIndex) {

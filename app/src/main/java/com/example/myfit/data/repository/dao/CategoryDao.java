@@ -108,7 +108,7 @@ public abstract class CategoryDao extends BaseDao<Category, CategoryFolderTuple>
     }
 
     @Insert
-    protected abstract Long[] insert(Category[] categories);
+    public abstract Long[] insert(Category[] categories);
 
     @Transaction
     //from nameEdit dialog
