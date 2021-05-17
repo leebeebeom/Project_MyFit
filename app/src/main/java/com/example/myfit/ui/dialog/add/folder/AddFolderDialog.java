@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class AddFolderDialog extends DialogFragment {
+    public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
     @Inject
@@ -41,12 +42,14 @@ public class AddFolderDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String inputText = savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
         navController = NavHostFragment.findNavController(this);
         NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
         model = new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(AddFolderDialogViewModel.class);
         binding = dialogBindingBuilder
                 .setHint(getString(R.string.dialog_hint_folder_name))
                 .setPlaceHolder(getString(R.string.dialog_place_holder_folder_name))
+                .setText(inputText)
                 .create();
     }
 
@@ -55,12 +58,15 @@ public class AddFolderDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         model.getIsExistingLive().observe(this, isExisting -> {
-            if (isExisting != null && isExisting) {
-                navigateToSameFolderNameDialog();
-                KeyBoardUtil.hideKeyBoard(binding.et);
-            } else if (isExisting != null) {
-                model.insert();
-                dismiss();
+            if (isExisting != null){
+                if (isExisting) {
+                    navigateToSameFolderNameDialog();
+                    KeyBoardUtil.hideKeyBoard(binding.et);
+                } else {
+                    model.insert();
+                    dismiss();
+                }
+                model.getIsExistingLive().setValue(null);
             }
         });
         return getAlertDialog();
@@ -94,5 +100,11 @@ public class AddFolderDialog extends DialogFragment {
     @NotNull
     private String getInputText() {
         return String.valueOf(binding.et.getText());
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(INPUT_TEXT, String.valueOf(binding.et.getText()));
     }
 }
