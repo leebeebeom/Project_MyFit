@@ -1,7 +1,10 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.RecentSearch;
 import com.example.myfit.data.repository.dao.RecentSearchDao;
 
@@ -13,8 +16,8 @@ public class RecentSearchRepository {
     private final RecentSearchDao recentSearchDao;
 
     @Inject
-    public RecentSearchRepository(RecentSearchDao recentSearchDao) {
-        this.recentSearchDao = recentSearchDao;
+    public RecentSearchRepository(Context context) {
+        this.recentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
     }
 
     public LiveData<List<RecentSearch>> getLiveByType(byte type) {
