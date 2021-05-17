@@ -18,15 +18,11 @@ import com.example.myfit.ui.main.MainGraphViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DeleteImageDialog extends BaseDialog {
     public static final String IMAGE_DELETE = "image delete";
-    @Inject
-    DialogBuilder dialogBuilder;
     private NavBackStackEntry navBackStackEntry;
 
     @Override
