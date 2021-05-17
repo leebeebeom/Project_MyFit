@@ -9,10 +9,6 @@
             type="String" />
 
         <variable
-            name="setText"
-            type="String" />
-
-        <variable
             name="placeHolder"
             type="String" />
     </data>
@@ -43,7 +39,6 @@
                 android:maxLength="30"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:text="@{setText}"
                 android:textSize="@dimen/_11sdp" />
         </com.google.android.material.textfield.TextInputLayout>
     </FrameLayout>
