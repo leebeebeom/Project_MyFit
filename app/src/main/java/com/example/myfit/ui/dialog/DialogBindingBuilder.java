@@ -28,6 +28,11 @@ public class DialogBindingBuilder {
         return this;
     }
 
+    public DialogBindingBuilder setText(String text){
+        mBinding.et.setText(text);
+        return this;
+    }
+
     private void showErrorIfMoreThan30Characters() {
         mBinding.et.setOnKeyListener((v, keyCode, event) -> {
             if (isTextLength30() && keyCode != KeyEvent.KEYCODE_DEL && keyCode != KeyEvent.FLAG_EDITOR_ACTION)
