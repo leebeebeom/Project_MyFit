@@ -1,12 +1,13 @@
 package com.example.myfit.ui.dialog.add.category;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myfit.data.repository.CategoryRepository;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -19,18 +20,19 @@ public class AddCategoryDialogViewModel extends ViewModel {
     private final SavedStateHandle savedStateHandle;
     private byte parentIndex;
     private String name;
-    private LiveData<Boolean> isExistingLive = new MutableLiveData<>();
+    private final LiveData<Boolean> isExistingLive;
 
     @Inject
-    public AddCategoryDialogViewModel(SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
+    public AddCategoryDialogViewModel(@NotNull SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
         this.savedStateHandle = savedStateHandle;
+        isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME),
+                name -> categoryRepository.isExistingName((String) name, this.parentIndex));
     }
 
     public void queryIsExistingName(String name, byte parentIndex) {
         this.name = name;
         this.parentIndex = parentIndex;
-        isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME), name2 -> categoryRepository.isExistingName((String) name2, this.parentIndex));
         savedStateHandle.set(CATEGORY_NAME, name);
     }
 
