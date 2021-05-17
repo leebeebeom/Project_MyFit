@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
@@ -27,7 +26,6 @@ import com.example.myfit.util.constant.ParentCategory;
 import org.jetbrains.annotations.NotNull;
 
 @Database(entities = {Category.class, Size.class, Folder.class, RecentSearch.class}, version = 2, exportSchema = false)
-@TypeConverters({Converter.class})
 public abstract class AppDataBase extends RoomDatabase {
     private static final Migration MIGRATION_2_1 = new Migration(2, 1) {
         @Override
