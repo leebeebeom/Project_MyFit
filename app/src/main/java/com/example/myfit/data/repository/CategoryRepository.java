@@ -119,7 +119,8 @@ public class CategoryRepository extends BaseRepository{
         return isExistNameLive;
     }
 
-    public void setMainSortPreferenceValue(int sort) {
+    @Override
+    public void changeSort(int sort) {
         SharedPreferences.Editor editor = mainSortPreference.edit();
         editor.putInt(Sort.SORT_MAIN.getText(), sort);
         editor.apply();

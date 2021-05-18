@@ -89,11 +89,17 @@ public class SizeRepository extends BaseRepository{
         new Thread(() -> sizeDao.move(targetId, ids)).start();
     }
 
-
     @Override
     //from selectedItemDelete, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         new Thread(() -> sizeDao.deleteOrRestore(ids, isDeleted)).start();
+    }
+
+    @Override
+    public void changeSort(int sort) {
+        SharedPreferences.Editor editor = listSortPreference.edit();
+        editor.putInt(Sort.SORT_LIST.getText(), sort);
+        editor.apply();
     }
 
     private int getSort() {

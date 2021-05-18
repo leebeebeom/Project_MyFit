@@ -117,7 +117,8 @@ public class FolderRepository extends BaseRepository{
         return isExistNameLive;
     }
 
-    public void setListSortPreferenceValue(int sort) {
+    @Override
+    public void changeSort(int sort) {
         SharedPreferences.Editor editor = listSortPreference.edit();
         editor.putInt(Sort.SORT_LIST.getText(), sort);
         editor.apply();
