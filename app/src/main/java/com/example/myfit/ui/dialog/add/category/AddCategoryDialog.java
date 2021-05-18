@@ -13,9 +13,6 @@ import com.example.myfit.ui.dialog.add.BaseAddDialog;
 import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 import com.example.myfit.util.CommonUtil;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class AddCategoryDialog extends BaseAddDialog {
     @Override
     protected BaseAddViewModel getModel(NavBackStackEntry navBackStackEntry) {
