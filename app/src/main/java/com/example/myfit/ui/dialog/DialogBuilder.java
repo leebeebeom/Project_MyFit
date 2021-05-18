@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.example.myfit.R;
+import com.example.myfit.util.OnTextChange;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -47,6 +48,16 @@ public class DialogBuilder {
 
     public DialogBuilder makeEditTextDialog(String title, View view) {
         mDialog.setTitle(title);
+        mDialog.setView(view);
+        return this;
+    }
+
+    public DialogBuilder setTitle(String title){
+        mDialog.setTitle(title);
+        return this;
+    }
+
+    public DialogBuilder setView(View view){
         mDialog.setView(view);
         return this;
     }
