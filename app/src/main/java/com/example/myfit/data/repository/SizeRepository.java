@@ -79,10 +79,16 @@ public class SizeRepository extends BaseRepository{
         new Thread(() -> sizeDao.update(size)).start();
     }
 
+    //from sizeDelete dialog
+    public void delete(long id){
+        new Thread(() -> sizeDao.delete(id)).start();
+    }
+
     //from move dialog
     public void move(long targetId, long[] ids) {
         new Thread(() -> sizeDao.move(targetId, ids)).start();
     }
+
 
     @Override
     //from selectedItemDelete, restore dialog
