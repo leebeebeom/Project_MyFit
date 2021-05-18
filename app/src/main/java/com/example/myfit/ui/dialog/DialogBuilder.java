@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -58,25 +56,31 @@ public class DialogBuilder {
         mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    public DialogBuilder setPositiveEnabledByIsInputTextEmpty(CharSequence inputText) {
+    public DialogBuilder setPositiveEnabledByIsInputText(CharSequence inputText) {
         getPositiveButton().setEnabled(!TextUtils.isEmpty(inputText));
         return this;
     }
 
-    public DialogBuilder setPositiveEnabledByIsChangedTextEmpty(@NotNull TextInputEditText editText) {
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+    public DialogBuilder setPositiveEnabledByIsInputText(CharSequence inputText, String oldName) {
+        getPositiveButton().setEnabled(!TextUtils.isEmpty(inputText) && !inputText.equals(oldName));
+        return this;
+    }
 
+    public DialogBuilder setPositiveEnabledByIsChangedText(@NotNull TextInputEditText editText) {
+        editText.addTextChangedListener(new OnTextChange() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setPositiveEnabledByIsInputTextEmpty(s);
+                setPositiveEnabledByIsInputText(s);
             }
+        });
+        return this;
+    }
 
+    public DialogBuilder setPositiveEnabledByIsChangedText(@NotNull TextInputEditText editText, String oldName) {
+        editText.addTextChangedListener(new OnTextChange() {
             @Override
-            public void afterTextChanged(Editable s) {
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setPositiveEnabledByIsInputText(s, oldName);
             }
         });
         return this;
