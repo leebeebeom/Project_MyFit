@@ -82,8 +82,8 @@ public abstract class BaseAddDialog extends BaseDialog {
         return dialogBuilder
                 .makeEditTextDialog(getDialogTitle(), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
-                .setPositiveEnabledByIsInputTextEmpty(inputText)
-                .setPositiveEnabledByIsChangedTextEmpty(binding.et)
+                .setPositiveEnabledByIsInputText(inputText)
+                .setPositiveEnabledByIsChangedText(binding.et)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
                 .create();
     }
