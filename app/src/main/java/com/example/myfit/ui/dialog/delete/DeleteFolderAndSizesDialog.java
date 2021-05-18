@@ -40,8 +40,13 @@ public class DeleteFolderAndSizesDialog extends BaseDialog {
         selectedFolderIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
         selectedSizeIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
         NavController navController = NavHostFragment.findNavController(this);
-        navBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(MainGraphViewModel.class);
+        navBackStackEntry = navController.getBackStackEntry(R.id.deleteFolderAndSizesDialog);
+        setBackStackEntryLive(navController);
+    }
+
+    private void setBackStackEntryLive(@NotNull NavController navController) {
+        NavBackStackEntry mainBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
+        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
         mainGraphViewModel.setBackStackEntryLive(navBackStackEntry);
     }
 

@@ -28,18 +28,17 @@ public abstract class BaseDeleteDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectedItemIds = getSelectedItemIds();
-        navBackStackEntry = getBackStackEntry();
-        setBackStackEntryLive(navBackStackEntry);
+        NavController navController = NavHostFragment.findNavController(this);
+        navBackStackEntry = getBackStackEntry(navController);
+        setBackStackEntryLive(navController);
     }
 
     @NotNull
-    private NavBackStackEntry getBackStackEntry(){
-        NavController navController = NavHostFragment.findNavController(this);
-        return navController.getBackStackEntry(navController.getGraph().getId());
-    }
+    protected abstract NavBackStackEntry getBackStackEntry(NavController navController);
 
-    private void setBackStackEntryLive(NavBackStackEntry navBackStackEntry){
-        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(MainGraphViewModel.class);
+    private void setBackStackEntryLive(NavController navController){
+        NavBackStackEntry mainBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
+        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
         mainGraphViewModel.setBackStackEntryLive(navBackStackEntry);
     }
 
