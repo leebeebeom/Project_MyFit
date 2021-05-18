@@ -2,6 +2,7 @@ package com.example.myfit.ui.dialog.add;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public abstract class BaseAddDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
-    protected DialogBindingBuilder dialogBindingBuilder;
+    DialogBindingBuilder dialogBindingBuilder;
     private NavController navController;
     protected BaseAddViewModel model;
     private ItemDialogEditTextBinding binding;
@@ -81,7 +82,7 @@ public abstract class BaseAddDialog extends BaseDialog {
     protected AlertDialog getAlertDialog() {
         return dialogBuilder
                 .makeEditTextDialog(getDialogTitle(), binding.getRoot())
-                .setPositiveClickListener(getPositiveClickListener())
+                .setPositiveClickListener(getPositiveClickListener(model))
                 .setPositiveEnabledByIsInputText(inputText)
                 .setPositiveEnabledByIsChangedText(binding.et)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
@@ -89,6 +90,8 @@ public abstract class BaseAddDialog extends BaseDialog {
     }
 
     protected abstract String getDialogTitle();
+
+    protected abstract View.OnClickListener getPositiveClickListener(BaseAddViewModel model);
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {

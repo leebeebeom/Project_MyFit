@@ -13,9 +13,6 @@ import com.example.myfit.ui.dialog.add.BaseAddDialog;
 import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 import com.example.myfit.util.CommonUtil;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -46,14 +43,17 @@ public class AddFolderDialog extends BaseAddDialog {
         return getString(R.string.all_create_folder);
     }
 
-    @NotNull
-    @Contract(pure = true)
     @Override
-    protected View.OnClickListener getPositiveClickListener() {
+    protected View.OnClickListener getPositiveClickListener(BaseAddViewModel model) {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getFolderId();
             byte parentIndex = (byte) AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentId, parentIndex);
         };
+    }
+
+    @Override
+    protected View.OnClickListener getPositiveClickListener() {
+        return null;
     }
 }

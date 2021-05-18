@@ -13,9 +13,6 @@ import com.example.myfit.ui.dialog.add.BaseAddDialog;
 import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 import com.example.myfit.util.CommonUtil;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -46,13 +43,16 @@ public class AddCategoryDialog extends BaseAddDialog {
         return getString(R.string.all_add_category);
     }
 
-    @NotNull
-    @Contract(pure = true)
     @Override
-    protected View.OnClickListener getPositiveClickListener() {
+    protected View.OnClickListener getPositiveClickListener(BaseAddViewModel model) {
         return v -> {
             byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentIndex);
         };
+    }
+
+    @Override
+    protected View.OnClickListener getPositiveClickListener() {
+        return null;
     }
 }
