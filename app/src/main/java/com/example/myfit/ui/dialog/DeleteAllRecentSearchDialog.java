@@ -22,8 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DeleteAllRecentSearchDialog extends BaseDialog {
     @Inject
-    DialogBindingBuilder dialogBindingBuilder;
-    @Inject
     RecentSearchRepository recentSearchRepository;
 
     @NonNull
