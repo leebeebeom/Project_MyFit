@@ -19,7 +19,7 @@ import com.example.myfit.util.constant.SortValue;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FolderRepository {
+public class FolderRepository extends BaseRepository{
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
 
@@ -101,6 +101,7 @@ public class FolderRepository {
         new Thread(() -> folderDao.move(targetId, ids)).start();
     }
 
+    @Override
     //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         new Thread(() -> folderDao.deleteOrRestore(ids, isDeleted)).start();

@@ -18,7 +18,7 @@ import com.example.myfit.util.constant.SortValue;
 
 import java.util.List;
 
-public class SizeRepository {
+public class SizeRepository extends BaseRepository{
     private final SizeDao sizeDao;
     private final SharedPreferences listSortPreference;
 
@@ -84,6 +84,7 @@ public class SizeRepository {
         new Thread(() -> sizeDao.move(targetId, ids)).start();
     }
 
+    @Override
     //from selectedItemDelete, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         new Thread(() -> sizeDao.deleteOrRestore(ids, isDeleted)).start();

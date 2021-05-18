@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CategoryRepository {
+public class CategoryRepository extends BaseRepository{
     private final SharedPreferences mainSortPreference;
     private final CategoryDao categoryDao;
 
@@ -103,6 +103,7 @@ public class CategoryRepository {
         new Thread(() -> categoryDao.update(categoryTuples)).start();
     }
 
+    @Override
     //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         new Thread(() -> categoryDao.deleteOrRestore(ids, isDeleted)).start();
