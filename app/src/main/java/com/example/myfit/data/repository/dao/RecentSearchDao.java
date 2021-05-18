@@ -14,10 +14,12 @@ import java.util.List;
 
 @Dao
 public abstract class RecentSearchDao {
+    //to searchView, recycleBin search
     @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY date DESC LIMIT 20")
     public abstract LiveData<List<RecentSearch>> getLiveByType(byte type);
 
     @Transaction
+    //from searchView, recycleBin search
     public void insert(String word, byte type) {
         if (isExistingWord(word, type)) delete(word);
 
@@ -35,8 +37,10 @@ public abstract class RecentSearchDao {
     protected abstract void insert(RecentSearch recentSearch);
 
     @Delete
+    //from searchView, recycleBin search
     public abstract void delete(RecentSearch recentSearch);
 
     @Query("DELETE FROM RecentSearch")
-    public abstract void deleteAllRecentSearch();
+    //from searchView, recycleBin search
+    public abstract void deleteAll();
 }

@@ -20,18 +20,22 @@ public class RecentSearchRepository {
         this.recentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
     }
 
+    //to searchView, recycleBin search
     public LiveData<List<RecentSearch>> getLiveByType(byte type) {
         return recentSearchDao.getLiveByType(type);
     }
 
+    //from searchView, recycleBin search
     public void insert(String word, byte type) {
         new Thread(() -> recentSearchDao.insert(word, type)).start();
     }
 
+    //from searchView, recycleBin search
     public void delete(RecentSearch recentSearch) {
         new Thread(() -> recentSearchDao.delete(recentSearch)).start();
     }
 
+    //from searchView, recycleBin search
     public void deleteAll() {
         new Thread(recentSearchDao::deleteAll).start();
     }
