@@ -40,7 +40,9 @@ public abstract class BaseDao<T extends BaseTuple> {
     }
 
     protected long[] getItemIds(@NotNull List<T> tuples) {
-        return tuples.stream().mapToLong(BaseTuple::getId).toArray();
+        return tuples.stream()
+                .mapToLong(BaseTuple::getId)
+                .toArray();
     }
 
     @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
@@ -129,14 +131,12 @@ public abstract class BaseDao<T extends BaseTuple> {
         Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(0));
     }
 
-    protected void setChildrenParentDeleted(long[] categoryIds, boolean isDeleted) {
+    protected void setChildrenParentDeleted(long[] parentIds, boolean isDeleted) {
         LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
-        addAllChildFolderParentDeletedTuples(categoryIds, allFolderParentDeletedTuples);
+        addAllChildFolderParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
 
-        LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = new LinkedList<>(this.getSizeParentDeletedTuplesByParentIds(categoryIds));
-        long[] allFolderIds = allFolderParentDeletedTuples.stream()
-                .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
-                .mapToLong(ParentDeletedTuple::getId).toArray();
+        LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = new LinkedList<>(this.getSizeParentDeletedTuplesByParentIds(parentIds));
+        long[] allFolderIds = getParentDeletedTupleIds(allFolderParentDeletedTuples);
         addAllChildSizeParentDeletedTuples(allFolderIds, allSizeParentDeletedTuples);
 
         setParentDeletedTuples(allFolderParentDeletedTuples, isDeleted);
@@ -149,11 +149,15 @@ public abstract class BaseDao<T extends BaseTuple> {
         List<ParentDeletedTuple> childFolderParentDeletedTuples = this.getFolderParentDeletedTuplesByParentIds(parentIds);
         if (!childFolderParentDeletedTuples.isEmpty()) {
             allParentDeletedTuples.addAll(childFolderParentDeletedTuples);
-            long[] childFolderIds = childFolderParentDeletedTuples.stream()
-                    .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
-                    .mapToLong(ParentDeletedTuple::getId).toArray();
+            long[] childFolderIds = getParentDeletedTupleIds(childFolderParentDeletedTuples);
             addAllChildFolderParentDeletedTuples(childFolderIds, allParentDeletedTuples);
         }
+    }
+
+    private long[] getParentDeletedTupleIds(@NotNull List<ParentDeletedTuple> childFolderParentDeletedTuples) {
+        return childFolderParentDeletedTuples.stream()
+                .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
+                .mapToLong(ParentDeletedTuple::getId).toArray();
     }
 
     @Query("SELECT id, isDeleted ,isParentDeleted FROM Folder WHERE parentId IN (:parentIds)")
