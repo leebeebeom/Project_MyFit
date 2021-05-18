@@ -2,7 +2,6 @@ package com.example.myfit.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,8 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class CategoryRepository {
     private final SharedPreferences mainSortPreference;
     private final CategoryDao categoryDao;
@@ -32,7 +29,7 @@ public class CategoryRepository {
         mainSortPreference = context.getSharedPreferences(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 
-    //to main, recycleBin
+    //to main
     public LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive() {
         IntegerSharedPreferenceLiveData mainSortPreferenceLive =
                 new IntegerSharedPreferenceLiveData(mainSortPreference, Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
@@ -46,14 +43,13 @@ public class CategoryRepository {
     }
 
     //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive(String keyWord) {
-        return categoryDao.getDeletedSearchTuplesLive(keyWord);
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive() {
+        return categoryDao.getDeletedSearchTuplesLive();
     }
 
     //to treeView(disposable)
     public LiveData<List<CategoryFolderTuple>> getTuplesByParentIndex(byte parentIndex) {
         MutableLiveData<List<CategoryFolderTuple>> tuplesLive = new MutableLiveData<>();
-        //TODO test
         new Thread(() -> {
                 int sort = getSort();
                 List<CategoryFolderTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
@@ -65,7 +61,6 @@ public class CategoryRepository {
     //to treeView(disposable)
     public LiveData<CategoryFolderTuple> getTupleById(long id) {
         MutableLiveData<CategoryFolderTuple> categoryTupleLive = new MutableLiveData<>();
-        //TODO test
         new Thread(() -> {
                 CategoryFolderTuple tuple = categoryDao.getTupleById(id);
                 categoryTupleLive.postValue(tuple);
@@ -83,10 +78,10 @@ public class CategoryRepository {
         return insertIdLive;
     }
 
-    @Inject
+    //from appDateBase
     public void insert(Category[] categories){
         new Thread(() -> categoryDao.insert(categories)).start();
-    };
+    }
 
     //from restore dialog(disposable)
     public LiveData<Long[]> insertRestoreCategories(@NotNull byte[] parentIndex) {
@@ -117,12 +112,8 @@ public class CategoryRepository {
     public LiveData<Boolean> isExistingName(String name, byte parentIndex) {
         MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
-            try {
                 boolean isExistName = categoryDao.isExistingName(name, parentIndex);
                 isExistNameLive.postValue(isExistName);
-            } catch (Exception e) {
-                logE(e);
-            }
         }).start();
         return isExistNameLive;
     }
@@ -136,10 +127,6 @@ public class CategoryRepository {
     @NotNull
     private Integer getSort() {
         return mainSortPreference.getInt(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
-    }
-
-    private void logE(Exception e) {
-        Log.e("에러", "logE: " + e.getMessage(), e);
     }
 }
 

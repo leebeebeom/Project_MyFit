@@ -12,7 +12,6 @@ import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
-import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,15 +44,15 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
     protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
 
     //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive(String keyWord) {
-        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2(keyWord);
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive() {
+        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
-        return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive, SortValue.SORT_NAME.getValue());
+        return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 AND name LIKE :keyWord ORDER BY name")
-    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedSearchTuplesLive2(String keyWord);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 AND name ORDER BY name")
+    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedSearchTuplesLive2();
 
     @Transaction
     //to treeView (disposable)
@@ -70,7 +69,7 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
     protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
 
     @Transaction
-    //to treeView
+    //to treeView(disposable)
     public CategoryFolderTuple getTupleById(long id) {
         CategoryFolderTuple tuple = this.getTupleById2(id);
         int contentsSize = getContentsSizeByParentId(id);
@@ -82,7 +81,7 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
     protected abstract CategoryFolderTuple getTupleById2(long id);
 
     @Transaction
-    //from addCategory Dialog
+    //from addCategory dialog(disposable)
     public long insert(String name, byte parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Category category = ModelFactory.makeCategory(name, parentIndex, orderNumber);
@@ -95,8 +94,12 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
     @Insert
     protected abstract long insert(Category category);
 
+    @Insert
+    //from appDateBase
+    public abstract Long[] insert(Category[] categories);
+
     @Transaction
-    //from restore Dialog
+    //from restore dialog(disposable)
     public Long[] insertRestoreCategories(@NotNull byte[] parentIndex) {
         String name = "복구됨";
         int orderNumber = this.getLargestOrderNumber() + 1;
@@ -109,9 +112,6 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
         }
         return this.insert(categories);
     }
-
-    @Insert
-    public abstract Long[] insert(Category[] categories);
 
     @Transaction
     //from nameEdit dialog
