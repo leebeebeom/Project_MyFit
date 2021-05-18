@@ -23,8 +23,11 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import static com.example.myfit.ui.dialog.delete.BaseDeleteDialog.DELETE_SELECT_ITEMS;
 
+@AndroidEntryPoint
 public class DeleteFolderAndSizesDialog extends BaseDialog {
     @Inject
     FolderRepository folderRepository;
