@@ -5,6 +5,8 @@ import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.dao.AutoCompleteDao;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,20 +20,22 @@ public class AutoCompleteRepository {
     }
 
     public LiveData<List<String>> getAutoCompleteWordsLive() {
-        LiveData<List<String>> autoCompleteListWordsLive = autoCompleteDao.getAutoCompleteWordsLive();
+        LiveData<List<String>> autoCompleteWordsLive = autoCompleteDao.getAutoCompleteWordsLive();
 
-        return Transformations.map(autoCompleteListWordsLive, autoCompleteWords -> {
-            autoCompleteWords.sort(String::compareTo);
-            return autoCompleteWords;
-        });
+        return getOrderedLive(autoCompleteWordsLive);
     }
 
     public LiveData<List<String>> getDeletedAutoCompleteWordsLive() {
         LiveData<List<String>> deletedAutoCompleteWordsLive = autoCompleteDao.getDeletedAutoCompleteWordsLive();
 
-        return Transformations.map(deletedAutoCompleteWordsLive, deletedAutoCompleteWords -> {
-            deletedAutoCompleteWords.sort(String::compareTo);
-            return deletedAutoCompleteWords;
+        return getOrderedLive(deletedAutoCompleteWordsLive);
+    }
+
+    @NotNull
+    private LiveData<List<String>> getOrderedLive(LiveData<List<String>> autoCompleteWordsLive) {
+        return Transformations.map(autoCompleteWordsLive, autoCompleteWords -> {
+            autoCompleteWords.sort(String::compareTo);
+            return autoCompleteWords;
         });
     }
 }
