@@ -22,15 +22,20 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DeleteImageDialog extends BaseDialog {
-    public static final String IMAGE_DELETE = "image delete";
+    public static final String DELETE_IMAGE = "image delete";
     private NavBackStackEntry navBackStackEntry;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NavController navController = NavHostFragment.findNavController(this);
-        navBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(MainGraphViewModel.class);
+        navBackStackEntry = navController.getBackStackEntry(R.id.deleteImageDialog);
+        setBackStackEntryLive(navController);
+    }
+
+    private void setBackStackEntryLive(@NotNull NavController navController) {
+        NavBackStackEntry mainBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
+        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
         mainGraphViewModel.setBackStackEntryLive(navBackStackEntry);
     }
 
@@ -51,7 +56,7 @@ public class DeleteImageDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            navBackStackEntry.getSavedStateHandle().set(IMAGE_DELETE, null);
+            navBackStackEntry.getSavedStateHandle().set(DELETE_IMAGE, null);
             dismiss();
         };
     }
