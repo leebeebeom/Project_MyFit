@@ -25,21 +25,17 @@ import java.util.List;
 @Dao
 public abstract class SizeDao extends BaseDao<SizeTuple> {
 
-    //to recycleBin
-    public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<SizeTuple>> tuplesLive = this.getDeletedTuplesLive();
-
-        return getClassifiedTuplesLive(tuplesLive);
+    //to list
+    public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId, int sort) {
+        LiveData<List<SizeTuple>> tuplesLive = getTuplesLiveByParentId(parentId);
+        return Transformations.map(tuplesLive, tuples -> {
+            this.orderSizeTuples(sort, tuples);
+            return tuples;
+        });
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
-            "WHERE isDeleted = 1 AND isParentDeleted = 0 ORDER BY deletedTime DESC")
-    protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
-
-    @NotNull
-    private LiveData<List<List<SizeTuple>>> getClassifiedTuplesLive(LiveData<List<SizeTuple>> tuplesLive) {
-        return Transformations.map(tuplesLive, this::getClassifiedSizeTuplesByParentIndex);
-    }
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
+    protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
 
     private void orderSizeTuples(int sort, List<SizeTuple> tuples) {
         try {
@@ -48,6 +44,16 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
             logE(e);
         }
     }
+
+    //to recycleBin
+    public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
+        LiveData<List<SizeTuple>> tuplesLive = this.getDeletedTuplesLive();
+        return Transformations.map(tuplesLive, this::getClassifiedSizeTuplesByParentIndex);
+    }
+
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
+            "WHERE isDeleted = 1 AND isParentDeleted = 0 ORDER BY deletedTime DESC")
+    protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
     @NotNull
     private List<List<SizeTuple>> getClassifiedSizeTuplesByParentIndex(List<SizeTuple> tuples) {
@@ -64,34 +70,21 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         return classifiedList;
     }
 
-    //to list
-    public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId, int sort) {
-        LiveData<List<SizeTuple>> tuplesLive = getTuplesLiveByParentId(parentId);
-        return Transformations.map(tuplesLive, tuples -> {
-            this.orderSizeTuples(sort, tuples);
-            return tuples;
-        });
-    }
-
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
-
     //to search
-    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(String keyWord) {
-        LiveData<List<SizeTuple>> tuplesLive = getSearchTuplesLive2(false, keyWord);
-
-        return getClassifiedTuplesLive(tuplesLive);
+    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive() {
+        LiveData<List<SizeTuple>> tuplesLive = getSearchTuplesLive2(false);
+        return Transformations.map(tuplesLive, this::getClassifiedSizeTuplesByParentIndex);
     }
 
     //to recycleBin search
-    public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive(String keyWord) {
-        LiveData<List<SizeTuple>> deletedTuplesLive = getSearchTuplesLive2(true, keyWord);
-        return getClassifiedTuplesLive(deletedTuplesLive);
+    public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive() {
+        LiveData<List<SizeTuple>> deletedTuplesLive = getSearchTuplesLive2(true);
+        return Transformations.map(deletedTuplesLive, this::getClassifiedSizeTuplesByParentIndex);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
-            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand LIKE :keyWord ORDER BY name")
-    protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean isDeleted, String keyWord);
+            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand ORDER BY name")
+    protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean isDeleted);
 
     //to sizeFragment(disposable)
     public List<String> getBrands() {
@@ -107,11 +100,15 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     @Query("SELECT * FROM Size WHERE id = :id")
     public abstract Size getSizeById(long id);
 
+    //from sizeFragment
     public void insertSize(@NotNull Size size) {
         int orderNumber = getLargestOrder() + 1;
         size.setOrderNumber(orderNumber);
         this.insert(size);
     }
+
+    @Query("SELECT max(orderNumber) FROM Size")
+    protected abstract int getLargestOrder();
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(Size size);
@@ -147,7 +144,4 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
-
-    @Query("SELECT max(orderNumber) FROM Size")
-    protected abstract int getLargestOrder();
 }

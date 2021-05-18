@@ -27,11 +27,6 @@ public class SizeRepository {
         this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 
-    //to recycleBin
-    public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
-        return sizeDao.getDeletedClassifiedTuplesLive();
-    }
-
     //to list
     public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
         IntegerSharedPreferenceLiveData listSortPreferenceLive =
@@ -39,14 +34,19 @@ public class SizeRepository {
         return Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, sort));
     }
 
+    //to recycleBin
+    public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
+        return sizeDao.getDeletedClassifiedTuplesLive();
+    }
+
     //to search
-    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(String keyWord) {
-        return sizeDao.getSearchTuplesLive(keyWord);
+    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive() {
+        return sizeDao.getSearchTuplesLive();
     }
 
     //to recycleBin search
-    public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive(String keyWord) {
-        return sizeDao.getDeletedSearchTuplesLive(keyWord);
+    public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive() {
+        return sizeDao.getDeletedSearchTuplesLive();
     }
 
     //to sizeFragment(disposable)
@@ -69,6 +69,7 @@ public class SizeRepository {
         return sizeLive;
     }
 
+    //from sizeFragment
     public void insert(Size size) {
         new Thread(() -> sizeDao.insertSize(size)).start();
     }
