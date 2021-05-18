@@ -12,35 +12,34 @@ import org.jetbrains.annotations.NotNull;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.components.ViewModelComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ViewModelScoped;
+import dagger.hilt.android.scopes.ActivityRetainedScoped;
 
 @Module
-@InstallIn(ViewModelComponent.class)
+@InstallIn(ActivityRetainedScoped.class)
 public class DataModule {
-    @ViewModelScoped
+    @ActivityRetainedScoped
     @NotNull
     @Provides
     public static CategoryRepository provideCategoryRepository(@ApplicationContext Context context) {
         return new CategoryRepository(context);
     }
 
-    @ViewModelScoped
+    @ActivityRetainedScoped
     @NotNull
     @Provides
     public static FolderRepository provideFolderRepository(@ApplicationContext Context context) {
         return new FolderRepository(context);
     }
 
-    @ViewModelScoped
+    @ActivityRetainedScoped
     @NotNull
     @Provides
     public static SizeRepository provideSizeRepository(@ApplicationContext Context context) {
         return new SizeRepository(context);
     }
 
-    @ViewModelScoped
+    @ActivityRetainedScoped
     @NotNull
     @Provides
     public static RecentSearchRepository provideRecentSearchRepository(@ApplicationContext Context context) {
