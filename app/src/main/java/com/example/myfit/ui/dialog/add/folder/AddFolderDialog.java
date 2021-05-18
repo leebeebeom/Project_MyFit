@@ -56,9 +56,4 @@ public class AddFolderDialog extends BaseAddDialog {
             model.queryIsExistingName(getInputText(), parentId, parentIndex);
         };
     }
-
-    @NotNull
-    private String getInputText() {
-        return String.valueOf(binding.et.getText());
-    }
 }

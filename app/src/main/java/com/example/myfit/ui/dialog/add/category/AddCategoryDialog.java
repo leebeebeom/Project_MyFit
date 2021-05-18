@@ -55,9 +55,4 @@ public class AddCategoryDialog extends BaseAddDialog {
             model.queryIsExistingName(getInputText(), parentIndex);
         };
     }
-
-    @NotNull
-    private String getInputText() {
-        return String.valueOf(binding.et.getText());
-    }
 }

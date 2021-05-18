@@ -28,7 +28,7 @@ public abstract class BaseAddDialog extends BaseDialog {
     protected DialogBindingBuilder dialogBindingBuilder;
     private NavController navController;
     protected BaseAddViewModel model;
-    protected ItemDialogEditTextBinding binding;
+    private ItemDialogEditTextBinding binding;
     private String inputText;
 
     @Override
@@ -94,5 +94,10 @@ public abstract class BaseAddDialog extends BaseDialog {
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(INPUT_TEXT, String.valueOf(binding.et.getText()));
+    }
+
+    @NotNull
+    protected String getInputText() {
+        return String.valueOf(binding.et.getText());
     }
 }
