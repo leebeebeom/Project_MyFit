@@ -28,7 +28,7 @@ public abstract class BaseAddDialog extends BaseDialog {
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
     private NavController navController;
-    protected BaseAddViewModel model;
+    private BaseAddViewModel model;
     private ItemDialogEditTextBinding binding;
     private String inputText;
 
