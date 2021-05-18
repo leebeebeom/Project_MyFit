@@ -5,9 +5,9 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModel;
 
 import com.example.myfit.data.repository.FolderRepository;
+import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class AddFolderDialogViewModel extends ViewModel {
+public class AddFolderDialogViewModel extends BaseAddViewModel {
     public static final String FOLDER_NAME = "folder name";
     private final SavedStateHandle savedStateHandle;
     private final FolderRepository folderRepository;
@@ -35,18 +35,25 @@ public class AddFolderDialogViewModel extends ViewModel {
         isExistingMutable.addSource(isExistingLive, isExistingMutable::setValue);
     }
 
-    public void queryIsExistingFolderName(String name, long parentId, byte parentIndex) {
-        this.name = name;
-        this.parentId = parentId;
-        this.parentIndex = parentIndex;
-        savedStateHandle.set(FOLDER_NAME, name);
-    }
-
     public void insert() {
         folderRepository.insert(name, parentId, parentIndex);
     }
 
+    @Override
     public MutableLiveData<Boolean> getIsExistingLive() {
         return isExistingMutable;
+    }
+
+    @Override
+    public void queryIsExistingName(String inputText, byte parentIndex) {
+        
+    }
+
+    @Override
+    public void queryIsExistingName(String inputText, long parentId, byte parentIndex) {
+        this.name = inputText;
+        this.parentId = parentId;
+        this.parentIndex = parentIndex;
+        savedStateHandle.set(FOLDER_NAME, name);
     }
 }
