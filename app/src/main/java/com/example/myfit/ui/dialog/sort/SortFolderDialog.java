@@ -20,7 +20,7 @@ public class SortFolderDialog extends BaseSortDialog {
 
     @Override
     protected int getCheckedNumber() {
-        return SortFolderDialogArgs.fromBundle(getArguments()).getCheckedItem();
+        return folderRepository.getSort();
     }
 
     @Override

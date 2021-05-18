@@ -25,7 +25,7 @@ public class SortCategoryDialog extends BaseSortDialog {
 
     @Override
     protected int getCheckedNumber() {
-        return SortCategoryDialogArgs.fromBundle(getArguments()).getCheckedItem();
+        return categoryRepository.getSort();
     }
 
     @Override
