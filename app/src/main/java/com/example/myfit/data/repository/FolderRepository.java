@@ -28,11 +28,6 @@ public class FolderRepository {
         this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 
-    //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
-        return folderDao.getDeletedClassifiedTuplesLive();
-    }
-
     //to list
     public LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId) {
         IntegerSharedPreferenceLiveData listSortPreferenceLive =
@@ -40,19 +35,24 @@ public class FolderRepository {
         return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getTuplesLiveByParentId(parentId, sort));
     }
 
-    //to searchView
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchTuplesListLive(String keyWord) {
-        return folderDao.getSearchTuplesListLive(keyWord);
+    //to recycleBin
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
+        return folderDao.getDeletedClassifiedTuplesLive();
     }
 
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyword) {
-        return folderDao.getDeletedSearchFolderTuplesListLive(keyword);
+    //to searchView
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchTuplesListLive() {
+        return folderDao.getSearchTuplesListLive();
+    }
+
+    //to recycleBin search
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive() {
+        return folderDao.getDeletedSearchTuplesListLive();
     }
 
     //to treeView(disposable)
     public LiveData<List<CategoryFolderTuple>> getTuplesByParentIndex(byte parentIndex) {
         MutableLiveData<List<CategoryFolderTuple>> tuplesLive = new MutableLiveData<>();
-        //TODO test
         new Thread(() -> {
                 int sort = getSort();
                 List<CategoryFolderTuple> folderTuples = folderDao.getTuplesByParentIndex(parentIndex, sort);
@@ -64,7 +64,6 @@ public class FolderRepository {
     //to treeView(disposable)
     public LiveData<CategoryFolderTuple> getTupleById(long id) {
         MutableLiveData<CategoryFolderTuple> folderTupleLive = new MutableLiveData<>();
-        //TODO test
         new Thread(() -> {
                 CategoryFolderTuple folderTuple = folderDao.getTupleById(id);
                 folderTupleLive.postValue(folderTuple);
@@ -80,7 +79,6 @@ public class FolderRepository {
     //from addFolder dialog
     public LiveData<Long> insert(String name, long parentId, byte parentIndex) {
         MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
-        //TODO test
         new Thread(() -> {
                 long insertId = folderDao.insert(name, parentId, parentIndex);
                 insertIdLive.postValue(insertId);
@@ -103,7 +101,7 @@ public class FolderRepository {
         new Thread(() -> folderDao.move(targetId, ids)).start();
     }
 
-    //from deleteSelectedItems, restore dialog
+    //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         new Thread(() -> folderDao.deleteOrRestore(ids, isDeleted)).start();
     }

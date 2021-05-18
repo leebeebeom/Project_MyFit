@@ -23,17 +23,6 @@ import java.util.List;
 @Dao
 public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
 
-    //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
-
-        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
-    }
-
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
-    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
-
     //to list
     public LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId, int sort) {
         LiveData<List<CategoryFolderTuple>> tuplesLive = this.getTuplesLiveByParentId(parentId);
@@ -57,25 +46,36 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
         });
     }
 
+    //to recycleBin
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
+        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
+        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
+
+        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
+    }
+
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
+
     //to searchView
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchTuplesListLive(String keyWord) {
-        LiveData<List<CategoryFolderTuple>> searchTuplesLive = this.getSearchTuplesLive(false, keyWord);
+    public LiveData<List<List<CategoryFolderTuple>>> getSearchTuplesListLive() {
+        LiveData<List<CategoryFolderTuple>> searchTuplesLive = this.getSearchTuplesLive(false);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchTuplesLive, false);
 
         return this.getClassifiedTuplesLive(searchTuplesLive, contentsSizesLive);
     }
 
     //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchFolderTuplesListLive(String keyWord) {
-        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = this.getSearchTuplesLive(true, keyWord);
+    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesListLive() {
+        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = this.getSearchTuplesLive(true);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
         return this.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder " +
-            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name LIKE :keyWord ORDER BY name")
-    protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(boolean isDeleted, String keyWord);
+            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name ORDER BY name")
+    protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(boolean isDeleted);
 
     //to treeView (disposable)
     @Transaction
@@ -92,7 +92,7 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
     protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
 
     @Transaction
-    //to treeView
+    //to treeView(disposable)
     public CategoryFolderTuple getTupleById(long id) {
         CategoryFolderTuple tuple = this.getTupleById2(id);
         int contentsSize = getContentsSizeByParentId(id);
@@ -152,7 +152,7 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
     protected abstract void update(ParentIdTuple[] parentIdTuples);
 
     @Transaction
-    //from delete, restore dialog
+    //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
         DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples, isDeleted);
