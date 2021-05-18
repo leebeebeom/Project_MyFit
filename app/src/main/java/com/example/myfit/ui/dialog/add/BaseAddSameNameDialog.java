@@ -15,7 +15,7 @@ import com.example.myfit.ui.dialog.BaseDialog;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class BaseSameNameDialog extends BaseDialog {
+public abstract class BaseAddSameNameDialog extends BaseDialog {
     private NavController navController;
     private BaseAddViewModel model;
 

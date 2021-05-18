@@ -6,12 +6,12 @@ import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.R;
 import com.example.myfit.ui.dialog.add.BaseAddViewModel;
-import com.example.myfit.ui.dialog.add.BaseSameNameDialog;
+import com.example.myfit.ui.dialog.add.BaseAddSameNameDialog;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddSameFolderNameDialog extends BaseSameNameDialog {
+public class AddSameFolderNameDialog extends BaseAddSameNameDialog {
     @Override
     protected BaseAddViewModel getModel(NavBackStackEntry navBackStackEntry) {
         return new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(AddFolderDialogViewModel.class);
