@@ -122,7 +122,7 @@ public abstract class BaseDao<T extends BaseTuple> {
         Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(currentTime));
     }
 
-    private long getCurrentTime() {
+    protected long getCurrentTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
         return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
