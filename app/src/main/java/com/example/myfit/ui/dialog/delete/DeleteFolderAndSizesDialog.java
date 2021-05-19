@@ -28,18 +28,23 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     }
 
     @Override
-    protected String getSelectedItemsSize() {
-        return String.valueOf(getSelectedFolderIds().length + getSelectedSizeIds().length);
-    }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
+    protected View.OnClickListener getPositiveClickListener(NavBackStackEntry navBackStackEntry) {
         return v -> {
             folderRepository.deleteOrRestore(getSelectedFolderIds(), true);
             sizeRepository.deleteOrRestore(getSelectedSizeIds(), true);
             navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
             dismiss();
         };
+    }
+
+    @Override
+    protected String getSelectedItemsSize() {
+        return String.valueOf(getSelectedFolderIds().length + getSelectedSizeIds().length);
+    }
+
+    @Override
+    protected View.OnClickListener getPositiveClickListener() {
+        return null;
     }
 
     private long[] getSelectedFolderIds() {

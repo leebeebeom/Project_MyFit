@@ -26,17 +26,22 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
     }
 
     @Override
+    protected View.OnClickListener getPositiveClickListener(NavBackStackEntry navBackStackEntry) {
+        return v -> {
+            categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
+            navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
+            dismiss();
+        };
+    }
+
+    @Override
     protected String getSelectedItemsSize() {
         return String.valueOf(getSelectedItemIds().length);
     }
 
     @Override
     protected View.OnClickListener getPositiveClickListener() {
-        return v -> {
-            categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
-            navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
-            dismiss();
-        };
+        return null;
     }
 
     private long[] getSelectedItemIds() {

@@ -2,6 +2,7 @@ package com.example.myfit.ui.dialog.delete;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +20,7 @@ import com.example.myfit.ui.main.MainGraphViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseDeleteDialog extends BaseDialog {
-    protected NavBackStackEntry navBackStackEntry;
+    private NavBackStackEntry navBackStackEntry;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -48,9 +49,11 @@ public abstract class BaseDeleteDialog extends BaseDialog {
     @Override
     protected AlertDialog getAlertDialog() {
         return dialogBuilder.makeConfirmDialog(getSelectedItemsSize() + getString(R.string.dialog_message_selected_item_delete))
-                .setPositiveClickListener(getPositiveClickListener())
+                .setPositiveClickListener(getPositiveClickListener(navBackStackEntry))
                 .create();
     }
+
+    protected abstract View.OnClickListener getPositiveClickListener(NavBackStackEntry navBackStackEntry);
 
     protected abstract String getSelectedItemsSize();
 
