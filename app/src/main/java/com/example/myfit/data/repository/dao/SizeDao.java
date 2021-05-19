@@ -113,6 +113,17 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(Size size);
 
+    @Transaction
+    public void delete(long id) {
+        DeletedTuple deletedTuple = getDeletedTuple(id);
+        deletedTuple.setDeleted(true);
+        deletedTuple.setDeletedTime(super.getCurrentTime());
+        updateDeletedTuple(deletedTuple);
+    }
+
+    @Query("SELECT id, isDeleted, deletedTime FROM Size WHERE id = :id")
+    protected abstract DeletedTuple getDeletedTuple(long id);
+
     @Insert
     protected abstract long insert(Size size);
 
@@ -144,4 +155,8 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
+    protected abstract void updateDeletedTuple(DeletedTuple deletedTuple);
+
 }
