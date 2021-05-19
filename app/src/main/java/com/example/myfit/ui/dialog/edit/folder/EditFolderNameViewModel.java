@@ -1,8 +1,6 @@
 package com.example.myfit.ui.dialog.edit.folder;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
@@ -21,22 +19,18 @@ public class EditFolderNameViewModel extends BaseEditViewModel {
     private final SavedStateHandle savedStateHandle;
     private final FolderRepository folderRepository;
     private String name;
-    private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
     private long id, parentId;
 
     @Inject
     public EditFolderNameViewModel(@NotNull SavedStateHandle savedStateHandle, FolderRepository folderRepository) {
         this.savedStateHandle = savedStateHandle;
         this.folderRepository = folderRepository;
-
-        LiveData<Boolean> isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(EDIT_FOLDER_NAME),
-                name -> folderRepository.isExistingName((String) name, parentId));
-        isExistingMutable.addSource(isExistingLive, isExistingMutable::setValue);
     }
 
     @Override
-    public MutableLiveData<Boolean> getIsExistingLive() {
-        return isExistingMutable;
+    protected LiveData<Boolean> getIsExistingLive() {
+        return Transformations.switchMap(savedStateHandle.getLiveData(EDIT_FOLDER_NAME),
+                name -> folderRepository.isExistingName((String) name, parentId));
     }
 
     @Override
