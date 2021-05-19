@@ -18,6 +18,8 @@ import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 public abstract class BaseSortDialog extends BaseDialog {
     private LayoutDialogSortBinding binding;
     private int checkedNumber;
@@ -52,8 +54,10 @@ public abstract class BaseSortDialog extends BaseDialog {
             buttons[i].setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     checkedNumber = buttonConstantArray[finalI];
-                    for (MaterialRadioButton button : buttons)
-                        if (button != buttonView) button.setChecked(false);
+
+                    Arrays.stream(buttons)
+                            .filter(button -> button != buttonView)
+                            .forEach(button -> button.setChecked(false));
                 }
             });
         }
