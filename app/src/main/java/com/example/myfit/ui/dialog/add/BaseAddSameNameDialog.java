@@ -14,16 +14,6 @@ import com.example.myfit.ui.dialog.BaseDialogViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseAddSameNameDialog extends BaseDialog {
-    private BaseDialogViewModel model;
-
-    @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        model = getModel();
-    }
-
-    protected abstract BaseDialogViewModel getModel();
-
     @NonNull
     @NotNull
     @Override
@@ -43,10 +33,13 @@ public abstract class BaseAddSameNameDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
+            BaseDialogViewModel model = getModel();
             model.insert();
             getNavController().popBackStack(getDestinationId(), true);
         };
     }
+
+    protected abstract BaseDialogViewModel getModel();
 
     protected abstract int getDestinationId();
 }
