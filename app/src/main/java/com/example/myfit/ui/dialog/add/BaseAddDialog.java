@@ -76,7 +76,7 @@ public abstract class BaseAddDialog extends BaseDialog {
     protected AlertDialog getAlertDialog() {
         return dialogBuilder
                 .makeEditTextDialog(getDialogTitle(), binding.getRoot())
-                .setPositiveClickListener(getPositiveClickListener(model))
+                .setPositiveClickListener(getPositiveClickListener())
                 .setPositiveEnabledByInputText(inputText)
                 .setPositiveEnabledByChangedText(binding.et)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
@@ -85,12 +85,12 @@ public abstract class BaseAddDialog extends BaseDialog {
 
     protected abstract String getDialogTitle();
 
-    protected abstract View.OnClickListener getPositiveClickListener(BaseAddViewModel model);
-
     @Override
     protected View.OnClickListener getPositiveClickListener() {
-        return null;
+        return getPositiveClickListener(model);
     }
+
+    protected abstract View.OnClickListener getPositiveClickListener(BaseAddViewModel model);
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
