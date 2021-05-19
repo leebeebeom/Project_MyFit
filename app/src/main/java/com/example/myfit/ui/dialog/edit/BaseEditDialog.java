@@ -2,22 +2,15 @@ package com.example.myfit.ui.dialog.edit;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.hilt.navigation.HiltViewModelFactory;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myfit.R;
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
-import com.example.myfit.ui.main.MainGraphViewModel;
 import com.example.myfit.util.KeyBoardUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,9 +26,7 @@ public abstract class BaseEditDialog extends BaseDialog {
     DialogBindingBuilder dialogBindingBuilder;
     private ItemDialogEditTextBinding binding;
     private String oldName;
-    private BaseEditViewModel model;
-    private NavBackStackEntry navBackStackEntry;
-    private NavController navController;
+    private NavBackStackEntry backStackEntry;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -44,12 +35,8 @@ public abstract class BaseEditDialog extends BaseDialog {
         String inputText = savedInstanceState == null ? oldName : savedInstanceState.getString(EDIT_NAME);
         binding = getBinding(inputText);
 
-        navController = NavHostFragment.findNavController(this);
-        navBackStackEntry = getBackStackEntry(navController);
-        setBackStackLive();
-
-        NavBackStackEntry editGraphBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        model = getModel(editGraphBackStackEntry);
+        backStackEntry = getBackStackEntry();
+        setBackStackLive(backStackEntry);
     }
 
     protected abstract String getName();
@@ -65,28 +52,22 @@ public abstract class BaseEditDialog extends BaseDialog {
 
     protected abstract String getPlaceHolder();
 
-    protected abstract NavBackStackEntry getBackStackEntry(NavController navController);
-
-    private void setBackStackLive() {
-        NavBackStackEntry mainBackStackEntry = navController.getBackStackEntry(R.id.nav_graph_main);
-        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
-        mainGraphViewModel.setBackStackEntryLive(navBackStackEntry);
-    }
-
-    protected abstract BaseEditViewModel getModel(NavBackStackEntry editGraphBackStackEntry);
+    protected abstract NavBackStackEntry getBackStackEntry();
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        BaseEditViewModel model = getModel();
+
         model.getIsExistingMutable().observe(this, isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
-                    navigateSameNameDialog(navController);
+                    navigateSameNameDialog();
                     KeyBoardUtil.hideKeyBoard(binding.et);
                 } else {
                     model.update();
-                    navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
+                    actionModeOff(backStackEntry);
                     dismiss();
                 }
                 model.getIsExistingMutable().setValue(null);
@@ -96,10 +77,14 @@ public abstract class BaseEditDialog extends BaseDialog {
         return getAlertDialog();
     }
 
+    protected abstract BaseEditViewModel getModel();
+
+    protected abstract void navigateSameNameDialog();
+
     @Override
     protected AlertDialog getAlertDialog() {
         return dialogBuilder.makeEditTextDialog(getTitle(), binding.getRoot())
-                .setPositiveClickListener(getPositiveClickListener(model, getInputText()))
+                .setPositiveClickListener(getPositiveClickListener())
                 .setPositiveEnabledByInputText(binding.et.getText(), oldName)
                 .setPositiveEnabledByChangedText(binding.et, oldName)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
@@ -107,10 +92,6 @@ public abstract class BaseEditDialog extends BaseDialog {
     }
 
     protected abstract String getTitle();
-
-    protected abstract View.OnClickListener getPositiveClickListener(BaseEditViewModel model, String inputText);
-
-    protected abstract void navigateSameNameDialog(NavController navController);
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
