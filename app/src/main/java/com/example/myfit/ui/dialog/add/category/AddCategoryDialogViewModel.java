@@ -37,7 +37,7 @@ public class AddCategoryDialogViewModel extends BaseDialogViewModel {
     }
 
     @Override
-    public LiveData<Boolean> getIsExistingLive() {
+    protected LiveData<Boolean> getIsExistingLive() {
         return Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME),
                 name -> categoryRepository.isExistingName((String) name, this.parentIndex));
     }

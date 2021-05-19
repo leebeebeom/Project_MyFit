@@ -39,7 +39,7 @@ public class AddFolderDialogViewModel extends BaseDialogViewModel {
     }
 
     @Override
-    public LiveData<Boolean> getIsExistingLive() {
+    protected LiveData<Boolean> getIsExistingLive() {
         return Transformations.switchMap(savedStateHandle.getLiveData(FOLDER_NAME),
                 name -> folderRepository.isExistingName((String) name, parentId));
     }

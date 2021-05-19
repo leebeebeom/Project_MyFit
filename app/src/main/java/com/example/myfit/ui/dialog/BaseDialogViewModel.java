@@ -13,7 +13,7 @@ public abstract class BaseDialogViewModel extends ViewModel {
         return isExistingMutable;
     }
 
-    public abstract LiveData<Boolean> getIsExistingLive();
+    protected abstract LiveData<Boolean> getIsExistingLive();
 
     public abstract void queryIsExistingName(String inputText, byte parentIndex);
 
