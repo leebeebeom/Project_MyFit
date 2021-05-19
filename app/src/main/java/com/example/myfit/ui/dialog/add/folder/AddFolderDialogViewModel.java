@@ -56,4 +56,14 @@ public class AddFolderDialogViewModel extends BaseDialogViewModel {
         this.parentIndex = parentIndex;
         savedStateHandle.set(FOLDER_NAME, name);
     }
+
+    @Override
+    public void queryIsExistingName(long id, String inputText, byte parentIndex) {
+
+    }
+
+    @Override
+    public void queryIsExistingName(long id, String inputText, long parentId) {
+
+    }
 }

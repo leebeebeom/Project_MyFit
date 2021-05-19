@@ -52,4 +52,14 @@ public class AddCategoryDialogViewModel extends BaseDialogViewModel {
     @Override
     public void queryIsExistingName(String inputText, long parentId, byte parentIndex) {
     }
+
+    @Override
+    public void queryIsExistingName(long id, String inputText, byte parentIndex) {
+
+    }
+
+    @Override
+    public void queryIsExistingName(long id, String inputText, long parentId) {
+
+    }
 }
