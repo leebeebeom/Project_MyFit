@@ -1,8 +1,6 @@
 package com.example.myfit.ui.dialog.add.folder;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
@@ -23,16 +21,11 @@ public class AddFolderDialogViewModel extends BaseAddViewModel {
     private long parentId;
     private String name;
     private byte parentIndex;
-    private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
 
     @Inject
     public AddFolderDialogViewModel(@NotNull SavedStateHandle savedStateHandle, FolderRepository folderRepository) {
         this.savedStateHandle = savedStateHandle;
         this.folderRepository = folderRepository;
-
-        LiveData<Boolean> isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(FOLDER_NAME),
-                name -> folderRepository.isExistingName((String) name, parentId));
-        isExistingMutable.addSource(isExistingLive, isExistingMutable::setValue);
     }
 
     public void insert() {
@@ -40,8 +33,9 @@ public class AddFolderDialogViewModel extends BaseAddViewModel {
     }
 
     @Override
-    public MutableLiveData<Boolean> getIsExistingLive() {
-        return isExistingMutable;
+    public LiveData<Boolean> getIsExistingLive() {
+        return Transformations.switchMap(savedStateHandle.getLiveData(FOLDER_NAME),
+                name -> folderRepository.isExistingName((String) name, parentId));
     }
 
     @Override

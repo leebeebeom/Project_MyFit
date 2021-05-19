@@ -1,8 +1,6 @@
 package com.example.myfit.ui.dialog.add.category;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
@@ -22,16 +20,11 @@ public class AddCategoryDialogViewModel extends BaseAddViewModel {
     private final CategoryRepository categoryRepository;
     private byte parentIndex;
     private String name;
-    private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
 
     @Inject
     public AddCategoryDialogViewModel(@NotNull SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
         this.savedStateHandle = savedStateHandle;
         this.categoryRepository = categoryRepository;
-
-        LiveData<Boolean> isExistingLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME),
-                name -> categoryRepository.isExistingName((String) name, this.parentIndex));
-        isExistingMutable.addSource(isExistingLive, isExistingMutable::setValue);
     }
 
     @Override
@@ -40,8 +33,9 @@ public class AddCategoryDialogViewModel extends BaseAddViewModel {
     }
 
     @Override
-    public MutableLiveData<Boolean> getIsExistingLive() {
-        return isExistingMutable;
+    public LiveData<Boolean> getIsExistingLive() {
+        return Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_NAME),
+                name -> categoryRepository.isExistingName((String) name, this.parentIndex));
     }
 
     @Override
