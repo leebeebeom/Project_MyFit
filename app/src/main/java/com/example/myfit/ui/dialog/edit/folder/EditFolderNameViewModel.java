@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.FolderRepository;
-import com.example.myfit.ui.dialog.edit.BaseEditViewModel;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditFolderNameViewModel extends BaseEditViewModel {
+public class EditFolderNameViewModel extends BaseDialogViewModel {
     public static final String EDIT_FOLDER_NAME = "edit folder name";
     private final SavedStateHandle savedStateHandle;
     private final FolderRepository folderRepository;
@@ -34,6 +34,16 @@ public class EditFolderNameViewModel extends BaseEditViewModel {
     }
 
     @Override
+    public void queryIsExistingName(String inputText, byte parentIndex) {
+
+    }
+
+    @Override
+    public void queryIsExistingName(String inputText, long parentId, byte parentIndex) {
+
+    }
+
+    @Override
     public void queryIsExistingName(long id, String inputText, byte parentIndex) {
 
     }
@@ -44,6 +54,11 @@ public class EditFolderNameViewModel extends BaseEditViewModel {
         this.name = inputText;
         this.parentId = parentId;
         savedStateHandle.set(EDIT_FOLDER_NAME, name);
+    }
+
+    @Override
+    public void insert() {
+
     }
 
     @Override

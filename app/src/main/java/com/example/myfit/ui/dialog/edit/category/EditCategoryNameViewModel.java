@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.ui.dialog.edit.BaseEditViewModel;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditCategoryNameViewModel extends BaseEditViewModel {
+public class EditCategoryNameViewModel extends BaseDialogViewModel {
     public static final String EDIT_CATEGORY_NAME = "edit category name";
     SavedStateHandle savedStateHandle;
     CategoryRepository categoryRepository;
@@ -32,6 +32,21 @@ public class EditCategoryNameViewModel extends BaseEditViewModel {
     protected LiveData<Boolean> getIsExistingLive() {
         return Transformations.switchMap(savedStateHandle.getLiveData(EDIT_CATEGORY_NAME),
                 name -> categoryRepository.isExistingName((String) name, parentIndex));
+    }
+
+    @Override
+    public void queryIsExistingName(String inputText, byte parentIndex) {
+
+    }
+
+    @Override
+    public void queryIsExistingName(String inputText, long parentId, byte parentIndex) {
+
+    }
+
+    @Override
+    public void insert() {
+
     }
 
     @Override
