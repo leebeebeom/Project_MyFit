@@ -8,12 +8,13 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 import com.example.myfit.ui.dialog.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
     @Override
-    protected BaseAddViewModel getModel() {
+    protected BaseDialogViewModel getModel() {
         NavBackStackEntry graphBackStack = getGraphBackStack();
         return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryDialogViewModel.class);
     }
@@ -40,8 +41,8 @@ public class AddCategoryDialog extends BaseAddDialog {
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(BaseAddViewModel model) {
-        return v -> {
+    protected View.OnClickListener getPositiveClickListener(BaseDialogViewModel model) {
+        return  v -> {
             byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentIndex);
         };
