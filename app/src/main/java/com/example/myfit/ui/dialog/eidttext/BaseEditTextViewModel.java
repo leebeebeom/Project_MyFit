@@ -1,11 +1,11 @@
-package com.example.myfit.ui.dialog;
+package com.example.myfit.ui.dialog.eidttext;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public abstract class BaseDialogViewModel extends ViewModel {
+public abstract class BaseEditTextViewModel extends ViewModel {
     private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
 
     public MutableLiveData<Boolean> getIsExistingMutable() {

@@ -1,11 +1,11 @@
-package com.example.myfit.ui.dialog.edit.category;
+package com.example.myfit.ui.dialog.eidttext.edit.category;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditCategoryNameViewModel extends BaseDialogViewModel {
+public class EditCategoryNameViewModel extends BaseEditTextViewModel {
     public static final String EDIT_CATEGORY_NAME = "edit category name";
     SavedStateHandle savedStateHandle;
     CategoryRepository categoryRepository;
@@ -45,11 +45,6 @@ public class EditCategoryNameViewModel extends BaseDialogViewModel {
     }
 
     @Override
-    public void insert() {
-
-    }
-
-    @Override
     public void queryIsExistingName(long id, String inputText, byte parentIndex) {
         this.id = id;
         this.name = inputText;
@@ -59,6 +54,11 @@ public class EditCategoryNameViewModel extends BaseDialogViewModel {
 
     @Override
     public void queryIsExistingName(long id, String inputText, long parentId) {
+
+    }
+
+    @Override
+    public void insert() {
 
     }
 

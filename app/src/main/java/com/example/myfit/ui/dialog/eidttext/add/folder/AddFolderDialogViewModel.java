@@ -1,11 +1,11 @@
-package com.example.myfit.ui.dialog.add.folder;
+package com.example.myfit.ui.dialog.eidttext.add.folder;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.FolderRepository;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class AddFolderDialogViewModel extends BaseDialogViewModel {
+public class AddFolderDialogViewModel extends BaseEditTextViewModel {
     public static final String FOLDER_NAME = "folder name";
     private final SavedStateHandle savedStateHandle;
     private final FolderRepository folderRepository;
@@ -26,16 +26,6 @@ public class AddFolderDialogViewModel extends BaseDialogViewModel {
     public AddFolderDialogViewModel(@NotNull SavedStateHandle savedStateHandle, FolderRepository folderRepository) {
         this.savedStateHandle = savedStateHandle;
         this.folderRepository = folderRepository;
-    }
-
-    @Override
-    public void insert() {
-        folderRepository.insert(name, parentId, parentIndex);
-    }
-
-    @Override
-    public void update() {
-
     }
 
     @Override
@@ -65,5 +55,14 @@ public class AddFolderDialogViewModel extends BaseDialogViewModel {
     @Override
     public void queryIsExistingName(long id, String inputText, long parentId) {
 
+    }
+
+    @Override
+    public void insert() {
+        folderRepository.insert(name, parentId, parentIndex);
+    }
+
+    @Override
+    public void update() {
     }
 }

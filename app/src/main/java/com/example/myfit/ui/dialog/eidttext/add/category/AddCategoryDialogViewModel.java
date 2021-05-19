@@ -1,11 +1,11 @@
-package com.example.myfit.ui.dialog.add.category;
+package com.example.myfit.ui.dialog.eidttext.add.category;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class AddCategoryDialogViewModel extends BaseDialogViewModel {
+public class AddCategoryDialogViewModel extends BaseEditTextViewModel {
     public static final String CATEGORY_NAME = "category name";
     private final SavedStateHandle savedStateHandle;
     private final CategoryRepository categoryRepository;
@@ -25,15 +25,6 @@ public class AddCategoryDialogViewModel extends BaseDialogViewModel {
     public AddCategoryDialogViewModel(@NotNull SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
         this.savedStateHandle = savedStateHandle;
         this.categoryRepository = categoryRepository;
-    }
-
-    @Override
-    public void insert() {
-        categoryRepository.insert(name, parentIndex);
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override
@@ -61,5 +52,14 @@ public class AddCategoryDialogViewModel extends BaseDialogViewModel {
     @Override
     public void queryIsExistingName(long id, String inputText, long parentId) {
 
+    }
+
+    @Override
+    public void insert() {
+        categoryRepository.insert(name, parentIndex);
+    }
+
+    @Override
+    public void update() {
     }
 }
