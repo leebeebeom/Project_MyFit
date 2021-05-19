@@ -10,6 +10,7 @@ import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
 import com.example.myfit.util.KeyBoardUtil;
 
@@ -58,7 +59,7 @@ public abstract class BaseEditDialog extends BaseDialog {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        BaseEditViewModel model = getModel();
+        BaseDialogViewModel model = getModel();
 
         model.getIsExistingMutable().observe(this, isExisting -> {
             if (isExisting != null) {
@@ -77,7 +78,7 @@ public abstract class BaseEditDialog extends BaseDialog {
         return getAlertDialog();
     }
 
-    protected abstract BaseEditViewModel getModel();
+    protected abstract BaseDialogViewModel getModel();
 
     protected abstract void navigateSameNameDialog();
 
