@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public abstract class BaseDialog extends DialogFragment {
+    public static final String ACTION_MODE_OFF = "action mode off";
     @Inject
     protected DialogBuilder dialogBuilder;
 
