@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public abstract class BaseEditDialog extends BaseDialog {
     public static final String EDIT_NAME = "name";
     @Inject
-    protected DialogBindingBuilder dialogBindingBuilder;
+    DialogBindingBuilder dialogBindingBuilder;
     private ItemDialogEditTextBinding binding;
     private String oldName;
     private BaseEditViewModel model;
@@ -46,7 +46,7 @@ public abstract class BaseEditDialog extends BaseDialog {
 
         navController = NavHostFragment.findNavController(this);
         navBackStackEntry = getBackStackEntry(navController);
-        setBackStackLive(navController);
+        setBackStackLive();
 
         NavBackStackEntry editGraphBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
         model = getModel(editGraphBackStackEntry);
@@ -67,7 +67,7 @@ public abstract class BaseEditDialog extends BaseDialog {
 
     protected abstract NavBackStackEntry getBackStackEntry(NavController navController);
 
-    private void setBackStackLive(@NotNull NavController navController) {
+    private void setBackStackLive() {
         NavBackStackEntry mainBackStackEntry = navController.getBackStackEntry(R.id.nav_graph_main);
         MainGraphViewModel mainGraphViewModel = new ViewModelProvider(mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
         mainGraphViewModel.setBackStackEntryLive(navBackStackEntry);
@@ -79,17 +79,17 @@ public abstract class BaseEditDialog extends BaseDialog {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        model.getIsExistingLive().observe(this, isExisting -> {
+        model.getIsExistingMutable().observe(this, isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
                     navigateSameNameDialog(navController);
                     KeyBoardUtil.hideKeyBoard(binding.et);
                 } else {
                     model.update();
-                    navBackStackEntry.getSavedStateHandle().set(EDIT_NAME, null);
+                    navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
                     dismiss();
                 }
-                model.getIsExistingLive().setValue(null);
+                model.getIsExistingMutable().setValue(null);
             }
         });
 
@@ -100,8 +100,8 @@ public abstract class BaseEditDialog extends BaseDialog {
     protected AlertDialog getAlertDialog() {
         return dialogBuilder.makeEditTextDialog(getTitle(), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener(model, getInputText()))
-                .setPositiveEnabledByIsInputText(binding.et.getText(), oldName)
-                .setPositiveEnabledByIsChangedText(binding.et, oldName)
+                .setPositiveEnabledByInputText(binding.et.getText(), oldName)
+                .setPositiveEnabledByChangedText(binding.et, oldName)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
                 .create();
     }
