@@ -2,7 +2,6 @@ package com.example.myfit.ui.dialog.add;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +24,6 @@ public abstract class BaseAddDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
-    private BaseDialogViewModel model;
     private ItemDialogEditTextBinding binding;
     private String inputText;
 
@@ -33,11 +31,8 @@ public abstract class BaseAddDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputText = savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
-        model = getModel();
         binding = getBinding();
     }
-
-    protected abstract BaseDialogViewModel getModel();
 
     private ItemDialogEditTextBinding getBinding() {
         return dialogBindingBuilder
@@ -55,6 +50,8 @@ public abstract class BaseAddDialog extends BaseDialog {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        BaseDialogViewModel model = getModel();
+
         model.getIsExistingMutable().observe(this, isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
@@ -71,6 +68,8 @@ public abstract class BaseAddDialog extends BaseDialog {
         return getAlertDialog();
     }
 
+    protected abstract BaseDialogViewModel getModel();
+
     protected abstract void navigateSameNameDialog();
 
     @Override
@@ -85,13 +84,6 @@ public abstract class BaseAddDialog extends BaseDialog {
     }
 
     protected abstract String getDialogTitle();
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return getPositiveClickListener(model);
-    }
-
-    protected abstract View.OnClickListener getPositiveClickListener(BaseDialogViewModel model);
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {

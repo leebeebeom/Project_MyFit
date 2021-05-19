@@ -13,10 +13,16 @@ import com.example.myfit.ui.dialog.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {
+
+    private AddFolderDialogViewModel model;
+
     @Override
     protected BaseDialogViewModel getModel() {
-        NavBackStackEntry graphBackStack = getGraphBackStack();
-        return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderDialogViewModel.class);
+        if (model == null){
+            NavBackStackEntry graphBackStack = getGraphBackStack();
+            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderDialogViewModel.class);
+        }
+        return model;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class AddFolderDialog extends BaseAddDialog {
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(BaseDialogViewModel model) {
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getFolderId();
             byte parentIndex = (byte) AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();

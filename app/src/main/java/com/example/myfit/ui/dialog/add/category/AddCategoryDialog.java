@@ -13,10 +13,16 @@ import com.example.myfit.ui.dialog.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
+
+    private AddCategoryDialogViewModel model;
+
     @Override
     protected BaseDialogViewModel getModel() {
-        NavBackStackEntry graphBackStack = getGraphBackStack();
-        return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryDialogViewModel.class);
+        if (model == null){
+            NavBackStackEntry graphBackStack = getGraphBackStack();
+            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryDialogViewModel.class);
+        }
+        return model;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(BaseDialogViewModel model) {
+    protected View.OnClickListener getPositiveClickListener() {
         return  v -> {
             byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentIndex);
