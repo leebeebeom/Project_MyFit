@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.ui.dialog.add.BaseAddViewModel;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class AddCategoryDialogViewModel extends BaseAddViewModel {
+public class AddCategoryDialogViewModel extends BaseDialogViewModel {
     public static final String CATEGORY_NAME = "category name";
     private final SavedStateHandle savedStateHandle;
     private final CategoryRepository categoryRepository;
@@ -30,6 +30,10 @@ public class AddCategoryDialogViewModel extends BaseAddViewModel {
     @Override
     public void insert() {
         categoryRepository.insert(name, parentIndex);
+    }
+
+    @Override
+    public void update() {
     }
 
     @Override

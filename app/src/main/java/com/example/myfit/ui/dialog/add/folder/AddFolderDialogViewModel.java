@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.FolderRepository;
-import com.example.myfit.ui.dialog.add.BaseAddViewModel;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class AddFolderDialogViewModel extends BaseAddViewModel {
+public class AddFolderDialogViewModel extends BaseDialogViewModel {
     public static final String FOLDER_NAME = "folder name";
     private final SavedStateHandle savedStateHandle;
     private final FolderRepository folderRepository;
@@ -30,6 +30,11 @@ public class AddFolderDialogViewModel extends BaseAddViewModel {
 
     public void insert() {
         folderRepository.insert(name, parentId, parentIndex);
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override

@@ -9,7 +9,6 @@ import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
 import com.example.myfit.ui.dialog.add.BaseAddDialog;
-import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {

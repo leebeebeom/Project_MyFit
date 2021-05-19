@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 import com.example.myfit.ui.dialog.add.BaseAddSameNameDialog;
-import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 
 public class AddSameCategoryNameDialog extends BaseAddSameNameDialog {
     @Override
-    protected BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry) {
+    protected BaseDialogViewModel getModel(NavBackStackEntry addGraphBackStackEntry) {
         return new ViewModelProvider(addGraphBackStackEntry, HiltViewModelFactory.create(requireContext(), addGraphBackStackEntry)).get(AddCategoryDialogViewModel.class);
     }
 

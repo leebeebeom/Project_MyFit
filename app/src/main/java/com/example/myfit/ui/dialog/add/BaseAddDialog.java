@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 import com.example.myfit.ui.dialog.DialogBindingBuilder;
 import com.example.myfit.util.KeyBoardUtil;
 
@@ -24,7 +25,7 @@ public abstract class BaseAddDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
-    private BaseAddViewModel model;
+    private BaseDialogViewModel model;
     private ItemDialogEditTextBinding binding;
     private String inputText;
 
@@ -36,7 +37,7 @@ public abstract class BaseAddDialog extends BaseDialog {
         binding = getBinding();
     }
 
-    protected abstract BaseAddViewModel getModel();
+    protected abstract BaseDialogViewModel getModel();
 
     private ItemDialogEditTextBinding getBinding() {
         return dialogBindingBuilder
@@ -90,7 +91,7 @@ public abstract class BaseAddDialog extends BaseDialog {
         return getPositiveClickListener(model);
     }
 
-    protected abstract View.OnClickListener getPositiveClickListener(BaseAddViewModel model);
+    protected abstract View.OnClickListener getPositiveClickListener(BaseDialogViewModel model);
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {

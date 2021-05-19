@@ -12,12 +12,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.ui.dialog.BaseDialog;
+import com.example.myfit.ui.dialog.BaseDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseAddSameNameDialog extends BaseDialog {
     private NavController navController;
-    private BaseAddViewModel model;
+    private BaseDialogViewModel model;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public abstract class BaseAddSameNameDialog extends BaseDialog {
         model = getModel(addGraphBackStackEntry);
     }
 
-    protected abstract BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry);
+    protected abstract BaseDialogViewModel getModel(NavBackStackEntry addGraphBackStackEntry);
 
     @NonNull
     @NotNull
