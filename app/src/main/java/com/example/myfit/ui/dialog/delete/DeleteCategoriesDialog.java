@@ -1,10 +1,11 @@
 package com.example.myfit.ui.dialog.delete;
 
+import android.view.View;
+
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
-import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.data.repository.CategoryRepository;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,17 +26,20 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
     }
 
     @Override
-    protected String getMessage() {
-        return getString(R.string.dialog_message_selected_item_delete);
+    protected String getSelectedItemsSize() {
+        return String.valueOf(getSelectedItemIds().length);
     }
 
     @Override
-    protected long[] getSelectedItemIds() {
+    protected View.OnClickListener getPositiveClickListener() {
+        return v -> {
+            categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
+            navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
+            dismiss();
+        };
+    }
+
+    private long[] getSelectedItemIds() {
         return DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
-    }
-
-    @Override
-    protected BaseRepository getRepository() {
-        return categoryRepository;
     }
 }
