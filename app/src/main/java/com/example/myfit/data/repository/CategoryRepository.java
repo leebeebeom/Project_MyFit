@@ -26,7 +26,7 @@ public class CategoryRepository extends BaseRepository{
 
     public CategoryRepository(@NotNull Context context) {
         categoryDao = AppDataBase.getsInstance(context).categoryDao();
-        mainSortPreference = context.getSharedPreferences(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
+        mainSortPreference = context.getSharedPreferences(Sort.SORT_MAIN.getText(), Context.MODE_PRIVATE);
     }
 
     //to main
@@ -109,26 +109,24 @@ public class CategoryRepository extends BaseRepository{
         new Thread(() -> categoryDao.deleteOrRestore(ids, isDeleted)).start();
     }
 
+    @Override
+    protected SharedPreferences getPreference() {
+        return mainSortPreference;
+    }
+
+    @Override
+    protected String getPreferenceKey() {
+        return Sort.SORT_MAIN.getText();
+    }
+
     //from addCategory Dialog
     public LiveData<Boolean> isExistingName(String name, byte parentIndex) {
         MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
-                boolean isExistName = categoryDao.isExistingName(name, parentIndex);
-                isExistNameLive.postValue(isExistName);
+            boolean isExistName = categoryDao.isExistingName(name, parentIndex);
+            isExistNameLive.postValue(isExistName);
         }).start();
         return isExistNameLive;
-    }
-
-    @Override
-    public void changeSort(int sort) {
-        SharedPreferences.Editor editor = mainSortPreference.edit();
-        editor.putInt(Sort.SORT_MAIN.getText(), sort);
-        editor.apply();
-    }
-
-    @NotNull
-    private Integer getSort() {
-        return mainSortPreference.getInt(Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
     }
 }
 

@@ -2,7 +2,6 @@ package com.example.myfit.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -25,7 +24,7 @@ public class FolderRepository extends BaseRepository{
 
     public FolderRepository(Context context) {
         this.folderDao = AppDataBase.getsInstance(context).folderDao();
-        this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
+        this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), Context.MODE_PRIVATE);
     }
 
     //to list
@@ -107,29 +106,24 @@ public class FolderRepository extends BaseRepository{
         new Thread(() -> folderDao.deleteOrRestore(ids, isDeleted)).start();
     }
 
+    @Override
+    protected SharedPreferences getPreference() {
+        return listSortPreference;
+    }
+
+    @Override
+    protected String getPreferenceKey() {
+        return Sort.SORT_LIST.getText();
+    }
+
     //from addFolder dialog
     public LiveData<Boolean> isExistingName(String name, long parentId) {
         MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
-                boolean isExistName = folderDao.isExistingName(name, parentId);
-                isExistNameLive.postValue(isExistName);
+            boolean isExistName = folderDao.isExistingName(name, parentId);
+            isExistNameLive.postValue(isExistName);
         }).start();
         return isExistNameLive;
-    }
-
-    @Override
-    public void changeSort(int sort) {
-        SharedPreferences.Editor editor = listSortPreference.edit();
-        editor.putInt(Sort.SORT_LIST.getText(), sort);
-        editor.apply();
-    }
-
-    private int getSort() {
-        return listSortPreference.getInt(Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
-    }
-
-    private void logE(Exception e) {
-        Log.e("에러", "logE: " + e.getMessage(), e);
     }
 }
 
