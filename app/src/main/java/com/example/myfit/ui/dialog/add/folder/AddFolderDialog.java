@@ -48,9 +48,4 @@ public class AddFolderDialog extends BaseAddDialog {
             model.queryIsExistingName(getInputText(), parentId, parentIndex);
         };
     }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return null;
-    }
 }

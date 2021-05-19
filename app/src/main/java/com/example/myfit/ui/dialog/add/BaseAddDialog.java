@@ -88,6 +88,11 @@ public abstract class BaseAddDialog extends BaseDialog {
     protected abstract View.OnClickListener getPositiveClickListener(BaseAddViewModel model);
 
     @Override
+    protected View.OnClickListener getPositiveClickListener() {
+        return null;
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(INPUT_TEXT, String.valueOf(binding.et.getText()));

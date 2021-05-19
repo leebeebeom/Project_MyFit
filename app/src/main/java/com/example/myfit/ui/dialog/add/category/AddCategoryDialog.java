@@ -47,9 +47,4 @@ public class AddCategoryDialog extends BaseAddDialog {
             model.queryIsExistingName(getInputText(), parentIndex);
         };
     }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return null;
-    }
 }
