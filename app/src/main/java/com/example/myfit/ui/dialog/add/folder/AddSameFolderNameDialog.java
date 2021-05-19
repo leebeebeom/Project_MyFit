@@ -10,8 +10,8 @@ import com.example.myfit.ui.dialog.add.BaseAddViewModel;
 
 public class AddSameFolderNameDialog extends BaseAddSameNameDialog {
     @Override
-    protected BaseAddViewModel getModel(NavBackStackEntry navBackStackEntry) {
-        return new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(AddFolderDialogViewModel.class);
+    protected BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry) {
+        return new ViewModelProvider(addGraphBackStackEntry, HiltViewModelFactory.create(requireContext(), addGraphBackStackEntry)).get(AddFolderDialogViewModel.class);
     }
 
     @Override

@@ -23,11 +23,11 @@ public abstract class BaseAddSameNameDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-        NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        model = getModel(navBackStackEntry);
+        NavBackStackEntry addGraphBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
+        model = getModel(addGraphBackStackEntry);
     }
 
-    protected abstract BaseAddViewModel getModel(NavBackStackEntry navBackStackEntry);
+    protected abstract BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry);
 
     @NonNull
     @NotNull
