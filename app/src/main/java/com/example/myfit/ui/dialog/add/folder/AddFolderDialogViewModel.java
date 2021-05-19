@@ -28,6 +28,7 @@ public class AddFolderDialogViewModel extends BaseDialogViewModel {
         this.folderRepository = folderRepository;
     }
 
+    @Override
     public void insert() {
         folderRepository.insert(name, parentId, parentIndex);
     }
