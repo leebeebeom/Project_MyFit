@@ -37,12 +37,12 @@ public abstract class BaseAddDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
         inputText = savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
         navController = NavHostFragment.findNavController(this);
-        NavBackStackEntry navBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        model = getModel(navBackStackEntry);
+        NavBackStackEntry addGraphBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
+        model = getModel(addGraphBackStackEntry);
         binding = getBinding();
     }
 
-    protected abstract BaseAddViewModel getModel(NavBackStackEntry navBackStackEntry);
+    protected abstract BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry);
 
     private ItemDialogEditTextBinding getBinding() {
         return dialogBindingBuilder
@@ -60,7 +60,7 @@ public abstract class BaseAddDialog extends BaseDialog {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        model.getIsExistingLive().observe(this, isExisting -> {
+        model.getIsExistingMutable().observe(this, isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
                     navigateSameNameDialog(navController);
@@ -69,7 +69,7 @@ public abstract class BaseAddDialog extends BaseDialog {
                     model.insert();
                     dismiss();
                 }
-                model.getIsExistingLive().setValue(null);
+                model.getIsExistingMutable().setValue(null);
             }
         });
 
@@ -83,8 +83,8 @@ public abstract class BaseAddDialog extends BaseDialog {
         return dialogBuilder
                 .makeEditTextDialog(getDialogTitle(), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener(model))
-                .setPositiveEnabledByIsInputText(inputText)
-                .setPositiveEnabledByIsChangedText(binding.et)
+                .setPositiveEnabledByInputText(inputText)
+                .setPositiveEnabledByChangedText(binding.et)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
                 .create();
     }

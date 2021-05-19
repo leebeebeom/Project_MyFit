@@ -15,8 +15,8 @@ import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
     @Override
-    protected BaseAddViewModel getModel(NavBackStackEntry navBackStackEntry) {
-        return new ViewModelProvider(navBackStackEntry, HiltViewModelFactory.create(requireContext(), navBackStackEntry)).get(AddCategoryDialogViewModel.class);
+    protected BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry) {
+        return new ViewModelProvider(addGraphBackStackEntry, HiltViewModelFactory.create(requireContext(), addGraphBackStackEntry)).get(AddCategoryDialogViewModel.class);
     }
 
     @Override
