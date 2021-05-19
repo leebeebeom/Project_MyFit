@@ -22,18 +22,21 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     SizeRepository sizeRepository;
     private long[] selectedFolderIds;
     private long[] selectedSizeIds;
+    private NavBackStackEntry backStackEntry;
 
     @Override
     protected @NotNull NavBackStackEntry getBackStackEntry() {
-        return getNavController().getBackStackEntry(R.id.deleteFolderAndSizesDialog);
+        if (backStackEntry == null)
+            backStackEntry = getNavController().getBackStackEntry(R.id.deleteFolderAndSizesDialog);
+        return backStackEntry;
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(NavBackStackEntry navBackStackEntry) {
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             folderRepository.deleteOrRestore(getSelectedFolderIds(), true);
             sizeRepository.deleteOrRestore(getSelectedSizeIds(), true);
-            actionModeOff(navBackStackEntry);
+            actionModeOff(backStackEntry);
             dismiss();
         };
     }
@@ -41,11 +44,6 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     @Override
     protected String getSelectedItemsSize() {
         return String.valueOf(getSelectedFolderIds().length + getSelectedSizeIds().length);
-    }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return null;
     }
 
     private long[] getSelectedFolderIds() {

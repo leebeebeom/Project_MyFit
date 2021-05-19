@@ -18,18 +18,21 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
     @Inject
     CategoryRepository categoryRepository;
     private long[] selectedCategoryIds;
+    private NavBackStackEntry backStackEntry;
 
     @NotNull
     @Override
     protected NavBackStackEntry getBackStackEntry() {
-        return getNavController().getBackStackEntry(R.id.deleteCategoriesDialog);
+        if (backStackEntry == null)
+            backStackEntry = getNavController().getBackStackEntry(R.id.deleteCategoriesDialog);
+        return backStackEntry;
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(NavBackStackEntry navBackStackEntry) {
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
-            actionModeOff(navBackStackEntry);
+            actionModeOff(backStackEntry);
             dismiss();
         };
     }
@@ -37,11 +40,6 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
     @Override
     protected String getSelectedItemsSize() {
         return String.valueOf(getSelectedItemIds().length);
-    }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return null;
     }
 
     private long[] getSelectedItemIds() {
