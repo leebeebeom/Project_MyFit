@@ -3,7 +3,6 @@ package com.example.myfit.ui.dialog.delete;
 import android.view.View;
 
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.FolderRepository;
@@ -21,10 +20,12 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     FolderRepository folderRepository;
     @Inject
     SizeRepository sizeRepository;
+    private long[] selectedFolderIds;
+    private long[] selectedSizeIds;
 
     @Override
-    protected @NotNull NavBackStackEntry getBackStackEntry(NavController navController) {
-        return navController.getBackStackEntry(R.id.deleteFolderAndSizesDialog);
+    protected @NotNull NavBackStackEntry getBackStackEntry() {
+        return getNavController().getBackStackEntry(R.id.deleteFolderAndSizesDialog);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
         return v -> {
             folderRepository.deleteOrRestore(getSelectedFolderIds(), true);
             sizeRepository.deleteOrRestore(getSelectedSizeIds(), true);
-            navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
+            actionModeOff(navBackStackEntry);
             dismiss();
         };
     }
@@ -48,11 +49,14 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     }
 
     private long[] getSelectedFolderIds() {
-        return DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
+        if (selectedFolderIds == null)
+            selectedFolderIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
+        return selectedFolderIds;
     }
 
     protected long[] getSelectedSizeIds() {
-        return DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
+        if (selectedFolderIds == null)
+            selectedSizeIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
+        return selectedSizeIds;
     }
-
 }

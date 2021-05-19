@@ -3,7 +3,6 @@ package com.example.myfit.ui.dialog.delete;
 import android.view.View;
 
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.CategoryRepository;
@@ -18,18 +17,19 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class DeleteCategoriesDialog extends BaseDeleteDialog {
     @Inject
     CategoryRepository categoryRepository;
+    private long[] selectedCategoryIds;
 
     @NotNull
     @Override
-    protected NavBackStackEntry getBackStackEntry(@NotNull NavController navController) {
-        return navController.getBackStackEntry(R.id.deleteCategoriesDialog);
+    protected NavBackStackEntry getBackStackEntry() {
+        return getNavController().getBackStackEntry(R.id.deleteCategoriesDialog);
     }
 
     @Override
     protected View.OnClickListener getPositiveClickListener(NavBackStackEntry navBackStackEntry) {
         return v -> {
             categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
-            navBackStackEntry.getSavedStateHandle().set(ACTION_MODE_OFF, null);
+            actionModeOff(navBackStackEntry);
             dismiss();
         };
     }
@@ -45,6 +45,8 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
     }
 
     private long[] getSelectedItemIds() {
-        return DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
+        if (selectedCategoryIds == null)
+            selectedCategoryIds = DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
+        return selectedCategoryIds;
     }
 }

@@ -7,8 +7,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.SizeRepository;
@@ -24,12 +22,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class DeleteSizeDialog extends BaseDialog {
     @Inject
     SizeRepository sizeRepository;
-    private NavController navController;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
     }
 
     @NonNull
@@ -51,7 +47,7 @@ public class DeleteSizeDialog extends BaseDialog {
         return v -> {
             long id = DeleteSizeDialogArgs.fromBundle(getArguments()).getId();
             sizeRepository.delete(id);
-            navController.popBackStack(R.id.sizeFragment, true);
+            getNavController().popBackStack(R.id.sizeFragment, true);
         };
     }
 }
