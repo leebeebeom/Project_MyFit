@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SortCategoryDialog extends BaseSortDialog {
+public class SortMainDialog extends BaseSortDialog {
     @Inject
     CategoryRepository categoryRepository;
 

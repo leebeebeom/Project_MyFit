@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SortFolderDialog extends BaseSortDialog {
+public class SortListDialog extends BaseSortDialog {
     @Inject
     FolderRepository folderRepository;
 
