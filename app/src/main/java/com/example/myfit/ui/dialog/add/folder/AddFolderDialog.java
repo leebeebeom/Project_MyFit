@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
@@ -15,8 +14,9 @@ import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {
     @Override
-    protected BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry) {
-        return new ViewModelProvider(addGraphBackStackEntry, HiltViewModelFactory.create(requireContext(), addGraphBackStackEntry)).get(AddFolderDialogViewModel.class);
+    protected BaseAddViewModel getModel() {
+        NavBackStackEntry graphBackStack = getGraphBackStack();
+        return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderDialogViewModel.class);
     }
 
     @Override
@@ -30,9 +30,9 @@ public class AddFolderDialog extends BaseAddDialog {
     }
 
     @Override
-    protected void navigateSameNameDialog(NavController navController) {
+    protected void navigateSameNameDialog() {
         NavDirections action = AddFolderDialogDirections.toAddSameFolderNameDialog();
-        CommonUtil.navigate(navController, R.id.addFolderDialog, action);
+        CommonUtil.navigate(getNavController(), R.id.addFolderDialog, action);
     }
 
     @Override

@@ -7,9 +7,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
@@ -27,7 +24,6 @@ public abstract class BaseAddDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     DialogBindingBuilder dialogBindingBuilder;
-    private NavController navController;
     private BaseAddViewModel model;
     private ItemDialogEditTextBinding binding;
     private String inputText;
@@ -36,13 +32,11 @@ public abstract class BaseAddDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputText = savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
-        navController = NavHostFragment.findNavController(this);
-        NavBackStackEntry addGraphBackStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        model = getModel(addGraphBackStackEntry);
+        model = getModel();
         binding = getBinding();
     }
 
-    protected abstract BaseAddViewModel getModel(NavBackStackEntry addGraphBackStackEntry);
+    protected abstract BaseAddViewModel getModel();
 
     private ItemDialogEditTextBinding getBinding() {
         return dialogBindingBuilder
@@ -63,7 +57,7 @@ public abstract class BaseAddDialog extends BaseDialog {
         model.getIsExistingMutable().observe(this, isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
-                    navigateSameNameDialog(navController);
+                    navigateSameNameDialog();
                     KeyBoardUtil.hideKeyBoard(binding.et);
                 } else {
                     model.insert();
@@ -76,7 +70,7 @@ public abstract class BaseAddDialog extends BaseDialog {
         return getAlertDialog();
     }
 
-    protected abstract void navigateSameNameDialog(NavController navController);
+    protected abstract void navigateSameNameDialog();
 
     @Override
     protected AlertDialog getAlertDialog() {
