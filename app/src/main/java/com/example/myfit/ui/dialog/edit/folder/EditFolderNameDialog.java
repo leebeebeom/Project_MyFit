@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
@@ -13,9 +12,9 @@ import com.example.myfit.ui.dialog.edit.BaseEditDialog;
 import com.example.myfit.ui.dialog.edit.BaseEditViewModel;
 import com.example.myfit.util.CommonUtil;
 
-import org.jetbrains.annotations.NotNull;
-
 public class EditFolderNameDialog extends BaseEditDialog {
+    private EditFolderNameViewModel model;
+
     @Override
     protected String getName() {
         return EditFolderNameDialogArgs.fromBundle(getArguments()).getName();
@@ -32,14 +31,17 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStackEntry(@NotNull NavController navController) {
-        return navController.getBackStackEntry(R.id.editFolderNameDialog);
+    protected NavBackStackEntry getBackStackEntry() {
+        return getNavController().getBackStackEntry(R.id.editFolderNameDialog);
     }
 
     @Override
-    protected BaseEditViewModel getModel(NavBackStackEntry editGraphBackStackEntry) {
-        return new ViewModelProvider(editGraphBackStackEntry, HiltViewModelFactory.create(requireContext(), editGraphBackStackEntry))
-                .get(EditFolderNameViewModel.class);
+    protected BaseEditViewModel getModel() {
+        if (model == null){
+            NavBackStackEntry graphBackStack = getGraphBackStack();
+            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(EditFolderNameViewModel.class);
+        }
+        return model;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(BaseEditViewModel model, String inputText) {
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long id = EditFolderNameDialogArgs.fromBundle(getArguments()).getId();
             long parentId = EditFolderNameDialogArgs.fromBundle(getArguments()).getParentId();
@@ -57,13 +59,8 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected void navigateSameNameDialog(NavController navController) {
+    protected void navigateSameNameDialog() {
         NavDirections action = EditFolderNameDialogDirections.toEditSameFolderNameDialog();
-        CommonUtil.navigate(navController, R.id.editFolderNameDialog, action);
-    }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return null;
+        CommonUtil.navigate(getNavController(), R.id.editFolderNameDialog, action);
     }
 }

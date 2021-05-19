@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
@@ -13,12 +12,12 @@ import com.example.myfit.ui.dialog.edit.BaseEditDialog;
 import com.example.myfit.ui.dialog.edit.BaseEditViewModel;
 import com.example.myfit.util.CommonUtil;
 
-import org.jetbrains.annotations.NotNull;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class EditCategoryNameDialog extends BaseEditDialog {
+    private EditCategoryNameViewModel model;
+
     @Override
     protected String getName() {
         return EditCategoryNameDialogArgs.fromBundle(getArguments()).getName();
@@ -35,14 +34,18 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStackEntry(@NotNull NavController navController) {
-        return navController.getBackStackEntry(R.id.editCategoryNameDialog);
+    protected NavBackStackEntry getBackStackEntry() {
+        return getNavController().getBackStackEntry(R.id.editCategoryNameDialog);
     }
 
     @Override
-    protected BaseEditViewModel getModel(NavBackStackEntry editGraphBackStackEntry) {
-        return new ViewModelProvider(editGraphBackStackEntry, HiltViewModelFactory.create(requireContext(), editGraphBackStackEntry))
-                .get(EditCategoryNameViewModel.class);
+    protected BaseEditViewModel getModel() {
+        if (model == null) {
+            NavBackStackEntry graphBackStack = getGraphBackStack();
+            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))
+                    .get(EditCategoryNameViewModel.class);
+        }
+        return model;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener(BaseEditViewModel model, String inputText) {
+    protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long id = EditCategoryNameDialogArgs.fromBundle(getArguments()).getId();
             byte parentIndex = (byte) EditCategoryNameDialogArgs.fromBundle(getArguments()).getParentIndex();
@@ -60,13 +63,8 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected void navigateSameNameDialog(NavController navController) {
+    protected void navigateSameNameDialog() {
         NavDirections action = EditCategoryNameDialogDirections.toEditSameCategoryNameDialog();
-        CommonUtil.navigate(navController, R.id.editCategoryNameDialog, action);
-    }
-
-    @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return null;
+        CommonUtil.navigate(getNavController(), R.id.editCategoryNameDialog, action);
     }
 }
