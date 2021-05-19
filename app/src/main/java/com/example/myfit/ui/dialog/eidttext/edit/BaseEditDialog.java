@@ -34,6 +34,8 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
         actionModeOff();
     }
 
+    protected abstract BaseEditViewModel getModel();
+
     @Override
     protected AlertDialog getAlertDialog() {
         ItemDialogEditTextBinding binding = getBinding();

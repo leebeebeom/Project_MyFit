@@ -22,6 +22,8 @@ public abstract class BaseAddDialog extends BaseEditTextDialog {
         getModel().insert();
     }
 
+    protected abstract BaseAddViewModel getModel();
+
     @Override
     protected AlertDialog getAlertDialog() {
         ItemDialogEditTextBinding binding = getBinding();
