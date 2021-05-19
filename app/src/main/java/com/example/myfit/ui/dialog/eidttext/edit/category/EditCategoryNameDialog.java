@@ -8,8 +8,8 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
+import com.example.myfit.ui.dialog.eidttext.edit.BaseEditViewModel;
 import com.example.myfit.util.CommonUtil;
 
 public class EditCategoryNameDialog extends BaseEditDialog {
@@ -42,7 +42,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected BaseEditTextViewModel getModel() {
+    protected BaseEditViewModel getModel() {
         if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))

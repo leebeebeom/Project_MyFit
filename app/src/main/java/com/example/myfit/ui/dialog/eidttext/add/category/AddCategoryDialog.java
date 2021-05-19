@@ -8,19 +8,19 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.add.BaseAddDialog;
+import com.example.myfit.ui.dialog.eidttext.add.BaseAddViewModel;
 import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
-    private AddCategoryDialogViewModel model;
+    private AddCategoryViewModel model;
     private NavBackStackEntry backStackEntry;
 
     @Override
-    protected BaseEditTextViewModel getModel() {
+    protected BaseAddViewModel getModel() {
         if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
-            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryDialogViewModel.class);
+            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryViewModel.class);
         }
         return model;
     }
