@@ -1,4 +1,4 @@
-package com.example.myfit.ui.dialog.add.category;
+package com.example.myfit.ui.dialog.eidttext.add.category;
 
 import android.view.View;
 
@@ -8,17 +8,17 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
-import com.example.myfit.ui.dialog.add.BaseAddDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
+import com.example.myfit.ui.dialog.eidttext.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
-
     private AddCategoryDialogViewModel model;
+    private NavBackStackEntry backStackEntry;
 
     @Override
-    protected BaseDialogViewModel getModel() {
-        if (model == null){
+    protected BaseEditTextViewModel getModel() {
+        if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryDialogViewModel.class);
         }
@@ -42,15 +42,22 @@ public class AddCategoryDialog extends BaseAddDialog {
     }
 
     @Override
-    protected String getDialogTitle() {
+    protected String getTitle() {
         return getString(R.string.all_add_category);
     }
 
     @Override
     protected View.OnClickListener getPositiveClickListener() {
-        return  v -> {
+        return v -> {
             byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentIndex);
         };
+    }
+
+    @Override
+    protected NavBackStackEntry getBackStack() {
+        if (backStackEntry == null)
+            backStackEntry = getNavController().getBackStackEntry(R.id.addCategoryDialog);
+        return backStackEntry;
     }
 }

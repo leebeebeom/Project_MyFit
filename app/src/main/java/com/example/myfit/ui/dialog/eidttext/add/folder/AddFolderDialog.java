@@ -1,4 +1,4 @@
-package com.example.myfit.ui.dialog.add.folder;
+package com.example.myfit.ui.dialog.eidttext.add.folder;
 
 import android.view.View;
 
@@ -8,17 +8,17 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
-import com.example.myfit.ui.dialog.add.BaseAddDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
+import com.example.myfit.ui.dialog.eidttext.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {
-
     private AddFolderDialogViewModel model;
+    private NavBackStackEntry backStackEntry;
 
     @Override
-    protected BaseDialogViewModel getModel() {
-        if (model == null){
+    protected BaseEditTextViewModel getModel() {
+        if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderDialogViewModel.class);
         }
@@ -42,7 +42,7 @@ public class AddFolderDialog extends BaseAddDialog {
     }
 
     @Override
-    protected String getDialogTitle() {
+    protected String getTitle() {
         return getString(R.string.all_create_folder);
     }
 
@@ -53,5 +53,12 @@ public class AddFolderDialog extends BaseAddDialog {
             byte parentIndex = (byte) AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.queryIsExistingName(getInputText(), parentId, parentIndex);
         };
+    }
+
+    @Override
+    protected NavBackStackEntry getBackStack() {
+        if (backStackEntry == null)
+            backStackEntry = getNavController().getBackStackEntry(R.id.addFolderDialog);
+        return backStackEntry;
     }
 }

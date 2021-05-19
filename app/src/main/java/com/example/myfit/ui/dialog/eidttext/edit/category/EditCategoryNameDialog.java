@@ -1,4 +1,4 @@
-package com.example.myfit.ui.dialog.edit.category;
+package com.example.myfit.ui.dialog.eidttext.edit.category;
 
 import android.view.View;
 
@@ -8,19 +8,20 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
-import com.example.myfit.ui.dialog.edit.BaseEditDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
+import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
 import com.example.myfit.util.CommonUtil;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class EditCategoryNameDialog extends BaseEditDialog {
     private EditCategoryNameViewModel model;
+    private String name;
+    private NavBackStackEntry backStackEntry;
 
     @Override
     protected String getName() {
-        return EditCategoryNameDialogArgs.fromBundle(getArguments()).getName();
+        if (name == null)
+            name = EditCategoryNameDialogArgs.fromBundle(getArguments()).getName();
+        return name;
     }
 
     @Override
@@ -34,12 +35,14 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStackEntry() {
-        return getNavController().getBackStackEntry(R.id.editCategoryNameDialog);
+    protected NavBackStackEntry getBackStack() {
+        if (backStackEntry == null)
+            backStackEntry = getNavController().getBackStackEntry(R.id.editCategoryNameDialog);
+        return backStackEntry;
     }
 
     @Override
-    protected BaseDialogViewModel getModel() {
+    protected BaseEditTextViewModel getModel() {
         if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))

@@ -1,4 +1,4 @@
-package com.example.myfit.ui.dialog.edit.folder;
+package com.example.myfit.ui.dialog.eidttext.edit.folder;
 
 import android.view.View;
 
@@ -8,12 +8,13 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
-import com.example.myfit.ui.dialog.edit.BaseEditDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
+import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class EditFolderNameDialog extends BaseEditDialog {
     private EditFolderNameViewModel model;
+    private NavBackStackEntry backStackEntry;
 
     @Override
     protected String getName() {
@@ -31,13 +32,15 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStackEntry() {
-        return getNavController().getBackStackEntry(R.id.editFolderNameDialog);
+    protected NavBackStackEntry getBackStack() {
+        if (backStackEntry == null)
+            backStackEntry = getNavController().getBackStackEntry(R.id.editFolderNameDialog);
+        return backStackEntry;
     }
 
     @Override
-    protected BaseDialogViewModel getModel() {
-        if (model == null){
+    protected BaseEditTextViewModel getModel() {
+        if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(EditFolderNameViewModel.class);
         }
