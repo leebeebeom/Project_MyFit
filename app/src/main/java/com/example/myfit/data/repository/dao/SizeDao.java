@@ -130,14 +130,14 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     @Transaction
     //from move dialog
     public void move(long targetId, long[] ids) {
-        ParentIdTuple[] parentIdTuples = this.getParentIdTuples(ids);
+        ParentIdTuple[] parentIdTuples = this.getParentIdTuplesByIds(ids);
         Arrays.stream(parentIdTuples).
                 forEach(parentIdTuple -> parentIdTuple.setParentId(targetId));
         this.update(parentIdTuples);
     }
 
     @Query("SELECT id, parentId FROM Size WHERE id IN (:ids)")
-    protected abstract ParentIdTuple[] getParentIdTuples(long[] ids);
+    public abstract ParentIdTuple[] getParentIdTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void update(ParentIdTuple[] parentIdTuples);
@@ -158,5 +158,4 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuple(DeletedTuple deletedTuple);
-
 }

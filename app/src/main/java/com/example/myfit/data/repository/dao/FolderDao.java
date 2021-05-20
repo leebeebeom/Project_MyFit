@@ -146,7 +146,7 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
     }
 
     @Query("SELECT id, parentId FROM Folder WHERE id IN (:ids)")
-    protected abstract ParentIdTuple[] getParentIdTuplesByIds(long[] ids);
+    public abstract ParentIdTuple[] getParentIdTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     protected abstract void update(ParentIdTuple[] parentIdTuples);
