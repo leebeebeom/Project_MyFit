@@ -14,7 +14,6 @@ import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {
     private AddFolderViewModel model;
-    private NavBackStackEntry backStackEntry;
 
     @Override
     protected BaseAddViewModel getModel() {
@@ -57,8 +56,6 @@ public class AddFolderDialog extends BaseAddDialog {
 
     @Override
     protected NavBackStackEntry getBackStack() {
-        if (backStackEntry == null)
-            backStackEntry = getNavController().getBackStackEntry(R.id.addFolderDialog);
-        return backStackEntry;
+        return getNavController().getBackStackEntry(R.id.addFolderDialog);
     }
 }

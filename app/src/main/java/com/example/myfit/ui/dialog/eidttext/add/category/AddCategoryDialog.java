@@ -14,7 +14,6 @@ import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
     private AddCategoryViewModel model;
-    private NavBackStackEntry backStackEntry;
 
     @Override
     protected BaseAddViewModel getModel() {
@@ -56,8 +55,6 @@ public class AddCategoryDialog extends BaseAddDialog {
 
     @Override
     protected NavBackStackEntry getBackStack() {
-        if (backStackEntry == null)
-            backStackEntry = getNavController().getBackStackEntry(R.id.addCategoryDialog);
-        return backStackEntry;
+        return getNavController().getBackStackEntry(R.id.addCategoryDialog);
     }
 }

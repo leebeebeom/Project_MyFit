@@ -1,6 +1,7 @@
 package com.example.myfit.ui.dialog.eidttext.add.folder;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.SavedStateHandle;
 
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.ui.dialog.eidttext.add.BaseAddViewModel;
@@ -17,7 +18,8 @@ public class AddFolderViewModel extends BaseAddViewModel {
     private byte parentIndex;
 
     @Inject
-    public AddFolderViewModel(FolderRepository folderRepository) {
+    public AddFolderViewModel(SavedStateHandle savedStateHandle, FolderRepository folderRepository) {
+        super(savedStateHandle);
         this.folderRepository = folderRepository;
     }
 
