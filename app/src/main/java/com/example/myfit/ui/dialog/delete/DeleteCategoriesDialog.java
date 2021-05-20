@@ -22,7 +22,7 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
 
     @NotNull
     @Override
-    protected NavBackStackEntry getBackStackEntry() {
+    protected NavBackStackEntry getBackStack() {
         if (backStackEntry == null)
             backStackEntry = getNavController().getBackStackEntry(R.id.deleteCategoriesDialog);
         return backStackEntry;
@@ -32,7 +32,7 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
-            actionModeOff(backStackEntry);
+            actionModeOff();
             dismiss();
         };
     }

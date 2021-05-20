@@ -18,12 +18,11 @@ public abstract class BaseDeleteDialog extends BaseDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NavBackStackEntry navBackStackEntry = getBackStackEntry();
-        setBackStackLive(navBackStackEntry);
+        setBackStackLive();
     }
 
     @NotNull
-    protected abstract NavBackStackEntry getBackStackEntry();
+    protected abstract NavBackStackEntry getBackStack();
 
     @NonNull
     @NotNull

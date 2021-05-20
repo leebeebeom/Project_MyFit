@@ -25,7 +25,7 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     private NavBackStackEntry backStackEntry;
 
     @Override
-    protected @NotNull NavBackStackEntry getBackStackEntry() {
+    protected @NotNull NavBackStackEntry getBackStack() {
         if (backStackEntry == null)
             backStackEntry = getNavController().getBackStackEntry(R.id.deleteFolderAndSizesDialog);
         return backStackEntry;
@@ -36,7 +36,7 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
         return v -> {
             folderRepository.deleteOrRestore(getSelectedFolderIds(), true);
             sizeRepository.deleteOrRestore(getSelectedSizeIds(), true);
-            actionModeOff(backStackEntry);
+            actionModeOff();
             dismiss();
         };
     }

@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.SizeRepository;
@@ -49,5 +50,10 @@ public class DeleteSizeDialog extends BaseDialog {
             sizeRepository.delete(id);
             getNavController().popBackStack(R.id.sizeFragment, true);
         };
+    }
+
+    @Override
+    protected NavBackStackEntry getBackStack() {
+        return getNavController().getBackStackEntry(R.id.deleteSizeDialog);
     }
 }
