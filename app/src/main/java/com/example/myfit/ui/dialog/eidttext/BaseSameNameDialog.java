@@ -1,4 +1,4 @@
-package com.example.myfit.ui.dialog.add;
+package com.example.myfit.ui.dialog.eidttext;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -9,11 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.BaseDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class BaseAddSameNameDialog extends BaseDialog {
+public abstract class BaseSameNameDialog extends BaseDialog {
     @NonNull
     @NotNull
     @Override
@@ -23,23 +22,22 @@ public abstract class BaseAddSameNameDialog extends BaseDialog {
 
     @Override
     protected AlertDialog getAlertDialog() {
-        return dialogBuilder.makeConfirmDialog(getTitle())
+        return dialogBuilder.makeConfirmDialog(getMessage())
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
 
-    protected abstract String getTitle();
+    protected abstract String getMessage();
 
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            BaseDialogViewModel model = getModel();
-            model.insert();
+            task();
             getNavController().popBackStack(getDestinationId(), true);
         };
     }
 
-    protected abstract BaseDialogViewModel getModel();
+    protected abstract void task();
 
     protected abstract int getDestinationId();
 }

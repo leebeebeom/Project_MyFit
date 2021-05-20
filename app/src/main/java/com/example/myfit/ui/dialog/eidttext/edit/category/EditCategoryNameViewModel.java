@@ -1,6 +1,7 @@
 package com.example.myfit.ui.dialog.eidttext.edit.category;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.SavedStateHandle;
 
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.ui.dialog.eidttext.edit.BaseEditViewModel;
@@ -17,7 +18,8 @@ public class EditCategoryNameViewModel extends BaseEditViewModel {
     private long id;
 
     @Inject
-    public EditCategoryNameViewModel(CategoryRepository categoryRepository) {
+    public EditCategoryNameViewModel(SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
+        super(savedStateHandle);
         this.categoryRepository = categoryRepository;
     }
 

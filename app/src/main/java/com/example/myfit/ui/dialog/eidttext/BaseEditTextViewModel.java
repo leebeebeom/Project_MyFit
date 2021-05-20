@@ -14,8 +14,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public abstract class BaseEditTextViewModel extends ViewModel {
     private static final String QUERY = "query";
-    private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
     private final SavedStateHandle savedStateHandle;
+    private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
 
     @Inject
     public BaseEditTextViewModel(SavedStateHandle savedStateHandle) {
@@ -34,7 +34,7 @@ public abstract class BaseEditTextViewModel extends ViewModel {
 
     protected abstract LiveData<Boolean> query(String name);
 
-    protected void setStateHandle(String name) {
+    public void setStateHandle(String name) {
         savedStateHandle.set(QUERY, name);
     }
 }

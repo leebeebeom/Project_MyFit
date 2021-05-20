@@ -14,7 +14,6 @@ import com.example.myfit.util.CommonUtil;
 
 public class EditFolderNameDialog extends BaseEditDialog {
     private EditFolderNameViewModel model;
-    private NavBackStackEntry backStackEntry;
 
     @Override
     protected String getName() {
@@ -33,9 +32,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
 
     @Override
     protected NavBackStackEntry getBackStack() {
-        if (backStackEntry == null)
-            backStackEntry = getNavController().getBackStackEntry(R.id.editFolderNameDialog);
-        return backStackEntry;
+        return getNavController().getBackStackEntry(R.id.editFolderNameDialog);
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
 
 public abstract class BaseEditDialog extends BaseEditTextDialog {
     private String oldName;
-    private String inputText;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -23,9 +22,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
 
     @Override
     protected String getInitialText(Bundle savedInstanceState) {
-        if (inputText == null)
-            inputText = savedInstanceState == null ? oldName : savedInstanceState.getString(INPUT_TEXT);
-        return inputText;
+        return savedInstanceState == null ? oldName : savedInstanceState.getString(INPUT_TEXT);
     }
 
     @Override
@@ -42,7 +39,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
         return dialogBuilder
                 .makeEditTextDialog(getTitle(), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
-                .setPositiveEnabledByInputText(binding.et.getText(), oldName)
+                .setPositiveEnabledByInputText(getInputText(), oldName)
                 .setPositiveEnabledByChangedText(binding.et, oldName)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
                 .create();

@@ -14,14 +14,10 @@ import com.example.myfit.util.CommonUtil;
 
 public class EditCategoryNameDialog extends BaseEditDialog {
     private EditCategoryNameViewModel model;
-    private String name;
-    private NavBackStackEntry backStackEntry;
 
     @Override
     protected String getName() {
-        if (name == null)
-            name = EditCategoryNameDialogArgs.fromBundle(getArguments()).getName();
-        return name;
+        return EditCategoryNameDialogArgs.fromBundle(getArguments()).getName();
     }
 
     @Override
@@ -36,9 +32,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
 
     @Override
     protected NavBackStackEntry getBackStack() {
-        if (backStackEntry == null)
-            backStackEntry = getNavController().getBackStackEntry(R.id.editCategoryNameDialog);
-        return backStackEntry;
+        return getNavController().getBackStackEntry(R.id.editCategoryNameDialog);
     }
 
     @Override
