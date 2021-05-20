@@ -10,6 +10,7 @@ import androidx.lifecycle.Transformations;
 import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
+import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
 import com.example.myfit.util.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
@@ -102,6 +103,16 @@ public class SizeRepository extends BaseRepository{
     @Override
     protected String getPreferenceKey() {
         return Sort.SORT_LIST.getText();
+    }
+
+    //to treeView
+    public LiveData<ParentIdTuple[]> getParentIdTuplesByIds(long[] ids) {
+        MutableLiveData<ParentIdTuple[]> parentIdTuplesLive = new MutableLiveData<>();
+        new Thread(() -> {
+            ParentIdTuple[] parentIdTuples = sizeDao.getParentIdTuplesByIds(ids);
+            parentIdTuplesLive.postValue(parentIdTuples);
+        });
+        return parentIdTuplesLive;
     }
 }
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.Transformations;
 import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.tuple.CategoryFolderTuple;
+import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
 import com.example.myfit.util.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
@@ -124,6 +125,16 @@ public class FolderRepository extends BaseRepository{
             isExistNameLive.postValue(isExistName);
         }).start();
         return isExistNameLive;
+    }
+
+    //to treeView
+    public LiveData<ParentIdTuple[]> getParentIdTuplesByIds(long[] ids) {
+        MutableLiveData<ParentIdTuple[]> parentIdTuplesLive = new MutableLiveData<>();
+        new Thread(() -> {
+            ParentIdTuple[] parentIdTuples = folderDao.getParentIdTuplesByIds(ids);
+            parentIdTuplesLive.postValue(parentIdTuples);
+        });
+        return parentIdTuplesLive;
     }
 }
 
