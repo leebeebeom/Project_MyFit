@@ -57,7 +57,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
         return v -> {
             long id = EditFolderNameDialogArgs.fromBundle(getArguments()).getId();
             long parentId = EditFolderNameDialogArgs.fromBundle(getArguments()).getParentId();
-            model.queryIsExistingName(id, getInputText(), parentId);
+            model.setStateHandle(id, getInputText(), parentId);
         };
     }
 

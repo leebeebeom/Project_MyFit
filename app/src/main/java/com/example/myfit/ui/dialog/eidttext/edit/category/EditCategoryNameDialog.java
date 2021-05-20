@@ -61,7 +61,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
         return v -> {
             long id = EditCategoryNameDialogArgs.fromBundle(getArguments()).getId();
             byte parentIndex = (byte) EditCategoryNameDialogArgs.fromBundle(getArguments()).getParentIndex();
-            model.queryIsExistingName(id, getInputText(), parentIndex);
+            model.setStateHandle(id, getInputText(), parentIndex);
         };
     }
 

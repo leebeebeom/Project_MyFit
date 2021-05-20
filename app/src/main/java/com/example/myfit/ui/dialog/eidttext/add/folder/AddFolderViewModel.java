@@ -1,22 +1,23 @@
-package com.example.myfit.ui.dialog.eidttext.edit.folder;
+package com.example.myfit.ui.dialog.eidttext.add.folder;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.myfit.data.repository.FolderRepository;
-import com.example.myfit.ui.dialog.eidttext.edit.BaseEditViewModel;
+import com.example.myfit.ui.dialog.eidttext.add.BaseAddViewModel;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditFolderNameViewModel extends BaseEditViewModel {
+public class AddFolderViewModel extends BaseAddViewModel {
     private final FolderRepository folderRepository;
+    private long parentId;
     private String name;
-    private long id, parentId;
+    private byte parentIndex;
 
     @Inject
-    public EditFolderNameViewModel(FolderRepository folderRepository) {
+    public AddFolderViewModel(FolderRepository folderRepository) {
         this.folderRepository = folderRepository;
     }
 
@@ -25,15 +26,15 @@ public class EditFolderNameViewModel extends BaseEditViewModel {
         return folderRepository.isExistingName((String) name, parentId);
     }
 
-    public void setStateHandle(long id, String inputText, long parentId) {
-        this.id = id;
+    public void setStateHandle(String inputText, long parentId, byte parentIndex) {
         this.name = inputText;
         this.parentId = parentId;
+        this.parentIndex = parentIndex;
         setStateHandle(name);
     }
 
     @Override
-    public void update() {
-        folderRepository.update(id, name);
+    public void insert() {
+        folderRepository.insert(name, parentId, parentIndex);
     }
 }

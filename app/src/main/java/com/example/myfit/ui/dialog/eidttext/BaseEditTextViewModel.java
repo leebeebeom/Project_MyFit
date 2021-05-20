@@ -3,27 +3,38 @@ package com.example.myfit.ui.dialog.eidttext;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public abstract class BaseEditTextViewModel extends ViewModel {
+    private static final String QUERY = "query";
     private final MediatorLiveData<Boolean> isExistingMutable = new MediatorLiveData<>();
+    private final SavedStateHandle savedStateHandle;
+
+    @Inject
+    public BaseEditTextViewModel(SavedStateHandle savedStateHandle) {
+        this.savedStateHandle = savedStateHandle;
+    }
 
     public MutableLiveData<Boolean> getIsExistingMutable() {
         isExistingMutable.addSource(getIsExistingLive(), isExistingMutable::setValue);
         return isExistingMutable;
     }
 
-    protected abstract LiveData<Boolean> getIsExistingLive();
+    private LiveData<Boolean> getIsExistingLive() {
+        MutableLiveData<String> stateHandleLiveData = savedStateHandle.getLiveData(QUERY);
+        return Transformations.switchMap(stateHandleLiveData, this::query);
+    }
 
-    public abstract void queryIsExistingName(String inputText, byte parentIndex);
+    protected abstract LiveData<Boolean> query(String name);
 
-    public abstract void queryIsExistingName(String inputText, long parentId, byte parentIndex);
-
-    public abstract void queryIsExistingName(long id, String inputText, byte parentIndex);
-
-    public abstract void queryIsExistingName(long id, String inputText, long parentId);
-
-    public abstract void insert();
-
-    public abstract void update();
+    protected void setStateHandle(String name) {
+        savedStateHandle.set(QUERY, name);
+    }
 }
