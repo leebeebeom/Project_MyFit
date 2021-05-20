@@ -1,5 +1,8 @@
 package com.example.myfit.ui.dialog.sort;
 
+import androidx.navigation.NavBackStackEntry;
+
+import com.example.myfit.R;
 import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
@@ -26,5 +29,10 @@ public class SortListDialog extends BaseSortDialog {
     @Override
     protected BaseRepository getRepository() {
         return folderRepository;
+    }
+
+    @Override
+    protected NavBackStackEntry getBackStack() {
+        return getNavController().getBackStackEntry(R.id.sortListDialog);
     }
 }
