@@ -67,31 +67,31 @@ public class DialogBuilder {
         mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    public DialogBuilder setPositiveEnabledByIsInputText(CharSequence inputText) {
+    public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText) {
         getPositiveButton().setEnabled(!TextUtils.isEmpty(inputText));
         return this;
     }
 
-    public DialogBuilder setPositiveEnabledByIsInputText(CharSequence inputText, String oldName) {
+    public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText, String oldName) {
         getPositiveButton().setEnabled(!TextUtils.isEmpty(inputText) && !inputText.equals(oldName));
         return this;
     }
 
-    public DialogBuilder setPositiveEnabledByIsChangedText(@NotNull TextInputEditText editText) {
+    public DialogBuilder setPositiveEnabledByChangedText(@NotNull TextInputEditText editText) {
         editText.addTextChangedListener(new OnTextChange() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setPositiveEnabledByIsInputText(s);
+                setPositiveEnabledByInputText(s);
             }
         });
         return this;
     }
 
-    public DialogBuilder setPositiveEnabledByIsChangedText(@NotNull TextInputEditText editText, String oldName) {
+    public DialogBuilder setPositiveEnabledByChangedText(@NotNull TextInputEditText editText, String oldName) {
         editText.addTextChangedListener(new OnTextChange() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setPositiveEnabledByIsInputText(s, oldName);
+                setPositiveEnabledByInputText(s, oldName);
             }
         });
         return this;
