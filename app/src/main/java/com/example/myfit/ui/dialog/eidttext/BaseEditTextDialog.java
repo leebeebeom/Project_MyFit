@@ -53,7 +53,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         BaseEditTextViewModel model = getModel();
-        model.getIsExistingMutable().observe(this, isExisting -> {
+        model.getIsExistingMutable().observe(getViewLifecycleOwner(), isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
                     navigateSameNameDialog();
@@ -83,5 +83,11 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     @NotNull
     protected String getInputText() {
         return String.valueOf(binding.et.getText());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
