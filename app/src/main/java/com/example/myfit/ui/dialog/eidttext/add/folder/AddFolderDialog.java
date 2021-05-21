@@ -48,7 +48,7 @@ public class AddFolderDialog extends BaseAddDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getFolderId();
+            long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getParentId();
             int parentIndex = (int) AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.setStateHandle(getInputText(), parentId, parentIndex);
         };
