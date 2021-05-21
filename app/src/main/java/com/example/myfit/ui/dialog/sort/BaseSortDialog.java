@@ -94,4 +94,10 @@ public abstract class BaseSortDialog extends BaseDialog {
         super.onSaveInstanceState(outState);
         outState.putInt(Sort.SORT.getText(), checkedNumber);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
