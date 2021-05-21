@@ -15,7 +15,7 @@ public class AddFolderViewModel extends BaseAddViewModel {
     private final FolderRepository folderRepository;
     private long parentId;
     private String name;
-    private byte parentIndex;
+    private int parentIndex;
 
     @Inject
     public AddFolderViewModel(SavedStateHandle savedStateHandle, FolderRepository folderRepository) {
@@ -28,7 +28,7 @@ public class AddFolderViewModel extends BaseAddViewModel {
         return folderRepository.isExistingName((String) name, parentId);
     }
 
-    public void setStateHandle(String inputText, long parentId, byte parentIndex) {
+    public void setStateHandle(String inputText, long parentId, int parentIndex) {
         this.name = inputText;
         this.parentId = parentId;
         this.parentIndex = parentIndex;

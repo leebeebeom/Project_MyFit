@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class AddCategoryViewModel extends BaseAddViewModel {
     private final CategoryRepository categoryRepository;
-    private byte parentIndex;
+    private int parentIndex;
     private String name;
 
     @Inject
@@ -27,7 +27,7 @@ public class AddCategoryViewModel extends BaseAddViewModel {
         return categoryRepository.isExistingName((String) name, this.parentIndex);
     }
 
-    public void setStateHandle(String name, byte parentIndex) {
+    public void setStateHandle(String name, int parentIndex) {
         this.name = name;
         this.parentIndex = parentIndex;
         setStateHandle(name);

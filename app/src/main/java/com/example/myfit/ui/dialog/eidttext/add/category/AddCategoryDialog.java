@@ -48,7 +48,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            byte parentIndex = (byte) AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
+            int parentIndex = AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.setStateHandle(getInputText(), parentIndex);
         };
     }

@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class EditCategoryNameViewModel extends BaseEditViewModel {
     private final CategoryRepository categoryRepository;
-    private byte parentIndex;
+    private int parentIndex;
     private String name;
     private long id;
 
@@ -28,7 +28,7 @@ public class EditCategoryNameViewModel extends BaseEditViewModel {
         return categoryRepository.isExistingName((String) name, parentIndex);
     }
 
-    public void setStateHandle(long id, String inputText, byte parentIndex) {
+    public void setStateHandle(long id, String inputText, int parentIndex) {
         this.id = id;
         this.name = inputText;
         this.parentIndex = parentIndex;

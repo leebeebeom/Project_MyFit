@@ -54,7 +54,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long id = EditCategoryNameDialogArgs.fromBundle(getArguments()).getId();
-            byte parentIndex = (byte) EditCategoryNameDialogArgs.fromBundle(getArguments()).getParentIndex();
+            int parentIndex = EditCategoryNameDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.setStateHandle(id, getInputText(), parentIndex);
         };
     }
