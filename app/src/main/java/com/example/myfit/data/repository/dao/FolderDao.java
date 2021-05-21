@@ -79,7 +79,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     //to treeView (disposable)
     @Transaction
-    public List<FolderTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
+    public List<FolderTuple> getTuplesByParentIndex(int parentIndex, int sort) {
         List<FolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getItemIds(tuples);
         int[] contentsSizes = getContentsSizesByParentIds(ids);
@@ -89,7 +89,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract List<FolderTuple> getTuplesByParentIndex(byte parentIndex);
+    protected abstract List<FolderTuple> getTuplesByParentIndex(int parentIndex);
 
     @Transaction
     //to treeView(disposable)
@@ -109,7 +109,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     @Transaction
     //from addFolder dialog
-    public long insert(String name, long parentId, byte parentIndex) {
+    public long insert(String name, long parentId, int parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Folder folder = ModelFactory.makeFolder(name, parentId, parentIndex, orderNumber);
         return this.insert(folder);

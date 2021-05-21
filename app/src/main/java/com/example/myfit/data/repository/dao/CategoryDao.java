@@ -69,7 +69,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //to treeView (disposable)
-    public List<CategoryTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
+    public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, int sort) {
         List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getItemIds(tuples);
         int[] contentsSizes = getContentsSizesByParentIds(ids);
@@ -79,7 +79,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
-    protected abstract List<CategoryTuple> getTuplesByParentIndex(byte parentIndex);
+    protected abstract List<CategoryTuple> getTuplesByParentIndex(int parentIndex);
 
     @Transaction
     //to treeView(disposable)
@@ -95,7 +95,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from addCategory dialog(disposable)
-    public long insert(String name, byte parentIndex) {
+    public long insert(String name, int parentIndex) {
         int orderNumber = this.getLargestOrderNumber() + 1;
         Category category = ModelFactory.makeCategory(name, parentIndex, orderNumber);
         return this.insert(category);
@@ -113,7 +113,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from restore dialog(disposable)
-    public Long[] insertRestoreCategories(@NotNull byte[] parentIndex) {
+    public Long[] insertRestoreCategories(@NotNull int[] parentIndex) {
         String name = "복구됨";
         int orderNumber = this.getLargestOrderNumber() + 1;
 
@@ -159,5 +159,5 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND isDeleted = 0)")
-    public abstract boolean isExistingName(String name, byte parentIndex);
+    public abstract boolean isExistingName(String name, int parentIndex);
 }
