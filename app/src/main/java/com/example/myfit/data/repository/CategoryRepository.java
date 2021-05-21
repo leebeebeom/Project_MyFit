@@ -48,7 +48,7 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //to treeView(disposable)
-    public LiveData<List<CategoryTuple>> getTuplesByParentIndex(byte parentIndex) {
+    public LiveData<List<CategoryTuple>> getTuplesByParentIndex(int parentIndex) {
         MutableLiveData<List<CategoryTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
                 int sort = getSort();
@@ -69,7 +69,7 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //from addCategory dialog(disposable)
-    public LiveData<Long> insert(String name, byte parentIndex) {
+    public LiveData<Long> insert(String name, int parentIndex) {
         MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
         new Thread(() -> {
                 long insertId = categoryDao.insert(name, parentIndex);
@@ -84,7 +84,7 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //from restore dialog(disposable)
-    public LiveData<Long[]> insertRestoreCategories(@NotNull byte[] parentIndex) {
+    public LiveData<Long[]> insertRestoreCategories(@NotNull int[] parentIndex) {
         MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
                 Long[] insertIds = categoryDao.insertRestoreCategories(parentIndex);
@@ -120,7 +120,7 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //from addCategory Dialog
-    public LiveData<Boolean> isExistingName(String name, byte parentIndex) {
+    public LiveData<Boolean> isExistingName(String name, int parentIndex) {
         MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
         new Thread(() -> {
             boolean isExistName = categoryDao.isExistingName(name, parentIndex);

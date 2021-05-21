@@ -21,12 +21,12 @@ public class RecentSearchRepository {
     }
 
     //to searchView, recycleBin search
-    public LiveData<List<RecentSearch>> getLiveByType(byte type) {
+    public LiveData<List<RecentSearch>> getLiveByType(int type) {
         return recentSearchDao.getLiveByType(type);
     }
 
     //from searchView, recycleBin search
-    public void insert(String word, byte type) {
+    public void insert(String word, int type) {
         new Thread(() -> recentSearchDao.insert(word, type)).start();
     }
 

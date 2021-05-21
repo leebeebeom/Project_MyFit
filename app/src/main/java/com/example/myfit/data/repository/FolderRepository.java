@@ -51,7 +51,7 @@ public class FolderRepository extends BaseRepository{
     }
 
     //to treeView(disposable)
-    public LiveData<List<FolderTuple>> getTuplesByParentIndex(byte parentIndex) {
+    public LiveData<List<FolderTuple>> getTuplesByParentIndex(int parentIndex) {
         MutableLiveData<List<FolderTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
                 int sort = getSort();
@@ -77,7 +77,7 @@ public class FolderRepository extends BaseRepository{
     }
 
     //from addFolder dialog
-    public LiveData<Long> insert(String name, long parentId, byte parentIndex) {
+    public LiveData<Long> insert(String name, long parentId, int parentIndex) {
         MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
         new Thread(() -> {
                 long insertId = folderDao.insert(name, parentId, parentIndex);
