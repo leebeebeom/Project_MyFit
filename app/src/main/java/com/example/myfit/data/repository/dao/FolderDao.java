@@ -11,7 +11,7 @@ import androidx.room.Update;
 
 import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.folder.Folder;
-import com.example.myfit.data.model.tuple.CategoryFolderTuple;
+import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 
@@ -21,25 +21,25 @@ import java.util.Arrays;
 import java.util.List;
 
 @Dao
-public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
+public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     //to list
-    public LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId, int sort) {
-        LiveData<List<CategoryFolderTuple>> tuplesLive = this.getTuplesLiveByParentId(parentId);
+    public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId, int sort) {
+        LiveData<List<FolderTuple>> tuplesLive = this.getTuplesLiveByParentId(parentId);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
 
         return this.getOrderedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLiveByParentId(long parentId);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
+    protected abstract LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId);
 
     @NotNull
-    private LiveData<List<CategoryFolderTuple>> getOrderedTuplesLive(LiveData<List<CategoryFolderTuple>> tuplesLive,
-                                                                     LiveData<int[]> contentsSizesLive,
-                                                                     int sort) {
+    private LiveData<List<FolderTuple>> getOrderedTuplesLive(LiveData<List<FolderTuple>> tuplesLive,
+                                                               LiveData<int[]> contentsSizesLive,
+                                                               int sort) {
         return Transformations.map(contentsSizesLive, contentsSizes -> {
-            List<CategoryFolderTuple> tuples = tuplesLive.getValue();
+            List<FolderTuple> tuples = tuplesLive.getValue();
             super.setContentsSize(tuples, contentsSizes);
             super.orderTuples(sort, tuples);
             return tuples;
@@ -47,40 +47,40 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
     }
 
     //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
+    public LiveData<List<List<FolderTuple>>> getDeletedClassifiedTuplesLive() {
+        LiveData<List<FolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
-    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    protected abstract LiveData<List<FolderTuple>> getDeletedTuplesLive();
 
     //to searchView
-    public LiveData<List<List<CategoryFolderTuple>>> getSearchTuplesListLive() {
-        LiveData<List<CategoryFolderTuple>> searchTuplesLive = this.getSearchTuplesLive(false);
+    public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive() {
+        LiveData<List<FolderTuple>> searchTuplesLive = this.getSearchTuplesLive(false);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchTuplesLive, false);
 
         return this.getClassifiedTuplesLive(searchTuplesLive, contentsSizesLive);
     }
 
     //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesListLive() {
-        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = this.getSearchTuplesLive(true);
+    public LiveData<List<List<FolderTuple>>> getDeletedSearchTuplesListLive() {
+        LiveData<List<FolderTuple>> deletedSearchTuplesLive = this.getSearchTuplesLive(true);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
         return this.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder " +
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder " +
             "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name ORDER BY name")
-    protected abstract LiveData<List<CategoryFolderTuple>> getSearchTuplesLive(boolean isDeleted);
+    protected abstract LiveData<List<FolderTuple>> getSearchTuplesLive(boolean isDeleted);
 
     //to treeView (disposable)
     @Transaction
-    public List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
-        List<CategoryFolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
+    public List<FolderTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
+        List<FolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getItemIds(tuples);
         int[] contentsSizes = getContentsSizesByParentIds(ids);
         super.setContentsSize(tuples, contentsSizes);
@@ -88,20 +88,20 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
         return tuples;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
+    protected abstract List<FolderTuple> getTuplesByParentIndex(byte parentIndex);
 
     @Transaction
     //to treeView(disposable)
-    public CategoryFolderTuple getTupleById(long id) {
-        CategoryFolderTuple tuple = this.getTupleById2(id);
+    public FolderTuple getTupleById(long id) {
+        FolderTuple tuple = this.getTupleById2(id);
         int contentsSize = getContentsSizeByParentId(id);
         tuple.setContentsSize(contentsSize);
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Folder WHERE id = :id AND isDeleted = 0 AND isParentDeleted = 0")
-    protected abstract CategoryFolderTuple getTupleById2(long id);
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE id = :id AND isDeleted = 0 AND isParentDeleted = 0")
+    protected abstract FolderTuple getTupleById2(long id);
 
     //to list
     @Query("SELECT * FROM Folder WHERE id = :id")
@@ -124,17 +124,17 @@ public abstract class FolderDao extends BaseDao<CategoryFolderTuple> {
     @Transaction
     //from editFolderName dialog
     public void update(long id, String name) {
-        CategoryFolderTuple tuple = this.getTupleById2(id);
+        FolderTuple tuple = this.getTupleById2(id);
         tuple.setName(name);
         this.update(tuple);
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
-    protected abstract void update(CategoryFolderTuple tuple);
+    protected abstract void update(FolderTuple tuple);
 
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
-    public abstract void update(List<CategoryFolderTuple> tuples);
+    public abstract void update(List<FolderTuple> tuples);
 
     @Transaction
     //from move dialog
