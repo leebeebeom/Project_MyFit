@@ -14,27 +14,27 @@ import java.util.Locale;
 public class ModelFactory {
     @NotNull
     @Contract("_, _, _ -> new")
-    public static Category makeCategory(String categoryName, byte parentIndex, int orderNumber) {
+    public static Category makeCategory(String categoryName, int parentIndex, int orderNumber) {
         BaseInfo defaultCategoryInfo = createDefaultInfo(parentIndex, orderNumber);
         return new Category(defaultCategoryInfo, categoryName);
     }
 
     @NotNull
     @Contract("_, _, _, _ -> new")
-    public static Folder makeFolder(String folderName, long parentId, byte parentIndex, int orderNumber) {
+    public static Folder makeFolder(String folderName, long parentId, int parentIndex, int orderNumber) {
         BaseInfo defaultFolderInfo = createDefaultInfo(parentIndex, orderNumber);
         return new Folder(defaultFolderInfo, folderName, parentId);
     }
 
     @NotNull
     @Contract("_, _, _ -> new")
-    public static Size makeSize(long parentId, byte parentIndex, int orderNumber) {
+    public static Size makeSize(long parentId, int parentIndex, int orderNumber) {
         BaseInfo defaultSizeInfo = createDefaultInfo(parentIndex, orderNumber);
         return new Size(defaultSizeInfo, parentId);
     }
 
     @NotNull
-    public static RecentSearch makeRecentSearch(String word, byte type) {
+    public static RecentSearch makeRecentSearch(String word, int type) {
         String date = getRecentSearchDate();
         return new RecentSearch(word, date, type);
     }
@@ -47,7 +47,7 @@ public class ModelFactory {
 
     @NotNull
     @Contract(value = "_, _ -> new", pure = true)
-    private static BaseInfo createDefaultInfo(byte parentIndex, int orderNumber) {
+    private static BaseInfo createDefaultInfo(int parentIndex, int orderNumber) {
         return new BaseInfo(parentIndex, orderNumber);
     }
 }

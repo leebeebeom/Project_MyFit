@@ -25,7 +25,7 @@ public class BaseModel {
         this.id = id;
     }
 
-    public byte getParentIndex() {
+    public int getParentIndex() {
         return baseInfo.getParentIndex();
     }
 

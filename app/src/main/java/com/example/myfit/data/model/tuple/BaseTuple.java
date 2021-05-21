@@ -4,8 +4,7 @@ import java.util.Objects;
 
 public class BaseTuple {
     private long id;
-    private byte parentIndex;
-    private int orderNumber;
+    private int parentIndex, orderNumber;
     private String name;
     private long deletedTime;
 
@@ -25,11 +24,11 @@ public class BaseTuple {
         this.orderNumber = orderNumber;
     }
 
-    public byte getParentIndex() {
+    public int getParentIndex() {
         return parentIndex;
     }
 
-    public void setParentIndex(byte parentIndex) {
+    public void setParentIndex(int parentIndex) {
         this.parentIndex = parentIndex;
     }
 

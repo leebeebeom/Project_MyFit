@@ -3,17 +3,17 @@ package com.example.myfit.data.model;
 import java.util.Objects;
 //TODO delete 타임 넣기
 public class BaseInfo {
-    private final byte parentIndex;
+    private final int parentIndex;
     private int orderNumber;
     private boolean isDeleted, dummy;
     private long deletedTime;
 
-    public BaseInfo(byte parentIndex, int orderNumber) {
+    public BaseInfo(int parentIndex, int orderNumber) {
         this.parentIndex = parentIndex;
         this.orderNumber = orderNumber;
     }
 
-    public byte getParentIndex() {
+    public int getParentIndex() {
         return parentIndex;
     }
 
