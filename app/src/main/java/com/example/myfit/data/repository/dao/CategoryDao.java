@@ -1,6 +1,7 @@
 package com.example.myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -10,7 +11,7 @@ import androidx.room.Update;
 
 import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.category.Category;
-import com.example.myfit.data.model.tuple.CategoryFolderTuple;
+import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,45 +20,57 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Dao
-public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
+public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     //to main
-    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive(int sort) {
-        LiveData<List<CategoryFolderTuple>> tuplesLive = this.getTuplesLive();
+    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(int sort) {
+        LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
 
-        return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
+        return this.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 0")
-    protected abstract LiveData<List<CategoryFolderTuple>> getTuplesLive();
+    protected abstract LiveData<List<CategoryTuple>> getTuplesLive();
+
+    @NotNull
+    private LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryTuple>> tuplesLive,
+                                                                        LiveData<int[]> contentsSizesLive,
+                                                                        int sort) {
+        return Transformations.map(contentsSizesLive, contentsSizes -> {
+            List<CategoryTuple> tuples = tuplesLive.getValue();
+            super.setContentsSize(tuples, contentsSizes);
+            super.orderTuples(sort, tuples);
+            return super.getClassifiedTuplesByParentIndex(tuples);
+        });
+    }
 
     //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<CategoryFolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
+    public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
+        LiveData<List<CategoryTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 ORDER BY deletedTime DESC")
-    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedTuplesLive();
+    protected abstract LiveData<List<CategoryTuple>> getDeletedTuplesLive();
 
     //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive() {
-        LiveData<List<CategoryFolderTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
+    public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
+        LiveData<List<CategoryTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 AND name ORDER BY name")
-    protected abstract LiveData<List<CategoryFolderTuple>> getDeletedSearchTuplesLive2();
+    protected abstract LiveData<List<CategoryTuple>> getDeletedSearchTuplesLive2();
 
     @Transaction
     //to treeView (disposable)
-    public List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
-        List<CategoryFolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
+    public List<CategoryTuple> getTuplesByParentIndex(byte parentIndex, int sort) {
+        List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getItemIds(tuples);
         int[] contentsSizes = getContentsSizesByParentIds(ids);
         super.setContentsSize(tuples, contentsSizes);
@@ -66,19 +79,19 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
-    protected abstract List<CategoryFolderTuple> getTuplesByParentIndex(byte parentIndex);
+    protected abstract List<CategoryTuple> getTuplesByParentIndex(byte parentIndex);
 
     @Transaction
     //to treeView(disposable)
-    public CategoryFolderTuple getTupleById(long id) {
-        CategoryFolderTuple tuple = this.getTupleById2(id);
+    public CategoryTuple getTupleById(long id) {
+        CategoryTuple tuple = this.getTupleById2(id);
         int contentsSize = getContentsSizeByParentId(id);
         tuple.setContentsSize(contentsSize);
         return tuple;
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE id = :id AND isDeleted = 0")
-    protected abstract CategoryFolderTuple getTupleById2(long id);
+    protected abstract CategoryTuple getTupleById2(long id);
 
     @Transaction
     //from addCategory dialog(disposable)
@@ -116,17 +129,17 @@ public abstract class CategoryDao extends BaseDao<CategoryFolderTuple> {
     @Transaction
     //from nameEdit dialog
     public void update(long id, String name) {
-        CategoryFolderTuple tuple = this.getTupleById2(id);
+        CategoryTuple tuple = this.getTupleById2(id);
         tuple.setName(name);
         this.update(tuple);
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    protected abstract void update(CategoryFolderTuple categoryTuple);
+    protected abstract void update(CategoryTuple categoryTuple);
 
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void update(LinkedList<CategoryFolderTuple> categoryTuples);
+    public abstract void update(LinkedList<CategoryTuple> categoryTuples);
 
     @Transaction
     //from delete dialog, restore dialog
