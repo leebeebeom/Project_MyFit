@@ -9,7 +9,7 @@ import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
-import com.example.myfit.data.model.tuple.CategoryFolderTuple;
+import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
 import com.example.myfit.util.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
@@ -30,7 +30,7 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //to main
-    public LiveData<List<List<CategoryFolderTuple>>> getClassifiedTuplesLive() {
+    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         IntegerSharedPreferenceLiveData mainSortPreferenceLive =
                 new IntegerSharedPreferenceLiveData(mainSortPreference, Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
 
@@ -38,31 +38,31 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //to recycleBin
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedClassifiedTuplesLive() {
+    public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
         return categoryDao.getDeletedClassifiedTuplesLive();
     }
 
     //to recycleBin search
-    public LiveData<List<List<CategoryFolderTuple>>> getDeletedSearchTuplesLive() {
+    public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
         return categoryDao.getDeletedSearchTuplesLive();
     }
 
     //to treeView(disposable)
-    public LiveData<List<CategoryFolderTuple>> getTuplesByParentIndex(byte parentIndex) {
-        MutableLiveData<List<CategoryFolderTuple>> tuplesLive = new MutableLiveData<>();
+    public LiveData<List<CategoryTuple>> getTuplesByParentIndex(byte parentIndex) {
+        MutableLiveData<List<CategoryTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
                 int sort = getSort();
-                List<CategoryFolderTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
+                List<CategoryTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
                 tuplesLive.postValue(tuples);
         }).start();
         return tuplesLive;
     }
 
     //to treeView(disposable)
-    public LiveData<CategoryFolderTuple> getTupleById(long id) {
-        MutableLiveData<CategoryFolderTuple> categoryTupleLive = new MutableLiveData<>();
+    public LiveData<CategoryTuple> getTupleById(long id) {
+        MutableLiveData<CategoryTuple> categoryTupleLive = new MutableLiveData<>();
         new Thread(() -> {
-                CategoryFolderTuple tuple = categoryDao.getTupleById(id);
+                CategoryTuple tuple = categoryDao.getTupleById(id);
                 categoryTupleLive.postValue(tuple);
         }).start();
         return categoryTupleLive;
@@ -99,7 +99,7 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //from adapter drag drop
-    public void updateCategories(LinkedList<CategoryFolderTuple> categoryTuples) {
+    public void updateCategories(LinkedList<CategoryTuple> categoryTuples) {
         new Thread(() -> categoryDao.update(categoryTuples)).start();
     }
 
