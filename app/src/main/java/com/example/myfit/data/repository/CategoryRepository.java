@@ -23,6 +23,7 @@ import java.util.List;
 public class CategoryRepository extends BaseRepository{
     private final SharedPreferences mainSortPreference;
     private final CategoryDao categoryDao;
+    private MutableLiveData<Long> insertIdLive;
 
     public CategoryRepository(@NotNull Context context) {
         categoryDao = AppDataBase.getsInstance(context).categoryDao();
@@ -69,17 +70,21 @@ public class CategoryRepository extends BaseRepository{
     }
 
     //from addCategory dialog(disposable)
-    public LiveData<Long> insert(String name, int parentIndex) {
-        MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
+    public void insert(String name, int parentIndex) {
         new Thread(() -> {
-                long insertId = categoryDao.insert(name, parentIndex);
-                insertIdLive.postValue(insertId);
+            long insertId = categoryDao.insert(name, parentIndex);
+            if (insertIdLive != null) insertIdLive.postValue(insertId);
         }).start();
+    }
+
+    public MutableLiveData<Long> getInsertIdLive() {
+        if (insertIdLive == null)
+            insertIdLive = new MutableLiveData<>();
         return insertIdLive;
     }
 
     //from appDateBase
-    public void insert(Category[] categories){
+    public void insert(Category[] categories) {
         new Thread(() -> categoryDao.insert(categories)).start();
     }
 

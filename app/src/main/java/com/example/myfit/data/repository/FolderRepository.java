@@ -22,6 +22,7 @@ import java.util.List;
 public class FolderRepository extends BaseRepository{
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
+    private MutableLiveData<Long> insertIdLive;
 
     public FolderRepository(Context context) {
         this.folderDao = AppDataBase.getsInstance(context).folderDao();
@@ -77,12 +78,16 @@ public class FolderRepository extends BaseRepository{
     }
 
     //from addFolder dialog
-    public LiveData<Long> insert(String name, long parentId, int parentIndex) {
-        MutableLiveData<Long> insertIdLive = new MutableLiveData<>();
+    public void insert(String name, long parentId, int parentIndex) {
         new Thread(() -> {
-                long insertId = folderDao.insert(name, parentId, parentIndex);
-                insertIdLive.postValue(insertId);
+            long insertId = folderDao.insert(name, parentId, parentIndex);
+            if (insertIdLive != null) insertIdLive.postValue(insertId);
         }).start();
+    }
+
+    public MutableLiveData<Long> getInsertIdLive() {
+        if (insertIdLive == null)
+            insertIdLive = new MutableLiveData<>();
         return insertIdLive;
     }
 
