@@ -10,5 +10,7 @@ public abstract class BaseVHListener {
 
     public abstract void itemViewLongClick(int position);
 
-    public abstract void dragHandelTouch(RecyclerView.ViewHolder viewHolder);
+    public abstract void dragStart(RecyclerView.ViewHolder viewHolder);
+
+    public abstract void dragStop();
 }

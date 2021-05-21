@@ -1,28 +1,31 @@
-package com.example.myfit.util.adapter.viewholder;
+package com.example.myfit.util.adapter.viewholder.size;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.myfit.data.model.folder.FolderTuple;
-import com.example.myfit.databinding.ItemFolderListBinding;
+import com.example.myfit.data.model.size.SizeTuple;
+import com.example.myfit.databinding.ItemSizeListBinding;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FolderListVH extends BaseVH<FolderTuple> {
-    private final ItemFolderListBinding binding;
+public class SizeListVH extends BaseSizeVH {
+    private final ItemSizeListBinding binding;
 
-    public FolderListVH(@NotNull ItemFolderListBinding binding) {
+    public SizeListVH(@NotNull ItemSizeListBinding binding) {
         super(binding);
         this.binding = binding;
+
+        binding.cbFavorite.setOnClickListener(v -> getListener().sizeFavoriteClick((SizeTuple) getTuple()));
     }
 
-    protected void bind(FolderTuple tuple) {
+    @Override
+    public void bind(SizeTuple tuple) {
         binding.setTuple(tuple);
     }
 
     @Override
     protected MaterialCheckBox getCheckBox() {
-        return binding.cb;
+        return null;
     }
 
     @Override
@@ -32,9 +35,12 @@ public class FolderListVH extends BaseVH<FolderTuple> {
 
     @Override
     protected void setDraggingView() {
+
     }
 
     @Override
     protected void setDropView() {
+
     }
 }
+
