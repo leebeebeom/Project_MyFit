@@ -1,8 +1,10 @@
-package com.example.myfit.data.model.tuple;
+package com.example.myfit.data.model.category;
+
+import com.example.myfit.data.model.tuple.BaseTuple;
 
 import java.util.Objects;
 
-public class CategoryFolderTuple extends BaseTuple {
+public class CategoryTuple extends BaseTuple {
     private int contentsSize;
 
     public int getContentsSize() {
@@ -16,9 +18,9 @@ public class CategoryFolderTuple extends BaseTuple {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CategoryFolderTuple)) return false;
+        if (!(o instanceof CategoryTuple)) return false;
         if (!super.equals(o)) return false;
-        CategoryFolderTuple that = (CategoryFolderTuple) o;
+        CategoryTuple that = (CategoryTuple) o;
         return getContentsSize() == that.getContentsSize();
     }
 
