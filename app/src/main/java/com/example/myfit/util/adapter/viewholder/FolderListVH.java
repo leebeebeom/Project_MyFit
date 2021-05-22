@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class FolderListVH extends BaseVH<FolderTuple> {
     private final ItemFolderListBinding binding;
 
-    public FolderListVH(@NotNull ItemFolderListBinding binding) {
-        super(binding);
+    public FolderListVH(@NotNull ItemFolderListBinding binding, BaseVHListener listener) {
+        super(binding, listener);
         this.binding = binding;
     }
 

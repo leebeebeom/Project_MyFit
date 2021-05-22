@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public class FolderGridVH extends BaseVH<FolderTuple> {
     private final ItemFolderGridBinding binding;
 
-    public FolderGridVH(@NotNull ItemFolderGridBinding binding) {
-        super(binding);
+    public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener) {
+        super(binding, listener);
         this.binding = binding;
     }
 

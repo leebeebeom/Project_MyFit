@@ -14,7 +14,7 @@ public class CategoryVH extends BaseVH<CategoryTuple> {
     private final ItemCategoryBinding binding;
 
     public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener) {
-        super(binding);
+        super(binding, listener);
         this.binding = binding;
     }
 

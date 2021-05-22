@@ -13,31 +13,28 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolder {
     public static boolean IS_DRAGGING = false;
-    private BaseVHListener listener;
+    private final BaseVHListener listener;
     private T tuple;
 
     @SuppressLint("ClickableViewAccessibility")
-    public BaseVH(ViewDataBinding binding) {
+    public BaseVH(ViewDataBinding binding, BaseVHListener listener) {
         super(binding.getRoot());
+        this.listener = listener;
 
         itemView.setOnClickListener(v -> {
-            if (listener != null) listener.itemViewClick(tuple, getCheckBox());
+            listener.itemViewClick(tuple, getCheckBox());
         });
 
         itemView.setOnLongClickListener(v -> {
-            if (listener != null) listener.itemViewLongClick(getLayoutPosition());
+            listener.itemViewLongClick(getLayoutPosition());
             return false;
         });
 
         getDragHandleIcon().setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && !IS_DRAGGING && listener != null)
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !IS_DRAGGING)
                 dragStart();
             return false;
         });
-    }
-
-    public void setListener(BaseVHListener listener) {
-        this.listener = listener;
     }
 
     public void setTuple(T tuple) {
