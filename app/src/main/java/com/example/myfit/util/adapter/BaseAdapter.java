@@ -20,13 +20,14 @@ import java.util.List;
 import static com.example.myfit.util.MyFitConstant.ACTION_MODE_ON;
 import static com.example.myfit.util.MyFitConstant.LISTVIEW;
 
-public abstract class BaseAdapter<T extends BaseTuple, VH extends BaseVH<T>> extends ListAdapter<T, VH> {
+public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener, VH extends BaseVH<T, L>> extends ListAdapter<T, VH> {
     private final AdapterUtil<T> adapterUtil;
-    private int actionModeState, sort;
-    private final BaseVHListener listener;
+    private final L listener;
     private HashSet<Long> selectedItemIds;
+    private int actionModeState, sort;
+    private List<T> itemList;
 
-    protected BaseAdapter(BaseVHListener listener) {
+    protected BaseAdapter(L listener) {
         super(new DiffUtil.ItemCallback<T>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull T oldItem, @NonNull @NotNull T newItem) {
@@ -39,9 +40,9 @@ public abstract class BaseAdapter<T extends BaseTuple, VH extends BaseVH<T>> ext
             }
         });
         this.adapterUtil = new AdapterUtil<>();
-        setHasStableIds(true);
         this.listener = listener;
         this.selectedItemIds = new HashSet<>();
+        setHasStableIds(true);
     }
 
     @Override
@@ -50,8 +51,9 @@ public abstract class BaseAdapter<T extends BaseTuple, VH extends BaseVH<T>> ext
     }
 
     public void setItems(int sort, List<T> list) {
-        this.sort = sort;
         submitList(list);
+        this.sort = sort;
+        this.itemList = list;
     }
 
     @NonNull
@@ -61,7 +63,7 @@ public abstract class BaseAdapter<T extends BaseTuple, VH extends BaseVH<T>> ext
         return getViewHolder(parent, listener);
     }
 
-    protected abstract VH getViewHolder(@NotNull ViewGroup parent, BaseVHListener listener);
+    protected abstract VH getViewHolder(@NotNull ViewGroup parent, L listener);
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull VH holder, int position) {
@@ -89,14 +91,16 @@ public abstract class BaseAdapter<T extends BaseTuple, VH extends BaseVH<T>> ext
     private void actionModeOn(@NotNull VH holder) {
         if (getViewType() == LISTVIEW)
             adapterUtil.listActionModeOn(holder.getCardView());
-        else adapterUtil.gridActionModeOn(holder.getCheckBox());
+        else holder.getCheckBox().setVisibility(View.VISIBLE);
     }
 
     private void actionModeOff(VH holder) {
         if (getViewType() == LISTVIEW)
             adapterUtil.listActionModeOff(holder.getCardView());
-        else adapterUtil.gridActionModeOff(holder.getCheckBox());
-
+        else {
+            holder.getCheckBox().jumpDrawablesToCurrentState();
+            holder.getCheckBox().setVisibility(View.GONE);
+        }
         if (getItemCount() - 1 == holder.getLayoutPosition()) actionModeState = 0;
     }
 
@@ -106,7 +110,10 @@ public abstract class BaseAdapter<T extends BaseTuple, VH extends BaseVH<T>> ext
         this.selectedItemIds = selectedItemIds;
     }
 
-    public abstract void moveItem(int from, int to);
+    public void moveItem(int from, int to) {
+        adapterUtil.itemMove(from, to, itemList);
+        notifyItemMoved(from, to);
+    }
 
     public void selectAll() {
         getCurrentList().forEach(tuple -> selectedItemIds.add(tuple.getId()));
