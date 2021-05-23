@@ -23,7 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.example.project_myfit.util.ktw;
+package com.example.myfit.util.ktw;
 
 /**
  * 한글 음절 근사 매칭 클래스.

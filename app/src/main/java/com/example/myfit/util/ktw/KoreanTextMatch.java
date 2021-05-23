@@ -23,7 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.example.project_myfit.util.ktw;
+package com.example.myfit.util.ktw;
 
 /**
  * {@link KoreanTextMatcher} 매칭 결과를 담고 있는 클래스

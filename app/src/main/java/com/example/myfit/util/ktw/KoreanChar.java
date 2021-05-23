@@ -23,7 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.example.project_myfit.util.ktw;
+package com.example.myfit.util.ktw;
 
 import java.util.Arrays;
 
