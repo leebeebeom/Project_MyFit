@@ -1,4 +1,4 @@
-package com.example.project_myfit.util;
+package com.example.myfit.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
