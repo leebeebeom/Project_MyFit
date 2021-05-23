@@ -1,46 +1,43 @@
-package com.example.project_myfit.util;
+package com.example.myfit.util;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener;
 
 public class DragSelectImpl extends DragSelectTouchListener implements DragSelectTouchListener.OnAdvancedDragSelectListener {
-    private LockableScrollView mScrollView;
-    private RecyclerView mRecyclerView;
+    public static boolean isDragSelecting;
+    private final LockableScrollView scrollView;
+    private RecyclerView recyclerView;
 
-    public DragSelectImpl() {
+    public DragSelectImpl(LockableScrollView scrollView) {
+        this.scrollView = scrollView;
         withSelectListener(this);
     }
 
-    public DragSelectImpl setScrollView(LockableScrollView scrollView) {
-        this.mScrollView = scrollView;
-        return this;
-    }
-
     public DragSelectImpl setRecyclerView(RecyclerView recyclerView) {
-        this.mRecyclerView = recyclerView;
+        this.recyclerView = recyclerView;
         return this;
     }
 
     @Override
     public void onSelectionStarted(int i) {
-        if (mScrollView != null) mScrollView.setScrollable(false);
-        MyFitVariable.isDragSelecting = true;
+        scrollView.setScrollable(false);
+        isDragSelecting = true;
 
-        RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForLayoutPosition(i);
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(i);
         if (viewHolder != null) viewHolder.itemView.callOnClick();
     }
 
     @Override
     public void onSelectionFinished(int i) {
-        if (mScrollView != null) mScrollView.setScrollable(true);
-        MyFitVariable.isDragSelecting = false;
+        scrollView.setScrollable(true);
+        isDragSelecting = false;
     }
 
     @Override
     public void onSelectChange(int i, int i1, boolean b) {
         for (int j = i; j <= i1; j++) {
-            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForLayoutPosition(j);
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(j);
             if (viewHolder != null) viewHolder.itemView.callOnClick();
         }
     }
