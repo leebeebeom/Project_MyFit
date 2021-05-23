@@ -181,4 +181,8 @@ public class TreeNodeProvider {
             return parentHolder2.map(TreeFolderHolder::getNode).orElse(null);
         }
     }
+
+    public int getMargin() {
+        return margin;
+    }
 }
