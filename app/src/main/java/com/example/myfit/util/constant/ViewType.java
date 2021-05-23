@@ -1,11 +1,11 @@
 package com.example.myfit.util.constant;
 
-public enum ParentCategory {
-    TOP(0), BOTTOM(1), OUTER(2), ETC(3);
+public enum ViewType {
+    LIST_VIEW(0), GRID_VIEW(1);
 
     private final int value;
 
-    ParentCategory(int value) {
+    ViewType(int value) {
         this.value = value;
     }
 
