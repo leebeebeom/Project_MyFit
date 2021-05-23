@@ -65,7 +65,6 @@ public class TreeNodeProvider {
         return new TreeFolderHolder(context, folderTuples, navController);
     }
 
-    //TODO holder -> value로 수정
     public void checkIsParentItemParent(ParentIdTuple[] folderParentIdTuples, ParentIdTuple[] sizeParentIdTuples) {
         TreeCategoryHolder[] categoryHolders = getCategoryHolders();
         TreeFolderHolder[] folderHolders = getFolderHolders();
