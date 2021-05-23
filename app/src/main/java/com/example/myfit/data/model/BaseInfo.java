@@ -1,7 +1,7 @@
 package com.example.myfit.data.model;
 
 import java.util.Objects;
-//TODO delete 타임 넣기
+
 public class BaseInfo {
     private final int parentIndex;
     private int orderNumber;
