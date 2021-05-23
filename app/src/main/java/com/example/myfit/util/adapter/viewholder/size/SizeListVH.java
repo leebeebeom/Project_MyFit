@@ -1,23 +1,26 @@
 package com.example.myfit.util.adapter.viewholder.size;
 
+import android.view.View;
+
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.databinding.ItemSizeListBinding;
+import com.example.myfit.util.adapter.viewholder.BaseVH;
 import com.example.myfit.util.adapter.viewholder.SizeVHListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-public class SizeListVH extends BaseSizeVH {
+public class SizeListVH extends BaseVH<SizeTuple, SizeVHListener> {
     private final ItemSizeListBinding binding;
 
     public SizeListVH(@NotNull ItemSizeListBinding binding, SizeVHListener listener) {
         super(binding, listener);
         this.binding = binding;
 
-        binding.cbFavorite.setOnClickListener(v -> getListener().sizeFavoriteClick((SizeTuple) getTuple()));
+        binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));
     }
 
     @Override
@@ -32,17 +35,23 @@ public class SizeListVH extends BaseSizeVH {
 
     @Override
     public AppCompatImageView getDragHandleIcon() {
-        return null;
+        return binding.iconDragHandle;
     }
 
     @Override
     protected void setDraggingView() {
-
+        setItemViewTranslationZ(itemView, 10);
+        binding.cb.setVisibility(View.INVISIBLE);
+        binding.layoutContents.setAlpha(0.7f);
+        binding.iv.setAlpha(0.5f);
     }
 
     @Override
     protected void setDropView() {
-
+        setItemViewTranslationZ(itemView, 0);
+        binding.cb.setVisibility(View.VISIBLE);
+        binding.layoutContents.setAlpha(1);
+        binding.iv.setAlpha(1f);
     }
 
     @Override

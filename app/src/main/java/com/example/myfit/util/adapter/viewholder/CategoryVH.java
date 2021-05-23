@@ -11,7 +11,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CategoryVH extends BaseVH<CategoryTuple> {
+public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     private final ItemCategoryBinding binding;
 
     public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener) {

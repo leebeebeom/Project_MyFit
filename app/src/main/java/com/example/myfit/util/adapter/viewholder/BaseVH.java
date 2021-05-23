@@ -14,13 +14,13 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.HashSet;
 
-public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolder {
+public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
     public static boolean IS_DRAGGING = false;
-    private final BaseVHListener listener;
+    private final L listener;
     private T tuple;
 
     @SuppressLint("ClickableViewAccessibility")
-    public BaseVH(ViewDataBinding binding, BaseVHListener listener) {
+    public BaseVH(ViewDataBinding binding, L listener) {
         super(binding.getRoot());
         this.listener = listener;
 
@@ -46,7 +46,7 @@ public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolde
 
     protected abstract void bind(T tuple);
 
-    protected BaseTuple getTuple() {
+    protected T getTuple() {
         return tuple;
     }
 

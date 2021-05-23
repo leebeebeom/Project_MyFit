@@ -11,7 +11,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FolderGridVH extends BaseVH<FolderTuple> {
+public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemFolderGridBinding binding;
 
     public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener) {
