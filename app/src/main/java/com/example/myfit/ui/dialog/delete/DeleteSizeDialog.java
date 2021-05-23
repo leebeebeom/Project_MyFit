@@ -1,19 +1,12 @@
 package com.example.myfit.ui.dialog.delete;
 
-import android.app.Dialog;
-import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.SizeRepository;
 import com.example.myfit.ui.dialog.BaseDialog;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -23,18 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class DeleteSizeDialog extends BaseDialog {
     @Inject
     SizeRepository sizeRepository;
-
-    @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @NonNull
-    @NotNull
-    @Override
-    public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return getAlertDialog();
-    }
 
     @Override
     protected AlertDialog getAlertDialog() {
@@ -53,7 +34,7 @@ public class DeleteSizeDialog extends BaseDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.deleteSizeDialog);
+    protected int getResId() {
+        return R.id.deleteSizeDialog;
     }
 }

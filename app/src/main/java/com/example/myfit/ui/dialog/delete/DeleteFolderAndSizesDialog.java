@@ -1,14 +1,8 @@
 package com.example.myfit.ui.dialog.delete;
 
-import android.view.View;
-
-import androidx.navigation.NavBackStackEntry;
-
 import com.example.myfit.R;
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.data.repository.SizeRepository;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -20,25 +14,16 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     FolderRepository folderRepository;
     @Inject
     SizeRepository sizeRepository;
-    private long[] selectedFolderIds;
-    private long[] selectedSizeIds;
-    private NavBackStackEntry backStackEntry;
 
     @Override
-    protected @NotNull NavBackStackEntry getBackStack() {
-        if (backStackEntry == null)
-            backStackEntry = getNavController().getBackStackEntry(R.id.deleteFolderAndSizesDialog);
-        return backStackEntry;
+    protected int getResId() {
+        return R.id.deleteFolderAndSizesDialog;
     }
 
     @Override
-    protected View.OnClickListener getPositiveClickListener() {
-        return v -> {
-            folderRepository.deleteOrRestore(getSelectedFolderIds(), true);
-            sizeRepository.deleteOrRestore(getSelectedSizeIds(), true);
-            actionModeOff();
-            dismiss();
-        };
+    protected void task() {
+        folderRepository.deleteOrRestore(getSelectedFolderIds(), true);
+        sizeRepository.deleteOrRestore(getSelectedSizeIds(), true);
     }
 
     @Override
@@ -47,14 +32,10 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     }
 
     private long[] getSelectedFolderIds() {
-        if (selectedFolderIds == null)
-            selectedFolderIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
-        return selectedFolderIds;
+        return DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
     }
 
     protected long[] getSelectedSizeIds() {
-        if (selectedFolderIds == null)
-            selectedSizeIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
-        return selectedSizeIds;
+        return DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
     }
 }
