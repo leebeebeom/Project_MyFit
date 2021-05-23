@@ -29,12 +29,12 @@ public abstract class BaseEditTextViewModel extends ViewModel {
 
     private LiveData<Boolean> getIsExistingLive() {
         MutableLiveData<String> stateHandleLiveData = savedStateHandle.getLiveData(QUERY);
-        return Transformations.switchMap(stateHandleLiveData, this::query);
+        return Transformations.switchMap(stateHandleLiveData, this::getIsExistingLive);
     }
 
-    protected abstract LiveData<Boolean> query(String name);
+    protected abstract LiveData<Boolean> getIsExistingLive(String name);
 
-    public void setStateHandle(String name) {
+    protected void setStateHandle(String name) {
         savedStateHandle.set(QUERY, name);
     }
 }
