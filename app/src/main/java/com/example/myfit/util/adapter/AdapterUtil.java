@@ -41,18 +41,18 @@ public class AdapterUtil<T extends BaseTuple> {
     public void itemMove(int from, int to, List<T> list) {
         if (from < to) {//down
             for (int i = from; i < to; i++) {
-                swap(list, i, i + 1);
+                swapOrderNumber(list, i, i + 1);
                 Collections.swap(list, i, i + 1);
             }
         } else {//up
             for (int i = from; i > to; i--) {
-                swap(list, i, i - 1);
+                swapOrderNumber(list, i, i - 1);
                 Collections.swap(list, i, i - 1);
             }
         }
     }
 
-    private void swap(List<T> list, int i, int i2) {
+    private void swapOrderNumber(List<T> list, int i, int i2) {
         BaseTuple baseTuple1 = list.get(i);
         BaseTuple baseTuple2 = list.get(i2);
         int order1 = baseTuple1.getOrderNumber();
