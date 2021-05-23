@@ -1,12 +1,8 @@
 package com.example.myfit.ui.dialog;
 
 
-import android.app.Dialog;
-import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.R;
@@ -24,13 +20,6 @@ public class DeleteAllRecentSearchDialog extends BaseDialog {
     @Inject
     RecentSearchRepository recentSearchRepository;
 
-    @NonNull
-    @NotNull
-    @Override
-    public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return getAlertDialog();
-    }
-
     @Override
     protected AlertDialog getAlertDialog() {
         return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all))
@@ -46,5 +35,10 @@ public class DeleteAllRecentSearchDialog extends BaseDialog {
             recentSearchRepository.deleteAll();
             dismiss();
         };
+    }
+
+    @Override
+    protected int getResId() {
+        return R.id.deleteAllRecentSearchDialog;
     }
 }

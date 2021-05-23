@@ -2,8 +2,6 @@ package com.example.myfit.ui.dialog.sort;
 
 import android.view.View;
 
-import androidx.navigation.NavBackStackEntry;
-
 import com.example.myfit.R;
 import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.data.repository.CategoryRepository;
@@ -37,7 +35,7 @@ public class SortMainDialog extends BaseSortDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.sortMainDialog);
+    protected int getResId() {
+        return R.id.sortMainDialog;
     }
 }

@@ -1,6 +1,5 @@
 package com.example.myfit.ui.dialog.sort;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 
@@ -61,13 +60,6 @@ public abstract class BaseSortDialog extends BaseDialog {
                 }
             });
         }
-    }
-
-    @NonNull
-    @NotNull
-    @Override
-    public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return getAlertDialog();
     }
 
     @Override

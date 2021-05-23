@@ -50,7 +50,7 @@ public abstract class BaseDialog extends DialogFragment {
         return getNavController().getBackStackEntry(R.id.nav_graph_main);
     }
 
-    private NavBackStackEntry getBackStack() {
+    protected NavBackStackEntry getBackStack() {
         return getNavController().getBackStackEntry(getResId());
     }
 
