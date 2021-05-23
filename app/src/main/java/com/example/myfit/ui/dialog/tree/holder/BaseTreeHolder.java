@@ -11,11 +11,11 @@ import androidx.navigation.NavController;
 import com.example.myfit.R;
 import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.ui.dialog.tree.TreeViewDialogDirections;
+import com.example.myfit.ui.dialog.tree.holder.value.BaseValue;
 import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
-//TODO 테스트 시급
-public abstract class BaseTreeHolder<T, Y extends BaseTuple> extends TreeNode.BaseNodeViewHolder<T> {
+public abstract class BaseTreeHolder<V extends BaseTuple, T extends BaseValue<V>> extends TreeNode.BaseNodeViewHolder<T> {
     private final NavController navController;
     protected boolean isClickable = true;
 
@@ -26,18 +26,19 @@ public abstract class BaseTreeHolder<T, Y extends BaseTuple> extends TreeNode.Ba
 
     @Override
     public View createNodeView(TreeNode node, T value) {
-        bind();
-        if (!node.getChildren().isEmpty())
+        bind(value.getTuple());
+        if (!node.getChildren().isEmpty()) {
+            getArrowIcon().setVisibility(View.GONE);
             getFolderIconLayout().setOnClickListener(v -> tView.toggleNode(node));
-        else getArrowIcon().setVisibility(View.GONE);
+        }
 
-        getAddIcon().setOnClickListener(v -> {
-            BaseTuple tuple = getTuple();
-            CommonUtil.navigate(navController, R.id.treeViewDialog,
-                    TreeViewDialogDirections.toAddFolderDialog(tuple.getId(), tuple.getParentIndex()));
-        });
+        getAddIcon().setOnClickListener(v ->
+                CommonUtil.navigate(navController, R.id.treeViewDialog,
+                        TreeViewDialogDirections.toAddFolderDialog(value.getId(), value.getParentIndex())));
         return getBindingRoot();
     }
+
+    protected abstract void bind(V tuple);
 
     public void setAlpha() {
         if (isClickable) {
@@ -62,10 +63,6 @@ public abstract class BaseTreeHolder<T, Y extends BaseTuple> extends TreeNode.Ba
         getFolderIcon().setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
-    public long getId() {
-        return getTuple().getId();
-    }
-
     public TreeNode getNode() {
         return mNode;
     }
@@ -73,10 +70,6 @@ public abstract class BaseTreeHolder<T, Y extends BaseTuple> extends TreeNode.Ba
     public void showCurrentPosition() {
         getCurrentPosition().setVisibility(View.VISIBLE);
     }
-
-    protected abstract Y getTuple();
-
-    protected abstract void bind();
 
     protected abstract View getBindingRoot();
 

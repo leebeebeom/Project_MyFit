@@ -11,8 +11,9 @@ import androidx.navigation.NavController;
 
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.databinding.ItemTreeCategoryBinding;
+import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
 
-public class TreeCategoryHolder extends BaseTreeHolder<TreeCategoryHolder.TreeCategoryValue, CategoryTuple> {
+public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryValue> {
     private ItemTreeCategoryBinding binding;
 
     public TreeCategoryHolder(Context context, NavController navController) {
@@ -20,14 +21,9 @@ public class TreeCategoryHolder extends BaseTreeHolder<TreeCategoryHolder.TreeCa
     }
 
     @Override
-    protected CategoryTuple getTuple() {
-        return ((TreeCategoryValue) mNode.getValue()).categoryTuple;
-    }
-
-    @Override
-    protected void bind() {
+    protected void bind(CategoryTuple tuple) {
         binding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
-        binding.setCategoryTuple(getTuple());
+        binding.setCategoryTuple(tuple);
     }
 
     @Override
@@ -63,13 +59,5 @@ public class TreeCategoryHolder extends BaseTreeHolder<TreeCategoryHolder.TreeCa
     @Override
     protected View getBindingRoot() {
         return binding.getRoot();
-    }
-
-    public static class TreeCategoryValue {
-        private final CategoryTuple categoryTuple;
-
-        public TreeCategoryValue(CategoryTuple categoryTuple) {
-            this.categoryTuple = categoryTuple;
-        }
     }
 }

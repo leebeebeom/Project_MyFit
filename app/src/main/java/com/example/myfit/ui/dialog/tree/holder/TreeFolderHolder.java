@@ -12,13 +12,14 @@ import androidx.navigation.NavController;
 import com.example.myfit.R;
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.databinding.ItemTreeFolderBinding;
+import com.example.myfit.ui.dialog.tree.holder.value.FolderValue;
 import com.unnamed.b.atv.model.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class TreeFolderHolder extends BaseTreeHolder<TreeFolderHolder.TreeFolderValue, FolderTuple> {
+public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     private final List<FolderTuple> folderTuples;
     private ItemTreeFolderBinding binding;
 
@@ -29,14 +30,9 @@ public class TreeFolderHolder extends BaseTreeHolder<TreeFolderHolder.TreeFolder
     }
 
     @Override
-    protected FolderTuple getTuple() {
-        return ((TreeFolderValue) mNode.getValue()).folderTuple;
-    }
-
-    @Override
-    protected void bind() {
+    protected void bind(FolderTuple tuple) {
         binding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        binding.setFolderTuple(getTuple());
+        binding.setFolderTuple(tuple);
     }
 
     @Override
@@ -74,42 +70,28 @@ public class TreeFolderHolder extends BaseTreeHolder<TreeFolderHolder.TreeFolder
         return binding.tvCurrentPosition;
     }
 
-    @Override
-    public View createNodeView(TreeNode node, @NotNull TreeFolderValue value) {
+    @Override//TODO super 콜 후 다시 뷰 리턴 되는지 확인
+    public View createNodeView(TreeNode node, @NotNull FolderValue value) {
         super.createNodeView(node, value);
-        setMargin();
-        addChildNode();
+        setMargin(value.getMargin());
+        addChildNode(value);
         return binding.getRoot();
     }
 
-    private void setMargin() {
+    private void setMargin(int margin) {
         LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) binding.iconArrow.getLayoutParams();
-        params.leftMargin = getMargin();
+        params.leftMargin = margin;
     }
 
-    private void addChildNode() {
+    private void addChildNode(@NotNull FolderValue value) {
         int margin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
         folderTuples.stream()
-                .filter(folderTuple -> folderTuple.getParentId() == getTuple().getId())
+                .filter(folderTuple -> folderTuple.getParentId() == value.getId())
                 .forEach(folderTuple -> {
-                    TreeNode treeNode = new TreeNode(new TreeFolderValue(folderTuple, getMargin() + margin))
+                    TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + margin))
                             .setViewHolder(this);
                     mNode.addChild(treeNode);
                 });
-    }
-
-    public int getMargin() {
-        return ((TreeFolderValue) mNode.getValue()).margin;
-    }
-
-    public static class TreeFolderValue {
-        private final FolderTuple folderTuple;
-        private final int margin;
-
-        public TreeFolderValue(FolderTuple folderTuple, int margin) {
-            this.folderTuple = folderTuple;
-            this.margin = margin;
-        }
     }
 }
 
