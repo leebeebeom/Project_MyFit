@@ -8,13 +8,9 @@ import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
 
 public abstract class BaseAddDialog extends BaseEditTextDialog {
-    private String initialText;
-
     @Override
     protected String getInitialText(Bundle savedInstanceState) {
-        if (initialText == null)
-            initialText = savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
-        return initialText;
+        return savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
     }
 
     @Override
@@ -30,7 +26,7 @@ public abstract class BaseAddDialog extends BaseEditTextDialog {
         return dialogBuilder
                 .makeEditTextDialog(getTitle(), binding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
-                .setPositiveEnabledByInputText(initialText)
+                .setPositiveEnabledByInputText(binding.et.getText())
                 .setPositiveEnabledByChangedText(binding.et)
                 .setPositiveCallOnClickWhenImeClicked(binding.et)
                 .create();
