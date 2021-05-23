@@ -21,12 +21,13 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.example.myfit.util.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.myfit.util.MyFitConstant.ACTION_MODE_ON;
-
 public class ActionModeImpl implements ActionMode.Callback {
+    public static final String ACTION_MODE = "action mode";
     public static ActionMode actionMode;
     public static boolean isActionModeOn;
+    public static final int ACTION_MODE_ON = 1;
+    public static final int ACTION_MODE_OFF = 2;
+
     private final TitleActionModeBinding binding;
     private final int resId;
     private final ActionModeListener listener;
