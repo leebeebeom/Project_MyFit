@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
+public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     private final List<FolderTuple> folderTuples;
     private ItemTreeFolderBinding binding;
 
@@ -30,9 +30,14 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     }
 
     @Override
-    protected void bind(FolderTuple tuple) {
+    protected void bind(FolderValue value) {
         binding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        binding.setFolderTuple(tuple);
+        binding.setFolderTuple(value.getTuple());
+    }
+
+    @Override
+    public TreeNode getNode() {
+        return mNode;
     }
 
     @Override
@@ -86,7 +91,7 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     private void addChildNode(@NotNull FolderValue value) {
         int margin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
         folderTuples.stream()
-                .filter(folderTuple -> folderTuple.getParentId() == value.getId())
+                .filter(folderTuple -> folderTuple.getParentId() == value.getTupleId())
                 .forEach(folderTuple -> {
                     TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + margin))
                             .setViewHolder(this);

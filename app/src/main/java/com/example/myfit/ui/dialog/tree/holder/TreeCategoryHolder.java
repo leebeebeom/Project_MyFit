@@ -9,11 +9,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
-import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.databinding.ItemTreeCategoryBinding;
 import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
+import com.unnamed.b.atv.model.TreeNode;
 
-public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryValue> {
+public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     private ItemTreeCategoryBinding binding;
 
     public TreeCategoryHolder(Context context, NavController navController) {
@@ -21,9 +21,14 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryVa
     }
 
     @Override
-    protected void bind(CategoryTuple tuple) {
+    protected void bind(CategoryValue value) {
         binding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
-        binding.setCategoryTuple(tuple);
+        binding.setCategoryTuple(value.getTuple());
+    }
+
+    @Override
+    public TreeNode getNode() {
+        return mNode;
     }
 
     @Override

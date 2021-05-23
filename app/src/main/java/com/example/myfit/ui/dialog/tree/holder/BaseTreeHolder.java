@@ -9,15 +9,15 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
-import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.ui.dialog.tree.TreeViewDialogDirections;
 import com.example.myfit.ui.dialog.tree.holder.value.BaseValue;
 import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
-public abstract class BaseTreeHolder<V extends BaseTuple, T extends BaseValue<V>> extends TreeNode.BaseNodeViewHolder<T> {
+public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.BaseNodeViewHolder<T> {
     private final NavController navController;
     protected boolean isClickable = true;
+    private T value;
 
     public BaseTreeHolder(Context context, NavController navController) {
         super(context);
@@ -26,19 +26,21 @@ public abstract class BaseTreeHolder<V extends BaseTuple, T extends BaseValue<V>
 
     @Override
     public View createNodeView(TreeNode node, T value) {
-        bind(value.getTuple());
+        this.value = value;
+        bind(value);
+
         if (!node.getChildren().isEmpty()) {
-            getArrowIcon().setVisibility(View.GONE);
+            getArrowIcon().setVisibility(View.VISIBLE);
             getFolderIconLayout().setOnClickListener(v -> tView.toggleNode(node));
         }
 
         getAddIcon().setOnClickListener(v ->
                 CommonUtil.navigate(navController, R.id.treeViewDialog,
-                        TreeViewDialogDirections.toAddFolderDialog(value.getId(), value.getParentIndex())));
+                        TreeViewDialogDirections.toAddFolderDialog(value.getTupleId(), value.getParentIndex())));
         return getBindingRoot();
     }
 
-    protected abstract void bind(V tuple);
+    protected abstract void bind(T value);
 
     public void setAlpha() {
         if (isClickable) {
@@ -63,8 +65,14 @@ public abstract class BaseTreeHolder<V extends BaseTuple, T extends BaseValue<V>
         getFolderIcon().setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
-    public TreeNode getNode() {
-        return mNode;
+    public abstract TreeNode getNode();
+
+    public T getValue() {
+        return value;
+    }
+
+    public long getId() {
+        return value.getTupleId();
     }
 
     public void showCurrentPosition() {
