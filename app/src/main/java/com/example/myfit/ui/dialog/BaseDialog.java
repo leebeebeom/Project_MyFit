@@ -22,8 +22,6 @@ public abstract class BaseDialog extends DialogFragment {
     public static final String ACTION_MODE_OFF = "action mode off";
     @Inject
     protected DialogBuilder dialogBuilder;
-    private NavController navController;
-    private NavBackStackEntry mainStackEntry, graphStackEntry;
 
     protected abstract AlertDialog getAlertDialog();
 
@@ -36,24 +34,18 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     protected NavBackStackEntry getMainBackStack() {
-        if (mainStackEntry == null)
-            mainStackEntry = getNavController().getBackStackEntry(R.id.nav_graph_main);
-        return mainStackEntry;
+        return getNavController().getBackStackEntry(R.id.nav_graph_main);
     }
 
     protected abstract NavBackStackEntry getBackStack();
 
     protected NavBackStackEntry getGraphBackStack() {
-        if (graphStackEntry == null) {
-            NavController navController = getNavController();
-            graphStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
-        }
-        return graphStackEntry;
+        NavController navController = getNavController();
+        return navController.getBackStackEntry(navController.getGraph().getId());
     }
 
     protected NavController getNavController() {
-        if (navController == null) navController = NavHostFragment.findNavController(this);
-        return navController;
+        return NavHostFragment.findNavController(this);
     }
 
     protected void actionModeOff() {
