@@ -111,7 +111,6 @@ public abstract class AppDataBase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             Category[] categories = new Category[17];
-                            //TODO test
                             categories[0] = ModelFactory.makeCategory("반팔", ParentCategory.TOP.getValue(), 1);
                             categories[1] = ModelFactory.makeCategory("긴팔", ParentCategory.TOP.getValue(), 2);
                             categories[2] = ModelFactory.makeCategory("니트", ParentCategory.TOP.getValue(), 3);
