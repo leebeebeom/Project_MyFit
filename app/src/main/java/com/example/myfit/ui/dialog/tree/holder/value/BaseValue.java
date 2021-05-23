@@ -13,11 +13,11 @@ public class BaseValue<T extends BaseTuple> {
         return tuple;
     }
 
-    public long getId() {
+    public long getTupleId() {
         return tuple.getId();
     }
 
-    public int getParentIndex(){
+    public int getParentIndex() {
         return tuple.getParentIndex();
     }
 }
