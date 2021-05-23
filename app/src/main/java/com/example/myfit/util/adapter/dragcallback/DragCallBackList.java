@@ -6,14 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.util.adapter.BaseAdapter;
-import com.example.myfit.util.adapter.viewholder.BaseVH;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DragCallBackList<T extends BaseTuple, VH extends BaseVH<T>> extends BaseDragCallBack<T, VH> {
-    public DragCallBackList(BaseAdapter<T, VH> adapter) {
+public class DragCallBackList extends BaseDragCallBack {
+
+    public DragCallBackList(BaseAdapter<?, ?, ?> adapter) {
         super(adapter);
     }
 

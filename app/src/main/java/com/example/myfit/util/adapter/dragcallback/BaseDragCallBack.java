@@ -4,14 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.example.myfit.util.adapter.viewholder.BaseVH;
 
-public abstract  class BaseDragCallBack<T extends BaseTuple, VH extends BaseVH<T>> extends ItemTouchHelper.Callback {
-    private final BaseAdapter<T, VH> adapter;
+import org.jetbrains.annotations.NotNull;
 
-    public BaseDragCallBack(BaseAdapter<T, VH> adapter) {
+public abstract class BaseDragCallBack extends ItemTouchHelper.Callback {
+    private final BaseAdapter<?, ?, ?> adapter;
+
+    public BaseDragCallBack(BaseAdapter<?, ?, ?> adapter) {
         this.adapter = adapter;
     }
 
@@ -32,9 +33,8 @@ public abstract  class BaseDragCallBack<T extends BaseTuple, VH extends BaseVH<T
     }
 
     @Override
-    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder instanceof BaseVH) ((BaseVH<?>) viewHolder).dragStop();
+    public void clearView(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        if (viewHolder instanceof BaseVH) ((BaseVH<?, ?>) viewHolder).dragStop();
     }
-
-
 }
