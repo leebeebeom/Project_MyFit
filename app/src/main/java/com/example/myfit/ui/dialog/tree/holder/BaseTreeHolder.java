@@ -75,6 +75,10 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         return value.getTupleId();
     }
 
+    public BaseTreeHolder<?> getParent(){
+        return (BaseTreeHolder<?>) mNode.getParent().getViewHolder();
+    }
+
     public void showCurrentPosition() {
         getCurrentPosition().setVisibility(View.VISIBLE);
     }
