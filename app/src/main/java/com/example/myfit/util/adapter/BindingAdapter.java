@@ -1,12 +1,13 @@
-package com.example.project_myfit.util.adapter;
+package com.example.myfit.util.adapter;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.project_myfit.R;
+import com.example.myfit.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,5 +80,17 @@ public class BindingAdapter {
     public static void setDotIcon(@NotNull ImageView imageView, String dummy) {
         dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_dot).into(imageView);
+    }
+
+    @androidx.databinding.BindingAdapter("android:text")
+    public static void text(@NotNull TextView textView, int i) {
+        String number = String.valueOf(i);
+        textView.setText(number);
+    }
+
+    @androidx.databinding.BindingAdapter("setTriangleIcon")
+    public static void setTriangleIcon(ImageView imageView, String dummy) {
+        dummy = null;
+        Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
     }
 }
