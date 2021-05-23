@@ -1,4 +1,4 @@
-package com.example.myfit.util.adapter.viewholder.size;
+package com.example.myfit.util.adapter.viewholder;
 
 import androidx.appcompat.widget.AppCompatImageView;
 

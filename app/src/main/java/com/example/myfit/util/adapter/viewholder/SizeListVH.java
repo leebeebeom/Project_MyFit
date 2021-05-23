@@ -1,4 +1,4 @@
-package com.example.myfit.util.adapter.viewholder.size;
+package com.example.myfit.util.adapter.viewholder;
 
 import android.view.View;
 
@@ -6,8 +6,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.databinding.ItemSizeListBinding;
-import com.example.myfit.util.adapter.viewholder.BaseVH;
-import com.example.myfit.util.adapter.viewholder.SizeVHListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
