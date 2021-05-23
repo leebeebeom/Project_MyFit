@@ -14,20 +14,21 @@ import com.example.myfit.util.constant.SortValue;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import static com.example.myfit.util.MyFitConstant.ACTION_MODE_OFF;
 import static com.example.myfit.util.MyFitConstant.ACTION_MODE_ON;
 import static com.example.myfit.util.MyFitConstant.LISTVIEW;
 
 public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener, VH extends BaseVH<T, L>> extends ListAdapter<T, VH> {
-    private final AdapterUtil<T> adapterUtil;
+    private final AdapterUtil<T> adapterUtil = new AdapterUtil<>();
     private final L listener;
-    private HashSet<Long> selectedItemIds;
+    private final Set<Long> selectedItemIds;
     private int actionModeState, sort;
     private List<T> itemList;
 
-    protected BaseAdapter(L listener) {
+    protected BaseAdapter(L listener, Set<Long> selectedItemIds) {
         super(new DiffUtil.ItemCallback<T>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull T oldItem, @NonNull @NotNull T newItem) {
@@ -39,9 +40,8 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
                 return oldItem.equals(newItem);
             }
         });
-        this.adapterUtil = new AdapterUtil<>();
+        this.selectedItemIds = selectedItemIds;
         this.listener = listener;
-        this.selectedItemIds = new HashSet<>();
         setHasStableIds(true);
     }
 
@@ -60,25 +60,23 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     @NotNull
     @Override
     public VH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        return getViewHolder(parent, listener);
+        return getViewHolder(parent, listener, selectedItemIds);
     }
 
-    protected abstract VH getViewHolder(@NotNull ViewGroup parent, L listener);
+    protected abstract VH getViewHolder(@NotNull ViewGroup parent, L listener, Set<Long> selectedItemIds);
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull VH holder, int position) {
-        T tuple = getItem(position);
-        holder.setTuple(tuple);
+        holder.setTuple(getItem(position));
 
         if (actionModeState == ACTION_MODE_ON) {
             holder.getCheckBox().setChecked(selectedItemIds.contains(getItemId(position)));
-            holder.setCheckBoxCheckedChangeListener(selectedItemIds, getItemId(position));
             holder.getDragHandleIcon().setVisibility(sort == SortValue.SORT_CUSTOM.getValue() ? View.VISIBLE : View.GONE);
             this.actionModeOn(holder);
-        } else {
+        } else if (actionModeState == ACTION_MODE_OFF) {
             holder.getCheckBox().setChecked(false);
-            holder.getCheckBox().setOnCheckedChangeListener(null);
             holder.getDragHandleIcon().setVisibility(View.GONE);
+            if (!selectedItemIds.isEmpty()) selectedItemIds.clear();
             this.actionModeOff(holder);
         }
     }
@@ -105,10 +103,6 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     }
 
     protected abstract int getViewType();
-
-    public void setSelectedItemIds(HashSet<Long> selectedItemIds) {
-        this.selectedItemIds = selectedItemIds;
-    }
 
     public void moveItem(int from, int to) {
         adapterUtil.itemMove(from, to, itemList);
