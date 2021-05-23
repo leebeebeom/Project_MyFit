@@ -12,7 +12,7 @@ import com.example.myfit.data.model.tuple.BaseTuple;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
-import java.util.HashSet;
+import java.util.Set;
 
 public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
     public static boolean IS_DRAGGING = false;
@@ -20,12 +20,11 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     private T tuple;
 
     @SuppressLint("ClickableViewAccessibility")
-    public BaseVH(ViewDataBinding binding, L listener) {
+    public BaseVH(ViewDataBinding binding, L listener, Set<Long> selectedIds) {
         super(binding.getRoot());
         this.listener = listener;
 
-        itemView.setOnClickListener(
-                v -> listener.itemViewClick(tuple, getCheckBox()));
+        setItemViewClickListener(listener, selectedIds);
 
         itemView.setOnLongClickListener(v -> {
             listener.itemViewLongClick(getLayoutPosition());
@@ -37,6 +36,21 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
                 dragStart();
             return false;
         });
+    }
+
+    private void setItemViewClickListener(L listener, Set<Long> selectedItemSet) {
+        itemView.setOnClickListener(
+                v -> {
+                    MaterialCheckBox checkBox = getCheckBox();
+                    if (selectedItemSet.contains(tuple.getId())) {
+                        checkBox.setChecked(false);
+                        selectedItemSet.remove(tuple.getId());
+                    } else {
+                        checkBox.setChecked(true);
+                        selectedItemSet.add(tuple.getId());
+                    }
+                    listener.itemViewClick(tuple);
+                });
     }
 
     public void setTuple(T tuple) {
@@ -75,11 +89,4 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     }
 
     public abstract MaterialCardView getCardView();
-
-    public void setCheckBoxCheckedChangeListener(HashSet<Long> selectedItemIds, long id) {
-        getCheckBox().setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) selectedItemIds.add(id);
-            else selectedItemIds.remove(id);
-        });
-    }
 }

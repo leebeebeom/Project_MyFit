@@ -11,11 +11,13 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemFolderGridBinding binding;
 
-    public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener) {
-        super(binding, listener);
+    public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
+        super(binding, listener, selectedIds);
         this.binding = binding;
     }
 
@@ -24,7 +26,7 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
         binding.setTuple(tuple);
         if (tuple.getId() == -1) {
             binding.getRoot().setVisibility(View.INVISIBLE);
-            binding.getRoot().setEnabled(false);
+            itemView.setClickable(false);
         }
     }
 

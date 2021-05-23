@@ -11,11 +11,13 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class SizeListVH extends BaseVH<SizeTuple, SizeVHListener> {
     private final ItemSizeListBinding binding;
 
-    public SizeListVH(@NotNull ItemSizeListBinding binding, SizeVHListener listener) {
-        super(binding, listener);
+    public SizeListVH(@NotNull ItemSizeListBinding binding, SizeVHListener listener, Set<Long> selectedIds) {
+        super(binding, listener, selectedIds);
         this.binding = binding;
 
         binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));

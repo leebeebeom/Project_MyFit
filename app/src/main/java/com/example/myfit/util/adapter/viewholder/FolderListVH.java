@@ -9,11 +9,13 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemFolderListBinding binding;
 
-    public FolderListVH(@NotNull ItemFolderListBinding binding, BaseVHListener listener) {
-        super(binding, listener);
+    public FolderListVH(@NotNull ItemFolderListBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
+        super(binding, listener, selectedIds);
         this.binding = binding;
     }
 

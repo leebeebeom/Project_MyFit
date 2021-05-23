@@ -4,18 +4,18 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.databinding.ItemSizeGridBinding;
-import com.example.myfit.util.adapter.viewholder.BaseVH;
-import com.example.myfit.util.adapter.viewholder.SizeVHListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class SizeGridVH extends BaseVH<SizeTuple, SizeVHListener> {
     private final ItemSizeGridBinding binding;
 
-    public SizeGridVH(@NotNull ItemSizeGridBinding binding, SizeVHListener listener) {
-        super(binding, listener);
+    public SizeGridVH(@NotNull ItemSizeGridBinding binding, SizeVHListener listener, Set<Long> selectedIds) {
+        super(binding, listener, selectedIds);
         this.binding = binding;
 
         binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));

@@ -11,11 +11,13 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     private final ItemCategoryBinding binding;
 
-    public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener) {
-        super(binding, listener);
+    public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
+        super(binding, listener, selectedIds);
         this.binding = binding;
     }
 
