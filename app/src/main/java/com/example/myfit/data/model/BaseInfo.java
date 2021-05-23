@@ -5,7 +5,7 @@ import java.util.Objects;
 public class BaseInfo {
     private final int parentIndex;
     private int orderNumber;
-    private boolean isDeleted, dummy;
+    private boolean isDeleted;
     private long deletedTime;
 
     public BaseInfo(int parentIndex, int orderNumber) {
@@ -33,14 +33,6 @@ public class BaseInfo {
         isDeleted = deleted;
     }
 
-    public boolean isDummy() {
-        return dummy;
-    }
-
-    public void setDummy(boolean dummy) {
-        this.dummy = dummy;
-    }
-
     public long getDeletedTime() {
         return deletedTime;
     }
@@ -57,12 +49,11 @@ public class BaseInfo {
         return getParentIndex() == baseInfo.getParentIndex() &&
                 getOrderNumber() == baseInfo.getOrderNumber() &&
                 isDeleted() == baseInfo.isDeleted() &&
-                isDummy() == baseInfo.isDummy() &&
                 getDeletedTime() == baseInfo.getDeletedTime();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), isDummy(), getDeletedTime());
+        return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), getDeletedTime());
     }
 }

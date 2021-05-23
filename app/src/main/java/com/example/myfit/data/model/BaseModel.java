@@ -45,14 +45,6 @@ public class BaseModel {
         this.baseInfo.setDeleted(deleted);
     }
 
-    public boolean isDummy() {
-        return baseInfo.isDummy();
-    }
-
-    public void setDummy() {
-        this.baseInfo.setDummy(!isDummy());
-    }
-
     public BaseInfo getBaseInfo() {
         return baseInfo;
     }
