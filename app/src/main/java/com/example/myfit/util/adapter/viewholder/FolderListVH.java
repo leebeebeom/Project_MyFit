@@ -4,6 +4,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.databinding.ItemFolderListBinding;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,12 +22,12 @@ public class FolderListVH extends BaseVH<FolderTuple> {
     }
 
     @Override
-    protected MaterialCheckBox getCheckBox() {
+    public MaterialCheckBox getCheckBox() {
         return binding.cb;
     }
 
     @Override
-    protected AppCompatImageView getDragHandleIcon() {
+    public AppCompatImageView getDragHandleIcon() {
         return null;
     }
 
@@ -36,5 +37,10 @@ public class FolderListVH extends BaseVH<FolderTuple> {
 
     @Override
     protected void setDropView() {
+    }
+
+    @Override
+    public MaterialCardView getCardView() {
+        return binding.cardView;
     }
 }

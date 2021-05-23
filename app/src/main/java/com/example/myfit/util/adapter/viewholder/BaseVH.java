@@ -9,7 +9,10 @@ import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.data.model.tuple.BaseTuple;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
+
+import java.util.HashSet;
 
 public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolder {
     public static boolean IS_DRAGGING = false;
@@ -21,9 +24,8 @@ public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolde
         super(binding.getRoot());
         this.listener = listener;
 
-        itemView.setOnClickListener(v -> {
-            listener.itemViewClick(tuple, getCheckBox());
-        });
+        itemView.setOnClickListener(
+                v -> listener.itemViewClick(tuple, getCheckBox()));
 
         itemView.setOnLongClickListener(v -> {
             listener.itemViewLongClick(getLayoutPosition());
@@ -48,9 +50,9 @@ public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolde
         return tuple;
     }
 
-    protected abstract MaterialCheckBox getCheckBox();
+    public abstract MaterialCheckBox getCheckBox();
 
-    protected abstract AppCompatImageView getDragHandleIcon();
+    public abstract AppCompatImageView getDragHandleIcon();
 
     private void dragStart() {
         IS_DRAGGING = true;
@@ -70,5 +72,14 @@ public abstract class BaseVH<T extends BaseTuple> extends RecyclerView.ViewHolde
 
     protected void setItemViewTranslationZ(View itemView, int value) {
         itemView.setTranslationZ(value);
+    }
+
+    public abstract MaterialCardView getCardView();
+
+    public void setCheckBoxCheckedChangeListener(HashSet<Long> selectedItemIds, long id) {
+        getCheckBox().setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) selectedItemIds.add(id);
+            else selectedItemIds.remove(id);
+        });
     }
 }

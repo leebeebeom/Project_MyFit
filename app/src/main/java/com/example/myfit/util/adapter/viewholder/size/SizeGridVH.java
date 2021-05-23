@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.databinding.ItemSizeGridBinding;
 import com.example.myfit.util.adapter.viewholder.SizeVHListener;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +26,12 @@ public class SizeGridVH extends BaseSizeVH {
     }
 
     @Override
-    protected MaterialCheckBox getCheckBox() {
+    public MaterialCheckBox getCheckBox() {
         return binding.cb;
     }
 
     @Override
-    protected AppCompatImageView getDragHandleIcon() {
+    public AppCompatImageView getDragHandleIcon() {
         return binding.iconDragHandle;
     }
 
@@ -48,6 +49,11 @@ public class SizeGridVH extends BaseSizeVH {
         binding.iv.setAlpha(1f);
         binding.layoutContents.setAlpha(1);
         binding.cb.setAlpha(0.8f);
+    }
+
+    @Override
+    public MaterialCardView getCardView() {
+        return binding.cardView;
     }
 }
 

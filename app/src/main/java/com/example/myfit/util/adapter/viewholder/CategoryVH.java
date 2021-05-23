@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.databinding.ItemCategoryBinding;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +25,12 @@ public class CategoryVH extends BaseVH<CategoryTuple> {
     }
 
     @Override
-    protected MaterialCheckBox getCheckBox() {
+    public MaterialCheckBox getCheckBox() {
         return binding.cb;
     }
 
     @Override
-    protected AppCompatImageView getDragHandleIcon() {
+    public AppCompatImageView getDragHandleIcon() {
         return binding.iconDragHandle;
     }
 
@@ -47,5 +48,10 @@ public class CategoryVH extends BaseVH<CategoryTuple> {
         binding.cb.setVisibility(View.VISIBLE);
         binding.tvCategoryName.setAlpha(0.8f);
         binding.layoutContentsSize.setAlpha(0.8f);
+    }
+
+    @Override
+    public MaterialCardView getCardView() {
+        return binding.cardView;
     }
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.databinding.ItemFolderGridBinding;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,12 +29,12 @@ public class FolderGridVH extends BaseVH<FolderTuple> {
     }
 
     @Override
-    protected MaterialCheckBox getCheckBox() {
+    public MaterialCheckBox getCheckBox() {
         return binding.cb;
     }
 
     @Override
-    protected AppCompatImageView getDragHandleIcon() {
+    public AppCompatImageView getDragHandleIcon() {
         return binding.iconDragHandle;
     }
 
@@ -51,5 +52,10 @@ public class FolderGridVH extends BaseVH<FolderTuple> {
         binding.layoutContentsSize.setVisibility(View.VISIBLE);
         binding.tvFolderName.setAlpha(1);
         binding.cb.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public MaterialCardView getCardView() {
+        return binding.cardView;
     }
 }
