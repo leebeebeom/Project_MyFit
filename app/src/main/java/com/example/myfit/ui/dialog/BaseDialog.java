@@ -35,6 +35,12 @@ public abstract class BaseDialog extends DialogFragment {
         mainGraphViewModel.setBackStackEntryLive(getBackStack());
     }
 
+    protected NavBackStackEntry getMainBackStack() {
+        if (mainStackEntry == null)
+            mainStackEntry = getNavController().getBackStackEntry(R.id.nav_graph_main);
+        return mainStackEntry;
+    }
+
     protected abstract NavBackStackEntry getBackStack();
 
     protected NavBackStackEntry getGraphBackStack() {
@@ -43,12 +49,6 @@ public abstract class BaseDialog extends DialogFragment {
             graphStackEntry = navController.getBackStackEntry(navController.getGraph().getId());
         }
         return graphStackEntry;
-    }
-
-    protected NavBackStackEntry getMainBackStack() {
-        if (mainStackEntry == null)
-            mainStackEntry = getNavController().getBackStackEntry(R.id.nav_graph_main);
-        return mainStackEntry;
     }
 
     protected NavController getNavController() {
