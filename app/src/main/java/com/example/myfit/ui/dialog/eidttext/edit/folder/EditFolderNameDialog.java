@@ -31,8 +31,8 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.editFolderNameDialog);
+    protected int getResId() {
+        return R.id.editFolderNameDialog;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.all_create_folder);
+        return getString(R.string.dialog_title_edit_folder_name);
     }
 
     @Override

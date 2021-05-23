@@ -27,7 +27,7 @@ public class EditSameCategoryNameDialog extends BaseEditSameNameDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.editSameCategoryNameDialog);
+    protected int getResId() {
+        return R.id.editSameCategoryNameDialog;
     }
 }

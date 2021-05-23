@@ -24,7 +24,7 @@ public class EditCategoryNameViewModel extends BaseEditViewModel {
     }
 
     @Override
-    protected LiveData<Boolean> query(String name) {
+    protected LiveData<Boolean> queryIsExistingLive(String name) {
         return categoryRepository.isExistingName((String) name, parentIndex);
     }
 

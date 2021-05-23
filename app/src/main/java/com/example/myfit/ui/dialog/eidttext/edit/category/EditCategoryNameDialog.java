@@ -31,8 +31,8 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.editCategoryNameDialog);
+    protected int getResId() {
+        return R.id.editCategoryNameDialog;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.all_add_category);
+        return getString(R.string.dialog_title_edit_category_name);
     }
 
     @Override

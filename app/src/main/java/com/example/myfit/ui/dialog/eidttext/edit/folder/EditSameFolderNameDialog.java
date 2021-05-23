@@ -27,7 +27,7 @@ public class EditSameFolderNameDialog extends BaseEditSameNameDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.editSameFolderNameDialog);
+    protected int getResId() {
+        return R.id.editSameFolderNameDialog;
     }
 }

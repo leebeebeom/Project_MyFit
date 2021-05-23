@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public abstract class BaseEditViewModel extends BaseEditTextViewModel {
-
     @Inject
     public BaseEditViewModel(SavedStateHandle savedStateHandle) {
         super(savedStateHandle);

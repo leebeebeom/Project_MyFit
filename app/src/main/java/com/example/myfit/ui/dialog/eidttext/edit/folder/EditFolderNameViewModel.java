@@ -23,7 +23,7 @@ public class EditFolderNameViewModel extends BaseEditViewModel {
     }
 
     @Override
-    protected LiveData<Boolean> query(String name) {
+    protected LiveData<Boolean> queryIsExistingLive(String name) {
         return folderRepository.isExistingName((String) name, parentId);
     }
 
