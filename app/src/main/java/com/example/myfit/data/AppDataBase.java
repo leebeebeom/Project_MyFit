@@ -112,25 +112,25 @@ public abstract class AppDataBase extends RoomDatabase {
                             super.onCreate(db);
                             Category[] categories = new Category[17];
                             //TODO test
-                            categories[0] = ModelFactory.makeCategory("반팔", ParentCategory.TOP.getIndex(), 1);
-                            categories[1] = ModelFactory.makeCategory("긴팔", ParentCategory.TOP.getIndex(), 2);
-                            categories[2] = ModelFactory.makeCategory("니트", ParentCategory.TOP.getIndex(), 3);
-                            categories[3] = ModelFactory.makeCategory("후드", ParentCategory.TOP.getIndex(), 4);
-                            categories[4] = ModelFactory.makeCategory("셔츠", ParentCategory.TOP.getIndex(), 5);
+                            categories[0] = ModelFactory.makeCategory("반팔", ParentCategory.TOP.getValue(), 1);
+                            categories[1] = ModelFactory.makeCategory("긴팔", ParentCategory.TOP.getValue(), 2);
+                            categories[2] = ModelFactory.makeCategory("니트", ParentCategory.TOP.getValue(), 3);
+                            categories[3] = ModelFactory.makeCategory("후드", ParentCategory.TOP.getValue(), 4);
+                            categories[4] = ModelFactory.makeCategory("셔츠", ParentCategory.TOP.getValue(), 5);
 
-                            categories[5] = ModelFactory.makeCategory("청바지", ParentCategory.BOTTOM.getIndex(), 6);
-                            categories[6] = ModelFactory.makeCategory("슬랙스", ParentCategory.BOTTOM.getIndex(), 7);
-                            categories[7] = ModelFactory.makeCategory("반바지", ParentCategory.BOTTOM.getIndex(), 8);
+                            categories[5] = ModelFactory.makeCategory("청바지", ParentCategory.BOTTOM.getValue(), 6);
+                            categories[6] = ModelFactory.makeCategory("슬랙스", ParentCategory.BOTTOM.getValue(), 7);
+                            categories[7] = ModelFactory.makeCategory("반바지", ParentCategory.BOTTOM.getValue(), 8);
 
-                            categories[8] = ModelFactory.makeCategory("Ma-1", ParentCategory.OUTER.getIndex(), 9);
-                            categories[9] = ModelFactory.makeCategory("패딩", ParentCategory.OUTER.getIndex(), 10);
-                            categories[10] = ModelFactory.makeCategory("야상", ParentCategory.OUTER.getIndex(), 11);
-                            categories[11] = ModelFactory.makeCategory("후드 집업", ParentCategory.OUTER.getIndex(), 12);
+                            categories[8] = ModelFactory.makeCategory("Ma-1", ParentCategory.OUTER.getValue(), 9);
+                            categories[9] = ModelFactory.makeCategory("패딩", ParentCategory.OUTER.getValue(), 10);
+                            categories[10] = ModelFactory.makeCategory("야상", ParentCategory.OUTER.getValue(), 11);
+                            categories[11] = ModelFactory.makeCategory("후드 집업", ParentCategory.OUTER.getValue(), 12);
 
-                            categories[12] = ModelFactory.makeCategory("신발", ParentCategory.ETC.getIndex(), 13);
-                            categories[13] = ModelFactory.makeCategory("안경", ParentCategory.ETC.getIndex(), 14);
-                            categories[14] = ModelFactory.makeCategory("목걸이", ParentCategory.ETC.getIndex(), 15);
-                            categories[15] = ModelFactory.makeCategory("기타", ParentCategory.ETC.getIndex(), 16);
+                            categories[12] = ModelFactory.makeCategory("신발", ParentCategory.ETC.getValue(), 13);
+                            categories[13] = ModelFactory.makeCategory("안경", ParentCategory.ETC.getValue(), 14);
+                            categories[14] = ModelFactory.makeCategory("목걸이", ParentCategory.ETC.getValue(), 15);
+                            categories[15] = ModelFactory.makeCategory("기타", ParentCategory.ETC.getValue(), 16);
 
                             new CategoryRepository(context).insert(categories);
                         }
