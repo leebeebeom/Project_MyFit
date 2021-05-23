@@ -6,6 +6,8 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.databinding.ItemRecyclerViewBinding;
+import com.example.myfit.util.DragSelectImpl;
+import com.example.myfit.util.adapter.BaseAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,8 +42,20 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
         binding.layoutNoData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
-    public ItemRecyclerViewBinding getBinding() {
-        return binding;
+    public RecyclerView.Adapter<?> getAdapter() {
+        return binding.rv.getAdapter();
+    }
+
+    public void setAdapter(BaseAdapter<?, ?, ?> adapter) {
+        binding.rv.setAdapter(adapter);
+    }
+
+    public void addItemTouchListener(DragSelectImpl dragSelectListener) {
+        binding.rv.addOnItemTouchListener(dragSelectListener.setRecyclerView(binding.rv));
+    }
+
+    public RecyclerView getRecyclerView() {
+        return binding.rv;
     }
 
     public interface ViewPagerAutoScrollListener {
