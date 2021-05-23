@@ -12,7 +12,7 @@ import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
-import com.example.myfit.util.IntegerSharedPreferenceLiveData;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.constant.SortValue;
 

@@ -11,7 +11,7 @@ import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
-import com.example.myfit.util.IntegerSharedPreferenceLiveData;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.constant.SortValue;
 

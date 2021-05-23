@@ -12,7 +12,7 @@ import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
-import com.example.myfit.util.IntegerSharedPreferenceLiveData;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.constant.SortValue;
 
