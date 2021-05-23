@@ -24,7 +24,7 @@ public class AddFolderViewModel extends BaseAddViewModel {
     }
 
     @Override
-    protected LiveData<Boolean> query(String name) {
+    protected LiveData<Boolean> queryIsExistingLive(String name) {
         return folderRepository.isExistingName((String) name, parentId);
     }
 

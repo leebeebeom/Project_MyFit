@@ -49,13 +49,13 @@ public class AddFolderDialog extends BaseAddDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getParentId();
-            int parentIndex = (int) AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
+            int parentIndex = AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
             model.setStateHandle(getInputText(), parentId, parentIndex);
         };
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.addFolderDialog);
+    protected int getResId() {
+        return R.id.addFolderDialog;
     }
 }

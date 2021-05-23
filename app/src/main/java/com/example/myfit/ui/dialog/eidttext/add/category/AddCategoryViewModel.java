@@ -23,7 +23,7 @@ public class AddCategoryViewModel extends BaseAddViewModel {
     }
 
     @Override
-    protected LiveData<Boolean> query(String name) {
+    protected LiveData<Boolean> queryIsExistingLive(String name) {
         return categoryRepository.isExistingName((String) name, this.parentIndex);
     }
 

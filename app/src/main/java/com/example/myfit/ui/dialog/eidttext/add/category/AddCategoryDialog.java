@@ -54,7 +54,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.addCategoryDialog);
+    protected int getResId() {
+        return R.id.addCategoryDialog;
     }
 }

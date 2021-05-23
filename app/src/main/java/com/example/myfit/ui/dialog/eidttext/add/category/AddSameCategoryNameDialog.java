@@ -26,7 +26,7 @@ public class AddSameCategoryNameDialog extends BaseAddSameNameDialog {
     }
 
     @Override
-    protected NavBackStackEntry getBackStack() {
-        return getNavController().getBackStackEntry(R.id.addSameCategoryNameDialog);
+    protected int getResId() {
+        return R.id.addSameCategoryNameDialog;
     }
 }
