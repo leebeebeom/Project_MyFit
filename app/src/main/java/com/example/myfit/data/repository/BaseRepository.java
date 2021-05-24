@@ -2,21 +2,22 @@ package com.example.myfit.data.repository;
 
 import android.content.SharedPreferences;
 
-import com.example.myfit.util.constant.SortValue;
+import com.example.myfit.util.constant.Sort;
 
 public abstract class BaseRepository {
     public abstract void deleteOrRestore(long[] ids, boolean isDeleted);
 
-    public void changeSort(int sort) {
-        if (sort != getPreference().getInt(getPreferenceKey(), SortValue.SORT_CUSTOM.getValue())) {
+    public void changeSort(Sort sort) {
+        if (sort.getValue() != getPreference().getInt(getPreferenceKey(), Sort.SORT_CUSTOM.getValue())) {
             SharedPreferences.Editor edit = getPreference().edit();
-            edit.putInt(getPreferenceKey(), sort);
+            edit.putInt(getPreferenceKey(), sort.getValue());
             edit.apply();
         }
     }
 
-    public int getSort() {
-        return getPreference().getInt(getPreferenceKey(), SortValue.SORT_CUSTOM.getValue());
+    public Sort getSort() {
+        int sort = getPreference().getInt(getPreferenceKey(), Sort.SORT_CUSTOM.getValue());
+        return Sort.values()[sort];
     }
 
     protected abstract SharedPreferences getPreference();

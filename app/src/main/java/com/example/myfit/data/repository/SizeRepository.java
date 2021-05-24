@@ -12,11 +12,12 @@ import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
-import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.constant.SortValue;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import java.util.List;
+
+import static com.example.myfit.data.repository.FolderRepository.SORT_LIST;
 
 public class SizeRepository extends BaseRepository{
     private final SizeDao sizeDao;
@@ -24,14 +25,15 @@ public class SizeRepository extends BaseRepository{
 
     public SizeRepository(Context context) {
         this.sizeDao = AppDataBase.getsInstance(context).sizeDao();
-        this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), Context.MODE_PRIVATE);
+        this.listSortPreference = context.getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
     }
 
     //to list
     public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
         IntegerSharedPreferenceLiveData listSortPreferenceLive =
-                new IntegerSharedPreferenceLiveData(listSortPreference, Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
-        return Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, sort));
+                new IntegerSharedPreferenceLiveData(listSortPreference, SORT_LIST, Sort.SORT_CUSTOM.getValue());
+
+        return Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
     }
 
     //to recycleBin
@@ -102,7 +104,7 @@ public class SizeRepository extends BaseRepository{
 
     @Override
     protected String getPreferenceKey() {
-        return Sort.SORT_LIST.getText();
+        return SORT_LIST;
     }
 
     //to treeView

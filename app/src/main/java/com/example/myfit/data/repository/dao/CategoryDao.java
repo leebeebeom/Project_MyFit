@@ -13,6 +13,7 @@ import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
+import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,7 @@ import java.util.List;
 public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     //to main
-    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(int sort) {
+    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(Sort sort) {
         LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
 
@@ -36,7 +37,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     @NotNull
     private LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryTuple>> tuplesLive,
                                                                         LiveData<int[]> contentsSizesLive,
-                                                                        int sort) {
+                                                                        Sort sort) {
         return Transformations.map(contentsSizesLive, contentsSizes -> {
             List<CategoryTuple> tuples = tuplesLive.getValue();
             super.setContentsSize(tuples, contentsSizes);
@@ -69,7 +70,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //to treeView (disposable)
-    public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, int sort) {
+    public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
         List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getItemIds(tuples);
         int[] contentsSizes = getContentsSizesByParentIds(ids);

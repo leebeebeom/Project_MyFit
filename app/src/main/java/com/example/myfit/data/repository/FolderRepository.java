@@ -12,28 +12,30 @@ import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
-import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.constant.SortValue;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class FolderRepository extends BaseRepository{
+public class FolderRepository extends BaseRepository {
+    static final String SORT_LIST = "sort list";
+
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
     private MutableLiveData<Long> insertIdLive;
 
     public FolderRepository(Context context) {
         this.folderDao = AppDataBase.getsInstance(context).folderDao();
-        this.listSortPreference = context.getSharedPreferences(Sort.SORT_LIST.getText(), Context.MODE_PRIVATE);
+        this.listSortPreference = context.getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
     }
 
     //to list
     public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId) {
         IntegerSharedPreferenceLiveData listSortPreferenceLive =
-                new IntegerSharedPreferenceLiveData(listSortPreference, Sort.SORT_LIST.getText(), SortValue.SORT_CUSTOM.getValue());
-        return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getTuplesLiveByParentId(parentId, sort));
+                new IntegerSharedPreferenceLiveData(listSortPreference, SORT_LIST, Sort.SORT_CUSTOM.getValue());
+
+        return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
     }
 
     //to recycleBin
@@ -55,9 +57,9 @@ public class FolderRepository extends BaseRepository{
     public LiveData<List<FolderTuple>> getTuplesByParentIndex(int parentIndex) {
         MutableLiveData<List<FolderTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
-                int sort = getSort();
-                List<FolderTuple> folderTuples = folderDao.getTuplesByParentIndex(parentIndex, sort);
-                tuplesLive.postValue(folderTuples);
+            Sort sort = getSort();
+            List<FolderTuple> folderTuples = folderDao.getTuplesByParentIndex(parentIndex, sort);
+            tuplesLive.postValue(folderTuples);
         }).start();
         return tuplesLive;
     }
@@ -119,7 +121,7 @@ public class FolderRepository extends BaseRepository{
 
     @Override
     protected String getPreferenceKey() {
-        return Sort.SORT_LIST.getText();
+        return SORT_LIST;
     }
 
     //from addFolder dialog

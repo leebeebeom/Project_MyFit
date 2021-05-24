@@ -11,31 +11,32 @@ import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
-import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.constant.SortValue;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class CategoryRepository extends BaseRepository{
+public class CategoryRepository extends BaseRepository {
+    private static final String SORT_MAIN = "sort main";
+
     private final SharedPreferences mainSortPreference;
     private final CategoryDao categoryDao;
     private MutableLiveData<Long> insertIdLive;
 
     public CategoryRepository(@NotNull Context context) {
         categoryDao = AppDataBase.getsInstance(context).categoryDao();
-        mainSortPreference = context.getSharedPreferences(Sort.SORT_MAIN.getText(), Context.MODE_PRIVATE);
+        mainSortPreference = context.getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
     }
 
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         IntegerSharedPreferenceLiveData mainSortPreferenceLive =
-                new IntegerSharedPreferenceLiveData(mainSortPreference, Sort.SORT_MAIN.getText(), SortValue.SORT_CUSTOM.getValue());
+                new IntegerSharedPreferenceLiveData(mainSortPreference, SORT_MAIN, Sort.SORT_CUSTOM.getValue());
 
-        return Transformations.switchMap(mainSortPreferenceLive, categoryDao::getClassifiedTuplesLive);
+        return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
     }
 
     //to recycleBin
@@ -52,9 +53,9 @@ public class CategoryRepository extends BaseRepository{
     public LiveData<List<CategoryTuple>> getTuplesByParentIndex(int parentIndex) {
         MutableLiveData<List<CategoryTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
-                int sort = getSort();
-                List<CategoryTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
-                tuplesLive.postValue(tuples);
+            Sort sort = getSort();
+            List<CategoryTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
+            tuplesLive.postValue(tuples);
         }).start();
         return tuplesLive;
     }
@@ -121,7 +122,7 @@ public class CategoryRepository extends BaseRepository{
 
     @Override
     protected String getPreferenceKey() {
-        return Sort.SORT_MAIN.getText();
+        return SORT_MAIN;
     }
 
     //from addCategory Dialog

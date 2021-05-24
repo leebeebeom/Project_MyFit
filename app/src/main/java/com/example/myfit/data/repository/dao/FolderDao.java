@@ -14,6 +14,7 @@ import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ import java.util.List;
 public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     //to list
-    public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId, int sort) {
+    public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId, Sort sort) {
         LiveData<List<FolderTuple>> tuplesLive = this.getTuplesLiveByParentId(parentId);
         LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
 
@@ -37,7 +38,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     @NotNull
     private LiveData<List<FolderTuple>> getOrderedTuplesLive(LiveData<List<FolderTuple>> tuplesLive,
                                                                LiveData<int[]> contentsSizesLive,
-                                                               int sort) {
+                                                               Sort sort) {
         return Transformations.map(contentsSizesLive, contentsSizes -> {
             List<FolderTuple> tuples = tuplesLive.getValue();
             super.setContentsSize(tuples, contentsSizes);
@@ -79,7 +80,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     //to treeView (disposable)
     @Transaction
-    public List<FolderTuple> getTuplesByParentIndex(int parentIndex, int sort) {
+    public List<FolderTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
         List<FolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getItemIds(tuples);
         int[] contentsSizes = getContentsSizesByParentIds(ids);

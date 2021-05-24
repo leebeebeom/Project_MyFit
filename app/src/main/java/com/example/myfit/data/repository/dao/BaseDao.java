@@ -16,6 +16,7 @@ import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentDeletedTuple;
 import com.example.myfit.util.SortUtil;
+import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +70,7 @@ public abstract class BaseDao<T extends BaseTuple> {
         }
     }
 
-    protected <R extends CategoryTuple> void orderTuples(int sort, List<R> tuples) {
+    protected <R extends CategoryTuple> void orderTuples(Sort sort, List<R> tuples) {
         try {
             SortUtil.orderCategoryFolderTuples(sort, tuples);
         } catch (NullPointerException e) {
