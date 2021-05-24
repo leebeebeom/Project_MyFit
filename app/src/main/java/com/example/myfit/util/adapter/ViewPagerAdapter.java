@@ -13,20 +13,29 @@ import com.example.myfit.util.adapter.viewholder.ViewPagerVH;
 
 import org.jetbrains.annotations.NotNull;
 
-public class BaseViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
+public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
     private final ViewPagerVH.ViewPagerAutoScrollListener listener;
     private final BaseAdapter<?, ?, ?>[] adapters;
     private final DragSelectImpl[] dragSelectListeners;
-    private final ItemTouchHelper[] itemTouchHelpers;
+    private ItemTouchHelper[] itemTouchHelpers;
 
-    public BaseViewPagerAdapter(ViewPagerVH.ViewPagerAutoScrollListener listener,
-                                BaseAdapter<?, ?, ?>[] adapters,
-                                DragSelectImpl[] dragSelectListeners,
-                                ItemTouchHelper[] itemTouchHelpers) {
+    public ViewPagerAdapter(ViewPagerVH.ViewPagerAutoScrollListener listener,
+                            BaseAdapter<?, ?, ?>[] adapters,
+                            DragSelectImpl[] dragSelectListeners,
+                            ItemTouchHelper[] itemTouchHelpers) {
         this.listener = listener;
         this.adapters = adapters;
         this.dragSelectListeners = dragSelectListeners;
         this.itemTouchHelpers = itemTouchHelpers;
+        setHasStableIds(true);
+    }
+
+    public ViewPagerAdapter(ViewPagerVH.ViewPagerAutoScrollListener listener,
+                            BaseAdapter<?, ?, ?>[] adapters,
+                            DragSelectImpl[] dragSelectListeners) {
+        this.listener = listener;
+        this.adapters = adapters;
+        this.dragSelectListeners = dragSelectListeners;
         setHasStableIds(true);
     }
 
@@ -49,7 +58,8 @@ public class BaseViewPagerAdapter extends RecyclerView.Adapter<ViewPagerVH> {
         if (holder.getAdapter() == null) {
             holder.setAdapter(adapters[position]);
             holder.addItemTouchListener(dragSelectListeners[position]);
-            itemTouchHelpers[position].attachToRecyclerView(holder.getRecyclerView());
+            if (itemTouchHelpers != null)
+                itemTouchHelpers[position].attachToRecyclerView(holder.getRecyclerView());
         }
     }
 
