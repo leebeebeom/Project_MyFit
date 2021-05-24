@@ -14,6 +14,8 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.Set;
 
+import static com.example.myfit.util.ActionModeImpl.ACTION_MODE;
+
 public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
     public static boolean IS_DRAGGING = false;
     private final L listener;
@@ -38,27 +40,33 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
         });
     }
 
-    private void setItemViewClickListener(L listener, Set<Long> selectedItemSet) {
-        itemView.setOnClickListener(
-                v -> {
-                    MaterialCheckBox checkBox = getCheckBox();
-                    if (selectedItemSet.contains(tuple.getId())) {
-                        checkBox.setChecked(false);
-                        selectedItemSet.remove(tuple.getId());
-                    } else {
-                        checkBox.setChecked(true);
-                        selectedItemSet.add(tuple.getId());
-                    }
-                    listener.itemViewClick(tuple);
-                });
-    }
-
     public void setTuple(T tuple) {
         this.tuple = tuple;
         bind(tuple);
     }
 
     protected abstract void bind(T tuple);
+
+    private void setItemViewClickListener(L listener, Set<Long> selectedItemSet) {
+        itemView.setOnClickListener(
+                v -> {
+                    if (ACTION_MODE != null) {
+                        if (selectedItemSet.contains(tuple.getId()))
+                            removeItem(selectedItemSet);
+                        else addItem(selectedItemSet);
+                    } else listener.itemViewClick(tuple);
+                });
+    }
+
+    private void addItem(Set<Long> selectedItemSet) {
+        getCheckBox().setChecked(true);
+        selectedItemSet.add(tuple.getId());
+    }
+
+    private void removeItem(Set<Long> selectedItemSet) {
+        getCheckBox().setChecked(false);
+        selectedItemSet.remove(tuple.getId());
+    }
 
     protected T getTuple() {
         return tuple;
