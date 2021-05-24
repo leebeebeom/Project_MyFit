@@ -1,5 +1,6 @@
 package com.example.myfit.util.adapter.viewholder;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -21,12 +22,15 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
         this.binding = binding;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bind(FolderTuple tuple) {
         binding.setTuple(tuple);
         if (tuple.getId() == -1) {
             binding.getRoot().setVisibility(View.INVISIBLE);
-            itemView.setClickable(false);
+            itemView.setOnClickListener(null);
+            itemView.setOnLongClickListener(null);
+            binding.iconDragHandle.setOnTouchListener(null);
         }
     }
 
@@ -45,7 +49,7 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
         setItemViewTranslationZ(itemView, 10);
         binding.layoutContentsSize.setVisibility(View.INVISIBLE);
         binding.tvFolderName.setAlpha(0.5f);
-        binding.cb.setVisibility(View.INVISIBLE);
+        binding.cb.setAlpha(0.5f);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
         setItemViewTranslationZ(itemView, 0);
         binding.layoutContentsSize.setVisibility(View.VISIBLE);
         binding.tvFolderName.setAlpha(1);
-        binding.cb.setVisibility(View.VISIBLE);
+        binding.cb.setAlpha(0.8f);
     }
 
     @Override
