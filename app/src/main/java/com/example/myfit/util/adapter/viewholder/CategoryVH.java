@@ -16,8 +16,8 @@ import java.util.Set;
 public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     private final ItemCategoryBinding binding;
 
-    public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
-        super(binding, listener, selectedIds);
+    public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener, Set<CategoryTuple> selectedItems) {
+        super(binding, listener, selectedItems);
         this.binding = binding;
     }
 

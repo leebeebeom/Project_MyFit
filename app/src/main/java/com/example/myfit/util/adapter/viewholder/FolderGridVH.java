@@ -17,8 +17,8 @@ import java.util.Set;
 public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemFolderGridBinding binding;
 
-    public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
-        super(binding, listener, selectedIds);
+    public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
+        super(binding, listener, selectedItems);
         this.binding = binding;
     }
 

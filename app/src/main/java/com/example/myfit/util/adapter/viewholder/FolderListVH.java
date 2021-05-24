@@ -7,16 +7,14 @@ import com.example.myfit.databinding.ItemFolderListBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Set;
 
 public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemFolderListBinding binding;
     private AppCompatImageView dummy;
 
-    public FolderListVH(@NotNull ItemFolderListBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
-        super(binding, listener, selectedIds);
+    public FolderListVH(ItemFolderListBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
+        super(binding, listener, selectedItems);
         this.binding = binding;
     }
 

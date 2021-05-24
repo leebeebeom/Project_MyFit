@@ -14,8 +14,8 @@ import java.util.Set;
 public class SizeGridVH extends BaseVH<SizeTuple, SizeVHListener> {
     private final ItemSizeGridBinding binding;
 
-    public SizeGridVH(@NotNull ItemSizeGridBinding binding, SizeVHListener listener, Set<Long> selectedIds) {
-        super(binding, listener, selectedIds);
+    public SizeGridVH(@NotNull ItemSizeGridBinding binding, SizeVHListener listener, Set<SizeTuple> selectedItems) {
+        super(binding, listener, selectedItems);
         this.binding = binding;
 
         binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));

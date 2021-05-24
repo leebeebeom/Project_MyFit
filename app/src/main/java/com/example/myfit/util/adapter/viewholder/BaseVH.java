@@ -22,11 +22,11 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     private T tuple;
 
     @SuppressLint("ClickableViewAccessibility")
-    public BaseVH(ViewDataBinding binding, L listener, Set<Long> selectedIds) {
+    public BaseVH(ViewDataBinding binding, L listener, Set<T> selectedItems) {
         super(binding.getRoot());
         this.listener = listener;
 
-        setItemViewClickListener(listener, selectedIds);
+        setItemViewClickListener(listener, selectedItems);
 
         itemView.setOnLongClickListener(v -> {
             listener.itemViewLongClick(getLayoutPosition());
@@ -47,25 +47,25 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     protected abstract void bind(T tuple);
 
-    private void setItemViewClickListener(L listener, Set<Long> selectedItemSet) {
+    private void setItemViewClickListener(L listener, Set<T> selectedItems) {
         itemView.setOnClickListener(
                 v -> {
                     if (ACTION_MODE != null) {
-                        if (selectedItemSet.contains(tuple.getId()))
-                            removeItem(selectedItemSet);
-                        else addItem(selectedItemSet);
+                        if (selectedItems.contains(tuple))
+                            removeItem(selectedItems);
+                        else addItem(selectedItems);
                     } else listener.itemViewClick(tuple);
                 });
     }
 
-    private void addItem(Set<Long> selectedItemSet) {
+    private void addItem(Set<T> selectedItemSet) {
         getCheckBox().setChecked(true);
-        selectedItemSet.add(tuple.getId());
+        selectedItemSet.add(tuple);
     }
 
-    private void removeItem(Set<Long> selectedItemSet) {
+    private void removeItem(Set<T> selectedItemSet) {
         getCheckBox().setChecked(false);
-        selectedItemSet.remove(tuple.getId());
+        selectedItemSet.remove(tuple);
     }
 
     protected T getTuple() {
