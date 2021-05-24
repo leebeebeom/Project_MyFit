@@ -75,6 +75,11 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
         return binding.tvCurrentPosition;
     }
 
+    @Override
+    public TextView getContentsSize() {
+        return binding.tvContentsSize;
+    }
+
     @Override//TODO super 콜 후 다시 뷰 리턴 되는지 확인
     public View createNodeView(TreeNode node, @NotNull FolderValue value) {
         super.createNodeView(node, value);

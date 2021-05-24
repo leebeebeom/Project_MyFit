@@ -62,6 +62,11 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     }
 
     @Override
+    public TextView getContentsSize() {
+        return binding.tvContentsSize;
+    }
+
+    @Override
     protected View getBindingRoot() {
         return binding.getRoot();
     }

@@ -3,6 +3,7 @@ package com.example.myfit.ui.dialog.tree;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -154,17 +155,30 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         model.getFolderTupleMutable().observe(getViewLifecycleOwner(), folderTuple -> {
             if (folderTuple != null) {
                 TreeNode clickedNode = treeNodeProvider.getClickedNode(folderTuple);
-                int margin;
-                if (clickedNode.getValue() instanceof FolderValue)
-                    margin = ((FolderValue) clickedNode.getValue()).getMargin() + getResources().getDimensionPixelSize(R.dimen._8sdp);
-                else margin = treeNodeProvider.getMargin();
+                int margin = getMargin(clickedNode);
 
                 TreeNode addedFolderNode = new TreeNode(new FolderValue(folderTuple, margin))
                         .setViewHolder(treeNodeProvider.makeFolderHolder(getNavController()));
                 treeView.addNode(clickedNode, addedFolderNode);
+
+                addContentsSize(clickedNode);
+
                 model.getFolderTupleMutable().setValue(null);
             }
         });
+    }
+
+    private int getMargin(TreeNode clickedNode) {
+        if (clickedNode.getValue() instanceof FolderValue)
+            return ((FolderValue) clickedNode.getValue()).getMargin() + getResources().getDimensionPixelSize(R.dimen._8sdp);
+        else return treeNodeProvider.getMargin();
+    }
+
+    private void addContentsSize(TreeNode clickedNode) {
+        TextView tvContentsSize = ((BaseTreeHolder<?>) clickedNode.getViewHolder()).getContentsSize();
+        String originContentsSize = tvContentsSize.getText().toString();
+        int addedContentsSize = Integer.parseInt(originContentsSize + 1);
+        tvContentsSize.setText(String.valueOf(addedContentsSize));
     }
 
     private void expandingNode() {
