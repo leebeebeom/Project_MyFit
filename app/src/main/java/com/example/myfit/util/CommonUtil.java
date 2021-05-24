@@ -9,6 +9,7 @@ import android.view.View;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
+import com.example.myfit.util.constant.ParentCategory;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -45,5 +46,18 @@ public class CommonUtil {
     public static void navigate(@NotNull NavController navController, int originResId, NavDirections action) {
         if (navController.getCurrentBackStackEntry() == navController.getBackStackEntry(originResId))
             navController.navigate(action);
+    }
+
+    public static String getParentCategory(int parentIndex) {
+        switch (ParentCategory.values()[parentIndex]) {
+            case TOP:
+                return ParentCategory.TOP.name();
+            case BOTTOM:
+                return ParentCategory.BOTTOM.name();
+            case OUTER:
+                return ParentCategory.OUTER.name();
+            default:
+                return ParentCategory.ETC.name();
+        }
     }
 }
