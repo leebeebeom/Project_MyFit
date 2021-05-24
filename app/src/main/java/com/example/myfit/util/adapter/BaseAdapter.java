@@ -10,16 +10,16 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.example.myfit.data.model.tuple.BaseTuple;
 import com.example.myfit.util.adapter.viewholder.BaseVH;
 import com.example.myfit.util.adapter.viewholder.BaseVHListener;
-import com.example.myfit.util.constant.SortValue;
+import com.example.myfit.util.constant.Sort;
+import com.example.myfit.util.constant.ViewType;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.example.myfit.util.MyFitConstant.ACTION_MODE_OFF;
-import static com.example.myfit.util.MyFitConstant.ACTION_MODE_ON;
-import static com.example.myfit.util.MyFitConstant.LISTVIEW;
+import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_OFF;
+import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_ON;
 
 public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener, VH extends BaseVH<T, L>> extends ListAdapter<T, VH> {
     private final AdapterUtil<T> adapterUtil = new AdapterUtil<>();
@@ -71,7 +71,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
 
         if (actionModeState == ACTION_MODE_ON) {
             holder.getCheckBox().setChecked(selectedItemIds.contains(getItemId(position)));
-            holder.getDragHandleIcon().setVisibility(sort == SortValue.SORT_CUSTOM.getValue() ? View.VISIBLE : View.GONE);
+            holder.getDragHandleIcon().setVisibility(sort == Sort.SORT_CUSTOM.getValue() ? View.VISIBLE : View.GONE);
             this.actionModeOn(holder);
         } else if (actionModeState == ACTION_MODE_OFF) {
             holder.getCheckBox().setChecked(false);
@@ -87,13 +87,13 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     }
 
     private void actionModeOn(@NotNull VH holder) {
-        if (getViewType() == LISTVIEW)
+        if (getViewType() == ViewType.LIST_VIEW)
             adapterUtil.listActionModeOn(holder.getCardView());
         else holder.getCheckBox().setVisibility(View.VISIBLE);
     }
 
     private void actionModeOff(VH holder) {
-        if (getViewType() == LISTVIEW)
+        if (getViewType() == ViewType.GRID_VIEW)
             adapterUtil.listActionModeOff(holder.getCardView());
         else {
             holder.getCheckBox().jumpDrawablesToCurrentState();
@@ -102,7 +102,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
         if (getItemCount() - 1 == holder.getLayoutPosition()) actionModeState = 0;
     }
 
-    protected abstract int getViewType();
+    protected abstract ViewType getViewType();
 
     public void moveItem(int from, int to) {
         adapterUtil.itemMove(from, to, itemList);
