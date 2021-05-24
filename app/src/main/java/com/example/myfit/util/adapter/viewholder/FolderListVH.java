@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemFolderListBinding binding;
+    private AppCompatImageView dummy;
 
     public FolderListVH(@NotNull ItemFolderListBinding binding, BaseVHListener listener, Set<Long> selectedIds) {
         super(binding, listener, selectedIds);
@@ -30,7 +31,10 @@ public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
 
     @Override
     public AppCompatImageView getDragHandleIcon() {
-        return null;
+        //instead of null
+        if (dummy == null)
+            dummy = new AppCompatImageView(binding.getRoot().getContext());
+        return dummy;
     }
 
     @Override
