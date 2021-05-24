@@ -12,7 +12,6 @@ import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.constant.SortValue;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 public abstract class BaseSortDialog extends BaseDialog {
+    private static final String CHECKED_SORT = "check sort";
     private LayoutDialogSortBinding binding;
     private int checkedNumber;
 
@@ -27,7 +27,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = getBinding();
-        checkedNumber = savedInstanceState == null ? getCheckedNumber() : savedInstanceState.getInt(Sort.SORT.getText());
+        checkedNumber = savedInstanceState == null ? getCheckedNumber() : savedInstanceState.getInt(CHECKED_SORT);
         MaterialRadioButton[] sortButtons = getSortButtons();
         addRadioButtonCheckListener(sortButtons);
         sortButtons[checkedNumber].setChecked(true);
@@ -44,9 +44,9 @@ public abstract class BaseSortDialog extends BaseDialog {
     }
 
     private void addRadioButtonCheckListener(@NotNull MaterialRadioButton[] buttons) {
-        int[] buttonConstantArray = {SortValue.SORT_CUSTOM.getValue(), SortValue.SORT_CREATE.getValue(), SortValue.SORT_CREATE_REVERSE.getValue(),
-                SortValue.SORT_BRAND.getValue(), SortValue.SORT_BRAND_REVERSE.getValue(),
-                SortValue.SORT_NAME.getValue(), SortValue.SORT_NAME_REVERSE.getValue()};
+        int[] buttonConstantArray = {Sort.SORT_CUSTOM.getValue(), Sort.SORT_CREATE.getValue(), Sort.SORT_CREATE_REVERSE.getValue(),
+                Sort.SORT_BRAND.getValue(), Sort.SORT_BRAND_REVERSE.getValue(),
+                Sort.SORT_NAME.getValue(), Sort.SORT_NAME_REVERSE.getValue()};
 
         for (int i = 0; i < buttons.length; i++) {
             int finalI = i;
@@ -74,7 +74,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            getRepository().changeSort(checkedNumber);
+            getRepository().changeSort(Sort.values()[checkedNumber]);
             dismiss();
         };
     }
@@ -84,7 +84,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Sort.SORT.getText(), checkedNumber);
+        outState.putInt(CHECKED_SORT, checkedNumber);
     }
 
     @Override

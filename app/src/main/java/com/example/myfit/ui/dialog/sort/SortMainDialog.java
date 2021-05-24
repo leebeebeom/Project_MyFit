@@ -26,7 +26,7 @@ public class SortMainDialog extends BaseSortDialog {
 
     @Override
     protected int getCheckedNumber() {
-        return categoryRepository.getSort();
+        return categoryRepository.getSort().getValue();
     }
 
     @Override

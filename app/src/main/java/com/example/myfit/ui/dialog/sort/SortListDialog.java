@@ -21,7 +21,7 @@ public class SortListDialog extends BaseSortDialog {
 
     @Override
     protected int getCheckedNumber() {
-        return folderRepository.getSort();
+        return folderRepository.getSort().getValue();
     }
 
     @Override
