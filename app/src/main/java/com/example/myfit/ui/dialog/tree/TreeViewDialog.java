@@ -17,7 +17,6 @@ import com.example.myfit.ui.dialog.tree.holder.TreeCategoryHolder;
 import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
 import com.example.myfit.ui.dialog.tree.holder.value.FolderValue;
 import com.example.myfit.util.CommonUtil;
-import com.example.myfit.util.constant.ParentCategory;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
@@ -30,10 +29,10 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.example.myfit.util.MyFitConstant.TREE_VIEW_STATE;
-
 @AndroidEntryPoint
 public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClickListener {
+    public static final String TREE_VIEW_STATE = "state";
+
     @Inject
     TreeNodeProvider treeNodeProvider;
     private int parentIndex;
@@ -85,24 +84,12 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
 
     private LayoutDialogTreeBinding getBinding() {
         binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
-        binding.setParentCategory(getParentCategory());
+        String parentCategory = CommonUtil.getParentCategory(parentIndex);
+        binding.setParentCategory(parentCategory);
         binding.layoutAddCategory.setOnClickListener(v ->
                 CommonUtil.navigate(getNavController(), R.id.treeViewDialog,
                         TreeViewDialogDirections.toAddCategoryDialog(parentIndex)));
         return binding;
-    }
-
-    private String getParentCategory() {
-        switch (parentIndex) {
-            case 0:
-                return ParentCategory.TOP.name();
-            case 1:
-                return ParentCategory.BOTTOM.name();
-            case 2:
-                return ParentCategory.OUTER.name();
-            default:
-                return ParentCategory.ETC.name();
-        }
     }
 
     private void setTreeView() {
