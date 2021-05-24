@@ -3,7 +3,7 @@ package com.example.myfit.util.adapter.viewholder;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.databinding.ItemHeaderBinding;
-import com.example.myfit.util.constant.ParentCategory;
+import com.example.myfit.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,19 +16,7 @@ public class HeaderVH extends RecyclerView.ViewHolder {
     }
 
     public void bind(int parentIndex) {
-        binding.setParentCategory(getParentCategory(parentIndex));
-    }
-
-    private String getParentCategory(int parentIndex) {
-        switch (parentIndex) {
-            case 0:
-                return ParentCategory.TOP.name();
-            case 1:
-                return ParentCategory.BOTTOM.name();
-            case 2:
-                return ParentCategory.OUTER.name();
-            default:
-                return ParentCategory.ETC.name();
-        }
+        String parentCategory = CommonUtil.getParentCategory(parentIndex);
+        binding.setParentCategory(parentCategory);
     }
 }
