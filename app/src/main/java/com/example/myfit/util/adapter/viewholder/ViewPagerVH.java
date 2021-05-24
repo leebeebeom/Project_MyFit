@@ -8,12 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myfit.databinding.ItemRecyclerViewBinding;
 import com.example.myfit.util.DragSelectImpl;
 import com.example.myfit.util.adapter.BaseAdapter;
+import com.example.myfit.util.constant.AutoScrollFlag;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.example.myfit.util.MyFitConstant.DOWN;
-import static com.example.myfit.util.MyFitConstant.STOP;
-import static com.example.myfit.util.MyFitConstant.UP;
 
 public class ViewPagerVH extends RecyclerView.ViewHolder {
     private final ItemRecyclerViewBinding binding;
@@ -25,11 +22,11 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
 
         binding.rv.setOnTouchListener((v, event) -> {
             if (event.getRawY() < 250)
-                listener.dragAutoScroll(UP);
+                listener.dragAutoScroll(AutoScrollFlag.UP);
             else if (event.getRawY() > 2000)
-                listener.dragAutoScroll(DOWN);
+                listener.dragAutoScroll(AutoScrollFlag.DOWN);
             else if (event.getRawY() < 2000 && event.getRawY() > 250)
-                listener.dragAutoScroll(STOP);
+                listener.dragAutoScroll(AutoScrollFlag.STOP);
             return false;
         });
     }
@@ -59,6 +56,6 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
     }
 
     public interface ViewPagerAutoScrollListener {
-        void dragAutoScroll(int upDownStop);
+        void dragAutoScroll(AutoScrollFlag flag);
     }
 }
