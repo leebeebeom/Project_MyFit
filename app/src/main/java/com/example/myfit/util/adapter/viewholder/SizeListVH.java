@@ -30,7 +30,7 @@ public class SizeListVH extends BaseVH<SizeTuple, SizeVHListener> {
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return null;
+        return binding.cb;
     }
 
     @Override
