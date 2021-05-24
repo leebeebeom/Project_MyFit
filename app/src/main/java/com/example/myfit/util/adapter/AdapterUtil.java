@@ -29,10 +29,9 @@ public class AdapterUtil<T extends BaseTuple> {
     public void itemMove(int from, int to, List<T> list) {
         if (from < to) {//down
             for (int i = from; i < to; i++) {
-                if (list.get(i++).getId() != -1) {
+                if (list.get(i++).getId() != -1)
                     swapOrderNumber(list, i, i++);
-                    Collections.swap(list, i, i++);
-                }
+                Collections.swap(list, i, i++);
             }
         } else {//up
             for (int i = from; i > to; i--) {
