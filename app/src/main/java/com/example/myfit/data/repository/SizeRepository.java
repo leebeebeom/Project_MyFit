@@ -1,17 +1,16 @@
 package com.example.myfit.data.repository;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
+import com.example.myfit.di.DataModule;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
@@ -19,23 +18,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static com.example.myfit.data.repository.FolderRepository.SORT_LIST;
-
 public class SizeRepository extends BaseRepository{
     private final SizeDao sizeDao;
     private final SharedPreferences listSortPreference;
+    private final IntegerSharedPreferenceLiveData listSortPreferenceLive;
 
     @Inject
-    public SizeRepository(Context context) {
-        this.sizeDao = AppDataBase.getsInstance(context).sizeDao();
-        this.listSortPreference = context.getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
+    public SizeRepository(SizeDao sizeDao,
+                          @DataModule.Qualifiers.ListSortPreferenceLive SharedPreferences listSortPreference,
+                          @DataModule.Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive) {
+        this.sizeDao = sizeDao;
+        this.listSortPreference = listSortPreference;
+        this.listSortPreferenceLive = listSortPreferenceLive;
     }
 
     //to list
     public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
-        IntegerSharedPreferenceLiveData listSortPreferenceLive =
-                new IntegerSharedPreferenceLiveData(listSortPreference, SORT_LIST, Sort.SORT_CUSTOM.getValue());
-
         return Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
     }
 
@@ -103,11 +101,6 @@ public class SizeRepository extends BaseRepository{
     @Override
     protected SharedPreferences getPreference() {
         return listSortPreference;
-    }
-
-    @Override
-    protected String getPreferenceKey() {
-        return SORT_LIST;
     }
 
     //to treeView

@@ -1,17 +1,16 @@
 package com.example.myfit.data.repository;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.folder.FolderTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
+import com.example.myfit.di.DataModule;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
@@ -21,23 +20,24 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class FolderRepository extends BaseRepository {
-    static final String SORT_LIST = "sort list";
-
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
-    private MutableLiveData<Long> insertIdLive;
+    private final IntegerSharedPreferenceLiveData listSortPreferenceLive;
+    private final MutableLiveData<Long> insertIdLive;
 
     @Inject
-    public FolderRepository(Context context) {
-        this.folderDao = AppDataBase.getsInstance(context).folderDao();
-        this.listSortPreference = context.getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
+    public FolderRepository(FolderDao folderDao,
+                            @DataModule.Qualifiers.ListSortPreference SharedPreferences listSortPreference,
+                            @DataModule.Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive,
+                            @DataModule.Qualifiers.FolderInsertIdLive MutableLiveData<Long> insertIdLive) {
+        this.folderDao = folderDao;
+        this.listSortPreference = listSortPreference;
+        this.listSortPreferenceLive = listSortPreferenceLive;
+        this.insertIdLive = insertIdLive;
     }
 
     //to list
     public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId) {
-        IntegerSharedPreferenceLiveData listSortPreferenceLive =
-                new IntegerSharedPreferenceLiveData(listSortPreference, SORT_LIST, Sort.SORT_CUSTOM.getValue());
-
         return Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
     }
 
@@ -86,14 +86,8 @@ public class FolderRepository extends BaseRepository {
     public void insert(String name, long parentId, int parentIndex) {
         new Thread(() -> {
             long insertId = folderDao.insert(name, parentId, parentIndex);
-            if (insertIdLive != null) insertIdLive.postValue(insertId);
+            insertIdLive.postValue(insertId);
         }).start();
-    }
-
-    public MutableLiveData<Long> getInsertIdLive() {
-        if (insertIdLive == null)
-            insertIdLive = new MutableLiveData<>();
-        return insertIdLive;
     }
 
     //from editFolderName dialog
@@ -120,11 +114,6 @@ public class FolderRepository extends BaseRepository {
     @Override
     protected SharedPreferences getPreference() {
         return listSortPreference;
-    }
-
-    @Override
-    protected String getPreferenceKey() {
-        return SORT_LIST;
     }
 
     //from addFolder dialog

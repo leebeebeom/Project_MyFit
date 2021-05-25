@@ -1,16 +1,15 @@
 package com.example.myfit.data.repository;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
+import com.example.myfit.di.DataModule;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
@@ -19,25 +18,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class CategoryRepository extends BaseRepository {
-    private static final String SORT_MAIN = "sort main";
-
-    private final SharedPreferences mainSortPreference;
     private final CategoryDao categoryDao;
-    private MutableLiveData<Long> insertIdLive;
+    private final SharedPreferences mainSortPreference;
+    private final IntegerSharedPreferenceLiveData mainSortPreferenceLive;
+    private final MutableLiveData<Long> insertIdLive;
 
     @Inject
-    public CategoryRepository(@NotNull Context context) {
-        categoryDao = AppDataBase.getsInstance(context).categoryDao();
-        mainSortPreference = context.getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
+    public CategoryRepository(CategoryDao categoryDao,
+                              @DataModule.Qualifiers.MainSortPreference SharedPreferences mainSortPreference,
+                              @DataModule.Qualifiers.MainSortPreferenceLive IntegerSharedPreferenceLiveData mainSortPreferenceLive,
+                              @DataModule.Qualifiers.CategoryInsertIdLive MutableLiveData<Long> insertIdLive) {
+        this.categoryDao = categoryDao;
+        this.mainSortPreference = mainSortPreference;
+        this.mainSortPreferenceLive = mainSortPreferenceLive;
+        this.insertIdLive = insertIdLive;
     }
 
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
-        IntegerSharedPreferenceLiveData mainSortPreferenceLive =
-                new IntegerSharedPreferenceLiveData(mainSortPreference, SORT_MAIN, Sort.SORT_CUSTOM.getValue());
-
         return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
     }
 
@@ -66,8 +68,8 @@ public class CategoryRepository extends BaseRepository {
     public LiveData<CategoryTuple> getTupleById(long id) {
         MutableLiveData<CategoryTuple> categoryTupleLive = new MutableLiveData<>();
         new Thread(() -> {
-                CategoryTuple tuple = categoryDao.getTupleById(id);
-                categoryTupleLive.postValue(tuple);
+            CategoryTuple tuple = categoryDao.getTupleById(id);
+            categoryTupleLive.postValue(tuple);
         }).start();
         return categoryTupleLive;
     }
@@ -76,14 +78,8 @@ public class CategoryRepository extends BaseRepository {
     public void insert(String name, int parentIndex) {
         new Thread(() -> {
             long insertId = categoryDao.insert(name, parentIndex);
-            if (insertIdLive != null) insertIdLive.postValue(insertId);
+            insertIdLive.postValue(insertId);
         }).start();
-    }
-
-    public MutableLiveData<Long> getInsertIdLive() {
-        if (insertIdLive == null)
-            insertIdLive = new MutableLiveData<>();
-        return insertIdLive;
     }
 
     //from appDateBase
@@ -95,8 +91,8 @@ public class CategoryRepository extends BaseRepository {
     public LiveData<Long[]> insertRestoreCategories(@NotNull int[] parentIndex) {
         MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
-                Long[] insertIds = categoryDao.insertRestoreCategories(parentIndex);
-                insertIdsLive.postValue(insertIds);
+            Long[] insertIds = categoryDao.insertRestoreCategories(parentIndex);
+            insertIdsLive.postValue(insertIds);
         }).start();
         return insertIdsLive;
     }
@@ -120,11 +116,6 @@ public class CategoryRepository extends BaseRepository {
     @Override
     protected SharedPreferences getPreference() {
         return mainSortPreference;
-    }
-
-    @Override
-    protected String getPreferenceKey() {
-        return SORT_MAIN;
     }
 
     //from addCategory Dialog
