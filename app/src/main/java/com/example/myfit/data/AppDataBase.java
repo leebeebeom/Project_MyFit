@@ -15,6 +15,7 @@ import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.repository.CategoryRepository;
+import com.example.myfit.data.repository.dao.AutoCompleteDao;
 import com.example.myfit.data.repository.dao.CategoryDao;
 import com.example.myfit.data.repository.dao.FolderDao;
 import com.example.myfit.data.repository.dao.RecentSearchDao;
@@ -146,4 +147,6 @@ public abstract class AppDataBase extends RoomDatabase {
     public abstract FolderDao folderDao();
 
     public abstract RecentSearchDao recentSearchDao();
+
+    public abstract AutoCompleteDao autoCompleteDao();
 }

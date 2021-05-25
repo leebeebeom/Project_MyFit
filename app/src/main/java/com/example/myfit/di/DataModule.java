@@ -2,6 +2,7 @@ package com.example.myfit.di;
 
 import android.content.Context;
 
+import com.example.myfit.data.repository.AutoCompleteRepository;
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.data.repository.RecentSearchRepository;
@@ -45,5 +46,12 @@ public class DataModule {
     @Provides
     public static RecentSearchRepository provideRecentSearchRepository(@ApplicationContext Context context) {
         return new RecentSearchRepository(context);
+    }
+
+    @ActivityRetainedScoped
+    @NotNull
+    @Provides
+    public static AutoCompleteRepository provideAutoCompleteRepository(@ApplicationContext Context context) {
+        return new AutoCompleteRepository(context);
     }
 }

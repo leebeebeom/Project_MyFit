@@ -1,8 +1,11 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.repository.dao.AutoCompleteDao;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +18,8 @@ public class AutoCompleteRepository {
     private final AutoCompleteDao autoCompleteDao;
 
     @Inject
-    public AutoCompleteRepository(AutoCompleteDao autoCompleteDao) {
-        this.autoCompleteDao = autoCompleteDao;
+    public AutoCompleteRepository(Context context) {
+        this.autoCompleteDao = AppDataBase.getsInstance(context).autoCompleteDao();
     }
 
     public LiveData<List<String>> getAutoCompleteWordsLive() {

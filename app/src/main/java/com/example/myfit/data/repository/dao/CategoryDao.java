@@ -17,7 +17,6 @@ import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Dao
@@ -140,7 +139,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void update(LinkedList<CategoryTuple> categoryTuples);
+    public abstract void update(List<CategoryTuple> categoryTuples);
 
     @Transaction
     //from delete dialog, restore dialog

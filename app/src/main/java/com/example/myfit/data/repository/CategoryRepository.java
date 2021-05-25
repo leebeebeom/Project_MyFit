@@ -16,8 +16,9 @@ import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveDa
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class CategoryRepository extends BaseRepository {
     private static final String SORT_MAIN = "sort main";
@@ -26,6 +27,7 @@ public class CategoryRepository extends BaseRepository {
     private final CategoryDao categoryDao;
     private MutableLiveData<Long> insertIdLive;
 
+    @Inject
     public CategoryRepository(@NotNull Context context) {
         categoryDao = AppDataBase.getsInstance(context).categoryDao();
         mainSortPreference = context.getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
@@ -105,7 +107,7 @@ public class CategoryRepository extends BaseRepository {
     }
 
     //from adapter drag drop
-    public void updateCategories(LinkedList<CategoryTuple> categoryTuples) {
+    public void updateCategories(List<CategoryTuple> categoryTuples) {
         new Thread(() -> categoryDao.update(categoryTuples)).start();
     }
 

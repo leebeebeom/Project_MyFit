@@ -18,6 +18,8 @@ import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveDa
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class FolderRepository extends BaseRepository {
     static final String SORT_LIST = "sort list";
 
@@ -25,6 +27,7 @@ public class FolderRepository extends BaseRepository {
     private final SharedPreferences listSortPreference;
     private MutableLiveData<Long> insertIdLive;
 
+    @Inject
     public FolderRepository(Context context) {
         this.folderDao = AppDataBase.getsInstance(context).folderDao();
         this.listSortPreference = context.getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);

@@ -17,12 +17,15 @@ import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveDa
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static com.example.myfit.data.repository.FolderRepository.SORT_LIST;
 
 public class SizeRepository extends BaseRepository{
     private final SizeDao sizeDao;
     private final SharedPreferences listSortPreference;
 
+    @Inject
     public SizeRepository(Context context) {
         this.sizeDao = AppDataBase.getsInstance(context).sizeDao();
         this.listSortPreference = context.getSharedPreferences(SORT_LIST, Context.MODE_PRIVATE);
