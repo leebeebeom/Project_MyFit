@@ -8,8 +8,8 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
-import com.example.myfit.ui.dialog.eidttext.edit.BaseEditViewModel;
 import com.example.myfit.util.CommonUtil;
 
 public class EditCategoryNameDialog extends BaseEditDialog {
@@ -36,7 +36,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected BaseEditViewModel getModel() {
+    protected BaseEditTextViewModel.BaseEditViewModel getModel() {
         if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))
@@ -55,7 +55,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
         return v -> {
             long id = EditCategoryNameDialogArgs.fromBundle(getArguments()).getId();
             int parentIndex = EditCategoryNameDialogArgs.fromBundle(getArguments()).getParentIndex();
-            model.setStateHandle(id, getInputText(), parentIndex);
+            model.queryIsExistingName(getInputText(), id, parentIndex);
         };
     }
 

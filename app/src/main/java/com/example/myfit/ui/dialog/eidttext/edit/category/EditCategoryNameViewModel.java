@@ -1,42 +1,38 @@
 package com.example.myfit.ui.dialog.eidttext.edit.category;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.ui.dialog.eidttext.edit.BaseEditViewModel;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditCategoryNameViewModel extends BaseEditViewModel {
+public class EditCategoryNameViewModel extends BaseEditTextViewModel.BaseEditViewModel {
     private final CategoryRepository categoryRepository;
-    private int parentIndex;
     private String name;
     private long id;
 
     @Inject
-    public EditCategoryNameViewModel(SavedStateHandle savedStateHandle, CategoryRepository categoryRepository) {
-        super(savedStateHandle);
+    public EditCategoryNameViewModel(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-    @Override
-    protected LiveData<Boolean> queryIsExistingLive(String name) {
-        return categoryRepository.isExistingName((String) name, parentIndex);
-    }
-
-    public void setStateHandle(long id, String inputText, int parentIndex) {
-        this.id = id;
+    public void queryIsExistingName(String inputText, long id, int parentIndex) {
         this.name = inputText;
-        this.parentIndex = parentIndex;
-        setStateHandle(name);
+        this.id = id;
+        categoryRepository.isExistingName(name, parentIndex);
     }
 
     @Override
     public void update() {
         categoryRepository.update(id, name);
+    }
+
+    @Override
+    public MutableLiveData<Boolean> getIsExistingMutable() {
+        return null;
     }
 }

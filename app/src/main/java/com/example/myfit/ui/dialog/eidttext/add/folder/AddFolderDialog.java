@@ -8,15 +8,15 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.add.BaseAddDialog;
-import com.example.myfit.ui.dialog.eidttext.add.BaseAddViewModel;
 import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {
     private AddFolderViewModel model;
 
     @Override
-    protected BaseAddViewModel getModel() {
+    protected BaseEditTextViewModel.BaseAddViewModel getModel() {
         if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderViewModel.class);
@@ -50,7 +50,7 @@ public class AddFolderDialog extends BaseAddDialog {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getParentId();
             int parentIndex = AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
-            model.setStateHandle(getInputText(), parentId, parentIndex);
+            model.queryIsExistingName(parentId, getInputText(), parentIndex);
         };
     }
 

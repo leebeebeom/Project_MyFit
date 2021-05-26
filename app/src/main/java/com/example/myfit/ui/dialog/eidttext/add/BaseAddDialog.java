@@ -5,11 +5,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
+import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
 public abstract class BaseAddDialog extends BaseEditTextDialog {
     @Override
-    protected String getInitialText(Bundle savedInstanceState) {
+    protected String getInputText(Bundle savedInstanceState) {
         return savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
     }
 
@@ -18,10 +20,10 @@ public abstract class BaseAddDialog extends BaseEditTextDialog {
         getModel().insert();
     }
 
-    protected abstract BaseAddViewModel getModel();
+    protected abstract BaseEditTextViewModel.BaseAddViewModel getModel();
 
     @Override
-    protected AlertDialog getAlertDialog() {
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
         ItemDialogEditTextBinding binding = getBinding();
         return dialogBuilder
                 .makeEditTextDialog(getTitle(), binding.getRoot())

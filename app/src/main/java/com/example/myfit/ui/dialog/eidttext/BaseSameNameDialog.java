@@ -5,10 +5,11 @@ import android.view.View;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.ui.dialog.BaseDialog;
+import com.example.myfit.ui.dialog.DialogBuilder;
 
 public abstract class BaseSameNameDialog extends BaseDialog {
     @Override
-    protected AlertDialog getAlertDialog() {
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
         return dialogBuilder.makeConfirmDialog(getMessage())
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();

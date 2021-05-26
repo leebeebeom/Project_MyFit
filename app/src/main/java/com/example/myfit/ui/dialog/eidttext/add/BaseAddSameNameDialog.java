@@ -1,5 +1,6 @@
 package com.example.myfit.ui.dialog.eidttext.add;
 
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.BaseSameNameDialog;
 
 public abstract class BaseAddSameNameDialog extends BaseSameNameDialog {
@@ -8,5 +9,5 @@ public abstract class BaseAddSameNameDialog extends BaseSameNameDialog {
         getModel().insert();
     }
 
-    protected abstract BaseAddViewModel getModel();
+    protected abstract BaseEditTextViewModel.BaseAddViewModel getModel();
 }

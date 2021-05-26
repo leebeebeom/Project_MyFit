@@ -6,7 +6,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
+import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
 public abstract class BaseEditDialog extends BaseEditTextDialog {
     private String oldName;
@@ -21,7 +23,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
     protected abstract String getName();
 
     @Override
-    protected String getInitialText(Bundle savedInstanceState) {
+    protected String getInputText(Bundle savedInstanceState) {
         return savedInstanceState == null ? oldName : savedInstanceState.getString(INPUT_TEXT);
     }
 
@@ -31,10 +33,10 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
         actionModeOff();
     }
 
-    protected abstract BaseEditViewModel getModel();
+    protected abstract BaseEditTextViewModel.BaseEditViewModel getModel();
 
     @Override
-    protected AlertDialog getAlertDialog() {
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
         ItemDialogEditTextBinding binding = getBinding();
         return dialogBuilder
                 .makeEditTextDialog(getTitle(), binding.getRoot())

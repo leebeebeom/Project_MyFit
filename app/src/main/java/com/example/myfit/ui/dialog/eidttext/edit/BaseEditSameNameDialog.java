@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.BaseSameNameDialog;
 
 public abstract class BaseEditSameNameDialog extends BaseSameNameDialog {
@@ -19,5 +20,5 @@ public abstract class BaseEditSameNameDialog extends BaseSameNameDialog {
         actionModeOff();
     }
 
-    protected abstract BaseEditViewModel getModel();
+    protected abstract BaseEditTextViewModel.BaseEditViewModel getModel();
 }

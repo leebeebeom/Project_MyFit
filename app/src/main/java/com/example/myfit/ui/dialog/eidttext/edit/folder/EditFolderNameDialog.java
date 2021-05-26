@@ -8,8 +8,8 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
-import com.example.myfit.ui.dialog.eidttext.edit.BaseEditViewModel;
 import com.example.myfit.util.CommonUtil;
 
 public class EditFolderNameDialog extends BaseEditDialog {
@@ -36,7 +36,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected BaseEditViewModel getModel() {
+    protected BaseEditTextViewModel.BaseEditViewModel getModel() {
         if (model == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
             model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(EditFolderNameViewModel.class);
@@ -54,7 +54,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
         return v -> {
             long id = EditFolderNameDialogArgs.fromBundle(getArguments()).getId();
             long parentId = EditFolderNameDialogArgs.fromBundle(getArguments()).getParentId();
-            model.setStateHandle(id, getInputText(), parentId);
+            model.queryIsExistingName(getInputText(), id, parentId);
         };
     }
 

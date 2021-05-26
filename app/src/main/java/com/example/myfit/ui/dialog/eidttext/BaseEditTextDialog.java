@@ -34,7 +34,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
         return dialogBindingBuilder
                 .setHint(getHint())
                 .setPlaceHolder(getPlaceHolder())
-                .setText(getInitialText(savedInstanceState))
+                .setText(getInputText(savedInstanceState))
                 .create();
     }
 
@@ -42,7 +42,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
 
     protected abstract String getPlaceHolder();
 
-    protected abstract String getInitialText(Bundle savedInstanceState);
+    protected abstract String getInputText(Bundle savedInstanceState);
 
     protected ItemDialogEditTextBinding getBinding() {
         return binding;
@@ -65,7 +65,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
                 model.getIsExistingMutable().setValue(null);
             }
         });
-        return getAlertDialog();
+        return getAlertDialog(getDialogBuilder());
     }
 
     protected abstract BaseEditTextViewModel getModel();

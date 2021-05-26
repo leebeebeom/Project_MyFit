@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.R;
+import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import com.example.myfit.ui.dialog.eidttext.add.BaseAddSameNameDialog;
-import com.example.myfit.ui.dialog.eidttext.add.BaseAddViewModel;
 
 public class AddSameFolderNameDialog extends BaseAddSameNameDialog {
     @Override
-    protected BaseAddViewModel getModel() {
+    protected BaseEditTextViewModel.BaseAddViewModel getModel() {
         NavBackStackEntry graphBackStack = getGraphBackStack();
         return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderViewModel.class);
     }
