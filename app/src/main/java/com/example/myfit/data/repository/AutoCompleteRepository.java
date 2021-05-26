@@ -10,9 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class AutoCompleteRepository {
     private final AutoCompleteDao autoCompleteDao;
     private LiveData<List<String>> orderedWordsLive, orderedDeletedWordsLive;

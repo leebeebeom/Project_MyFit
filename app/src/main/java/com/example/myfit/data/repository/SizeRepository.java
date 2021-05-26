@@ -17,9 +17,7 @@ import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveDa
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class SizeRepository extends BaseRepository {
     private final SizeDao sizeDao;
     private final SharedPreferences listSortPreference;

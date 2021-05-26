@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class CategoryRepository extends BaseRepository {
     private final CategoryDao categoryDao;
     private SharedPreferences mainSortPreference;

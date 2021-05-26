@@ -8,11 +8,8 @@ import com.example.myfit.data.repository.dao.RecentSearchDao;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
-public class
-RecentSearchRepository {
+public class RecentSearchRepository {
     private final RecentSearchDao recentSearchDao;
     private int type;
     private LiveData<List<RecentSearch>> recentSearchLive;

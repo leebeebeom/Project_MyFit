@@ -18,9 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class FolderRepository extends BaseRepository {
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
