@@ -8,9 +8,14 @@ import com.example.myfit.data.repository.dao.RecentSearchDao;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public class RecentSearchRepository {
+@Singleton
+public class
+RecentSearchRepository {
     private final RecentSearchDao recentSearchDao;
+    private int type;
+    private LiveData<List<RecentSearch>> recentSearchLive;
 
     @Inject
     public RecentSearchRepository(RecentSearchDao recentSearchDao) {
@@ -19,7 +24,11 @@ public class RecentSearchRepository {
 
     //to searchView, recycleBin search
     public LiveData<List<RecentSearch>> getLiveByType(int type) {
-        return recentSearchDao.getLiveByType(type);
+        if (this.type != type) {
+            this.type = type;
+            recentSearchLive = recentSearchDao.getLiveByType(type);
+        }
+        return recentSearchLive;
     }
 
     //from searchView, recycleBin search

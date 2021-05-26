@@ -10,9 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class AutoCompleteRepository {
     private final AutoCompleteDao autoCompleteDao;
+    private LiveData<List<String>> orderedWordsLive, orderedDeletedWordsLive;
 
     @Inject
     public AutoCompleteRepository(AutoCompleteDao autoCompleteDao) {
@@ -20,15 +23,19 @@ public class AutoCompleteRepository {
     }
 
     public LiveData<List<String>> getAutoCompleteWordsLive() {
-        LiveData<List<String>> autoCompleteWordsLive = autoCompleteDao.getAutoCompleteWordsLive();
-
-        return getOrderedLive(autoCompleteWordsLive);
+        if (orderedWordsLive == null) {
+            LiveData<List<String>> autoCompleteWordsLive = autoCompleteDao.getAutoCompleteWordsLive();
+            orderedWordsLive = getOrderedLive(autoCompleteWordsLive);
+        }
+        return orderedWordsLive;
     }
 
     public LiveData<List<String>> getDeletedAutoCompleteWordsLive() {
-        LiveData<List<String>> deletedAutoCompleteWordsLive = autoCompleteDao.getDeletedAutoCompleteWordsLive();
-
-        return getOrderedLive(deletedAutoCompleteWordsLive);
+        if (orderedDeletedWordsLive == null) {
+            LiveData<List<String>> deletedAutoCompleteWordsLive = autoCompleteDao.getDeletedAutoCompleteWordsLive();
+            orderedDeletedWordsLive = getOrderedLive(deletedAutoCompleteWordsLive);
+        }
+        return orderedDeletedWordsLive;
     }
 
     @NotNull

@@ -1,15 +1,17 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
 import com.example.myfit.data.model.category.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
-import com.example.myfit.di.DataModule;
+import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
@@ -23,34 +25,45 @@ import javax.inject.Singleton;
 @Singleton
 public class CategoryRepository extends BaseRepository {
     private final CategoryDao categoryDao;
-    private final SharedPreferences mainSortPreference;
-    private final IntegerSharedPreferenceLiveData mainSortPreferenceLive;
-    private final MutableLiveData<Long> insertIdLive;
+    private SharedPreferences mainSortPreference;
+    private IntegerSharedPreferenceLiveData mainSortPreferenceLive;
+    private MutableLiveData<Long> insertIdLive;
+    private MutableLiveData<Boolean> isExistingNameLive;
+    private LiveData<List<List<CategoryTuple>>> classifiedTuplesLive, deletedClassifiedTuplesLive, deletedSearchTuplesLive;
 
     @Inject
     public CategoryRepository(CategoryDao categoryDao,
-                              @DataModule.Qualifiers.MainSortPreference SharedPreferences mainSortPreference,
-                              @DataModule.Qualifiers.MainSortPreferenceLive IntegerSharedPreferenceLiveData mainSortPreferenceLive,
-                              @DataModule.Qualifiers.CategoryInsertIdLive MutableLiveData<Long> insertIdLive) {
+                              @Qualifiers.MainSortPreference SharedPreferences mainSortPreference,
+                              @Qualifiers.MainSortPreferenceLive IntegerSharedPreferenceLiveData mainSortPreferenceLive) {
         this.categoryDao = categoryDao;
         this.mainSortPreference = mainSortPreference;
         this.mainSortPreferenceLive = mainSortPreferenceLive;
-        this.insertIdLive = insertIdLive;
+    }
+
+    //for appDataBase
+    public CategoryRepository(Context context) {
+        this.categoryDao = AppDataBase.getsInstance(context).categoryDao();
     }
 
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
-        return Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
+        if (classifiedTuplesLive == null)
+            classifiedTuplesLive = Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
+        return classifiedTuplesLive;
     }
 
     //to recycleBin
     public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
-        return categoryDao.getDeletedClassifiedTuplesLive();
+        if (deletedClassifiedTuplesLive == null)
+            deletedClassifiedTuplesLive = categoryDao.getDeletedClassifiedTuplesLive();
+        return deletedClassifiedTuplesLive;
     }
 
     //to recycleBin search
     public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
-        return categoryDao.getDeletedSearchTuplesLive();
+        if (deletedSearchTuplesLive == null)
+            deletedSearchTuplesLive = categoryDao.getDeletedSearchTuplesLive();
+        return deletedSearchTuplesLive;
     }
 
     //to treeView(disposable)
@@ -82,7 +95,13 @@ public class CategoryRepository extends BaseRepository {
         }).start();
     }
 
-    //from appDateBase
+    public MutableLiveData<Long> getInsertIdLive() {
+        if (insertIdLive == null)
+            insertIdLive = new MutableLiveData<>();
+        return insertIdLive;
+    }
+
+    //from appDataBase
     public void insert(Category[] categories) {
         new Thread(() -> categoryDao.insert(categories)).start();
     }
@@ -92,7 +111,7 @@ public class CategoryRepository extends BaseRepository {
         MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
             Long[] insertIds = categoryDao.insertRestoreCategories(parentIndex);
-            insertIdsLive.postValue(insertIds);
+            if (insertIdLive != null) insertIdsLive.postValue(insertIds);
         }).start();
         return insertIdsLive;
     }
@@ -119,13 +138,17 @@ public class CategoryRepository extends BaseRepository {
     }
 
     //from addCategory Dialog
-    public LiveData<Boolean> isExistingName(String name, int parentIndex) {
-        MutableLiveData<Boolean> isExistNameLive = new MutableLiveData<>();
+    public void isExistingName(String name, int parentIndex) {
         new Thread(() -> {
             boolean isExistName = categoryDao.isExistingName(name, parentIndex);
-            isExistNameLive.postValue(isExistName);
+            if (isExistingNameLive != null) isExistingNameLive.postValue(isExistName);
         }).start();
-        return isExistNameLive;
+    }
+
+    public MutableLiveData<Boolean> getIsExistingNameLive() {
+        if (isExistingNameLive == null)
+            isExistingNameLive = new MutableLiveData<>();
+        return isExistingNameLive;
     }
 }
 

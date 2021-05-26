@@ -10,23 +10,30 @@ import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
-import com.example.myfit.di.DataModule;
+import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;
 import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public class SizeRepository extends BaseRepository{
+@Singleton
+public class SizeRepository extends BaseRepository {
     private final SizeDao sizeDao;
     private final SharedPreferences listSortPreference;
     private final IntegerSharedPreferenceLiveData listSortPreferenceLive;
+    private LiveData<List<SizeTuple>> tuplesLiveByParentId;
+    private long parentId;
+    private LiveData<List<List<SizeTuple>>> deletedClassifiedTuplesLive;
+    private LiveData<List<List<SizeTuple>>> searchTuplesLive;
+    private LiveData<List<List<SizeTuple>>> deletedSearchTuplesLive;
 
     @Inject
     public SizeRepository(SizeDao sizeDao,
-                          @DataModule.Qualifiers.ListSortPreferenceLive SharedPreferences listSortPreference,
-                          @DataModule.Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive) {
+                          @Qualifiers.ListSortPreferenceLive SharedPreferences listSortPreference,
+                          @Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive) {
         this.sizeDao = sizeDao;
         this.listSortPreference = listSortPreference;
         this.listSortPreferenceLive = listSortPreferenceLive;
@@ -34,22 +41,32 @@ public class SizeRepository extends BaseRepository{
 
     //to list
     public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
-        return Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
+        if (this.parentId != parentId) {
+            this.parentId = parentId;
+            tuplesLiveByParentId = Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
+        }
+        return tuplesLiveByParentId;
     }
 
     //to recycleBin
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
-        return sizeDao.getDeletedClassifiedTuplesLive();
+        if (deletedClassifiedTuplesLive == null)
+            deletedClassifiedTuplesLive = sizeDao.getDeletedClassifiedTuplesLive();
+        return deletedClassifiedTuplesLive;
     }
 
     //to search
     public LiveData<List<List<SizeTuple>>> getSearchTuplesLive() {
-        return sizeDao.getSearchTuplesLive();
+        if (searchTuplesLive == null)
+            searchTuplesLive = sizeDao.getSearchTuplesLive();
+        return searchTuplesLive;
     }
 
     //to recycleBin search
     public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive() {
-        return sizeDao.getDeletedSearchTuplesLive();
+        if (deletedSearchTuplesLive == null)
+            deletedSearchTuplesLive = sizeDao.getDeletedSearchTuplesLive();
+        return deletedSearchTuplesLive;
     }
 
     //to sizeFragment(disposable)
