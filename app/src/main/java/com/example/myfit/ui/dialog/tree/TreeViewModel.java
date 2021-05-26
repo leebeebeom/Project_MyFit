@@ -25,10 +25,10 @@ public class TreeViewModel extends ViewModel {
     private static final String CATEGORY_INSERT_ID = "category insert id";
     private static final String FOLDER_INSERT_ID = "folder insert id";
 
-    private final SavedStateHandle savedStateHandle;
     private final CategoryRepository categoryRepository;
     private final FolderRepository folderRepository;
     private final SizeRepository sizeRepository;
+    private final SavedStateHandle savedStateHandle;
     private LiveData<ParentIdTuple[]> folderParentIdTuplesLive, sizeParentIdTuplesLive;
     private final MediatorLiveData<CategoryTuple> categoryTupleMutable = new MediatorLiveData<>();
     private final MediatorLiveData<FolderTuple> folderTupleMutable = new MediatorLiveData<>();
@@ -99,5 +99,4 @@ public class TreeViewModel extends ViewModel {
     public void setFolderInsertId(long id) {
         savedStateHandle.set(FOLDER_INSERT_ID, id);
     }
-
 }
