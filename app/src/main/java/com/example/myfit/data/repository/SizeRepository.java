@@ -24,9 +24,7 @@ public class SizeRepository extends BaseRepository {
     private final IntegerSharedPreferenceLiveData listSortPreferenceLive;
     private LiveData<List<SizeTuple>> tuplesLiveByParentId;
     private long parentId;
-    private LiveData<List<List<SizeTuple>>> deletedClassifiedTuplesLive;
-    private LiveData<List<List<SizeTuple>>> searchTuplesLive;
-    private LiveData<List<List<SizeTuple>>> deletedSearchTuplesLive;
+    private LiveData<List<List<SizeTuple>>> deletedClassifiedTuplesLive, searchTuplesLive, deletedSearchTuplesLive;
 
     @Inject
     public SizeRepository(SizeDao sizeDao,

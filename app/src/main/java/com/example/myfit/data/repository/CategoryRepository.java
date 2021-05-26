@@ -20,7 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class CategoryRepository extends BaseRepository {
     private final CategoryDao categoryDao;
     private SharedPreferences mainSortPreference;
@@ -89,13 +91,12 @@ public class CategoryRepository extends BaseRepository {
     public void insert(String name, int parentIndex) {
         new Thread(() -> {
             long insertId = categoryDao.insert(name, parentIndex);
-            insertIdLive.postValue(insertId);
+            if (insertIdLive != null) insertIdLive.postValue(insertId);
         }).start();
     }
 
     public MutableLiveData<Long> getInsertIdLive() {
-        if (insertIdLive == null)
-            insertIdLive = new MutableLiveData<>();
+        insertIdLive = new MutableLiveData<>();
         return insertIdLive;
     }
 
@@ -139,7 +140,8 @@ public class CategoryRepository extends BaseRepository {
     public void isExistingName(String name, int parentIndex) {
         new Thread(() -> {
             boolean isExistName = categoryDao.isExistingName(name, parentIndex);
-            if (isExistingNameLive != null) isExistingNameLive.postValue(isExistName);
+            if (isExistingNameLive != null)
+                isExistingNameLive.postValue(isExistName);
         }).start();
     }
 

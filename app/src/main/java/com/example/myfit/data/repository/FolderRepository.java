@@ -18,7 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class FolderRepository extends BaseRepository {
     private final FolderDao folderDao;
     private final SharedPreferences listSortPreference;
@@ -103,8 +105,7 @@ public class FolderRepository extends BaseRepository {
     }
 
     public MutableLiveData<Long> getInsertIdLive() {
-        if (insertIdLive == null)
-            insertIdLive = new MutableLiveData<>();
+        insertIdLive = new MutableLiveData<>();
         return insertIdLive;
     }
 
