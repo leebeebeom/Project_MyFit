@@ -1,7 +1,6 @@
 package com.example.myfit.ui.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
@@ -18,7 +17,6 @@ import androidx.core.content.ContextCompat;
 
 import com.example.myfit.R;
 import com.example.myfit.util.OnTextChange;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,19 +27,14 @@ public class DialogBuilder {
     public static final String ALERT_TITLE = "alertTitle";
     public static final String ID = "id";
     private final AlertDialog dialog;
-    private final Context context;
 
     @Inject
-    public DialogBuilder(Context context) {
-        this.context = context;
-        this.dialog = new MaterialAlertDialogBuilder(context, R.style.myAlertDialogStyle)
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .setPositiveButton(R.string.dialog_confirm, null)
-                .create();
+    public DialogBuilder(AlertDialog dialog) {
+        this.dialog = dialog;
     }
 
     public DialogBuilder makeConfirmDialog(String message) {
-        dialog.setTitle(context.getString(R.string.dialog_confirm));
+        dialog.setTitle(dialog.getContext().getString(R.string.dialog_confirm));
         dialog.setMessage(message);
         return this;
     }
@@ -127,39 +120,39 @@ public class DialogBuilder {
     }
 
     private void setBackgroundDrawable() {
-        int margin = (int) context.getResources().getDimension(R.dimen._20sdp);
-        Drawable dialogBackground = ContextCompat.getDrawable(context, R.drawable.tree_view_dialog_background);
+        int margin = (int) dialog.getContext().getResources().getDimension(R.dimen._20sdp);
+        Drawable dialogBackground = ContextCompat.getDrawable(dialog.getContext(), R.drawable.tree_view_dialog_background);
         InsetDrawable inset = new InsetDrawable(dialogBackground, margin);
         dialog.getWindow().setBackgroundDrawable(inset);
     }
 
     private void setTitleTextSize() {
         showDialog();
-        TextView tvTitle = dialog.findViewById(context.getResources().getIdentifier(ALERT_TITLE, ID, context.getPackageName()));
+        TextView tvTitle = dialog.findViewById(dialog.getContext().getResources().getIdentifier(ALERT_TITLE, ID, dialog.getContext().getPackageName()));
         if (tvTitle != null)
-            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, context.getResources().getDimension(R.dimen._5sdp));
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._5sdp));
     }
 
     private void setMessageTextSize() {
         showDialog();
         TextView tvMessage = dialog.findViewById(android.R.id.message);
         if (tvMessage != null)
-            tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, context.getResources().getDimension(R.dimen._4sdp));
+            tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
     }
 
     private void setMessageTopPadding() {
         showDialog();
         TextView tvMessage = dialog.findViewById(android.R.id.message);
         if (tvMessage != null)
-            tvMessage.setPadding(tvMessage.getPaddingLeft(), context.getResources().getDimensionPixelSize(R.dimen._8sdp), tvMessage.getPaddingRight(), tvMessage.getPaddingBottom());
+            tvMessage.setPadding(tvMessage.getPaddingLeft(), dialog.getContext().getResources().getDimensionPixelSize(R.dimen._8sdp), tvMessage.getPaddingRight(), tvMessage.getPaddingBottom());
     }
 
     private void setButtonTextSize() {
         showDialog();
         Button btnPositive = getPositiveButton();
-        btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, context.getResources().getDimension(R.dimen._4sdp));
+        btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
         Button btnNegative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-        btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, context.getResources().getDimension(R.dimen._4sdp));
+        btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
     }
 
     private void showDialog() {
