@@ -13,10 +13,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class SortListDialog extends BaseSortDialog {
     @Inject
     FolderRepository folderRepository;
+    @Inject
+    LayoutDialogSortBinding binding;
 
     @Override
     protected LayoutDialogSortBinding getBinding() {
-        return LayoutDialogSortBinding.inflate(getLayoutInflater());
+        return binding;
     }
 
     @Override

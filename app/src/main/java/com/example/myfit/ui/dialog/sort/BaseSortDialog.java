@@ -11,6 +11,7 @@ import com.example.myfit.R;
 import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
+import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.util.constant.Sort;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 
@@ -63,7 +64,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     }
 
     @Override
-    protected AlertDialog getAlertDialog() {
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
         return dialogBuilder
                 .setTitle(getString(R.string.all_sort_order))
                 .setView(binding.getRoot())

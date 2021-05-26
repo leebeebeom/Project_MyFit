@@ -15,10 +15,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class SortMainDialog extends BaseSortDialog {
     @Inject
     CategoryRepository categoryRepository;
+    @Inject
+    LayoutDialogSortBinding binding;
 
     @Override
     protected LayoutDialogSortBinding getBinding() {
-        LayoutDialogSortBinding binding = LayoutDialogSortBinding.inflate(getLayoutInflater());
         binding.radioBtnBrand.setVisibility(View.GONE);
         binding.radioBtnBrandReverse.setVisibility(View.GONE);
         return binding;
