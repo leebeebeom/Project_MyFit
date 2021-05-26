@@ -8,8 +8,8 @@ import com.example.myfit.R;
 
 public class GoBackDialog extends BaseDialog {
     @Override
-    protected AlertDialog getAlertDialog() {
-        return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_go_back))
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
+        return this.dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_go_back))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }

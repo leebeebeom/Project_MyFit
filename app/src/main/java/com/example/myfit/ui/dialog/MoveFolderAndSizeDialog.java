@@ -20,22 +20,17 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
     FolderRepository folderRepository;
     @Inject
     SizeRepository sizeRepository;
-    private long[] folderIds;
-    private long[] sizeIds;
-    private long targetId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        folderIds = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getFolderIds();
-        sizeIds = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getSizeIds();
-        targetId = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getTargetId();
         setBackStackLive();
     }
+
     @Override
-    protected AlertDialog getAlertDialog() {
-        String selectedItemsSize = String.valueOf(folderIds.length + sizeIds.length);
-        return dialogBuilder.makeConfirmDialog(selectedItemsSize + getString(R.string.dialog_message_item_move))
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
+        String selectedItemsSize = String.valueOf(getSelectedFolderIds().length + getSelectedSizeIds().length);
+        return this.dialogBuilder.makeConfirmDialog(selectedItemsSize + getString(R.string.dialog_message_item_move))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -43,8 +38,10 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            if (folderIds.length != 0) folderRepository.move(targetId, folderIds);
-            if (sizeIds.length != 0) sizeRepository.move(targetId, sizeIds);
+            if (getSelectedFolderIds().length != 0)
+                folderRepository.move(getTargetId(), getSelectedFolderIds());
+            if (getSelectedSizeIds().length != 0)
+                sizeRepository.move(getTargetId(), getSelectedSizeIds());
             getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
             getNavController().popBackStack(R.id.treeViewDialog, true);
         };
@@ -53,5 +50,17 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
     @Override
     protected int getResId() {
         return R.id.moveFolderAndSizeDialog;
+    }
+
+    private long[] getSelectedFolderIds() {
+        return MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getFolderIds();
+    }
+
+    private long[] getSelectedSizeIds() {
+        return MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getSizeIds();
+    }
+
+    private long getTargetId() {
+        return MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getTargetId();
     }
 }

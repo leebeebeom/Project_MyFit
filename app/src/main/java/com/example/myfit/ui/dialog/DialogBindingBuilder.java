@@ -1,7 +1,6 @@
 package com.example.myfit.ui.dialog;
 
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 
 import com.example.myfit.R;
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
@@ -12,8 +11,8 @@ public class DialogBindingBuilder {
     private final ItemDialogEditTextBinding binding;
 
     @Inject
-    public DialogBindingBuilder(LayoutInflater inflater) {
-        this.binding = ItemDialogEditTextBinding.inflate(inflater);
+    public DialogBindingBuilder(ItemDialogEditTextBinding binding) {
+        this.binding = binding;
         binding.et.requestFocus();
         this.showErrorIfMoreThan30Characters();
     }

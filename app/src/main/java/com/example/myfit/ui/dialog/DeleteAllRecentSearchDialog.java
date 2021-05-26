@@ -21,8 +21,8 @@ public class DeleteAllRecentSearchDialog extends BaseDialog {
     RecentSearchRepository recentSearchRepository;
 
     @Override
-    protected AlertDialog getAlertDialog() {
-        return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all))
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
+        return this.dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }

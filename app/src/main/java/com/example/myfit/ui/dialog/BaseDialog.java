@@ -12,7 +12,6 @@ import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfit.R;
 import com.example.myfit.ui.main.MainGraphViewModel;
@@ -27,16 +26,22 @@ import dagger.hilt.android.AndroidEntryPoint;
 public abstract class BaseDialog extends DialogFragment {
     public static final String ACTION_MODE_OFF = "action mode off";
     @Inject
-    protected DialogBuilder dialogBuilder;
+    DialogBuilder dialogBuilder;
+    @Inject
+    NavController navController;
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return getAlertDialog();
+        return getAlertDialog(dialogBuilder);
     }
 
-    protected abstract AlertDialog getAlertDialog();
+    public DialogBuilder getDialogBuilder() {
+        return dialogBuilder;
+    }
+
+    protected abstract AlertDialog getAlertDialog(DialogBuilder dialogBuilder);
 
     protected abstract View.OnClickListener getPositiveClickListener();
 
@@ -62,7 +67,7 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     protected NavController getNavController() {
-        return NavHostFragment.findNavController(this);
+        return navController;
     }
 
     protected void actionModeOff() {
