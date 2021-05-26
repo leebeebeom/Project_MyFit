@@ -47,13 +47,12 @@ public class BaseInfo {
         if (!(o instanceof BaseInfo)) return false;
         BaseInfo baseInfo = (BaseInfo) o;
         return getParentIndex() == baseInfo.getParentIndex() &&
-                getOrderNumber() == baseInfo.getOrderNumber() &&
                 isDeleted() == baseInfo.isDeleted() &&
                 getDeletedTime() == baseInfo.getDeletedTime();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getParentIndex(), getOrderNumber(), isDeleted(), getDeletedTime());
+        return Objects.hash(getParentIndex(), isDeleted(), getDeletedTime());
     }
 }
