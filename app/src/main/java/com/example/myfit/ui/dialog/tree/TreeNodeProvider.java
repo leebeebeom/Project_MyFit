@@ -22,35 +22,40 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 public class TreeNodeProvider {
     private final Context context;
+    private final NavController navController;
     private LinkedList<TreeNode> categoryNodes;
     private final int margin;
     private List<FolderTuple> folderTuples;
     private TreeCategoryHolder[] categoryHolders;
     private TreeFolderHolder[] folderHolders;
 
-    public TreeNodeProvider(Context context) {
+    @Inject
+    public TreeNodeProvider(Context context, NavController navController) {
         this.context = context;
+        this.navController = navController;
         this.margin = context.getResources().getDimensionPixelSize(R.dimen._12sdp);
     }
 
-    public LinkedList<TreeNode> makeNodes(List<CategoryTuple> categoryTuples, List<FolderTuple> folderTuples, NavController navController) {
+    public LinkedList<TreeNode> makeNodes(List<CategoryTuple> categoryTuples, List<FolderTuple> folderTuples) {
         this.folderTuples = folderTuples;
         categoryNodes = new LinkedList<>();
 
         categoryTuples.forEach(
-                categoryTuple -> categoryNodes.add(new TreeNode(new CategoryValue(categoryTuple)).setViewHolder(makeCategoryHolder(navController))));
+                categoryTuple -> categoryNodes.add(new TreeNode(new CategoryValue(categoryTuple)).setViewHolder(makeCategoryHolder())));
 
-        addFolderNodes(navController);
+        addFolderNodes();
         return categoryNodes;
     }
 
-    public TreeCategoryHolder makeCategoryHolder(NavController navController) {
+    public TreeCategoryHolder makeCategoryHolder() {
         return new TreeCategoryHolder(context, navController);
     }
 
-    private void addFolderNodes(NavController navController) {
+    private void addFolderNodes() {
         categoryNodes.forEach(categoryNode ->
                 folderTuples.stream()
                         .filter(folderTuple -> {
@@ -58,10 +63,10 @@ public class TreeNodeProvider {
                             return categoryHolder.getId() == folderTuple.getParentId();
                         })
                         .forEach(folderTuple ->
-                                categoryNode.addChild(new TreeNode(new FolderValue(folderTuple, margin)).setViewHolder(makeFolderHolder(navController)))));
+                                categoryNode.addChild(new TreeNode(new FolderValue(folderTuple, margin)).setViewHolder(makeFolderHolder()))));
     }
 
-    public TreeFolderHolder makeFolderHolder(NavController navController) {
+    public TreeFolderHolder makeFolderHolder() {
         return new TreeFolderHolder(context, folderTuples, navController);
     }
 
