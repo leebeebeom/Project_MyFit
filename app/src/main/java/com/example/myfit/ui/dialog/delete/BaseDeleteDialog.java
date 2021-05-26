@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.R;
 import com.example.myfit.ui.dialog.BaseDialog;
+import com.example.myfit.ui.dialog.DialogBuilder;
 
 public abstract class BaseDeleteDialog extends BaseDialog {
 
@@ -18,7 +19,7 @@ public abstract class BaseDeleteDialog extends BaseDialog {
     }
 
     @Override
-    protected AlertDialog getAlertDialog() {
+    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
         return dialogBuilder.makeConfirmDialog(getSelectedItemsSize() + getString(R.string.dialog_message_selected_item_delete))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
