@@ -1,57 +1,93 @@
 package com.example.myfit.di;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
-import com.example.myfit.data.repository.AutoCompleteRepository;
-import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.data.repository.FolderRepository;
-import com.example.myfit.data.repository.RecentSearchRepository;
-import com.example.myfit.data.repository.SizeRepository;
+import com.example.myfit.data.AppDataBase;
+import com.example.myfit.data.repository.dao.AutoCompleteDao;
+import com.example.myfit.data.repository.dao.CategoryDao;
+import com.example.myfit.data.repository.dao.FolderDao;
+import com.example.myfit.data.repository.dao.RecentSearchDao;
+import com.example.myfit.data.repository.dao.SizeDao;
+import com.example.myfit.util.constant.Sort;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
-import org.jetbrains.annotations.NotNull;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.components.ActivityRetainedComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ActivityRetainedScoped;
+import dagger.hilt.components.SingletonComponent;
 
 @Module
-@InstallIn(ActivityRetainedComponent.class)
+@InstallIn(SingletonComponent.class)
 public class DataModule {
-    @ActivityRetainedScoped
-    @NotNull
+    private static final String SORT_MAIN = "sort main";
+    private static final String SORT_LIST = "sort list";
+    public static final String SORT = "sort";
+
+    @Singleton
     @Provides
-    public static CategoryRepository provideCategoryRepository(@ApplicationContext Context context) {
-        return new CategoryRepository(context);
+    public static CategoryDao provideCategoryDao(AppDataBase appDataBase) {
+        return appDataBase.categoryDao();
     }
 
-    @ActivityRetainedScoped
-    @NotNull
+    @Singleton
     @Provides
-    public static FolderRepository provideFolderRepository(@ApplicationContext Context context) {
-        return new FolderRepository(context);
+    public static FolderDao provideFolderDao(AppDataBase appDataBase) {
+        return appDataBase.folderDao();
     }
 
-    @ActivityRetainedScoped
-    @NotNull
+    @Singleton
     @Provides
-    public static SizeRepository provideSizeRepository(@ApplicationContext Context context) {
-        return new SizeRepository(context);
+    public static SizeDao provideSizeDao(AppDataBase appDataBase) {
+        return appDataBase.sizeDao();
     }
 
-    @ActivityRetainedScoped
-    @NotNull
+    @Singleton
     @Provides
-    public static RecentSearchRepository provideRecentSearchRepository(@ApplicationContext Context context) {
-        return new RecentSearchRepository(context);
+    public static RecentSearchDao provideRecentSearchDao(AppDataBase appDataBase) {
+        return appDataBase.recentSearchDao();
     }
 
-    @ActivityRetainedScoped
-    @NotNull
+    @Singleton
     @Provides
-    public static AutoCompleteRepository provideAutoCompleteRepository(@ApplicationContext Context context) {
-        return new AutoCompleteRepository(context);
+    public static AutoCompleteDao provideAutoCompleteDao(AppDataBase appDataBase) {
+        return appDataBase.autoCompleteDao();
+    }
+
+    @Singleton
+    @Provides
+    public static AppDataBase provideAppDataBase(@ApplicationContext Context context) {
+        return AppDataBase.getsInstance(context);
+    }
+
+    @Qualifiers.MainSortPreference
+    @Singleton
+    @Provides
+    public static SharedPreferences provideMainSortPreference(@ApplicationContext Context context) {
+        return context.getSharedPreferences(SORT_MAIN, Context.MODE_PRIVATE);
+    }
+
+    @Qualifiers.MainSortPreferenceLive
+    @Singleton
+    @Provides
+    public static IntegerSharedPreferenceLiveData provideMainSorePreferenceList(@Qualifiers.MainSortPreference SharedPreferences mainSortPreference) {
+        return new IntegerSharedPreferenceLiveData(mainSortPreference, SORT, Sort.SORT_CUSTOM.getValue());
+    }
+
+    @Qualifiers.ListSortPreference
+    @Singleton
+    @Provides
+    public static SharedPreferences provideListSortPreference(@ApplicationContext Context context) {
+        return context.getSharedPreferences(SORT_LIST, Sort.SORT_CUSTOM.getValue());
+    }
+
+    @Qualifiers.ListSortPreferenceLive
+    @Singleton
+    @Provides
+    public static IntegerSharedPreferenceLiveData provideListSortPreferenceList(@Qualifiers.ListSortPreference SharedPreferences listSortPreference) {
+        return new IntegerSharedPreferenceLiveData(listSortPreference, SORT, Sort.SORT_CUSTOM.getValue());
     }
 }
