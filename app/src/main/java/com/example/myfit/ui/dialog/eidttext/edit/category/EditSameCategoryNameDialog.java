@@ -6,9 +6,9 @@ import androidx.navigation.NavBackStackEntry;
 
 import com.example.myfit.R;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
-import com.example.myfit.ui.dialog.eidttext.edit.BaseEditSameNameDialog;
+import com.example.myfit.ui.dialog.eidttext.BaseSameNameDialog;
 
-public class EditSameCategoryNameDialog extends BaseEditSameNameDialog {
+public class EditSameCategoryNameDialog extends BaseSameNameDialog.BaseEditSameNameDialog {
     @Override
     protected BaseEditTextViewModel.BaseEditViewModel getModel() {
         NavBackStackEntry graphBackStack = getGraphBackStack();

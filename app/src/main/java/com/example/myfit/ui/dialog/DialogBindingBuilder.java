@@ -18,12 +18,12 @@ public class DialogBindingBuilder {
     }
 
     public DialogBindingBuilder setHint(String hint) {
-        binding.setHint(hint);
+        binding.layout.setHint(hint);
         return this;
     }
 
     public DialogBindingBuilder setPlaceHolder(String placeHolder) {
-        binding.setPlaceHolder(placeHolder);
+        binding.layout.setPlaceholderText(placeHolder);
         return this;
     }
 

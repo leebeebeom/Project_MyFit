@@ -29,7 +29,6 @@ public class TreeViewModel extends ViewModel {
     private final FolderRepository folderRepository;
     private final SizeRepository sizeRepository;
     private final SavedStateHandle savedStateHandle;
-    private LiveData<ParentIdTuple[]> folderParentIdTuplesLive, sizeParentIdTuplesLive;
     private final MediatorLiveData<CategoryTuple> categoryTupleMutable = new MediatorLiveData<>();
     private final MediatorLiveData<FolderTuple> folderTupleMutable = new MediatorLiveData<>();
 
@@ -65,15 +64,11 @@ public class TreeViewModel extends ViewModel {
     }
 
     public LiveData<ParentIdTuple[]> getFolderParentIdTuplesLive(long[] selectedFolderIds) {
-        if (folderParentIdTuplesLive == null)
-            folderParentIdTuplesLive = folderRepository.getParentIdTuplesByIds(selectedFolderIds);
-        return folderParentIdTuplesLive;
+        return folderRepository.getParentIdTuplesByIds(selectedFolderIds);
     }
 
     public LiveData<ParentIdTuple[]> getSizeParentIdTuplesLive(long[] selectedSizeIds) {
-        if (sizeParentIdTuplesLive == null)
-            sizeParentIdTuplesLive = sizeRepository.getParentIdTuplesByIds(selectedSizeIds);
-        return sizeParentIdTuplesLive;
+        return sizeRepository.getParentIdTuplesByIds(selectedSizeIds);
     }
 
     public MutableLiveData<Long> getCategoryInsertIdLive() {

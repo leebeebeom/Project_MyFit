@@ -11,7 +11,6 @@ import androidx.navigation.NavController;
 
 import com.example.myfit.databinding.ItemTreeCategoryBinding;
 import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
-import com.unnamed.b.atv.model.TreeNode;
 
 public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     private ItemTreeCategoryBinding binding;
@@ -24,11 +23,6 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     protected void bind(CategoryValue value) {
         binding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         binding.setCategoryTuple(value.getTuple());
-    }
-
-    @Override
-    public TreeNode getNode() {
-        return mNode;
     }
 
     @Override

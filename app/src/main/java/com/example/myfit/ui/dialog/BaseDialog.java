@@ -37,10 +37,6 @@ public abstract class BaseDialog extends DialogFragment {
         return getAlertDialog(dialogBuilder);
     }
 
-    public DialogBuilder getDialogBuilder() {
-        return dialogBuilder;
-    }
-
     protected abstract AlertDialog getAlertDialog(DialogBuilder dialogBuilder);
 
     protected abstract View.OnClickListener getPositiveClickListener();
@@ -62,15 +58,18 @@ public abstract class BaseDialog extends DialogFragment {
     protected abstract int getResId();
 
     protected NavBackStackEntry getGraphBackStack() {
-        NavController navController = getNavController();
         return navController.getBackStackEntry(navController.getGraph().getId());
+    }
+
+    protected void setBackStackActionModeOff() {
+        getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
+    }
+
+    protected DialogBuilder getDialogBuilder() {
+        return dialogBuilder;
     }
 
     protected NavController getNavController() {
         return navController;
-    }
-
-    protected void actionModeOff() {
-        getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
     }
 }

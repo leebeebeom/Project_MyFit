@@ -55,19 +55,18 @@ public class DialogBuilder {
         return this;
     }
 
-    private void showKeyboard() {
-        if (dialog.isShowing()) dialog.dismiss();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    }
-
     public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText) {
-        getPositiveButton().setEnabled(!TextUtils.isEmpty(inputText));
+        getPositiveButton().setEnabled(!isInputTextEmpty(inputText));
         return this;
     }
 
     public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText, String oldName) {
-        getPositiveButton().setEnabled(!TextUtils.isEmpty(inputText) && !inputText.equals(oldName));
+        getPositiveButton().setEnabled(!isInputTextEmpty(inputText) && !inputText.equals(oldName));
         return this;
+    }
+
+    private boolean isInputTextEmpty(CharSequence inputText) {
+        return !TextUtils.isEmpty(inputText);
     }
 
     public DialogBuilder setPositiveEnabledByChangedText(@NotNull TextInputEditText editText) {
@@ -153,6 +152,11 @@ public class DialogBuilder {
         btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
         Button btnNegative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
+    }
+
+    private void showKeyboard() {
+        if (dialog.isShowing()) dialog.dismiss();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     private void showDialog() {

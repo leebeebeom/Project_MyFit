@@ -30,7 +30,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
     @Override
     protected void task() {
         getModel().update();
-        actionModeOff();
+        setBackStackActionModeOff();
     }
 
     protected abstract BaseEditTextViewModel.BaseEditViewModel getModel();

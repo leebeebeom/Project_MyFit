@@ -36,11 +36,6 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     }
 
     @Override
-    public TreeNode getNode() {
-        return mNode;
-    }
-
-    @Override
     protected View getBindingRoot() {
         return binding.getRoot();
     }
@@ -94,11 +89,11 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     }
 
     private void addChildNode(@NotNull FolderValue value) {
-        int margin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
+        int plusMargin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
         folderTuples.stream()
                 .filter(folderTuple -> folderTuple.getParentId() == value.getTupleId())
                 .forEach(folderTuple -> {
-                    TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + margin))
+                    TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + plusMargin))
                             .setViewHolder(this);
                     mNode.addChild(treeNode);
                 });

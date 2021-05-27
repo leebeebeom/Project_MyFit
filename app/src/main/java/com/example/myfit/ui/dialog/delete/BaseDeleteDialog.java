@@ -31,7 +31,7 @@ public abstract class BaseDeleteDialog extends BaseDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             task();
-            actionModeOff();
+            setBackStackActionModeOff();
             dismiss();
         };
     }

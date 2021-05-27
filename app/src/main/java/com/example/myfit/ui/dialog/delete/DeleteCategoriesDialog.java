@@ -1,5 +1,9 @@
 package com.example.myfit.ui.dialog.delete;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
 import com.example.myfit.R;
 import com.example.myfit.data.repository.CategoryRepository;
 
@@ -11,6 +15,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class DeleteCategoriesDialog extends BaseDeleteDialog {
     @Inject
     CategoryRepository categoryRepository;
+    private long[] selectedItemIds;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        selectedItemIds = DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
+    }
 
     @Override
     protected int getResId() {
@@ -19,15 +30,11 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
 
     @Override
     protected void task() {
-        categoryRepository.deleteOrRestore(getSelectedItemIds(), true);
+        categoryRepository.deleteOrRestore(selectedItemIds, true);
     }
 
     @Override
     protected String getSelectedItemsSize() {
-        return String.valueOf(getSelectedItemIds().length);
-    }
-
-    private long[] getSelectedItemIds() {
-        return DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
+        return String.valueOf(selectedItemIds.length);
     }
 }
