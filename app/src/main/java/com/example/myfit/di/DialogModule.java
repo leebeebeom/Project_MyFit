@@ -1,14 +1,13 @@
 package com.example.myfit.di;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 
-import com.example.myfit.ui.dialog.DialogBindingBuilder;
-import com.example.myfit.ui.dialog.DialogBuilder;
+import androidx.appcompat.app.AlertDialog;
+import androidx.navigation.NavController;
+
+import com.example.myfit.R;
 import com.example.myfit.ui.dialog.tree.TreeNodeProvider;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,26 +19,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 @Module
 @InstallIn(FragmentComponent.class)
 public class DialogModule {
-    @NotNull
-    @Provides
-    public static DialogBuilder provideDialogBuilder(@ApplicationContext Context context) {
-        return new DialogBuilder(context);
-    }
 
-    @NotNull
-    @Contract("_ -> new")
     @Provides
-    public static DialogBindingBuilder provideDialogBinding(LayoutInflater inflater) {
-        return new DialogBindingBuilder(inflater);
+    public static AlertDialog provideAlertDialog(@ApplicationContext Context context) {
+        return new MaterialAlertDialogBuilder(context, R.style.myAlertDialogStyle)
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_confirm, null)
+                .create();
     }
 
     @Provides
-    public static LayoutInflater provideLayoutInflater(@ActivityContext Context context) {
-        return LayoutInflater.from(context);
-    }
-
-    @Provides
-    public static TreeNodeProvider provideTreeNodeProvider(@ActivityContext Context context) {
-        return new TreeNodeProvider(context);
+    public static TreeNodeProvider provideTreeNodeProvider(@ActivityContext Context context, NavController navController){
+        return new TreeNodeProvider(context, navController);
     }
 }
