@@ -26,47 +26,47 @@ import javax.inject.Inject;
 public class DialogBuilder {
     public static final String ALERT_TITLE = "alertTitle";
     public static final String ID = "id";
-    private final AlertDialog dialog;
+    private final AlertDialog mDialog;
 
     @Inject
     public DialogBuilder(AlertDialog dialog) {
-        this.dialog = dialog;
+        this.mDialog = dialog;
     }
 
     public DialogBuilder makeConfirmDialog(String message) {
-        dialog.setTitle(dialog.getContext().getString(R.string.dialog_confirm));
-        dialog.setMessage(message);
+        mDialog.setTitle(mDialog.getContext().getString(R.string.dialog_confirm));
+        mDialog.setMessage(message);
         return this;
     }
 
     public DialogBuilder makeEditTextDialog(String title, View view) {
-        dialog.setTitle(title);
-        dialog.setView(view);
+        mDialog.setTitle(title);
+        mDialog.setView(view);
         return this;
     }
 
     public DialogBuilder setTitle(String title){
-        dialog.setTitle(title);
+        mDialog.setTitle(title);
         return this;
     }
 
     public DialogBuilder setView(View view){
-        dialog.setView(view);
+        mDialog.setView(view);
         return this;
     }
 
     public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText) {
-        getPositiveButton().setEnabled(!isInputTextEmpty(inputText));
+        getPositiveButton().setEnabled(isNotInputTextEmpty(inputText));
         return this;
     }
 
     public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText, String oldName) {
-        getPositiveButton().setEnabled(!isInputTextEmpty(inputText) && !inputText.equals(oldName));
+        getPositiveButton().setEnabled(isNotInputTextEmpty(inputText) && !inputText.equals(oldName));
         return this;
     }
 
-    private boolean isInputTextEmpty(CharSequence inputText) {
-        return !TextUtils.isEmpty(inputText);
+    private boolean isNotInputTextEmpty(CharSequence inputText) {
+        return TextUtils.isEmpty(inputText);
     }
 
     public DialogBuilder setPositiveEnabledByChangedText(@NotNull TextInputEditText editText) {
@@ -105,7 +105,7 @@ public class DialogBuilder {
 
     private Button getPositiveButton() {
         showDialog();
-        return dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        return mDialog.getButton(DialogInterface.BUTTON_POSITIVE);
     }
 
     public AlertDialog create() {
@@ -115,51 +115,51 @@ public class DialogBuilder {
         this.setMessageTopPadding();
         this.setButtonTextSize();
         this.showKeyboard();
-        return dialog;
+        return mDialog;
     }
 
     private void setBackgroundDrawable() {
-        int margin = (int) dialog.getContext().getResources().getDimension(R.dimen._20sdp);
-        Drawable dialogBackground = ContextCompat.getDrawable(dialog.getContext(), R.drawable.tree_view_dialog_background);
+        int margin = (int) mDialog.getContext().getResources().getDimension(R.dimen._20sdp);
+        Drawable dialogBackground = ContextCompat.getDrawable(mDialog.getContext(), R.drawable.tree_view_dialog_background);
         InsetDrawable inset = new InsetDrawable(dialogBackground, margin);
-        dialog.getWindow().setBackgroundDrawable(inset);
+        mDialog.getWindow().setBackgroundDrawable(inset);
     }
 
     private void setTitleTextSize() {
         showDialog();
-        TextView tvTitle = dialog.findViewById(dialog.getContext().getResources().getIdentifier(ALERT_TITLE, ID, dialog.getContext().getPackageName()));
+        TextView tvTitle = mDialog.findViewById(mDialog.getContext().getResources().getIdentifier(ALERT_TITLE, ID, mDialog.getContext().getPackageName()));
         if (tvTitle != null)
-            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._5sdp));
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mDialog.getContext().getResources().getDimension(R.dimen._5sdp));
     }
 
     private void setMessageTextSize() {
         showDialog();
-        TextView tvMessage = dialog.findViewById(android.R.id.message);
+        TextView tvMessage = mDialog.findViewById(android.R.id.message);
         if (tvMessage != null)
-            tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
+            tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mDialog.getContext().getResources().getDimension(R.dimen._4sdp));
     }
 
     private void setMessageTopPadding() {
         showDialog();
-        TextView tvMessage = dialog.findViewById(android.R.id.message);
+        TextView tvMessage = mDialog.findViewById(android.R.id.message);
         if (tvMessage != null)
-            tvMessage.setPadding(tvMessage.getPaddingLeft(), dialog.getContext().getResources().getDimensionPixelSize(R.dimen._8sdp), tvMessage.getPaddingRight(), tvMessage.getPaddingBottom());
+            tvMessage.setPadding(tvMessage.getPaddingLeft(), mDialog.getContext().getResources().getDimensionPixelSize(R.dimen._8sdp), tvMessage.getPaddingRight(), tvMessage.getPaddingBottom());
     }
 
     private void setButtonTextSize() {
         showDialog();
         Button btnPositive = getPositiveButton();
-        btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
-        Button btnNegative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-        btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dialog.getContext().getResources().getDimension(R.dimen._4sdp));
+        btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mDialog.getContext().getResources().getDimension(R.dimen._4sdp));
+        Button btnNegative = mDialog.getButton(Dialog.BUTTON_NEGATIVE);
+        btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mDialog.getContext().getResources().getDimension(R.dimen._4sdp));
     }
 
     private void showKeyboard() {
-        if (dialog.isShowing()) dialog.dismiss();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        if (mDialog.isShowing()) mDialog.dismiss();
+        mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     private void showDialog() {
-        if (!dialog.isShowing()) dialog.show();
+        if (!mDialog.isShowing()) mDialog.show();
     }
 }
