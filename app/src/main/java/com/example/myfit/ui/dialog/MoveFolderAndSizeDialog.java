@@ -17,25 +17,25 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MoveFolderAndSizeDialog extends BaseDialog {
     @Inject
-    FolderRepository folderRepository;
+    FolderRepository mFolderRepository;
     @Inject
-    SizeRepository sizeRepository;
-    private long[] selectedFolderIds, selectedSizeIds;
-    private long targetId;
+    SizeRepository mSizeRepository;
+    private long[] mSelectedFolderIds, mSelectedSizeIds;
+    private long mTargetId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedFolderIds = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
-        selectedSizeIds = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
-        targetId = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getTargetId();
+        mSelectedFolderIds = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
+        mSelectedSizeIds = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
+        mTargetId = MoveFolderAndSizeDialogArgs.fromBundle(getArguments()).getTargetId();
         setBackStackLive();
     }
 
     @Override
     protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        String selectedItemsSize = String.valueOf(selectedFolderIds.length + selectedSizeIds.length);
-        return this.dialogBuilder.makeConfirmDialog(selectedItemsSize + getString(R.string.dialog_message_item_move))
+        String selectedItemsSize = String.valueOf(mSelectedFolderIds.length + mSelectedSizeIds.length);
+        return dialogBuilder.makeConfirmDialog(selectedItemsSize + getString(R.string.dialog_message_item_move))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -43,10 +43,10 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            if (selectedFolderIds.length != 0)
-                folderRepository.move(targetId, selectedFolderIds);
-            if (selectedSizeIds.length != 0)
-                sizeRepository.move(targetId, selectedSizeIds);
+            if (mSelectedFolderIds.length != 0)
+                mFolderRepository.move(mTargetId, mSelectedFolderIds);
+            if (mSelectedSizeIds.length != 0)
+                mSizeRepository.move(mTargetId, mSelectedSizeIds);
             getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
             getNavController().popBackStack(R.id.treeViewDialog, true);
         };

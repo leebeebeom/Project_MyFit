@@ -18,11 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DeleteAllRecentSearchDialog extends BaseDialog {
     @Inject
-    RecentSearchRepository recentSearchRepository;
+    RecentSearchRepository mRecentSearchRepository;
 
     @Override
     protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        return this.dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all))
+        return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_recent_search_delete_all))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -32,7 +32,7 @@ public class DeleteAllRecentSearchDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            recentSearchRepository.deleteAll();
+            mRecentSearchRepository.deleteAll();
             dismiss();
         };
     }

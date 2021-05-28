@@ -26,15 +26,15 @@ import dagger.hilt.android.AndroidEntryPoint;
 public abstract class BaseDialog extends DialogFragment {
     public static final String ACTION_MODE_OFF = "action mode off";
     @Inject
-    DialogBuilder dialogBuilder;
+    DialogBuilder mDialogBuilder;
     @Inject
-    NavController navController;
+    NavController mNavController;
 
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return getAlertDialog(dialogBuilder);
+        return getAlertDialog(mDialogBuilder);
     }
 
     protected abstract AlertDialog getAlertDialog(DialogBuilder dialogBuilder);
@@ -58,7 +58,7 @@ public abstract class BaseDialog extends DialogFragment {
     protected abstract int getResId();
 
     protected NavBackStackEntry getGraphBackStack() {
-        return navController.getBackStackEntry(navController.getGraph().getId());
+        return mNavController.getBackStackEntry(mNavController.getGraph().getId());
     }
 
     protected void setBackStackActionModeOff() {
@@ -66,10 +66,10 @@ public abstract class BaseDialog extends DialogFragment {
     }
 
     protected DialogBuilder getDialogBuilder() {
-        return dialogBuilder;
+        return mDialogBuilder;
     }
 
     protected NavController getNavController() {
-        return navController;
+        return mNavController;
     }
 }

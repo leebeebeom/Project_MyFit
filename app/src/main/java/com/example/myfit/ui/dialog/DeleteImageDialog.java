@@ -19,7 +19,7 @@ public class DeleteImageDialog extends BaseDialog {
 
     @Override
     protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        return this.dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_image_clear))
+        return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_image_clear))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
