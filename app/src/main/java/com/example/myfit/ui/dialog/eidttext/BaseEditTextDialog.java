@@ -21,17 +21,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 public abstract class BaseEditTextDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
-    DialogBindingBuilder dialogBindingBuilder;
-    private ItemDialogEditTextBinding binding;
+    DialogBindingBuilder mDialogBindingBuilder;
+    private ItemDialogEditTextBinding mBinding;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = getBinding(savedInstanceState);
+        mBinding = getBinding(savedInstanceState);
     }
 
     private ItemDialogEditTextBinding getBinding(@Nullable Bundle savedInstanceState) {
-        return dialogBindingBuilder
+        return mDialogBindingBuilder
                 .setHint(getHint())
                 .setPlaceHolder(getPlaceHolder())
                 .setText(getInputText(savedInstanceState))
@@ -45,7 +45,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     protected abstract String getInputText(Bundle savedInstanceState);
 
     protected ItemDialogEditTextBinding getBinding() {
-        return binding;
+        return mBinding;
     }
 
     @NonNull
@@ -57,7 +57,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
             if (isExisting != null) {
                 if (isExisting) {
                     navigateSameNameDialog();
-                    KeyBoardUtil.hideKeyBoard(binding.et);
+                    KeyBoardUtil.hideKeyBoard(mBinding.et);
                 } else {
                     task();
                     dismiss();
@@ -82,12 +82,12 @@ public abstract class BaseEditTextDialog extends BaseDialog {
 
     @NotNull
     protected String getInputText() {
-        return String.valueOf(binding.et.getText());
+        return String.valueOf(mBinding.et.getText());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        mBinding = null;
     }
 }
