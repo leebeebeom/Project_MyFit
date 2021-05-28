@@ -13,50 +13,55 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class SizeListVH extends BaseVH<SizeTuple, SizeVHListener> {
-    private final ItemSizeListBinding binding;
+public class SizeListVH extends BaseVH.BaseSizeVH {
+    private final ItemSizeListBinding mBinding;
 
     public SizeListVH(@NotNull ItemSizeListBinding binding, SizeVHListener listener, Set<SizeTuple> selectedItems) {
         super(binding, listener, selectedItems);
-        this.binding = binding;
+        this.mBinding = binding;
 
         binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));
     }
 
     @Override
     public void bind(SizeTuple tuple) {
-        binding.setTuple(tuple);
+        mBinding.setTuple(tuple);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return binding.cb;
+        return mBinding.cb;
     }
 
     @Override
     public AppCompatImageView getDragHandleIcon() {
-        return binding.iconDragHandle;
+        return mBinding.iconDragHandle;
     }
 
     @Override
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
-        binding.cb.setVisibility(View.INVISIBLE);
-        binding.layoutContents.setAlpha(0.7f);
-        binding.iv.setAlpha(0.5f);
+        mBinding.cb.setVisibility(View.INVISIBLE);
+        mBinding.layoutContents.setAlpha(0.7f);
+        mBinding.iv.setAlpha(0.5f);
     }
 
     @Override
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 0);
-        binding.cb.setVisibility(View.VISIBLE);
-        binding.layoutContents.setAlpha(1);
-        binding.iv.setAlpha(1f);
+        mBinding.cb.setVisibility(View.VISIBLE);
+        mBinding.layoutContents.setAlpha(1);
+        mBinding.iv.setAlpha(1f);
     }
 
     @Override
     public MaterialCardView getCardView() {
-        return binding.cardView;
+        return mBinding.cardView;
+    }
+
+    @Override
+    public MaterialCheckBox getFavorite() {
+        return mBinding.cbFavorite;
     }
 }
 

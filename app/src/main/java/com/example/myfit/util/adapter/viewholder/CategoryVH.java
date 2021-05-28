@@ -14,46 +14,46 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
-    private final ItemCategoryBinding binding;
+    private final ItemCategoryBinding mBinding;
 
     public CategoryVH(@NotNull ItemCategoryBinding binding, BaseVHListener listener, Set<CategoryTuple> selectedItems) {
         super(binding, listener, selectedItems);
-        this.binding = binding;
+        this.mBinding = binding;
     }
 
     @Override
     protected void bind(CategoryTuple tuple) {
-        binding.setTuple(tuple);
+        mBinding.setTuple(tuple);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return binding.cb;
+        return mBinding.cb;
     }
 
     @Override
     public AppCompatImageView getDragHandleIcon() {
-        return binding.iconDragHandle;
+        return mBinding.iconDragHandle;
     }
 
     @Override
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
-        binding.cb.setVisibility(View.INVISIBLE);
-        binding.tvCategoryName.setAlpha(0.5f);
-        binding.layoutContentsSize.setAlpha(0.5f);
+        mBinding.cb.setVisibility(View.INVISIBLE);
+        mBinding.tvCategoryName.setAlpha(0.5f);
+        mBinding.layoutContentsSize.setAlpha(0.5f);
     }
 
     @Override
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 10);
-        binding.cb.setVisibility(View.VISIBLE);
-        binding.tvCategoryName.setAlpha(0.8f);
-        binding.layoutContentsSize.setAlpha(0.8f);
+        mBinding.cb.setVisibility(View.VISIBLE);
+        mBinding.tvCategoryName.setAlpha(0.8f);
+        mBinding.layoutContentsSize.setAlpha(0.8f);
     }
 
     @Override
     public MaterialCardView getCardView() {
-        return binding.cardView;
+        return mBinding.cardView;
     }
 }

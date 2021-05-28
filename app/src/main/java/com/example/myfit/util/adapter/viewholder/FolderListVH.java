@@ -10,29 +10,25 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import java.util.Set;
 
 public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
-    private final ItemFolderListBinding binding;
-    private AppCompatImageView dummy;
+    private final ItemFolderListBinding mBinding;
 
     public FolderListVH(ItemFolderListBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
         super(binding, listener, selectedItems);
-        this.binding = binding;
+        this.mBinding = binding;
     }
 
     protected void bind(FolderTuple tuple) {
-        binding.setTuple(tuple);
+        mBinding.setTuple(tuple);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return binding.cb;
+        return mBinding.cb;
     }
 
     @Override
     public AppCompatImageView getDragHandleIcon() {
-        //instead of null
-        if (dummy == null)
-            dummy = new AppCompatImageView(binding.getRoot().getContext());
-        return dummy;
+        return null;
     }
 
     @Override
@@ -45,6 +41,6 @@ public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
 
     @Override
     public MaterialCardView getCardView() {
-        return binding.cardView;
+        return mBinding.cardView;
     }
 }

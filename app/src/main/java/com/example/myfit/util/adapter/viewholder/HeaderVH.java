@@ -8,15 +8,15 @@ import com.example.myfit.util.CommonUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class HeaderVH extends RecyclerView.ViewHolder {
-    private final ItemHeaderBinding binding;
+    private final ItemHeaderBinding mBinding;
 
     public HeaderVH(@NotNull ItemHeaderBinding binding) {
         super(binding.getRoot());
-        this.binding = binding;
+        this.mBinding = binding;
     }
 
     public void bind(int parentIndex) {
         String parentCategory = CommonUtil.getParentCategory(parentIndex);
-        binding.setParentCategory(parentCategory);
+        mBinding.setParentCategory(parentCategory);
     }
 }

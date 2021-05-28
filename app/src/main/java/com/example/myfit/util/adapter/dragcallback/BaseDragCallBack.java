@@ -10,10 +10,10 @@ import com.example.myfit.util.adapter.viewholder.BaseVH;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseDragCallBack extends ItemTouchHelper.Callback {
-    private final BaseAdapter<?, ?, ?> adapter;
+    private final BaseAdapter<?, ?, ?> mAdapter;
 
     public BaseDragCallBack(BaseAdapter<?, ?, ?> adapter) {
-        this.adapter = adapter;
+        this.mAdapter = adapter;
     }
 
     @Override
@@ -23,7 +23,7 @@ public abstract class BaseDragCallBack extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        adapter.moveItem(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
+        mAdapter.moveItem(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         return true;
     }
 

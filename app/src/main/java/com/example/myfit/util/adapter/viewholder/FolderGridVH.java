@@ -15,53 +15,57 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
-    private final ItemFolderGridBinding binding;
+    private final ItemFolderGridBinding mBinding;
 
     public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
         super(binding, listener, selectedItems);
-        this.binding = binding;
+        this.mBinding = binding;
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bind(FolderTuple tuple) {
-        binding.setTuple(tuple);
+        mBinding.setTuple(tuple);
         if (tuple.getId() == -1) {
-            binding.getRoot().setVisibility(View.INVISIBLE);
+            mBinding.getRoot().setVisibility(View.INVISIBLE);
             itemView.setOnClickListener(null);
             itemView.setOnLongClickListener(null);
-            binding.iconDragHandle.setOnTouchListener(null);
+            mBinding.iconDragHandle.setOnTouchListener(null);
         }
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return binding.cb;
+        return mBinding.cb;
     }
 
     @Override
     public AppCompatImageView getDragHandleIcon() {
-        return binding.iconDragHandle;
+        return mBinding.iconDragHandle;
     }
 
     @Override
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
-        binding.layoutContentsSize.setVisibility(View.INVISIBLE);
-        binding.tvFolderName.setAlpha(0.5f);
-        binding.cb.setAlpha(0.5f);
+        mBinding.layoutContentsSize.setVisibility(View.INVISIBLE);
+        mBinding.tvFolderName.setAlpha(0.5f);
+        mBinding.cb.setAlpha(0.5f);
     }
 
     @Override
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 0);
-        binding.layoutContentsSize.setVisibility(View.VISIBLE);
-        binding.tvFolderName.setAlpha(1);
-        binding.cb.setAlpha(0.8f);
+        mBinding.layoutContentsSize.setVisibility(View.VISIBLE);
+        mBinding.tvFolderName.setAlpha(1);
+        mBinding.cb.setAlpha(0.8f);
     }
 
     @Override
     public MaterialCardView getCardView() {
-        return binding.cardView;
+        return mBinding.cardView;
+    }
+
+    public ItemFolderGridBinding getBinding() {
+        return mBinding;
     }
 }

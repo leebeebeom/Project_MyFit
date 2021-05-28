@@ -8,40 +8,43 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.BaseTuple;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.Set;
 
-import static com.example.myfit.util.ActionModeImpl.ACTION_MODE;
+import static com.example.myfit.util.actionmodecallback.BaseActionModeCallBack.sActionMode;
 
 public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
-    public static boolean IS_DRAGGING = false;
-    private final L listener;
-    private T tuple;
+    public static boolean sIsDragging = false;
+    private final L mListener;
+    private T mTuple;
 
     @SuppressLint("ClickableViewAccessibility")
     public BaseVH(ViewDataBinding binding, L listener, Set<T> selectedItems) {
         super(binding.getRoot());
-        this.listener = listener;
+        this.mListener = listener;
 
         setItemViewClickListener(listener, selectedItems);
 
         itemView.setOnLongClickListener(v -> {
-            listener.itemViewLongClick(getLayoutPosition());
+            listener.itemViewLongClick(getLayoutPosition(), mTuple.getParentIndex());
             return false;
         });
 
-        getDragHandleIcon().setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && !IS_DRAGGING)
-                dragStart();
-            return false;
-        });
+        if (getDragHandleIcon() != null) {
+            getDragHandleIcon().setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && !sIsDragging)
+                    dragStart();
+                return false;
+            });
+        }
     }
 
     public void setTuple(T tuple) {
-        this.tuple = tuple;
+        this.mTuple = tuple;
         bind(tuple);
     }
 
@@ -50,26 +53,26 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     private void setItemViewClickListener(L listener, Set<T> selectedItems) {
         itemView.setOnClickListener(
                 v -> {
-                    if (ACTION_MODE != null) {
-                        if (selectedItems.contains(tuple))
+                    if (sActionMode != null) {
+                        if (selectedItems.contains(mTuple))
                             removeItem(selectedItems);
                         else addItem(selectedItems);
-                    } else listener.itemViewClick(tuple);
+                    } else listener.itemViewClick(mTuple);
                 });
     }
 
     private void addItem(Set<T> selectedItemSet) {
         getCheckBox().setChecked(true);
-        selectedItemSet.add(tuple);
+        selectedItemSet.add(mTuple);
     }
 
     private void removeItem(Set<T> selectedItemSet) {
         getCheckBox().setChecked(false);
-        selectedItemSet.remove(tuple);
+        selectedItemSet.remove(mTuple);
     }
 
     protected T getTuple() {
-        return tuple;
+        return mTuple;
     }
 
     public abstract MaterialCheckBox getCheckBox();
@@ -77,16 +80,16 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     public abstract AppCompatImageView getDragHandleIcon();
 
     private void dragStart() {
-        IS_DRAGGING = true;
-        listener.dragStart(this);
+        sIsDragging = true;
+        mListener.dragStart(this, getTuple().getParentIndex());
         setDraggingView();
     }
 
     protected abstract void setDraggingView();
 
     public void dragStop() {
-        IS_DRAGGING = false;
-        listener.dragStop();
+        sIsDragging = false;
+        mListener.dragStop(getTuple().getParentIndex());
         setDropView();
     }
 
@@ -97,4 +100,13 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     }
 
     public abstract MaterialCardView getCardView();
+
+    public abstract static class BaseSizeVH extends BaseVH<SizeTuple, SizeVHListener> {
+
+        public BaseSizeVH(ViewDataBinding binding, SizeVHListener listener, Set<SizeTuple> selectedItems) {
+            super(binding, listener, selectedItems);
+        }
+
+        public abstract MaterialCheckBox getFavorite();
+    }
 }

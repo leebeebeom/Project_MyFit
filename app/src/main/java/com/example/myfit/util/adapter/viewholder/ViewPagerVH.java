@@ -6,19 +6,19 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.databinding.ItemRecyclerViewBinding;
-import com.example.myfit.util.DragSelectImpl;
+import com.example.myfit.util.dragselect.DragSelect;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.example.myfit.util.constant.AutoScrollFlag;
 
 import org.jetbrains.annotations.NotNull;
 
 public class ViewPagerVH extends RecyclerView.ViewHolder {
-    private final ItemRecyclerViewBinding binding;
+    private final ItemRecyclerViewBinding mBinding;
 
     @SuppressLint("ClickableViewAccessibility")
-    public ViewPagerVH(@NotNull ItemRecyclerViewBinding binding, ViewPagerAutoScrollListener listener) {
+    public ViewPagerVH(@NotNull ItemRecyclerViewBinding binding, AutoScrollListener listener) {
         super(binding.getRoot());
-        this.binding = binding;
+        this.mBinding = binding;
 
         binding.rv.setOnTouchListener((v, event) -> {
             if (event.getRawY() < 250)
@@ -32,30 +32,30 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
     }
 
     public void setNoResult(boolean isEmpty) {
-        binding.layoutNoResult.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        mBinding.layoutNoResult.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     public void setNoData(boolean isEmpty) {
-        binding.layoutNoData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        mBinding.layoutNoData.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     public RecyclerView.Adapter<?> getAdapter() {
-        return binding.rv.getAdapter();
+        return mBinding.rv.getAdapter();
     }
 
     public void setAdapter(BaseAdapter<?, ?, ?> adapter) {
-        binding.rv.setAdapter(adapter);
+        mBinding.rv.setAdapter(adapter);
     }
 
-    public void addItemTouchListener(DragSelectImpl dragSelectListener) {
-        binding.rv.addOnItemTouchListener(dragSelectListener.setRecyclerView(binding.rv));
+    public void addItemTouchListener(DragSelect dragSelectListener) {
+        mBinding.rv.addOnItemTouchListener(dragSelectListener.setRecyclerView(mBinding.rv));
     }
 
     public RecyclerView getRecyclerView() {
-        return binding.rv;
+        return mBinding.rv;
     }
 
-    public interface ViewPagerAutoScrollListener {
+    public interface AutoScrollListener {
         void dragAutoScroll(AutoScrollFlag flag);
     }
 }

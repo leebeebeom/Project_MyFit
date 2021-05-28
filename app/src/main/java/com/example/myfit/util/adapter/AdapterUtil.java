@@ -13,17 +13,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class AdapterUtil<T extends BaseTuple> {
-    private Animation openAnimation;
+    private Animation mOpenAnimation;
 
     public void listActionModeOn(@NotNull MaterialCardView cardView) {
-        if (openAnimation == null)
-            openAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_right);
-        cardView.setAnimation(openAnimation);
+        if (mOpenAnimation == null)
+            mOpenAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_right);
+        cardView.setAnimation(mOpenAnimation);
     }
 
     public void listActionModeOff(@NotNull MaterialCardView cardView) {
         cardView.setAnimation(AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_left));
-        openAnimation = null;
+        mOpenAnimation = null;
     }
 
     public void itemMove(int from, int to, List<T> list) {

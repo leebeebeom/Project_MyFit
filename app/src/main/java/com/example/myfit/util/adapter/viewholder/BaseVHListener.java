@@ -7,9 +7,9 @@ import com.example.myfit.data.model.tuple.BaseTuple;
 public interface BaseVHListener {
     void itemViewClick(BaseTuple tuple);
 
-    void itemViewLongClick(int position);
+    void itemViewLongClick(int position, int parentIndex);
 
-    void dragStart(RecyclerView.ViewHolder viewHolder);
+    void dragStart(RecyclerView.ViewHolder viewHolder, int parentIndex);
 
-    void dragStop();
+    void dragStop(int parentIndex);
 }

@@ -31,13 +31,11 @@ public class BindingAdapter {
 
     @androidx.databinding.BindingAdapter("setDragHandle")
     public static void setDragHandle(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_drag_handle).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setDragHandle2")
     public static void setDragHandle2(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_drag_handle2).into(imageView);
     }
 
@@ -54,31 +52,26 @@ public class BindingAdapter {
 
     @androidx.databinding.BindingAdapter("setAddIcon2")
     public static void setAddIcon2(ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_add).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setRecentSearchIcon")
     public static void setRecentSearchIcon(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_recent_search).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setCloseIcon")
     public static void setCloseIcon(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_close).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setFolderIcon")
     public static void setFolderIcon(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_folder).into(imageView);
     }
 
     @androidx.databinding.BindingAdapter("setDotIcon")
     public static void setDotIcon(@NotNull ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_dot).into(imageView);
     }
 
@@ -90,7 +83,6 @@ public class BindingAdapter {
 
     @androidx.databinding.BindingAdapter("setTriangleIcon")
     public static void setTriangleIcon(ImageView imageView, String dummy) {
-        dummy = null;
         Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
     }
 }
