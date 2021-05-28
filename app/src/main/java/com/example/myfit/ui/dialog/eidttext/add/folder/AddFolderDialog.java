@@ -13,15 +13,15 @@ import com.example.myfit.ui.dialog.eidttext.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddFolderDialog extends BaseAddDialog {
-    private AddFolderViewModel model;
+    private AddFolderViewModel mModel;
 
     @Override
     protected BaseEditTextViewModel.BaseAddViewModel getModel() {
-        if (model == null) {
+        if (mModel == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
-            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderViewModel.class);
+            mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderViewModel.class);
         }
-        return model;
+        return mModel;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AddFolderDialog extends BaseAddDialog {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getParentId();
             int parentIndex = AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
-            model.queryIsExistingName(parentId, getInputText(), parentIndex);
+            mModel.queryIsExistingName(parentId, getInputText(), parentIndex);
         };
     }
 

@@ -11,30 +11,30 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class AddFolderViewModel extends BaseEditTextViewModel.BaseAddViewModel {
-    private final FolderRepository folderRepository;
-    private long parentId;
-    private String name;
-    private int parentIndex;
+    private final FolderRepository mFolderRepository;
+    private long mParentId;
+    private String mName;
+    private int mParentIndex;
 
     @Inject
     public AddFolderViewModel(FolderRepository folderRepository) {
-        this.folderRepository = folderRepository;
+        this.mFolderRepository = folderRepository;
     }
 
     public void queryIsExistingName(long parentId, String inputText, int parentIndex) {
-        this.parentId = parentId;
-        this.parentIndex = parentIndex;
-        this.name = inputText;
-        folderRepository.isExistingName(name, parentId);
+        this.mParentId = parentId;
+        this.mParentIndex = parentIndex;
+        this.mName = inputText;
+        mFolderRepository.isExistingName(mName, parentId);
     }
 
     @Override
     public void insert() {
-        folderRepository.insert(name, parentId, parentIndex);
+        mFolderRepository.insert(mName, mParentId, mParentIndex);
     }
 
     @Override
     public MutableLiveData<Boolean> getIsExistingMutable() {
-        return folderRepository.getIsExistingNameLive();
+        return mFolderRepository.getIsExistingNameLive();
     }
 }

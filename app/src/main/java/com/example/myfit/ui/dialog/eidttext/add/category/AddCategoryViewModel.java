@@ -11,28 +11,28 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class AddCategoryViewModel extends BaseEditTextViewModel.BaseAddViewModel {
-    private final CategoryRepository categoryRepository;
-    private int parentIndex;
-    private String name;
+    private final CategoryRepository mCategoryRepository;
+    private int mParentIndex;
+    private String mName;
 
     @Inject
     public AddCategoryViewModel(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+        this.mCategoryRepository = categoryRepository;
     }
 
     public void queryIsExistingName(String inputText, int parentIndex) {
-        this.name = inputText;
-        this.parentIndex = parentIndex;
-        categoryRepository.isExistingName(inputText, parentIndex);
+        this.mName = inputText;
+        this.mParentIndex = parentIndex;
+        mCategoryRepository.isExistingName(inputText, parentIndex);
     }
 
     @Override
     public void insert() {
-        categoryRepository.insert(name, parentIndex);
+        mCategoryRepository.insert(mName, mParentIndex);
     }
 
     @Override
     public MutableLiveData<Boolean> getIsExistingMutable() {
-        return categoryRepository.getIsExistingNameLive();
+        return mCategoryRepository.getIsExistingNameLive();
     }
 }

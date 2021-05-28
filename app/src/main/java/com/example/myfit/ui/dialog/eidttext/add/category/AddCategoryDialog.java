@@ -13,15 +13,15 @@ import com.example.myfit.ui.dialog.eidttext.add.BaseAddDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class AddCategoryDialog extends BaseAddDialog {
-    private AddCategoryViewModel model;
+    private AddCategoryViewModel mModel;
 
     @Override
     protected BaseEditTextViewModel.BaseAddViewModel getModel() {
-        if (model == null) {
+        if (mModel == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
-            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryViewModel.class);
+            mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryViewModel.class);
         }
-        return model;
+        return mModel;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             int parentIndex = AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
-            model.queryIsExistingName(getInputText(),parentIndex);
+            mModel.queryIsExistingName(getInputText(),parentIndex);
         };
     }
 
