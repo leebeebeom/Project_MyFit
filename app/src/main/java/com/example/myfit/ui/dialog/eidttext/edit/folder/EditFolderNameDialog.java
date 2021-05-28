@@ -13,7 +13,7 @@ import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class EditFolderNameDialog extends BaseEditDialog {
-    private EditFolderNameViewModel model;
+    private EditFolderNameViewModel mModel;
 
     @Override
     protected String getName() {
@@ -37,11 +37,11 @@ public class EditFolderNameDialog extends BaseEditDialog {
 
     @Override
     protected BaseEditTextViewModel.BaseEditViewModel getModel() {
-        if (model == null) {
+        if (mModel == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
-            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(EditFolderNameViewModel.class);
+            mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(EditFolderNameViewModel.class);
         }
-        return model;
+        return mModel;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
         return v -> {
             long id = EditFolderNameDialogArgs.fromBundle(getArguments()).getId();
             long parentId = EditFolderNameDialogArgs.fromBundle(getArguments()).getParentId();
-            model.queryIsExistingName(getInputText(), id, parentId);
+            mModel.queryIsExistingName(getInputText(), id, parentId);
         };
     }
 

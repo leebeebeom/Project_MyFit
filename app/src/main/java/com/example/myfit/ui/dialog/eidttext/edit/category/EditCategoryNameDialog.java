@@ -13,7 +13,7 @@ import com.example.myfit.ui.dialog.eidttext.edit.BaseEditDialog;
 import com.example.myfit.util.CommonUtil;
 
 public class EditCategoryNameDialog extends BaseEditDialog {
-    private EditCategoryNameViewModel model;
+    private EditCategoryNameViewModel mModel;
 
     @Override
     protected String getName() {
@@ -37,12 +37,12 @@ public class EditCategoryNameDialog extends BaseEditDialog {
 
     @Override
     protected BaseEditTextViewModel.BaseEditViewModel getModel() {
-        if (model == null) {
+        if (mModel == null) {
             NavBackStackEntry graphBackStack = getGraphBackStack();
-            model = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))
+            mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))
                     .get(EditCategoryNameViewModel.class);
         }
-        return model;
+        return mModel;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
         return v -> {
             long id = EditCategoryNameDialogArgs.fromBundle(getArguments()).getId();
             int parentIndex = EditCategoryNameDialogArgs.fromBundle(getArguments()).getParentIndex();
-            model.queryIsExistingName(getInputText(), id, parentIndex);
+            mModel.queryIsExistingName(getInputText(), id, parentIndex);
         };
     }
 
