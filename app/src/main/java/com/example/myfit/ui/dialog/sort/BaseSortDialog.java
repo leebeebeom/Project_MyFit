@@ -19,29 +19,37 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public abstract class BaseSortDialog extends BaseDialog {
+    @Inject
+    LayoutDialogSortBinding mBinding;
+
     private static final String CHECKED_SORT = "check sort";
-    private LayoutDialogSortBinding binding;
-    private int checkedNumber;
+    private int mCheckedNumber;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = getBinding();
-        checkedNumber = savedInstanceState == null ? getCheckedNumber() : savedInstanceState.getInt(CHECKED_SORT);
+        mCheckedNumber = savedInstanceState == null ? getCheckedNumber() : savedInstanceState.getInt(CHECKED_SORT);
         MaterialRadioButton[] sortButtons = getSortButtons();
         addRadioButtonCheckListener(sortButtons);
-        sortButtons[checkedNumber].setChecked(true);
+        sortButtons[mCheckedNumber].setChecked(true);
     }
 
-    protected abstract LayoutDialogSortBinding getBinding();
+    protected LayoutDialogSortBinding getBinding(){
+        return mBinding;
+    }
 
     protected abstract int getCheckedNumber();
 
     @NotNull
     private MaterialRadioButton[] getSortButtons() {
-        return new MaterialRadioButton[]{binding.radioBtnCustom, binding.radioBtnCreate, binding.radioBtnCreateReverse,
-                binding.radioBtnBrand, binding.radioBtnBrandReverse, binding.radioBtnName, binding.radioBtnNameReverse};
+        return new MaterialRadioButton[]{mBinding.radioBtnCustom, mBinding.radioBtnCreate, mBinding.radioBtnCreateReverse,
+                mBinding.radioBtnBrand, mBinding.radioBtnBrandReverse, mBinding.radioBtnName, mBinding.radioBtnNameReverse};
     }
 
     private void addRadioButtonCheckListener(@NotNull MaterialRadioButton[] buttons) {
@@ -53,7 +61,7 @@ public abstract class BaseSortDialog extends BaseDialog {
             int finalI = i;
             buttons[i].setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    checkedNumber = buttonConstantArray[finalI];
+                    mCheckedNumber = buttonConstantArray[finalI];
 
                     Arrays.stream(buttons)
                             .filter(button -> button != buttonView)
@@ -67,7 +75,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
         return dialogBuilder
                 .setTitle(getString(R.string.all_sort_order))
-                .setView(binding.getRoot())
+                .setView(mBinding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -75,7 +83,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            getRepository().changeSort(Sort.values()[checkedNumber]);
+            getRepository().changeSort(Sort.values()[mCheckedNumber]);
             dismiss();
         };
     }
@@ -85,12 +93,12 @@ public abstract class BaseSortDialog extends BaseDialog {
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CHECKED_SORT, checkedNumber);
+        outState.putInt(CHECKED_SORT, mCheckedNumber);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        mBinding = null;
     }
 }

@@ -1,6 +1,9 @@
 package com.example.myfit.ui.dialog.sort;
 
+import android.os.Bundle;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.BaseRepository;
@@ -14,25 +17,24 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class SortMainDialog extends BaseSortDialog {
     @Inject
-    CategoryRepository categoryRepository;
-    @Inject
-    LayoutDialogSortBinding binding;
+    CategoryRepository mCategoryRepository;
 
     @Override
-    protected LayoutDialogSortBinding getBinding() {
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LayoutDialogSortBinding binding = getBinding();
         binding.radioBtnBrand.setVisibility(View.GONE);
         binding.radioBtnBrandReverse.setVisibility(View.GONE);
-        return binding;
     }
 
     @Override
     protected int getCheckedNumber() {
-        return categoryRepository.getSort().getValue();
+        return mCategoryRepository.getSort().getValue();
     }
 
     @Override
     protected BaseRepository getRepository() {
-        return categoryRepository;
+        return mCategoryRepository;
     }
 
     @Override
