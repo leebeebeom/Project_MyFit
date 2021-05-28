@@ -15,18 +15,18 @@ import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
 public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.BaseNodeViewHolder<T> {
-    private final NavController navController;
-    protected boolean isClickable = true;
-    private T value;
+    private final NavController mNavController;
+    private boolean mClickable = true;
+    private T mValue;
 
     public BaseTreeHolder(Context context, NavController navController) {
         super(context);
-        this.navController = navController;
+        this.mNavController = navController;
     }
 
     @Override
     public View createNodeView(TreeNode node, T value) {
-        this.value = value;
+        this.mValue = value;
         bind(value);
 
         if (!node.getChildren().isEmpty()) {
@@ -35,7 +35,7 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         }
 
         getAddIcon().setOnClickListener(v ->
-                CommonUtil.navigate(navController, R.id.treeViewDialog,
+                CommonUtil.navigate(mNavController, R.id.treeViewDialog,
                         TreeViewDialogDirections.toAddFolderDialog(value.getTupleId(), value.getParentIndex())));
         return getBindingRoot();
     }
@@ -43,15 +43,15 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
     protected abstract void bind(T value);
 
     public void setAlpha() {
-        if (isClickable) {
+        if (mClickable) {
             getFolderIconLayout().setAlpha(0.5f);
             getNameTextView().setAlpha(0.5f);
-            isClickable = false;
+            mClickable = false;
         }
     }
 
     public boolean isClickable() {
-        return isClickable;
+        return mClickable;
     }
 
     public void setIconClickable() {
@@ -70,7 +70,7 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
     };
 
     public long getId() {
-        return value.getTupleId();
+        return mValue.getTupleId();
     }
 
     public BaseTreeHolder<?> getParent(){

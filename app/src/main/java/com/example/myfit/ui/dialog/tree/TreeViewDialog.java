@@ -36,27 +36,29 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     public static final String TREE_VIEW_STATE = "state";
 
     @Inject
-    TreeNodeProvider treeNodeProvider;
-    private TreeViewModel model;
-    private TreeNode nodeRoot;
-    private AndroidTreeView treeView;
-    private LayoutDialogTreeBinding binding;
-    private int parentIndex;
-    private long currentPositionId;
-    private long[] selectedFolderIds, selectedSizeIds, folderPathIds;
-    private long categoryId;
+    TreeNodeProvider mTreeNodeProvider;
+    @Inject
+    LayoutDialogTreeBinding mBinding;
+
+    private TreeViewModel mModel;
+    private TreeNode mNodeRoot;
+    private AndroidTreeView mTreeView;
+    private int mParentIndex;
+    private long mCurrentPositionId;
+    private long[] mSelectedFolderIds, mSelectedSizeIds, mFolderPathIds;
+    private long mCategoryId;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = new ViewModelProvider(this).get(TreeViewModel.class);
+        mModel = new ViewModelProvider(this).get(TreeViewModel.class);
         TreeViewDialogArgs args = TreeViewDialogArgs.fromBundle(getArguments());
-        parentIndex = args.getParentIndex();
-        selectedFolderIds = args.getSelectedFolderIds();
-        selectedSizeIds = args.getSelectedSizeIds();
-        currentPositionId = args.getCurrentPositionId();
-        folderPathIds = args.getFolderPathIds();
-        categoryId = args.getCategoryId();
+        mParentIndex = args.getParentIndex();
+        mSelectedFolderIds = args.getSelectedFolderIds();
+        mSelectedSizeIds = args.getSelectedSizeIds();
+        mCurrentPositionId = args.getCurrentPositionId();
+        mFolderPathIds = args.getFolderPathIds();
+        mCategoryId = args.getCategoryId();
     }
 
     @NotNull
@@ -70,10 +72,10 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         observeCategoryTupleMutable();
         observeFolderTupleMutable();
 
-        if (savedInstanceState == null && currentPositionId != -1)
+        if (savedInstanceState == null && mCurrentPositionId != -1)
             expandingNode();
         else if (savedInstanceState != null)
-            treeView.restoreState(savedInstanceState.getString(TREE_VIEW_STATE));
+            mTreeView.restoreState(savedInstanceState.getString(TREE_VIEW_STATE));
         return alertDialog;
     }
 
@@ -87,85 +89,84 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     }
 
     private LayoutDialogTreeBinding getBinding() {
-        binding = LayoutDialogTreeBinding.inflate(getLayoutInflater());
-        String parentCategory = CommonUtil.getParentCategory(parentIndex);
-        binding.setParentCategory(parentCategory);
-        binding.layoutAddCategory.setOnClickListener(v ->
+        String parentCategory = CommonUtil.getParentCategory(mParentIndex);
+        mBinding.setParentCategory(parentCategory);
+        mBinding.layoutAddCategory.setOnClickListener(v ->
                 CommonUtil.navigate(getNavController(), R.id.treeViewDialog,
-                        TreeViewDialogDirections.toAddCategoryDialog(parentIndex)));
-        return binding;
+                        TreeViewDialogDirections.toAddCategoryDialog(mParentIndex)));
+        return mBinding;
     }
 
     private void setTreeView() {
-        model.getCategoryTuplesLive(parentIndex).observe(this, categoryTuples ->
-                model.getFolderTuplesLive(parentIndex).observe(this, folderTuples ->
-                        model.getFolderParentIdTuplesLive(selectedFolderIds).observe(this, folderParentIdTuples ->
-                                model.getSizeParentIdTuplesLive(selectedSizeIds).observe(this, sizeParentIdTuples -> {
-                                    LinkedList<TreeNode> categoryNodes = treeNodeProvider.makeNodes(categoryTuples, folderTuples);
+        mModel.getCategoryTuplesLive(mParentIndex).observe(this, categoryTuples ->
+                mModel.getFolderTuplesLive(mParentIndex).observe(this, folderTuples ->
+                        mModel.getFolderParentIdTuplesLive(mSelectedFolderIds).observe(this, folderParentIdTuples ->
+                                mModel.getSizeParentIdTuplesLive(mSelectedSizeIds).observe(this, sizeParentIdTuples -> {
+                                    LinkedList<TreeNode> categoryNodes = mTreeNodeProvider.makeNodes(categoryTuples, folderTuples);
 
-                                    treeNodeProvider.checkIsSelectedItemParent(folderParentIdTuples, sizeParentIdTuples);
-                                    treeNodeProvider.checkIsSelectedFolder(folderParentIdTuples);
-                                    treeNodeProvider.checkIsParentSelectedFolder(folderParentIdTuples);
-                                    treeNodeProvider.showCurrentPosition(currentPositionId);
+                                    mTreeNodeProvider.checkIsSelectedItemParent(folderParentIdTuples, sizeParentIdTuples);
+                                    mTreeNodeProvider.checkIsSelectedFolder(folderParentIdTuples);
+                                    mTreeNodeProvider.checkIsParentSelectedFolder(folderParentIdTuples);
+                                    mTreeNodeProvider.showCurrentPosition(mCurrentPositionId);
 
                                     AndroidTreeView treeView = getTreeView(categoryNodes);
-                                    binding.treeViewContainer.removeAllViews();
-                                    binding.treeViewContainer.addView(treeView.getView());
+                                    mBinding.treeViewContainer.removeAllViews();
+                                    mBinding.treeViewContainer.addView(treeView.getView());
                                 }))));
     }
 
     @NotNull
     private AndroidTreeView getTreeView(LinkedList<TreeNode> categoryNodes) {
-        nodeRoot = TreeNode.root().addChildren(categoryNodes);
-        treeView = new AndroidTreeView(requireContext(), nodeRoot);
-        treeView.setDefaultAnimation(false);
-        treeView.setUseAutoToggle(false);
-        treeView.setDefaultNodeClickListener(this);
-        return treeView;
+        mNodeRoot = TreeNode.root().addChildren(categoryNodes);
+        mTreeView = new AndroidTreeView(requireContext(), mNodeRoot);
+        mTreeView.setDefaultAnimation(false);
+        mTreeView.setUseAutoToggle(false);
+        mTreeView.setDefaultNodeClickListener(this);
+        return mTreeView;
     }
 
     private void observeCategoryInsertIdLive() {
-        model.getCategoryInsertIdLive().observe(getViewLifecycleOwner(), insertId -> {
+        mModel.getCategoryInsertIdLive().observe(getViewLifecycleOwner(), insertId -> {
             if (insertId != null) {
-                model.setCategoryInsertId(insertId);
-                model.getCategoryInsertIdLive().setValue(null);
+                mModel.setCategoryInsertId(insertId);
+                mModel.getCategoryInsertIdLive().setValue(null);
             }
         });
     }
 
     private void observeFolderInsertIdLive() {
-        model.getFolderInsertIdLive().observe(getViewLifecycleOwner(), insertId -> {
+        mModel.getFolderInsertIdLive().observe(getViewLifecycleOwner(), insertId -> {
             if (insertId != null) {
-                model.setFolderInsertId(insertId);
-                model.getCategoryInsertIdLive().setValue(null);
+                mModel.setFolderInsertId(insertId);
+                mModel.getCategoryInsertIdLive().setValue(null);
             }
         });
     }
 
     private void observeCategoryTupleMutable() {
-        model.getCategoryTupleMutable().observe(getViewLifecycleOwner(), categoryTuple -> {
+        mModel.getCategoryTupleMutable().observe(getViewLifecycleOwner(), categoryTuple -> {
             if (categoryTuple != null) {
-                TreeNode addedCategoryNode = new TreeNode(new CategoryValue(categoryTuple)).setViewHolder(treeNodeProvider.makeCategoryHolder());
-                treeView.addNode(nodeRoot, addedCategoryNode);
-                model.getCategoryTupleMutable().setValue(null);
+                TreeNode addedCategoryNode = new TreeNode(new CategoryValue(categoryTuple)).setViewHolder(mTreeNodeProvider.makeCategoryHolder());
+                mTreeView.addNode(mNodeRoot, addedCategoryNode);
+                mModel.getCategoryTupleMutable().setValue(null);
             }
         });
     }
 
     private void observeFolderTupleMutable() {
-        model.getFolderTupleMutable().observe(getViewLifecycleOwner(), folderTuple -> {
+        mModel.getFolderTupleMutable().observe(getViewLifecycleOwner(), folderTuple -> {
             if (folderTuple != null) {
-                TreeNode clickedNode = treeNodeProvider.getClickedNode(folderTuple);
+                TreeNode clickedNode = mTreeNodeProvider.getClickedNode(folderTuple);
                 int margin = getMargin(clickedNode);
 
                 TreeNode addedFolderNode = new TreeNode(new FolderValue(folderTuple, margin))
-                        .setViewHolder(treeNodeProvider.makeFolderHolder());
-                treeView.addNode(clickedNode, addedFolderNode);
+                        .setViewHolder(mTreeNodeProvider.makeFolderHolder());
+                mTreeView.addNode(clickedNode, addedFolderNode);
 
                 addContentsSize(clickedNode);
                 BaseTreeHolder<?> viewHolder = (BaseTreeHolder<?>) clickedNode.getViewHolder();
                 viewHolder.setIconClickable();
-                model.getFolderTupleMutable().setValue(null);
+                mModel.getFolderTupleMutable().setValue(null);
             }
         });
     }
@@ -173,7 +174,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     private int getMargin(TreeNode clickedNode) {
         if (clickedNode.getValue() instanceof FolderValue)
             return ((FolderValue) clickedNode.getValue()).getMargin() + getResources().getDimensionPixelSize(R.dimen._8sdp);
-        else return treeNodeProvider.getMargin();
+        else return mTreeNodeProvider.getMargin();
     }
 
     private void addContentsSize(TreeNode clickedNode) {
@@ -189,24 +190,24 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     }
 
     private void expandCategoryNode() {
-        TreeCategoryHolder[] categoryHolders = treeNodeProvider.getCategoryHolders();
+        TreeCategoryHolder[] categoryHolders = mTreeNodeProvider.getCategoryHolders();
         Arrays.stream(categoryHolders)
-                .filter(categoryHolder -> categoryHolder.getId() == categoryId)
-                .forEach(categoryHolder -> treeView.expandNode(categoryHolder.getNode()));
+                .filter(categoryHolder -> categoryHolder.getId() == mCategoryId)
+                .forEach(categoryHolder -> mTreeView.expandNode(categoryHolder.getNode()));
     }
 
     public void expandingFolderNode() {
-        Arrays.stream(treeNodeProvider.getFolderHolders())
+        Arrays.stream(mTreeNodeProvider.getFolderHolders())
                 .filter(folderHolder ->
-                        Arrays.stream(folderPathIds)
+                        Arrays.stream(mFolderPathIds)
                                 .anyMatch(folderId -> folderHolder.getId() == folderId))
-                .forEach(folderHolder -> treeView.expandNode(folderHolder.getNode()));
+                .forEach(folderHolder -> mTreeView.expandNode(folderHolder.getNode()));
     }
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(TREE_VIEW_STATE, treeView.getSaveState());
+        outState.putString(TREE_VIEW_STATE, mTreeView.getSaveState());
     }
 
     @Override
@@ -215,7 +216,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         if (viewHolder.isClickable()) {
             TreeViewDialogDirections.ToMoveFolderAndSizeDialog action =
                     TreeViewDialogDirections.toMoveFolderAndSizeDialog(
-                            selectedFolderIds, selectedSizeIds, viewHolder.getId());
+                            mSelectedFolderIds, mSelectedSizeIds, viewHolder.getId());
             CommonUtil.navigate(getNavController(), R.id.treeViewDialog, action);
         }
     }
@@ -233,6 +234,6 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        mBinding = null;
     }
 }

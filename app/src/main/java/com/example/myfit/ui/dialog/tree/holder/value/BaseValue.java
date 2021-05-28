@@ -3,21 +3,21 @@ package com.example.myfit.ui.dialog.tree.holder.value;
 import com.example.myfit.data.model.tuple.BaseTuple;
 
 public class BaseValue<T extends BaseTuple> {
-    private final T tuple;
+    private final T mTuple;
 
     public BaseValue(T tuple) {
-        this.tuple = tuple;
+        this.mTuple = tuple;
     }
 
     public T getTuple() {
-        return tuple;
+        return mTuple;
     }
 
     public long getTupleId() {
-        return tuple.getId();
+        return mTuple.getId();
     }
 
     public int getParentIndex() {
-        return tuple.getParentIndex();
+        return mTuple.getParentIndex();
     }
 }

@@ -20,59 +20,59 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
-    private final List<FolderTuple> folderTuples;
-    private ItemTreeFolderBinding binding;
+    private final List<FolderTuple> mFolderTuples;
+    private ItemTreeFolderBinding mBinding;
 
     public TreeFolderHolder(Context context,
                             List<FolderTuple> folderTuples, NavController navController) {
         super(context, navController);
-        this.folderTuples = folderTuples;
+        this.mFolderTuples = folderTuples;
     }
 
     @Override
     protected void bind(FolderValue value) {
-        binding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        binding.setFolderTuple(value.getTuple());
+        mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
+        mBinding.setFolderTuple(value.getTuple());
     }
 
     @Override
     protected View getBindingRoot() {
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
     protected LinearLayoutCompat getFolderIconLayout() {
-        return binding.layoutFolderIcon;
+        return mBinding.layoutFolderIcon;
     }
 
     @Override
     protected TextView getNameTextView() {
-        return binding.tvFolderName;
+        return mBinding.tvFolderName;
     }
 
     @Override
     protected AppCompatImageView getArrowIcon() {
-        return binding.iconArrow;
+        return mBinding.iconArrow;
     }
 
     @Override
     protected AppCompatImageView getAddIcon() {
-        return binding.iconAdd;
+        return mBinding.iconAdd;
     }
 
     @Override
     protected AppCompatImageView getFolderIcon() {
-        return binding.iconFolder;
+        return mBinding.iconFolder;
     }
 
     @Override
     protected TextView getCurrentPosition() {
-        return binding.tvCurrentPosition;
+        return mBinding.tvCurrentPosition;
     }
 
     @Override
     public TextView getContentsSize() {
-        return binding.tvContentsSize;
+        return mBinding.tvContentsSize;
     }
 
     @Override//TODO super 콜 후 다시 뷰 리턴 되는지 확인
@@ -80,17 +80,17 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
         super.createNodeView(node, value);
         setMargin(value.getMargin());
         addChildNode(value);
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void setMargin(int margin) {
-        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) binding.iconArrow.getLayoutParams();
+        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.iconArrow.getLayoutParams();
         params.leftMargin = margin;
     }
 
     private void addChildNode(@NotNull FolderValue value) {
         int plusMargin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
-        folderTuples.stream()
+        mFolderTuples.stream()
                 .filter(folderTuple -> folderTuple.getParentId() == value.getTupleId())
                 .forEach(folderTuple -> {
                     TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + plusMargin))

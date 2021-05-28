@@ -13,7 +13,7 @@ import com.example.myfit.databinding.ItemTreeCategoryBinding;
 import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
 
 public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
-    private ItemTreeCategoryBinding binding;
+    private ItemTreeCategoryBinding mBinding;
 
     public TreeCategoryHolder(Context context, NavController navController) {
         super(context, navController);
@@ -21,47 +21,47 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
 
     @Override
     protected void bind(CategoryValue value) {
-        binding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
-        binding.setCategoryTuple(value.getTuple());
+        mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
+        mBinding.setCategoryTuple(value.getTuple());
     }
 
     @Override
     protected LinearLayoutCompat getFolderIconLayout() {
-        return binding.layoutFolderIcon;
+        return mBinding.layoutFolderIcon;
     }
 
     @Override
     protected TextView getNameTextView() {
-        return binding.tvCategoryName;
+        return mBinding.tvCategoryName;
     }
 
     @Override
     protected AppCompatImageView getArrowIcon() {
-        return binding.iconArrow;
+        return mBinding.iconArrow;
     }
 
     @Override
     protected AppCompatImageView getAddIcon() {
-        return binding.iconAdd;
+        return mBinding.iconAdd;
     }
 
     @Override
     protected AppCompatImageView getFolderIcon() {
-        return binding.iconFolder;
+        return mBinding.iconFolder;
     }
 
     @Override
     protected TextView getCurrentPosition() {
-        return binding.tvCurrentPosition;
+        return mBinding.tvCurrentPosition;
     }
 
     @Override
     public TextView getContentsSize() {
-        return binding.tvContentsSize;
+        return mBinding.tvContentsSize;
     }
 
     @Override
     protected View getBindingRoot() {
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 }

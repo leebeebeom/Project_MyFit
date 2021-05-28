@@ -25,73 +25,73 @@ public class TreeViewModel extends ViewModel {
     private static final String CATEGORY_INSERT_ID = "category insert id";
     private static final String FOLDER_INSERT_ID = "folder insert id";
 
-    private final CategoryRepository categoryRepository;
-    private final FolderRepository folderRepository;
-    private final SizeRepository sizeRepository;
-    private final SavedStateHandle savedStateHandle;
-    private final MediatorLiveData<CategoryTuple> categoryTupleMutable = new MediatorLiveData<>();
-    private final MediatorLiveData<FolderTuple> folderTupleMutable = new MediatorLiveData<>();
+    private final CategoryRepository mCategoryRepository;
+    private final FolderRepository mFolderRepository;
+    private final SizeRepository mSizeRepository;
+    private final SavedStateHandle mSavedStateHandle;
+    private final MediatorLiveData<CategoryTuple> mCategoryTupleMutable = new MediatorLiveData<>();
+    private final MediatorLiveData<FolderTuple> mFolderTupleMutable = new MediatorLiveData<>();
 
     @Inject
     public TreeViewModel(SavedStateHandle savedStateHandle, CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
-        this.savedStateHandle = savedStateHandle;
-        this.categoryRepository = categoryRepository;
-        this.folderRepository = folderRepository;
-        this.sizeRepository = sizeRepository;
+        this.mSavedStateHandle = savedStateHandle;
+        this.mCategoryRepository = categoryRepository;
+        this.mFolderRepository = folderRepository;
+        this.mSizeRepository = sizeRepository;
 
         categoryTupleMutableAddSource();
         folderTupleMutableAddSource();
     }
 
     private void categoryTupleMutableAddSource() {
-        LiveData<CategoryTuple> categoryTupleLive = Transformations.switchMap(savedStateHandle.getLiveData(CATEGORY_INSERT_ID),
-                insertId -> categoryRepository.getTupleById((Long) insertId));
-        categoryTupleMutable.addSource(categoryTupleLive, categoryTupleMutable::setValue);
+        LiveData<CategoryTuple> categoryTupleLive = Transformations.switchMap(mSavedStateHandle.getLiveData(CATEGORY_INSERT_ID),
+                insertId -> mCategoryRepository.getTupleById((Long) insertId));
+        mCategoryTupleMutable.addSource(categoryTupleLive, mCategoryTupleMutable::setValue);
     }
 
     private void folderTupleMutableAddSource() {
-        LiveData<FolderTuple> folderTupleLive = Transformations.switchMap(savedStateHandle.getLiveData(FOLDER_INSERT_ID),
-                insertId -> folderRepository.getTupleById((Long) insertId));
-        folderTupleMutable.addSource(folderTupleLive, folderTupleMutable::setValue);
+        LiveData<FolderTuple> folderTupleLive = Transformations.switchMap(mSavedStateHandle.getLiveData(FOLDER_INSERT_ID),
+                insertId -> mFolderRepository.getTupleById((Long) insertId));
+        mFolderTupleMutable.addSource(folderTupleLive, mFolderTupleMutable::setValue);
     }
 
     public LiveData<List<CategoryTuple>> getCategoryTuplesLive(int parentIndex) {
-        return categoryRepository.getTuplesByParentIndex(parentIndex);
+        return mCategoryRepository.getTuplesByParentIndex(parentIndex);
     }
 
     public LiveData<List<FolderTuple>> getFolderTuplesLive(int parentIndex) {
-        return folderRepository.getTuplesByParentIndex(parentIndex);
+        return mFolderRepository.getTuplesByParentIndex(parentIndex);
     }
 
     public LiveData<ParentIdTuple[]> getFolderParentIdTuplesLive(long[] selectedFolderIds) {
-        return folderRepository.getParentIdTuplesByIds(selectedFolderIds);
+        return mFolderRepository.getParentIdTuplesByIds(selectedFolderIds);
     }
 
     public LiveData<ParentIdTuple[]> getSizeParentIdTuplesLive(long[] selectedSizeIds) {
-        return sizeRepository.getParentIdTuplesByIds(selectedSizeIds);
+        return mSizeRepository.getParentIdTuplesByIds(selectedSizeIds);
     }
 
     public MutableLiveData<Long> getCategoryInsertIdLive() {
-        return categoryRepository.getInsertIdLive();
+        return mCategoryRepository.getInsertIdLive();
     }
 
     public MutableLiveData<Long> getFolderInsertIdLive() {
-        return folderRepository.getInsertIdLive();
+        return mFolderRepository.getInsertIdLive();
     }
 
     public MutableLiveData<CategoryTuple> getCategoryTupleMutable() {
-        return categoryTupleMutable;
+        return mCategoryTupleMutable;
     }
 
     public void setCategoryInsertId(long id) {
-        savedStateHandle.set(CATEGORY_INSERT_ID, id);
+        mSavedStateHandle.set(CATEGORY_INSERT_ID, id);
     }
 
     public MutableLiveData<FolderTuple> getFolderTupleMutable() {
-        return folderTupleMutable;
+        return mFolderTupleMutable;
     }
 
     public void setFolderInsertId(long id) {
-        savedStateHandle.set(FOLDER_INSERT_ID, id);
+        mSavedStateHandle.set(FOLDER_INSERT_ID, id);
     }
 }
