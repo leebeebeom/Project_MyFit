@@ -15,17 +15,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     @Inject
-    FolderRepository folderRepository;
+    FolderRepository mFolderRepository;
     @Inject
-    SizeRepository sizeRepository;
-    private long[] selectedFolderIds;
-    private long[] selectedSizeIds;
+    SizeRepository mSizeRepository;
+    private long[] mSelectedFolderIds;
+    private long[] mSelectedSizeIds;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedFolderIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
-        selectedSizeIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
+        mSelectedFolderIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedFolderIds();
+        mSelectedSizeIds = DeleteFolderAndSizesDialogArgs.fromBundle(getArguments()).getSelectedSizeIds();
     }
 
     @Override
@@ -35,12 +35,12 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
 
     @Override
     protected void task() {
-        folderRepository.deleteOrRestore(selectedFolderIds, true);
-        sizeRepository.deleteOrRestore(selectedSizeIds, true);
+        mFolderRepository.deleteOrRestore(mSelectedFolderIds, true);
+        mSizeRepository.deleteOrRestore(mSelectedSizeIds, true);
     }
 
     @Override
     protected String getSelectedItemsSize() {
-        return String.valueOf(selectedFolderIds.length + selectedSizeIds.length);
+        return String.valueOf(mSelectedFolderIds.length + mSelectedSizeIds.length);
     }
 }

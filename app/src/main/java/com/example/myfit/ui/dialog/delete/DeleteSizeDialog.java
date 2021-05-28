@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DeleteSizeDialog extends BaseDialog {
     @Inject
-    SizeRepository sizeRepository;
+    SizeRepository mSizeRepository;
 
     @Override
     protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
@@ -29,7 +29,7 @@ public class DeleteSizeDialog extends BaseDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             long id = DeleteSizeDialogArgs.fromBundle(getArguments()).getId();
-            sizeRepository.delete(id);
+            mSizeRepository.delete(id);
             getNavController().popBackStack(R.id.sizeFragment, true);
         };
     }

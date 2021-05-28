@@ -14,13 +14,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DeleteCategoriesDialog extends BaseDeleteDialog {
     @Inject
-    CategoryRepository categoryRepository;
-    private long[] selectedItemIds;
+    CategoryRepository mCategoryRepository;
+    private long[] mSelectedItemIds;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedItemIds = DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
+        mSelectedItemIds = DeleteCategoriesDialogArgs.fromBundle(getArguments()).getSelectedItemIds();
     }
 
     @Override
@@ -30,11 +30,11 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
 
     @Override
     protected void task() {
-        categoryRepository.deleteOrRestore(selectedItemIds, true);
+        mCategoryRepository.deleteOrRestore(mSelectedItemIds, true);
     }
 
     @Override
     protected String getSelectedItemsSize() {
-        return String.valueOf(selectedItemIds.length);
+        return String.valueOf(mSelectedItemIds.length);
     }
 }
