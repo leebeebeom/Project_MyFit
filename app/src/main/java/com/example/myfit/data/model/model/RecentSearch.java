@@ -1,4 +1,4 @@
-package com.example.myfit.data.model;
+package com.example.myfit.data.model.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

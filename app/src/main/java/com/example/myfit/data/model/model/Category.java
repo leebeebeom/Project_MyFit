@@ -1,4 +1,4 @@
-package com.example.myfit.data.model.category;
+package com.example.myfit.data.model.model;
 
 import androidx.room.Entity;
 

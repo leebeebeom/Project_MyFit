@@ -1,4 +1,4 @@
-package com.example.myfit.data.model.size;
+package com.example.myfit.data.model.model.size;
 
 import java.util.Objects;
 

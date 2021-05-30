@@ -1,9 +1,8 @@
-package com.example.myfit.data.model.folder;
+package com.example.myfit.data.model.model;
 
 import androidx.room.Entity;
 
 import com.example.myfit.data.model.BaseInfo;
-import com.example.myfit.data.model.category.Category;
 
 import java.util.Objects;
 
