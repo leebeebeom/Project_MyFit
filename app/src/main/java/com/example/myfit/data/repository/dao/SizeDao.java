@@ -35,7 +35,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         });
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
     protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
 
     private void orderSizeTuples(Sort sort, List<SizeTuple> tuples) {
@@ -53,7 +53,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
-            "WHERE isDeleted = 1 AND isParentDeleted = 0 ORDER BY deletedTime DESC")
+            "WHERE deleted = 1 AND parentDeleted = 0 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
     @NotNull
@@ -84,8 +84,8 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
-            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name || brand ORDER BY name")
-    protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean isDeleted);
+            "WHERE deleted = :deleted AND parentDeleted = 0 AND name || brand ORDER BY name")
+    protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean deleted);
 
     //to sizeFragment(disposable)
     public List<String> getBrands() {
@@ -94,7 +94,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         return brands;
     }
 
-    @Query("SELECT brand FROM Size WHERE isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT brand FROM Size WHERE deleted = 0 AND parentDeleted = 0")
     protected abstract List<String> getBrands2();
 
     //to sizeFragment
@@ -111,8 +111,11 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     @Query("SELECT max(orderNumber) FROM Size")
     protected abstract int getLargestOrder();
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void update(Size size);
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
+    public abstract void update(SizeTuple sizeTuple);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
+    public abstract void update(List<SizeTuple> sizeTuples);
 
     @Transaction
     public void delete(long id) {
@@ -122,7 +125,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         updateDeletedTuple(deletedTuple);
     }
 
-    @Query("SELECT id, isDeleted, deletedTime FROM Size WHERE id = :id")
+    @Query("SELECT id, deleted, deletedTime FROM Size WHERE id = :id")
     protected abstract DeletedTuple getDeletedTuple(long id);
 
     @Insert
@@ -145,13 +148,13 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Transaction
     //from selectedItemDelete, restore dialog
-    public void deleteOrRestore(long[] ids, boolean isDeleted) {
+    public void deleteOrRestore(long[] ids, boolean deleted) {
         DeletedTuple[] sizeDeletedTuples = getDeletedTuples(ids);
-        super.setDeletedTuples(sizeDeletedTuples, isDeleted);
+        super.setDeletedTuples(sizeDeletedTuples, deleted);
         this.updateDeletedTuples(sizeDeletedTuples);
     }
 
-    @Query("SELECT id, isDeleted, deletedTime FROM Size WHERE id IN (:ids)")
+    @Query("SELECT id, deleted, deletedTime FROM Size WHERE id IN (:ids)")
     protected abstract DeletedTuple[] getDeletedTuples(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
