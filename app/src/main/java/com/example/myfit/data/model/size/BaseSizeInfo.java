@@ -83,8 +83,7 @@ public class BaseSizeInfo {
         if (this == o) return true;
         if (!(o instanceof BaseSizeInfo)) return false;
         BaseSizeInfo that = (BaseSizeInfo) o;
-        return isFavorite() == that.isFavorite() &&
-                getCreatedTime().equals(that.getCreatedTime()) &&
+        return getCreatedTime().equals(that.getCreatedTime()) &&
                 Objects.equals(getModifiedTime(), that.getModifiedTime()) &&
                 Objects.equals(getImageUri(), that.getImageUri()) &&
                 getBrand().equals(that.getBrand()) &&
@@ -96,6 +95,6 @@ public class BaseSizeInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedTime(), getModifiedTime(), getImageUri(), getBrand(), getName(), getSize(), getLink(), getMemo(), isFavorite());
+        return Objects.hash(getCreatedTime(), getModifiedTime(), getImageUri(), getBrand(), getName(), getSize(), getLink(), getMemo());
     }
 }
