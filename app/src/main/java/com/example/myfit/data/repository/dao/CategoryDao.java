@@ -1,7 +1,6 @@
 package com.example.myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -23,32 +22,20 @@ import java.util.List;
 public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     //to main
-    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(Sort sort) {
+    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(tuplesLive, false);
 
-        return this.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
+        return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 0")
     protected abstract LiveData<List<CategoryTuple>> getTuplesLive();
 
-    @NotNull
-    private LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive(LiveData<List<CategoryTuple>> tuplesLive,
-                                                                        LiveData<int[]> contentsSizesLive,
-                                                                        Sort sort) {
-        return Transformations.map(contentsSizesLive, contentsSizes -> {
-            List<CategoryTuple> tuples = tuplesLive.getValue();
-            super.setContentsSize(tuples, contentsSizes);
-            super.orderTuples(sort, tuples);
-            return super.getClassifiedTuplesByParentIndex(tuples);
-        });
-    }
-
     //to recycleBin
     public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(deletedTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
@@ -59,7 +46,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to recycleBin search
     public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
         LiveData<List<CategoryTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(deletedSearchTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
