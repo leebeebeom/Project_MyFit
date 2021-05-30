@@ -32,10 +32,10 @@ import java.util.Locale;
 @Dao
 public abstract class BaseDao<T extends BaseTuple> {
     @NotNull
-    protected LiveData<int[]> getContentsSizesLive(LiveData<List<T>> tuplesLive, boolean isParentDeleted) {
+    protected LiveData<int[]> getContentsSizesLive(LiveData<List<T>> tuplesLive, boolean parentDeleted) {
         return Transformations.switchMap(tuplesLive, tuples -> {
             long[] itemIds = getItemIds(tuples);
-            return getContentsSizesLiveByParentIds(itemIds, isParentDeleted);
+            return getContentsSizesLiveByParentIds(itemIds, parentDeleted);
         });
     }
 
@@ -45,9 +45,9 @@ public abstract class BaseDao<T extends BaseTuple> {
                 .toArray();
     }
 
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted = 0 AND isParentDeleted = :isParentDeleted))")
-    protected abstract LiveData<int[]> getContentsSizesLiveByParentIds(long[] parentIds, boolean isParentDeleted);
+    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND deleted = 0 AND parentDeleted = :parentDeleted) + " +
+            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND deleted = 0 AND parentDeleted = :parentDeleted))")
+    protected abstract LiveData<int[]> getContentsSizesLiveByParentIds(long[] parentIds, boolean parentDeleted);
 
 
     @NotNull
@@ -97,11 +97,11 @@ public abstract class BaseDao<T extends BaseTuple> {
         Log.e("에러", "Exception " + e.getMessage(), e);
     }
 
-    protected void setDeletedTuples(DeletedTuple[] deletedTuples, boolean isDeleted) {
+    protected void setDeletedTuples(DeletedTuple[] deletedTuples, boolean deleted) {
         Arrays.stream(deletedTuples)
-                .forEach(deletedTuple -> deletedTuple.setDeleted(isDeleted));
+                .forEach(deletedTuple -> deletedTuple.setDeleted(deleted));
 
-        if (isDeleted) setDeletedTime(deletedTuples);
+        if (deleted) setDeletedTime(deletedTuples);
         else clearDeletedTime(deletedTuples);
     }
 
@@ -120,7 +120,7 @@ public abstract class BaseDao<T extends BaseTuple> {
         Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(0));
     }
 
-    protected void setChildrenParentDeleted(long[] parentIds, boolean isDeleted) {
+    protected void setChildrenParentDeleted(long[] parentIds, boolean deleted) {
         LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
         addAllChildFolderParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
 
@@ -128,8 +128,8 @@ public abstract class BaseDao<T extends BaseTuple> {
         long[] allFolderIds = getParentDeletedTupleIds(allFolderParentDeletedTuples);
         addAllChildSizeParentDeletedTuples(allFolderIds, allSizeParentDeletedTuples);
 
-        setParentDeletedTuples(allFolderParentDeletedTuples, isDeleted);
-        setParentDeletedTuples(allSizeParentDeletedTuples, isDeleted);
+        setParentDeletedTuples(allFolderParentDeletedTuples, deleted);
+        setParentDeletedTuples(allSizeParentDeletedTuples, deleted);
         updateFolderParentDeletedTuples(allFolderParentDeletedTuples);
         updateSizeParentDeletedTuples(allSizeParentDeletedTuples);
     }
@@ -149,18 +149,18 @@ public abstract class BaseDao<T extends BaseTuple> {
                 .mapToLong(ParentDeletedTuple::getId).toArray();
     }
 
-    @Query("SELECT id, isDeleted ,isParentDeleted FROM Folder WHERE parentId IN (:parentIds)")
+    @Query("SELECT id, deleted ,parentDeleted FROM Folder WHERE parentId IN (:parentIds)")
     protected abstract List<ParentDeletedTuple> getFolderParentDeletedTuplesByParentIds(long[] parentIds);
 
     private void addAllChildSizeParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
         allParentDeletedTuples.addAll(getSizeParentDeletedTuplesByParentIds(parentIds));
     }
 
-    @Query("SELECT id, isDeleted, isParentDeleted FROM Size WHERE parentId IN(:parentIds)")
+    @Query("SELECT id, deleted, parentDeleted FROM Size WHERE parentId IN(:parentIds)")
     protected abstract List<ParentDeletedTuple> getSizeParentDeletedTuplesByParentIds(long[] parentIds);
 
-    private void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean isParentDeleted) {
-        parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(isParentDeleted));
+    private void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean parentDeleted) {
+        parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(parentDeleted));
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
@@ -169,11 +169,11 @@ public abstract class BaseDao<T extends BaseTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateSizeParentDeletedTuples(List<ParentDeletedTuple> parentDeletedTuples);
 
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND isDeleted = 0 AND isParentDeleted = 0) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND isDeleted =0 AND isParentDeleted = 0))")
+    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND deleted = 0 AND parentDeleted = 0) + " +
+            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND deleted =0 AND parentDeleted = 0))")
     protected abstract int[] getContentsSizesByParentIds(long[] parentIds);
 
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId = :parentId AND isDeleted =0 AND isParentDeleted = 0))")
+    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0) + " +
+            "(SELECT COUNT(parentId) FROM Size WHERE parentId = :parentId AND deleted =0 AND parentDeleted = 0))")
     protected abstract int getContentsSizeByParentId(long parentId);
 }

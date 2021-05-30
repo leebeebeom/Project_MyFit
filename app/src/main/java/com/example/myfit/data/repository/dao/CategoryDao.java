@@ -30,7 +30,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return this.getClassifiedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 0")
     protected abstract LiveData<List<CategoryTuple>> getTuplesLive();
 
     @NotNull
@@ -53,7 +53,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<CategoryTuple>> getDeletedTuplesLive();
 
     //to recycleBin search
@@ -64,7 +64,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE isDeleted = 1 AND name ORDER BY name")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 1 AND name ORDER BY name")
     protected abstract LiveData<List<CategoryTuple>> getDeletedSearchTuplesLive2();
 
     @Transaction
@@ -78,7 +78,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return tuples;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND isDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND deleted = 0")
     protected abstract List<CategoryTuple> getTuplesByParentIndex(int parentIndex);
 
     @Transaction
@@ -90,7 +90,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE id = :id AND isDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE id = :id AND deleted = 0")
     protected abstract CategoryTuple getTupleById2(long id);
 
     @Transaction
@@ -143,21 +143,21 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids, boolean isDeleted) {
+    public void deleteOrRestore(long[] ids, boolean deleted) {
         DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
-        super.setDeletedTuples(deletedTuples, isDeleted);
+        super.setDeletedTuples(deletedTuples, deleted);
         this.update(deletedTuples);
 
-        this.setChildrenParentDeleted(ids, isDeleted);
+        this.setChildrenParentDeleted(ids, deleted);
     }
 
-    @Query("SELECT id, isDeleted, deletedTime FROM Category WHERE id IN (:ids)")
+    @Query("SELECT id, deleted, deletedTime FROM Category WHERE id IN (:ids)")
     protected abstract DeletedTuple[] getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void update(DeletedTuple[] deletedTuples);
 
     //from addCategory dialog
-    @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND isDeleted = 0)")
+    @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND deleted = 0)")
     public abstract boolean isExistingName(String name, int parentIndex);
 }
