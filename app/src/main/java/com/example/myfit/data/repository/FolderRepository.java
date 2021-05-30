@@ -18,56 +18,56 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
-public class FolderRepository extends BaseRepository {
-    private final FolderDao folderDao;
-    private final SharedPreferences listSortPreference;
-    private final IntegerSharedPreferenceLiveData listSortPreferenceLive;
-    private MutableLiveData<Long> insertIdLive;
-    private MutableLiveData<Boolean> isExistingNameLive;
-    private LiveData<List<FolderTuple>> tuplesLiveByParentId;
-    private LiveData<List<List<FolderTuple>>> deletedClassifiedTuplesLive, searchTuplesLive, deletedSearchTuplesLive;
-    private long parentId;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+import static com.example.myfit.di.DataModule.FOLDER_TOGGLE;
+
+@ViewModelScoped
+public class FolderRepository extends BaseRepository<FolderTuple> {
+    private final FolderDao mFolderDao;
+    private final SharedPreferences mListSortPreference;
+    private final IntegerSharedPreferenceLiveData mListSortPreferenceLive;
+    private final SharedPreferences mFolderTogglePreference;
+    private MutableLiveData<Long> mInsertIdLive;
+    private MutableLiveData<Boolean> mExistingNameLive;
+    private LiveData<List<List<FolderTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
     public FolderRepository(FolderDao folderDao,
                             @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
-                            @Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive) {
-        this.folderDao = folderDao;
-        this.listSortPreference = listSortPreference;
-        this.listSortPreferenceLive = listSortPreferenceLive;
+                            @Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive,
+                            @Qualifiers.FolderTogglePreference SharedPreferences folderTogglePreference) {
+        this.mFolderDao = folderDao;
+        this.mListSortPreference = listSortPreference;
+        this.mListSortPreferenceLive = listSortPreferenceLive;
+        this.mFolderTogglePreference = folderTogglePreference;
     }
 
     //to list
     public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId) {
-        if (this.parentId != parentId) {
-            this.parentId = parentId;
-            tuplesLiveByParentId = Transformations.switchMap(listSortPreferenceLive, sort -> folderDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
-        }
-        return tuplesLiveByParentId;
+        return Transformations.switchMap(mListSortPreferenceLive, sort -> mFolderDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
     }
 
     //to recycleBin
     public LiveData<List<List<FolderTuple>>> getDeletedClassifiedTuplesLive() {
-        if (deletedClassifiedTuplesLive == null)
-            deletedClassifiedTuplesLive = folderDao.getDeletedClassifiedTuplesLive();
-        return deletedClassifiedTuplesLive;
+        if (mDeletedClassifiedTuplesLive == null)
+            mDeletedClassifiedTuplesLive = mFolderDao.getDeletedClassifiedTuplesLive();
+        return mDeletedClassifiedTuplesLive;
     }
 
     //to searchView
     public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive() {
-        if (searchTuplesLive == null)
-            searchTuplesLive = folderDao.getSearchTuplesListLive();
-        return searchTuplesLive;
+        if (mSearchTuplesLive == null)
+            mSearchTuplesLive = mFolderDao.getSearchTuplesListLive();
+        return mSearchTuplesLive;
     }
 
     //to recycleBin search
     public LiveData<List<List<FolderTuple>>> getDeletedSearchFolderTuplesListLive() {
-        if (deletedSearchTuplesLive == null)
-            deletedSearchTuplesLive = folderDao.getDeletedSearchTuplesListLive();
-        return deletedSearchTuplesLive;
+        if (mDeletedSearchTuplesLive == null)
+            mDeletedSearchTuplesLive = mFolderDao.getDeletedSearchTuplesListLive();
+        return mDeletedSearchTuplesLive;
     }
 
     //to treeView(disposable)
@@ -75,17 +75,26 @@ public class FolderRepository extends BaseRepository {
         MutableLiveData<List<FolderTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
             Sort sort = getSort();
-            List<FolderTuple> folderTuples = folderDao.getTuplesByParentIndex(parentIndex, sort);
+            List<FolderTuple> folderTuples = mFolderDao.getTuplesByParentIndex(parentIndex, sort);
             tuplesLive.postValue(folderTuples);
         }).start();
         return tuplesLive;
+    }
+
+    public LiveData<List<FolderTuple>> getFolderPathTuples(long id) {
+        MutableLiveData<List<FolderTuple>> folderPathTuplesLive = new MutableLiveData<>();
+        new Thread(() -> {
+            LinkedList<FolderTuple> folderPathIds = mFolderDao.getFolderPathTuples(id);
+            folderPathTuplesLive.postValue(folderPathIds);
+        }).start();
+        return folderPathTuplesLive;
     }
 
     //to treeView(disposable)
     public LiveData<FolderTuple> getTupleById(long id) {
         MutableLiveData<FolderTuple> folderTupleLive = new MutableLiveData<>();
         new Thread(() -> {
-            FolderTuple folderTuple = folderDao.getTupleById(id);
+            FolderTuple folderTuple = mFolderDao.getTupleById(id);
             folderTupleLive.postValue(folderTuple);
         }).start();
         return folderTupleLive;
@@ -93,70 +102,75 @@ public class FolderRepository extends BaseRepository {
 
     //to list
     public LiveData<Folder> getSingleLiveById(long id) {
-        return folderDao.getSingleLiveById(id);
+        return mFolderDao.getSingleLiveById(id);
+    }
+
+    public MutableLiveData<Long> getInsertIdLive() {
+        mInsertIdLive = new MutableLiveData<>();
+        return mInsertIdLive;
     }
 
     //from addFolder dialog
     public void insert(String name, long parentId, int parentIndex) {
         new Thread(() -> {
-            long insertId = folderDao.insert(name, parentId, parentIndex);
-            if (insertIdLive != null) insertIdLive.postValue(insertId);
+            long insertId = mFolderDao.insert(name, parentId, parentIndex);
+            if (mInsertIdLive != null) mInsertIdLive.postValue(insertId);
         }).start();
-    }
-
-    public MutableLiveData<Long> getInsertIdLive() {
-        insertIdLive = new MutableLiveData<>();
-        return insertIdLive;
     }
 
     //from editFolderName dialog
     public void update(long id, String name) {
-        new Thread(() -> folderDao.update(id, name)).start();
+        new Thread(() -> mFolderDao.update(id, name)).start();
     }
 
+    @Override
     //from adapter drag drop
-    public void updateFolders(LinkedList<FolderTuple> folderTuple) {
-        new Thread(() -> folderDao.update(folderTuple)).start();
+    public void updateTuples(List<FolderTuple> folderTuples) {
+        new Thread(() -> mFolderDao.update(folderTuples)).start();
     }
 
     //from move dialog
     public void move(long targetId, long[] ids) {
-        new Thread(() -> folderDao.move(targetId, ids)).start();
+        new Thread(() -> mFolderDao.move(targetId, ids)).start();
     }
 
     @Override
     //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
-        new Thread(() -> folderDao.deleteOrRestore(ids, isDeleted)).start();
+        new Thread(() -> mFolderDao.deleteOrRestore(ids, isDeleted)).start();
     }
 
     @Override
     protected SharedPreferences getPreference() {
-        return listSortPreference;
+        return mListSortPreference;
+    }
+
+    public MutableLiveData<Boolean> getExistingNameLive() {
+        mExistingNameLive = new MutableLiveData<>();
+        return mExistingNameLive;
     }
 
     //from addFolder dialog
     public void isExistingName(String name, long parentId) {
         new Thread(() -> {
-            boolean isExistName = folderDao.isExistingName(name, parentId);
-            if (isExistingNameLive != null) isExistingNameLive.postValue(isExistName);
+            boolean isExistName = mFolderDao.isExistingName(name, parentId);
+            if (mExistingNameLive != null) mExistingNameLive.postValue(isExistName);
         }).start();
-    }
-
-    public MutableLiveData<Boolean> getIsExistingNameLive() {
-        if (isExistingNameLive == null)
-            isExistingNameLive = new MutableLiveData<>();
-        return isExistingNameLive;
     }
 
     //to treeView
     public LiveData<ParentIdTuple[]> getParentIdTuplesByIds(long[] ids) {
         MutableLiveData<ParentIdTuple[]> parentIdTuplesLive = new MutableLiveData<>();
         new Thread(() -> {
-            ParentIdTuple[] parentIdTuples = folderDao.getParentIdTuplesByIds(ids);
+            ParentIdTuple[] parentIdTuples = mFolderDao.getParentIdTuplesByIds(ids);
             parentIdTuplesLive.postValue(parentIdTuples);
         });
         return parentIdTuplesLive;
+    }
+
+    public void folderToggleChange() {
+        boolean folderToggle = mFolderTogglePreference.getBoolean(FOLDER_TOGGLE, false);
+        mFolderTogglePreference.edit().putBoolean(FOLDER_TOGGLE, !folderToggle).apply();
     }
 }
 
