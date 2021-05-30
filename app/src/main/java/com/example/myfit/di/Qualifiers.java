@@ -28,29 +28,61 @@ public class Qualifiers {
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface CategoryVHListener {
+    public @interface ViewTypePreference {
     }
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface MainViewPagerAdapter {
+    public @interface ViewTypePreferenceLive {
     }
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface MainActionModeListener {
+    public @interface FolderTogglePreference {
     }
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface MainAutoScrollListener {
+    public @interface FolderTogglePreferenceLive {
     }
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface ColorControl{}
+    public @interface ColorControl {
+    }
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface ColorPrimary{}
+    public @interface ColorPrimary {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface FolderItemTouchHelper {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface SizeItemTouchHelperList {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface SizeItemTouchHelperGrid {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Padding8dp {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Padding60dp {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface NavigationTextViewSize {
+    }
 }
