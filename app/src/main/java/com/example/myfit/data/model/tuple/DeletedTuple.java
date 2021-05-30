@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class DeletedTuple {
     private long id;
-    private boolean isDeleted;
+    private boolean deleted;
     private long deletedTime;
 
     public void setId(long id) {
@@ -16,11 +16,11 @@ public class DeletedTuple {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     public long getDeletedTime() {

@@ -5,7 +5,7 @@ import java.util.Objects;
 public class BaseInfo {
     private final int parentIndex;
     private int orderNumber;
-    private boolean isDeleted;
+    private boolean deleted;
     private long deletedTime;
 
     public BaseInfo(int parentIndex, int orderNumber) {
@@ -26,11 +26,11 @@ public class BaseInfo {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     public long getDeletedTime() {

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class ParentDeletedTuple {
     private long id;
-    private boolean isDeleted, isParentDeleted;
+    private boolean deleted, parentDeleted;
 
     public void setId(long id) {
         this.id = id;
@@ -15,19 +15,19 @@ public class ParentDeletedTuple {
     }
 
     public boolean isParentDeleted() {
-        return isParentDeleted;
+        return parentDeleted;
     }
 
     public void setParentDeleted(boolean parentDeleted) {
-        isParentDeleted = parentDeleted;
+        this.parentDeleted = parentDeleted;
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     @Override
