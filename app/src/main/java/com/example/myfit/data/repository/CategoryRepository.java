@@ -20,50 +20,51 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
-public class CategoryRepository extends BaseRepository {
-    private final CategoryDao categoryDao;
-    private SharedPreferences mainSortPreference;
-    private IntegerSharedPreferenceLiveData mainSortPreferenceLive;
-    private MutableLiveData<Long> insertIdLive;
-    private MutableLiveData<Boolean> isExistingNameLive;
-    private LiveData<List<List<CategoryTuple>>> classifiedTuplesLive, deletedClassifiedTuplesLive, deletedSearchTuplesLive;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+@ViewModelScoped
+public class CategoryRepository extends BaseRepository<CategoryTuple> {
+    private final CategoryDao mCategoryDao;
+    private SharedPreferences mMainSortPreference;
+    private IntegerSharedPreferenceLiveData mMainSortPreferenceLive;
+    private MutableLiveData<Long> mInsertIdLive;
+    private MutableLiveData<Boolean> mExistingNameLive;
+    private LiveData<List<List<CategoryTuple>>> mClassifiedTuplesLive, mDeletedClassifiedTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
     public CategoryRepository(CategoryDao categoryDao,
                               @Qualifiers.MainSortPreference SharedPreferences mainSortPreference,
                               @Qualifiers.MainSortPreferenceLive IntegerSharedPreferenceLiveData mainSortPreferenceLive) {
-        this.categoryDao = categoryDao;
-        this.mainSortPreference = mainSortPreference;
-        this.mainSortPreferenceLive = mainSortPreferenceLive;
+        this.mCategoryDao = categoryDao;
+        this.mMainSortPreference = mainSortPreference;
+        this.mMainSortPreferenceLive = mainSortPreferenceLive;
     }
 
     //for appDataBase
     public CategoryRepository(Context context) {
-        this.categoryDao = AppDataBase.getsInstance(context).categoryDao();
+        this.mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
     }
 
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
-        if (classifiedTuplesLive == null)
-            classifiedTuplesLive = Transformations.switchMap(mainSortPreferenceLive, sort -> categoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
-        return classifiedTuplesLive;
+        if (mClassifiedTuplesLive == null)
+            mClassifiedTuplesLive = Transformations.switchMap(mMainSortPreferenceLive, sort -> mCategoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
+        return mClassifiedTuplesLive;
     }
 
     //to recycleBin
     public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
-        if (deletedClassifiedTuplesLive == null)
-            deletedClassifiedTuplesLive = categoryDao.getDeletedClassifiedTuplesLive();
-        return deletedClassifiedTuplesLive;
+        if (mDeletedClassifiedTuplesLive == null)
+            mDeletedClassifiedTuplesLive = mCategoryDao.getDeletedClassifiedTuplesLive();
+        return mDeletedClassifiedTuplesLive;
     }
 
     //to recycleBin search
     public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
-        if (deletedSearchTuplesLive == null)
-            deletedSearchTuplesLive = categoryDao.getDeletedSearchTuplesLive();
-        return deletedSearchTuplesLive;
+        if (mDeletedSearchTuplesLive == null)
+            mDeletedSearchTuplesLive = mCategoryDao.getDeletedSearchTuplesLive();
+        return mDeletedSearchTuplesLive;
     }
 
     //to treeView(disposable)
@@ -71,7 +72,7 @@ public class CategoryRepository extends BaseRepository {
         MutableLiveData<List<CategoryTuple>> tuplesLive = new MutableLiveData<>();
         new Thread(() -> {
             Sort sort = getSort();
-            List<CategoryTuple> tuples = categoryDao.getTuplesByParentIndex(parentIndex, sort);
+            List<CategoryTuple> tuples = mCategoryDao.getTuplesByParentIndex(parentIndex, sort);
             tuplesLive.postValue(tuples);
         }).start();
         return tuplesLive;
@@ -81,74 +82,76 @@ public class CategoryRepository extends BaseRepository {
     public LiveData<CategoryTuple> getTupleById(long id) {
         MutableLiveData<CategoryTuple> categoryTupleLive = new MutableLiveData<>();
         new Thread(() -> {
-            CategoryTuple tuple = categoryDao.getTupleById(id);
+            CategoryTuple tuple = mCategoryDao.getTupleById(id);
             categoryTupleLive.postValue(tuple);
         }).start();
         return categoryTupleLive;
     }
 
+    //to treeView
+    public MutableLiveData<Long> getInsertIdLive() {
+        mInsertIdLive = new MutableLiveData<>();
+        return mInsertIdLive;
+    }
+
     //from addCategory dialog(disposable)
     public void insert(String name, int parentIndex) {
         new Thread(() -> {
-            long insertId = categoryDao.insert(name, parentIndex);
-            if (insertIdLive != null) insertIdLive.postValue(insertId);
+            long insertId = mCategoryDao.insert(name, parentIndex);
+            if (mInsertIdLive != null) mInsertIdLive.postValue(insertId);
         }).start();
-    }
-
-    public MutableLiveData<Long> getInsertIdLive() {
-        insertIdLive = new MutableLiveData<>();
-        return insertIdLive;
     }
 
     //from appDataBase
     public void insert(Category[] categories) {
-        new Thread(() -> categoryDao.insert(categories)).start();
+        new Thread(() -> mCategoryDao.insert(categories)).start();
     }
 
     //from restore dialog(disposable)
     public LiveData<Long[]> insertRestoreCategories(@NotNull int[] parentIndex) {
         MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
-            Long[] insertIds = categoryDao.insertRestoreCategories(parentIndex);
-            if (insertIdLive != null) insertIdsLive.postValue(insertIds);
+            Long[] insertIds = mCategoryDao.insertRestoreCategories(parentIndex);
+            if (mInsertIdLive != null) insertIdsLive.postValue(insertIds);
         }).start();
         return insertIdsLive;
     }
 
     //from editCategoryName dialog
     public void update(long id, String name) {
-        new Thread(() -> categoryDao.update(id, name)).start();
+        new Thread(() -> mCategoryDao.update(id, name)).start();
     }
 
+    @Override
     //from adapter drag drop
-    public void updateCategories(List<CategoryTuple> categoryTuples) {
-        new Thread(() -> categoryDao.update(categoryTuples)).start();
+    public void updateTuples(List<CategoryTuple> categoryTuples) {
+        new Thread(() -> mCategoryDao.update(categoryTuples)).start();
     }
 
     @Override
     //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
-        new Thread(() -> categoryDao.deleteOrRestore(ids, isDeleted)).start();
+        new Thread(() -> mCategoryDao.deleteOrRestore(ids, isDeleted)).start();
     }
 
     @Override
     protected SharedPreferences getPreference() {
-        return mainSortPreference;
+        return mMainSortPreference;
+    }
+
+    //to addCategory Dialog
+    public MutableLiveData<Boolean> getExistingNameLive() {
+        mExistingNameLive = new MutableLiveData<>();
+        return mExistingNameLive;
     }
 
     //from addCategory Dialog
     public void isExistingName(String name, int parentIndex) {
         new Thread(() -> {
-            boolean isExistName = categoryDao.isExistingName(name, parentIndex);
-            if (isExistingNameLive != null)
-                isExistingNameLive.postValue(isExistName);
+            boolean isExistName = mCategoryDao.isExistingName(name, parentIndex);
+            if (mExistingNameLive != null)
+                mExistingNameLive.postValue(isExistName);
         }).start();
-    }
-
-    public MutableLiveData<Boolean> getIsExistingNameLive() {
-        if (isExistingNameLive == null)
-            isExistingNameLive = new MutableLiveData<>();
-        return isExistingNameLive;
     }
 }
 
