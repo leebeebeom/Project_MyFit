@@ -10,32 +10,33 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+@ViewModelScoped
 public class AutoCompleteRepository {
-    private final AutoCompleteDao autoCompleteDao;
-    private LiveData<List<String>> orderedWordsLive, orderedDeletedWordsLive;
+    private final AutoCompleteDao mAutoCompleteDao;
+    private LiveData<List<String>> mOrderedWordsLive, mOrderedDeletedWordsLive;
 
     @Inject
     public AutoCompleteRepository(AutoCompleteDao autoCompleteDao) {
-        this.autoCompleteDao = autoCompleteDao;
+        this.mAutoCompleteDao = autoCompleteDao;
     }
 
     public LiveData<List<String>> getAutoCompleteWordsLive() {
-        if (orderedWordsLive == null) {
-            LiveData<List<String>> autoCompleteWordsLive = autoCompleteDao.getAutoCompleteWordsLive();
-            orderedWordsLive = getOrderedLive(autoCompleteWordsLive);
+        if (mOrderedWordsLive == null) {
+            LiveData<List<String>> autoCompleteWordsLive = mAutoCompleteDao.getAutoCompleteWordsLive();
+            mOrderedWordsLive = getOrderedLive(autoCompleteWordsLive);
         }
-        return orderedWordsLive;
+        return mOrderedWordsLive;
     }
 
     public LiveData<List<String>> getDeletedAutoCompleteWordsLive() {
-        if (orderedDeletedWordsLive == null) {
-            LiveData<List<String>> deletedAutoCompleteWordsLive = autoCompleteDao.getDeletedAutoCompleteWordsLive();
-            orderedDeletedWordsLive = getOrderedLive(deletedAutoCompleteWordsLive);
+        if (mOrderedDeletedWordsLive == null) {
+            LiveData<List<String>> deletedAutoCompleteWordsLive = mAutoCompleteDao.getDeletedAutoCompleteWordsLive();
+            mOrderedDeletedWordsLive = getOrderedLive(deletedAutoCompleteWordsLive);
         }
-        return orderedDeletedWordsLive;
+        return mOrderedDeletedWordsLive;
     }
 
     @NotNull
