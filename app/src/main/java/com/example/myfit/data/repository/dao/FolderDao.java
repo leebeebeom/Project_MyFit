@@ -27,24 +27,22 @@ import java.util.Optional;
 public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     //to list
-    public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId, Sort sort) {
-        LiveData<List<FolderTuple>> tuplesLive = this.getTuplesLiveByParentId(parentId);
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(tuplesLive, false);
+    public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId) {
+        LiveData<List<FolderTuple>> tuplesLive = this.getTuplesLiveByParentId2(parentId);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(tuplesLive, false);
 
-        return this.getOrderedTuplesLive(tuplesLive, contentsSizesLive, sort);
+        return this.getOrderedTuplesLive(tuplesLive, contentsSizesLive);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
-    protected abstract LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId);
+    protected abstract LiveData<List<FolderTuple>> getTuplesLiveByParentId2(long parentId);
 
     @NotNull
     private LiveData<List<FolderTuple>> getOrderedTuplesLive(LiveData<List<FolderTuple>> tuplesLive,
-                                                               LiveData<int[]> contentsSizesLive,
-                                                               Sort sort) {
+                                                             LiveData<int[]> contentsSizesLive) {
         return Transformations.map(contentsSizesLive, contentsSizes -> {
             List<FolderTuple> tuples = tuplesLive.getValue();
             super.setContentsSize(tuples, contentsSizes);
-            super.orderTuples(sort, tuples);
             return tuples;
         });
     }
@@ -52,7 +50,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     //to recycleBin
     public LiveData<List<List<FolderTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<FolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedTuplesLive, true);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(deletedTuplesLive, true);
 
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
@@ -63,7 +61,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     //to searchView
     public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive() {
         LiveData<List<FolderTuple>> searchTuplesLive = this.getSearchTuplesLive(false);
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(searchTuplesLive, false);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(searchTuplesLive, false);
 
         return this.getClassifiedTuplesLive(searchTuplesLive, contentsSizesLive);
     }
@@ -71,7 +69,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     //to recycleBin search
     public LiveData<List<List<FolderTuple>>> getDeletedSearchTuplesListLive() {
         LiveData<List<FolderTuple>> deletedSearchTuplesLive = this.getSearchTuplesLive(true);
-        LiveData<int[]> contentsSizesLive = super.getContentsSizesLive(deletedSearchTuplesLive, true);
+        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(deletedSearchTuplesLive, true);
 
         return this.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
