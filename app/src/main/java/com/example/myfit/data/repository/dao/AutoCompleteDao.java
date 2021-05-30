@@ -15,11 +15,4 @@ public abstract class AutoCompleteDao {
             "(SELECT id, name, deleted FROM Size WHERE parentDeleted = 0) + " +
             "(SELECT id, brand, deleted FROM Size WHERE parentDeleted = 0)")
     public abstract LiveData<List<AutoCompleteTuple>> getAutoCompleteWordsLive();
-
-//    to recycleBin search
-//    @Query("SELECT(SELECT name FROM Category WHERE deleted = 1) + " +
-//            "(SELECT name FROM Folder WHERE deleted = 1) + " +
-//            "(SELECT name FROM Size WHERE deleted = 1) + " +
-//            "(SELECT brand FROM Size WHERE deleted = 1)")
-//    public abstract LiveData<List<String>> getDeletedAutoCompleteWordsLive();
 }
