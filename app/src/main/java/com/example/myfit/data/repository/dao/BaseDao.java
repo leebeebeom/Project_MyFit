@@ -32,7 +32,7 @@ import java.util.Locale;
 @Dao
 public abstract class BaseDao<T extends BaseTuple> {
     @NotNull
-    protected LiveData<int[]> getContentsSizesLive(LiveData<List<T>> tuplesLive, boolean parentDeleted) {
+    public LiveData<int[]> getContentSizesLive(LiveData<List<T>> tuplesLive, boolean parentDeleted) {
         return Transformations.switchMap(tuplesLive, tuples -> {
             long[] itemIds = getItemIds(tuples);
             return getContentsSizesLiveByParentIds(itemIds, parentDeleted);
