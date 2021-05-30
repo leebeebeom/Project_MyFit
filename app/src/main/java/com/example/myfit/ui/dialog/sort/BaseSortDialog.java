@@ -88,7 +88,7 @@ public abstract class BaseSortDialog extends BaseDialog {
         };
     }
 
-    protected abstract BaseRepository getRepository();
+    protected abstract BaseRepository<?> getRepository();
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {

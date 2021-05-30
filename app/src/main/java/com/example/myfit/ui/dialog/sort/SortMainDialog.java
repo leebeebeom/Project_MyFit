@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.example.myfit.R;
-import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
 
@@ -33,7 +32,7 @@ public class SortMainDialog extends BaseSortDialog {
     }
 
     @Override
-    protected BaseRepository getRepository() {
+    protected CategoryRepository getRepository() {
         return mCategoryRepository;
     }
 

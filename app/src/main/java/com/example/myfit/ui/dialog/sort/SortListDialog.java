@@ -1,7 +1,6 @@
 package com.example.myfit.ui.dialog.sort;
 
 import com.example.myfit.R;
-import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.data.repository.FolderRepository;
 
 import javax.inject.Inject;
@@ -19,7 +18,7 @@ public class SortListDialog extends BaseSortDialog {
     }
 
     @Override
-    protected BaseRepository getRepository() {
+    protected FolderRepository getRepository() {
         return mFolderRepository;
     }
 
