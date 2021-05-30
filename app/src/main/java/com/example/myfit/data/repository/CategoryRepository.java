@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.category.Category;
@@ -34,11 +33,9 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
 
     @Inject
     public CategoryRepository(CategoryDao categoryDao,
-                              @Qualifiers.MainSortPreference SharedPreferences mainSortPreference,
-                              @Qualifiers.MainSortPreferenceLive IntegerSharedPreferenceLiveData mainSortPreferenceLive) {
+                              @Qualifiers.MainSortPreference SharedPreferences mainSortPreference){
         this.mCategoryDao = categoryDao;
         this.mMainSortPreference = mainSortPreference;
-        this.mMainSortPreferenceLive = mainSortPreferenceLive;
     }
 
     //for appDataBase
@@ -49,7 +46,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         if (mClassifiedTuplesLive == null)
-            mClassifiedTuplesLive = Transformations.switchMap(mMainSortPreferenceLive, sort -> mCategoryDao.getClassifiedTuplesLive(Sort.values()[sort]));
+            mClassifiedTuplesLive = mCategoryDao.getClassifiedTuplesLive();
         return mClassifiedTuplesLive;
     }
 
