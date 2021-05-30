@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myfit.data.AppDataBase;
-import com.example.myfit.data.model.category.Category;
-import com.example.myfit.data.model.category.CategoryTuple;
+import com.example.myfit.data.model.model.Category;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
 import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;

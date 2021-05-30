@@ -3,7 +3,7 @@ package com.example.myfit.data.repository;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.myfit.data.model.tuple.AutoCompleteTuple;
+import com.example.myfit.data.tuple.AutoCompleteTuple;
 import com.example.myfit.data.repository.dao.AutoCompleteDao;
 
 import java.util.List;

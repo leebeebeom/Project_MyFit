@@ -2,7 +2,7 @@ package com.example.myfit.data.repository;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.myfit.data.model.RecentSearch;
+import com.example.myfit.data.model.model.RecentSearch;
 import com.example.myfit.data.repository.dao.RecentSearchDao;
 
 import java.util.List;

@@ -9,11 +9,11 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.ModelFactory;
-import com.example.myfit.data.model.folder.Folder;
-import com.example.myfit.data.model.folder.FolderTuple;
-import com.example.myfit.data.model.tuple.DeletedTuple;
-import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.data.ModelFactory;
+import com.example.myfit.data.model.model.Folder;
+import com.example.myfit.data.tuple.DeletedTuple;
+import com.example.myfit.data.tuple.ParentIdTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;

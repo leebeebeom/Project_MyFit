@@ -9,10 +9,10 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.size.Size;
-import com.example.myfit.data.model.size.SizeTuple;
-import com.example.myfit.data.model.tuple.DeletedTuple;
-import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.data.model.model.size.Size;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
+import com.example.myfit.data.tuple.DeletedTuple;
+import com.example.myfit.data.tuple.ParentIdTuple;
 
 import org.jetbrains.annotations.NotNull;
 

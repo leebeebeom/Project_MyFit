@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.myfit.data.model.folder.Folder;
-import com.example.myfit.data.model.folder.FolderTuple;
-import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.data.model.model.Folder;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
+import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
 import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;

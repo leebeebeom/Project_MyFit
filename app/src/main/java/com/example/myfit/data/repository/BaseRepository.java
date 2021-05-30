@@ -2,7 +2,7 @@ package com.example.myfit.data.repository;
 
 import android.content.SharedPreferences;
 
-import com.example.myfit.data.model.tuple.BaseTuple;
+import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.util.constant.Sort;
 
 import java.util.List;

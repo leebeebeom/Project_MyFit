@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import com.example.myfit.data.model.tuple.AutoCompleteTuple;
+import com.example.myfit.data.tuple.AutoCompleteTuple;
 
 import java.util.List;
 

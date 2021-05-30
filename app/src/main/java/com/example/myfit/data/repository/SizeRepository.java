@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.myfit.data.model.size.Size;
-import com.example.myfit.data.model.size.SizeTuple;
-import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.data.model.model.size.Size;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
+import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
 import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.ViewType;

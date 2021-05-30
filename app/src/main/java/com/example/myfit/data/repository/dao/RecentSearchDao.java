@@ -7,8 +7,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.example.myfit.data.model.ModelFactory;
-import com.example.myfit.data.model.RecentSearch;
+import com.example.myfit.data.ModelFactory;
+import com.example.myfit.data.model.model.RecentSearch;
 
 import java.util.List;
 

@@ -9,12 +9,12 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.category.CategoryTuple;
-import com.example.myfit.data.model.folder.Folder;
-import com.example.myfit.data.model.size.Size;
-import com.example.myfit.data.model.tuple.BaseTuple;
-import com.example.myfit.data.model.tuple.DeletedTuple;
-import com.example.myfit.data.model.tuple.ParentDeletedTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.data.model.model.Folder;
+import com.example.myfit.data.model.model.size.Size;
+import com.example.myfit.data.tuple.BaseTuple;
+import com.example.myfit.data.tuple.DeletedTuple;
+import com.example.myfit.data.tuple.ParentDeletedTuple;
 import com.example.myfit.util.SortUtil;
 import com.example.myfit.util.constant.Sort;
 

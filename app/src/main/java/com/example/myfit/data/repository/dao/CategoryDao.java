@@ -8,10 +8,10 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.ModelFactory;
-import com.example.myfit.data.model.category.Category;
-import com.example.myfit.data.model.category.CategoryTuple;
-import com.example.myfit.data.model.tuple.DeletedTuple;
+import com.example.myfit.data.ModelFactory;
+import com.example.myfit.data.model.model.Category;
+import com.example.myfit.data.tuple.DeletedTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
