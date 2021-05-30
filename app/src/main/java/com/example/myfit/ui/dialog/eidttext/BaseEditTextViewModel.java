@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public abstract class BaseEditTextViewModel extends ViewModel {
-    public abstract MutableLiveData<Boolean> getIsExistingMutable();
+    public abstract MutableLiveData<Boolean> getExistingNameLive();
 
     public abstract static class BaseAddViewModel extends BaseEditTextViewModel {
         public abstract void insert();

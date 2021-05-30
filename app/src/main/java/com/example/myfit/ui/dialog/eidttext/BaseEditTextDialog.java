@@ -53,7 +53,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         BaseEditTextViewModel model = getModel();
-        model.getIsExistingMutable().observe(getViewLifecycleOwner(), isExisting -> {
+        model.getExistingNameLive().observe(getViewLifecycleOwner(), isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
                     navigateSameNameDialog();
@@ -62,7 +62,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
                     task();
                     dismiss();
                 }
-                model.getIsExistingMutable().setValue(null);
+                model.getExistingNameLive().setValue(null);
             }
         });
         return getAlertDialog(getDialogBuilder());
