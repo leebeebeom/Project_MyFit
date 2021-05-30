@@ -139,5 +139,7 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     public void updateTuples(List<SizeTuple> sizeTuples) {
         new Thread(() -> mSizeDao.update(sizeTuples)).start();
     }
+
+
 }
 

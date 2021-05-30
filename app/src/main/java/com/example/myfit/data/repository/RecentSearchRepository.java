@@ -14,8 +14,6 @@ import dagger.hilt.android.scopes.ViewModelScoped;
 @ViewModelScoped
 public class RecentSearchRepository {
     private final RecentSearchDao mRecentSearchDao;
-    private int mType;
-    private LiveData<List<RecentSearch>> mRecentSearchLive;
 
     @Inject
     public RecentSearchRepository(RecentSearchDao recentSearchDao) {

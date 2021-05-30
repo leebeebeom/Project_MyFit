@@ -8,11 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.model.Category;
-import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.data.repository.dao.CategoryDao;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +25,6 @@ import dagger.hilt.android.scopes.ViewModelScoped;
 public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private final CategoryDao mCategoryDao;
     private SharedPreferences mMainSortPreference;
-    private IntegerSharedPreferenceLiveData mMainSortPreferenceLive;
     private MutableLiveData<Long> mInsertIdLive;
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<CategoryTuple>>> mClassifiedTuplesLive, mDeletedClassifiedTuplesLive, mDeletedSearchTuplesLive;
