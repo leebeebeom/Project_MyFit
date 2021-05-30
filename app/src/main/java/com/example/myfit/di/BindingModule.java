@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
+import com.example.myfit.databinding.LayoutDialogTreeBinding;
 import com.example.myfit.databinding.LayoutPopupBinding;
 import com.example.myfit.databinding.TitleActionModeBinding;
 
@@ -33,5 +34,10 @@ public class BindingModule {
     @Provides
     public static LayoutPopupBinding provideLayoutPopupBinding(LayoutInflater inflater){
         return LayoutPopupBinding.inflate(inflater);
+    }
+
+    @Provides
+    public static LayoutDialogTreeBinding provideTreeViewBinding(LayoutInflater inflater){
+        return LayoutDialogTreeBinding.inflate(inflater);
     }
 }
