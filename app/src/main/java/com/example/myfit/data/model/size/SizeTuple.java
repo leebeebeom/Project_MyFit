@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class SizeTuple extends BaseTuple {
     private String brand, imageUri;
-    private boolean isFavorite;
+    private boolean favorite;
 
     public String getBrand() {
         return brand;
@@ -17,11 +17,11 @@ public class SizeTuple extends BaseTuple {
     }
 
     public boolean isFavorite() {
-        return isFavorite;
+        return favorite;
     }
 
     public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
+        this.favorite = favorite;
     }
 
     public String getImageUri() {

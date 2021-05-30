@@ -15,7 +15,7 @@ public class Size extends BaseModel {
     @Embedded
     private DetailSizeInfo detailSizeInfo;
     private long parentId;
-    private boolean isParentDeleted;
+    private boolean parentDeleted;
 
     public Size(BaseInfo baseInfo, long parentId) {
         super(baseInfo);
@@ -33,11 +33,11 @@ public class Size extends BaseModel {
     }
 
     public boolean isParentDeleted() {
-        return isParentDeleted;
+        return parentDeleted;
     }
 
     public void setParentDeleted(boolean parentDeleted) {
-        this.isParentDeleted = parentDeleted;
+        this.parentDeleted = parentDeleted;
     }
 
     public String getCreatedTime() {

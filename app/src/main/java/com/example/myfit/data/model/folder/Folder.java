@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 public class Folder extends Category {
     private long parentId;
-    private boolean isParentDeleted;
+    private boolean parentDeleted;
 
     public Folder(BaseInfo baseInfo, String name, long parentId) {
         super(baseInfo, name);
@@ -26,11 +26,11 @@ public class Folder extends Category {
     }
 
     public boolean isParentDeleted() {
-        return isParentDeleted;
+        return parentDeleted;
     }
 
     public void setParentDeleted(boolean parentDeleted) {
-        isParentDeleted = parentDeleted;
+        this.parentDeleted = parentDeleted;
     }
 
     @Override
