@@ -13,8 +13,6 @@ import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.DeletedTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
-import com.example.myfit.util.SortUtil;
-import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,24 +25,13 @@ import java.util.List;
 public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //to list
-    public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId, Sort sort) {
-        LiveData<List<SizeTuple>> tuplesLive = getTuplesLiveByParentId(parentId);
-        return Transformations.map(tuplesLive, tuples -> {
-            this.orderSizeTuples(sort, tuples);
-            return tuples;
-        });
+    public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
+        LiveData<List<SizeTuple>> tuplesLive = getTuplesLiveByParentId2(parentId);
+        return Transformations.map(tuplesLive, tuples -> tuples);
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
-    protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
-
-    private void orderSizeTuples(Sort sort, List<SizeTuple> tuples) {
-        try {
-            SortUtil.orderSizeTuples(sort, tuples);
-        } catch (NullPointerException e) {
-            logE(e);
-        }
-    }
+    protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId2(long parentId);
 
     //to recycleBin
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
