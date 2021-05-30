@@ -1,34 +1,33 @@
 package com.example.myfit.di;
 
-import com.example.myfit.data.model.category.CategoryTuple;
-import com.example.myfit.data.model.folder.FolderTuple;
-import com.example.myfit.data.model.size.SizeTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.util.SizeLiveSet;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.components.SingletonComponent;
+import dagger.hilt.android.components.ViewModelComponent;
+import dagger.hilt.android.scopes.ViewModelScoped;
 
 @Module
-@InstallIn(SingletonComponent.class)
+@InstallIn(ViewModelComponent.class)
 public class SelectedItemsModule {
 
-    @Singleton
+    @ViewModelScoped
     @Provides
     public static SizeLiveSet<CategoryTuple> provideSelectedCategoryTuples() {
         return new SizeLiveSet<>();
     }
 
-    @Singleton
+    @ViewModelScoped
     @Provides
     public static SizeLiveSet<FolderTuple> provideSelectedFolderTuples() {
         return new SizeLiveSet<>();
     }
 
-    @Singleton
+    @ViewModelScoped
     @Provides
     public static SizeLiveSet<SizeTuple> provideSelectedSizeTuples() {
         return new SizeLiveSet<>();
