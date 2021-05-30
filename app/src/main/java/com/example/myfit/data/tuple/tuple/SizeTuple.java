@@ -1,6 +1,6 @@
-package com.example.myfit.data.model.size;
+package com.example.myfit.data.tuple.tuple;
 
-import com.example.myfit.data.model.tuple.BaseTuple;
+import com.example.myfit.data.tuple.BaseTuple;
 
 import java.util.Objects;
 

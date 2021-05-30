@@ -1,6 +1,4 @@
-package com.example.myfit.data.model.folder;
-
-import com.example.myfit.data.model.category.CategoryTuple;
+package com.example.myfit.data.tuple.tuple;
 
 import java.util.Objects;
 

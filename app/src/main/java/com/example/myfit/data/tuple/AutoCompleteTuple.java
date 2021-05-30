@@ -1,4 +1,4 @@
-package com.example.myfit.data.model.tuple;
+package com.example.myfit.data.tuple;
 
 public class AutoCompleteTuple {
     private long id;

@@ -9,11 +9,10 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.myfit.data.model.ModelFactory;
-import com.example.myfit.data.model.RecentSearch;
-import com.example.myfit.data.model.category.Category;
-import com.example.myfit.data.model.folder.Folder;
-import com.example.myfit.data.model.size.Size;
+import com.example.myfit.data.model.model.Category;
+import com.example.myfit.data.model.model.Folder;
+import com.example.myfit.data.model.model.RecentSearch;
+import com.example.myfit.data.model.model.size.Size;
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.data.repository.dao.AutoCompleteDao;
 import com.example.myfit.data.repository.dao.CategoryDao;
