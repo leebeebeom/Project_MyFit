@@ -10,9 +10,9 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.myfit.data.model.model.size.Size;
-import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.data.tuple.DeletedTuple;
 import com.example.myfit.data.tuple.ParentIdTuple;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -91,7 +91,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     //from sizeFragment
     public void insertSize(@NotNull Size size) {
         int orderNumber = getLargestOrder() + 1;
-        size.setOrderNumber(orderNumber);
+        size.getBaseInfo().setOrderNumber(orderNumber);
         this.insert(size);
     }
 

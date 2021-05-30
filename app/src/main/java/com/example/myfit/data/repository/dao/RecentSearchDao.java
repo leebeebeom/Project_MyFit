@@ -14,6 +14,7 @@ import java.util.List;
 
 @Dao
 public abstract class RecentSearchDao {
+
     //to searchView, recycleBin search
     @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY date DESC LIMIT 20")
     public abstract LiveData<List<RecentSearch>> getLiveByType(int type);
