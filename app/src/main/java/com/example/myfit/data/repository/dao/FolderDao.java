@@ -19,7 +19,9 @@ import com.example.myfit.util.constant.Sort;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Dao
 public abstract class FolderDao extends BaseDao<FolderTuple> {
@@ -32,7 +34,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         return this.getOrderedTuplesLive(tuplesLive, contentsSizesLive, sort);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
     protected abstract LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId);
 
     @NotNull
@@ -55,7 +57,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE isDeleted = 1 ORDER BY deletedTime DESC")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE deleted = 1 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<FolderTuple>> getDeletedTuplesLive();
 
     //to searchView
@@ -75,8 +77,8 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     }
 
     @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder " +
-            "WHERE isDeleted = :isDeleted AND isParentDeleted = 0 AND name ORDER BY name")
-    protected abstract LiveData<List<FolderTuple>> getSearchTuplesLive(boolean isDeleted);
+            "WHERE deleted = :deleted AND parentDeleted = 0 AND name ORDER BY name")
+    protected abstract LiveData<List<FolderTuple>> getSearchTuplesLive(boolean deleted);
 
     //to treeView (disposable)
     @Transaction
@@ -89,7 +91,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         return tuples;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentIndex = :parentIndex AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE parentIndex = :parentIndex AND deleted = 0 AND parentDeleted = 0")
     protected abstract List<FolderTuple> getTuplesByParentIndex(int parentIndex);
 
     @Transaction
@@ -101,7 +103,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE id = :id AND isDeleted = 0 AND isParentDeleted = 0")
+    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime, parentId FROM Folder WHERE id = :id AND deleted = 0 AND parentDeleted = 0")
     protected abstract FolderTuple getTupleById2(long id);
 
     //to list
@@ -154,21 +156,42 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids, boolean isDeleted) {
+    public void deleteOrRestore(long[] ids, boolean deleted) {
         DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
-        super.setDeletedTuples(deletedTuples, isDeleted);
+        super.setDeletedTuples(deletedTuples, deleted);
         this.update(deletedTuples);
 
-        super.setChildrenParentDeleted(ids, isDeleted);
+        super.setChildrenParentDeleted(ids, deleted);
     }
 
-    @Query("SELECT id, isDeleted, deletedTime FROM Folder WHERE id IN (:ids)")
+    @Query("SELECT id, deleted, deletedTime FROM Folder WHERE id IN (:ids)")
     protected abstract DeletedTuple[] getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     protected abstract void update(DeletedTuple[] deletedTuples);
 
     //from addFolder dialog
-    @Query("SELECT EXISTS(SELECT name, parentId FROM Folder WHERE name =:name AND parentId = :parentId AND isDeleted = 0 AND isParentDeleted = 0)")
+    @Query("SELECT EXISTS(SELECT name, parentId FROM Folder WHERE name =:name AND parentId = :parentId AND deleted = 0 AND parentDeleted = 0)")
     public abstract boolean isExistingName(String name, long parentId);
+
+    @Transaction
+    public LinkedList<FolderTuple> getFolderPathTuples(long id) {
+        FolderTuple tuple = getTupleById2(id);
+        List<FolderTuple> folderTuples = getTuplesByParentIndex(tuple.getParentIndex());
+        LinkedList<FolderTuple> folderPathTuples = new LinkedList<>();
+        folderPathTuples.add(tuple);
+        completeFolderPath(folderTuples, folderPathTuples, tuple.getId());
+        return folderPathTuples;
+    }
+
+    private void completeFolderPath(List<FolderTuple> folderTuples, LinkedList<FolderTuple> folderPathTuples, long folderId) {
+        Optional<FolderTuple> parentTuple = folderTuples.stream()
+                .filter(folderTuple -> folderId == folderTuple.getParentId())
+                .findFirst();
+
+        if (parentTuple.isPresent()) {
+            folderPathTuples.add(0, parentTuple.get());
+            completeFolderPath(folderTuples, folderPathTuples, parentTuple.get().getId());
+        }
+    }
 }
