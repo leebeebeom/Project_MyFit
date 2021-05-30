@@ -10,7 +10,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
-import com.example.myfit.data.model.folder.FolderTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemTreeFolderBinding;
 import com.example.myfit.ui.dialog.tree.holder.value.FolderValue;
 import com.unnamed.b.atv.model.TreeNode;
