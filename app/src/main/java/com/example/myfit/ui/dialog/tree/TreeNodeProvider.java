@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
-import com.example.myfit.data.model.category.CategoryTuple;
-import com.example.myfit.data.model.folder.FolderTuple;
-import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
+import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder;
 import com.example.myfit.ui.dialog.tree.holder.TreeCategoryHolder;
 import com.example.myfit.ui.dialog.tree.holder.TreeFolderHolder;

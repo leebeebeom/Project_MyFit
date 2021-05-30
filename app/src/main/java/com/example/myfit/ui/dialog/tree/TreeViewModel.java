@@ -7,9 +7,9 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myfit.data.model.category.CategoryTuple;
-import com.example.myfit.data.model.folder.FolderTuple;
-import com.example.myfit.data.model.tuple.ParentIdTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
+import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.data.repository.SizeRepository;
