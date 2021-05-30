@@ -4,72 +4,68 @@ import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.model.size.Size;
 import com.example.myfit.data.model.size.SizeTuple;
 import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.SizeDao;
 import com.example.myfit.di.Qualifiers;
-import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
+import com.example.myfit.util.constant.ViewType;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class SizeRepository extends BaseRepository {
-    private final SizeDao sizeDao;
-    private final SharedPreferences listSortPreference;
-    private final IntegerSharedPreferenceLiveData listSortPreferenceLive;
-    private LiveData<List<SizeTuple>> tuplesLiveByParentId;
-    private long parentId;
-    private LiveData<List<List<SizeTuple>>> deletedClassifiedTuplesLive, searchTuplesLive, deletedSearchTuplesLive;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+import static com.example.myfit.di.DataModule.VIEW_TYPE;
+
+@ViewModelScoped
+public class SizeRepository extends BaseRepository<SizeTuple> {
+    private final SizeDao mSizeDao;
+    private final SharedPreferences mListSortPreference, mViewTypePreference;
+    private LiveData<List<List<SizeTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
     public SizeRepository(SizeDao sizeDao,
-                          @Qualifiers.ListSortPreferenceLive SharedPreferences listSortPreference,
-                          @Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive) {
-        this.sizeDao = sizeDao;
-        this.listSortPreference = listSortPreference;
-        this.listSortPreferenceLive = listSortPreferenceLive;
+                          @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
+                          @Qualifiers.ViewTypePreference SharedPreferences viewTypePreference) {
+        this.mSizeDao = sizeDao;
+        this.mListSortPreference = listSortPreference;
+        this.mViewTypePreference = viewTypePreference;
     }
 
     //to list
     public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
-        if (this.parentId != parentId) {
-            this.parentId = parentId;
-            tuplesLiveByParentId = Transformations.switchMap(listSortPreferenceLive, sort -> sizeDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
-        }
-        return tuplesLiveByParentId;
+        return mSizeDao.getTuplesLiveByParentId(parentId);
     }
 
     //to recycleBin
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
-        if (deletedClassifiedTuplesLive == null)
-            deletedClassifiedTuplesLive = sizeDao.getDeletedClassifiedTuplesLive();
-        return deletedClassifiedTuplesLive;
+        if (mDeletedClassifiedTuplesLive == null)
+            mDeletedClassifiedTuplesLive = mSizeDao.getDeletedClassifiedTuplesLive();
+        return mDeletedClassifiedTuplesLive;
     }
 
     //to search
     public LiveData<List<List<SizeTuple>>> getSearchTuplesLive() {
-        if (searchTuplesLive == null)
-            searchTuplesLive = sizeDao.getSearchTuplesLive();
-        return searchTuplesLive;
+        if (mSearchTuplesLive == null)
+            mSearchTuplesLive = mSizeDao.getSearchTuplesLive();
+        return mSearchTuplesLive;
     }
 
     //to recycleBin search
     public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive() {
-        if (deletedSearchTuplesLive == null)
-            deletedSearchTuplesLive = sizeDao.getDeletedSearchTuplesLive();
-        return deletedSearchTuplesLive;
+        if (mDeletedSearchTuplesLive == null)
+            mDeletedSearchTuplesLive = mSizeDao.getDeletedSearchTuplesLive();
+        return mDeletedSearchTuplesLive;
     }
 
     //to sizeFragment(disposable)
     public LiveData<List<String>> getBrands() {
         MutableLiveData<List<String>> brandsLive = new MutableLiveData<>();
         new Thread(() -> {
-                List<String> brands = sizeDao.getBrands();
+            List<String> brands = mSizeDao.getBrands();
                 brandsLive.postValue(brands);
         }).start();
         return brandsLive;
@@ -79,51 +75,69 @@ public class SizeRepository extends BaseRepository {
     public LiveData<Size> getSizeById(long id) {
         MutableLiveData<Size> sizeLive = new MutableLiveData<>();
         new Thread(() -> {
-                Size size = sizeDao.getSizeById(id);
-                sizeLive.postValue(size);
+            Size size = mSizeDao.getSizeById(id);
+            sizeLive.postValue(size);
         }).start();
         return sizeLive;
     }
 
     //from sizeFragment
     public void insert(Size size) {
-        new Thread(() -> sizeDao.insertSize(size)).start();
+        new Thread(() -> mSizeDao.insertSize(size)).start();
     }
 
-    //from sizeFragment
-    public void update(Size size) {
-        new Thread(() -> sizeDao.update(size)).start();
+    //from listFragment
+    public void update(SizeTuple sizeTuple) {
+        new Thread(() -> mSizeDao.update(sizeTuple)).start();
     }
 
     //from sizeDelete dialog
-    public void delete(long id){
-        new Thread(() -> sizeDao.delete(id)).start();
+    public void delete(long id) {
+        new Thread(() -> mSizeDao.delete(id)).start();
     }
 
     //from move dialog
     public void move(long targetId, long[] ids) {
-        new Thread(() -> sizeDao.move(targetId, ids)).start();
+        new Thread(() -> mSizeDao.move(targetId, ids)).start();
     }
 
     @Override
     //from selectedItemDelete, restore dialog
     public void deleteOrRestore(long[] ids, boolean isDeleted) {
-        new Thread(() -> sizeDao.deleteOrRestore(ids, isDeleted)).start();
+        new Thread(() -> mSizeDao.deleteOrRestore(ids, isDeleted)).start();
     }
 
     @Override
     protected SharedPreferences getPreference() {
-        return listSortPreference;
+        return mListSortPreference;
     }
 
     //to treeView
     public LiveData<ParentIdTuple[]> getParentIdTuplesByIds(long[] ids) {
         MutableLiveData<ParentIdTuple[]> parentIdTuplesLive = new MutableLiveData<>();
         new Thread(() -> {
-            ParentIdTuple[] parentIdTuples = sizeDao.getParentIdTuplesByIds(ids);
+            ParentIdTuple[] parentIdTuples = mSizeDao.getParentIdTuplesByIds(ids);
             parentIdTuplesLive.postValue(parentIdTuples);
         });
         return parentIdTuplesLive;
+    }
+
+    public void changeViewType() {
+        if (getViewType() == ViewType.LIST_VIEW)
+            mViewTypePreference.edit().putInt(VIEW_TYPE, ViewType.GRID_VIEW.getValue()).apply();
+        else mViewTypePreference.edit().putInt(VIEW_TYPE, ViewType.LIST_VIEW.getValue()).apply();
+    }
+
+    public ViewType getViewType() {
+        return ViewType.values()[getViewTypeInt()];
+    }
+
+    private int getViewTypeInt() {
+        return mViewTypePreference.getInt(VIEW_TYPE, ViewType.LIST_VIEW.getValue());
+    }
+
+    public void updateTuples(List<SizeTuple> sizeTuples) {
+        new Thread(() -> mSizeDao.update(sizeTuples)).start();
     }
 }
 
