@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.model.folder.Folder;
 import com.example.myfit.data.model.folder.FolderTuple;
@@ -12,7 +11,6 @@ import com.example.myfit.data.model.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
 import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +25,6 @@ import static com.example.myfit.di.DataModule.FOLDER_TOGGLE;
 public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;
     private final SharedPreferences mListSortPreference;
-    private final IntegerSharedPreferenceLiveData mListSortPreferenceLive;
     private final SharedPreferences mFolderTogglePreference;
     private MutableLiveData<Long> mInsertIdLive;
     private MutableLiveData<Boolean> mExistingNameLive;
@@ -36,17 +33,15 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     @Inject
     public FolderRepository(FolderDao folderDao,
                             @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
-                            @Qualifiers.ListSortPreferenceLive IntegerSharedPreferenceLiveData listSortPreferenceLive,
                             @Qualifiers.FolderTogglePreference SharedPreferences folderTogglePreference) {
         this.mFolderDao = folderDao;
         this.mListSortPreference = listSortPreference;
-        this.mListSortPreferenceLive = listSortPreferenceLive;
         this.mFolderTogglePreference = folderTogglePreference;
     }
 
     //to list
     public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId) {
-        return Transformations.switchMap(mListSortPreferenceLive, sort -> mFolderDao.getTuplesLiveByParentId(parentId, Sort.values()[sort]));
+        return mFolderDao.getTuplesLiveByParentId(parentId);
     }
 
     //to recycleBin
