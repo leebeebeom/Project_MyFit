@@ -5,73 +5,20 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 public class BaseModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @Embedded
-    private BaseInfo baseInfo;
+    private final BaseInfo baseInfo;
 
     public BaseModel(@NotNull BaseInfo baseInfo) {
         this.baseInfo = baseInfo;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getParentIndex() {
-        return baseInfo.getParentIndex();
-    }
-
-    public int getOrderNumber() {
-        return baseInfo.getOrderNumber();
-    }
-
-    public void setOrderNumber(int orderNumber) {
-        this.baseInfo.setOrderNumber(orderNumber);
-    }
-
-    public boolean isDeleted() {
-        return baseInfo.isDeleted();
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.baseInfo.setDeleted(deleted);
-    }
-
-    public BaseInfo getBaseInfo() {
-        return baseInfo;
-    }
-
-    public void setBaseInfo(BaseInfo baseInfo) {
-        this.baseInfo = baseInfo;
-    }
-
-    public long getDeletedTime() {
-        return baseInfo.getDeletedTime();
-    }
-
-    public void setDeletedTime(long deletedTime) {
-        this.baseInfo.setDeletedTime(deletedTime);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BaseModel)) return false;
-        BaseModel baseModel = (BaseModel) o;
-        return getId() == baseModel.getId() &&
-                getBaseInfo().equals(baseModel.getBaseInfo());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getBaseInfo());
     }
 }

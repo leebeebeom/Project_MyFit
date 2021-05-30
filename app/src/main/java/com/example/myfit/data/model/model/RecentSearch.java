@@ -3,9 +3,14 @@ package com.example.myfit.data.model.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode
 public class RecentSearch {
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -16,41 +21,5 @@ public class RecentSearch {
         this.word = word;
         this.date = date;
         this.type = type;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RecentSearch)) return false;
-        RecentSearch that = (RecentSearch) o;
-        return getId() == that.getId() &&
-                getType() == that.getType() &&
-                getWord().equals(that.getWord()) &&
-                getDate().equals(that.getDate());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getWord(), getDate(), getType());
     }
 }
