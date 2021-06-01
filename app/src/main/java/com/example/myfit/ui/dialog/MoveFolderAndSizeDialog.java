@@ -33,9 +33,9 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
     }
 
     @Override
-    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
+    protected AlertDialog getAlertDialog() {
         String selectedItemsSize = String.valueOf(mSelectedFolderIds.length + mSelectedSizeIds.length);
-        return dialogBuilder.makeConfirmDialog(selectedItemsSize + getString(R.string.dialog_message_item_move))
+        return mDialogBuilder.makeConfirmDialog(selectedItemsSize + getString(R.string.dialog_message_item_move))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -48,7 +48,7 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
             if (mSelectedSizeIds.length != 0)
                 mSizeRepository.move(mTargetId, mSelectedSizeIds);
             getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
-            getNavController().popBackStack(R.id.treeViewDialog, true);
+            mNavController.popBackStack(R.id.treeViewDialog, true);
         };
     }
 
