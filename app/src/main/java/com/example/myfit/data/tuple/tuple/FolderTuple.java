@@ -1,29 +1,12 @@
 package com.example.myfit.data.tuple.tuple;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 public class FolderTuple extends CategoryTuple {
     private long parentId;
-
-    public long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(long parentId) {
-        this.parentId = parentId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FolderTuple)) return false;
-        if (!super.equals(o)) return false;
-        FolderTuple that = (FolderTuple) o;
-        return getParentId() == that.getParentId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getParentId());
-    }
 }
