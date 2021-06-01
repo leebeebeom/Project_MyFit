@@ -8,7 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.data.ModelFactory;
+import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.model.Category;
 import com.example.myfit.data.tuple.DeletedTuple;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
@@ -29,7 +29,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 0")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 0")
     protected abstract LiveData<List<CategoryTuple>> getTuplesLive();
 
     //to recycleBin
@@ -40,7 +40,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY deletedTime DESC")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<CategoryTuple>> getDeletedTuplesLive();
 
     //to recycleBin search
@@ -51,45 +51,45 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE deleted = 1 AND name ORDER BY name")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY name")
     protected abstract LiveData<List<CategoryTuple>> getDeletedSearchTuplesLive2();
 
     @Transaction
     //to treeView (disposable)
     public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
         List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
-        long[] ids = super.getItemIds(tuples);
-        int[] contentsSizes = getContentsSizesByParentIds(ids);
-        super.setContentsSize(tuples, contentsSizes);
-        super.orderTuples(sort, tuples);
+        long[] ids = super.getTupleIds(tuples);
+        int[] contentsSizes = getContentSizesByParentIds(ids);
+        super.setContentSize(tuples, contentsSizes);
+        super.sortTuples(sort, tuples);
         return tuples;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND deleted = 0")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND deleted = 0")
     protected abstract List<CategoryTuple> getTuplesByParentIndex(int parentIndex);
 
     @Transaction
     //to treeView(disposable)
     public CategoryTuple getTupleById(long id) {
         CategoryTuple tuple = this.getTupleById2(id);
-        int contentsSize = getContentsSizeByParentId(id);
-        tuple.setContentsSize(contentsSize);
+        int contentsSize = getContentSizeByParentId(id);
+        tuple.setContentSize(contentsSize);
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, contentsSize, deletedTime FROM Category WHERE id = :id AND deleted = 0")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id AND deleted = 0")
     protected abstract CategoryTuple getTupleById2(long id);
 
     @Transaction
     //from addCategory dialog(disposable)
     public long insert(String name, int parentIndex) {
-        int orderNumber = this.getLargestOrderNumber() + 1;
-        Category category = ModelFactory.makeCategory(name, parentIndex, orderNumber);
+        int sortNumber = this.getLargestSortNumber() + 1;
+        Category category = ModelFactory.makeCategory(name, parentIndex, sortNumber);
         return this.insert(category);
     }
 
-    @Query("SELECT max(orderNumber) FROM Category")
-    protected abstract int getLargestOrderNumber();
+    @Query("SELECT max(sortNumber) FROM Category")
+    protected abstract int getLargestSortNumber();
 
     @Insert
     protected abstract long insert(Category category);
@@ -102,13 +102,13 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //from restore dialog(disposable)
     public Long[] insertRestoreCategories(@NotNull int[] parentIndex) {
         String name = "복구됨";
-        int orderNumber = this.getLargestOrderNumber() + 1;
+        int sortNumber = this.getLargestSortNumber() + 1;
 
         int count = parentIndex.length;
         Category[] categories = new Category[count];
         for (int i = 0; i < count; i++) {
-            categories[i] = ModelFactory.makeCategory(name, parentIndex[i], orderNumber);
-            orderNumber++;
+            categories[i] = ModelFactory.makeCategory(name, parentIndex[i], sortNumber);
+            sortNumber++;
         }
         return this.insert(categories);
     }
