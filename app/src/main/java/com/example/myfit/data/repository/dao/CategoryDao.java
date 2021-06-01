@@ -24,9 +24,9 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
-        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(tuplesLive, false);
+        LiveData<int[]> contentSizesLive = super.getContentSizesLive(tuplesLive, false);
 
-        return super.getClassifiedTuplesLive(tuplesLive, contentsSizesLive);
+        return super.getClassifiedTuplesLive(tuplesLive, contentSizesLive);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 0")
@@ -35,9 +35,9 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to recycleBin
     public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(deletedTuplesLive, true);
+        LiveData<int[]> contentSizesLive = super.getContentSizesLive(deletedTuplesLive, true);
 
-        return super.getClassifiedTuplesLive(deletedTuplesLive, contentsSizesLive);
+        return super.getClassifiedTuplesLive(deletedTuplesLive, contentSizesLive);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY deletedTime DESC")
@@ -46,9 +46,9 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to recycleBin search
     public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
         LiveData<List<CategoryTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
-        LiveData<int[]> contentsSizesLive = super.getContentSizesLive(deletedSearchTuplesLive, true);
+        LiveData<int[]> contentSizesLive = super.getContentSizesLive(deletedSearchTuplesLive, true);
 
-        return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentsSizesLive);
+        return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentSizesLive);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY name")
@@ -59,8 +59,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
         List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getTupleIds(tuples);
-        int[] contentsSizes = getContentSizesByParentIds(ids);
-        super.setContentSize(tuples, contentsSizes);
+        int[] contentSizes = getContentSizesByParentIds(ids);
+        super.setContentSize(tuples, contentSizes);
         super.sortTuples(sort, tuples);
         return tuples;
     }
@@ -72,8 +72,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to treeView(disposable)
     public CategoryTuple getTupleById(long id) {
         CategoryTuple tuple = this.getTupleById2(id);
-        int contentsSize = getContentSizeByParentId(id);
-        tuple.setContentSize(contentsSize);
+        int contentSize = getContentSizeByParentId(id);
+        tuple.setContentSize(contentSize);
         return tuple;
     }
 
