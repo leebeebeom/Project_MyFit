@@ -44,8 +44,29 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         return Transformations.map(contentSizesLive, contentSizes -> {
             List<FolderTuple> tuples = tuplesLive.getValue();
             super.setContentSize(tuples, contentSizes);
+            addDummy(tuples);
             return tuples;
         });
+    }
+
+    private void addDummy(List<FolderTuple> tuples) {
+        if (tuples != null) {
+            int size = tuples.size();
+            if (size % 4 == 1)
+                addDummyFolder(tuples, 3);
+            else if (size % 4 == 2)
+                addDummyFolder(tuples, 2);
+            else if (size % 4 == 3)
+                addDummyFolder(tuples, 1);
+        }
+    }
+
+    private void addDummyFolder(List<FolderTuple> tuples, int count) {
+        for (int i = 0; i < count; i++) {
+            FolderTuple dummy = new FolderTuple();
+            dummy.setId(-1);
+            tuples.add(dummy);
+        }
     }
 
     //to recycleBin
