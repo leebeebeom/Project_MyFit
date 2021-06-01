@@ -53,7 +53,7 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
 
     //to searchView, recycleBin search
     public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive(boolean deleted) {
-        if (deleted) {
+        if (!deleted) {
             if (mSearchTuplesLive == null)
                 mSearchTuplesLive = mFolderDao.getSearchTuplesListLive(deleted);
             return mSearchTuplesLive;
