@@ -115,7 +115,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime, parentId FROM Folder WHERE id = :id AND deleted = 0 AND parentDeleted = 0")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime, parentId FROM Folder WHERE id = :id")
     protected abstract FolderTuple getTupleById2(long id);
 
     //to list
