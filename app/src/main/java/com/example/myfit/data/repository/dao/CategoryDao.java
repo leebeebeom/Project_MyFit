@@ -100,11 +100,11 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Insert
     //from appDateBase
-    public abstract Long[] insert(Category[] categories);
+    public abstract long[] insert(Category[] categories);
 
     @Transaction
     //from restore dialog(disposable)
-    public Long[] insertRestoreCategories(@NotNull int[] parentIndex) {
+    public long[] insertRestoreCategories(@NotNull int[] parentIndex) {
         String name = "복구됨";
         int sortNumber = this.getLargestSortNumber() + 1;
 
@@ -151,4 +151,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND deleted = 0)")
     public abstract boolean isExistingName(String name, int parentIndex);
+
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id IN (:ids)")
+    public abstract CategoryTuple[] getTuplesByIds(long[] ids);
 }
