@@ -25,13 +25,14 @@ import dagger.hilt.android.scopes.ViewModelScoped;
 public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private final CategoryDao mCategoryDao;
     private SharedPreferences mMainSortPreference;
-    private MutableLiveData<Long> mInsertIdLive;
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<CategoryTuple>>> mClassifiedTuplesLive, mDeletedClassifiedTuplesLive, mDeletedSearchTuplesLive;
+    private MutableLiveData<CategoryTuple> mAddedTupleLive;
+    private MutableLiveData<CategoryTuple[]> mAddedTuplesLive;
 
     @Inject
     public CategoryRepository(CategoryDao categoryDao,
-                              @Qualifiers.MainSortPreference SharedPreferences mainSortPreference){
+                              @Qualifiers.MainSortPreference SharedPreferences mainSortPreference) {
         this.mCategoryDao = categoryDao;
         this.mMainSortPreference = mainSortPreference;
     }
@@ -39,6 +40,11 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     //for appDataBase
     public CategoryRepository(Context context) {
         this.mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
+    }
+
+    //from appDataBase
+    public void insert(Category[] categories) {
+        new Thread(() -> mCategoryDao.insert(categories)).start();
     }
 
     //to main
@@ -62,6 +68,11 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
         return mDeletedSearchTuplesLive;
     }
 
+    //to listFragment
+    public LiveData<CategoryTuple> getTupleLiveById(long id) {
+        return mCategoryDao.getTupleLiveById(id);
+    }
+
     //to treeView(disposable)
     public LiveData<List<CategoryTuple>> getTuplesByParentIndex(int parentIndex) {
         MutableLiveData<List<CategoryTuple>> tuplesLive = new MutableLiveData<>();
@@ -73,41 +84,35 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
         return tuplesLive;
     }
 
-    //to treeView(disposable)
-    public LiveData<CategoryTuple> getTupleById(long id) {
-        MutableLiveData<CategoryTuple> categoryTupleLive = new MutableLiveData<>();
-        new Thread(() -> {
-            CategoryTuple tuple = mCategoryDao.getTupleById(id);
-            categoryTupleLive.postValue(tuple);
-        }).start();
-        return categoryTupleLive;
-    }
-
     //to treeView
-    public MutableLiveData<Long> getInsertIdLive() {
-        mInsertIdLive = new MutableLiveData<>();
-        return mInsertIdLive;
+    public LiveData<CategoryTuple> getAddedTupleLive() {
+        mAddedTupleLive = new MutableLiveData<>();
+        return mAddedTupleLive;
     }
 
-    //from addCategory dialog(disposable)
+    //from addCategory dialog
     public void insert(String name, int parentIndex) {
         new Thread(() -> {
             long insertId = mCategoryDao.insert(name, parentIndex);
-            if (mInsertIdLive != null) mInsertIdLive.postValue(insertId);
+            if (mAddedTupleLive != null) {
+                CategoryTuple tuple = mCategoryDao.getTupleById(insertId);
+                mAddedTupleLive.postValue(tuple);
+            }
         }).start();
     }
 
-    //from appDataBase
-    public void insert(Category[] categories) {
-        new Thread(() -> mCategoryDao.insert(categories)).start();
+    public MutableLiveData<CategoryTuple[]> getAddedTuplesLive() {
+        mAddedTuplesLive = new MutableLiveData<>();
+        return mAddedTuplesLive;
     }
 
     //from restore dialog(disposable)
     public LiveData<Long[]> insertRestoreCategories(@NotNull int[] parentIndex) {
         MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
-            Long[] insertIds = mCategoryDao.insertRestoreCategories(parentIndex);
-            if (mInsertIdLive != null) insertIdsLive.postValue(insertIds);
+            long[] insertIds = mCategoryDao.insertRestoreCategories(parentIndex);
+            CategoryTuple[] addedTuples = mCategoryDao.getTuplesByIds(insertIds);
+            mAddedTuplesLive.postValue(addedTuples);
         }).start();
         return insertIdsLive;
     }
@@ -125,8 +130,8 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
 
     @Override
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids, boolean isDeleted) {
-        new Thread(() -> mCategoryDao.deleteOrRestore(ids, isDeleted)).start();
+    public void deleteOrRestore(long[] ids) {
+        new Thread(() -> mCategoryDao.deleteOrRestore(ids)).start();
     }
 
     @Override
