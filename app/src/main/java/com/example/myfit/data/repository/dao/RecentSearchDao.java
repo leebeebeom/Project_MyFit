@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.example.myfit.data.ModelFactory;
+import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.model.RecentSearch;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class RecentSearchDao {
 
     //to searchView, recycleBin search
-    @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY date DESC LIMIT 20")
+    @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY id DESC LIMIT 20")
     public abstract LiveData<List<RecentSearch>> getLiveByType(int type);
 
     @Transaction
@@ -38,10 +38,8 @@ public abstract class RecentSearchDao {
     protected abstract void insert(RecentSearch recentSearch);
 
     @Delete
-    //from searchView, recycleBin search
     public abstract void delete(RecentSearch recentSearch);
 
     @Query("DELETE FROM RecentSearch")
-    //from searchView, recycleBin search
     public abstract void deleteAll();
 }
