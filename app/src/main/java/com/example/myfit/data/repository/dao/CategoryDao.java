@@ -68,6 +68,10 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND deleted = 0")
     protected abstract List<CategoryTuple> getTuplesByParentIndex(int parentIndex);
 
+    //to listFragment
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id")
+    public abstract LiveData<CategoryTuple> getTupleLiveById(long id);
+
     @Transaction
     //to treeView(disposable)
     public CategoryTuple getTupleById(long id) {
@@ -77,7 +81,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         return tuple;
     }
 
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id AND deleted = 0")
+    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id")
     protected abstract CategoryTuple getTupleById2(long id);
 
     @Transaction
