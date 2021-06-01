@@ -130,12 +130,12 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids, boolean deleted) {
+    public void deleteOrRestore(long[] ids) {
         DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
-        super.setDeletedTuples(deletedTuples, deleted);
+        super.setDeletedTuples(deletedTuples);
         this.update(deletedTuples);
 
-        this.setChildrenParentDeleted(ids, deleted);
+        this.setChildrenParentDeleted(ids);
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Category WHERE id IN (:ids)")

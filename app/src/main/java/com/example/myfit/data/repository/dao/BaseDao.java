@@ -79,18 +79,20 @@ public abstract class BaseDao<T extends BaseTuple> {
         if (tuples != null) SortUtil.sortCategoryFolderTuples(sort, tuples);
     }
 
-    protected void setDeletedTuples(DeletedTuple[] deletedTuples, boolean deleted) {
+    protected void setDeletedTuples(DeletedTuple[] deletedTuples) {
         Arrays.stream(deletedTuples)
-                .forEach(deletedTuple -> deletedTuple.setDeleted(deleted));
-
-        if (deleted) setDeletedTime(deletedTuples);
-        else clearDeletedTime(deletedTuples);
+                .forEach(deletedTuple -> deletedTuple.setDeleted(!deletedTuple.isDeleted()));
+        setDeletedTime(deletedTuples);
     }
 
     @Contract(pure = true)
     private void setDeletedTime(@NotNull DeletedTuple[] deletedTuples) {
         long currentTime = getCurrentTime();
-        Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(currentTime));
+        Arrays.stream(deletedTuples).forEach(deletedTuple -> {
+            if (deletedTuple.isDeleted())
+                deletedTuple.setDeletedTime(currentTime);
+            else deletedTuple.setDeletedTime(0);
+        });
     }
 
     protected long getCurrentTime() {
@@ -98,11 +100,7 @@ public abstract class BaseDao<T extends BaseTuple> {
         return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
 
-    private void clearDeletedTime(DeletedTuple[] deletedTuples) {
-        Arrays.stream(deletedTuples).forEach(deletedTuple -> deletedTuple.setDeletedTime(0));
-    }
-
-    protected void setChildrenParentDeleted(long[] parentIds, boolean deleted) {
+    protected void setChildrenParentDeleted(long[] parentIds) {
         LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
         addAllChildFolderParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
 
@@ -110,8 +108,8 @@ public abstract class BaseDao<T extends BaseTuple> {
         long[] allFolderIds = getParentDeletedTupleIds(allFolderParentDeletedTuples);
         addAllChildSizeParentDeletedTuples(allFolderIds, allSizeParentDeletedTuples);
 
-        setParentDeletedTuples(allFolderParentDeletedTuples, deleted);
-        setParentDeletedTuples(allSizeParentDeletedTuples, deleted);
+        setParentDeletedTuples(allFolderParentDeletedTuples);
+        setParentDeletedTuples(allSizeParentDeletedTuples);
         updateFolderParentDeletedTuples(allFolderParentDeletedTuples);
         updateSizeParentDeletedTuples(allSizeParentDeletedTuples);
     }
@@ -141,8 +139,8 @@ public abstract class BaseDao<T extends BaseTuple> {
     @Query("SELECT id, deleted, parentDeleted FROM Size WHERE parentId IN(:parentIds)")
     protected abstract List<ParentDeletedTuple> getSizeParentDeletedTuplesByParentIds(long[] parentIds);
 
-    private void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples, boolean parentDeleted) {
-        parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(parentDeleted));
+    private void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples) {
+        parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(!parentDeletedTuple.isDeleted()));
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)

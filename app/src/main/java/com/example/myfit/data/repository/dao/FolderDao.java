@@ -168,12 +168,12 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids, boolean deleted) {
+    public void deleteOrRestore(long[] ids) {
         DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
-        super.setDeletedTuples(deletedTuples, deleted);
+        super.setDeletedTuples(deletedTuples);
         this.update(deletedTuples);
 
-        super.setChildrenParentDeleted(ids, deleted);
+        super.setChildrenParentDeleted(ids);
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Folder WHERE id IN (:ids)")
