@@ -14,8 +14,8 @@ public class Folder extends Category {
     private long parentId;
     private boolean parentDeleted;
 
-    public Folder(int parentIndex, int orderNumber, String name, long parentId) {
-        super(parentIndex, orderNumber, name);
+    public Folder(int parentIndex, int sortNumber, String name, long parentId) {
+        super(parentIndex, sortNumber, name);
         this.parentId = parentId;
     }
 }

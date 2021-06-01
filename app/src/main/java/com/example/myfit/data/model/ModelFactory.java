@@ -15,20 +15,20 @@ import java.util.Locale;
 public class ModelFactory {
     @NotNull
     @Contract("_, _, _ -> new")
-    public static Category makeCategory(String categoryName, int parentIndex, int orderNumber) {
-        return new Category(parentIndex, orderNumber, categoryName);
+    public static Category makeCategory(String categoryName, int parentIndex, int sortNumber) {
+        return new Category(parentIndex, sortNumber, categoryName);
     }
 
     @NotNull
     @Contract("_, _, _, _ -> new")
-    public static Folder makeFolder(String folderName, long parentId, int parentIndex, int orderNumber) {
-        return new Folder(parentIndex, orderNumber, folderName, parentId);
+    public static Folder makeFolder(String folderName, long parentId, int parentIndex, int sortNumber) {
+        return new Folder(parentIndex, sortNumber, folderName, parentId);
     }
 
     @NotNull
     @Contract("_, _, _ -> new")
-    public static Size makeSize(long parentId, int parentIndex, int orderNumber) {
-        return new Size(parentIndex, orderNumber, parentId);
+    public static Size makeSize(long parentId, int parentIndex, int sortNumber) {
+        return new Size(parentIndex, sortNumber, parentId);
     }
 
     @NotNull

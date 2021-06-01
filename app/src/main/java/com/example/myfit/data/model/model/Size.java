@@ -18,8 +18,8 @@ public class Size extends BaseModel {
     private boolean isFavorite, parentDeleted;
     private long parentId;
 
-    public Size(int parentIndex, int orderNumber, long parentId) {
-        super(parentIndex, orderNumber);
+    public Size(int parentIndex, int sortNumber, long parentId) {
+        super(parentIndex, sortNumber);
         this.parentId = parentId;
     }
 }

@@ -16,8 +16,8 @@ public class Category extends BaseModel {
     private String name;
     private int contentSize;
 
-    public Category(int parentIndex, int orderNumber, String name) {
-        super(parentIndex, orderNumber);
+    public Category(int parentIndex, int sortNumber, String name) {
+        super(parentIndex, sortNumber);
         this.name = name;
     }
 }

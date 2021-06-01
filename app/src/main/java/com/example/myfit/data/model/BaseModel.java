@@ -13,12 +13,12 @@ public class BaseModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private final int parentIndex;
-    private int orderNumber;
+    private int sortNumber;
     private boolean deleted;
     private long deletedTime;
 
-    public BaseModel(int parentIndex, int orderNumber) {
+    public BaseModel(int parentIndex, int sortNumber) {
         this.parentIndex = parentIndex;
-        this.orderNumber = orderNumber;
+        this.sortNumber = sortNumber;
     }
 }

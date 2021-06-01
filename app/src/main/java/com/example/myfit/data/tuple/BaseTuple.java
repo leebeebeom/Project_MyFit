@@ -9,7 +9,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class BaseTuple {
     private long id;
-    private int parentIndex, orderNumber;
+    private int parentIndex, sortNumber;
     private String name;
     private long deletedTime;
 }
