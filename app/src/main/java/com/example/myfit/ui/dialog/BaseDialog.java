@@ -57,10 +57,6 @@ public abstract class BaseDialog extends DialogFragment {
 
     protected abstract int getResId();
 
-    protected NavBackStackEntry getGraphBackStack() {
-        return mNavController.getBackStackEntry(mNavController.getGraph().getId());
-    }
-
     protected void setBackStackActionModeOff() {
         getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
     }
