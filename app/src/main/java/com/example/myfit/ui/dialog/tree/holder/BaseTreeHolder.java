@@ -15,9 +15,10 @@ import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
 public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.BaseNodeViewHolder<T> {
-    private final NavController mNavController;
+    protected final NavController mNavController;
     private boolean mClickable = true;
     private T mValue;
+    protected TreeNode mNode;
 
     public BaseTreeHolder(Context context, NavController navController) {
         super(context);
@@ -27,6 +28,7 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
     @Override
     public View createNodeView(TreeNode node, T value) {
         this.mValue = value;
+        this.mNode = node;
         bind(value);
 
         if (!node.getChildren().isEmpty()) {
@@ -54,9 +56,9 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         return mClickable;
     }
 
-    public void setIconClickable() {
-        getFolderIconLayout().setOnClickListener(v -> tView.toggleNode(mNode));
+    public void setFolderIconClickable() {
         getArrowIcon().setVisibility(View.VISIBLE);
+        getFolderIconLayout().setOnClickListener(v -> tView.toggleNode(mNode));
     }
 
     @Override
@@ -67,9 +69,9 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
 
     public TreeNode getNode(){
         return mNode;
-    };
+    }
 
-    public long getId() {
+    public long getTupleId() {
         return mValue.getTupleId();
     }
 

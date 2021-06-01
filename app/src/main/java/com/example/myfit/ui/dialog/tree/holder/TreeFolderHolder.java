@@ -75,12 +75,10 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
         return mBinding.tvContentsSize;
     }
 
-    @Override//TODO super 콜 후 다시 뷰 리턴 되는지 확인
     public View createNodeView(TreeNode node, @NotNull FolderValue value) {
-        super.createNodeView(node, value);
         setMargin(value.getMargin());
         addChildNode(value);
-        return mBinding.getRoot();
+        return super.createNodeView(node, value);
     }
 
     private void setMargin(int margin) {
@@ -94,7 +92,7 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
                 .filter(folderTuple -> folderTuple.getParentId() == value.getTupleId())
                 .forEach(folderTuple -> {
                     TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + plusMargin))
-                            .setViewHolder(this);
+                            .setViewHolder(new TreeFolderHolder(context, mFolderTuples, mNavController));
                     mNode.addChild(treeNode);
                 });
     }
