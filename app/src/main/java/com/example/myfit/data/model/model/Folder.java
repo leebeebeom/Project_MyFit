@@ -2,8 +2,6 @@ package com.example.myfit.data.model.model;
 
 import androidx.room.Entity;
 
-import com.example.myfit.data.model.BaseInfo;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +14,8 @@ public class Folder extends Category {
     private long parentId;
     private boolean parentDeleted;
 
-    public Folder(BaseInfo baseInfo, String name, long parentId) {
-        super(baseInfo, name);
+    public Folder(int parentIndex, int orderNumber, String name, long parentId) {
+        super(parentIndex, orderNumber, name);
         this.parentId = parentId;
     }
 }

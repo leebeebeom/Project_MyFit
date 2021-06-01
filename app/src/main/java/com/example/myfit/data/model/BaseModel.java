@@ -1,9 +1,6 @@
 package com.example.myfit.data.model;
 
-import androidx.room.Embedded;
 import androidx.room.PrimaryKey;
-
-import org.jetbrains.annotations.NotNull;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,10 +12,13 @@ import lombok.Setter;
 public class BaseModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
-    @Embedded
-    private final BaseInfo baseInfo;
+    private final int parentIndex;
+    private int orderNumber;
+    private boolean deleted;
+    private long deletedTime;
 
-    public BaseModel(@NotNull BaseInfo baseInfo) {
-        this.baseInfo = baseInfo;
+    public BaseModel(int parentIndex, int orderNumber) {
+        this.parentIndex = parentIndex;
+        this.orderNumber = orderNumber;
     }
 }

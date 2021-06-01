@@ -2,7 +2,6 @@ package com.example.myfit.data.model.model;
 
 import androidx.room.Entity;
 
-import com.example.myfit.data.model.BaseInfo;
 import com.example.myfit.data.model.BaseModel;
 
 import lombok.EqualsAndHashCode;
@@ -17,8 +16,8 @@ public class Category extends BaseModel {
     private String name;
     private int contentsSize;
 
-    public Category(BaseInfo baseInfo, String name) {
-        super(baseInfo);
+    public Category(int parentIndex, int orderNumber, String name) {
+        super(parentIndex, orderNumber);
         this.name = name;
     }
 }
