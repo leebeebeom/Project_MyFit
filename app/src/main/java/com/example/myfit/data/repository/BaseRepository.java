@@ -10,14 +10,11 @@ import java.util.List;
 import static com.example.myfit.di.DataModule.SORT;
 
 public abstract class BaseRepository<T extends BaseTuple> {
-    public abstract void deleteOrRestore(long[] ids, boolean isDeleted);
+    public abstract void deleteOrRestore(long[] ids);
 
     public void changeSort(Sort sort) {
-        if (sort != getSort()) {
-            SharedPreferences.Editor edit = getPreference().edit();
-            edit.putInt(SORT, sort.getValue());
-            edit.apply();
-        }
+        if (sort != getSort())
+            getPreference().edit().putInt(SORT, sort.getValue()).apply();
     }
 
     public Sort getSort() {
