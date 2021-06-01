@@ -1,18 +1,15 @@
 package com.example.myfit.ui.dialog.tree;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myfit.data.tuple.tuple.CategoryTuple;
-import com.example.myfit.data.tuple.tuple.FolderTuple;
-import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.data.repository.SizeRepository;
+import com.example.myfit.data.tuple.ParentIdTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
 
 import java.util.List;
 
@@ -28,31 +25,17 @@ public class TreeViewModel extends ViewModel {
     private final CategoryRepository mCategoryRepository;
     private final FolderRepository mFolderRepository;
     private final SizeRepository mSizeRepository;
-    private final SavedStateHandle mSavedStateHandle;
-    private final MediatorLiveData<CategoryTuple> mCategoryTupleMutable = new MediatorLiveData<>();
-    private final MediatorLiveData<FolderTuple> mFolderTupleMutable = new MediatorLiveData<>();
+    private final MutableLiveData<CategoryTuple> mAddedCategoryTupleLive;
+    private final MutableLiveData<FolderTuple> mAddedFolderTupleLive;
 
     @Inject
-    public TreeViewModel(SavedStateHandle savedStateHandle, CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
-        this.mSavedStateHandle = savedStateHandle;
+    public TreeViewModel(CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
         this.mCategoryRepository = categoryRepository;
         this.mFolderRepository = folderRepository;
         this.mSizeRepository = sizeRepository;
 
-        categoryTupleMutableAddSource();
-        folderTupleMutableAddSource();
-    }
-
-    private void categoryTupleMutableAddSource() {
-        LiveData<CategoryTuple> categoryTupleLive = Transformations.switchMap(mSavedStateHandle.getLiveData(CATEGORY_INSERT_ID),
-                insertId -> mCategoryRepository.getTupleById((Long) insertId));
-        mCategoryTupleMutable.addSource(categoryTupleLive, mCategoryTupleMutable::setValue);
-    }
-
-    private void folderTupleMutableAddSource() {
-        LiveData<FolderTuple> folderTupleLive = Transformations.switchMap(mSavedStateHandle.getLiveData(FOLDER_INSERT_ID),
-                insertId -> mFolderRepository.getTupleById((Long) insertId));
-        mFolderTupleMutable.addSource(folderTupleLive, mFolderTupleMutable::setValue);
+        this.mAddedCategoryTupleLive = mCategoryRepository.getAddedTupleLive();
+        this.mAddedFolderTupleLive = mFolderRepository.getAddedTupleLive();
     }
 
     public LiveData<List<CategoryTuple>> getCategoryTuplesLive(int parentIndex) {
@@ -71,27 +54,11 @@ public class TreeViewModel extends ViewModel {
         return mSizeRepository.getParentIdTuplesByIds(selectedSizeIds);
     }
 
-    public MutableLiveData<Long> getCategoryInsertIdLive() {
-        return mCategoryRepository.getInsertIdLive();
+    public MutableLiveData<CategoryTuple> getAddedCategoryTupleLive() {
+        return mAddedCategoryTupleLive;
     }
 
-    public MutableLiveData<Long> getFolderInsertIdLive() {
-        return mFolderRepository.getInsertIdLive();
-    }
-
-    public MutableLiveData<CategoryTuple> getCategoryTupleMutable() {
-        return mCategoryTupleMutable;
-    }
-
-    public void setCategoryInsertId(long id) {
-        mSavedStateHandle.set(CATEGORY_INSERT_ID, id);
-    }
-
-    public MutableLiveData<FolderTuple> getFolderTupleMutable() {
-        return mFolderTupleMutable;
-    }
-
-    public void setFolderInsertId(long id) {
-        mSavedStateHandle.set(FOLDER_INSERT_ID, id);
+    public MutableLiveData<FolderTuple> getAddedFolderTupleLive() {
+        return mAddedFolderTupleLive;
     }
 }
