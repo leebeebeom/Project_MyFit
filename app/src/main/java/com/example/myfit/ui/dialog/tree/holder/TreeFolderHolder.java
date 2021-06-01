@@ -71,8 +71,8 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     }
 
     @Override
-    public TextView getContentsSize() {
-        return mBinding.tvContentsSize;
+    public TextView getContentSize() {
+        return mBinding.tvContentSize;
     }
 
     public View createNodeView(TreeNode node, @NotNull FolderValue value) {

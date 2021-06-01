@@ -97,5 +97,5 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
 
     protected abstract TextView getCurrentPosition();
 
-    public abstract TextView getContentsSize();
+    public abstract TextView getContentSize();
 }

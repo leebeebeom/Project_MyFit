@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myfit.R;
 import com.example.myfit.databinding.LayoutDialogTreeBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder;
 import com.example.myfit.ui.dialog.tree.holder.TreeCategoryHolder;
+import com.example.myfit.ui.dialog.tree.holder.TreeFolderHolder;
 import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
 import com.example.myfit.ui.dialog.tree.holder.value.FolderValue;
 import com.example.myfit.util.CommonUtil;
@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -64,16 +65,14 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        AlertDialog alertDialog = getAlertDialog(getDialogBuilder());
+        AlertDialog alertDialog = getAlertDialog();
         setTreeView();
 
-        observeCategoryInsertIdLive();
-        observeFolderInsertIdLive();
         observeCategoryTupleMutable();
         observeFolderTupleMutable();
 
         if (savedInstanceState == null && mCurrentPositionId != -1)
-            expandingNode();
+            expandingNodes();
         else if (savedInstanceState != null)
             mTreeView.restoreState(savedInstanceState.getString(TREE_VIEW_STATE));
         return alertDialog;
@@ -81,8 +80,8 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
 
     @NotNull
     @Override
-    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        return dialogBuilder
+    protected AlertDialog getAlertDialog() {
+        return mDialogBuilder
                 .setTitle(getString(R.string.tree_title))
                 .setView(getBinding().getRoot())
                 .create();
@@ -92,7 +91,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         String parentCategory = CommonUtil.getParentCategory(mParentIndex);
         mBinding.setParentCategory(parentCategory);
         mBinding.layoutAddCategory.setOnClickListener(v ->
-                CommonUtil.navigate(getNavController(), R.id.treeViewDialog,
+                CommonUtil.navigate(mNavController, R.id.treeViewDialog,
                         TreeViewDialogDirections.toAddCategoryDialog(mParentIndex)));
         return mBinding;
     }
@@ -110,7 +109,6 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
                                     mTreeNodeProvider.showCurrentPosition(mCurrentPositionId);
 
                                     AndroidTreeView treeView = getTreeView(categoryNodes);
-                                    mBinding.treeViewContainer.removeAllViews();
                                     mBinding.treeViewContainer.addView(treeView.getView());
                                 }))));
     }
@@ -125,36 +123,18 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         return mTreeView;
     }
 
-    private void observeCategoryInsertIdLive() {
-        mModel.getCategoryInsertIdLive().observe(getViewLifecycleOwner(), insertId -> {
-            if (insertId != null) {
-                mModel.setCategoryInsertId(insertId);
-                mModel.getCategoryInsertIdLive().setValue(null);
-            }
-        });
-    }
-
-    private void observeFolderInsertIdLive() {
-        mModel.getFolderInsertIdLive().observe(getViewLifecycleOwner(), insertId -> {
-            if (insertId != null) {
-                mModel.setFolderInsertId(insertId);
-                mModel.getCategoryInsertIdLive().setValue(null);
-            }
-        });
-    }
-
     private void observeCategoryTupleMutable() {
-        mModel.getCategoryTupleMutable().observe(getViewLifecycleOwner(), categoryTuple -> {
+        mModel.getAddedCategoryTupleLive().observe(getViewLifecycleOwner(), categoryTuple -> {
             if (categoryTuple != null) {
                 TreeNode addedCategoryNode = new TreeNode(new CategoryValue(categoryTuple)).setViewHolder(mTreeNodeProvider.makeCategoryHolder());
                 mTreeView.addNode(mNodeRoot, addedCategoryNode);
-                mModel.getCategoryTupleMutable().setValue(null);
+                mModel.getAddedCategoryTupleLive().setValue(null);
             }
         });
     }
 
     private void observeFolderTupleMutable() {
-        mModel.getFolderTupleMutable().observe(getViewLifecycleOwner(), folderTuple -> {
+        mModel.getAddedFolderTupleLive().observe(getViewLifecycleOwner(), folderTuple -> {
             if (folderTuple != null) {
                 TreeNode clickedNode = mTreeNodeProvider.getClickedNode(folderTuple);
                 int margin = getMargin(clickedNode);
@@ -163,10 +143,10 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
                         .setViewHolder(mTreeNodeProvider.makeFolderHolder());
                 mTreeView.addNode(clickedNode, addedFolderNode);
 
-                addContentsSize(clickedNode);
                 BaseTreeHolder<?> viewHolder = (BaseTreeHolder<?>) clickedNode.getViewHolder();
-                viewHolder.setIconClickable();
-                mModel.getFolderTupleMutable().setValue(null);
+                addContentSize(viewHolder);
+                viewHolder.setFolderIconClickable();
+                mModel.getAddedFolderTupleLive().setValue(null);
             }
         });
     }
@@ -177,31 +157,35 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         else return mTreeNodeProvider.getMargin();
     }
 
-    private void addContentsSize(TreeNode clickedNode) {
-        TextView tvContentsSize = ((BaseTreeHolder<?>) clickedNode.getViewHolder()).getContentsSize();
-        String originContentsSize = tvContentsSize.getText().toString();
-        int addedContentsSize = Integer.parseInt(originContentsSize + 1);
-        tvContentsSize.setText(String.valueOf(addedContentsSize));
+    private void addContentSize(BaseTreeHolder<?> viewHolder) {
+        TextView tvContentSize = viewHolder.getContentSize();
+        String originContentSize = tvContentSize.getText().toString();
+        int addedContentSize = Integer.parseInt(originContentSize) + 1;
+        tvContentSize.setText(String.valueOf(addedContentSize));
     }
 
-    private void expandingNode() {
+    private void expandingNodes() {
         expandCategoryNode();
         expandingFolderNode();
     }
 
     private void expandCategoryNode() {
         TreeCategoryHolder[] categoryHolders = mTreeNodeProvider.getCategoryHolders();
-        Arrays.stream(categoryHolders)
-                .filter(categoryHolder -> categoryHolder.getId() == mCategoryId)
-                .forEach(categoryHolder -> mTreeView.expandNode(categoryHolder.getNode()));
+        Optional<TreeCategoryHolder> holder = Arrays.stream(categoryHolders)
+                .filter(categoryHolder -> categoryHolder.getTupleId() == mCategoryId)
+                .findFirst();
+        holder.ifPresent(categoryHolder -> mTreeView.expandNode(categoryHolder.getNode()));
     }
 
     public void expandingFolderNode() {
-        Arrays.stream(mTreeNodeProvider.getFolderHolders())
-                .filter(folderHolder ->
-                        Arrays.stream(mFolderPathIds)
-                                .anyMatch(folderId -> folderHolder.getId() == folderId))
-                .forEach(folderHolder -> mTreeView.expandNode(folderHolder.getNode()));
+        TreeFolderHolder[] folderHolders = mTreeNodeProvider.getFolderHolders();
+        Arrays.stream(mFolderPathIds)
+                .forEach(folderPathId -> {
+                    Optional<TreeFolderHolder> holder = Arrays.stream(folderHolders)
+                            .filter(folderHolder -> folderHolder.getTupleId() == folderPathId)
+                            .findFirst();
+                    holder.ifPresent(folderHolder -> mTreeView.expandNode(holder.get().getNode()));
+                });
     }
 
     @Override
@@ -216,8 +200,8 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         if (viewHolder.isClickable()) {
             TreeViewDialogDirections.ToMoveFolderAndSizeDialog action =
                     TreeViewDialogDirections.toMoveFolderAndSizeDialog(
-                            mSelectedFolderIds, mSelectedSizeIds, viewHolder.getId());
-            CommonUtil.navigate(getNavController(), R.id.treeViewDialog, action);
+                            mSelectedFolderIds, mSelectedSizeIds, viewHolder.getTupleId());
+            CommonUtil.navigate(mNavController, R.id.treeViewDialog, action);
         }
     }
 

@@ -27,6 +27,8 @@ public class TreeViewModel extends ViewModel {
     private final SizeRepository mSizeRepository;
     private final MutableLiveData<CategoryTuple> mAddedCategoryTupleLive;
     private final MutableLiveData<FolderTuple> mAddedFolderTupleLive;
+    private LiveData<ParentIdTuple[]> mFolderParentIdTuplesLive;
+    private LiveData<ParentIdTuple[]> mSizeParentIdTuplesLive;
 
     @Inject
     public TreeViewModel(CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
@@ -47,11 +49,15 @@ public class TreeViewModel extends ViewModel {
     }
 
     public LiveData<ParentIdTuple[]> getFolderParentIdTuplesLive(long[] selectedFolderIds) {
-        return mFolderRepository.getParentIdTuplesByIds(selectedFolderIds);
+        if (mFolderParentIdTuplesLive == null)
+            mFolderParentIdTuplesLive = mFolderRepository.getParentIdTuplesByIds(selectedFolderIds);
+        return mFolderParentIdTuplesLive;
     }
 
     public LiveData<ParentIdTuple[]> getSizeParentIdTuplesLive(long[] selectedSizeIds) {
-        return mSizeRepository.getParentIdTuplesByIds(selectedSizeIds);
+        if (mSizeParentIdTuplesLive == null)
+            mSizeParentIdTuplesLive = mSizeRepository.getParentIdTuplesByIds(selectedSizeIds);
+        return mSizeParentIdTuplesLive;
     }
 
     public MutableLiveData<CategoryTuple> getAddedCategoryTupleLive() {

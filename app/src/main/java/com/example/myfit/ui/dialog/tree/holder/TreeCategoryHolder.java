@@ -56,8 +56,8 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     }
 
     @Override
-    public TextView getContentsSize() {
-        return mBinding.tvContentsSize;
+    public TextView getContentSize() {
+        return mBinding.tvContentSize;
     }
 
     @Override
