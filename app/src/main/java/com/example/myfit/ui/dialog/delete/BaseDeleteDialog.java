@@ -24,7 +24,7 @@ public abstract class BaseDeleteDialog extends BaseDialog {
                 .create();
     }
 
-    protected abstract String getSelectedItemsSize();
+    protected abstract int getSelectedItemsSize();
 
     @Override
     protected View.OnClickListener getPositiveClickListener() {

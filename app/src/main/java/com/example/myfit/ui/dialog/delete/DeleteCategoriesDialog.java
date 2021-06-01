@@ -30,11 +30,11 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
 
     @Override
     protected void task() {
-        mCategoryRepository.deleteOrRestore(mSelectedItemIds, true);
+        mCategoryRepository.deleteOrRestore(mSelectedItemIds);
     }
 
     @Override
-    protected String getSelectedItemsSize() {
-        return String.valueOf(mSelectedItemIds.length);
+    protected int getSelectedItemsSize() {
+        return mSelectedItemIds.length;
     }
 }

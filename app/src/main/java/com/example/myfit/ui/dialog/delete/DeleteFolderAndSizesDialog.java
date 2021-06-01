@@ -18,8 +18,7 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
     FolderRepository mFolderRepository;
     @Inject
     SizeRepository mSizeRepository;
-    private long[] mSelectedFolderIds;
-    private long[] mSelectedSizeIds;
+    private long[] mSelectedFolderIds, mSelectedSizeIds;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -35,12 +34,14 @@ public class DeleteFolderAndSizesDialog extends BaseDeleteDialog {
 
     @Override
     protected void task() {
-        mFolderRepository.deleteOrRestore(mSelectedFolderIds, true);
-        mSizeRepository.deleteOrRestore(mSelectedSizeIds, true);
+        if (mSelectedFolderIds.length != 0)
+            mFolderRepository.deleteOrRestore(mSelectedFolderIds);
+        if (mSelectedSizeIds.length != 0)
+            mSizeRepository.deleteOrRestore(mSelectedSizeIds);
     }
 
     @Override
-    protected String getSelectedItemsSize() {
-        return String.valueOf(mSelectedFolderIds.length + mSelectedSizeIds.length);
+    protected int getSelectedItemsSize() {
+        return mSelectedFolderIds.length + mSelectedSizeIds.length;
     }
 }

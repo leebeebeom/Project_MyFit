@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.myfit.R;
 import com.example.myfit.data.repository.SizeRepository;
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.DialogBuilder;
 
 import javax.inject.Inject;
 
@@ -19,8 +18,8 @@ public class DeleteSizeDialog extends BaseDialog {
     SizeRepository mSizeRepository;
 
     @Override
-    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        return dialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_delete))
+    protected AlertDialog getAlertDialog() {
+        return mDialogBuilder.makeConfirmDialog(getString(R.string.dialog_message_delete))
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -30,7 +29,7 @@ public class DeleteSizeDialog extends BaseDialog {
         return v -> {
             long id = DeleteSizeDialogArgs.fromBundle(getArguments()).getId();
             mSizeRepository.delete(id);
-            getNavController().popBackStack(R.id.sizeFragment, true);
+            mNavController.popBackStack(R.id.sizeFragment, true);
         };
     }
 
