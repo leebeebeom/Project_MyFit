@@ -9,7 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.model.size.Size;
+import com.example.myfit.data.model.model.Size;
 import com.example.myfit.data.tuple.DeletedTuple;
 import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
@@ -18,99 +18,92 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Dao
 public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //to list
-    public LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId) {
-        LiveData<List<SizeTuple>> tuplesLive = getTuplesLiveByParentId2(parentId);
-        return Transformations.map(tuplesLive, tuples -> tuples);
-    }
-
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
-    protected abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId2(long parentId);
+    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, isFavorite, deletedTime " +
+            "FROM Size WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
+    public abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
 
     //to recycleBin
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<SizeTuple>> tuplesLive = this.getDeletedTuplesLive();
-        return Transformations.map(tuplesLive, this::getClassifiedSizeTuplesByParentIndex);
+        return Transformations.map(tuplesLive, this::getClassifiedSizeTuples);
     }
 
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
+    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
             "WHERE deleted = 1 AND parentDeleted = 0 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
-    @NotNull
-    private List<List<SizeTuple>> getClassifiedSizeTuplesByParentIndex(List<SizeTuple> tuples) {
-        List<LinkedList<SizeTuple>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-        List<List<SizeTuple>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    private List<List<SizeTuple>> getClassifiedSizeTuples(List<SizeTuple> tuples) {
+        if (tuples != null) {
+            List<LinkedList<SizeTuple>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+            List<List<SizeTuple>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
-        try {
             tuples.forEach(tuple -> classifiedLinkedList.get(tuple.getParentIndex()).add(tuple));
             for (int i = 0; i < 4; i++) classifiedList.get(i).addAll(classifiedLinkedList.get(i));
-        } catch (NullPointerException e) {
-            logE(e);
-        }
-
-        return classifiedList;
+            return classifiedList;
+        } else return null;
     }
 
-    //to search
-    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive() {
-        LiveData<List<SizeTuple>> tuplesLive = getSearchTuplesLive2(false);
-        return Transformations.map(tuplesLive, this::getClassifiedSizeTuplesByParentIndex);
+    //to search, recycleBin search
+    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(boolean deleted) {
+        LiveData<List<SizeTuple>> tuplesLive = getSearchTuplesLive2(deleted);
+        return Transformations.map(tuplesLive, this::getClassifiedSizeTuples);
     }
 
-    //to recycleBin search
-    public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive() {
-        LiveData<List<SizeTuple>> deletedTuplesLive = getSearchTuplesLive2(true);
-        return Transformations.map(deletedTuplesLive, this::getClassifiedSizeTuplesByParentIndex);
-    }
-
-    @Query("SELECT id, parentIndex, orderNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
+    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
             "WHERE deleted = :deleted AND parentDeleted = 0 AND name || brand ORDER BY name")
     protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean deleted);
 
-    //to sizeFragment(disposable)
-    public List<String> getBrands() {
-        List<String> brands = this.getBrands2();
-        brands.sort(String::compareTo);
-        return brands;
+    //to sizeFragment
+    public LiveData<Set<String>> getBrands() {
+        LiveData<List<String>> brands = this.getBrands2();
+        return Transformations.map(brands, HashSet::new);
     }
 
-    @Query("SELECT brand FROM Size WHERE deleted = 0 AND parentDeleted = 0")
-    protected abstract List<String> getBrands2();
+    @Query("SELECT brand FROM Size WHERE deleted = 0 AND parentDeleted = 0 ORDER BY brand")
+    protected abstract LiveData<List<String>> getBrands2();
 
     //to sizeFragment
     @Query("SELECT * FROM Size WHERE id = :id")
-    public abstract Size getSizeById(long id);
+    public abstract LiveData<Size> getSizeById(long id);
 
     //from sizeFragment
     public void insertSize(@NotNull Size size) {
-        int orderNumber = getLargestOrder() + 1;
-        size.getBaseInfo().setOrderNumber(orderNumber);
+        int sortNumber = getLargestSort() + 1;
+        size.setSortNumber(sortNumber);
         this.insert(size);
     }
 
-    @Query("SELECT max(orderNumber) FROM Size")
-    protected abstract int getLargestOrder();
+    @Query("SELECT max(sortNumber) FROM Size")
+    protected abstract int getLargestSort();
 
+    //from listFragment(favorite)
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     public abstract void update(SizeTuple sizeTuple);
 
+    //from listFragment(drag drop)
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     public abstract void update(List<SizeTuple> sizeTuples);
 
+    //from sizeFragment
     @Transaction
-    public void delete(long id) {
+    public void deleteOrRestore(long id) {
         DeletedTuple deletedTuple = getDeletedTuple(id);
-        deletedTuple.setDeleted(true);
+        deletedTuple.setDeleted(!deletedTuple.isDeleted());
         deletedTuple.setDeletedTime(super.getCurrentTime());
         updateDeletedTuple(deletedTuple);
     }
+
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
+    protected abstract void updateDeletedTuple(DeletedTuple deletedTuple);
 
     @Query("SELECT id, deleted, deletedTime FROM Size WHERE id = :id")
     protected abstract DeletedTuple getDeletedTuple(long id);
@@ -127,6 +120,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         this.update(parentIdTuples);
     }
 
+    //to treeView(selectedSizes)
     @Query("SELECT id, parentId FROM Size WHERE id IN (:ids)")
     public abstract ParentIdTuple[] getParentIdTuplesByIds(long[] ids);
 
@@ -135,9 +129,9 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Transaction
     //from selectedItemDelete, restore dialog
-    public void deleteOrRestore(long[] ids, boolean deleted) {
+    public void deleteOrRestore(long[] ids) {
         DeletedTuple[] sizeDeletedTuples = getDeletedTuples(ids);
-        super.setDeletedTuples(sizeDeletedTuples, deleted);
+        super.setDeletedTuples(sizeDeletedTuples);
         this.updateDeletedTuples(sizeDeletedTuples);
     }
 
@@ -146,7 +140,4 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
-    protected abstract void updateDeletedTuple(DeletedTuple deletedTuple);
 }
