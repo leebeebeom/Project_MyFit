@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
+import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.data.tuple.tuple.FolderTuple;
-import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder;
 import com.example.myfit.ui.dialog.tree.holder.TreeCategoryHolder;
 import com.example.myfit.ui.dialog.tree.holder.TreeFolderHolder;
@@ -65,7 +65,7 @@ public class TreeNodeProvider {
                 mFolderTuples.stream()
                         .filter(folderTuple -> {
                             TreeCategoryHolder categoryHolder = (TreeCategoryHolder) categoryNode.getViewHolder();
-                            return categoryHolder.getId() == folderTuple.getParentId();
+                            return categoryHolder.getTupleId() == folderTuple.getParentId();
                         })
                         .forEach(folderTuple ->
                                 categoryNode.addChild(new TreeNode(new FolderValue(folderTuple, mMargin)).setViewHolder(makeFolderHolder()))));
@@ -99,12 +99,9 @@ public class TreeNodeProvider {
     }
 
     private void addAllFolderNodes(List<TreeNode> topFolderNodes, LinkedList<TreeNode> allFolderNodes) {
-        topFolderNodes.stream()
-                .filter(folderNode -> !folderNode.getChildren().isEmpty())
-                .forEach(folderNode -> {
-                    allFolderNodes.addAll(folderNode.getChildren());
-                    addAllFolderNodes(folderNode.getChildren(), allFolderNodes);
-                });
+        allFolderNodes.addAll(topFolderNodes);
+        List<TreeNode> childFolderNodes = topFolderNodes.stream().filter(folderNode -> !folderNode.getChildren().isEmpty()).collect(Collectors.toList());
+        if (!childFolderNodes.isEmpty()) addAllFolderNodes(childFolderNodes, allFolderNodes);
     }
 
     public void checkIsSelectedItemParent(ParentIdTuple[] folderParentIdTuples, ParentIdTuple[] sizeParentIdTuples) {
@@ -118,7 +115,7 @@ public class TreeNodeProvider {
         Arrays.stream(parentIdTuples)
                 .forEach(parentIdTuple ->
                         Arrays.stream(holders)
-                                .filter(holder -> holder.getId() == parentIdTuple.getParentId())
+                                .filter(holder -> holder.getTupleId() == parentIdTuple.getParentId())
                                 .forEach(holder -> holder.setAlpha()));
     }
 
@@ -127,7 +124,7 @@ public class TreeNodeProvider {
                 .forEach(folderParentIdTuple -> {
                     TreeFolderHolder[] selectedFolderHolders = (TreeFolderHolder[])
                             Arrays.stream(mFolderHolders)
-                                    .filter(folderHolder -> folderHolder.getId() == folderParentIdTuple.getId())
+                                    .filter(folderHolder -> folderHolder.getTupleId() == folderParentIdTuple.getId())
                                     .toArray();
 
                     BaseTreeHolder<?>[] selectedFolderHolderParents = (BaseTreeHolder<?>[])
@@ -145,20 +142,19 @@ public class TreeNodeProvider {
                 .forEach(folderParentIdTuple ->
                         Arrays.stream(mFolderHolders).filter(folderHolder -> {
                             BaseTreeHolder<?> parentHolder = folderHolder.getParent();
-                            return (parentHolder instanceof TreeCategoryHolder && ((TreeCategoryHolder) parentHolder).getId() == folderParentIdTuple.getId()) ||
-                                    (parentHolder instanceof TreeFolderHolder && ((TreeFolderHolder) parentHolder).getId() == folderParentIdTuple.getId());
+                            return (parentHolder instanceof TreeFolderHolder && ((TreeFolderHolder) parentHolder).getTupleId() == folderParentIdTuple.getId());
                         }).forEach(BaseTreeHolder::setAlpha));
     }
 
     public void showCurrentPosition(long currentPositionId) {
         Optional<TreeCategoryHolder> currentPositionHolder = Arrays.stream(mCategoryHolders)
-                .filter(categoryHolder -> categoryHolder.getId() == currentPositionId)
+                .filter(categoryHolder -> categoryHolder.getTupleId() == currentPositionId)
                 .findFirst();
         if (currentPositionHolder.isPresent()) {
             currentPositionHolder.get().showCurrentPosition();
         } else {
             Optional<TreeFolderHolder> currentPositionHolder2 = Arrays.stream(mFolderHolders)
-                    .filter(folderHolder -> folderHolder.getId() == currentPositionId)
+                    .filter(folderHolder -> folderHolder.getTupleId() == currentPositionId)
                     .findFirst();
             currentPositionHolder2.ifPresent(BaseTreeHolder::showCurrentPosition);
         }
@@ -166,14 +162,14 @@ public class TreeNodeProvider {
 
     public TreeNode getClickedNode(FolderTuple folderTuple) {
         Optional<TreeCategoryHolder> parentHolder = Arrays.stream(mCategoryHolders)
-                .filter(categoryHolder -> categoryHolder.getId() == folderTuple.getParentId())
+                .filter(categoryHolder -> categoryHolder.getTupleId() == folderTuple.getParentId())
                 .findFirst();
 
         if (parentHolder.isPresent()) {
             return parentHolder.get().getNode();
         } else {
             Optional<TreeFolderHolder> parentHolder2 = Arrays.stream(mFolderHolders)
-                    .filter(folderHolder -> folderHolder.getId() == folderTuple.getParentId())
+                    .filter(folderHolder -> folderHolder.getTupleId() == folderTuple.getParentId())
                     .findFirst();
             return parentHolder2.map(TreeFolderHolder::getNode).orElse(null);
         }
