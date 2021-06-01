@@ -85,7 +85,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     }
 
     //to treeView
-    public LiveData<CategoryTuple> getAddedTupleLive() {
+    public MutableLiveData<CategoryTuple> getAddedTupleLive() {
         mAddedTupleLive = new MutableLiveData<>();
         return mAddedTupleLive;
     }
