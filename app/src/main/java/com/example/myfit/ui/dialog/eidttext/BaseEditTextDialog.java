@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.DialogBindingBuilder;
 import com.example.myfit.util.KeyBoardUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,32 +20,21 @@ import dagger.hilt.android.AndroidEntryPoint;
 public abstract class BaseEditTextDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
-    DialogBindingBuilder mDialogBindingBuilder;
-    private ItemDialogEditTextBinding mBinding;
+    protected ItemDialogEditTextBinding mBinding;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = getBinding(savedInstanceState);
-    }
-
-    private ItemDialogEditTextBinding getBinding(@Nullable Bundle savedInstanceState) {
-        return mDialogBindingBuilder
-                .setHint(getHint())
-                .setPlaceHolder(getPlaceHolder())
-                .setText(getInputText(savedInstanceState))
-                .create();
+        mBinding.et.setHint(getHint());
+        mBinding.layout.setPlaceholderText(getPlaceHolder());
+        mBinding.et.setText(getInitialText(savedInstanceState));
     }
 
     protected abstract String getHint();
 
     protected abstract String getPlaceHolder();
 
-    protected abstract String getInputText(Bundle savedInstanceState);
-
-    protected ItemDialogEditTextBinding getBinding() {
-        return mBinding;
-    }
+    protected abstract String getInitialText(Bundle savedInstanceState);
 
     @NonNull
     @NotNull
@@ -65,7 +53,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
                 model.getExistingNameLive().setValue(null);
             }
         });
-        return getAlertDialog(getDialogBuilder());
+        return getAlertDialog();
     }
 
     protected abstract BaseEditTextViewModel getModel();

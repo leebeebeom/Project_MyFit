@@ -18,7 +18,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     @Override
     protected BaseEditTextViewModel.BaseAddViewModel getModel() {
         if (mModel == null) {
-            NavBackStackEntry graphBackStack = getGraphBackStack();
+            NavBackStackEntry graphBackStack = mNavController.getBackStackEntry(R.id.nav_graph_add_category);
             mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryViewModel.class);
         }
         return mModel;
@@ -37,7 +37,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     @Override
     protected void navigateSameNameDialog() {
         NavDirections action = AddCategoryDialogDirections.toAddSameCategoryNameDialog();
-        CommonUtil.navigate(getNavController(), R.id.addCategoryDialog, action);
+        CommonUtil.navigate(mNavController, R.id.addCategoryDialog, action);
     }
 
     @Override

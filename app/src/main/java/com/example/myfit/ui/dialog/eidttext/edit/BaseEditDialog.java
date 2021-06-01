@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.myfit.databinding.ItemDialogEditTextBinding;
-import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
@@ -23,7 +21,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
     protected abstract String getName();
 
     @Override
-    protected String getInputText(Bundle savedInstanceState) {
+    protected String getInitialText(Bundle savedInstanceState) {
         return savedInstanceState == null ? mOldName : savedInstanceState.getString(INPUT_TEXT);
     }
 
@@ -36,14 +34,13 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
     protected abstract BaseEditTextViewModel.BaseEditViewModel getModel();
 
     @Override
-    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        ItemDialogEditTextBinding binding = getBinding();
-        return dialogBuilder
-                .makeEditTextDialog(getTitle(), binding.getRoot())
+    protected AlertDialog getAlertDialog() {
+        return mDialogBuilder
+                .makeEditTextDialog(getTitle(), mBinding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
-                .setPositiveEnabledByInputText(binding.et.getText(), mOldName)
-                .setPositiveEnabledByChangedText(binding.et, mOldName)
-                .setPositiveCallOnClickWhenImeClicked(binding.et)
+                .setPositiveEnabledByInputText(mBinding.et.getText(), mOldName)
+                .setPositiveEnabledByChangedText(mBinding.et, mOldName)
+                .setPositiveCallOnClickWhenImeClicked(mBinding.et)
                 .create();
     }
 

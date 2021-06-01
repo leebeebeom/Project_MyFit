@@ -7,12 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.DialogBuilder;
 
 public abstract class BaseSameNameDialog extends BaseDialog {
     @Override
-    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        return dialogBuilder.makeConfirmDialog(getMessage())
+    protected AlertDialog getAlertDialog() {
+        return mDialogBuilder.makeConfirmDialog(getMessage())
                 .setPositiveClickListener(getPositiveClickListener())
                 .create();
     }
@@ -23,7 +22,7 @@ public abstract class BaseSameNameDialog extends BaseDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             task();
-            getNavController().popBackStack(getDestinationId(), true);
+            mNavController.popBackStack(getDestinationId(), true);
         };
     }
 

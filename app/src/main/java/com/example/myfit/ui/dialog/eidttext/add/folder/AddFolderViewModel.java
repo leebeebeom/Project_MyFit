@@ -34,7 +34,7 @@ public class AddFolderViewModel extends BaseEditTextViewModel.BaseAddViewModel {
     }
 
     @Override
-    public MutableLiveData<Boolean> getIsExistingMutable() {
+    public MutableLiveData<Boolean> getExistingNameLive() {
         return mFolderRepository.getExistingNameLive();
     }
 }

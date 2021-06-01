@@ -11,7 +11,7 @@ import com.example.myfit.ui.dialog.eidttext.BaseSameNameDialog;
 public class AddSameFolderNameDialog extends BaseSameNameDialog.BaseAddSameNameDialog {
     @Override
     protected BaseEditTextViewModel.BaseAddViewModel getModel() {
-        NavBackStackEntry graphBackStack = getGraphBackStack();
+        NavBackStackEntry graphBackStack = mNavController.getBackStackEntry(R.id.nav_graph_add_folder);
         return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderViewModel.class);
     }
 

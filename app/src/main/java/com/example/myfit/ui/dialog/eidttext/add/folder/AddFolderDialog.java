@@ -18,7 +18,7 @@ public class AddFolderDialog extends BaseAddDialog {
     @Override
     protected BaseEditTextViewModel.BaseAddViewModel getModel() {
         if (mModel == null) {
-            NavBackStackEntry graphBackStack = getGraphBackStack();
+            NavBackStackEntry graphBackStack = mNavController.getBackStackEntry(R.id.nav_graph_add_folder);
             mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddFolderViewModel.class);
         }
         return mModel;
@@ -37,7 +37,7 @@ public class AddFolderDialog extends BaseAddDialog {
     @Override
     protected void navigateSameNameDialog() {
         NavDirections action = AddFolderDialogDirections.toAddSameFolderNameDialog();
-        CommonUtil.navigate(getNavController(), R.id.addFolderDialog, action);
+        CommonUtil.navigate(mNavController, R.id.addFolderDialog, action);
     }
 
     @Override

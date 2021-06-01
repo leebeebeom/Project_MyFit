@@ -11,7 +11,7 @@ import com.example.myfit.ui.dialog.eidttext.BaseSameNameDialog;
 public class AddSameCategoryNameDialog extends BaseSameNameDialog.BaseAddSameNameDialog {
     @Override
     protected BaseEditTextViewModel.BaseAddViewModel getModel() {
-        NavBackStackEntry graphBackStack = getGraphBackStack();
+        NavBackStackEntry graphBackStack = mNavController.getBackStackEntry(R.id.nav_graph_add_category);
         return new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(AddCategoryViewModel.class);
     }
 

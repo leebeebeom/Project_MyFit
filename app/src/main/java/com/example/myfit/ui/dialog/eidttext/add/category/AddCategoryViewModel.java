@@ -32,7 +32,7 @@ public class AddCategoryViewModel extends BaseEditTextViewModel.BaseAddViewModel
     }
 
     @Override
-    public MutableLiveData<Boolean> getIsExistingMutable() {
+    public MutableLiveData<Boolean> getExistingNameLive() {
         return mCategoryRepository.getExistingNameLive();
     }
 }

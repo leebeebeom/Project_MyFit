@@ -38,7 +38,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
     @Override
     protected BaseEditTextViewModel.BaseEditViewModel getModel() {
         if (mModel == null) {
-            NavBackStackEntry graphBackStack = getGraphBackStack();
+            NavBackStackEntry graphBackStack = mNavController.getBackStackEntry(R.id.nav_graph_edit_folder_name);
             mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack)).get(EditFolderNameViewModel.class);
         }
         return mModel;
@@ -61,6 +61,6 @@ public class EditFolderNameDialog extends BaseEditDialog {
     @Override
     protected void navigateSameNameDialog() {
         NavDirections action = EditFolderNameDialogDirections.toEditSameFolderNameDialog();
-        CommonUtil.navigate(getNavController(), R.id.editFolderNameDialog, action);
+        CommonUtil.navigate(mNavController, R.id.editFolderNameDialog, action);
     }
 }

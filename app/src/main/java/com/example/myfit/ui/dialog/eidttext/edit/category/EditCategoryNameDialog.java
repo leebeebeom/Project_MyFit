@@ -38,7 +38,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     @Override
     protected BaseEditTextViewModel.BaseEditViewModel getModel() {
         if (mModel == null) {
-            NavBackStackEntry graphBackStack = getGraphBackStack();
+            NavBackStackEntry graphBackStack = mNavController.getBackStackEntry(R.id.nav_graph_edit_category_name);
             mModel = new ViewModelProvider(graphBackStack, HiltViewModelFactory.create(requireContext(), graphBackStack))
                     .get(EditCategoryNameViewModel.class);
         }
@@ -62,6 +62,6 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     @Override
     protected void navigateSameNameDialog() {
         NavDirections action = EditCategoryNameDialogDirections.toEditSameCategoryNameDialog();
-        CommonUtil.navigate(getNavController(), R.id.editCategoryNameDialog, action);
+        CommonUtil.navigate(mNavController, R.id.editCategoryNameDialog, action);
     }
 }
