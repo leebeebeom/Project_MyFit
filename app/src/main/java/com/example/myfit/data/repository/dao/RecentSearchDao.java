@@ -2,13 +2,13 @@ package com.example.myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.model.RecentSearch;
+import com.example.myfit.data.tuple.tuple.RecentSearchTuple;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ import java.util.List;
 public abstract class RecentSearchDao {
 
     //to searchView, recycleBin search
-    @Query("SELECT * FROM RecentSearch WHERE type = :type ORDER BY id DESC LIMIT 20")
-    public abstract LiveData<List<RecentSearch>> getLiveByType(int type);
+    @Query("SELECT word, date FROM RecentSearch WHERE type = :type ORDER BY id DESC LIMIT 20")
+    public abstract LiveData<List<RecentSearchTuple>> getLiveByType(int type);
 
     @Transaction
     //from searchView, recycleBin search
     public void insert(String word, int type) {
-        if (isExistingWord(word, type)) delete(word);
+        if (isExistingWord(word, type)) delete(word, type);
 
         RecentSearch recentSearch = ModelFactory.makeRecentSearch(word, type);
         insert(recentSearch);
@@ -31,15 +31,12 @@ public abstract class RecentSearchDao {
     @Query("SELECT EXISTS(SELECT word FROM RecentSearch WHERE word = :word AND type = :type)")
     protected abstract boolean isExistingWord(String word, int type);
 
-    @Query("DELETE FROM RecentSearch WHERE word = :word")
-    protected abstract void delete(String word);
+    @Query("DELETE FROM RecentSearch WHERE word = :word AND type = :type")
+    public abstract void delete(String word, int type);
 
     @Insert
     protected abstract void insert(RecentSearch recentSearch);
 
-    @Delete
-    public abstract void delete(RecentSearch recentSearch);
-
-    @Query("DELETE FROM RecentSearch")
-    public abstract void deleteAll();
+    @Query("DELETE FROM RecentSearch WHERE type = :type")
+    public abstract void deleteAll(int type);
 }
