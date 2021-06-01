@@ -95,8 +95,8 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
         new Thread(() -> {
             long insertId = mCategoryDao.insert(name, parentIndex);
             if (mAddedTupleLive != null) {
-                CategoryTuple tuple = mCategoryDao.getTupleById(insertId);
-                mAddedTupleLive.postValue(tuple);
+                CategoryTuple addedTuple = mCategoryDao.getTupleById(insertId);
+                mAddedTupleLive.postValue(addedTuple);
             }
         }).start();
     }
