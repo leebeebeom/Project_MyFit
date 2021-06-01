@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.example.myfit.R;
 import com.example.myfit.data.repository.CategoryRepository;
-import com.example.myfit.databinding.LayoutDialogSortBinding;
 
 import javax.inject.Inject;
 
@@ -21,14 +20,8 @@ public class SortMainDialog extends BaseSortDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutDialogSortBinding binding = getBinding();
-        binding.radioBtnBrand.setVisibility(View.GONE);
-        binding.radioBtnBrandReverse.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected int getCheckedNumber() {
-        return mCategoryRepository.getSort().getValue();
+        mBinding.radioBtnBrand.setVisibility(View.GONE);
+        mBinding.radioBtnBrandReverse.setVisibility(View.GONE);
     }
 
     @Override

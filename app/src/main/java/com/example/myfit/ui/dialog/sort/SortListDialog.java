@@ -13,11 +13,6 @@ public class SortListDialog extends BaseSortDialog {
     FolderRepository mFolderRepository;
 
     @Override
-    protected int getCheckedNumber() {
-        return mFolderRepository.getSort().getValue();
-    }
-
-    @Override
     protected FolderRepository getRepository() {
         return mFolderRepository;
     }

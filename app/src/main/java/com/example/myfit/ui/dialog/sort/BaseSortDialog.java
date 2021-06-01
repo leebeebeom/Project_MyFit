@@ -11,7 +11,6 @@ import com.example.myfit.R;
 import com.example.myfit.data.repository.BaseRepository;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
 import com.example.myfit.ui.dialog.BaseDialog;
-import com.example.myfit.ui.dialog.DialogBuilder;
 import com.example.myfit.util.constant.Sort;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 
@@ -26,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public abstract class BaseSortDialog extends BaseDialog {
     @Inject
-    LayoutDialogSortBinding mBinding;
+    protected LayoutDialogSortBinding mBinding;
 
     private static final String CHECKED_SORT = "check sort";
     private int mCheckedNumber;
@@ -34,17 +33,13 @@ public abstract class BaseSortDialog extends BaseDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCheckedNumber = savedInstanceState == null ? getCheckedNumber() : savedInstanceState.getInt(CHECKED_SORT);
+        mCheckedNumber = savedInstanceState == null ? getRepository().getSort().getValue() : savedInstanceState.getInt(CHECKED_SORT);
         MaterialRadioButton[] sortButtons = getSortButtons();
         addRadioButtonCheckListener(sortButtons);
         sortButtons[mCheckedNumber].setChecked(true);
     }
 
-    protected LayoutDialogSortBinding getBinding(){
-        return mBinding;
-    }
-
-    protected abstract int getCheckedNumber();
+    protected abstract BaseRepository<?> getRepository();
 
     @NotNull
     private MaterialRadioButton[] getSortButtons() {
@@ -72,8 +67,8 @@ public abstract class BaseSortDialog extends BaseDialog {
     }
 
     @Override
-    protected AlertDialog getAlertDialog(DialogBuilder dialogBuilder) {
-        return dialogBuilder
+    protected AlertDialog getAlertDialog() {
+        return mDialogBuilder
                 .setTitle(getString(R.string.all_sort_order))
                 .setView(mBinding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
@@ -87,8 +82,6 @@ public abstract class BaseSortDialog extends BaseDialog {
             dismiss();
         };
     }
-
-    protected abstract BaseRepository<?> getRepository();
 
     @Override
     public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
