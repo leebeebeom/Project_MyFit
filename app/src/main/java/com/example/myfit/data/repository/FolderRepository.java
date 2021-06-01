@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myfit.data.model.model.Folder;
-import com.example.myfit.data.tuple.tuple.FolderTuple;
-import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.repository.dao.FolderDao;
+import com.example.myfit.data.tuple.ParentIdTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.di.Qualifiers;
 import com.example.myfit.util.constant.Sort;
 
@@ -26,9 +26,9 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;
     private final SharedPreferences mListSortPreference;
     private final SharedPreferences mFolderTogglePreference;
-    private MutableLiveData<Long> mInsertIdLive;
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<FolderTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
+    private MutableLiveData<FolderTuple> mAddedTupleLive;
 
     @Inject
     public FolderRepository(FolderDao folderDao,
@@ -51,18 +51,17 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
         return mDeletedClassifiedTuplesLive;
     }
 
-    //to searchView
-    public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive() {
-        if (mSearchTuplesLive == null)
-            mSearchTuplesLive = mFolderDao.getSearchTuplesListLive();
-        return mSearchTuplesLive;
-    }
-
-    //to recycleBin search
-    public LiveData<List<List<FolderTuple>>> getDeletedSearchFolderTuplesListLive() {
-        if (mDeletedSearchTuplesLive == null)
-            mDeletedSearchTuplesLive = mFolderDao.getDeletedSearchTuplesListLive();
-        return mDeletedSearchTuplesLive;
+    //to searchView, recycleBin search
+    public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive(boolean deleted) {
+        if (deleted) {
+            if (mSearchTuplesLive == null)
+                mSearchTuplesLive = mFolderDao.getSearchTuplesListLive(deleted);
+            return mSearchTuplesLive;
+        } else {
+            if (mDeletedSearchTuplesLive == null)
+                mDeletedSearchTuplesLive = mFolderDao.getSearchTuplesListLive(deleted);
+            return mDeletedSearchTuplesLive;
+        }
     }
 
     //to treeView(disposable)
@@ -76,6 +75,23 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
         return tuplesLive;
     }
 
+    public MutableLiveData<FolderTuple> getAddedTupleLive() {
+        mAddedTupleLive = new MutableLiveData<>();
+        return mAddedTupleLive;
+    }
+
+    //from addFolder dialog
+    public void insert(String name, long parentId, int parentIndex) {
+        new Thread(() -> {
+            long insertId = mFolderDao.insert(name, parentId, parentIndex);
+            if (mAddedTupleLive != null) {
+                FolderTuple addedTuple = mFolderDao.getTupleById(insertId);
+                mAddedTupleLive.postValue(addedTuple);
+            }
+        }).start();
+    }
+
+    //to listFragment
     public LiveData<List<FolderTuple>> getFolderPathTuples(long id) {
         MutableLiveData<List<FolderTuple>> folderPathTuplesLive = new MutableLiveData<>();
         new Thread(() -> {
@@ -85,32 +101,9 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
         return folderPathTuplesLive;
     }
 
-    //to treeView(disposable)
-    public LiveData<FolderTuple> getTupleById(long id) {
-        MutableLiveData<FolderTuple> folderTupleLive = new MutableLiveData<>();
-        new Thread(() -> {
-            FolderTuple folderTuple = mFolderDao.getTupleById(id);
-            folderTupleLive.postValue(folderTuple);
-        }).start();
-        return folderTupleLive;
-    }
-
-    //to list
+    //to listFragment
     public LiveData<Folder> getSingleLiveById(long id) {
         return mFolderDao.getSingleLiveById(id);
-    }
-
-    public MutableLiveData<Long> getInsertIdLive() {
-        mInsertIdLive = new MutableLiveData<>();
-        return mInsertIdLive;
-    }
-
-    //from addFolder dialog
-    public void insert(String name, long parentId, int parentIndex) {
-        new Thread(() -> {
-            long insertId = mFolderDao.insert(name, parentId, parentIndex);
-            if (mInsertIdLive != null) mInsertIdLive.postValue(insertId);
-        }).start();
     }
 
     //from editFolderName dialog
@@ -131,8 +124,8 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
 
     @Override
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids, boolean isDeleted) {
-        new Thread(() -> mFolderDao.deleteOrRestore(ids, isDeleted)).start();
+    public void deleteOrRestore(long[] ids) {
+        new Thread(() -> mFolderDao.deleteOrRestore(ids)).start();
     }
 
     @Override
