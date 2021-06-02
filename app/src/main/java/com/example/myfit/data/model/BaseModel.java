@@ -17,7 +17,7 @@ public class BaseModel {
     private boolean deleted;
     private long deletedTime;
 
-    public BaseModel(int parentIndex, int sortNumber) {
+    protected BaseModel(int parentIndex, int sortNumber) {
         this.parentIndex = parentIndex;
         this.sortNumber = sortNumber;
     }
