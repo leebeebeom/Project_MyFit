@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.example.myfit.data.model.tuple.BaseTuple;
+import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.viewholder.BaseVH;
 import com.example.myfit.util.adapter.viewholder.BaseVHListener;
@@ -19,18 +19,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
-import static com.example.myfit.util.actionmodecallback.BaseActionModeCallBack.ACTION_MODE_OFF;
-import static com.example.myfit.util.actionmodecallback.BaseActionModeCallBack.ACTION_MODE_ON;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_OFF;
+import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_ON;
+
+@Accessors(prefix = "m")
 public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener, VH extends BaseVH<T, L>> extends ListAdapter<T, VH> {
-    private final AdapterUtil<T> mAdapterUtil = new AdapterUtil<>();
-    private final L mListener;
+    @Setter
+    private L mListener;
     private final Set<T> mSelectedItems;
     private int mActionModeState;
     private Sort mSort;
     private List<T> mItemList;
 
-    protected BaseAdapter(L listener, SizeLiveSet<T> selectedItems) {
+    protected BaseAdapter(SizeLiveSet<T> selectedItems) {
         super(new DiffUtil.ItemCallback<T>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull T oldItem, @NonNull @NotNull T newItem) {
@@ -43,7 +47,6 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
             }
         });
         this.mSelectedItems = selectedItems;
-        this.mListener = listener;
         setHasStableIds(true);
     }
 
@@ -90,13 +93,13 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
 
     protected void actionModeOn(@NotNull VH holder) {
         if (getViewType() == ViewType.LIST_VIEW)
-            mAdapterUtil.listActionModeOn(holder.getCardView());
+            AdapterUtil.listActionModeOn(holder.getCardView());
         else holder.getCheckBox().setVisibility(View.VISIBLE);
     }
 
     protected void actionModeOff(VH holder) {
         if (getViewType() == ViewType.GRID_VIEW)
-            mAdapterUtil.listActionModeOff(holder.getCardView());
+            AdapterUtil.listActionModeOff(holder.getCardView());
         else {
             holder.getCheckBox().jumpDrawablesToCurrentState();
             holder.getCheckBox().setVisibility(View.GONE);
@@ -107,7 +110,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     protected abstract ViewType getViewType();
 
     public void moveItem(int from, int to) {
-        mAdapterUtil.itemMove(from, to, mItemList);
+        AdapterUtil.itemMove(from, to, mItemList);
         notifyItemMoved(from, to);
     }
 
