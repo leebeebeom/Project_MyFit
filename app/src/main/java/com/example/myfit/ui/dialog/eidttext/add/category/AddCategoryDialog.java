@@ -25,12 +25,12 @@ public class AddCategoryDialog extends BaseAddDialog {
     }
 
     @Override
-    protected String getHint() {
+    public String getHint() {
         return getString(R.string.dialog_hint_category_name);
     }
 
     @Override
-    protected String getPlaceHolder() {
+    public String getPlaceHolder() {
         return getString(R.string.dialog_place_holder_category_name);
     }
 

@@ -21,12 +21,12 @@ public class EditFolderNameDialog extends BaseEditDialog {
     }
 
     @Override
-    protected String getHint() {
+    public String getHint() {
         return getString(R.string.dialog_hint_folder_name);
     }
 
     @Override
-    protected String getPlaceHolder() {
+    public String getPlaceHolder() {
         return getString(R.string.dialog_place_holder_folder_name);
     }
 

@@ -29,18 +29,17 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding.et.setHint(getHint());
-        mBinding.layout.setPlaceholderText(getPlaceHolder());
         mModel = getModel();
         if (mModel.getName() == null)
             mModel.setName(getName());
         mBinding.setLifecycleOwner(this);
         mBinding.setModel(mModel);
+        mBinding.setDialogFragment(this);
     }
 
-    protected abstract String getHint();
+    public abstract String getHint();
 
-    protected abstract String getPlaceHolder();
+    public abstract String getPlaceHolder();
 
     protected abstract String getName();
 
