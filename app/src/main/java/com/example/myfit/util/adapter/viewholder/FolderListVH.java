@@ -2,7 +2,7 @@ package com.example.myfit.util.adapter.viewholder;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.myfit.data.model.folder.FolderTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemFolderListBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;

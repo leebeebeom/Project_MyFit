@@ -5,7 +5,7 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.myfit.data.model.folder.FolderTuple;
+import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemFolderGridBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -14,7 +14,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+@Accessors(prefix = "m")
 public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
+    @Getter
     private final ItemFolderGridBinding mBinding;
 
     public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
@@ -63,9 +68,5 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
-    }
-
-    public ItemFolderGridBinding getBinding() {
-        return mBinding;
     }
 }

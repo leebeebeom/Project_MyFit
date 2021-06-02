@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.myfit.data.model.size.SizeTuple;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemSizeListBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -16,11 +16,9 @@ import java.util.Set;
 public class SizeListVH extends BaseVH.BaseSizeVH {
     private final ItemSizeListBinding mBinding;
 
-    public SizeListVH(@NotNull ItemSizeListBinding binding, SizeVHListener listener, Set<SizeTuple> selectedItems) {
+    public SizeListVH(@NotNull ItemSizeListBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
         super(binding, listener, selectedItems);
         this.mBinding = binding;
-
-        binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));
     }
 
     @Override

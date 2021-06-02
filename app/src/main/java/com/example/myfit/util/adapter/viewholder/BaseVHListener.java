@@ -3,6 +3,7 @@ package com.example.myfit.util.adapter.viewholder;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.data.tuple.BaseTuple;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
 
 public interface BaseVHListener {
     void itemViewClick(BaseTuple tuple);
@@ -12,4 +13,8 @@ public interface BaseVHListener {
     void dragStart(RecyclerView.ViewHolder viewHolder, BaseTuple tuple);
 
     void dragStop(BaseTuple tuple);
+
+    interface SizeVHListener extends BaseVHListener {
+        void favoriteClick(SizeTuple tuple);
+    }
 }

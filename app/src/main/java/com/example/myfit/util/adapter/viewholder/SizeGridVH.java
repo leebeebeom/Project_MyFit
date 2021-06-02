@@ -2,7 +2,7 @@ package com.example.myfit.util.adapter.viewholder;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.myfit.data.model.size.SizeTuple;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemSizeGridBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -11,14 +11,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+@Accessors(prefix = "m")
 public class SizeGridVH extends BaseVH.BaseSizeVH {
+    @Getter
     private final ItemSizeGridBinding mBinding;
 
-    public SizeGridVH(@NotNull ItemSizeGridBinding binding, SizeVHListener listener, Set<SizeTuple> selectedItems) {
+    public SizeGridVH(@NotNull ItemSizeGridBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
         super(binding, listener, selectedItems);
         this.mBinding = binding;
-
-        binding.cbFavorite.setOnClickListener(v -> listener.sizeFavoriteClick(getTuple()));
     }
 
     @Override
@@ -55,10 +58,6 @@ public class SizeGridVH extends BaseVH.BaseSizeVH {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
-    }
-
-    public ItemSizeGridBinding getBinding() {
-        return mBinding;
     }
 
     @Override

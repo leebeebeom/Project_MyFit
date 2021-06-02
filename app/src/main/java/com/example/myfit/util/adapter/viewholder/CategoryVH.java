@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.myfit.data.model.category.CategoryTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemCategoryBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;

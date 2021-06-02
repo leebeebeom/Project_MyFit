@@ -97,10 +97,12 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     public abstract MaterialCardView getCardView();
 
-    public abstract static class BaseSizeVH extends BaseVH<SizeTuple, SizeVHListener> {
+    public abstract static class BaseSizeVH extends BaseVH<SizeTuple, BaseVHListener.SizeVHListener> {
 
-        public BaseSizeVH(ViewDataBinding binding, SizeVHListener listener, Set<SizeTuple> selectedItems) {
+        public BaseSizeVH(ViewDataBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
             super(binding, listener, selectedItems);
+
+            getFavorite().setOnClickListener(v -> listener.favoriteClick(mTuple));
         }
 
         public abstract MaterialCheckBox getFavorite();
