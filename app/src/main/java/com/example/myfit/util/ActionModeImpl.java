@@ -2,6 +2,7 @@ package com.example.myfit.util;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.view.ActionMode;
@@ -9,6 +10,7 @@ import androidx.appcompat.view.ActionMode;
 import com.example.myfit.R;
 import com.example.myfit.databinding.TitleActionModeBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,6 +48,7 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
     public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(getResId(), menu);
         mode.setCustomView(mBinding.getRoot());
+        mBinding.setActionModeImpl(this);
 
         setActionMode(mode, ACTION_MODE_ON);
         return true;
@@ -60,15 +63,15 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
-        mBinding.cb.setOnClickListener(v -> {
-            if (mBinding.cb.isChecked())
-                Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::selectAll);
-            else Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::deselectAll);
-        });
-
         int count = menu.size();
         for (int i = 0; i < count; i++) mMenuItems.add(menu.getItem(i));
         return true;
+    }
+
+    public void allSelectClick(View view) {
+        if (((MaterialCheckBox) view).isChecked())
+            Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::selectAll);
+        else Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::deselectAll);
     }
 
     @Override
