@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -29,10 +30,11 @@ import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_ON;
 public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener, VH extends BaseVH<T, L>> extends ListAdapter<T, VH> {
     @Setter
     private L mListener;
+    @Getter
+    private List<T> mNewOrderList;
     private final Set<T> mSelectedItems;
     private int mActionModeState;
     private Sort mSort;
-    private List<T> mItemList;
 
     protected BaseAdapter(SizeLiveSet<T> selectedItems) {
         super(new DiffUtil.ItemCallback<T>() {
@@ -58,7 +60,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     public void setItems(Sort sort, List<T> list) {
         submitList(list);
         this.mSort = sort;
-        this.mItemList = list;
+        this.mNewOrderList = list;
     }
 
     @NonNull
@@ -110,7 +112,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     protected abstract ViewType getViewType();
 
     public void moveItem(int from, int to) {
-        AdapterUtil.itemMove(from, to, mItemList);
+        AdapterUtil.itemMove(from, to, mNewOrderList);
         notifyItemMoved(from, to);
     }
 
@@ -122,13 +124,5 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     public void deselectAll() {
         mSelectedItems.clear();
         notifyDataSetChanged();
-    }
-
-    public Set<T> getSelectedItems() {
-        return mSelectedItems;
-    }
-
-    public List<T> getNewOrderList() {
-        return mItemList;
     }
 }
