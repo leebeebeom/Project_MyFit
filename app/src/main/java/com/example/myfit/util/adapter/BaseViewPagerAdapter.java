@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.databinding.ItemRecyclerViewBinding;
 import com.example.myfit.ui.main.main.adapter.CategoryAdapter;
-import com.example.myfit.ui.main.main.listener.MainAutoScrollImpl;
 import com.example.myfit.util.adapter.viewholder.ViewPagerVH;
 import com.example.myfit.util.dragselect.DragSelect;
 
@@ -18,28 +17,31 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.scopes.FragmentScoped;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(prefix = "m")
 public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends RecyclerView.Adapter<ViewPagerVH> {
-    private final ViewPagerVH.AutoScrollListener mListener;
+    @Setter
+    private ViewPagerVH.AutoScrollListener mListener;
     private final T[] mAdapters;
+    @Getter
     private final DragSelect[] mDragSelectListeners;
+    @Getter
     private ItemTouchHelper[] mItemTouchHelpers;
 
-    public BaseViewPagerAdapter(ViewPagerVH.AutoScrollListener listener,
-                                T[] adapters,
+    public BaseViewPagerAdapter(T[] adapters,
                                 DragSelect[] dragSelectListeners,
                                 ItemTouchHelper[] itemTouchHelpers) {
-        this.mListener = listener;
         this.mAdapters = adapters;
         this.mDragSelectListeners = dragSelectListeners;
         this.mItemTouchHelpers = itemTouchHelpers;
         setHasStableIds(true);
     }
 
-    public BaseViewPagerAdapter(ViewPagerVH.AutoScrollListener listener,
-                                T[] adapters,
+    public BaseViewPagerAdapter(T[] adapters,
                                 DragSelect[] dragSelectListeners) {
-        this.mListener = listener;
         this.mAdapters = adapters;
         this.mDragSelectListeners = dragSelectListeners;
         setHasStableIds(true);
@@ -76,12 +78,12 @@ public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends Recycl
 
     @FragmentScoped
     public static class MainViewPagerAdapter extends BaseViewPagerAdapter<CategoryAdapter> {
+
         @Inject
-        public MainViewPagerAdapter(MainAutoScrollImpl listener,
-                                    CategoryAdapter[] adapters,
+        public MainViewPagerAdapter(CategoryAdapter[] adapters,
                                     DragSelect[] dragSelectListeners,
                                     ItemTouchHelper[] itemTouchHelpers) {
-            super(listener, adapters, dragSelectListeners, itemTouchHelpers);
+            super(adapters, dragSelectListeners, itemTouchHelpers);
         }
     }
 }
