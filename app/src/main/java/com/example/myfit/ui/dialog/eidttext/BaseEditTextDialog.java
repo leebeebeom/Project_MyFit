@@ -32,7 +32,8 @@ public abstract class BaseEditTextDialog extends BaseDialog {
         mBinding.et.setHint(getHint());
         mBinding.layout.setPlaceholderText(getPlaceHolder());
         mModel = getModel();
-        mModel.setName(getInitialText(savedInstanceState));
+        if (mModel.getName() == null)
+            mModel.setName(getName());
         mBinding.setLifecycleOwner(this);
         mBinding.setModel(mModel);
     }
@@ -41,7 +42,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
 
     protected abstract String getPlaceHolder();
 
-    protected abstract String getInitialText(Bundle savedInstanceState);
+    protected abstract String getName();
 
     @NonNull
     @NotNull

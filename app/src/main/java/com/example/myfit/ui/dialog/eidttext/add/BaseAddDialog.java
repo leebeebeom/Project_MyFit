@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseAddDialog extends BaseEditTextDialog {
     @Override
-    protected String getInitialText(Bundle savedInstanceState) {
-        return savedInstanceState == null ? "" : savedInstanceState.getString(INPUT_TEXT);
+    protected String getName() {
+        return "";
     }
 
     @Override

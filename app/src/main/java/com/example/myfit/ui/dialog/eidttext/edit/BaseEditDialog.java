@@ -22,13 +22,6 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
         setBackStackLive();
     }
 
-    protected abstract String getName();
-
-    @Override
-    protected String getInitialText(Bundle savedInstanceState) {
-        return savedInstanceState == null ? mOldName : savedInstanceState.getString(INPUT_TEXT);
-    }
-
     @Override
     protected void task() {
         getModel().update();
