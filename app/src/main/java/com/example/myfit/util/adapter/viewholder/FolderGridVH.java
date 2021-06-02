@@ -29,24 +29,13 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void bind(FolderTuple tuple) {
-        mBinding.setTuple(tuple);
-        if (tuple.getId() == -1) {
-            mBinding.getRoot().setVisibility(View.INVISIBLE);
-            itemView.setOnClickListener(null);
-            itemView.setOnLongClickListener(null);
-            mBinding.iconDragHandle.setOnTouchListener(null);
-        }
+    protected void bind() {
+        mBinding.setFolderGridVH(this);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
         return mBinding.cb;
-    }
-
-    @Override
-    public AppCompatImageView getDragHandleIcon() {
-        return mBinding.iconDragHandle;
     }
 
     @Override

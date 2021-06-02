@@ -1,7 +1,5 @@
 package com.example.myfit.util.adapter.viewholder;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemFolderListBinding;
 import com.google.android.material.card.MaterialCardView;
@@ -17,18 +15,13 @@ public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
         this.mBinding = binding;
     }
 
-    protected void bind(FolderTuple tuple) {
-        mBinding.setTuple(tuple);
+    protected void bind() {
+        mBinding.setFolderListVH(this);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
         return mBinding.cb;
-    }
-
-    @Override
-    public AppCompatImageView getDragHandleIcon() {
-        return null;
     }
 
     @Override

@@ -25,18 +25,13 @@ public class SizeGridVH extends BaseVH.BaseSizeVH {
     }
 
     @Override
-    protected void bind(SizeTuple tuple) {
-        mBinding.setTuple(tuple);
+    protected void bind() {
+        mBinding.setSizeGridVH(this);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
         return mBinding.cb;
-    }
-
-    @Override
-    public AppCompatImageView getDragHandleIcon() {
-        return mBinding.iconDragHandle;
     }
 
     @Override
@@ -58,11 +53,6 @@ public class SizeGridVH extends BaseVH.BaseSizeVH {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
-    }
-
-    @Override
-    public MaterialCheckBox getFavorite() {
-        return mBinding.cbFavorite;
     }
 }
 

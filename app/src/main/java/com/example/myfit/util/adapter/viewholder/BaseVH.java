@@ -1,10 +1,8 @@
 package com.example.myfit.util.adapter.viewholder;
 
 import android.annotation.SuppressLint;
-import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,50 +13,39 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 import static com.example.myfit.util.ActionModeImpl.sActionMode;
 
+@Accessors(prefix = "m")
 public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
     public static boolean sDragging = false;
+    @Getter
     private final L mListener;
+    private final Set<T> mSelectedItems;
+    @Getter
     protected T mTuple;
 
     @SuppressLint("ClickableViewAccessibility")
     public BaseVH(ViewDataBinding binding, L listener, Set<T> selectedItems) {
         super(binding.getRoot());
         this.mListener = listener;
-
-        setItemViewClickListener(selectedItems);
-
-        itemView.setOnLongClickListener(v -> {
-            listener.itemViewLongClick(getLayoutPosition(), mTuple);
-            return false;
-        });
-
-        if (getDragHandleIcon() != null) {
-            getDragHandleIcon().setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN && !sDragging)
-                    dragStart();
-                return false;
-            });
-        }
+        this.mSelectedItems = selectedItems;
     }
 
     public void setTuple(T tuple) {
         this.mTuple = tuple;
-        bind(tuple);
     }
 
-    protected abstract void bind(T tuple);
+    protected abstract void bind();
 
-    private void setItemViewClickListener(Set<T> selectedItems) {
-        itemView.setOnClickListener(
-                v -> {
-                    if (sActionMode != null) {
-                        if (selectedItems.contains(mTuple))
-                            removeItem(selectedItems);
-                        else addItem(selectedItems);
-                    } else mListener.itemViewClick(mTuple);
-                });
+    public void itemViewClick() {
+        if (sActionMode != null) {
+            if (mSelectedItems.contains(mTuple))
+                removeItem(mSelectedItems);
+            else addItem(mSelectedItems);
+        } else mListener.itemViewClick(mTuple);
     }
 
     private void removeItem(Set<T> selectedItemSet) {
@@ -73,9 +60,7 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     public abstract MaterialCheckBox getCheckBox();
 
-    public abstract AppCompatImageView getDragHandleIcon();
-
-    private void dragStart() {
+    public void dragStart() {
         sDragging = true;
         mListener.dragStart(this, mTuple);
         setDraggingView();
@@ -99,12 +84,15 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     public abstract static class BaseSizeVH extends BaseVH<SizeTuple, BaseVHListener.SizeVHListener> {
 
+        private final BaseVHListener.SizeVHListener mListener;
+
         public BaseSizeVH(ViewDataBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
             super(binding, listener, selectedItems);
-
-            getFavorite().setOnClickListener(v -> listener.favoriteClick(mTuple));
+            this.mListener = listener;
         }
 
-        public abstract MaterialCheckBox getFavorite();
+        public void favoriteClick() {
+            mListener.favoriteClick(mTuple);
+        }
     }
 }

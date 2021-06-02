@@ -22,18 +22,13 @@ public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     }
 
     @Override
-    protected void bind(CategoryTuple tuple) {
-        mBinding.setTuple(tuple);
+    protected void bind() {
+        mBinding.setCategoryVH(this);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
         return mBinding.cb;
-    }
-
-    @Override
-    public AppCompatImageView getDragHandleIcon() {
-        return mBinding.iconDragHandle;
     }
 
     @Override

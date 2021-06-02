@@ -6,29 +6,26 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.databinding.ItemRecyclerViewBinding;
-import com.example.myfit.util.dragselect.DragSelect;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.example.myfit.util.constant.AutoScrollFlag;
+import com.example.myfit.util.dragselect.DragSelect;
 
 import org.jetbrains.annotations.NotNull;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+@Accessors(prefix = "m")
 public class ViewPagerVH extends RecyclerView.ViewHolder {
     private final ItemRecyclerViewBinding mBinding;
+    @Getter
+    private final AutoScrollListener mListener;
 
     @SuppressLint("ClickableViewAccessibility")
     public ViewPagerVH(@NotNull ItemRecyclerViewBinding binding, AutoScrollListener listener) {
         super(binding.getRoot());
         this.mBinding = binding;
-
-        binding.rv.setOnTouchListener((v, event) -> {
-            if (event.getRawY() < 250)
-                listener.dragAutoScroll(AutoScrollFlag.UP);
-            else if (event.getRawY() > 2000)
-                listener.dragAutoScroll(AutoScrollFlag.DOWN);
-            else if (event.getRawY() < 2000 && event.getRawY() > 250)
-                listener.dragAutoScroll(AutoScrollFlag.STOP);
-            return false;
-        });
+        this.mListener = listener;
     }
 
     public void setNoResult(boolean isEmpty) {
