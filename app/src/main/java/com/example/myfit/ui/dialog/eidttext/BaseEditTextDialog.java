@@ -24,13 +24,17 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
     protected ItemDialogEditTextBinding mBinding;
+    private BaseEditTextViewModel mModel;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding.et.setHint(getHint());
         mBinding.layout.setPlaceholderText(getPlaceHolder());
-        mBinding.et.setText(getInitialText(savedInstanceState));
+        mModel = getModel();
+        mModel.setName(getInitialText(savedInstanceState));
+        mBinding.setLifecycleOwner(this);
+        mBinding.setModel(mModel);
     }
 
     protected abstract String getHint();
@@ -43,8 +47,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        BaseEditTextViewModel model = getModel();
-        model.getExistingNameLive().observe(getViewLifecycleOwner(), isExisting -> {
+        mModel.getExistingNameLive().observe(getViewLifecycleOwner(), isExisting -> {
             if (isExisting != null) {
                 if (isExisting) {
                     navigateSameNameDialog();
@@ -53,7 +56,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
                     task();
                     dismiss();
                 }
-                model.getExistingNameLive().setValue(null);
+                mModel.getExistingNameLive().setValue(null);
             }
         });
         return getAlertDialog();

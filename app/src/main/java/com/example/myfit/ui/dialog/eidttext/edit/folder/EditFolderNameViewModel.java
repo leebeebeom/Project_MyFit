@@ -20,8 +20,7 @@ public class EditFolderNameViewModel extends BaseEditTextViewModel.BaseEditViewM
         this.mFolderRepository = folderRepository;
     }
 
-    public void queryIsExistingName(String inputText, long id, long parentId) {
-        this.mName = inputText;
+    public void queryIsExistingName(long id, long parentId) {
         this.mId = id;
         mFolderRepository.isExistingName(mName, parentId);
     }

@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class EditCategoryNameViewModel extends BaseEditTextViewModel.BaseEditViewModel {
     private final CategoryRepository mCategoryRepository;
-    private String mName;
     private long mId;
 
     @Inject
@@ -20,8 +19,7 @@ public class EditCategoryNameViewModel extends BaseEditTextViewModel.BaseEditVie
         this.mCategoryRepository = categoryRepository;
     }
 
-    public void queryIsExistingName(String inputText, long id, int parentIndex) {
-        this.mName = inputText;
+    public void queryIsExistingName(long id, int parentIndex) {
         this.mId = id;
         mCategoryRepository.isExistingName(mName, parentIndex);
     }

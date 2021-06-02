@@ -13,17 +13,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class AddCategoryViewModel extends BaseEditTextViewModel.BaseAddViewModel {
     private final CategoryRepository mCategoryRepository;
     private int mParentIndex;
-    private String mName;
 
     @Inject
     public AddCategoryViewModel(CategoryRepository categoryRepository) {
         this.mCategoryRepository = categoryRepository;
     }
 
-    public void queryIsExistingName(String inputText, int parentIndex) {
-        this.mName = inputText;
+    public void queryIsExistingName(int parentIndex) {
         this.mParentIndex = parentIndex;
-        mCategoryRepository.isExistingName(inputText, parentIndex);
+        mCategoryRepository.isExistingName(mName, parentIndex);
     }
 
     @Override

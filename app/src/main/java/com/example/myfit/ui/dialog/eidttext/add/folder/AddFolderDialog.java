@@ -50,7 +50,7 @@ public class AddFolderDialog extends BaseAddDialog {
         return v -> {
             long parentId = AddFolderDialogArgs.fromBundle(getArguments()).getParentId();
             int parentIndex = AddFolderDialogArgs.fromBundle(getArguments()).getParentIndex();
-            mModel.queryIsExistingName(parentId, getInputText(), parentIndex);
+            mModel.queryIsExistingName(parentId, parentIndex);
         };
     }
 

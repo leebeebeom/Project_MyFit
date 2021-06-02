@@ -13,7 +13,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class AddFolderViewModel extends BaseEditTextViewModel.BaseAddViewModel {
     private final FolderRepository mFolderRepository;
     private long mParentId;
-    private String mName;
     private int mParentIndex;
 
     @Inject
@@ -21,10 +20,9 @@ public class AddFolderViewModel extends BaseEditTextViewModel.BaseAddViewModel {
         this.mFolderRepository = folderRepository;
     }
 
-    public void queryIsExistingName(long parentId, String inputText, int parentIndex) {
+    public void queryIsExistingName(long parentId, int parentIndex) {
         this.mParentId = parentId;
         this.mParentIndex = parentIndex;
-        this.mName = inputText;
         mFolderRepository.isExistingName(mName, parentId);
     }
 

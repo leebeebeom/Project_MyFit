@@ -49,7 +49,7 @@ public class AddCategoryDialog extends BaseAddDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             int parentIndex = AddCategoryDialogArgs.fromBundle(getArguments()).getParentIndex();
-            mModel.queryIsExistingName(getInputText(),parentIndex);
+            mModel.queryIsExistingName(parentIndex);
         };
     }
 
