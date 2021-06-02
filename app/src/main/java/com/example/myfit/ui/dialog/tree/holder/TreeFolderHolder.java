@@ -32,7 +32,7 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     @Override
     protected void bind(FolderValue value) {
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
-        mBinding.setFolderTuple(value.getTuple());
+        mBinding.setFolderHolder(this);
     }
 
     @Override
@@ -56,11 +56,6 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     }
 
     @Override
-    protected AppCompatImageView getAddIcon() {
-        return mBinding.iconAdd;
-    }
-
-    @Override
     protected AppCompatImageView getFolderIcon() {
         return mBinding.iconFolder;
     }
@@ -76,14 +71,8 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
     }
 
     public View createNodeView(TreeNode node, @NotNull FolderValue value) {
-        setMargin(value.getMargin());
         addChildNode(value);
         return super.createNodeView(node, value);
-    }
-
-    private void setMargin(int margin) {
-        LinearLayoutCompat.LayoutParams params = (LinearLayoutCompat.LayoutParams) mBinding.iconArrow.getLayoutParams();
-        params.leftMargin = margin;
     }
 
     private void addChildNode(@NotNull FolderValue value) {

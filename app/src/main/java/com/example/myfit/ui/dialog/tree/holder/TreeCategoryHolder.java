@@ -22,7 +22,7 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     @Override
     protected void bind(CategoryValue value) {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
-        mBinding.setCategoryTuple(value.getTuple());
+        mBinding.setCategoryHolder(this);
     }
 
     @Override
@@ -38,11 +38,6 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
     @Override
     protected AppCompatImageView getArrowIcon() {
         return mBinding.iconArrow;
-    }
-
-    @Override
-    protected AppCompatImageView getAddIcon() {
-        return mBinding.iconAdd;
     }
 
     @Override

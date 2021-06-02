@@ -44,7 +44,6 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     private TreeViewModel mModel;
     private TreeNode mNodeRoot;
     private AndroidTreeView mTreeView;
-    private int mParentIndex;
     private long mCurrentPositionId;
     private long[] mSelectedFolderIds, mSelectedSizeIds, mFolderPathIds;
     private long mCategoryId;
@@ -53,8 +52,12 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(TreeViewModel.class);
+
         TreeViewDialogArgs args = TreeViewDialogArgs.fromBundle(getArguments());
-        mParentIndex = args.getParentIndex();
+        if (mModel.getParentCategory() == null)
+            mModel.setParentCategory(args.getParentIndex());
+        mBinding.setLifecycleOwner(this);
+
         mSelectedFolderIds = args.getSelectedFolderIds();
         mSelectedSizeIds = args.getSelectedSizeIds();
         mCurrentPositionId = args.getCurrentPositionId();
@@ -83,22 +86,13 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     protected AlertDialog getAlertDialog() {
         return mDialogBuilder
                 .setTitle(getString(R.string.tree_title))
-                .setView(getBinding().getRoot())
+                .setView(mBinding.getRoot())
                 .create();
     }
 
-    private LayoutDialogTreeBinding getBinding() {
-        String parentCategory = CommonUtil.getParentCategory(mParentIndex);
-        mBinding.setParentCategory(parentCategory);
-        mBinding.layoutAddCategory.setOnClickListener(v ->
-                CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                        TreeViewDialogDirections.toAddCategoryDialog(mParentIndex)));
-        return mBinding;
-    }
-
     private void setTreeView() {
-        mModel.getCategoryTuplesLive(mParentIndex).observe(this, categoryTuples ->
-                mModel.getFolderTuplesLive(mParentIndex).observe(this, folderTuples ->
+        mModel.getCategoryTuplesLive().observe(this, categoryTuples ->
+                mModel.getFolderTuplesLive().observe(this, folderTuples ->
                         mModel.getFolderParentIdTuplesLive(mSelectedFolderIds).observe(this, folderParentIdTuples ->
                                 mModel.getSizeParentIdTuplesLive(mSelectedSizeIds).observe(this, sizeParentIdTuples -> {
                                     LinkedList<TreeNode> categoryNodes = mTreeNodeProvider.makeNodes(categoryTuples, folderTuples);

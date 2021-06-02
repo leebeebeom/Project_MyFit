@@ -51,15 +51,11 @@ public abstract class BaseSortDialog extends BaseDialog {
     }
 
     private void addRadioButtonCheckListener(@NotNull MaterialRadioButton[] buttons) {
-        int[] buttonConstantArray = {Sort.SORT_CUSTOM.getValue(), Sort.SORT_CREATE.getValue(), Sort.SORT_CREATE_REVERSE.getValue(),
-                Sort.SORT_BRAND.getValue(), Sort.SORT_BRAND_REVERSE.getValue(),
-                Sort.SORT_NAME.getValue(), Sort.SORT_NAME_REVERSE.getValue()};
-
         for (int i = 0; i < buttons.length; i++) {
             int finalI = i;
             buttons[i].setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    mCheckedNumber = buttonConstantArray[finalI];
+                    mCheckedNumber = Sort.values()[finalI].getValue();
 
                     Arrays.stream(buttons)
                             .filter(button -> button != buttonView)

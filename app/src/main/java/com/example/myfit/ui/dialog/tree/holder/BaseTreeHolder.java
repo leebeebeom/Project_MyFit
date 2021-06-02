@@ -15,13 +15,19 @@ import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Accessors(prefix = "m")
 public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.BaseNodeViewHolder<T> {
     protected final NavController mNavController;
+    @Getter
     private boolean mClickable = true;
+    @Getter
     private T mValue;
+    @Getter
     protected TreeNode mNode;
 
     public BaseTreeHolder(Context context, NavController navController) {
@@ -34,16 +40,12 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         this.mValue = value;
         this.mNode = node;
         bind(value);
-
-        if (!node.getChildren().isEmpty()) {
-            getArrowIcon().setVisibility(View.VISIBLE);
-            getFolderIconLayout().setOnClickListener(v -> tView.toggleNode(node));
-        }
-
-        getAddIcon().setOnClickListener(v ->
-                CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                        TreeViewDialogDirections.toAddFolderDialog(value.getTupleId(), value.getParentIndex())));
         return getBindingRoot();
+    }
+
+    public void addIconClick() {
+        CommonUtil.navigate(mNavController, R.id.treeViewDialog,
+                TreeViewDialogDirections.toAddFolderDialog(mValue.getTupleId(), mValue.getParentIndex()));
     }
 
     protected abstract void bind(T value);
@@ -56,10 +58,6 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         }
     }
 
-    public boolean isClickable() {
-        return mClickable;
-    }
-
     public void setFolderIconClickable() {
         getArrowIcon().setVisibility(View.VISIBLE);
         getFolderIconLayout().setOnClickListener(v -> tView.toggleNode(mNode));
@@ -69,10 +67,6 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
     public void toggle(boolean active) {
         getArrowIcon().setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
         getFolderIcon().setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
-    }
-
-    public TreeNode getNode(){
-        return mNode;
     }
 
     public long getTupleId() {
@@ -94,8 +88,6 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
     protected abstract TextView getNameTextView();
 
     protected abstract AppCompatImageView getArrowIcon();
-
-    protected abstract AppCompatImageView getAddIcon();
 
     protected abstract AppCompatImageView getFolderIcon();
 
