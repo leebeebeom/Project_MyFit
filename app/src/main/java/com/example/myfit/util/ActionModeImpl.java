@@ -1,128 +1,87 @@
 package com.example.myfit.util;
 
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.view.ActionMode;
-import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.myfit.R;
 import com.example.myfit.databinding.TitleActionModeBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
-import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
-public class ActionModeImpl implements ActionMode.Callback {
-    public static final String ACTION_MODE = "action mode";
-    public static ActionMode actionMode;
-    public static boolean isActionModeOn;
+import javax.inject.Inject;
+
+import dagger.hilt.android.scopes.FragmentScoped;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Accessors(chain = true, prefix = "m")
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+public abstract class ActionModeImpl implements ActionMode.Callback {
+    public static ActionMode sActionMode = null;
+    public static boolean sActionModeOn;
+    public static final String ACTION_MODE_STRING = "action mode";
     public static final int ACTION_MODE_ON = 1;
     public static final int ACTION_MODE_OFF = 2;
 
-    private final TitleActionModeBinding binding;
-    private final int resId;
-    private final ActionModeListener listener;
-    private final BaseAdapter<?, ?, ?>[] adapters;
-    private final ViewPager2 viewPager;
-    private final Button[] buttonArray;
-    private final TabLayout tabLayout;
-    private List<MenuItem> menuItemList;
-
-    private ActionModeImpl(ActionModeImpl.Builder builder) {
-        this.binding = builder.binding;
-        this.resId = builder.resId;
-        this.listener = builder.listener;
-        this.adapters = builder.adapters;
-        this.viewPager = builder.viewPager;
-        this.buttonArray = builder.buttonArray;
-        this.tabLayout = builder.tabLayout;
-    }
-
-    public static class Builder {
-        private final TitleActionModeBinding binding;
-        private final int resId;
-        private final ActionModeListener listener;
-        private final BaseAdapter<?, ?, ?>[] adapters;
-        private ViewPager2 viewPager;
-        private Button[] buttonArray;
-        private TabLayout tabLayout;
-
-        public Builder(LayoutInflater inflater, int resId, ActionModeListener listener, BaseAdapter<?, ?, ?>... adapters) {
-            this.binding = TitleActionModeBinding.inflate(inflater);
-            this.resId = resId;
-            this.listener = listener;
-            this.adapters = adapters;
-        }
-
-        public Builder hasViewPager(ViewPager2 viewPager, Button[] buttonArray) {
-            this.viewPager = viewPager;
-            this.buttonArray = buttonArray;
-            return this;
-        }
-
-        public Builder hasViewPager(ViewPager2 viewPager, TabLayout tabLayout) {
-            this.viewPager = viewPager;
-            this.tabLayout = tabLayout;
-            return this;
-        }
-
-        public ActionModeImpl build() {
-            return new ActionModeImpl(this);
-        }
-    }
-
+    @Getter
+    private final TitleActionModeBinding mBinding;
+    @Setter
+    private ActionModeListener mListener;
+    @Getter
+    private final LinkedList<MenuItem> menuItems = new LinkedList<>();
 
     @Override
     public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
-        mode.getMenuInflater().inflate(resId, menu);
-        mode.setCustomView(binding.getRoot());
+        mode.getMenuInflater().inflate(getResId(), menu);
+        mode.setCustomView(mBinding.getRoot());
 
         setActionMode(mode, ACTION_MODE_ON);
 
-        if (viewPager != null) setViewPagerEnable(false);
+        mListener.setViewPagerEnable(false);
         return true;
     }
 
-    private void setActionMode(@Nullable ActionMode mode, int actionModeState) {
-        actionMode = mode;
-        isActionModeOn = actionModeState == ACTION_MODE_ON;
+    protected void setActionMode(@Nullable ActionMode mode, int actionModeState) {
+        sActionMode = mode;
+        sActionModeOn = actionModeState == ACTION_MODE_ON;
 
-        Arrays.stream(adapters).forEach(adapter -> adapter.setActionModeState(actionModeState));
+        Arrays.stream(mListener.getAdapters()).forEach(adapter -> adapter.setActionModeState(actionModeState));
     }
 
-    public void setViewPagerEnable(boolean enable) {
-        viewPager.setUserInputEnabled(enable);
-        if (buttonArray != null)
-            Arrays.stream(buttonArray).forEach(button -> button.setEnabled(enable));
-        else if (tabLayout != null) {
-            LinearLayout tabLayout = (LinearLayout) this.tabLayout.getChildAt(0);
-            int count = tabLayout.getChildCount();
-            for (int i = 0; i < count; i++) tabLayout.getChildAt(i).setClickable(enable);
-        }
-    }
+//        else if (mTabLayout != null) {
+//            LinearLayout tabLayout = (LinearLayout) this.mTabLayout.getChildAt(0);
+//            int count = tabLayout.getChildCount();
+//            for (int i = 0; i < count; i++) tabLayout.getChildAt(i).setClickable(enable);
+//        }
+//    }
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
-        binding.cb.setOnClickListener(v -> listener.selectAllClick(binding.cb.isChecked()));
+        mBinding.cb.setOnClickListener(v -> {
+            if (mBinding.cb.isChecked())
+                Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::selectAll);
+            else Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::deselectAll);
+        });
 
-        menuItemList = new LinkedList<>();
         int count = menu.size();
-        for (int i = 0; i < count; i++) menuItemList.add(menu.getItem(i));
+        for (int i = 0; i < count; i++) menuItems.add(menu.getItem(i));
         return true;
     }
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, @NotNull MenuItem item) {
-        listener.actionItemClick(item.getItemId());
+        mListener.actionItemClick(item.getItemId());
         return true;
     }
 
@@ -130,23 +89,46 @@ public class ActionModeImpl implements ActionMode.Callback {
     public void onDestroyActionMode(ActionMode mode) {
         setActionMode(null, ACTION_MODE_OFF);
 
-        binding.cb.setChecked(false);
-        ((ViewGroup) binding.getRoot().getParent()).removeAllViews();
+        mBinding.cb.setChecked(false);
+        ((ViewGroup) mBinding.getRoot().getParent()).removeAllViews();
 
-        if (viewPager != null) setViewPagerEnable(true);
-    }
-
-    public List<MenuItem> getMenuItemList() {
-        return menuItemList;
-    }
-
-    public TitleActionModeBinding getBinding() {
-        return binding;
+        mListener.setViewPagerEnable(true);
     }
 
     public interface ActionModeListener {
-        void selectAllClick(boolean isChecked);
+        void setViewPagerEnable(boolean enable);
+
+        BaseAdapter<?, ?, ?>[] getAdapters();
 
         void actionItemClick(int itemId);
+    }
+
+    protected abstract int getResId();
+
+    @FragmentScoped
+    public static class MainActionModeCallBack extends ActionModeImpl {
+
+        @Inject
+        protected MainActionModeCallBack(TitleActionModeBinding binding) {
+            super(binding);
+        }
+
+        @Override
+        protected int getResId() {
+            return R.menu.menu_action_mode;
+        }
+    }
+
+    @FragmentScoped
+    public static class ListActionModeCallBack extends ActionModeImpl {
+        @Inject
+        public ListActionModeCallBack(TitleActionModeBinding binding) {
+            super(binding);
+        }
+
+        @Override
+        protected int getResId() {
+            return R.menu.menu_action_mode;
+        }
     }
 }
