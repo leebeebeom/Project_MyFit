@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Accessors(chain = true, prefix = "m")
+@Accessors(prefix = "m")
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ActionModeImpl implements ActionMode.Callback {
     public static ActionMode sActionMode = null;
@@ -36,10 +36,11 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
 
     @Getter
     private final TitleActionModeBinding mBinding;
-    @Setter
-    private ActionModeListener mListener;
     @Getter
-    private final LinkedList<MenuItem> menuItems = new LinkedList<>();
+    private final LinkedList<MenuItem> mMenuItems = new LinkedList<>();
+    @Setter
+    protected ActionModeListener mListener;
+
 
     @Override
     public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -47,8 +48,6 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         mode.setCustomView(mBinding.getRoot());
 
         setActionMode(mode, ACTION_MODE_ON);
-
-        mListener.setViewPagerEnable(false);
         return true;
     }
 
@@ -59,13 +58,6 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         Arrays.stream(mListener.getAdapters()).forEach(adapter -> adapter.setActionModeState(actionModeState));
     }
 
-//        else if (mTabLayout != null) {
-//            LinearLayout tabLayout = (LinearLayout) this.mTabLayout.getChildAt(0);
-//            int count = tabLayout.getChildCount();
-//            for (int i = 0; i < count; i++) tabLayout.getChildAt(i).setClickable(enable);
-//        }
-//    }
-
     @Override
     public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
         mBinding.cb.setOnClickListener(v -> {
@@ -75,7 +67,7 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         });
 
         int count = menu.size();
-        for (int i = 0; i < count; i++) menuItems.add(menu.getItem(i));
+        for (int i = 0; i < count; i++) mMenuItems.add(menu.getItem(i));
         return true;
     }
 
@@ -91,22 +83,24 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
 
         mBinding.cb.setChecked(false);
         ((ViewGroup) mBinding.getRoot().getParent()).removeAllViews();
-
-        mListener.setViewPagerEnable(true);
     }
 
     public interface ActionModeListener {
-        void setViewPagerEnable(boolean enable);
-
         BaseAdapter<?, ?, ?>[] getAdapters();
 
         void actionItemClick(int itemId);
+    }
+
+    public interface ViewPagerActionModeListener extends ActionModeListener {
+        void setViewPagerEnable(boolean enable);
     }
 
     protected abstract int getResId();
 
     @FragmentScoped
     public static class MainActionModeCallBack extends ActionModeImpl {
+
+        private ViewPagerActionModeListener mListener;
 
         @Inject
         protected MainActionModeCallBack(TitleActionModeBinding binding) {
@@ -116,6 +110,24 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         @Override
         protected int getResId() {
             return R.menu.menu_action_mode;
+        }
+
+        public void setListener(ViewPagerActionModeListener mListener) {
+            this.mListener = mListener;
+            super.setListener(mListener);
+        }
+
+        @Override
+        public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
+            super.onCreateActionMode(mode, menu);
+            this.mListener.setViewPagerEnable(false);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            super.onDestroyActionMode(mode);
+            this.mListener.setViewPagerEnable(false);
         }
     }
 
