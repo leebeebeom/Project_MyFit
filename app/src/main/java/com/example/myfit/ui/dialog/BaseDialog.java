@@ -21,8 +21,11 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @AndroidEntryPoint
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseDialog extends DialogFragment {
     public static final String ACTION_MODE_OFF = "action mode off";
     @Inject

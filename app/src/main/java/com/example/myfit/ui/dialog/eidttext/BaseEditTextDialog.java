@@ -15,8 +15,11 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @AndroidEntryPoint
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEditTextDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject

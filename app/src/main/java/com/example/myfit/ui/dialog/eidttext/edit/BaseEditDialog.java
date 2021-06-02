@@ -8,6 +8,10 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEditDialog extends BaseEditTextDialog {
     private String mOldName;
 

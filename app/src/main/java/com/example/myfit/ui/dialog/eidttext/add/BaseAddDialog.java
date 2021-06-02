@@ -7,6 +7,10 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseAddDialog extends BaseEditTextDialog {
     @Override
     protected String getInitialText(Bundle savedInstanceState) {

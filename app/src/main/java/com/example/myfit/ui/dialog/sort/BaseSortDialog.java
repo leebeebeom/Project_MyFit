@@ -21,8 +21,11 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @AndroidEntryPoint
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseSortDialog extends BaseDialog {
     @Inject
     protected LayoutDialogSortBinding mBinding;

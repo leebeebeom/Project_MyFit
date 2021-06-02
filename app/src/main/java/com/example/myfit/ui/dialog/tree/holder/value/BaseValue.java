@@ -5,7 +5,7 @@ import com.example.myfit.data.tuple.BaseTuple;
 public class BaseValue<T extends BaseTuple> {
     private final T mTuple;
 
-    public BaseValue(T tuple) {
+    protected BaseValue(T tuple) {
         this.mTuple = tuple;
     }
 
