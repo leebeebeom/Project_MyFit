@@ -1,15 +1,19 @@
 package com.example.myfit.util;
 
-import com.example.myfit.data.model.category.CategoryTuple;
-import com.example.myfit.data.model.size.SizeTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.util.constant.Sort;
 
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SortUtil {
-    public static <T extends CategoryTuple> void orderCategoryFolderTuples(Sort sort, List<T> tuples) {
+    public static <T extends CategoryTuple> void sortCategoryFolderTuples(Sort sort, List<T> tuples) {
         if (sort == Sort.SORT_CUSTOM)
-            tuples.sort((o1, o2) -> Integer.compare(o1.getOrderNumber(), o2.getOrderNumber()));
+            tuples.sort((o1, o2) -> Integer.compare(o1.getSortNumber(), o2.getSortNumber()));
         else if (sort == Sort.SORT_CREATE)
             tuples.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
         else if (sort == Sort.SORT_CREATE_REVERSE)
@@ -26,7 +30,7 @@ public class SortUtil {
 
     public static void orderSizeTuples(Sort sort, List<SizeTuple> sizeTuples) {
         if (sort == Sort.SORT_CUSTOM)
-            sizeTuples.sort((o1, o2) -> Integer.compare(o1.getOrderNumber(), o2.getOrderNumber()));
+            sizeTuples.sort((o1, o2) -> Integer.compare(o1.getSortNumber(), o2.getSortNumber()));
         else if (sort == Sort.SORT_CREATE)
             sizeTuples.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId()));
         else if (sort == Sort.SORT_CREATE_REVERSE)
