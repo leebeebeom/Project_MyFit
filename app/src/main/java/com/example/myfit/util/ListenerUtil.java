@@ -1,4 +1,4 @@
-package com.example.project_myfit.util;
+package com.example.myfit.util;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -8,31 +8,35 @@ import android.view.inputmethod.EditorInfo;
 
 import androidx.core.widget.NestedScrollView;
 
-import com.example.project_myfit.data.Repository;
+import com.example.myfit.util.constant.AutoScrollFlag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.project_myfit.util.MyFitConstant.DOWN;
-import static com.example.project_myfit.util.MyFitConstant.STOP;
-import static com.example.project_myfit.util.MyFitConstant.UP;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import static com.example.myfit.util.adapter.viewholder.BaseVH.sDragging;
+import static com.example.myfit.util.dragselect.DragSelect.sDragSelecting;
 
 public class ListenerUtil {
-    public void scrollChangeListener(@NotNull NestedScrollView scrollView, FloatingActionButton fabTop) {
+    public static boolean sScrollEnable;
+
+    public static void setScrollChangeListener(@NotNull NestedScrollView scrollView, FloatingActionButton fabTop) {
         scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (v.getScrollY() == 0) fabTop.hide();
             else fabTop.show();
 
-            if ((MyFitVariable.isDragSelecting || MyFitVariable.isDragging) && MyFitVariable.scrollEnable && scrollY > oldScrollY)
+            if ((sDragSelecting || sDragging) && sScrollEnable && scrollY > oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, 1), 50);
-            else if ((MyFitVariable.isDragSelecting || MyFitVariable.isDragging) && MyFitVariable.scrollEnable && scrollY < oldScrollY)
+            else if ((sDragSelecting || sDragging) && sScrollEnable && scrollY < oldScrollY)
                 v.postDelayed(() -> v.scrollBy(0, -1), 50);
         });
     }
 
-    public void fabTopClick(NestedScrollView scrollView, @NotNull FloatingActionButton fabTop) {
+    public static void setFabTopClickListener(NestedScrollView scrollView, @NotNull FloatingActionButton fabTop) {
         fabTop.setOnClickListener(v -> {
             scrollView.scrollTo(0, 0);
             scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -40,48 +44,50 @@ public class ListenerUtil {
                     scrollView.scrollTo(0, 0);
                 else {
                     scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                    scrollChangeListener(scrollView, fabTop);
+                    setScrollChangeListener(scrollView, fabTop);
                 }
             });
         });
-
     }
 
-    public void viewPagerAutoScroll(NestedScrollView scrollView, int upDownStop) {
-        if ((MyFitVariable.isDragSelecting || MyFitVariable.isDragging))
-            if (upDownStop == DOWN) {
-                scrollView.scrollBy(0, 1);
-                MyFitVariable.scrollEnable = true;
-            } else if (upDownStop == UP) {
-                scrollView.scrollBy(0, -1);
-                MyFitVariable.scrollEnable = true;
-            } else if (upDownStop == STOP) {
-                scrollView.scrollBy(0, 0);
-                MyFitVariable.scrollEnable = false;
+    public static void viewPagerAutoScroll(NestedScrollView scrollView, AutoScrollFlag flag) {
+        if ((sDragSelecting || sDragging))
+            switch (flag) {
+                case UP:
+                    scrollView.scrollBy(0, -1);
+                    sScrollEnable = true;
+                case DOWN:
+                    scrollView.scrollBy(0, 1);
+                    sScrollEnable = true;
+                case STOP:
+                    scrollView.scrollBy(0, 0);
+                    sScrollEnable = false;
             }
     }
 
-    public void autoScroll(NestedScrollView scrollView, @NotNull MotionEvent event) {
+    public static void autoScroll(NestedScrollView scrollView, @NotNull MotionEvent event) {
         if (event.getRawY() > 2000) {
             scrollView.scrollBy(0, 1);
-            MyFitVariable.scrollEnable = true;
+            sScrollEnable = true;
         } else if (event.getRawY() < 250) {
             scrollView.scrollBy(0, -1);
-            MyFitVariable.scrollEnable = true;
+            sScrollEnable = true;
         } else if (event.getRawY() < 2000 && event.getRawY() > 250)
-            MyFitVariable.scrollEnable = false;
+            sScrollEnable = false;
     }
 
-    public void recentSearchClick(String word, @NotNull MaterialAutoCompleteTextView autoCompleteTextView, @NotNull TextInputLayout textInputLayout, Context context, int type) {
+    public static void recentSearchClick(String word, @NotNull MaterialAutoCompleteTextView autoCompleteTextView, @NotNull TextInputLayout textInputLayout, Context context, int type) {
         autoCompleteTextView.setText(word);
         autoCompleteTextView.setSelection(word.length());
         autoCompleteTextView.dismissDropDown();
         textInputLayout.setEndIconVisible(false);
         CommonUtil.keyBoardHide(context, autoCompleteTextView);
-        Repository.getRecentSearchRepository(context).recentSearchInsert(word, type);
+
+        Repository repository = new Repository(context);
+        repository.getRecentSearchRepository().insertRecentSearch(word, type);
     }
 
-    public void autoCompleteImeClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
+    public static void autoCompleteImeClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
         autoCompleteTextView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 CommonUtil.keyBoardHide(context, autoCompleteTextView);
@@ -90,14 +96,16 @@ public class ListenerUtil {
 
                 String word = autoCompleteTextView.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(word))
-                    Repository.getRecentSearchRepository(context).recentSearchInsert(word, recentSearchType);
+                if (!TextUtils.isEmpty(word)) {
+                    Repository repository = new Repository(context);
+                    repository.getRecentSearchRepository().insertRecentSearch(word, recentSearchType);
+                }
             }
             return false;
         });
     }
 
-    public void autoCompleteEndIconClick(MaterialAutoCompleteTextView autoCompleteTextView, @NotNull TextInputLayout textInputLayout, Context context) {
+    public static void autoCompleteEndIconClick(MaterialAutoCompleteTextView autoCompleteTextView, @NotNull TextInputLayout textInputLayout, Context context) {
         textInputLayout.setEndIconOnClickListener(v -> {
             textInputLayout.setEndIconVisible(false);
             autoCompleteTextView.setText("");
@@ -105,13 +113,14 @@ public class ListenerUtil {
         });
     }
 
-    public void autoCompleteItemClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
+    public static void autoCompleteItemClick(@NotNull MaterialAutoCompleteTextView autoCompleteTextView, int recentSearchType, Context context) {
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             autoCompleteTextView.clearFocus();
             CommonUtil.keyBoardHide(context, autoCompleteTextView);
 
             String word = String.valueOf(autoCompleteTextView.getText());
-            Repository.getRecentSearchRepository(context).recentSearchInsert(word, recentSearchType);
+            Repository repository = new Repository(context);
+            repository.getRecentSearchRepository().insertRecentSearch(word, recentSearchType);
         });
     }
 }
