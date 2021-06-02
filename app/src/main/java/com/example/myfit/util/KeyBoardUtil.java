@@ -7,6 +7,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.jetbrains.annotations.NotNull;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class KeyBoardUtil {
     public static boolean isKeyboardShowing(@NotNull View rootView) {
         Rect r = new Rect();
