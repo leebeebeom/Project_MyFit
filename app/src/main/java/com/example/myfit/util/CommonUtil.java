@@ -9,8 +9,12 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonUtil {
-    public static void setBadgeCount(TabLayout.Tab tab, int count, int colorControl){
+    public static void setBadgeCount(TabLayout.Tab tab, int count, int colorControl) {
         if (tab != null) {
             if (count == 0) tab.removeBadge();
             else {
