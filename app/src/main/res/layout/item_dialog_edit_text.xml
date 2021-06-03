@@ -5,12 +5,11 @@
     <data>
 
         <variable
-            name="hint"
-            type="String" />
-
+            name="model"
+            type="com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel" />
         <variable
-            name="placeHolder"
-            type="String" />
+            name="dialogFragment"
+            type="com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog" />
     </data>
 
     <FrameLayout
@@ -24,9 +23,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@{hint}"
             android:theme="@style/myEditTextOutlineColor"
-            app:placeholderText="@{placeHolder}"
+            android:hint="@{dialogFragment.hint}"
+            app:placeholderText="@{dialogFragment.placeHolder}"
             app:endIconMode="clear_text"
             app:errorTextAppearance="@style/myTextSize8sdp"
             app:hintTextAppearance="@style/myTextSize8sdp"
@@ -38,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:maxLength="30"
                 android:imeOptions="actionDone"
+                android:text="@={model.name}"
                 android:inputType="text"
                 android:textSize="@dimen/_11sdp" />
         </com.google.android.material.textfield.TextInputLayout>
