@@ -20,8 +20,7 @@ public class SortMainDialog extends BaseSortDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding.radioBtnBrand.setVisibility(View.GONE);
-        mBinding.radioBtnBrandReverse.setVisibility(View.GONE);
+        mBinding.brandLayout.setVisibility(View.GONE);
     }
 
     @Override

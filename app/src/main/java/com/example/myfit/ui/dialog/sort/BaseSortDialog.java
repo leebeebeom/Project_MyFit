@@ -46,8 +46,8 @@ public abstract class BaseSortDialog extends BaseDialog {
 
     @NotNull
     private MaterialRadioButton[] getSortButtons() {
-        return new MaterialRadioButton[]{mBinding.radioBtnCustom, mBinding.radioBtnCreate, mBinding.radioBtnCreateReverse,
-                mBinding.radioBtnBrand, mBinding.radioBtnBrandReverse, mBinding.radioBtnName, mBinding.radioBtnNameReverse};
+        return new MaterialRadioButton[]{mBinding.radioBtnCustom.button, mBinding.radioBtnCreate.button, mBinding.radioBtnCreateReverse.button,
+                mBinding.radioBtnBrand.button, mBinding.radioBtnBrandReverse.button, mBinding.radioBtnName.button, mBinding.radioBtnNameReverse.button};
     }
 
     private void addRadioButtonCheckListener(@NotNull MaterialRadioButton[] buttons) {
