@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
+import com.example.myfit.util.adapter.BaseAdapter;
+import com.example.myfit.util.constant.Sort;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -81,6 +83,8 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     }
 
     public abstract MaterialCardView getCardView();
+
+    public abstract void setAdapter(BaseAdapter<?, ?, ?> baseAdapter);
 
     public abstract static class BaseSizeVH extends BaseVH<SizeTuple, BaseVHListener.SizeVHListener> {
 

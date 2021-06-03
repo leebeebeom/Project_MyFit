@@ -1,9 +1,10 @@
 package com.example.myfit.util.adapter.viewholder;
 
-import androidx.appcompat.widget.AppCompatImageView;
+import android.view.View;
 
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemSizeGridBinding;
+import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -53,6 +54,11 @@ public class SizeGridVH extends BaseVH.BaseSizeVH {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
+    }
+
+    @Override
+    public void setAdapter(BaseAdapter<?, ?, ?> baseAdapter) {
+        mBinding.setBaseAdapter(baseAdapter);
     }
 }
 

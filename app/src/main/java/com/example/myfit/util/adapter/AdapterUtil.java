@@ -17,19 +17,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AdapterUtil {
-    private static Animation sOpenAnimation;
-
-    public static void listActionModeOn(@NotNull MaterialCardView cardView) {
-        if (sOpenAnimation == null)
-            sOpenAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_right);
-        cardView.setAnimation(sOpenAnimation);
-    }
-
-    public static void listActionModeOff(@NotNull MaterialCardView cardView) {
-        cardView.setAnimation(AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_left));
-        sOpenAnimation = null;
-    }
-
     public static <T extends BaseTuple> void itemMove(int from, int to, List<T> list) {
         if (from < to) {//down
             for (int i = from; i < to; i++) {

@@ -1,6 +1,5 @@
 package com.example.myfit.util.adapter;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.viewholder.BaseVH;
 import com.example.myfit.util.adapter.viewholder.BaseVHListener;
 import com.example.myfit.util.constant.Sort;
-import com.example.myfit.util.constant.ViewType;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +31,9 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     @Getter
     private List<T> mNewOrderList;
     private final Set<T> mSelectedItems;
+    @Getter
     private int mActionModeState;
+    @Getter
     private Sort mSort;
 
     protected BaseAdapter(SizeLiveSet<T> selectedItems) {
@@ -75,16 +75,14 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     @Override
     public void onBindViewHolder(@NonNull @NotNull VH holder, int position) {
         holder.setTuple(getItem(position));
+        holder.setAdapter(this);
 
-        if (mActionModeState == ACTION_MODE_ON) {
+        if (mActionModeState == ACTION_MODE_ON)
             holder.getCheckBox().setChecked(mSelectedItems.contains(getItem(position)));
-            holder.getDragHandleIcon().setVisibility(mSort == Sort.SORT_CUSTOM ? View.VISIBLE : View.GONE);
-            this.actionModeOn(holder);
-        } else if (mActionModeState == ACTION_MODE_OFF) {
+        else if (mActionModeState == ACTION_MODE_OFF) {
             holder.getCheckBox().setChecked(false);
-            holder.getDragHandleIcon().setVisibility(View.GONE);
             if (!mSelectedItems.isEmpty()) mSelectedItems.clear();
-            this.actionModeOff(holder);
+            if (getItemCount() - 1 == holder.getLayoutPosition()) mActionModeState = 0;
         }
     }
 
@@ -92,24 +90,6 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
         this.mActionModeState = actionModeState;
         notifyDataSetChanged();
     }
-
-    protected void actionModeOn(@NotNull VH holder) {
-        if (getViewType() == ViewType.LIST_VIEW)
-            AdapterUtil.listActionModeOn(holder.getCardView());
-        else holder.getCheckBox().setVisibility(View.VISIBLE);
-    }
-
-    protected void actionModeOff(VH holder) {
-        if (getViewType() == ViewType.GRID_VIEW)
-            AdapterUtil.listActionModeOff(holder.getCardView());
-        else {
-            holder.getCheckBox().jumpDrawablesToCurrentState();
-            holder.getCheckBox().setVisibility(View.GONE);
-        }
-        if (getItemCount() - 1 == holder.getLayoutPosition()) mActionModeState = 0;
-    }
-
-    protected abstract ViewType getViewType();
 
     public void moveItem(int from, int to) {
         AdapterUtil.itemMove(from, to, mNewOrderList);

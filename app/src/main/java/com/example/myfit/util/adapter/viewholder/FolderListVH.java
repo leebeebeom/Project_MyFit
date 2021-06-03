@@ -2,6 +2,7 @@ package com.example.myfit.util.adapter.viewholder;
 
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemFolderListBinding;
+import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -35,5 +36,10 @@ public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
+    }
+
+    @Override
+    public void setAdapter(BaseAdapter<?, ?, ?> baseAdapter) {
+        mBinding.setBaseAdapter(baseAdapter);
     }
 }

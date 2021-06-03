@@ -2,10 +2,9 @@ package com.example.myfit.util.adapter.viewholder;
 
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemCategoryBinding;
+import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -50,5 +49,10 @@ public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
+    }
+
+    @Override
+    public void setAdapter(BaseAdapter<?, ?, ?> baseAdapter) {
+        mBinding.setBaseAdapter(baseAdapter);
     }
 }

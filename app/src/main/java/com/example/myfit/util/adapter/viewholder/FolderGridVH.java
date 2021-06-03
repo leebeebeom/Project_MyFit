@@ -7,6 +7,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemFolderGridBinding;
+import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -57,5 +58,10 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     @Override
     public MaterialCardView getCardView() {
         return mBinding.cardView;
+    }
+
+    @Override
+    public void setAdapter(BaseAdapter<?, ?, ?> baseAdapter) {
+        mBinding.setBaseAdapter(baseAdapter);
     }
 }
