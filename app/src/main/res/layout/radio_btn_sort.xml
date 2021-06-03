@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="text"
+            type="String" />
+    </data>
+
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_weight="1"
+        android:button="@drawable/radio_button"
+        android:paddingStart="@dimen/_4sdp"
+        android:paddingEnd="0dp"
+        android:text="@{text}"
+        android:textSize="@dimen/_11sdp"
+        tools:ignore="ObsoleteLayoutParam"
+        tools:text="아" />
+</layout>
