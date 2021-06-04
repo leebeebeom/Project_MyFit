@@ -6,18 +6,18 @@ import androidx.lifecycle.LiveData;
 
 public abstract class SharedPreferenceLiveData<T> extends LiveData<T> {
 
-    protected final SharedPreferences preference;
-    private final String key;
-    private final T defaultValue;
-    private final SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
+    protected final SharedPreferences mPreference;
+    private final String mKey;
+    private final T mDefaultValue;
+    private final SharedPreferences.OnSharedPreferenceChangeListener mPreferenceChangeListener;
 
     public SharedPreferenceLiveData(SharedPreferences preference, String key, T defaultValue) {
-        this.preference = preference;
-        this.key = key;
-        this.defaultValue = defaultValue;
+        this.mPreference = preference;
+        this.mKey = key;
+        this.mDefaultValue = defaultValue;
 
-        preferenceChangeListener = (sharedPreferences, key1) -> {
-            if (SharedPreferenceLiveData.this.key.equals(key1))
+        mPreferenceChangeListener = (sharedPreferences, key1) -> {
+            if (SharedPreferenceLiveData.this.mKey.equals(key1))
                 setValue(getValueFromPreferences(key1, defaultValue));
         };
     }
@@ -27,13 +27,13 @@ public abstract class SharedPreferenceLiveData<T> extends LiveData<T> {
     @Override
     protected void onActive() {
         super.onActive();
-        setValue(getValueFromPreferences(key, defaultValue));
-        preference.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+        setValue(getValueFromPreferences(mKey, mDefaultValue));
+        mPreference.registerOnSharedPreferenceChangeListener(mPreferenceChangeListener);
     }
 
     @Override
     protected void onInactive() {
-        preference.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
+        mPreference.unregisterOnSharedPreferenceChangeListener(mPreferenceChangeListener);
         super.onInactive();
     }
 

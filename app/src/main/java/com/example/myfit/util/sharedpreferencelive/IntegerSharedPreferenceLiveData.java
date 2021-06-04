@@ -10,6 +10,6 @@ public class IntegerSharedPreferenceLiveData extends SharedPreferenceLiveData<In
 
     @Override
     public Integer getValueFromPreferences(String key, Integer defaultValue) {
-        return preference.getInt(key, defaultValue);
+        return mPreference.getInt(key, defaultValue);
     }
 }
