@@ -14,7 +14,7 @@
     </data>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvCategoryName"
+        android:id="@+id/tv"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/_8sdp"

@@ -38,7 +38,7 @@
                 app:treeHolder="@{folderHolder}" />
 
             <include
-                android:id="@+id/addIcon"
+                android:id="@+id/postfix"
                 layout="@layout/item_tree_include_postfix"
                 app:treeHolder="@{folderHolder}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
