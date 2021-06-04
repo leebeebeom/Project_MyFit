@@ -6,17 +6,22 @@
     <data>
 
         <variable
-            name="size"
-            type="com.example.project_myfit.data.model.Size" />
+            name="sizeGridVH"
+            type="com.example.myfit.util.adapter.viewholder.SizeGridVH" />
+
+        <variable
+            name="baseAdapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
     </data>
 
     <FrameLayout
-        android:layout_width="match_parent"
+        holder="@{sizeGridVH}"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
-            android:layout_width="@dimen/_140sdp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_4sdp"
@@ -36,26 +41,30 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv"
                         android:scaleType="centerCrop"
-                        setUri="@{size.imageUri}"
+                        setUri="@{sizeGridVH.tuple.imageUri}"
                         android:layout_width="@dimen/_140sdp"
                         android:layout_height="@dimen/_140sdp"
                         android:layout_marginTop="@dimen/_16sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        setAddIcon="@{size.imageUri}"
-                        android:layout_width="@dimen/_40sdp"
-                        android:layout_height="@dimen/_40sdp"
+                        setAddIcon="@{sizeGridVH.tuple.imageUri}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleX="0.3"
+                        android:scaleY="0.3"
                         android:layout_gravity="center"
                         tools:src="@drawable/icon_add_image"
                         android:alpha="0.2" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iconDragHandle"
-                        setDragHandle2="@{size.size}"
-                        android:visibility="gone"
+                        adapter="@{baseAdapter}"
+                        holder="@{sizeGridVH}"
+                        setDragHandle2="@{}"
+                        android:layout_gravity="end"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end|top"
+                        android:visibility="gone"
                         android:layout_marginTop="-2dp"
                         android:alpha="0.9"
                         android:scaleX="0.7"
@@ -67,46 +76,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/_4sdp"
-                        android:paddingVertical="@dimen/_2sdp">
+                    <include
+                        android:id="@+id/nameLayout"
+                        layout="@layout/item_size_name_layout"
+                        app:sizeVH="@{sizeGridVH}" />
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:alpha="0.7"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@{size.brand.trim()}"
-                            android:textSize="@dimen/_7sdp"
-                            tools:text="앤더슨벨" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="-2dp"
-                            android:alpha="0.9"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@{size.name.trim()}"
-                            android:textSize="@dimen/_10sdp"
-                            tools:text="오버핏 반팔" />
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
+                    <include
                         android:id="@+id/cbFavorite"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom"
-                        android:button="@drawable/check_box_heart"
-                        android:background="@android:color/transparent"
-                        android:checked="@={size.favorite}"
-                        android:scaleX="0.7"
-                        android:scaleY="0.7" />
+                        layout="@layout/item_size_favorite_check_box"
+                        app:sizeVH="@{sizeGridVH}" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -114,12 +92,12 @@
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb"
+            adapter="@{baseAdapter}"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="top|center"
-            android:layout_marginStart="-4dp"
+            android:layout_gravity="start"
             android:layout_marginTop="@dimen/_3sdp"
-            android:layout_marginEnd="@dimen/_60sdp"
+            android:layout_marginStart="@dimen/_1sdp"
             android:alpha="0.8"
             android:buttonTint="?colorControlNormal"
             android:clickable="false"
