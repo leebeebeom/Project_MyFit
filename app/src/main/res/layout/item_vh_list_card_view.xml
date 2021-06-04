@@ -32,7 +32,7 @@
             type="float" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         adapter="@{baseAdapter}"
         android:layout_width="match_parent"
@@ -122,5 +122,5 @@
                 android:visibility="gone"
                 tools:src="@drawable/icon_drag_handle" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
