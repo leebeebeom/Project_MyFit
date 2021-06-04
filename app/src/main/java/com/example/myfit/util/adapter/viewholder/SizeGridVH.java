@@ -1,7 +1,5 @@
 package com.example.myfit.util.adapter.viewholder;
 
-import android.view.View;
-
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemSizeGridBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
