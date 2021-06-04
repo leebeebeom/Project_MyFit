@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sizeVH"
+            type="com.example.myfit.util.adapter.viewholder.BaseVH.BaseSizeVH" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_4sdp"
+        android:paddingVertical="@dimen/_2sdp"
+        tools:ignore="ObsoleteLayoutParam">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{sizeVH.tuple.brand.trim()}"
+            android:textSize="@dimen/_7sdp"
+            tools:text="앤더슨벨" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            android:alpha="0.8"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{sizeVH.tuple.name.trim()}"
+            android:textSize="@dimen/_10sdp"
+            tools:text="오버핏 반팔" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
