@@ -3,8 +3,6 @@ package com.example.myfit.util.adapter.viewholder;
 import android.annotation.SuppressLint;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemFolderGridBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
@@ -43,7 +41,7 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
         mBinding.layoutContentsSize.setVisibility(View.INVISIBLE);
-        mBinding.tvFolderName.setAlpha(0.5f);
+        mBinding.tvName.setAlpha(0.5f);
         mBinding.cb.setAlpha(0.5f);
     }
 
@@ -51,7 +49,7 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 0);
         mBinding.layoutContentsSize.setVisibility(View.VISIBLE);
-        mBinding.tvFolderName.setAlpha(1);
+        mBinding.tvName.setAlpha(1);
         mBinding.cb.setAlpha(0.8f);
     }
 
