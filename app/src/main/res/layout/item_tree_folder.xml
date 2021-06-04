@@ -25,7 +25,7 @@
 
             <include
                 android:id="@+id/prefix"
-                layout="@layout/item_tree_include_prefix"
+                layout="@layout/item_tree_prefix"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_4sdp"
@@ -33,13 +33,13 @@
 
             <include
                 android:id="@+id/tv"
-                layout="@layout/item_tree_include_text_view"
+                layout="@layout/item_tree_text_view"
                 app:textSize="@{@dimen/_10sdp}"
                 app:treeHolder="@{folderHolder}" />
 
             <include
                 android:id="@+id/postfix"
-                layout="@layout/item_tree_include_postfix"
+                layout="@layout/item_tree_postfix"
                 app:treeHolder="@{folderHolder}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
