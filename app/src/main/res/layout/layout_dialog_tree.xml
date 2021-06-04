@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="parentCategory"
-            type="String" />
+            name="model"
+            type="com.example.myfit.ui.dialog.tree.TreeViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -16,7 +16,6 @@
         android:scrollbars="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -26,6 +25,11 @@
                 android:layout_height="1px"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:background="?myColorControl" />
+
+            <FrameLayout
+                android:id="@+id/treeViewContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
@@ -46,10 +50,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
-                    android:text="@{' ' + parentCategory}"
+                    android:text="@{' ' + model.parentCategory}"
                     android:textSize="@dimen/_12sdp"
                     app:fontFamily="@font/noto_bold"
-                    tools:text="TOP" />
+                    tools:text=" TOP" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -57,6 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:onClick="@{() -> model.addCategoryClick()}"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_16sdp">
 
@@ -69,9 +74,10 @@
                     android:textSize="@dimen/_10sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    setAddIcon2="@{parentCategory}"
+                    setAddIcon2="@{}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    tools:src="@drawable/icon_add"
                     android:layout_gravity="end" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
