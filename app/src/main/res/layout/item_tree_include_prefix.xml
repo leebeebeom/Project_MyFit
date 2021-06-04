@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="treeHolder"
+            type="com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layoutFolderIcon"
+        toggleNode="@{treeHolder}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iconArrow"
+            setTriangleIcon="@{}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:alpha="0.8"
+            android:visibility="@{treeHolder.node.children.empty ? View.INVISIBLE : View.VISIBLE}"
+            tools:srcCompat="@drawable/icon_triangle_right" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iconFolder"
+            setFolderIcon="@{}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            tools:srcCompat="@drawable/icon_folder" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

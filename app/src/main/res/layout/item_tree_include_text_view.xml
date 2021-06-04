@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="textSize"
+            type="float" />
+
+        <variable
+            name="treeHolder"
+            type="com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder" />
+    </data>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvCategoryName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="@{treeHolder.value.tupleName}"
+        android:textSize="@{textSize}"
+        tools:ignore="ObsoleteLayoutParam"
+        tools:text="Short Sleeve" />
+</layout>
