@@ -1,7 +1,6 @@
 package com.example.myfit.util.bindingadapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,13 +33,13 @@ import static com.example.myfit.util.adapter.viewholder.BaseVH.sDragging;
 public class ItemBindingAdapter {
     private static Animation sOpenAnimation;
 
-    @androidx.databinding.BindingAdapter("android:text")
+    @BindingAdapter("android:text")
     public static void text(@NotNull TextView textView, int i) {
         String number = String.valueOf(i);
         textView.setText(number);
     }
 
-    @androidx.databinding.BindingAdapter("setUri")
+    @BindingAdapter("setUri")
     public static void setUri(ImageView imageView, String uriString) {
         if (uriString != null) {
             Uri uri = Uri.parse(uriString);
@@ -48,53 +47,49 @@ public class ItemBindingAdapter {
         } else Glide.with(imageView).clear(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setDragHandle")
+    @BindingAdapter("setDragHandle")
     public static void setDragHandle(@NotNull ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_drag_handle).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setDragHandle2")
+    @BindingAdapter("setDragHandle2")
     public static void setDragHandle2(@NotNull ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_drag_handle2).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setAddIcon")
+    @BindingAdapter("setAddIcon")
     public static void setAddIcon(@NotNull ImageView imageView, String imageUri) {
-        if (imageUri == null) {
-            Glide.with(imageView).load((Bitmap) null).error(R.drawable.icon_add_image).into(imageView);
+        if (imageUri == null)
             imageView.setVisibility(View.VISIBLE);
-        } else {
-            Glide.with(imageView).clear(imageView);
-            imageView.setVisibility(View.GONE);
-        }
+        else imageView.setVisibility(View.GONE);
     }
 
-    @androidx.databinding.BindingAdapter("setAddIcon2")
+    @BindingAdapter("setAddIcon2")
     public static void setAddIcon2(ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_add).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setRecentSearchIcon")
+    @BindingAdapter("setRecentSearchIcon")
     public static void setRecentSearchIcon(@NotNull ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_recent_search).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setCloseIcon")
+    @BindingAdapter("setCloseIcon")
     public static void setCloseIcon(@NotNull ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_close).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setFolderIcon")
+    @BindingAdapter("setFolderIcon")
     public static void setFolderIcon(@NotNull ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_folder).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setDotIcon")
+    @BindingAdapter("setDotIcon")
     public static void setDotIcon(@NotNull ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_dot).into(imageView);
     }
 
-    @androidx.databinding.BindingAdapter("setTriangleIcon")
+    @BindingAdapter("setTriangleIcon")
     public static void setTriangleIcon(ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
     }
