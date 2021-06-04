@@ -13,7 +13,7 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout"
-        toggleNode="@{treeHolder}"
+        android:onClick="@{() -> treeHolder.toggleNode()}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 

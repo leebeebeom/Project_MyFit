@@ -139,7 +139,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
 
                 BaseTreeHolder<?> viewHolder = (BaseTreeHolder<?>) clickedNode.getViewHolder();
                 addContentSize(viewHolder);
-                viewHolder.setFolderIconClickable();
+                viewHolder.showArrowIcon();
                 mModel.getAddedFolderTupleLive().setValue(null);
             }
         });

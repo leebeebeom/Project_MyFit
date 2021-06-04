@@ -11,13 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfit.R;
-import com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.example.myfit.util.adapter.viewholder.BaseVH;
 import com.example.myfit.util.adapter.viewholder.ViewPagerVH;
@@ -99,12 +97,6 @@ public class ItemBindingAdapter {
     @androidx.databinding.BindingAdapter("setTriangleIcon")
     public static void setTriangleIcon(ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
-    }
-
-    @androidx.databinding.BindingAdapter("toggleNode")
-    public static void toggleNode(LinearLayoutCompat linearLayout, BaseTreeHolder<?> holder) {
-        if (!holder.getNode().getChildren().isEmpty())
-            linearLayout.setOnClickListener(v -> holder.getTreeView().toggleNode(holder.getNode()));
     }
 
     @BindingAdapter("holder")
