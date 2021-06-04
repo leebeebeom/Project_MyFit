@@ -16,7 +16,7 @@
             android:background="?myColorControl" />
 
         <include
-            layout="@layout/radio_btn_sort"
+            layout="@layout/layout_dialog_sort_radio_btn"
             android:id="@+id/radioBtnCustom"
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_width="wrap_content"
@@ -29,12 +29,12 @@
 
             <include
                 android:id="@+id/radioBtnCreate"
-                layout="@layout/radio_btn_sort"
+                layout="@layout/layout_dialog_sort_radio_btn"
                 app:text="@{@string/dialog_sort_create}" />
 
             <include
                 android:id="@+id/radioBtnCreateReverse"
-                layout="@layout/radio_btn_sort"
+                layout="@layout/layout_dialog_sort_radio_btn"
                 app:text="@{@string/dialog_sort_create_reverse}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -45,12 +45,12 @@
 
             <include
                 android:id="@+id/radioBtnBrand"
-                layout="@layout/radio_btn_sort"
+                layout="@layout/layout_dialog_sort_radio_btn"
                 app:text="@{@string/dialog_sort_brand}" />
 
             <include
                 android:id="@+id/radioBtnBrandReverse"
-                layout="@layout/radio_btn_sort"
+                layout="@layout/layout_dialog_sort_radio_btn"
                 app:text="@{@string/dialog_sort_brand_reverse}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -60,12 +60,12 @@
 
             <include
                 android:id="@+id/radioBtnName"
-                layout="@layout/radio_btn_sort"
+                layout="@layout/layout_dialog_sort_radio_btn"
                 app:text="@{@string/dialog_sort_name}" />
 
             <include
                 android:id="@+id/radioBtnNameReverse"
-                layout="@layout/radio_btn_sort"
+                layout="@layout/layout_dialog_sort_radio_btn"
                 app:text="@{@string/dialog_sort_name_reverse}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
