@@ -1,16 +1,19 @@
 package com.example.myfit.ui.dialog.tree.holder.value;
 
-import com.example.myfit.data.tuple.BaseTuple;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 
-public class BaseValue<T extends BaseTuple> {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+@Accessors(prefix = "m")
+@AllArgsConstructor
+public class BaseValue<T extends CategoryTuple> {
+    @Getter
     private final T mTuple;
 
-    protected BaseValue(T tuple) {
-        this.mTuple = tuple;
-    }
-
-    public T getTuple() {
-        return mTuple;
+    public String getTupleName() {
+        return mTuple.getName();
     }
 
     public long getTupleId() {
@@ -19,5 +22,9 @@ public class BaseValue<T extends BaseTuple> {
 
     public int getParentIndex() {
         return mTuple.getParentIndex();
+    }
+
+    public int getContentsSize() {
+        return mTuple.getContentSize();
     }
 }
