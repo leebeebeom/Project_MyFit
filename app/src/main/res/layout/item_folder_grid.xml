@@ -31,13 +31,12 @@
                 android:id="@+id/cardView"
                 android:layout_width="@dimen/_64sdp"
                 android:layout_height="@dimen/_64sdp"
-                android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/_4sdp"
                 app:cardCornerRadius="@dimen/_8sdp"
                 app:cardElevation="@dimen/_3sdp">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvFolderName"
+                    android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:ellipsize="end"
@@ -46,21 +45,22 @@
                     android:paddingTop="@dimen/_4sdp"
                     android:text="@{folderGridVH.tuple.name}"
                     android:textSize="@dimen/_9sdp"
-                    tools:text="일곱글자까지됨세줄까지됨\n세줄까지됨" />
+                    tools:text="아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
                     adapter="@{baseAdapter}"
                     holder="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
                     setDragHandle2="@{}"
+                    android:layout_gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:alpha="0.9"
                     android:layout_marginTop="-4dp"
                     android:layout_marginEnd="-3dp"
+                    android:visibility="gone"
                     android:scaleX="0.5"
                     android:scaleY="0.7"
-                    android:visibility="gone"
                     tools:src="@drawable/icon_drag_handle2" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
