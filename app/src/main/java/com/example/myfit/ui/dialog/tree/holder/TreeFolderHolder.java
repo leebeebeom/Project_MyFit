@@ -42,32 +42,32 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
 
     @Override
     protected LinearLayoutCompat getFolderIconLayout() {
-        return mBinding.layoutFolderIcon;
+        return mBinding.prefix.layout;
     }
 
     @Override
     protected TextView getNameTextView() {
-        return mBinding.tvFolderName;
+        return mBinding.tv.tv;
     }
 
     @Override
     protected AppCompatImageView getArrowIcon() {
-        return mBinding.iconArrow;
+        return mBinding.prefix.iconArrow;
     }
 
     @Override
     protected AppCompatImageView getFolderIcon() {
-        return mBinding.iconFolder;
+        return mBinding.prefix.iconFolder;
     }
 
     @Override
     protected TextView getCurrentPosition() {
-        return mBinding.tvCurrentPosition;
+        return mBinding.postfix.tvContentSize;
     }
 
     @Override
     public TextView getContentSize() {
-        return mBinding.tvContentSize;
+        return mBinding.postfix.tvContentSize;
     }
 
     public View createNodeView(TreeNode node, @NotNull FolderValue value) {
