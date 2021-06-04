@@ -2,8 +2,6 @@ package com.example.myfit.util.adapter.viewholder;
 
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemSizeListBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
@@ -36,7 +34,7 @@ public class SizeListVH extends BaseVH.BaseSizeVH {
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
         mBinding.cb.setVisibility(View.INVISIBLE);
-        mBinding.layoutContents.setAlpha(0.7f);
+        mBinding.nameLayout.layout.setAlpha(0.7f);
         mBinding.iv.setAlpha(0.5f);
     }
 
@@ -44,7 +42,7 @@ public class SizeListVH extends BaseVH.BaseSizeVH {
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 0);
         mBinding.cb.setVisibility(View.VISIBLE);
-        mBinding.layoutContents.setAlpha(1);
+        mBinding.nameLayout.layout.setAlpha(1);
         mBinding.iv.setAlpha(1f);
     }
 
