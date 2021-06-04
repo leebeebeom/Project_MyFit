@@ -2,6 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="mainListener"
+            type="com.example.myfit.util.popupwindow.PopupWindowListener.MainPopupWindowListener" />
+
+        <variable
+            name="listListener"
+            type="com.example.myfit.util.popupwindow.PopupWindowListener.ListPopupWindowListener" />
+    </data>
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -22,6 +33,7 @@
                     android:id="@+id/tvAddCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainListener.addCategoryClick()}"
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
@@ -30,6 +42,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvCreateFolder"
+                    android:onClick="@{() -> listListener.createFolderClick()}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_8sdp"
@@ -42,6 +55,7 @@
                     android:id="@+id/tvSortOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainListener != null ? mainListener.sortClick() : listListener.sortClick()}"
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
@@ -52,6 +66,7 @@
                     android:id="@+id/tvRecycleBin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainListener != null ? mainListener.recycleBinClick() : listListener.recycleBinClick()}"
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
