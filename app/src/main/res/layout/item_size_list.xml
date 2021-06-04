@@ -6,28 +6,25 @@
     <data>
 
         <variable
-            name="size"
-            type="com.example.project_myfit.data.model.Size" />
+            name="sizeListVH"
+            type="com.example.myfit.util.adapter.viewholder.SizeListVH" />
+
+        <variable
+            name="baseAdapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
     </data>
 
     <FrameLayout
+        holder="@{sizeListVH}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.checkbox.MaterialCheckBox
+        <include
             android:id="@+id/cb"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:alpha="0.8"
-            android:buttonTint="?colorControlNormal"
-            android:clickable="false"
-            android:enabled="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            layout="@layout/item_vh_check_box" />
 
         <com.google.android.material.card.MaterialCardView
+            adapter="@{baseAdapter}"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,6 +36,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,7 +45,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv"
-                        setUri="@{size.imageUri}"
+                        setUri="@{sizeListVH.tuple.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
@@ -58,7 +56,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        setAddIcon="@{size.imageUri}"
+                        setAddIcon="@{sizeListVH.tuple.imageUri}"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:alpha="0.2"
@@ -72,52 +70,21 @@
                         tools:src="@drawable/icon_add_image" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/layoutTv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/_6sdp">
+                <include
+                    android:id="@+id/nameLayout"
+                    layout="@layout/item_size_name_layout"
+                    app:sizeVH="@{sizeListVH}" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:alpha="0.7"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{size.brand.trim()}"
-                        android:textSize="@dimen/_8sdp"
-                        tools:text="Anderson Bell" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.8"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{size.name.trim()}"
-                        android:textSize="@dimen/_10sdp"
-                        tools:text="DAMAGED CREW NECK SWEATER" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <com.google.android.material.checkbox.MaterialCheckBox
+                <include
                     android:id="@+id/cbFavorite"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:background="@android:color/transparent"
-                    android:button="@drawable/check_box_heart"
-                    android:checked="@={size.favorite}"
-                    android:gravity="bottom"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7" />
+                    layout="@layout/item_size_favorite_check_box"
+                    app:sizeVH="@{sizeListVH}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
-                    setDragHandle="@{size.size}"
+                    adapter="@{baseAdapter}"
+                    holder="@{sizeListVH}"
+                    setDragHandle="@{}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="end|center_vertical"
