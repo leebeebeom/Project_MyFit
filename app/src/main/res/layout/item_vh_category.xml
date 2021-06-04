@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="categoryVH"
+            type="com.example.myfit.util.adapter.viewholder.CategoryVH" />
+
+        <variable
+            name="baseAdapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
+    </data>
+
+    <FrameLayout
+        holder="@{categoryVH}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/cb"
+            layout="@layout/item_vh_check_box" />
+
+        <include
+            android:id="@+id/cardView"
+            layout="@layout/item_vh_list_card_view"
+            app:alpha="@{0.9}"
+            app:baseAdapter="@{baseAdapter}"
+            app:baseVH="@{categoryVH}"
+            app:showDotIcon="@{true}" />
+    </FrameLayout>
+</layout>

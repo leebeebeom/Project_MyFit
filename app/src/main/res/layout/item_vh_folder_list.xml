@@ -6,29 +6,34 @@
     <data>
 
         <variable
-            name="folder"
-            type="com.example.project_myfit.data.model.Folder" />
+            name="folderListVH"
+            type="com.example.myfit.util.adapter.viewholder.FolderListVH" />
+
+        <variable
+            name="baseAdapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
     </data>
 
     <FrameLayout
+        holder="@{folderListVH}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.checkbox.MaterialCheckBox
+        <include
             android:id="@+id/cb"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:alpha="0.8"
-            android:buttonTint="?colorControlNormal"
-            android:clickable="false"
-            android:enabled="false"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+            layout="@layout/item_vh_check_box" />
+
+        <include
+            android:id="@+id/cardView"
+            layout="@layout/item_vh_list_card_view"
+            app:alpha="@{0.8}"
+            app:baseAdapter="@{baseAdapter}"
+            app:baseVH="@{folderListVH}"
+            app:showFolderIcon="@{true}" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
+            adapter="@{baseAdapter}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -42,11 +47,12 @@
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    setFolderIcon="@{folder.folderName}"
+                    setFolderIcon="@{}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
                     android:alpha="0.8"
                     tools:src="@drawable/icon_folder" />
 
@@ -57,15 +63,14 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_6sdp"
                         android:alpha="0.8"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:maxWidth="@dimen/_220sdp"
                         android:maxLines="1"
-                        android:text="@{folder.folderName}"
+                        android:text="@{folderListVH.tuple.name}"
                         android:textSize="@dimen/_11sdp"
-                        tools:text="폴더당" />
+                        tools:text="안녕하세요" />
 
                     <FrameLayout
                         android:layout_width="wrap_content"
@@ -78,12 +83,13 @@
                         android:paddingBottom="@dimen/_1sdp">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tvContentsSize"
+                            android:id="@+id/tv_content_size"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:alpha="0.6"
                             android:textSize="@dimen/_8sdp"
-                            tools:text="12" />
+                            android:text="@{folderListVH.tuple.contentSize}"
+                            tools:text="1234" />
                     </FrameLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>

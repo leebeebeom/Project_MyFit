@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="showDotIcon"
+            type="boolean" />
+
+        <variable
+            name="showFolderIcon"
+            type="boolean" />
+
+        <variable
+            name="baseAdapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
+
+        <variable
+            name="tuple"
+            type="com.example.myfit.data.tuple.tuple.CategoryTuple" />
+
+        <variable
+            name="baseVH"
+            type="com.example.myfit.util.adapter.viewholder.BaseVH" />
+
+        <variable
+            name="alpha"
+            type="float" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        adapter="@{baseAdapter}"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginVertical="@dimen/_2sdp"
+        app:cardBackgroundColor="?myCardViewBackground"
+        app:cardCornerRadius="@dimen/_4sdp"
+        app:cardElevation="@dimen/_2sdp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                setDotIcon="@{}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:alpha="0.8"
+                android:scaleX="0.3"
+                android:scaleY="0.3"
+                android:visibility="@{showDotIcon ? View.VISIBLE : View.GONE}"
+                tools:src="@drawable/icon_dot"
+                tools:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                setFolderIcon="@{}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:alpha="0.8"
+                android:visibility="@{showFolderIcon ? View.VISIBLE : View.GONE}"
+                tools:src="@drawable/icon_folder" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:alpha="@{alpha}"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxWidth="@dimen/_220sdp"
+                android:maxLines="1"
+                android:text="@{tuple.name}"
+                android:textSize="@dimen/_11sdp"
+                tools:text="안녕하세요" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:background="@drawable/item_contents_size_background"
+                android:paddingHorizontal="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_1sdp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvContentSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:alpha="0.6"
+                    android:ellipsize="end"
+                    android:maxWidth="@dimen/_20sdp"
+                    android:maxLines="1"
+                    android:text="@{tuple.contentSize}"
+                    android:textSize="@dimen/_8sdp"
+                    tools:text="1234" />
+            </FrameLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iconDragHandle"
+                adapter="@{baseAdapter}"
+                holder="@{baseVH}"
+                setDragHandle="@{}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:alpha="0.8"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:scaleX="0.9"
+                android:visibility="gone"
+                tools:src="@drawable/icon_drag_handle" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+</layout>
