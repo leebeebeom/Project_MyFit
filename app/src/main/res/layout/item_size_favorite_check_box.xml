@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="sizeVH"
+            type="com.example.myfit.util.adapter.viewholder.BaseVH.BaseSizeVH" />
+    </data>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cbFavorite"
+        holder="@{sizeVH}"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:button="@drawable/check_box_heart"
+        android:checked="@={sizeVH.tuple.favorite}"
+        android:gravity="bottom"
+        android:scaleX="0.7"
+        android:scaleY="0.7" />
+</layout>
