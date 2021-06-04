@@ -5,87 +5,105 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="folder"
-            type="com.example.project_myfit.data.model.Folder" />
+            name="folderGridVH"
+            type="com.example.myfit.util.adapter.viewholder.FolderGridVH" />
+
+        <variable
+            name="baseAdapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <FrameLayout
+        holder="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="@dimen/_64sdp"
-            android:layout_height="@dimen/_64sdp"
-            android:layout_margin="@dimen/_4sdp"
-            app:cardCornerRadius="@dimen/_8sdp"
-            app:cardElevation="@dimen/_3sdp">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvFolderName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="3"
-                android:paddingTop="@dimen/_4sdp"
-                android:text="@{folder.folderName}"
-                android:textSize="@dimen/_9sdp"
-                tools:text="일곱글자까지됨세줄까지됨\n세줄까지됨" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iconDragHandle"
-                setDragHandle2="@{folder.folderName}"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="-4dp"
-                android:layout_marginEnd="-3dp"
-                android:scaleX="0.5"
-                android:scaleY="0.7"
-                tools:src="@drawable/icon_drag_handle2" />
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/cb"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="start"
-                android:layout_marginStart="-4dp"
-                android:layout_marginTop="-3dp"
-                android:alpha="0.8"
-                android:buttonTint="?colorControlNormal"
-                android:clickable="false"
-                android:enabled="false"
-                android:scaleX="0.6"
-                android:scaleY="0.6"
-                android:visibility="gone" />
-
-        </com.google.android.material.card.MaterialCardView>
+        android:visibility="@{folderGridVH.tuple.id != -1 ? View.VISIBLE : View.INVISIBLE}">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/layoutContentsSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvContentsSize"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView"
+                android:layout_width="@dimen/_64sdp"
+                android:layout_height="@dimen/_64sdp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/_4sdp"
+                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardElevation="@dimen/_3sdp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvFolderName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:paddingTop="@dimen/_4sdp"
+                    android:text="@{folderGridVH.tuple.name}"
+                    android:textSize="@dimen/_9sdp"
+                    tools:text="일곱글자까지됨세줄까지됨\n세줄까지됨" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconDragHandle"
+                    adapter="@{baseAdapter}"
+                    holder="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
+                    setDragHandle2="@{}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginEnd="-3dp"
+                    android:scaleX="0.5"
+                    android:scaleY="0.7"
+                    android:visibility="gone"
+                    tools:src="@drawable/icon_drag_handle2" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/cb"
+                    adapter="@{baseAdapter}"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginTop="-3dp"
+                    android:alpha="0.8"
+                    android:buttonTint="?colorControlNormal"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:visibility="gone" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layoutContentsSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_8sdp"
-                tools:text="0" />
+                android:layout_gravity="center_horizontal">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvItems"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_2sdp"
-                android:text="@string/item_folder_items"
-                android:textSize="@dimen/_8sdp" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvContentSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{folderGridVH.tuple.contentSize}"
+                    android:textSize="@dimen/_8sdp"
+                    tools:text="2" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    android:text="@{folderGridVH.tuple.contentSize == 1 ? @string/item_folder_item : @string/item_folder_items"
+                    android:textSize="@dimen/_8sdp"
+                    tools:text="@string/item_folder_items" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </FrameLayout>
 </layout>
