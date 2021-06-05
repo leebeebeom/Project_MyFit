@@ -7,6 +7,10 @@
         <variable
             name="activity"
             type="com.example.myfit.ui.main.MainActivity" />
+
+        <variable
+            name="model"
+            type="com.example.myfit.ui.main.MainActivityViewModel" />
     </data>
 
     <com.google.android.material.appbar.AppBarLayout
@@ -16,6 +20,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
+            app:layout_scrollFlags="scroll|enterAlways"
             activity="@{activity}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,7 +28,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvCustomTitle"
-                destinationId="@{activity.destinationIdLive}"
+                destinationId="@{model.destinationIdLive}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -31,13 +36,13 @@
                 android:text="@string/app_name"
                 android:textColor="?colorControlNormal"
                 android:textSize="@dimen/_26sdp"
-                android:visibility="gone"
                 app:fontFamily="@font/ballet_harmony" />
 
             <include
                 android:id="@+id/searchBar"
                 layout="@layout/activity_main_search_bar"
-                app:destinationId="@{activity.destinationIdLive}" />
+                app:activity="@{activity}"
+                app:model="@{model}"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
