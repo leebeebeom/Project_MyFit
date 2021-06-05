@@ -10,6 +10,10 @@
         <variable
             name="activity"
             type="com.example.myfit.ui.main.MainActivity" />
+
+        <variable
+            name="model"
+            type="com.example.myfit.ui.main.MainActivityViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -20,7 +24,9 @@
 
         <include
             android:id="@+id/actionBar"
-            layout="@layout/activity_main_action_bar" />
+            layout="@layout/activity_main_action_bar"
+            app:activity="@{activity}"
+            app:model="@{model}" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/host_fragment_main"
@@ -37,11 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_36sdp"
             android:layout_gravity="bottom"
-            android:visibility="@{activity.keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
+            android:visibility="@{model.keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
             app:backgroundTint="?colorPrimary"
             app:contentInsetStart="0dp"
             app:elevation="@dimen/_6sdp"
             app:fabAlignmentMode="center"
+            app:layout_behavior=".util.BottomNavigationBehavior"
             app:fabCradleMargin="@dimen/_6sdp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -62,13 +69,14 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
-            destinationId="@{activity.destinationIdLive}"
+            destinationId="@{model.destinationIdLive}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_add"
-            android:visibility="@{activity.keyboardShowingLive ? View.INVISIBLE : View.GONE}"
+            android:visibility="@{bottomAppBar.visibility}"
             app:elevation="0dp"
             app:layout_anchor="@id/bottomAppBar"
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
             app:tint="?colorPrimary"
             tools:ignore="ContentDescription" />
 
