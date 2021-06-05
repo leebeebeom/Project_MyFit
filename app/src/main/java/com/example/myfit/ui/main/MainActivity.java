@@ -39,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration mAppBarConfiguration;
 
     @Getter
-    private final MutableLiveData<Boolean> mKeyboardShowing = new MutableLiveData<>(false);
-    private int mTopFabOriginVisibility;
+    private final MutableLiveData<Boolean> mKeyboardShowingLive = new MutableLiveData<>(false);
+    @Getter
+    private final MutableLiveData<Integer> mDestinationIdLive = new MutableLiveData<>();
+    private int mTopFabOriginVisibility = View.INVISIBLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(mBinding.bottomNav, mNavController);
 
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) ->
-                mBinding.setDestinationId(destination.getId()));
+                mDestinationIdLive.setValue(destination.getId()));
 
         mBinding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() ->
-                mKeyboardShowing.setValue(KeyBoardUtil.isKeyboardShowing(mBinding.getRoot())));
+                mKeyboardShowingLive.setValue(KeyBoardUtil.isKeyboardShowing(mBinding.getRoot())));
 
-        mKeyboardShowing.observe(this, showing -> {
+        mKeyboardShowingLive.observe(this, showing -> {
             if (showing) {
                 mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
                 mBinding.fabTop.setVisibility(View.INVISIBLE);
@@ -83,5 +85,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBinding = null;
+        super.onDestroy();
     }
 }
