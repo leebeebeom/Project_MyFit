@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="destinationId"
+            type="int" />
+    </data>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        destinationId="@{destinationId}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/myEditTextOutlineColor"
+        app:endIconMode="clear_text"
+        app:placeholderText="@string/menu_search"
+        app:placeholderTextAppearance="@style/myTextSize10sdp"
+        app:startIconDrawable="@drawable/icon_search">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/acTv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@android:color/transparent"
+            android:completionThreshold="1"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="@dimen/_11sdp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</layout>
