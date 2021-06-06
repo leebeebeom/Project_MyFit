@@ -12,11 +12,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.myfit.databinding.ActivityMainBinding;
-import com.example.myfit.di.Qualifiers;
 import com.example.myfit.ui.search.adapter.AutoCompleteAdapter;
 import com.example.myfit.util.KeyBoardUtil;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -40,18 +37,12 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     ActivityMainBinding mBinding;
     @Inject
-    BottomAppBar mBottomAppBar;
-    @Qualifiers.MainFab
-    @Inject
-    FloatingActionButton mFab;
-    @Inject
     AppBarConfiguration mAppBarConfiguration;
     @Inject
     @Getter
     AutoCompleteAdapter mAutoCompleteAdapter;
     private int mTopFabOriginVisibility = View.INVISIBLE;
     private MainActivityViewModel mModel;
-    private static boolean sKeyboardShowingListenerOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
