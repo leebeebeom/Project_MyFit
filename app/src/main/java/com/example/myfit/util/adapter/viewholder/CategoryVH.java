@@ -5,7 +5,6 @@ import android.view.View;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemVhCategoryBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +16,7 @@ public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
 
     public CategoryVH(@NotNull ItemVhCategoryBinding binding, BaseVHListener listener, Set<CategoryTuple> selectedItems) {
         super(binding, listener, selectedItems);
+        binding.cardView.dotIcon.setVisibility(View.VISIBLE);
         this.mBinding = binding;
     }
 
@@ -44,11 +44,6 @@ public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
         mBinding.cb.setVisibility(View.VISIBLE);
         mBinding.cardView.tvName.setAlpha(0.8f);
         mBinding.cardView.tvContentSize.setAlpha(0.8f);
-    }
-
-    @Override
-    public MaterialCardView getCardView() {
-        return mBinding.cardView.cardView;
     }
 
     @Override
