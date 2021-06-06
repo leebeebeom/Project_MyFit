@@ -116,7 +116,7 @@ public class TreeNodeProvider {
                 .forEach(parentIdTuple ->
                         Arrays.stream(holders)
                                 .filter(holder -> holder.getTupleId() == parentIdTuple.getParentId())
-                                .forEach(holder -> holder.setAlpha()));
+                                .forEach(holder -> holder.setUnClickable()));
     }
 
     public void checkIsSelectedFolder(ParentIdTuple[] folderParentIdTuples) {
@@ -132,8 +132,8 @@ public class TreeNodeProvider {
                                     .map(BaseTreeHolder::getParent)
                                     .toArray();
 
-                    Arrays.stream(selectedFolderHolders).forEach(BaseTreeHolder::setAlpha);
-                    Arrays.stream(selectedFolderHolderParents).forEach(BaseTreeHolder::setAlpha);
+                    Arrays.stream(selectedFolderHolders).forEach(BaseTreeHolder::setUnClickable);
+                    Arrays.stream(selectedFolderHolderParents).forEach(BaseTreeHolder::setUnClickable);
                 });
     }
 
@@ -143,7 +143,7 @@ public class TreeNodeProvider {
                         Arrays.stream(mFolderHolders).filter(folderHolder -> {
                             BaseTreeHolder<?> parentHolder = folderHolder.getParent();
                             return (parentHolder instanceof TreeFolderHolder && ((TreeFolderHolder) parentHolder).getTupleId() == folderParentIdTuple.getId());
-                        }).forEach(BaseTreeHolder::setAlpha));
+                        }).forEach(BaseTreeHolder::setUnClickable));
     }
 
     public void showCurrentPosition(long currentPositionId) {
