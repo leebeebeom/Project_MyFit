@@ -6,13 +6,17 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.myfit.databinding.ActivityMainBinding;
+import com.example.myfit.di.Qualifiers;
+import com.example.myfit.ui.search.adapter.AutoCompleteAdapter;
 import com.example.myfit.util.KeyBoardUtil;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -36,33 +40,38 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     ActivityMainBinding mBinding;
     @Inject
+    BottomAppBar mBottomAppBar;
+    @Qualifiers.MainFab
+    @Inject
+    FloatingActionButton mFab;
+    @Inject
     AppBarConfiguration mAppBarConfiguration;
-
+    @Inject
     @Getter
-    private final MutableLiveData<Boolean> mKeyboardShowingLive = new MutableLiveData<>(false);
-    @Getter
-    private final MutableLiveData<Integer> mDestinationIdLive = new MutableLiveData<>();
+    AutoCompleteAdapter mAutoCompleteAdapter;
     private int mTopFabOriginVisibility = View.INVISIBLE;
+    private MainActivityViewModel mModel;
+    private static boolean sKeyboardShowingListenerOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
         mBinding.setActivity(this);
+        mBinding.setModel(mModel);
         mBinding.setLifecycleOwner(this);
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mBinding.bottomNav, mNavController);
 
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) ->
-                mDestinationIdLive.setValue(destination.getId()));
+                mModel.getDestinationIdLive().setValue(destination.getId()));
 
-        mBinding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() ->
-                mKeyboardShowingLive.setValue(KeyBoardUtil.isKeyboardShowing(mBinding.getRoot())));
-
-        mKeyboardShowingLive.observe(this, showing -> {
+        mModel.getKeyboardShowingLive().observe(this, showing -> {
             if (showing) {
                 mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
-                mBinding.fabTop.setVisibility(View.INVISIBLE);
+                mBinding.fabTop.hide();
             } else mBinding.fabTop.setVisibility(mTopFabOriginVisibility);
         });
     }
