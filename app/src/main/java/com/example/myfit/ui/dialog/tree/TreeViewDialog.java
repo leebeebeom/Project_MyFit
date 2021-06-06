@@ -57,6 +57,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         if (mModel.getParentCategory() == null)
             mModel.setParentCategory(args.getParentIndex());
         mBinding.setLifecycleOwner(this);
+        mBinding.setModel(mModel);
 
         mSelectedFolderIds = args.getSelectedFolderIds();
         mSelectedSizeIds = args.getSelectedSizeIds();
