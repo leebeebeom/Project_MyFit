@@ -30,11 +30,11 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = getModel();
-        if (mModel.getName() == null)
-            mModel.setName(getName());
+        if (mModel.getName() == null) mModel.setName(getName());
         mBinding.setLifecycleOwner(this);
         mBinding.setModel(mModel);
-        mBinding.setDialogFragment(this);
+        mBinding.layout.setHint(getHint());
+        mBinding.layout.setPlaceholderText(getPlaceHolder());
     }
 
     public abstract String getHint();
@@ -67,17 +67,6 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     protected abstract void navigateSameNameDialog();
 
     protected abstract void task();
-
-    @Override
-    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(INPUT_TEXT, getInputText());
-    }
-
-    @NotNull
-    protected String getInputText() {
-        return String.valueOf(mBinding.et.getText());
-    }
 
     @Override
     public void onDestroyView() {

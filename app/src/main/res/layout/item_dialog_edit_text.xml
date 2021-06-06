@@ -7,9 +7,6 @@
         <variable
             name="model"
             type="com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel" />
-        <variable
-            name="dialogFragment"
-            type="com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog" />
     </data>
 
     <FrameLayout
@@ -24,8 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/myEditTextOutlineColor"
-            android:hint="@{dialogFragment.hint}"
-            app:placeholderText="@{dialogFragment.placeHolder}"
             app:endIconMode="clear_text"
             app:errorTextAppearance="@style/myTextSize8sdp"
             app:hintTextAppearance="@style/myTextSize8sdp"
