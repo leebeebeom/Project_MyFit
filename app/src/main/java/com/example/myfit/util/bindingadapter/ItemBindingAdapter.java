@@ -94,7 +94,7 @@ public class ItemBindingAdapter {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
     }
 
-    @BindingAdapter("holder")
+    @BindingAdapter("itemViewClick")
     public static void itemViewClick(FrameLayout itemView, BaseVH<?, ?> holder) {
         itemView.setOnClickListener(v -> {
             if (holder != null)
@@ -102,7 +102,7 @@ public class ItemBindingAdapter {
         });
     }
 
-    @BindingAdapter("holder")
+    @BindingAdapter("itemViewLongClick")
     public static void itemViewLongClick(FrameLayout itemView, BaseVH<?, ?> holder) {
         itemView.setOnLongClickListener(v -> {
             if (holder != null)
@@ -112,8 +112,8 @@ public class ItemBindingAdapter {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    @BindingAdapter("holder")
-    public static void dragIconTouch(ImageView dragHandleIcon, BaseVH<?, ?> holder) {
+    @BindingAdapter("dragHandleTouch")
+    public static void dragHandleTouch(ImageView dragHandleIcon, BaseVH<?, ?> holder) {
         dragHandleIcon.setOnTouchListener((v, event) -> {
             if (holder != null && event.getAction() == MotionEvent.ACTION_DOWN && !sDragging)
                 holder.dragStart();
@@ -121,14 +121,14 @@ public class ItemBindingAdapter {
         });
     }
 
-    @BindingAdapter("holder")
+    @BindingAdapter("favoriteClick")
     public static void favoriteClick(MaterialCheckBox favoriteCheckBox, BaseVH.BaseSizeVH holder) {
         favoriteCheckBox.setOnClickListener(v -> holder.getListener().favoriteClick(holder.getTuple()));
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    @BindingAdapter("holder")
-    public static void rvTouch(RecyclerView recyclerView, ViewPagerVH holder) {
+    @BindingAdapter("recyclerViewTouch")
+    public static void recyclerViewTouch(RecyclerView recyclerView, ViewPagerVH holder) {
         ViewPagerVH.AutoScrollListener listener = holder.getListener();
         recyclerView.setOnTouchListener((v, event) -> {
             if (event.getRawY() < 250)
@@ -141,15 +141,15 @@ public class ItemBindingAdapter {
         });
     }
 
-    @BindingAdapter("adapter")
-    public static void setDragHandleVisibility(ImageView dragHandleIcon, BaseAdapter<?, ?, ?> adapter) {
+    @BindingAdapter("dragHandleVisibility")
+    public static void dragHandleVisibility(ImageView dragHandleIcon, BaseAdapter<?, ?, ?> adapter) {
         if (adapter.getActionModeState() == ACTION_MODE_ON)
             dragHandleIcon.setVisibility(adapter.getSort() == Sort.SORT_CUSTOM ? View.VISIBLE : View.GONE);
         else dragHandleIcon.setVisibility(View.GONE);
     }
 
-    @BindingAdapter("adapter")
-    public static void setListActionMode(MaterialCardView cardView, BaseAdapter<?, ?, ?> adapter) {
+    @BindingAdapter("listActionMode")
+    public static void listActionMode(MaterialCardView cardView, BaseAdapter<?, ?, ?> adapter) {
         if (adapter.getActionModeState() == ACTION_MODE_ON) {
             if (sOpenAnimation == null)
                 sOpenAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_right);
@@ -161,8 +161,8 @@ public class ItemBindingAdapter {
         }
     }
 
-    @BindingAdapter("adapter")
-    public static void setGridActionMode(MaterialCheckBox checkBox, BaseAdapter<?, ?, ?> adapter) {
+    @BindingAdapter("gridActionMode")
+    public static void gridActionMode(MaterialCheckBox checkBox, BaseAdapter<?, ?, ?> adapter) {
         if (adapter.getActionModeState() == ACTION_MODE_ON)
             checkBox.setVisibility(View.VISIBLE);
         else if (adapter.getActionModeState() == ACTION_MODE_OFF) {
