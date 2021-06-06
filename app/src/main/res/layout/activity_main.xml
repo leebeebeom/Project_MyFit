@@ -27,8 +27,7 @@
         <include
             android:id="@+id/actionBar"
             layout="@layout/activity_main_action_bar"
-            app:activity="@{activity}"
-            app:model="@{model}" />
+            app:activity="@{activity}" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/host_fragment_main"
