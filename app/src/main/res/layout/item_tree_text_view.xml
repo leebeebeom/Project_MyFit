@@ -9,8 +9,8 @@
             type="float" />
 
         <variable
-            name="treeHolder"
-            type="com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder" />
+            name="name"
+            type="String" />
     </data>
 
     <com.google.android.material.textview.MaterialTextView
@@ -22,7 +22,7 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:text="@{treeHolder.value.tupleName}"
+        android:text="@{name}"
         android:textSize="@{textSize}"
         tools:ignore="ObsoleteLayoutParam"
         tools:text="Short Sleeve" />

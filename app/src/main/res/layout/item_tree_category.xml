@@ -32,7 +32,7 @@
                 android:id="@+id/tv"
                 layout="@layout/item_tree_text_view"
                 app:textSize="@{@dimen/_11sdp}"
-                app:treeHolder="@{categoryHolder}" />
+                app:name="@{categoryHolder.value.tuple.name}" />
 
             <include
                 android:id="@+id/postfix"
