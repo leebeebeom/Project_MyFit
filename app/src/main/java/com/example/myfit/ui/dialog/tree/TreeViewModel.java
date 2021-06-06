@@ -78,7 +78,7 @@ public class TreeViewModel extends ViewModel {
         this.mParentCategory = CommonUtil.getParentCategory(parentIndex);
     }
 
-    public void addCategoryClick() {
+    public void navigateAddCategoryDialog() {
         CommonUtil.navigate(mNavController, R.id.treeViewDialog,
                 TreeViewDialogDirections.toAddCategoryDialog(mParentIndex));
     }
