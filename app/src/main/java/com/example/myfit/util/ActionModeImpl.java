@@ -43,7 +43,6 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
     @Setter
     protected ActionModeListener mListener;
 
-
     @Override
     public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(getResId(), menu);
