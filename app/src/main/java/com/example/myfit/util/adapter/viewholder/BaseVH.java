@@ -1,6 +1,7 @@
 package com.example.myfit.util.adapter.viewholder;
 
 import android.annotation.SuppressLint;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.databinding.ViewDataBinding;
@@ -9,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.util.adapter.BaseAdapter;
-import com.example.myfit.util.constant.Sort;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.Set;
@@ -62,6 +61,16 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     public abstract MaterialCheckBox getCheckBox();
 
+    public void itemViewLongClick() {
+        mListener.itemViewLongClick(getLayoutPosition(), mTuple);
+    }
+
+    public boolean dragStart(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN && !sDragging)
+            dragStart();
+        return false;
+    }
+
     public void dragStart() {
         sDragging = true;
         mListener.dragStart(this, mTuple);
@@ -81,8 +90,6 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     protected void setItemViewTranslationZ(View itemView, int value) {
         itemView.setTranslationZ(value);
     }
-
-    public abstract MaterialCardView getCardView();
 
     public abstract void setAdapter(BaseAdapter<?, ?, ?> baseAdapter);
 
