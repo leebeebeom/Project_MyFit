@@ -10,6 +10,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.myfit.R;
 import com.example.myfit.databinding.ActivityMainBinding;
+import com.example.myfit.ui.search.adapter.AutoCompleteAdapter;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -56,5 +59,30 @@ public class ActivityModule {
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         return typedValue.data;
+    }
+
+    @Provides
+    public static AutoCompleteAdapter provideAutoCompleteAdapter(@ActivityContext Context context) {
+        return new AutoCompleteAdapter(context, R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv);
+    }
+
+    @ActivityScoped
+    @Provides
+    public static BottomAppBar provideBottomAppBar(ActivityMainBinding binding) {
+        return binding.bottomAppBar;
+    }
+
+    @Qualifiers.MainFab
+    @ActivityScoped
+    @Provides
+    public static FloatingActionButton provideMainFab(ActivityMainBinding binding) {
+        return binding.fab;
+    }
+
+    @Qualifiers.TopFab
+    @ActivityScoped
+    @Provides
+    public static FloatingActionButton provideTopFab(ActivityMainBinding binding){
+        return binding.fabTop;
     }
 }
