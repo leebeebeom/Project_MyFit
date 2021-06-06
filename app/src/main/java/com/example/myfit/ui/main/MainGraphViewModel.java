@@ -5,14 +5,14 @@ import androidx.lifecycle.ViewModel;
 import androidx.navigation.NavBackStackEntry;
 
 public class MainGraphViewModel extends ViewModel {
-    private MutableLiveData<NavBackStackEntry> backStackEntryLive;
+    private MutableLiveData<NavBackStackEntry> mBackStackEntryLive;
 
     public void setBackStackEntryLive(NavBackStackEntry backStackEntry) {
-        backStackEntryLive.setValue(backStackEntry);
+        mBackStackEntryLive.setValue(backStackEntry);
     }
 
     public MutableLiveData<NavBackStackEntry> getBackStackEntryLive() {
-        if (backStackEntryLive == null) backStackEntryLive = new MutableLiveData<>();
-        return backStackEntryLive;
+        if (mBackStackEntryLive == null) mBackStackEntryLive = new MutableLiveData<>();
+        return mBackStackEntryLive;
     }
 }
