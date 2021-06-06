@@ -34,7 +34,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
-        adapter="@{baseAdapter}"
+        listActionMode="@{baseAdapter}"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginHorizontal="@dimen/_12sdp"
