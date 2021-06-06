@@ -8,24 +8,16 @@
         <import type="android.view.View" />
 
         <variable
-            name="showDotIcon"
-            type="boolean" />
-
-        <variable
-            name="showFolderIcon"
-            type="boolean" />
-
-        <variable
             name="baseAdapter"
             type="com.example.myfit.util.adapter.BaseAdapter" />
 
         <variable
-            name="tuple"
-            type="com.example.myfit.data.tuple.tuple.CategoryTuple" />
-
-        <variable
             name="baseVH"
             type="com.example.myfit.util.adapter.viewholder.BaseVH" />
+
+        <variable
+            name="tuple"
+            type="com.example.myfit.data.tuple.tuple.CategoryTuple" />
 
         <variable
             name="alpha"
@@ -48,6 +40,7 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/dotIcon"
                 setDotIcon="@{}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,11 +49,11 @@
                 android:alpha="0.8"
                 android:scaleX="0.3"
                 android:scaleY="0.3"
-                android:visibility="@{showDotIcon ? View.VISIBLE : View.GONE}"
-                tools:src="@drawable/icon_dot"
-                tools:visibility="gone" />
+                android:visibility="gone"
+                tools:src="@drawable/icon_dot" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/folderIcon"
                 setFolderIcon="@{}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,7 +61,7 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_6sdp"
                 android:alpha="0.8"
-                android:visibility="@{showFolderIcon ? View.VISIBLE : View.GONE}"
+                android:visibility="gone"
                 tools:src="@drawable/icon_folder" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -80,7 +73,7 @@
                 android:gravity="center_vertical"
                 android:maxWidth="@dimen/_220sdp"
                 android:maxLines="1"
-                android:text="@{tuple.name}"
+                android:text="@{baseVH.tuple.name}"
                 android:textSize="@dimen/_11sdp"
                 tools:text="안녕하세요" />
 
@@ -109,8 +102,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iconDragHandle"
-                dragHandleVisibility="@{baseAdapter}"
-                dragHandleTouch="@{baseVH}"
+                android:onTouch="@{(view, event) -> baseVH.dragStart(view, event)}"
+                dragHandleActionMode="@{baseAdapter}"
                 setDragHandle="@{}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
