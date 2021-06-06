@@ -17,7 +17,7 @@
     </data>
 
     <FrameLayout
-        holder="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
+        itemViewClick="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="@{folderGridVH.tuple.id != -1 ? View.VISIBLE : View.INVISIBLE}">
@@ -49,8 +49,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
-                    adapter="@{baseAdapter}"
-                    holder="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
+                    dragHandleTouch="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
+                    dragHandleVisibility="@{baseAdapter}"
                     setDragHandle2="@{}"
                     android:layout_gravity="end"
                     android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/cb"
-                    adapter="@{baseAdapter}"
+                    gridActionMode="@{baseAdapter}"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="start"

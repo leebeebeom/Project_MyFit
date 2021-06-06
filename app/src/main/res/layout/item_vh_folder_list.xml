@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -15,7 +14,7 @@
     </data>
 
     <FrameLayout
-        holder="@{folderListVH}"
+        itemViewClick="@{folderListVH}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -30,69 +29,5 @@
             app:baseAdapter="@{baseAdapter}"
             app:baseVH="@{folderListVH}"
             app:showFolderIcon="@{true}" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
-            adapter="@{baseAdapter}"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginHorizontal="@dimen/_12sdp"
-            android:layout_marginVertical="@dimen/_2sdp"
-            app:cardBackgroundColor="?myCardViewBackground"
-            app:cardCornerRadius="@dimen/_4sdp"
-            app:cardElevation="@dimen/_2sdp">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    setFolderIcon="@{}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:alpha="0.8"
-                    tools:src="@drawable/icon_folder" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:alpha="0.8"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:maxWidth="@dimen/_220sdp"
-                        android:maxLines="1"
-                        android:text="@{folderListVH.tuple.name}"
-                        android:textSize="@dimen/_11sdp"
-                        tools:text="안녕하세요" />
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_4sdp"
-                        android:layout_marginTop="@dimen/_1sdp"
-                        android:background="@drawable/item_contents_size_background"
-                        android:paddingHorizontal="@dimen/_6sdp"
-                        android:paddingBottom="@dimen/_1sdp">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_content_size"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:alpha="0.6"
-                            android:textSize="@dimen/_8sdp"
-                            android:text="@{folderListVH.tuple.contentSize}"
-                            tools:text="1234" />
-                    </FrameLayout>
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>

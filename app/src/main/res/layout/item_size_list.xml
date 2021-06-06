@@ -15,7 +15,7 @@
     </data>
 
     <FrameLayout
-        holder="@{sizeListVH}"
+        itemViewClick="@{sizeListVH}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -24,7 +24,7 @@
             layout="@layout/item_vh_check_box" />
 
         <com.google.android.material.card.MaterialCardView
-            adapter="@{baseAdapter}"
+            listActionMode="@{baseAdapter}"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,8 +82,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
-                    adapter="@{baseAdapter}"
-                    holder="@{sizeListVH}"
+                    dragHandleTouch="@{sizeListVH}"
+                    dragHandleVisibility="@{baseAdapter}"
                     setDragHandle="@{}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

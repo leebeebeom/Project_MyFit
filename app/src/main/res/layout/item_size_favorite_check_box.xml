@@ -10,7 +10,7 @@
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cbFavorite"
-        holder="@{sizeVH}"
+        favoriteClick="@{sizeVH}"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"

@@ -15,7 +15,7 @@
     </data>
 
     <FrameLayout
-        holder="@{sizeGridVH}"
+        itemViewClick="@{sizeGridVH}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -58,8 +58,8 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iconDragHandle"
-                        adapter="@{baseAdapter}"
-                        holder="@{sizeGridVH}"
+                        dragHandleTouch="@{sizeGridVH}"
+                        dragHandleVisibility="@{baseAdapter}"
                         setDragHandle2="@{}"
                         android:layout_gravity="end"
                         android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb"
-            adapter="@{baseAdapter}"
+            gridActionMode="@{baseAdapter}"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="start"
