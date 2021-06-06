@@ -62,7 +62,7 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderValue> {
 
     @Override
     protected TextView getCurrentPosition() {
-        return mBinding.postfix.tvContentSize;
+        return mBinding.postfix.tvCurrentPosition;
     }
 
     @Override
