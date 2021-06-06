@@ -43,14 +43,14 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         return getBindingRoot();
     }
 
-    public void addIconClick() {
+    protected abstract void bind(T value);
+
+    public void navigateAddFolderDialog() {
         CommonUtil.navigate(mNavController, R.id.treeViewDialog,
                 TreeViewDialogDirections.toAddFolderDialog(mValue.getTupleId(), mValue.getParentIndex()));
     }
 
-    protected abstract void bind(T value);
-
-    public void setAlpha() {
+    public void setUnClickable() {
         if (mClickable) {
             getFolderIconLayout().setAlpha(0.5f);
             getNameTextView().setAlpha(0.5f);
