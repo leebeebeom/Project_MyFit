@@ -14,7 +14,8 @@
     </data>
 
     <FrameLayout
-        itemViewClick="@{categoryVH}"
+        android:onClick="@{() -> categoryVH.itemViewClick()}"
+        app:onLongClick="@{() -> categoryVH.itemViewLongClick()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -25,9 +26,10 @@
         <include
             android:id="@+id/cardView"
             layout="@layout/item_vh_list_card_view"
-            app:alpha="@{0.9}"
             app:baseAdapter="@{baseAdapter}"
             app:baseVH="@{categoryVH}"
-            app:showDotIcon="@{true}" />
+            app:tuple="@{categoryVH.tuple}"
+            app:alpha="@{0.9}"
+             />
     </FrameLayout>
 </layout>
