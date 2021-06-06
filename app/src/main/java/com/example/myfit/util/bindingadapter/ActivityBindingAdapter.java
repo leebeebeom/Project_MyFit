@@ -41,11 +41,6 @@ public class ActivityBindingAdapter {
         bottomNavigationView.getMenu().getItem(2).setVisible(false);
     }
 
-    @BindingAdapter("setVisibility")
-    public static void setVisibility(TextView title, int destinationId) {
-        title.setVisibility(destinationId == R.id.mainFragment ? View.VISIBLE : View.GONE);
-    }
-
     @BindingAdapter("change")
     public static void change(FloatingActionButton fab, int destinationId) {
         if (destinationId == R.id.mainFragment)
@@ -60,14 +55,6 @@ public class ActivityBindingAdapter {
         fab.hide();
         fab.setImageResource(resId);
         fab.show();
-    }
-
-    @BindingAdapter("setVisibility")
-    public static void setVisibility(TextInputLayout layout, int destinationId) {
-        if (layout.getVisibility() == View.GONE && (destinationId == R.id.searchFragment || destinationId == R.id.recycleBinSearch))
-            layout.setVisibility(View.VISIBLE);
-        else if (layout.getVisibility() == View.VISIBLE && destinationId != R.id.searchFragment && destinationId != R.id.recycleBinSearch)
-            layout.setVisibility(View.GONE);
     }
 
     @BindingAdapter("setAutoCompleteItems")
