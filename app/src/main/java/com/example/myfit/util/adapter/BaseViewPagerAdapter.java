@@ -65,7 +65,7 @@ public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends Recycl
     public void onBindViewHolder(@NonNull @NotNull ViewPagerVH holder, int position) {
         if (holder.getAdapter() == null) {
             holder.setAdapter(mAdapters[position]);
-            holder.addItemTouchListener(mDragSelectListeners[position]);
+            holder.addItemTouchListener(mDragSelectListeners[position].setRecyclerView(holder.getRecyclerView()));
             if (mItemTouchHelpers != null)
                 mItemTouchHelpers[position].attachToRecyclerView(holder.getRecyclerView());
         }
