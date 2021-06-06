@@ -17,7 +17,9 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        activity="@{activity}"
+        android:id="@+id/root"
+        keyboardShowingListener="@{model}"
+        setContentView="@{activity}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity">
@@ -68,11 +70,11 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
-            destinationId="@{model.destinationIdLive}"
+            change="@{model.destinationIdLive}"
+            android:visibility="@{model.keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_add"
-            android:visibility="@{model.keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
             app:elevation="0dp"
             app:layout_anchor="@id/bottomAppBar"
             app:tint="?colorPrimary"
@@ -84,12 +86,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_44sdp"
+            android:layout_marginBottom="@dimen/_48sdp"
             android:src="@drawable/icon_arrow_up"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:backgroundTint="@color/white"
             app:fabCustomSize="@dimen/_24sdp"
-            app:fabSize="mini"
             tools:ignore="ContentDescription" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

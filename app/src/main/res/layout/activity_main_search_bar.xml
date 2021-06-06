@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
-            name="activity"
-            type="com.example.myfit.ui.main.MainActivity" />
+            name="adapter"
+            type="com.example.myfit.ui.search.adapter.AutoCompleteAdapter" />
         <variable
             name="model"
             type="com.example.myfit.ui.main.MainActivityViewModel" />
@@ -15,7 +14,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        destinationId="@{model.destinationIdLive}"
+        setVisibility="@{model.destinationIdLive}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:theme="@style/myEditTextOutlineColor"
@@ -27,8 +26,8 @@
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/acTv"
-            app:adapter="@{activity.autoCompleteAdapter}"
-            data="@{model.autoCompleteLive}"
+            app:adapter="@{adapter}"
+            setAutoCompleteItems="@{model.autoCompleteLive}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_36sdp"
             android:background="@android:color/transparent"

@@ -21,14 +21,14 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
             app:layout_scrollFlags="scroll|enterAlways"
-            activity="@{activity}"
+            setSupportActionBar="@{activity}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:titleTextAppearance="@style/myActionBarTitleStyle">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvCustomTitle"
-                destinationId="@{model.destinationIdLive}"
+                setVisibility="@{model.destinationIdLive}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -41,7 +41,7 @@
             <include
                 android:id="@+id/searchBar"
                 layout="@layout/activity_main_search_bar"
-                app:activity="@{activity}"
+                app:adapter="@{activity.autoCompleteAdapter}"
                 app:model="@{model}"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
