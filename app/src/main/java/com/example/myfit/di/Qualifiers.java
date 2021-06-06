@@ -85,4 +85,14 @@ public class Qualifiers {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface NavigationTextViewSize {
     }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface MainFab {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TopFab {
+    }
 }
