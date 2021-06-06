@@ -82,7 +82,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
         else if (mActionModeState == ACTION_MODE_OFF) {
             holder.getCheckBox().setChecked(false);
             if (!mSelectedItems.isEmpty()) mSelectedItems.clear();
-            if (getItemCount() - 1 == holder.getLayoutPosition()) mActionModeState = 0;
+            if (getItemCount() - 1 == position) mActionModeState = 0;
         }
     }
 
