@@ -1,7 +1,5 @@
 package com.example.myfit.ui.dialog.eidttext.add;
 
-import android.os.Bundle;
-
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
