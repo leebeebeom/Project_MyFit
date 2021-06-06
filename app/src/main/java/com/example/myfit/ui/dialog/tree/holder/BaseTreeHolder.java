@@ -69,11 +69,6 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
         getFolderIcon().setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
     }
 
-    public void toggleNode() {
-        if (!mNode.getChildren().isEmpty())
-            tView.toggleNode(mNode);
-    }
-
     public long getTupleId() {
         return mValue.getTupleId();
     }
