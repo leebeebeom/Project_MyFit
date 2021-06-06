@@ -2,11 +2,9 @@ package com.example.myfit.util.bindingadapter;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_OFF;
 import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_ON;
-import static com.example.myfit.util.adapter.viewholder.BaseVH.sDragging;
 
 
 public class ItemBindingAdapter {
@@ -94,33 +91,6 @@ public class ItemBindingAdapter {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
     }
 
-    @BindingAdapter("itemViewClick")
-    public static void itemViewClick(FrameLayout itemView, BaseVH<?, ?> holder) {
-        itemView.setOnClickListener(v -> {
-            if (holder != null)
-                holder.itemViewClick();
-        });
-    }
-
-    @BindingAdapter("itemViewLongClick")
-    public static void itemViewLongClick(FrameLayout itemView, BaseVH<?, ?> holder) {
-        itemView.setOnLongClickListener(v -> {
-            if (holder != null)
-                holder.getListener().itemViewClick(holder.getTuple());
-            return false;
-        });
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @BindingAdapter("dragHandleTouch")
-    public static void dragHandleTouch(ImageView dragHandleIcon, BaseVH<?, ?> holder) {
-        dragHandleIcon.setOnTouchListener((v, event) -> {
-            if (holder != null && event.getAction() == MotionEvent.ACTION_DOWN && !sDragging)
-                holder.dragStart();
-            return false;
-        });
-    }
-
     @BindingAdapter("favoriteClick")
     public static void favoriteClick(MaterialCheckBox favoriteCheckBox, BaseVH.BaseSizeVH holder) {
         favoriteCheckBox.setOnClickListener(v -> holder.getListener().favoriteClick(holder.getTuple()));
@@ -141,8 +111,8 @@ public class ItemBindingAdapter {
         });
     }
 
-    @BindingAdapter("dragHandleVisibility")
-    public static void dragHandleVisibility(ImageView dragHandleIcon, BaseAdapter<?, ?, ?> adapter) {
+    @BindingAdapter("dragHandleActionMode")
+    public static void dragHandleActionMode(ImageView dragHandleIcon, BaseAdapter<?, ?, ?> adapter) {
         if (adapter.getActionModeState() == ACTION_MODE_ON)
             dragHandleIcon.setVisibility(adapter.getSort() == Sort.SORT_CUSTOM ? View.VISIBLE : View.GONE);
         else dragHandleIcon.setVisibility(View.GONE);
