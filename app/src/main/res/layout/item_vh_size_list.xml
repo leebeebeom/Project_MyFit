@@ -79,6 +79,7 @@
                 <include
                     android:id="@+id/cbFavorite"
                     layout="@layout/item_vh_include_size_favorite_check_box"
+                    app:adapter="@{baseAdapter}"
                     app:sizeVH="@{sizeListVH}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
