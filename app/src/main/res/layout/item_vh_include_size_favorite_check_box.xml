@@ -9,8 +9,8 @@
     </data>
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/cbFavorite"
-        favoriteClick="@{sizeVH}"
+        android:id="@+id/cb"
+        android:onClick="@{() -> sizeVH.favoriteClick()}"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
