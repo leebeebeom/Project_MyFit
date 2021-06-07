@@ -11,7 +11,7 @@
 
         <variable
             name="adapter"
-            type="com.example.myfit.ui.main.list.adapter.sizeadapter.BaseSizeAdapter" />
+            type="com.example.myfit.util.adapter.BaseAdapter" />
     </data>
 
     <com.google.android.material.checkbox.MaterialCheckBox
