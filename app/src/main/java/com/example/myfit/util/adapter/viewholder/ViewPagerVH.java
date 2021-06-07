@@ -1,6 +1,7 @@
 package com.example.myfit.util.adapter.viewholder;
 
 import android.annotation.SuppressLint;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,16 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
 
     public RecyclerView getRecyclerView() {
         return mBinding.rv;
+    }
+
+    public boolean recyclerViewTouch(MotionEvent event) {
+        if (event.getRawY() < 250)
+            mListener.dragAutoScroll(AutoScrollFlag.UP);
+        else if (event.getRawY() > 2000)
+            mListener.dragAutoScroll(AutoScrollFlag.DOWN);
+        else if (event.getRawY() < 2000 && event.getRawY() > 250)
+            mListener.dragAutoScroll(AutoScrollFlag.STOP);
+        return false;
     }
 
     public interface AutoScrollListener {
