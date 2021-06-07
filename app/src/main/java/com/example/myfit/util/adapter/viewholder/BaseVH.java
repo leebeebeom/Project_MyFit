@@ -22,7 +22,6 @@ import static com.example.myfit.util.ActionModeImpl.sActionMode;
 @Accessors(prefix = "m")
 public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
     public static boolean sDragging = false;
-    @Getter
     private final L mListener;
     private final Set<T> mSelectedItems;
     @Getter
