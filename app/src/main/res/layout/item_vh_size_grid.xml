@@ -15,8 +15,10 @@
     </data>
 
     <FrameLayout
-        itemViewClick="@{sizeGridVH}"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:onClick="@{() -> sizeGridVH.itemViewClick()}"
+        app:onLongClickListener="@{() -> sizeGridVH.itemViewLongClick()}"
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
@@ -58,13 +60,13 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iconDragHandle"
-                        dragHandleTouch="@{sizeGridVH}"
-                        dragHandleVisibility="@{baseAdapter}"
+                        dragHandleActionMode="@{baseAdapter}"
+                        android:visibility="gone"
                         setDragHandle2="@{}"
                         android:layout_gravity="end"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
+                        app:onTouchListener="@{(view, event) -> sizeGridVH.dragStart(event)}"
                         android:layout_marginTop="-2dp"
                         android:alpha="0.9"
                         android:scaleX="0.7"
@@ -78,33 +80,33 @@
 
                     <include
                         android:id="@+id/nameLayout"
-                        layout="@layout/item_size_name_layout"
+                        layout="@layout/item_vh_include_size_name_layout"
                         app:sizeVH="@{sizeGridVH}" />
 
                     <include
                         android:id="@+id/cbFavorite"
-                        layout="@layout/item_size_favorite_check_box"
+                        layout="@layout/item_vh_include_size_favorite_check_box"
                         app:sizeVH="@{sizeGridVH}" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cb"
-            gridActionMode="@{baseAdapter}"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="start"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:layout_marginStart="@dimen/_1sdp"
-            android:alpha="0.8"
-            android:buttonTint="?colorControlNormal"
-            android:clickable="false"
-            android:elevation="@dimen/_4sdp"
-            android:enabled="false"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:visibility="gone" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb"
+                gridActionMode="@{baseAdapter}"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="start"
+                android:layout_marginStart="-4dp"
+                android:layout_marginTop="-2dp"
+                android:alpha="0.8"
+                android:buttonTint="?colorControlNormal"
+                android:clickable="false"
+                android:elevation="@dimen/_4sdp"
+                android:enabled="false"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:visibility="gone" />
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>
