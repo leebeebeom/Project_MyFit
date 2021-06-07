@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 //TODO 트리뷰 롱클릭으로 삭제, 이름변경?
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     AutoCompleteAdapter mAutoCompleteAdapter;
     private int mTopFabOriginVisibility = View.INVISIBLE;
-    private MainActivityViewModel mModel;
+    @Getter
+    private final MutableLiveData<Boolean> mKeyboardShowingLive = new MutableLiveData<>(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +50,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(mBinding.getRoot());
         setSupportActionBar(mBinding.actionBar.toolBar);
 
-        mModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-
-        mBinding.setModel(mModel);
         mBinding.setAutoCompleteAdapter(mAutoCompleteAdapter);
         mBinding.setLifecycleOwner(this);
 
         //keyboard showing listener
         mBinding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() ->
-                mModel.getKeyboardShowingLive().setValue(KeyBoardUtil.isKeyboardShowing(mBinding.getRoot())));
+                mKeyboardShowingLive.setValue(KeyBoardUtil.isKeyboardShowing(mBinding.getRoot())));
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mBinding.bottomNav, mNavController);
 
-        mNavController.addOnDestinationChangedListener((controller, destination, arguments) ->
-                mModel.getDestinationIdLive().setValue(destination.getId()));
-
-        mModel.getKeyboardShowingLive().observe(this, showing -> {
+        mKeyboardShowingLive.observe(this, showing -> {
             if (showing) {
                 mTopFabOriginVisibility = mBinding.fabTop.getVisibility();
                 mBinding.fabTop.hide();

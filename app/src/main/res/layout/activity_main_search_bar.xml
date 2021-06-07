@@ -6,9 +6,6 @@
         <variable
             name="autoCompleteAdapter"
             type="com.example.myfit.ui.search.adapter.AutoCompleteAdapter" />
-        <variable
-            name="model"
-            type="com.example.myfit.ui.main.MainActivityViewModel" />
     </data>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -26,7 +23,6 @@
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/acTv"
             app:adapter="@{autoCompleteAdapter}"
-            setAutoCompleteItems="@{model.autoCompleteLive}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_36sdp"
             android:background="@android:color/transparent"
