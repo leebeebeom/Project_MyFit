@@ -4,9 +4,8 @@ import android.annotation.SuppressLint;
 import android.view.View;
 
 import com.example.myfit.data.tuple.tuple.FolderTuple;
-import com.example.myfit.databinding.ItemFolderGridBinding;
+import com.example.myfit.databinding.ItemVhFolderGridBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,10 +17,9 @@ import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
 public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
-    @Getter
-    private final ItemFolderGridBinding mBinding;
+    private final ItemVhFolderGridBinding mBinding;
 
-    public FolderGridVH(@NotNull ItemFolderGridBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
+    public FolderGridVH(@NotNull ItemVhFolderGridBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
         super(binding, listener, selectedItems);
         this.mBinding = binding;
     }
@@ -29,7 +27,8 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bind() {
-        mBinding.setFolderGridVH(this);
+        if (mTuple.getId() != -1)
+            mBinding.setFolderGridVH(this);
     }
 
     @Override
@@ -51,11 +50,6 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
         mBinding.layoutContentsSize.setVisibility(View.VISIBLE);
         mBinding.tvName.setAlpha(1);
         mBinding.cb.setAlpha(0.8f);
-    }
-
-    @Override
-    public MaterialCardView getCardView() {
-        return mBinding.cardView;
     }
 
     @Override
