@@ -3,14 +3,22 @@
 
     <data>
 
+        <import type="com.example.myfit.util.ActionModeImpl" />
+
         <variable
             name="sizeVH"
             type="com.example.myfit.util.adapter.viewholder.BaseVH.BaseSizeVH" />
+
+        <variable
+            name="adapter"
+            type="com.example.myfit.ui.main.list.adapter.sizeadapter.BaseSizeAdapter" />
     </data>
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cb"
         android:onClick="@{() -> sizeVH.favoriteClick()}"
+        android:enabled="@{adapter.actionModeState ==
+        ActionModeImpl.ACTION_MODE_ON ? false : true}"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
