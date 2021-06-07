@@ -17,7 +17,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
-            recyclerViewTouch="@{viewPagerVH}"
+            app:onTouchListener="@{(view, event) ->viewPagerVH.recyclerViewTouch(event)}"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
