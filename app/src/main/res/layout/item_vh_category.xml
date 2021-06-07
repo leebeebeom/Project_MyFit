@@ -15,17 +15,17 @@
 
     <FrameLayout
         android:onClick="@{() -> categoryVH.itemViewClick()}"
-        app:onLongClick="@{() -> categoryVH.itemViewLongClick()}"
+        app:onLongClickListener="@{() -> categoryVH.itemViewLongClick()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <include
             android:id="@+id/cb"
-            layout="@layout/item_vh_check_box" />
+            layout="@layout/item_vh_include_check_box" />
 
         <include
             android:id="@+id/cardView"
-            layout="@layout/item_vh_list_card_view"
+            layout="@layout/item_vh_include_list_card_view"
             app:baseAdapter="@{baseAdapter}"
             app:baseVH="@{categoryVH}"
             app:tuple="@{categoryVH.tuple}"
