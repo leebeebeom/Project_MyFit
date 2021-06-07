@@ -65,7 +65,7 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
         mListener.itemViewLongClick(getLayoutPosition(), mTuple);
     }
 
-    public boolean dragStart(View v, MotionEvent event) {
+    public boolean dragStart(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN && !sDragging)
             dragStart();
         return false;
