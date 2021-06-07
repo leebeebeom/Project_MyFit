@@ -4,12 +4,16 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="size"
             type="com.example.myfit.data.model.model.Size" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:visibility="@{size.parentIndex == 3 ?
+        View.VISIBLE : View.GONE}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,13 +24,13 @@
 
             <include
                 android:id="@+id/option1"
-                layout="@layout/fragment_size_edit_text_option"
+                layout="@layout/fragment_size_edit_text_no_suffix"
                 app:hint="@{@string/include_option_1}"
                 app:text="@={size.firstInfo}" />
 
             <include
                 android:id="@+id/option2"
-                layout="@layout/fragment_size_edit_text_option"
+                layout="@layout/fragment_size_edit_text_no_suffix"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="0dp"
@@ -41,13 +45,13 @@
 
             <include
                 android:id="@+id/option3"
-                layout="@layout/fragment_size_edit_text_option"
+                layout="@layout/fragment_size_edit_text_no_suffix"
                 app:hint="@{@string/include_option_3}"
                 app:text="@={size.thirdInfo}" />
 
             <include
                 android:id="@+id/option4"
-                layout="@layout/fragment_size_edit_text_option"
+                layout="@layout/fragment_size_edit_text_no_suffix"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="0dp"
@@ -63,13 +67,13 @@
 
             <include
                 android:id="@+id/option5"
-                layout="@layout/fragment_size_edit_text_option"
+                layout="@layout/fragment_size_edit_text_no_suffix"
                 app:hint="@{@string/include_option_5}"
                 app:text="@={size.fifthInfo}" />
 
             <include
                 android:id="@+id/option6"
-                layout="@layout/fragment_size_edit_text_option"
+                layout="@layout/fragment_size_edit_text_no_suffix"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="0dp"

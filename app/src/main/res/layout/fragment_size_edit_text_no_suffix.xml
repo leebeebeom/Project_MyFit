@@ -15,6 +15,7 @@
     </data>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
         android:layout_weight="1"
         android:hint="@{hint}"
         android:theme="@style/myEditTextOutlineColor"
+        app:errorTextAppearance="@style/myTextSize8sdp"
         app:hintTextAppearance="@style/myTextSize8sdp"
         app:shapeAppearance="@style/myEditTextCorner"
         tools:ignore="ObsoleteLayoutParam">
