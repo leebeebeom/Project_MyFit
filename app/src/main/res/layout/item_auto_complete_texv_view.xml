@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="recentSearch"
-            type="com.example.project_myfit.data.model.RecentSearch" />
+            name="word"
+            type="String" />
     </data>
 
     <FrameLayout
@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_marginVertical="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_18sdp"
-            android:text="@{recentSearch.word}"
+            android:text="@{word}"
             android:textSize="@dimen/_10sdp"
             tools:text="검색된 단어" />
     </FrameLayout>
