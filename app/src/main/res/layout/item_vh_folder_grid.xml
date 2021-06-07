@@ -17,10 +17,11 @@
     </data>
 
     <FrameLayout
-        itemViewClick="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
+        android:onClick="@{() -> folderGridVH != null ? folderGridVH.itemViewClick() : void}"
+        android:visibility="@{folderGridVH != null ? View.VISIBLE : View.INVISIBLE}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="@{folderGridVH.tuple.id != -1 ? View.VISIBLE : View.INVISIBLE}">
+        app:onLongClickListener="@{() -> folderGridVH != null ? folderGridVH.itemViewLongClick() : false}">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
@@ -49,8 +50,9 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
-                    dragHandleTouch="@{folderGridVH.tuple.id != -1 ? folderGridVH : null}"
-                    dragHandleVisibility="@{baseAdapter}"
+                    dragHandleActionMode="@{baseAdapter}"
+                    app:onTouchListener="@{(view, event) -> folderGridVH != null ?
+                    folderGridVH.dragStart(view, event) : false}"
                     setDragHandle2="@{}"
                     android:layout_gravity="end"
                     android:layout_width="wrap_content"
