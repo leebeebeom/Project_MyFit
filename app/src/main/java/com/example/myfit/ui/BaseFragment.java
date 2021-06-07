@@ -10,10 +10,14 @@ import com.example.myfit.databinding.ActivityMainBinding;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 @AndroidEntryPoint
+@Accessors(prefix = "m")
 public abstract class BaseFragment extends Fragment {
     @Inject
+    @Getter
     protected ActivityMainBinding mActivityBinding;
 
     protected void addBottomAppBar() {
@@ -44,5 +48,11 @@ public abstract class BaseFragment extends Fragment {
     protected void hideSearchBar() {
         if (mActivityBinding.actionBar.searchBar.layout.getVisibility() == View.VISIBLE)
             mActivityBinding.actionBar.searchBar.layout.setVisibility(View.GONE);
+    }
+
+    protected void fabChange(int resId) {
+        mActivityBinding.fab.hide();
+        mActivityBinding.fab.setImageResource(resId);
+        mActivityBinding.fab.show();
     }
 }
