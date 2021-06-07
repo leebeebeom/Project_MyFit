@@ -15,7 +15,6 @@ import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
 public class SizeGridVH extends BaseVH.BaseSizeVH {
-    @Getter
     private final ItemVhSizeGridBinding mBinding;
 
     public SizeGridVH(@NotNull ItemVhSizeGridBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
