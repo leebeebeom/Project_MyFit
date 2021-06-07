@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="hint"
+            type="String" />
+
+        <variable
+            name="text"
+            type="String" />
+    </data>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_weight="1"
+        android:hint="@{hint}"
+        android:theme="@style/myEditTextOutlineColor"
+        app:hintTextAppearance="@style/myTextSize8sdp"
+        app:shapeAppearance="@style/myEditTextCorner"
+        app:suffixText="cm"
+        app:suffixTextAppearance="@style/myTextSize10sdp"
+        tools:ignore="ObsoleteLayoutParam">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_34sdp"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"
+            android:text='@={text}'
+            tools:text="@string/include_length"
+            android:textSize="@dimen/_10sdp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</layout>

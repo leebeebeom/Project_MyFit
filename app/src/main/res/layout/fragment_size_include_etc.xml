@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="size"
+            type="com.example.myfit.data.model.model.Size" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/option1"
+                layout="@layout/fragment_size_edit_text_option"
+                app:hint="@{@string/include_option_1}"
+                app:text="@={size.firstInfo}" />
+
+            <include
+                android:id="@+id/option2"
+                layout="@layout/fragment_size_edit_text_option"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_option_2}"
+                app:text="@={size.secondInfo}" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/option3"
+                layout="@layout/fragment_size_edit_text_option"
+                app:hint="@{@string/include_option_3}"
+                app:text="@={size.thirdInfo}" />
+
+            <include
+                android:id="@+id/option4"
+                layout="@layout/fragment_size_edit_text_option"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_option_4}"
+                app:text="@={size.fourthInfo}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/option5"
+                layout="@layout/fragment_size_edit_text_option"
+                app:hint="@{@string/include_option_5}"
+                app:text="@={size.fifthInfo}" />
+
+            <include
+                android:id="@+id/option6"
+                layout="@layout/fragment_size_edit_text_option"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_option_6}"
+                app:text="@={size.sixthInfo}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

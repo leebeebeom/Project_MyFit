@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="size"
+            type="com.example.myfit.data.model.model.Size" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/length"
+                layout="@layout/fragment_size_edit_text"
+                app:hint="@{@string/include_length}"
+                app:text="@={size.firstInfo}" />
+
+            <include
+                android:id="@+id/shoulder"
+                layout="@layout/fragment_size_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_shoulder}"
+                app:text="@={size.secondInfo}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/chest"
+                layout="@layout/fragment_size_edit_text"
+                app:hint="@{@string/include_chest}"
+                app:text="@={size.thirdInfo}" />
+
+            <include
+                android:id="@+id/sleeve"
+                layout="@layout/fragment_size_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_sleeve}"
+                app:text="@={size.fourthInfo}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

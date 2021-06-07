@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="size"
+            type="com.example.myfit.data.model.model.Size" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/length"
+                layout="@layout/fragment_size_edit_text"
+                app:hint="@{@string/include_length}"
+                app:text="@={size.firstInfo}" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="1"
+                android:background="@android:color/transparent" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/waist"
+                layout="@layout/fragment_size_edit_text"
+                app:hint="@{@string/include_waist}"
+                app:text="@={size.secondInfo}" />
+
+            <include
+                android:id="@+id/thigh"
+                layout="@layout/fragment_size_edit_text"
+                android:layout_width="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_thigh}"
+                android:layout_height="wrap_content"
+                app:text="@={size.thirdInfo}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/rise"
+                layout="@layout/fragment_size_edit_text"
+                app:hint="@{@string/include_rise}"
+                app:text="@={size.fourthInfo}" />
+
+            <include
+                android:id="@+id/hem"
+                layout="@layout/fragment_size_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:hint="@{@string/include_hem}"
+                app:text="@={size.fifthInfo}" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>
