@@ -58,7 +58,7 @@ public class ListViewModel extends ViewModel {
     private LiveData<List<SizeTuple>> mSizeTuplesLive;
     private MediatorLiveData<Integer> mSelectedSizeLive;
     @Getter
-    private MutableLiveData<Boolean> mFavoriteLive = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> mFavoriteLive = new MutableLiveData<>(false);
     @Setter
     private long mParentId;
 
@@ -104,7 +104,7 @@ public class ListViewModel extends ViewModel {
         return mParentLive;
     }
 
-    public void setStateHandleFolderPath(long id) {
+    public void setStateHandleFolderId(long id) {
         mSavedStateHandle.set(FOLDER_ID, id);
     }
 
