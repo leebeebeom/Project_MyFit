@@ -196,7 +196,7 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
                 if (((Folder) parent).isDeleted() || ((Folder) parent).isParentDeleted())
                     mNavController.popBackStack();
                 setActionBarTitle(((Folder) parent).getName());
-                mModel.setStateHandFolderPath(((Folder) parent).getId());
+                mModel.setStateHandleFolderId(((Folder) parent).getId());
             }
         });
     }
@@ -242,13 +242,14 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
     }
 
     private void observeSizeTuplesLive() {
-        mModel.getSizeLive().observe(getViewLifecycleOwner(), sizeTuples -> {
-            if (mModel.isFavorite())
-                sizeTuples.removeIf(sizeTuple -> !sizeTuple.isFavorite());
+        mModel.getSizeLive().observe(getViewLifecycleOwner(), sizeTuples ->
+                mModel.getFavoriteLive().observe(getViewLifecycleOwner(), isFavorite -> {
+                    if (isFavorite)
+                        sizeTuples.removeIf(sizeTuple -> !sizeTuple.isFavorite());
 
-            mSizeAdapterList.setItems(mModel.getSort(), sizeTuples);
-            mSizeAdapterGrid.setItems(mModel.getSort(), sizeTuples);
-        });
+                    mSizeAdapterList.setItems(mModel.getSort(), sizeTuples);
+                    mSizeAdapterGrid.setItems(mModel.getSort(), sizeTuples);
+                }));
     }
 
     private void observeMainGraphDialogLive() {
