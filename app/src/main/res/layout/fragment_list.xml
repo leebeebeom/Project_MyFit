@@ -3,13 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="listFragment"
+            type="com.example.myfit.ui.main.list.ListFragment" />
+
+        <variable
+            name="model"
+            type="com.example.myfit.ui.main.list.ListViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
-        tools:context=".main.list.ListFragment">
+        tools:context=".ui.main.list.ListFragment">
 
-        <com.example.project_myfit.util.LockableScrollView
+        <com.example.myfit.util.LockableScrollView
             android:id="@+id/sv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -20,113 +31,24 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/_8sdp"
-                    android:scrollbars="none">
+                <include
+                    android:id="@+id/textNavigation"
+                    layout="@layout/fragment_list_text_navigation"
+                    app:listFragment="@{listFragment}"
+                    app:model="@{model}" />
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/layoutTextNavigation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                <include
+                    android:id="@+id/rvFolder"
+                    layout="@layout/fragment_list_recycler_view_folder"
+                    app:listFragment="@{listFragment}"
+                    app:model="@{model}" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/iconHome"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:alpha="0.9"
-                            app:srcCompat="@drawable/icon_home"
-                            app:tint="?colorControlNormal" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:alpha="0.8"
-                            app:srcCompat="@drawable/icon_arrow_forward"
-                            app:tint="?colorControlNormal" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tvCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:alpha="0.9"
-                            android:textSize="@dimen/_11sdp"
-                            tools:text="Short Sleeve" />
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-                </HorizontalScrollView>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/layoutRvFolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iconToggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="@dimen/_4sdp"
-                        android:alpha="0.8"
-                        android:src="@drawable/icon_triangle_down" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvFolder"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:overScrollMode="never"
-                        android:paddingHorizontal="@dimen/_8sdp"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        app:spanCount="4"
-                        tools:itemCount="4"
-                        tools:listitem="@layout/item_folder_grid" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvSize"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:background="@drawable/recycler_background"
-                        android:clipToPadding="false"
-                        android:minHeight="@dimen/_560sdp"
-                        android:nestedScrollingEnabled="false"
-                        android:overScrollMode="never"
-                        android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_60sdp"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        app:spanCount="2"
-                        tools:listitem="@layout/item_size_grid" />
-
-                    <FrameLayout
-                        android:id="@+id/layoutNoData"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:background="@drawable/recycler_background"
-                        android:minHeight="@dimen/_560sdp"
-                        android:visibility="visible">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:alpha="0.5"
-                            android:text="@string/all_no_data"
-                            android:textSize="@dimen/_20sdp" />
-                    </FrameLayout>
-                </FrameLayout>
+                <include
+                    android:id="@+id/rvSize"
+                    layout="@layout/fragment_list_recycler_view_size"
+                    app:listFragment="@{listFragment}"
+                    app:model="@{model}" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.example.project_myfit.util.LockableScrollView>
+        </com.example.myfit.util.LockableScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

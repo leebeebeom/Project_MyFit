@@ -151,17 +151,17 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
         mBinding.setModel(mModel);
         mBinding.setLifecycleOwner(this);
 
-        mTouchHelperFolder.attachToRecyclerView(mBinding.rvFolder);
-        mTouchHelperList.attachToRecyclerView(mBinding.rvSize);
-        mTouchHelperGrid.attachToRecyclerView(mBinding.rvSize);
+        mTouchHelperFolder.attachToRecyclerView(mBinding.rvFolder.rv);
+        mTouchHelperList.attachToRecyclerView(mBinding.rvSize.rv);
+        mTouchHelperGrid.attachToRecyclerView(mBinding.rvSize.rv);
 
-        mBinding.rvFolder.addOnItemTouchListener(mFolderDragSelect);
+        mBinding.rvFolder.rv.addOnItemTouchListener(mFolderDragSelect);
         mFolderDragSelect.setScrollView(mBinding.sv);
-        mFolderDragSelect.setRecyclerViews(mBinding.rvFolder, mBinding.rvSize);
+        mFolderDragSelect.setRecyclerViews(mBinding.rvFolder.rv, mBinding.rvSize.rv);
 
-        mBinding.rvSize.addOnItemTouchListener(mSizeDragSelect);
+        mBinding.rvSize.rv.addOnItemTouchListener(mSizeDragSelect);
         mSizeDragSelect.setScrollView(mBinding.sv);
-        mSizeDragSelect.setRecyclerViews(mBinding.rvFolder, mBinding.rvSize);
+        mSizeDragSelect.setRecyclerViews(mBinding.rvFolder.rv, mBinding.rvSize.rv);
 
         setFabClickListener();
         return mBinding.getRoot();
@@ -207,8 +207,8 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
 
     private void setTextNavigation(List<FolderTuple> folderPathTuples) {
         folderPathTuples.forEach(folderTuple -> {
-            mBinding.layoutTextNavigation.addView(getArrowIcon());
-            mBinding.layoutTextNavigation.addView(getFolderNameTv(folderTuple));
+            mBinding.textNavigation.layout.addView(getArrowIcon());
+            mBinding.textNavigation.layout.addView(getFolderNameTv(folderTuple));
         });
     }
 

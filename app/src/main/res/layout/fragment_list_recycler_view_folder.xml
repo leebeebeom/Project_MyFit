@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="listFragment"
+            type="com.example.myfit.ui.main.list.ListFragment" />
+
+        <variable
+            name="model"
+            type="com.example.myfit.ui.main.list.ListViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="@{model.folderTuplesLive.empty ?
+                    View.GONE : View.VISIBLE}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iconToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:alpha="0.8"
+            android:onClick="@{() -> model.changeFolderToggleState()}"
+            app:srcCompat="@{model.folderTogglePreferenceLive}"
+            tools:src="@drawable/icon_triangle_down" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:visibility="@{model.folderTogglePreferenceLive ?
+                        View.VISIBLE : View.INVISIBLE}"
+            app:adapter="@{listFragment.folderAdapter}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="4"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_vh_folder_grid" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>
