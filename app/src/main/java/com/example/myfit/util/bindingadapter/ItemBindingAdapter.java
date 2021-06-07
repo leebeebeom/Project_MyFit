@@ -1,6 +1,5 @@
 package com.example.myfit.util.bindingadapter;
 
-import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.view.View;
 import android.view.animation.Animation;
@@ -9,14 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.myfit.R;
 import com.example.myfit.util.adapter.BaseAdapter;
-import com.example.myfit.util.adapter.viewholder.BaseVH;
-import com.example.myfit.util.adapter.viewholder.ViewPagerVH;
-import com.example.myfit.util.constant.AutoScrollFlag;
 import com.example.myfit.util.constant.Sort;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -89,26 +84,6 @@ public class ItemBindingAdapter {
     @BindingAdapter("setTriangleIcon")
     public static void setTriangleIcon(ImageView imageView, String dummy) {
         Glide.with(imageView).load(dummy).error(R.drawable.icon_triangle_right).into(imageView);
-    }
-
-    @BindingAdapter("favoriteClick")
-    public static void favoriteClick(MaterialCheckBox favoriteCheckBox, BaseVH.BaseSizeVH holder) {
-        favoriteCheckBox.setOnClickListener(v -> holder.getListener().favoriteClick(holder.getTuple()));
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @BindingAdapter("recyclerViewTouch")
-    public static void recyclerViewTouch(RecyclerView recyclerView, ViewPagerVH holder) {
-        ViewPagerVH.AutoScrollListener listener = holder.getListener();
-        recyclerView.setOnTouchListener((v, event) -> {
-            if (event.getRawY() < 250)
-                listener.dragAutoScroll(AutoScrollFlag.UP);
-            else if (event.getRawY() > 2000)
-                listener.dragAutoScroll(AutoScrollFlag.DOWN);
-            else if (event.getRawY() < 2000 && event.getRawY() > 250)
-                listener.dragAutoScroll(AutoScrollFlag.STOP);
-            return false;
-        });
     }
 
     @BindingAdapter("dragHandleActionMode")
