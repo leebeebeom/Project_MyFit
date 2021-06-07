@@ -2,11 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="mainViewPagerAdapter"
+            type="com.example.myfit.util.adapter.BaseViewPagerAdapter.MainViewPagerAdapter" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.project_myfit.util.LockableScrollView
+        <com.example.myfit.util.LockableScrollView
             android:id="@+id/sv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -74,10 +81,12 @@
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/vp"
+                    app:adapter="@{mainViewPagerAdapter}"
+                    app:offscreenPageLimit="@{1}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </com.example.project_myfit.util.LockableScrollView>
+        </com.example.myfit.util.LockableScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
