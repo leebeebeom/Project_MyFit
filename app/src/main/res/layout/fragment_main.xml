@@ -42,41 +42,25 @@
                     app:selectionRequired="true"
                     app:singleSelection="true">
 
-                    <com.google.android.material.button.MaterialButton
+                    <include
                         android:id="@+id/btnTop"
-                        style="?materialButtonOutlinedStyle"
-                        android:layout_width="@dimen/_72sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:text="@string/all_top_cap"
-                        android:textSize="@dimen/_9sdp"
-                        app:rippleColor="@android:color/transparent" />
+                        layout="@layout/fragment_main_button"
+                        app:text="@string/all_top_cap" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <include
                         android:id="@+id/btnBottom"
-                        style="?materialButtonOutlinedStyle"
-                        android:layout_width="@dimen/_72sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:text="@string/all_bottom_cap"
-                        android:textSize="@dimen/_9sdp"
-                        app:rippleColor="@android:color/transparent" />
+                        layout="@layout/fragment_main_button"
+                        app:text="@string/all_bottom_cap" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <include
                         android:id="@+id/btnOuter"
-                        style="?materialButtonOutlinedStyle"
-                        android:layout_width="@dimen/_72sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:text="@string/all_outer_cap"
-                        android:textSize="@dimen/_9sdp"
-                        app:rippleColor="@android:color/transparent" />
+                        layout="@layout/fragment_main_button"
+                        app:text="@string/all_outer_cap" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <include
                         android:id="@+id/btnEtc"
-                        style="?materialButtonOutlinedStyle"
-                        android:layout_width="@dimen/_72sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:text="@string/all_etc_cap"
-                        android:textSize="@dimen/_9sdp"
-                        app:rippleColor="@android:color/transparent" />
+                        layout="@layout/fragment_main_button"
+                        app:text="@string/all_etc_cap" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <androidx.viewpager2.widget.ViewPager2

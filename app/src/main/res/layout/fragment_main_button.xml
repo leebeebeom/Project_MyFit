@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="text"
+            type="String" />
+    </data>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        style="?materialButtonOutlinedStyle"
+        android:layout_width="@dimen/_72sdp"
+        android:layout_height="@dimen/_36sdp"
+        android:text="@{text}"
+        android:textSize="@dimen/_9sdp"
+        app:rippleColor="@android:color/transparent"
+        tools:text="TOP" />
+</layout>

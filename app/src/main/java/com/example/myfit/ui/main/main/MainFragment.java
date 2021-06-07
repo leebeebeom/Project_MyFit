@@ -125,7 +125,7 @@ public class MainFragment extends BaseViewPagerFragment implements ActionModeImp
 
         Arrays.stream(mMainViewPagerAdapter.getDragSelectListeners()).forEach(dragSelect -> dragSelect.setScrollView(mBinding.sv));
 
-        mButtons = new MaterialButton[]{mBinding.btnTop, mBinding.btnBottom, mBinding.btnOuter, mBinding.btnEtc};
+        mButtons = new MaterialButton[]{mBinding.btnTop.button, mBinding.btnBottom.button, mBinding.btnOuter.button, mBinding.btnEtc.button};
 
         setVpPageChangeListener();
         setToggleGroupCheckedListener();
@@ -150,7 +150,7 @@ public class MainFragment extends BaseViewPagerFragment implements ActionModeImp
 
     private void setToggleGroupCheckedListener() {
         if (mButtonTextOriginColor == null)
-            mButtonTextOriginColor = mBinding.btnEtc.getTextColors();
+            mButtonTextOriginColor = mBinding.btnEtc.button.getTextColors();
 
         //버튼 클릭 시 첫번째 호출
         mBinding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
