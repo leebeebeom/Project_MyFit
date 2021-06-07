@@ -146,6 +146,11 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        addBottomAppBar();
+        hideCustomTitle();
+        hideSearchBar();
+        fabChange(R.drawable.icon_add);
+
         mBinding = FragmentListBinding.inflate(inflater, container, false);
         mBinding.setListFragment(this);
         mBinding.setModel(mModel);
