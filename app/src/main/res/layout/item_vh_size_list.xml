@@ -15,13 +15,14 @@
     </data>
 
     <FrameLayout
-        itemViewClick="@{sizeListVH}"
+        android:onClick="@{() -> sizeListVH.itemViewClick()}"
+        app:onLongClickListener="@{() -> sizeListVH.itemViewLongClick()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <include
             android:id="@+id/cb"
-            layout="@layout/item_vh_check_box" />
+            layout="@layout/item_vh_include_check_box" />
 
         <com.google.android.material.card.MaterialCardView
             listActionMode="@{baseAdapter}"
@@ -72,18 +73,18 @@
 
                 <include
                     android:id="@+id/nameLayout"
-                    layout="@layout/item_size_name_layout"
+                    layout="@layout/item_vh_include_size_name_layout"
                     app:sizeVH="@{sizeListVH}" />
 
                 <include
                     android:id="@+id/cbFavorite"
-                    layout="@layout/item_size_favorite_check_box"
+                    layout="@layout/item_vh_include_size_favorite_check_box"
                     app:sizeVH="@{sizeListVH}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
-                    dragHandleTouch="@{sizeListVH}"
-                    dragHandleVisibility="@{baseAdapter}"
+                    app:onTouchListener="@{(view, event) -> sizeListVH.dragStart(event)}"
+                    dragHandleActionMode="@{baseAdapter}"
                     setDragHandle="@{}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
