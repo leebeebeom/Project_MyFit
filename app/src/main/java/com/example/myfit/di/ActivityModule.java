@@ -1,18 +1,14 @@
 package com.example.myfit.di;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.myfit.R;
 import com.example.myfit.databinding.ActivityMainBinding;
-import com.example.myfit.ui.search.adapter.AutoCompleteAdapter;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.myfit.util.adapter.AutoCompleteAdapter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,14 +23,8 @@ public class ActivityModule {
 
     @ActivityScoped
     @Provides
-    public static ActivityMainBinding provideActivityMainBinding(Activity activity) {
-        return ActivityMainBinding.inflate(activity.getLayoutInflater());
-    }
-
-    @ActivityScoped
-    @Provides
-    public static NavController provideNavController(Activity activity) {
-        return Navigation.findNavController(activity, R.id.host_fragment_main);
+    public static ActivityMainBinding provideActivityMainBinding(@ActivityContext Context context) {
+        return ActivityMainBinding.inflate(LayoutInflater.from(context));
     }
 
     @Provides
@@ -48,7 +38,7 @@ public class ActivityModule {
     @Provides
     public static int provideColorPrimary(@ActivityContext Context context) {
         TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         return typedValue.data;
     }
 
@@ -57,12 +47,17 @@ public class ActivityModule {
     @Provides
     public static int provideColorControl(@ActivityContext Context context) {
         TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        context.getTheme().resolveAttribute(R.attr.colorControlNormal, typedValue, true);
         return typedValue.data;
     }
 
     @Provides
     public static AutoCompleteAdapter provideAutoCompleteAdapter(@ActivityContext Context context) {
         return new AutoCompleteAdapter(context, R.layout.item_auto_complete_texv_view, R.id.tv_item_ac_tv);
+    }
+
+    @Provides
+    public static LayoutInflater provideLayoutInflater(@ActivityContext Context context) {
+        return LayoutInflater.from(context);
     }
 }
