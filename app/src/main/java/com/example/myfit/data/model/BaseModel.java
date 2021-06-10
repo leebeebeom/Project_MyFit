@@ -2,6 +2,8 @@ package com.example.myfit.data.model;
 
 import androidx.room.PrimaryKey;
 
+import com.example.myfit.util.CommonUtil;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +12,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class BaseModel {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long id;
     private final int parentIndex;
     private int sortNumber;
@@ -18,6 +20,7 @@ public class BaseModel {
     private long deletedTime;
 
     protected BaseModel(int parentIndex, int sortNumber) {
+        this.id = CommonUtil.getCurrentDate();
         this.parentIndex = parentIndex;
         this.sortNumber = sortNumber;
     }
