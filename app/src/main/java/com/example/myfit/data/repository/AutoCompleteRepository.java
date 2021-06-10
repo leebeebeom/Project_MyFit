@@ -4,49 +4,36 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.repository.dao.AutoCompleteDao;
-import com.example.myfit.data.tuple.AutoCompleteTuple;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
-
-@ViewModelScoped
 public class AutoCompleteRepository {
+    private final AutoCompleteDao mAutoCompleteDao;
     private LiveData<Set<String>> mWordsLive, mDeletedWordsLive;
-    private final LiveData<List<AutoCompleteTuple>> mOrderedWordsLive;
 
     @Inject
     public AutoCompleteRepository(AutoCompleteDao autoCompleteDao) {
-        LiveData<List<AutoCompleteTuple>> autoCompleteWordsLive = autoCompleteDao.getAutoCompleteWordsLive();
-        this.mOrderedWordsLive = Transformations.map(autoCompleteWordsLive, tuples -> {
-            tuples.sort((o1, o2) -> o1.getWord().compareTo(o2.getWord()));
-            return tuples;
-        });
+        mAutoCompleteDao = autoCompleteDao;
     }
 
     public LiveData<Set<String>> getAutoCompleteWordsLive() {
-        if (mWordsLive == null) {
-            mWordsLive = Transformations.map(mOrderedWordsLive,
-                    tuples -> tuples.stream()
-                            .filter(autoCompleteTuple -> !autoCompleteTuple.isDeleted())
-                            .map(AutoCompleteTuple::getWord)
-                            .collect(Collectors.toSet()));
-        }
+        if (mWordsLive == null) mWordsLive = getWordsLive(false);
         return mWordsLive;
     }
 
     public LiveData<Set<String>> getDeletedAutoCompleteWordsLive() {
-        if (mDeletedWordsLive == null) {
-            mDeletedWordsLive = Transformations.map(mOrderedWordsLive,
-                    tuples -> tuples.stream()
-                            .filter(AutoCompleteTuple::isDeleted)
-                            .map(AutoCompleteTuple::getWord)
-                            .collect(Collectors.toSet()));
-        }
+        if (mDeletedWordsLive == null) mDeletedWordsLive = getWordsLive(true);
         return mDeletedWordsLive;
+    }
+
+    private LiveData<Set<String>> getWordsLive(boolean deleted) {
+        return Transformations.map(mAutoCompleteDao.getAutoCompleteWordsLive(deleted), words -> {
+            words.forEach(s -> s = s.trim());
+            words.sort(String::compareTo);
+            return new LinkedHashSet<>(words);
+        });
     }
 }
