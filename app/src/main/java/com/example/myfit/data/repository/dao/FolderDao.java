@@ -29,7 +29,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     //to list
     public LiveData<List<FolderTuple>> getTuplesLiveByParentId(long parentId) {
         LiveData<List<FolderTuple>> tuplesLive = this.getTuplesLiveByParentId2(parentId);
-        LiveData<int[]> contentSizesLive = super.getContentSizesLive(tuplesLive, false);
+        LiveData<int[]> contentSizesLive = getFolderContentSizesLive(tuplesLive);
 
         return this.getTuplesWithContentSizeLive(tuplesLive, contentSizesLive);
     }
@@ -39,40 +39,34 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     protected abstract LiveData<List<FolderTuple>> getTuplesLiveByParentId2(long parentId);
 
     @NotNull
+    protected LiveData<int[]> getFolderContentSizesLive(LiveData<List<FolderTuple>> tuplesLive) {
+        return Transformations.switchMap(tuplesLive, tuples -> {
+            long[] itemIds = getTupleIds(tuples);
+            return getFolderContentSizesLive(itemIds);
+        });
+    }
+
+    @Query("SELECT SUM((childFolder.parentId IS NOT NULL AND childFolder.deleted = 0) + (size.parentId IS NOT NULL AND size.deleted = 0)) FROM Folder " +
+            "LEFT OUTER JOIN Folder AS ChildFolder ON folder.id = childFolder.parentId " +
+            "LEFT OUTER JOIN Size ON folder.id = size.parentId " +
+            "WHERE folder.id IN (:ids) " +
+            "GROUP BY folder.id")
+    protected abstract LiveData<int[]> getFolderContentSizesLive(long[] ids);
+
+    @NotNull
     private LiveData<List<FolderTuple>> getTuplesWithContentSizeLive(LiveData<List<FolderTuple>> tuplesLive,
                                                                      LiveData<int[]> contentSizesLive) {
         return Transformations.map(contentSizesLive, contentSizes -> {
             List<FolderTuple> tuples = tuplesLive.getValue();
             super.setContentSize(tuples, contentSizes);
-            addDummy(tuples);
             return tuples;
         });
-    }
-
-    private void addDummy(List<FolderTuple> tuples) {
-        if (tuples != null) {
-            int size = tuples.size();
-            if (size % 4 == 1)
-                addDummyFolder(tuples, 3);
-            else if (size % 4 == 2)
-                addDummyFolder(tuples, 2);
-            else if (size % 4 == 3)
-                addDummyFolder(tuples, 1);
-        }
-    }
-
-    private void addDummyFolder(List<FolderTuple> tuples, int count) {
-        for (int i = 0; i < count; i++) {
-            FolderTuple dummy = new FolderTuple();
-            dummy.setId(-1);
-            tuples.add(dummy);
-        }
     }
 
     //to recycleBin
     public LiveData<List<List<FolderTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<FolderTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<int[]> contentSizesLive = super.getContentSizesLive(deletedTuplesLive, true);
+        LiveData<int[]> contentSizesLive = getFolderContentSizesLive(deletedTuplesLive);
 
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentSizesLive);
     }
@@ -83,7 +77,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     //to searchView, recycleBin search
     public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive(boolean deleted) {
         LiveData<List<FolderTuple>> searchTuplesLive = this.getSearchTuplesLive(deleted);
-        LiveData<int[]> contentSizesLive = super.getContentSizesLive(searchTuplesLive, deleted);
+        LiveData<int[]> contentSizesLive = getFolderContentSizesLive(searchTuplesLive);
 
         return super.getClassifiedTuplesLive(searchTuplesLive, contentSizesLive);
     }
@@ -97,7 +91,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     public List<FolderTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
         List<FolderTuple> tuples = this.getTuplesByParentIndex(parentIndex);
         long[] ids = super.getTupleIds(tuples);
-        int[] contentSizes = getContentSizesByParentIds(ids);
+        int[] contentSizes = getFolderContentSizes(ids);
         super.setContentSize(tuples, contentSizes);
         super.sortTuples(sort, tuples);
         return tuples;
@@ -106,14 +100,28 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime, parentId FROM Folder WHERE parentIndex = :parentIndex AND deleted = 0 AND parentDeleted = 0")
     protected abstract List<FolderTuple> getTuplesByParentIndex(int parentIndex);
 
+    @Query("SELECT SUM((childFolder.parentId IS NOT NULL AND childFolder.deleted = 0) + (size.parentId IS NOT NULL AND size.deleted = 0)) FROM Folder " +
+            "LEFT OUTER JOIN Folder AS ChildFolder ON folder.id = childFolder.parentId " +
+            "LEFT OUTER JOIN Size ON folder.id = size.parentId " +
+            "WHERE folder.id IN (:ids) " +
+            "GROUP BY folder.id")
+    protected abstract int[] getFolderContentSizes(long[] ids);
+
     @Transaction
     //to treeView(disposable)
     public FolderTuple getTupleById(long id) {
         FolderTuple tuple = this.getTupleById2(id);
-        int contentSize = getContentSizeByParentId(id);
+        int contentSize = getFolderContentSizes(id);
         tuple.setContentSize(contentSize);
         return tuple;
     }
+
+    @Query("SELECT SUM((childFolder.parentId IS NOT NULL AND childFolder.deleted = 0) + (size.parentId IS NOT NULL AND size.deleted = 0)) FROM Folder " +
+            "LEFT OUTER JOIN Folder AS ChildFolder ON folder.id = childFolder.parentId " +
+            "LEFT OUTER JOIN Size ON folder.id = size.parentId " +
+            "WHERE folder.id = :id " +
+            "GROUP BY folder.id")
+    protected abstract int getFolderContentSizes(long id);
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime, parentId FROM Folder WHERE id = :id")
     protected abstract FolderTuple getTupleById2(long id);
@@ -192,18 +200,18 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
         List<FolderTuple> folderTuples = getTuplesByParentIndex(tuple.getParentIndex());
         LinkedList<FolderTuple> folderPathTuples = new LinkedList<>();
         folderPathTuples.add(tuple);
-        completeFolderPath(folderTuples, folderPathTuples, tuple.getId());
+        completeFolderPath(folderTuples, folderPathTuples, tuple);
         return folderPathTuples;
     }
 
-    private void completeFolderPath(List<FolderTuple> folderTuples, LinkedList<FolderTuple> folderPathTuples, long folderId) {
+    private void completeFolderPath(List<FolderTuple> folderTuples, LinkedList<FolderTuple> folderPathTuples, FolderTuple tuple) {
         Optional<FolderTuple> parentTuple = folderTuples.stream()
-                .filter(folderTuple -> folderId == folderTuple.getParentId())
+                .filter(folderTuple -> tuple.getParentId() == folderTuple.getId())
                 .findFirst();
 
         if (parentTuple.isPresent()) {
             folderPathTuples.add(0, parentTuple.get());
-            completeFolderPath(folderTuples, folderPathTuples, parentTuple.get().getId());
+            completeFolderPath(folderTuples, folderPathTuples, parentTuple.get());
         }
     }
 }
