@@ -3,6 +3,10 @@ package com.example.myfit.di;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.myfit.R;
 import com.example.myfit.databinding.ItemDialogEditTextBinding;
 import com.example.myfit.databinding.LayoutDialogSortBinding;
@@ -57,5 +61,10 @@ public class BindingModule {
     @Provides
     public static LayoutDialogTreeBinding provideTreeViewBinding(LayoutInflater inflater){
         return LayoutDialogTreeBinding.inflate(inflater);
+    }
+
+    @Provides
+    public static NavController provideNavController(Fragment fragment) {
+        return NavHostFragment.findNavController(fragment);
     }
 }
