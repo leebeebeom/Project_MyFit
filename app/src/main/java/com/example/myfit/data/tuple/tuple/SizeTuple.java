@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class SizeTuple extends BaseTuple {
     private String brand, imageUri;
     private boolean favorite;

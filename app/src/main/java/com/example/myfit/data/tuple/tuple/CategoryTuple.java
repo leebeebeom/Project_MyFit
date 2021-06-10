@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class CategoryTuple extends BaseTuple {
     private int contentSize;
 }
