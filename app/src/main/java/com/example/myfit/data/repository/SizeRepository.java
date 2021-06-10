@@ -17,11 +17,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
+import static com.example.myfit.di.SharedPreferencesModule.VIEW_TYPE;
 
-import static com.example.myfit.di.DataModule.VIEW_TYPE;
-
-@ViewModelScoped
 public class SizeRepository extends BaseRepository<SizeTuple> {
     private final SizeDao mSizeDao;
     private final SharedPreferences mListSortPreference, mViewTypePreference;
@@ -52,11 +49,11 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(boolean deleted) {
         if (!deleted) {
             if (mSearchTuplesLive == null)
-                mSearchTuplesLive = mSizeDao.getSearchTuplesLive(deleted);
+                mSearchTuplesLive = mSizeDao.getSearchTuplesLive(false);
             return mSearchTuplesLive;
         } else {
             if (mDeletedSearchTuplesLive == null)
-                mDeletedSearchTuplesLive = mSizeDao.getSearchTuplesLive(deleted);
+                mDeletedSearchTuplesLive = mSizeDao.getSearchTuplesLive(true);
             return mDeletedSearchTuplesLive;
         }
     }
@@ -79,6 +76,10 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     //from listFragment(favorite)
     public void update(SizeTuple sizeTuple) {
         new Thread(() -> mSizeDao.update(sizeTuple)).start();
+    }
+
+    public void update(Size size) {
+        new Thread(() -> mSizeDao.update(size)).start();
     }
 
     //from sizeDelete dialog
