@@ -7,7 +7,7 @@ import com.example.myfit.util.constant.Sort;
 
 import java.util.List;
 
-import static com.example.myfit.di.DataModule.SORT;
+import static com.example.myfit.di.SharedPreferencesModule.SORT;
 
 public abstract class BaseRepository<T extends BaseTuple> {
     public abstract void deleteOrRestore(long[] ids);
