@@ -18,10 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import dagger.hilt.android.scopes.ViewModelScoped;
-
-@ViewModelScoped
 public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private final CategoryDao mCategoryDao;
     private SharedPreferences mMainSortPreference;
@@ -43,7 +39,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     }
 
     //from appDataBase
-    public void insert(Category[] categories) {
+    public void insert(List<Category> categories) {
         new Thread(() -> mCategoryDao.insert(categories)).start();
     }
 
