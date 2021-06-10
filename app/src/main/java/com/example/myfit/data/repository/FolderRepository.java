@@ -17,11 +17,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
+import static com.example.myfit.di.SharedPreferencesModule.FOLDER_TOGGLE;
 
-import static com.example.myfit.di.DataModule.FOLDER_TOGGLE;
-
-@ViewModelScoped
 public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;
     private final SharedPreferences mListSortPreference;
@@ -55,11 +52,11 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive(boolean deleted) {
         if (!deleted) {
             if (mSearchTuplesLive == null)
-                mSearchTuplesLive = mFolderDao.getSearchTuplesListLive(deleted);
+                mSearchTuplesLive = mFolderDao.getSearchTuplesListLive(false);
             return mSearchTuplesLive;
         } else {
             if (mDeletedSearchTuplesLive == null)
-                mDeletedSearchTuplesLive = mFolderDao.getSearchTuplesListLive(deleted);
+                mDeletedSearchTuplesLive = mFolderDao.getSearchTuplesListLive(true);
             return mDeletedSearchTuplesLive;
         }
     }
