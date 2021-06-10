@@ -29,23 +29,11 @@ import java.util.Locale;
 
 @Dao
 public abstract class BaseDao<T extends BaseTuple> {
-    @NotNull
-    protected LiveData<int[]> getContentSizesLive(LiveData<List<T>> tuplesLive, boolean parentDeleted) {
-        return Transformations.switchMap(tuplesLive, tuples -> {
-            long[] itemIds = getTupleIds(tuples);
-            return getContentSizesLiveByParentIds(itemIds, parentDeleted);
-        });
-    }
-
     protected long[] getTupleIds(@NotNull List<T> tuples) {
         return tuples.stream()
                 .mapToLong(BaseTuple::getId)
                 .toArray();
     }
-
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND deleted = 0 AND parentDeleted = :parentDeleted) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND deleted = 0 AND parentDeleted = :parentDeleted))")
-    protected abstract LiveData<int[]> getContentSizesLiveByParentIds(long[] parentIds, boolean parentDeleted);
 
     protected <R extends CategoryTuple> LiveData<List<List<R>>> getClassifiedTuplesLive(LiveData<List<R>> tuplesLive,
                                                                                         LiveData<int[]> contentSizesLive) {
@@ -57,10 +45,11 @@ public abstract class BaseDao<T extends BaseTuple> {
     }
 
     protected <R extends CategoryTuple> void setContentSize(List<R> tuples, int[] contentSizes) {
-        if (tuples != null) {
-            int itemsSize = tuples.size();
-            for (int i = 0; i < itemsSize; i++)
+        if (tuples != null && tuples.size() == contentSizes.length) {
+            int count = tuples.size();
+            for (int i = 0; i < count; i++) {
                 tuples.get(i).setContentSize(contentSizes[i]);
+            }
         }
     }
 
@@ -148,12 +137,4 @@ public abstract class BaseDao<T extends BaseTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateSizeParentDeletedTuples(List<ParentDeletedTuple> parentDeletedTuples);
-
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId IN (:parentIds) AND deleted = 0 AND parentDeleted = 0) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId IN(:parentIds) AND deleted =0 AND parentDeleted = 0))")
-    protected abstract int[] getContentSizesByParentIds(long[] parentIds);
-
-    @Query("SELECT((SELECT COUNT(parentId) FROM Folder WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0) + " +
-            "(SELECT COUNT(parentId) FROM Size WHERE parentId = :parentId AND deleted =0 AND parentDeleted = 0))")
-    protected abstract int getContentSizeByParentId(long parentId);
 }
