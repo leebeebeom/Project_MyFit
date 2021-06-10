@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +27,7 @@ import java.util.Set;
 public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //to list
-    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, isFavorite, deletedTime " +
+    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, favorite, deletedTime " +
             "FROM Size WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
     public abstract LiveData<List<SizeTuple>> getTuplesLiveByParentId(long parentId);
 
@@ -37,7 +37,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         return Transformations.map(tuplesLive, this::getClassifiedSizeTuples);
     }
 
-    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
+    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, favorite, deletedTime FROM Size " +
             "WHERE deleted = 1 AND parentDeleted = 0 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
@@ -58,14 +58,17 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
         return Transformations.map(tuplesLive, this::getClassifiedSizeTuples);
     }
 
-    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, isFavorite, deletedTime FROM Size " +
+    @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, favorite, deletedTime FROM Size " +
             "WHERE deleted = :deleted AND parentDeleted = 0 AND name || brand ORDER BY name")
     protected abstract LiveData<List<SizeTuple>> getSearchTuplesLive2(boolean deleted);
 
     //to sizeFragment
     public LiveData<Set<String>> getBrands() {
         LiveData<List<String>> brands = this.getBrands2();
-        return Transformations.map(brands, HashSet::new);
+        return Transformations.map(brands, input -> {
+            input.forEach(s -> s = s.trim());
+            return new LinkedHashSet<>(input);
+        });
     }
 
     @Query("SELECT brand FROM Size WHERE deleted = 0 AND parentDeleted = 0 ORDER BY brand")
@@ -140,4 +143,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(Size size);
 }
