@@ -9,6 +9,10 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -42,5 +46,10 @@ public class CommonUtil {
             default:
                 return ParentCategory.ETC.name();
         }
+    }
+
+    public static long getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+        return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
     }
 }
