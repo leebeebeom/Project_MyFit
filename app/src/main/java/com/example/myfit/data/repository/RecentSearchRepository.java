@@ -10,9 +10,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.scopes.ViewModelScoped;
-
-@ViewModelScoped
 public class RecentSearchRepository {
     private final RecentSearchDao mRecentSearchDao;
     private LiveData<List<RecentSearchTuple>> mSearchLive, mRecycleBinLive, mDailyLookLive, mMWishListLive;
