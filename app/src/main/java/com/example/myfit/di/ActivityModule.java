@@ -15,7 +15,6 @@ import dagger.hilt.android.scopes.ActivityScoped;
 @Module
 @InstallIn(ActivityComponent.class)
 public class ActivityModule {
-
     @ActivityScoped
     @Provides
     public static ActivityMainBinding provideActivityMainBinding(@ActivityContext Context context) {
