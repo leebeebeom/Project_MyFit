@@ -15,11 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 @AndroidEntryPoint
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEditTextDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
     @Inject
@@ -47,16 +44,13 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        mModel.getExistingNameLive().observe(getViewLifecycleOwner(), isExisting -> {
-            if (isExisting != null) {
-                if (isExisting) {
-                    navigateSameNameDialog();
-                    KeyBoardUtil.hideKeyBoard(mBinding.et);
-                } else {
-                    task();
-                    dismiss();
-                }
-                mModel.getExistingNameLive().setValue(null);
+        mModel.getExistingNameLive().observe(this, isExisting -> {
+            if (isExisting) {
+                navigateSameNameDialog();
+                KeyBoardUtil.hideKeyBoard(mBinding.et);
+            } else {
+                task();
+                dismiss();
             }
         });
         return getAlertDialog();
