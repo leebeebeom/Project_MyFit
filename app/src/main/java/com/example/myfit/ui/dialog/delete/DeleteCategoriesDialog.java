@@ -5,16 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.example.myfit.R;
-import com.example.myfit.data.repository.CategoryRepository;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class DeleteCategoriesDialog extends BaseDeleteDialog {
-    @Inject
-    CategoryRepository mCategoryRepository;
     private long[] mSelectedItemIds;
 
     @Override
@@ -30,7 +22,7 @@ public class DeleteCategoriesDialog extends BaseDeleteDialog {
 
     @Override
     protected void task() {
-        mCategoryRepository.deleteOrRestore(mSelectedItemIds);
+        getMainGraphViewModel().categoriesDeleteOrRestore(mSelectedItemIds);
     }
 
     @Override

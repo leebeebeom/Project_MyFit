@@ -9,10 +9,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.myfit.R;
 import com.example.myfit.ui.dialog.BaseDialog;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseDeleteDialog extends BaseDialog {
 
     @Override
