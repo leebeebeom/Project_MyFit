@@ -111,7 +111,7 @@ public class TreeNodeProvider {
         checkIsSelectedItemParent(sizeParentIdTuples, mFolderHolders);
     }
 
-    private <T extends BaseTreeHolder<?>> void checkIsSelectedItemParent(ParentIdTuple[] parentIdTuples, T[] holders) {
+    private <T extends BaseTreeHolder<?, ?>> void checkIsSelectedItemParent(ParentIdTuple[] parentIdTuples, T[] holders) {
         Arrays.stream(parentIdTuples)
                 .forEach(parentIdTuple ->
                         Arrays.stream(holders)
@@ -127,7 +127,7 @@ public class TreeNodeProvider {
                                     .filter(folderHolder -> folderHolder.getTupleId() == folderParentIdTuple.getId())
                                     .toArray();
 
-                    BaseTreeHolder<?>[] selectedFolderHolderParents = (BaseTreeHolder<?>[])
+                    BaseTreeHolder<?, ?>[] selectedFolderHolderParents = (BaseTreeHolder<?, ?>[])
                             Arrays.stream(selectedFolderHolders)
                                     .map(BaseTreeHolder::getParent)
                                     .toArray();
@@ -141,7 +141,7 @@ public class TreeNodeProvider {
         Arrays.stream(folderParentTuples)
                 .forEach(folderParentIdTuple ->
                         Arrays.stream(mFolderHolders).filter(folderHolder -> {
-                            BaseTreeHolder<?> parentHolder = folderHolder.getParent();
+                            BaseTreeHolder<?, ?> parentHolder = folderHolder.getParent();
                             return (parentHolder instanceof TreeFolderHolder && ((TreeFolderHolder) parentHolder).getTupleId() == folderParentIdTuple.getId());
                         }).forEach(BaseTreeHolder::setUnClickable));
     }
