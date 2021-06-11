@@ -61,7 +61,7 @@ public class DialogBuilder {
     }
 
     public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText, String oldName) {
-        getPositiveButton().setEnabled(isNotInputTextEmpty(inputText) && !inputText.toString().equals(oldName));
+        getPositiveButton().setEnabled(isNotInputTextEmpty(inputText) && !inputText.toString().trim().equals(oldName));
         return this;
     }
 
