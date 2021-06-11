@@ -73,16 +73,6 @@ public class Qualifiers {
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Padding8dp {
-    }
-
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Padding60dp {
-    }
-
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
     public @interface NavigationTextViewSize {
     }
 
