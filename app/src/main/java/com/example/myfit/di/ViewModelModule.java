@@ -13,8 +13,7 @@ import dagger.hilt.android.scopes.ViewModelScoped;
 
 @Module
 @InstallIn(ViewModelComponent.class)
-public class SelectedItemsModule {
-
+public class ViewModelModule {
     @ViewModelScoped
     @Provides
     public static SizeLiveSet<CategoryTuple> provideSelectedCategoryTuples() {
@@ -32,5 +31,4 @@ public class SelectedItemsModule {
     public static SizeLiveSet<SizeTuple> provideSelectedSizeTuples() {
         return new SizeLiveSet<>();
     }
-
 }
