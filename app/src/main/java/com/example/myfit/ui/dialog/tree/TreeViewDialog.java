@@ -2,6 +2,7 @@ package com.example.myfit.ui.dialog.tree;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,10 +41,9 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     @Inject
     TreeNodeProvider mTreeNodeProvider;
     @Inject
-    LayoutDialogTreeBinding mBinding;
-    @Inject
     NavController mNavController;
 
+    private LayoutDialogTreeBinding mBinding;
     private TreeViewModel mModel;
     private TreeNode mNodeRoot;
     private AndroidTreeView mTreeView;
@@ -56,6 +56,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(TreeViewModel.class);
+        mBinding = LayoutDialogTreeBinding.inflate(LayoutInflater.from(requireContext()));
 
         TreeViewDialogArgs args = TreeViewDialogArgs.fromBundle(getArguments());
         if (mModel.getParentCategory() == null)
