@@ -1,6 +1,7 @@
 package com.example.myfit.ui.dialog.sort;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public abstract class BaseSortDialog extends BaseDialog {
-    @Inject
     protected LayoutDialogSortBinding mBinding;
 
     private static final String CHECKED_SORT = "check sort";
@@ -33,6 +33,7 @@ public abstract class BaseSortDialog extends BaseDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBinding = LayoutDialogSortBinding.inflate(LayoutInflater.from(requireContext()));
         mCheckedNumber = savedInstanceState == null ? getRepository().getSort().getValue() : savedInstanceState.getInt(CHECKED_SORT);
         MaterialRadioButton[] sortButtons = getSortButtons();
         addRadioButtonCheckListener(sortButtons);
