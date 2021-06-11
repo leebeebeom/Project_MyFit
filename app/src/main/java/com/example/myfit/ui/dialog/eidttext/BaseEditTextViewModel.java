@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Accessors(prefix = "m")
 public abstract class BaseEditTextViewModel extends ViewModel {
     @Getter

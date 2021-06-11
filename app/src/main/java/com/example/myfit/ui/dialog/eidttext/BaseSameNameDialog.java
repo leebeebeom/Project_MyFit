@@ -8,10 +8,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.ui.dialog.BaseDialog;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseSameNameDialog extends BaseDialog {
     @Override
     protected AlertDialog getAlertDialog() {
