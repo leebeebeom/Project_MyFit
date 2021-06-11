@@ -12,10 +12,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-@AndroidEntryPoint
 public class SortMainDialog extends BaseSortDialog {
-    @Inject
-    CategoryRepository mCategoryRepository;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -25,7 +22,7 @@ public class SortMainDialog extends BaseSortDialog {
 
     @Override
     protected CategoryRepository getRepository() {
-        return mCategoryRepository;
+        return getMainGraphViewModel().getCategoryRepository();
     }
 
     @Override
