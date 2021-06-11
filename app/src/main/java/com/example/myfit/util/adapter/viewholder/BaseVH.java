@@ -13,8 +13,6 @@ import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
-import java.util.Set;
-
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
