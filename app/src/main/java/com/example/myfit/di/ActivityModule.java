@@ -21,9 +21,4 @@ public class ActivityModule {
     public static ActivityMainBinding provideActivityMainBinding(@ActivityContext Context context) {
         return ActivityMainBinding.inflate(LayoutInflater.from(context));
     }
-
-    @Provides
-    public static LayoutInflater provideLayoutInflater(@ActivityContext Context context) {
-        return LayoutInflater.from(context);
-    }
 }
