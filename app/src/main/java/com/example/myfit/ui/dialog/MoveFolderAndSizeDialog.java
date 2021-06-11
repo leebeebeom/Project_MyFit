@@ -7,19 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.R;
-import com.example.myfit.data.repository.FolderRepository;
-import com.example.myfit.data.repository.SizeRepository;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class MoveFolderAndSizeDialog extends BaseDialog {
-    @Inject
-    FolderRepository mFolderRepository;
-    @Inject
-    SizeRepository mSizeRepository;
     private long[] mSelectedFolderIds, mSelectedSizeIds;
     private long mTargetId;
 
@@ -44,9 +33,9 @@ public class MoveFolderAndSizeDialog extends BaseDialog {
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
             if (mSelectedFolderIds.length != 0)
-                mFolderRepository.move(mTargetId, mSelectedFolderIds);
+                getMainGraphViewModel().folderMove(mTargetId, mSelectedFolderIds);
             if (mSelectedSizeIds.length != 0)
-                mSizeRepository.move(mTargetId, mSelectedSizeIds);
+                getMainGraphViewModel().sizeMove(mTargetId, mSelectedSizeIds);
             getBackStack().getSavedStateHandle().set(ACTION_MODE_OFF, null);
             mNavController.popBackStack(R.id.treeViewDialog, true);
         };
