@@ -1,16 +1,12 @@
 package com.example.myfit.ui.dialog.eidttext.edit;
 
 import android.os.Bundle;
-import android.text.Editable;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextDialog;
 import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 public abstract class BaseEditDialog extends BaseEditTextDialog {
     private String mOldName;
