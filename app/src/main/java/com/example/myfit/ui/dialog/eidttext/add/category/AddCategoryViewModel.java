@@ -21,12 +21,12 @@ public class AddCategoryViewModel extends BaseEditTextViewModel.BaseAddViewModel
 
     public void queryIsExistingName(int parentIndex) {
         this.mParentIndex = parentIndex;
-        mCategoryRepository.isExistingName(mName.trim(), parentIndex);
+        mCategoryRepository.isExistingName(mName, parentIndex);
     }
 
     @Override
     public void insert() {
-        mCategoryRepository.insert(mName.trim(), mParentIndex);
+        mCategoryRepository.insert(mName, mParentIndex);
     }
 
     @Override
