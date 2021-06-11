@@ -13,11 +13,11 @@ public class AdapterUtil {
     public static <T extends BaseTuple> void itemMove(int from, int to, List<T> list) {
         if (from < to) {//down
             for (int i = from; i < to; i++)
-                if (list.get(++i).getId() != -1)
-                    swapOrderNumber(list, i, ++i);
+                if (list.get(i + 1).getId() != -1)
+                    swapOrderNumber(list, i, i + 1);
         } else //up
             for (int i = from; i > to; i--)
-                swapOrderNumber(list, i, ++i);
+                swapOrderNumber(list, i, i - 1);
     }
 
     private static <T extends BaseTuple> void swapOrderNumber(List<T> list, int i, int i2) {
