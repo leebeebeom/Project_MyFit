@@ -2,6 +2,7 @@ package com.example.myfit.ui.dialog.eidttext;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,14 +13,11 @@ import com.example.myfit.util.KeyBoardUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public abstract class BaseEditTextDialog extends BaseDialog {
     public static final String INPUT_TEXT = "input text";
-    @Inject
     protected ItemDialogEditTextBinding mBinding;
     private BaseEditTextViewModel mModel;
 
@@ -27,6 +25,10 @@ public abstract class BaseEditTextDialog extends BaseDialog {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = getModel();
+
+        mBinding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(requireContext()));
+        mBinding.et.requestFocus();
+
         if (mModel.getName() == null) mModel.setName(getName());
         mBinding.setLifecycleOwner(this);
         mBinding.setModel(mModel);
