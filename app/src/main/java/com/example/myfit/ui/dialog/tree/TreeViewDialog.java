@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 
 import com.example.myfit.R;
 import com.example.myfit.databinding.LayoutDialogTreeBinding;
@@ -40,6 +41,8 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     TreeNodeProvider mTreeNodeProvider;
     @Inject
     LayoutDialogTreeBinding mBinding;
+    @Inject
+    NavController mNavController;
 
     private TreeViewModel mModel;
     private TreeNode mNodeRoot;
@@ -47,6 +50,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     private long mCurrentPositionId;
     private long[] mSelectedFolderIds, mSelectedSizeIds, mFolderPathIds;
     private long mCategoryId;
+    private int mParentIndex;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         mBinding.setLifecycleOwner(this);
         mBinding.setModel(mModel);
 
+        mParentIndex = args.getParentIndex();
         mSelectedFolderIds = args.getSelectedFolderIds();
         mSelectedSizeIds = args.getSelectedSizeIds();
         mCurrentPositionId = args.getCurrentPositionId();
@@ -138,7 +143,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
                         .setViewHolder(mTreeNodeProvider.makeFolderHolder());
                 mTreeView.addNode(clickedNode, addedFolderNode);
 
-                BaseTreeHolder<?> viewHolder = (BaseTreeHolder<?>) clickedNode.getViewHolder();
+                BaseTreeHolder<?, ?> viewHolder = (BaseTreeHolder<?, ?>) clickedNode.getViewHolder();
                 addContentSize(viewHolder);
                 viewHolder.showArrowIcon();
                 mModel.getAddedFolderTupleLive().setValue(null);
@@ -152,7 +157,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
         else return mTreeNodeProvider.getMargin();
     }
 
-    private void addContentSize(BaseTreeHolder<?> viewHolder) {
+    private void addContentSize(BaseTreeHolder<?, ?> viewHolder) {
         TextView tvContentSize = viewHolder.getContentSize();
         String originContentSize = tvContentSize.getText().toString();
         int addedContentSize = Integer.parseInt(originContentSize) + 1;
@@ -191,7 +196,7 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
 
     @Override
     public void onClick(@NotNull TreeNode node, Object value) {
-        BaseTreeHolder<?> viewHolder = (BaseTreeHolder<?>) node.getViewHolder();
+        BaseTreeHolder<?, ?> viewHolder = (BaseTreeHolder<?, ?>) node.getViewHolder();
         if (viewHolder.isClickable()) {
             TreeViewDialogDirections.ToMoveFolderAndSizeDialog action =
                     TreeViewDialogDirections.toMoveFolderAndSizeDialog(
@@ -214,5 +219,10 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     public void onDestroyView() {
         super.onDestroyView();
         mBinding = null;
+    }
+
+    public void navigateAddCategoryDialog() {
+        CommonUtil.navigate(mNavController, R.id.treeViewDialog,
+                TreeViewDialogDirections.toAddCategoryDialog(mParentIndex));
     }
 }
