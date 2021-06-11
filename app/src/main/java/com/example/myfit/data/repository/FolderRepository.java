@@ -11,7 +11,7 @@ import com.example.myfit.data.model.model.Folder;
 import com.example.myfit.data.repository.dao.FolderDao;
 import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.tuple.tuple.FolderTuple;
-import com.example.myfit.di.Qualifiers;
+import com.example.myfit.util.constant.SharedPreferenceKey;
 import com.example.myfit.util.constant.Sort;
 
 import java.util.LinkedList;
@@ -21,8 +21,6 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
-
-import static com.example.myfit.di.SharedPreferencesModule.FOLDER_TOGGLE;
 
 @ViewModelScoped
 public class FolderRepository extends BaseRepository<FolderTuple> {
@@ -34,12 +32,10 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     private MutableLiveData<FolderTuple> mAddedTupleLive;
 
     @Inject
-    public FolderRepository(@ApplicationContext Context context,
-                            @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
-                            @Qualifiers.FolderTogglePreference SharedPreferences folderTogglePreference) {
+    public FolderRepository(@ApplicationContext Context context) {
         this.mFolderDao = AppDataBase.getsInstance(context).folderDao();
-        this.mListSortPreference = listSortPreference;
-        this.mFolderTogglePreference = folderTogglePreference;
+        this.mListSortPreference = context.getSharedPreferences(SharedPreferenceKey.SORT_LIST.getValue(), Context.MODE_PRIVATE);
+        this.mFolderTogglePreference = context.getSharedPreferences(SharedPreferenceKey.FOLDER_TOGGLE.getValue(), Context.MODE_PRIVATE);
     }
 
     //to list
@@ -160,8 +156,8 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     }
 
     public void folderToggleChange() {
-        boolean folderToggle = mFolderTogglePreference.getBoolean(FOLDER_TOGGLE, false);
-        mFolderTogglePreference.edit().putBoolean(FOLDER_TOGGLE, !folderToggle).apply();
+        boolean folderToggle = mFolderTogglePreference.getBoolean(SharedPreferenceKey.FOLDER_TOGGLE.getValue(), false);
+        mFolderTogglePreference.edit().putBoolean(SharedPreferenceKey.FOLDER_TOGGLE.getValue() , !folderToggle).apply();
     }
 }
 

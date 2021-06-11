@@ -11,7 +11,7 @@ import com.example.myfit.data.model.model.Size;
 import com.example.myfit.data.repository.dao.SizeDao;
 import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
-import com.example.myfit.di.Qualifiers;
+import com.example.myfit.util.constant.SharedPreferenceKey;
 import com.example.myfit.util.constant.ViewType;
 
 import java.util.List;
@@ -22,8 +22,6 @@ import javax.inject.Inject;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
 
-import static com.example.myfit.di.SharedPreferencesModule.VIEW_TYPE;
-
 @ViewModelScoped
 public class SizeRepository extends BaseRepository<SizeTuple> {
     private final SizeDao mSizeDao;
@@ -31,12 +29,10 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     private LiveData<List<List<SizeTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
-    public SizeRepository(@ApplicationContext Context context,
-                          @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
-                          @Qualifiers.ViewTypePreference SharedPreferences viewTypePreference) {
+    public SizeRepository(@ApplicationContext Context context) {
         this.mSizeDao = AppDataBase.getsInstance(context).sizeDao();
-        this.mListSortPreference = listSortPreference;
-        this.mViewTypePreference = viewTypePreference;
+        this.mListSortPreference = context.getSharedPreferences(SharedPreferenceKey.SORT_LIST.getValue(), Context.MODE_PRIVATE);
+        this.mViewTypePreference = context.getSharedPreferences(SharedPreferenceKey.VIEW_TYPE.getValue(), Context.MODE_PRIVATE);
     }
 
     //to list
@@ -121,8 +117,9 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
 
     public void changeViewType() {
         if (getViewType() == ViewType.LIST_VIEW)
-            mViewTypePreference.edit().putInt(VIEW_TYPE, ViewType.GRID_VIEW.getValue()).apply();
-        else mViewTypePreference.edit().putInt(VIEW_TYPE, ViewType.LIST_VIEW.getValue()).apply();
+            mViewTypePreference.edit().putInt(SharedPreferenceKey.VIEW_TYPE.getValue(), ViewType.GRID_VIEW.getValue()).apply();
+        else
+            mViewTypePreference.edit().putInt(SharedPreferenceKey.VIEW_TYPE.getValue(), ViewType.LIST_VIEW.getValue()).apply();
     }
 
     public ViewType getViewType() {
@@ -130,7 +127,7 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     }
 
     private int getViewTypeInt() {
-        return mViewTypePreference.getInt(VIEW_TYPE, ViewType.LIST_VIEW.getValue());
+        return mViewTypePreference.getInt(SharedPreferenceKey.VIEW_TYPE.getValue(), ViewType.LIST_VIEW.getValue());
     }
 
     //from listFragment(drag drop)
