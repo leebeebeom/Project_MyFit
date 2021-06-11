@@ -18,6 +18,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+@ViewModelScoped
 public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private final CategoryDao mCategoryDao;
     private SharedPreferences mMainSortPreference;
@@ -27,9 +32,9 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private MutableLiveData<CategoryTuple[]> mAddedTuplesLive;
 
     @Inject
-    public CategoryRepository(CategoryDao categoryDao,
+    public CategoryRepository(@ApplicationContext Context context,
                               @Qualifiers.MainSortPreference SharedPreferences mainSortPreference) {
-        this.mCategoryDao = categoryDao;
+        this.mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
         this.mMainSortPreference = mainSortPreference;
     }
 
@@ -144,7 +149,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     //from addCategory Dialog
     public void isExistingName(String name, int parentIndex) {
         new Thread(() -> {
-            boolean isExistName = mCategoryDao.isExistingName(name, parentIndex);
+            boolean isExistName = mCategoryDao.isExistingName(name.trim(), parentIndex);
             if (mExistingNameLive != null)
                 mExistingNameLive.postValue(isExistName);
         }).start();

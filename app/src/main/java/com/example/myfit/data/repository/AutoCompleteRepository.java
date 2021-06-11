@@ -1,8 +1,11 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.repository.dao.AutoCompleteDao;
 
 import java.util.LinkedHashSet;
@@ -10,13 +13,17 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+@ViewModelScoped
 public class AutoCompleteRepository {
     private final AutoCompleteDao mAutoCompleteDao;
     private LiveData<Set<String>> mWordsLive, mDeletedWordsLive;
 
     @Inject
-    public AutoCompleteRepository(AutoCompleteDao autoCompleteDao) {
-        mAutoCompleteDao = autoCompleteDao;
+    public AutoCompleteRepository(@ApplicationContext Context context) {
+        mAutoCompleteDao = AppDataBase.getsInstance(context).autoCompleteDao();
     }
 
     public LiveData<Set<String>> getAutoCompleteWordsLive() {

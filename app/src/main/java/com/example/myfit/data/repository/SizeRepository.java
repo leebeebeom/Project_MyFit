@@ -1,10 +1,12 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.model.Size;
 import com.example.myfit.data.repository.dao.SizeDao;
 import com.example.myfit.data.tuple.ParentIdTuple;
@@ -17,18 +19,22 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
 import static com.example.myfit.di.SharedPreferencesModule.VIEW_TYPE;
 
+@ViewModelScoped
 public class SizeRepository extends BaseRepository<SizeTuple> {
     private final SizeDao mSizeDao;
     private final SharedPreferences mListSortPreference, mViewTypePreference;
     private LiveData<List<List<SizeTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
-    public SizeRepository(SizeDao sizeDao,
+    public SizeRepository(@ApplicationContext Context context,
                           @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
                           @Qualifiers.ViewTypePreference SharedPreferences viewTypePreference) {
-        this.mSizeDao = sizeDao;
+        this.mSizeDao = AppDataBase.getsInstance(context).sizeDao();
         this.mListSortPreference = listSortPreference;
         this.mViewTypePreference = viewTypePreference;
     }

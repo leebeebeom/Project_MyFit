@@ -1,10 +1,12 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.model.Folder;
 import com.example.myfit.data.repository.dao.FolderDao;
 import com.example.myfit.data.tuple.ParentIdTuple;
@@ -17,8 +19,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
 import static com.example.myfit.di.SharedPreferencesModule.FOLDER_TOGGLE;
 
+@ViewModelScoped
 public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;
     private final SharedPreferences mListSortPreference;
@@ -28,10 +34,10 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     private MutableLiveData<FolderTuple> mAddedTupleLive;
 
     @Inject
-    public FolderRepository(FolderDao folderDao,
+    public FolderRepository(@ApplicationContext Context context,
                             @Qualifiers.ListSortPreference SharedPreferences listSortPreference,
                             @Qualifiers.FolderTogglePreference SharedPreferences folderTogglePreference) {
-        this.mFolderDao = folderDao;
+        this.mFolderDao = AppDataBase.getsInstance(context).folderDao();
         this.mListSortPreference = listSortPreference;
         this.mFolderTogglePreference = folderTogglePreference;
     }
@@ -138,7 +144,7 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     //from addFolder dialog
     public void isExistingName(String name, long parentId) {
         new Thread(() -> {
-            boolean isExistName = mFolderDao.isExistingName(name, parentId);
+            boolean isExistName = mFolderDao.isExistingName(name.trim(), parentId);
             if (mExistingNameLive != null) mExistingNameLive.postValue(isExistName);
         }).start();
     }

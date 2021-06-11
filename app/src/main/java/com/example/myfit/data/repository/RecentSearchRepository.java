@@ -1,7 +1,10 @@
 package com.example.myfit.data.repository;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 
+import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.repository.dao.RecentSearchDao;
 import com.example.myfit.data.tuple.tuple.RecentSearchTuple;
 import com.example.myfit.util.constant.RecentSearchType;
@@ -10,13 +13,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.android.scopes.ViewModelScoped;
+
+@ViewModelScoped
 public class RecentSearchRepository {
     private final RecentSearchDao mRecentSearchDao;
     private LiveData<List<RecentSearchTuple>> mSearchLive, mRecycleBinLive, mDailyLookLive, mMWishListLive;
 
     @Inject
-    public RecentSearchRepository(RecentSearchDao recentSearchDao) {
-        this.mRecentSearchDao = recentSearchDao;
+    public RecentSearchRepository(@ApplicationContext Context context) {
+        this.mRecentSearchDao = AppDataBase.getsInstance(context).recentSearchDao();
     }
 
     public LiveData<List<RecentSearchTuple>> getLiveByType(RecentSearchType type) {
