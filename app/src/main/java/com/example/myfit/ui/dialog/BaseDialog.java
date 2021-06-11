@@ -21,17 +21,15 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 @AndroidEntryPoint
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseDialog extends DialogFragment {
     public static final String ACTION_MODE_OFF = "action mode off";
     @Inject
     protected DialogBuilder mDialogBuilder;
     @Inject
     protected NavController mNavController;
+    private MainGraphViewModel mMainGraphViewModel;
 
     @NonNull
     @NotNull
@@ -45,9 +43,15 @@ public abstract class BaseDialog extends DialogFragment {
     protected abstract View.OnClickListener getPositiveClickListener();
 
     protected void setBackStackLive() {
-        NavBackStackEntry mainBackStack = getMainBackStack();
-        MainGraphViewModel mainGraphViewModel = new ViewModelProvider(mainBackStack, HiltViewModelFactory.create(requireContext(), mainBackStack)).get(MainGraphViewModel.class);
-        mainGraphViewModel.setBackStackEntryLive(getBackStack());
+        getMainGraphViewModel().setBackStackEntryLive(getBackStack());
+    }
+
+    protected MainGraphViewModel getMainGraphViewModel() {
+        if (mMainGraphViewModel == null) {
+            NavBackStackEntry mainBackStack = getMainBackStack();
+            mMainGraphViewModel = new ViewModelProvider(mainBackStack, HiltViewModelFactory.create(requireContext(), mainBackStack)).get(MainGraphViewModel.class);
+        }
+        return mMainGraphViewModel;
     }
 
     protected NavBackStackEntry getMainBackStack() {
