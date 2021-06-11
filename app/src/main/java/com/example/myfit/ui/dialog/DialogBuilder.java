@@ -61,12 +61,12 @@ public class DialogBuilder {
     }
 
     public DialogBuilder setPositiveEnabledByInputText(CharSequence inputText, String oldName) {
-        getPositiveButton().setEnabled(isNotInputTextEmpty(inputText) && !inputText.equals(oldName));
+        getPositiveButton().setEnabled(isNotInputTextEmpty(inputText) && !inputText.toString().equals(oldName));
         return this;
     }
 
     private boolean isNotInputTextEmpty(CharSequence inputText) {
-        return TextUtils.isEmpty(inputText);
+        return !TextUtils.isEmpty(inputText.toString().trim());
     }
 
     public DialogBuilder setPositiveEnabledByChangedText(@NotNull TextInputEditText editText) {
