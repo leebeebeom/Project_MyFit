@@ -20,9 +20,4 @@ public class Qualifiers {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface SizeItemTouchHelperGrid {
     }
-
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface NavigationTextViewSize {
-    }
 }
