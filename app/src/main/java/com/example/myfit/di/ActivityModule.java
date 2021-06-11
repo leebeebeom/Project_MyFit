@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 
-import androidx.navigation.ui.AppBarConfiguration;
-
 import com.example.myfit.R;
 import com.example.myfit.databinding.ActivityMainBinding;
 import com.example.myfit.util.adapter.AutoCompleteAdapter;
@@ -25,12 +23,6 @@ public class ActivityModule {
     @Provides
     public static ActivityMainBinding provideActivityMainBinding(@ActivityContext Context context) {
         return ActivityMainBinding.inflate(LayoutInflater.from(context));
-    }
-
-    @Provides
-    public static AppBarConfiguration provideAppBarConfiguration() {
-        return new AppBarConfiguration.Builder(R.id.mainFragment, R.id.dailyLookFragment,
-                R.id.wishListFragment, R.id.settingFragment).build();
     }
 
     @Qualifiers.ColorPrimary
