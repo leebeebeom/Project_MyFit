@@ -9,19 +9,17 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.ui.dialog.tree.TreeViewDialogDirections;
 import com.example.myfit.ui.dialog.tree.holder.value.BaseValue;
 import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Accessors(prefix = "m")
-public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.BaseNodeViewHolder<T> {
+public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValue<U>> extends TreeNode.BaseNodeViewHolder<T> {
     protected final NavController mNavController;
     @Getter
     private boolean mClickable = true;
@@ -47,7 +45,7 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
 
     public void navigateAddFolderDialog() {
         CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                TreeViewDialogDirections.toAddFolderDialog(mValue.getTupleId(), mValue.getParentIndex()));
+                TreeViewDialogDirections.toAddFolderDialog(mValue.getTuple().getId(), mValue.getTuple().getParentIndex()));
     }
 
     public void setUnClickable() {
@@ -70,11 +68,11 @@ public abstract class BaseTreeHolder<T extends BaseValue<?>> extends TreeNode.Ba
     }
 
     public long getTupleId() {
-        return mValue.getTupleId();
+        return mValue.getTuple().getId();
     }
 
-    public BaseTreeHolder<?> getParent() {
-        return (BaseTreeHolder<?>) mNode.getParent().getViewHolder();
+    public BaseTreeHolder<?, ?> getParent() {
+        return (BaseTreeHolder<?, ?>) mNode.getParent().getViewHolder();
     }
 
     public void showCurrentPosition() {

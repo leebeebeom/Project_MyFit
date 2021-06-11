@@ -9,10 +9,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemTreeCategoryBinding;
 import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
 
-public class TreeCategoryHolder extends BaseTreeHolder<CategoryValue> {
+public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryValue> {
     private ItemTreeCategoryBinding mBinding;
 
     public TreeCategoryHolder(Context context, NavController navController) {
