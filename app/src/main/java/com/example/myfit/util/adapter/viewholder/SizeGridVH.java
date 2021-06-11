@@ -2,6 +2,7 @@ package com.example.myfit.util.adapter.viewholder;
 
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemVhSizeGridBinding;
+import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -17,13 +18,13 @@ import lombok.experimental.Accessors;
 public class SizeGridVH extends BaseVH.BaseSizeVH {
     private final ItemVhSizeGridBinding mBinding;
 
-    public SizeGridVH(@NotNull ItemVhSizeGridBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
+    public SizeGridVH(@NotNull ItemVhSizeGridBinding binding, BaseVHListener.SizeVHListener listener, SizeLiveSet<SizeTuple> selectedItems) {
         super(binding, listener, selectedItems);
         this.mBinding = binding;
     }
 
     @Override
-    protected void bind() {
+    public void bind() {
         mBinding.setSizeGridVH(this);
     }
 

@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemVhSizeListBinding;
+import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 public class SizeListVH extends BaseVH.BaseSizeVH {
     private final ItemVhSizeListBinding mBinding;
 
-    public SizeListVH(@NotNull ItemVhSizeListBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
+    public SizeListVH(@NotNull ItemVhSizeListBinding binding, BaseVHListener.SizeVHListener listener, SizeLiveSet<SizeTuple> selectedItems) {
         super(binding, listener, selectedItems);
         this.mBinding = binding;
     }
@@ -26,13 +27,13 @@ public class SizeListVH extends BaseVH.BaseSizeVH {
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return mBinding.cb;
+        return mBinding.cb.cb;
     }
 
     @Override
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
-        mBinding.cb.setVisibility(View.INVISIBLE);
+        mBinding.cb.cb.setVisibility(View.INVISIBLE);
         mBinding.nameLayout.layout.setAlpha(0.7f);
         mBinding.iv.setAlpha(0.5f);
     }
@@ -40,7 +41,7 @@ public class SizeListVH extends BaseVH.BaseSizeVH {
     @Override
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 0);
-        mBinding.cb.setVisibility(View.VISIBLE);
+        mBinding.cb.cb.setVisibility(View.VISIBLE);
         mBinding.nameLayout.layout.setAlpha(1);
         mBinding.iv.setAlpha(1f);
     }

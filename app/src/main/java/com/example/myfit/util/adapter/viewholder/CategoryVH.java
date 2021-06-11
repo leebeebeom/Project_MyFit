@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemVhCategoryBinding;
+import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -14,26 +15,26 @@ import java.util.Set;
 public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     private final ItemVhCategoryBinding mBinding;
 
-    public CategoryVH(@NotNull ItemVhCategoryBinding binding, BaseVHListener listener, Set<CategoryTuple> selectedItems) {
+    public CategoryVH(@NotNull ItemVhCategoryBinding binding, BaseVHListener listener, SizeLiveSet<CategoryTuple> selectedItems) {
         super(binding, listener, selectedItems);
         binding.cardView.dotIcon.setVisibility(View.VISIBLE);
         this.mBinding = binding;
     }
 
     @Override
-    protected void bind() {
+    public void bind() {
         mBinding.setCategoryVH(this);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return mBinding.cb;
+        return mBinding.cb.cb;
     }
 
     @Override
     protected void setDraggingView() {
         setItemViewTranslationZ(itemView, 10);
-        mBinding.cb.setVisibility(View.INVISIBLE);
+        mBinding.cb.cb.setVisibility(View.INVISIBLE);
         mBinding.cardView.tvName.setAlpha(0.5f);
         mBinding.cardView.tvContentSize.setAlpha(0.5f);
     }
@@ -41,7 +42,7 @@ public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     @Override
     protected void setDropView() {
         setItemViewTranslationZ(itemView, 10);
-        mBinding.cb.setVisibility(View.VISIBLE);
+        mBinding.cb.cb.setVisibility(View.VISIBLE);
         mBinding.cardView.tvName.setAlpha(0.8f);
         mBinding.cardView.tvContentSize.setAlpha(0.8f);
     }

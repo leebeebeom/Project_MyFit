@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemVhFolderListBinding;
+import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -12,19 +13,19 @@ import java.util.Set;
 public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemVhFolderListBinding mBinding;
 
-    public FolderListVH(ItemVhFolderListBinding binding, BaseVHListener listener, Set<FolderTuple> selectedItems) {
+    public FolderListVH(ItemVhFolderListBinding binding, BaseVHListener listener, SizeLiveSet<FolderTuple> selectedItems) {
         super(binding, listener, selectedItems);
         binding.cardView.folderIcon.setVisibility(View.VISIBLE);
         this.mBinding = binding;
     }
 
-    protected void bind() {
+    public void bind() {
         mBinding.setFolderListVH(this);
     }
 
     @Override
     public MaterialCheckBox getCheckBox() {
-        return mBinding.cb;
+        return mBinding.cb.cb;
     }
 
     @Override
