@@ -8,20 +8,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.myfit.R;
-import com.example.myfit.data.repository.RecentSearchRepository;
 import com.example.myfit.util.constant.RecentSearchType;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class DeleteAllRecentSearchDialog extends BaseDialog {
-    @Inject
-    RecentSearchRepository mRecentSearchRepository;
     private int type;
 
     @Override
@@ -43,7 +35,7 @@ public class DeleteAllRecentSearchDialog extends BaseDialog {
     @Override
     protected View.OnClickListener getPositiveClickListener() {
         return v -> {
-            mRecentSearchRepository.deleteAll(RecentSearchType.values()[type]);
+            getMainGraphViewModel().recentSearchRepositoryDeleteAll(RecentSearchType.values()[type]);
             dismiss();
         };
     }
