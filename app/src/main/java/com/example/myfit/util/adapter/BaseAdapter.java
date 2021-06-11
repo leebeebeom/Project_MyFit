@@ -15,7 +15,6 @@ import com.example.myfit.util.constant.Sort;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +29,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     private L mListener;
     @Getter
     private List<T> mNewOrderList;
-    private final Set<T> mSelectedItems;
+    private final SizeLiveSet<T> mSelectedItems;
     @Getter
     private int mActionModeState;
     @Getter
@@ -59,6 +58,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
 
     public void setItems(Sort sort, List<T> list) {
         submitList(list);
+        if (mSort != sort) notifyDataSetChanged();
         this.mSort = sort;
         this.mNewOrderList = list;
     }
@@ -70,11 +70,12 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
         return getViewHolder(parent, mListener, mSelectedItems);
     }
 
-    protected abstract VH getViewHolder(@NotNull ViewGroup parent, L listener, Set<T> selectedItemIds);
+    protected abstract VH getViewHolder(@NotNull ViewGroup parent, L listener, SizeLiveSet<T> selectedItems);
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull VH holder, int position) {
         holder.setTuple(getItem(position));
+        holder.bind();
         holder.setAdapter(this);
 
         if (mActionModeState == ACTION_MODE_ON)
@@ -82,7 +83,6 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
         else if (mActionModeState == ACTION_MODE_OFF) {
             holder.getCheckBox().setChecked(false);
             if (!mSelectedItems.isEmpty()) mSelectedItems.clear();
-            if (getItemCount() - 1 == position) mActionModeState = 0;
         }
     }
 
