@@ -23,12 +23,12 @@ public class AddFolderViewModel extends BaseEditTextViewModel.BaseAddViewModel {
     public void queryIsExistingName(long parentId, int parentIndex) {
         this.mParentId = parentId;
         this.mParentIndex = parentIndex;
-        mFolderRepository.isExistingName(mName, parentId);
+        mFolderRepository.isExistingName(mName.trim(), parentId);
     }
 
     @Override
     public void insert() {
-        mFolderRepository.insert(mName, mParentId, mParentIndex);
+        mFolderRepository.insert(mName.trim(), mParentId, mParentIndex);
     }
 
     @Override
