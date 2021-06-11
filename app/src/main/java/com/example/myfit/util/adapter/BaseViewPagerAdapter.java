@@ -7,8 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemRecyclerViewBinding;
 import com.example.myfit.ui.main.main.adapter.CategoryAdapter;
+import com.example.myfit.util.SizeLiveSet;
+import com.example.myfit.util.adapter.dragcallback.DragCallBackList;
 import com.example.myfit.util.adapter.viewholder.ViewPagerVH;
 import com.example.myfit.util.dragselect.DragSelect;
 
@@ -16,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.scopes.FragmentScoped;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -25,6 +27,7 @@ import lombok.experimental.Accessors;
 public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends RecyclerView.Adapter<ViewPagerVH> {
     @Setter
     private ViewPagerVH.AutoScrollListener mListener;
+    @Getter
     private final T[] mAdapters;
     @Getter
     private final DragSelect[] mDragSelectListeners;
@@ -36,7 +39,12 @@ public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends Recycl
                                 ItemTouchHelper[] itemTouchHelpers) {
         this.mAdapters = adapters;
         this.mDragSelectListeners = dragSelectListeners;
-        this.mItemTouchHelpers = itemTouchHelpers;
+        this.mItemTouchHelpers = new ItemTouchHelper[adapters.length];
+
+        int count = mAdapters.length;
+        for (int i = 0; i < count; i++)
+            mItemTouchHelpers[i] = new ItemTouchHelper(new DragCallBackList(adapters[i]));
+
         setHasStableIds(true);
     }
 
@@ -76,14 +84,16 @@ public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends Recycl
         return mAdapters.length;
     }
 
-    @FragmentScoped
     public static class MainViewPagerAdapter extends BaseViewPagerAdapter<CategoryAdapter> {
 
         @Inject
-        public MainViewPagerAdapter(CategoryAdapter[] adapters,
-                                    DragSelect[] dragSelectListeners,
-                                    ItemTouchHelper[] itemTouchHelpers) {
-            super(adapters, dragSelectListeners, itemTouchHelpers);
+        public MainViewPagerAdapter(SizeLiveSet<CategoryTuple> selectedCategoryTuples) {
+            super(new CategoryAdapter[]{new CategoryAdapter(selectedCategoryTuples),
+                            new CategoryAdapter(selectedCategoryTuples),
+                            new CategoryAdapter(selectedCategoryTuples),
+                            new CategoryAdapter(selectedCategoryTuples)},
+                    new DragSelect[]{new DragSelect(), new DragSelect(), new DragSelect(), new DragSelect()},
+                    new ItemTouchHelper[0]);
         }
     }
 }
