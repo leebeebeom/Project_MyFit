@@ -28,7 +28,7 @@ public class SortUtil {
             tuples.sort((o1, o2) -> Long.compare(o1.getDeletedTime(), o2.getDeletedTime()));
     }
 
-    public static void orderSizeTuples(Sort sort, List<SizeTuple> sizeTuples) {
+    public static void sortSizeTuples(Sort sort, List<SizeTuple> sizeTuples) {
         if (sort == Sort.SORT_CUSTOM)
             sizeTuples.sort((o1, o2) -> Integer.compare(o1.getSortNumber(), o2.getSortNumber()));
         else if (sort == Sort.SORT_CREATE)
