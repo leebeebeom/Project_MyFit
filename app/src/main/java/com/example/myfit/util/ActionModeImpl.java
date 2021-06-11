@@ -1,5 +1,7 @@
 package com.example.myfit.util;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,19 +18,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ActivityContext;
 import dagger.hilt.android.scopes.FragmentScoped;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ActionModeImpl implements ActionMode.Callback {
     public static ActionMode sActionMode = null;
     public static boolean sActionModeOn;
@@ -39,9 +38,13 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
     @Getter
     private final TitleActionModeBinding mBinding;
     @Getter
-    private final LinkedList<MenuItem> mMenuItems = new LinkedList<>();
+    private MenuItem[] mMenuItems;
     @Setter
     protected ActionModeListener mListener;
+
+    public ActionModeImpl(Context context) {
+        mBinding = TitleActionModeBinding.inflate(LayoutInflater.from(context));
+    }
 
     @Override
     public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
@@ -62,8 +65,10 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, @NotNull Menu menu) {
-        int count = menu.size();
-        for (int i = 0; i < count; i++) mMenuItems.add(menu.getItem(i));
+        mMenuItems = new MenuItem[menu.size()];
+        int count = mMenuItems.length;
+        for (int i = 0; i < count; i++)
+            mMenuItems[i] = menu.getItem(i);
         return true;
     }
 
@@ -105,8 +110,8 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         private ViewPagerActionModeListener mListener;
 
         @Inject
-        protected MainActionModeCallBack(TitleActionModeBinding binding) {
-            super(binding);
+        protected MainActionModeCallBack(@ActivityContext Context context) {
+            super(context);
         }
 
         @Override
@@ -129,15 +134,15 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             super.onDestroyActionMode(mode);
-            this.mListener.setViewPagerEnable(false);
+            this.mListener.setViewPagerEnable(true);
         }
     }
 
     @FragmentScoped
     public static class ListActionModeCallBack extends ActionModeImpl {
         @Inject
-        public ListActionModeCallBack(TitleActionModeBinding binding) {
-            super(binding);
+        public ListActionModeCallBack(@ActivityContext Context context) {
+            super(context);
         }
 
         @Override
