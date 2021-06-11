@@ -8,16 +8,6 @@ import javax.inject.Qualifier;
 public class Qualifiers {
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface ColorControl {
-    }
-
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ColorPrimary {
-    }
-
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
     public @interface FolderItemTouchHelper {
     }
 
