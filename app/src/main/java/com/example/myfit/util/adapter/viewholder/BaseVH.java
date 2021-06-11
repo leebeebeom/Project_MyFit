@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
+import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -23,12 +24,12 @@ import static com.example.myfit.util.ActionModeImpl.sActionMode;
 public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> extends RecyclerView.ViewHolder {
     public static boolean sDragging = false;
     private final L mListener;
-    private final Set<T> mSelectedItems;
+    private final SizeLiveSet<T> mSelectedItems;
     @Getter
     protected T mTuple;
 
     @SuppressLint("ClickableViewAccessibility")
-    public BaseVH(ViewDataBinding binding, L listener, Set<T> selectedItems) {
+    public BaseVH(ViewDataBinding binding, L listener, SizeLiveSet<T> selectedItems) {
         super(binding.getRoot());
         this.mListener = listener;
         this.mSelectedItems = selectedItems;
@@ -38,7 +39,7 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
         this.mTuple = tuple;
     }
 
-    protected abstract void bind();
+    public abstract void bind();
 
     public void itemViewClick() {
         if (sActionMode != null) {
@@ -48,20 +49,21 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
         } else mListener.itemViewClick(mTuple);
     }
 
-    private void removeItem(Set<T> selectedItemSet) {
+    private void removeItem(SizeLiveSet<T> selectedItemSet) {
         getCheckBox().setChecked(false);
         selectedItemSet.remove(mTuple);
     }
 
-    private void addItem(Set<T> selectedItemSet) {
+    private void addItem(SizeLiveSet<T> selectedItemSet) {
         getCheckBox().setChecked(true);
         selectedItemSet.add(mTuple);
     }
 
     public abstract MaterialCheckBox getCheckBox();
 
-    public void itemViewLongClick() {
+    public boolean itemViewLongClick() {
         mListener.itemViewLongClick(getLayoutPosition(), mTuple);
+        return false;
     }
 
     public boolean dragStart(MotionEvent event) {
@@ -96,7 +98,7 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
         private final BaseVHListener.SizeVHListener mListener;
 
-        public BaseSizeVH(ViewDataBinding binding, BaseVHListener.SizeVHListener listener, Set<SizeTuple> selectedItems) {
+        public BaseSizeVH(ViewDataBinding binding, BaseVHListener.SizeVHListener listener, SizeLiveSet<SizeTuple> selectedItems) {
             super(binding, listener, selectedItems);
             this.mListener = listener;
         }
