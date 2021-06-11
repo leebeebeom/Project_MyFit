@@ -13,6 +13,8 @@ import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.util.constant.SharedPreferenceKey;
 import com.example.myfit.util.constant.Sort;
+import com.example.myfit.util.sharedpreferencelive.BooleanSharedPreferenceLiveData;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,12 +23,19 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 @ViewModelScoped
+@Accessors(prefix = "m")
 public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;
     private final SharedPreferences mListSortPreference;
     private final SharedPreferences mFolderTogglePreference;
+    @Getter
+    private final IntegerSharedPreferenceLiveData mListSortPreferenceLive;
+    @Getter
+    private final BooleanSharedPreferenceLiveData mFolderTogglePreferenceLive;
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<FolderTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
     private MutableLiveData<FolderTuple> mAddedTupleLive;
@@ -35,7 +44,9 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     public FolderRepository(@ApplicationContext Context context) {
         this.mFolderDao = AppDataBase.getsInstance(context).folderDao();
         this.mListSortPreference = context.getSharedPreferences(SharedPreferenceKey.SORT_LIST.getValue(), Context.MODE_PRIVATE);
+        this.mListSortPreferenceLive = new IntegerSharedPreferenceLiveData(mListSortPreference, SharedPreferenceKey.SORT.getValue(), Sort.SORT_CUSTOM.getValue());
         this.mFolderTogglePreference = context.getSharedPreferences(SharedPreferenceKey.FOLDER_TOGGLE.getValue(), Context.MODE_PRIVATE);
+        this.mFolderTogglePreferenceLive = new BooleanSharedPreferenceLiveData(mFolderTogglePreference, SharedPreferenceKey.FOLDER_TOGGLE.getValue(), false);
     }
 
     //to list

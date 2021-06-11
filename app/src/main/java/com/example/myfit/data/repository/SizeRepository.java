@@ -13,6 +13,7 @@ import com.example.myfit.data.tuple.ParentIdTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.util.constant.SharedPreferenceKey;
 import com.example.myfit.util.constant.ViewType;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import java.util.List;
 import java.util.Set;
@@ -21,11 +22,16 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 @ViewModelScoped
+@Accessors(prefix = "m")
 public class SizeRepository extends BaseRepository<SizeTuple> {
     private final SizeDao mSizeDao;
     private final SharedPreferences mListSortPreference, mViewTypePreference;
+    @Getter
+    private final IntegerSharedPreferenceLiveData mViewTypePreferenceLive;
     private LiveData<List<List<SizeTuple>>> mDeletedClassifiedTuplesLive, mSearchTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
@@ -33,6 +39,7 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
         this.mSizeDao = AppDataBase.getsInstance(context).sizeDao();
         this.mListSortPreference = context.getSharedPreferences(SharedPreferenceKey.SORT_LIST.getValue(), Context.MODE_PRIVATE);
         this.mViewTypePreference = context.getSharedPreferences(SharedPreferenceKey.VIEW_TYPE.getValue(), Context.MODE_PRIVATE);
+        this.mViewTypePreferenceLive = new IntegerSharedPreferenceLiveData(mViewTypePreference, SharedPreferenceKey.VIEW_TYPE.getValue(), ViewType.LIST_VIEW.getValue());
     }
 
     //to list

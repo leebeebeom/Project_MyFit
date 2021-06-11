@@ -12,6 +12,7 @@ import com.example.myfit.data.repository.dao.CategoryDao;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.util.constant.SharedPreferenceKey;
 import com.example.myfit.util.constant.Sort;
+import com.example.myfit.util.sharedpreferencelive.IntegerSharedPreferenceLiveData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,11 +22,16 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 @ViewModelScoped
+@Accessors(prefix = "m")
 public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private final CategoryDao mCategoryDao;
     private final SharedPreferences mMainSortPreference;
+    @Getter
+    private final IntegerSharedPreferenceLiveData mMainSortPreferenceLive;
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<CategoryTuple>>> mClassifiedTuplesLive, mDeletedClassifiedTuplesLive, mDeletedSearchTuplesLive;
     private MutableLiveData<CategoryTuple> mAddedTupleLive;
@@ -35,6 +41,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     public CategoryRepository(@ApplicationContext Context context) {
         this.mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
         this.mMainSortPreference = context.getSharedPreferences(SharedPreferenceKey.SORT_MAIN.getValue(), Context.MODE_PRIVATE);
+        this.mMainSortPreferenceLive = new IntegerSharedPreferenceLiveData(mMainSortPreference, SharedPreferenceKey.SORT.getValue(), Sort.SORT_CUSTOM.getValue());
     }
 
     //from appDataBase
