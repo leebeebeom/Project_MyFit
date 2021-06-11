@@ -21,8 +21,13 @@ public class AdapterUtil {
     }
 
     private static <T extends BaseTuple> void swapOrderNumber(List<T> list, int i, int i2) {
-        list.get(i).setSortNumber(list.get(i2).getSortNumber());
-        list.get(i2).setSortNumber(list.get(i).getSortNumber());
         Collections.swap(list, i, i2);
+
+        BaseTuple baseTuple1 = list.get(i);
+        BaseTuple baseTuple2 = list.get(i2);
+        int sortNumber1 = baseTuple1.getSortNumber();
+        int sortNumber2 = baseTuple2.getSortNumber();
+        baseTuple1.setSortNumber(sortNumber2);
+        baseTuple2.setSortNumber(sortNumber1);
     }
 }
