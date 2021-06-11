@@ -3,9 +3,7 @@ package com.example.myfit.ui.dialog.tree;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.NavController;
 
-import com.example.myfit.R;
 import com.example.myfit.data.repository.CategoryRepository;
 import com.example.myfit.data.repository.FolderRepository;
 import com.example.myfit.data.repository.SizeRepository;
@@ -35,7 +33,6 @@ public class TreeViewModel extends ViewModel {
     private final MutableLiveData<CategoryTuple> mAddedCategoryTupleLive;
     @Getter
     private final MutableLiveData<FolderTuple> mAddedFolderTupleLive;
-    private final NavController mNavController;
     private LiveData<ParentIdTuple[]> mFolderParentIdTuplesLive;
     private LiveData<ParentIdTuple[]> mSizeParentIdTuplesLive;
     @Getter
@@ -43,11 +40,10 @@ public class TreeViewModel extends ViewModel {
     private int mParentIndex;
 
     @Inject
-    public TreeViewModel(CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository, NavController navController) {
+    public TreeViewModel(CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
         this.mCategoryRepository = categoryRepository;
         this.mFolderRepository = folderRepository;
         this.mSizeRepository = sizeRepository;
-        this.mNavController = navController;
 
         this.mAddedCategoryTupleLive = mCategoryRepository.getAddedTupleLive();
         this.mAddedFolderTupleLive = mFolderRepository.getAddedTupleLive();
@@ -76,10 +72,5 @@ public class TreeViewModel extends ViewModel {
     public void setParentCategory(int parentIndex) {
         this.mParentIndex = parentIndex;
         this.mParentCategory = CommonUtil.getParentCategory(parentIndex);
-    }
-
-    public void navigateAddCategoryDialog() {
-        CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                TreeViewDialogDirections.toAddCategoryDialog(mParentIndex));
     }
 }
