@@ -1,6 +1,7 @@
 package com.example.myfit.ui.dialog.eidttext.edit;
 
 import android.os.Bundle;
+import android.text.Editable;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -11,7 +12,6 @@ import com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEditDialog extends BaseEditTextDialog {
     private String mOldName;
 
@@ -35,7 +35,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
         return mDialogBuilder
                 .makeEditTextDialog(getTitle(), mBinding.getRoot())
                 .setPositiveClickListener(getPositiveClickListener())
-                .setPositiveEnabledByInputText(mBinding.et.getText(), mOldName)
+                .setPositiveEnabledByInputText(getModel().getName(), mOldName)
                 .setPositiveEnabledByChangedText(mBinding.et, mOldName)
                 .setPositiveCallOnClickWhenImeClicked(mBinding.et)
                 .create();
