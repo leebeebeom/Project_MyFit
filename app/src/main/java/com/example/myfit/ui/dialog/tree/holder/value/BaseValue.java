@@ -11,20 +11,4 @@ import lombok.experimental.Accessors;
 public class BaseValue<T extends CategoryTuple> {
     @Getter
     private final T mTuple;
-
-    public String getTupleName() {
-        return mTuple.getName();
-    }
-
-    public long getTupleId() {
-        return mTuple.getId();
-    }
-
-    public int getParentIndex() {
-        return mTuple.getParentIndex();
-    }
-
-    public int getContentsSize() {
-        return mTuple.getContentSize();
-    }
 }
