@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import com.example.myfit.R;
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemTreeFolderBinding;
+import com.example.myfit.databinding.ItemTreePrefixBinding;
 import com.example.myfit.ui.dialog.tree.holder.value.FolderValue;
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -30,9 +31,14 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     }
 
     @Override
-    protected void bind(FolderValue value) {
+    protected void bind() {
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolderHolder(this);
+    }
+
+    @Override
+    public long getTupleId() {
+        return ((FolderValue) getNode().getValue()).getTuple().getId();
     }
 
     @Override
@@ -56,11 +62,6 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     }
 
     @Override
-    protected AppCompatImageView getFolderIcon() {
-        return mBinding.prefix.iconFolder;
-    }
-
-    @Override
     protected TextView getCurrentPosition() {
         return mBinding.postfix.tvCurrentPosition;
     }
@@ -68,6 +69,16 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     @Override
     public TextView getContentSize() {
         return mBinding.postfix.tvContentSize;
+    }
+
+    @Override
+    public FolderTuple getTuple() {
+        return ((FolderValue) getNode().getValue()).getTuple();
+    }
+
+    @Override
+    protected ItemTreePrefixBinding getPrefix() {
+        return mBinding.prefix;
     }
 
     public View createNodeView(TreeNode node, @NotNull FolderValue value) {
@@ -78,12 +89,16 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
     private void addChildNode(@NotNull FolderValue value) {
         int plusMargin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
         mFolderTuples.stream()
-                .filter(folderTuple -> folderTuple.getParentId() == value.getTuple().getId())
+                .filter(folderTuple -> folderTuple.getParentId() == getTupleId())
                 .forEach(folderTuple -> {
                     TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + plusMargin))
                             .setViewHolder(new TreeFolderHolder(context, mFolderTuples, mNavController));
                     mNode.addChild(treeNode);
                 });
+    }
+
+    public int getMargin() {
+        return ((FolderValue) getNode().getValue()).getMargin();
     }
 }
 
