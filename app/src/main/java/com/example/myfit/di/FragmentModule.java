@@ -38,9 +38,4 @@ public class FragmentModule {
                 .setPositiveButton(R.string.dialog_confirm, null)
                 .create();
     }
-
-    @Provides
-    public static TreeNodeProvider provideTreeNodeProvider(@ActivityContext Context context, NavController navController) {
-        return new TreeNodeProvider(context, navController);
-    }
 }
