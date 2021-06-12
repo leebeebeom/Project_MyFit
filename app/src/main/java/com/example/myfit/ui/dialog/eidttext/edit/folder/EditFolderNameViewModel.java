@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class EditFolderNameViewModel extends BaseEditTextViewModel.BaseEditViewModel {
     private final FolderRepository mFolderRepository;
-    private String mName;
     private long mId;
 
     @Inject
