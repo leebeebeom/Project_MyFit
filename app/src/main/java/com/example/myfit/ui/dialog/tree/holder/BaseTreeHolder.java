@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 
 import com.example.myfit.R;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.databinding.ItemTreePrefixBinding;
 import com.example.myfit.ui.dialog.tree.TreeViewDialogDirections;
 import com.example.myfit.ui.dialog.tree.holder.value.BaseValue;
 import com.example.myfit.util.CommonUtil;
@@ -23,10 +24,6 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
     protected final NavController mNavController;
     @Getter
     private boolean mClickable = true;
-    @Getter
-    private T mValue;
-    @Getter
-    protected TreeNode mNode;
 
     public BaseTreeHolder(Context context, NavController navController) {
         super(context);
@@ -35,17 +32,15 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
 
     @Override
     public View createNodeView(TreeNode node, T value) {
-        this.mValue = value;
-        this.mNode = node;
-        bind(value);
+        bind();
         return getBindingRoot();
     }
 
-    protected abstract void bind(T value);
+    protected abstract void bind();
 
     public void navigateAddFolderDialog() {
         CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                TreeViewDialogDirections.toAddFolderDialog(mValue.getTuple().getId(), mValue.getTuple().getParentIndex()));
+                TreeViewDialogDirections.toAddFolderDialog(getTuple().getId(), getTuple().getParentIndex()));
     }
 
     public void setUnClickable() {
@@ -63,15 +58,16 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
 
     @Override
     public void toggle(boolean active) {
-        getArrowIcon().setImageResource(active ? R.drawable.icon_triangle_down : R.drawable.icon_triangle_right);
-        getFolderIcon().setImageResource(active ? R.drawable.icon_folder_open : R.drawable.icon_folder);
+        getPrefix().setActive(active);
     }
+
+    public abstract U getTuple();
 
     public long getTupleId() {
-        return mValue.getTuple().getId();
+        return getTuple().getId();
     }
 
-    public BaseTreeHolder<?, ?> getParent() {
+    public BaseTreeHolder<?, ?> getParentViewHolder() {
         return (BaseTreeHolder<?, ?>) mNode.getParent().getViewHolder();
     }
 
@@ -87,9 +83,13 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
 
     protected abstract AppCompatImageView getArrowIcon();
 
-    protected abstract AppCompatImageView getFolderIcon();
-
     protected abstract TextView getCurrentPosition();
 
     public abstract TextView getContentSize();
+
+    public TreeNode getNode() {
+        return mNode;
+    }
+
+    protected abstract ItemTreePrefixBinding getPrefix();
 }
