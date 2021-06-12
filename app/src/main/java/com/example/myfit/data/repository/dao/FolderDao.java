@@ -148,7 +148,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     //from editFolderName dialog
     public void update(long id, String name) {
         FolderTuple tuple = this.getTupleById2(id);
-        tuple.setName(name);
+        tuple.setName(name.trim());
         this.update(tuple);
     }
 

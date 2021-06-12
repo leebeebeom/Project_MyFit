@@ -121,7 +121,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //from addCategory dialog(disposable)
     public long insert(String name, int parentIndex) {
         int sortNumber = this.getLargestSortNumber() + 1;
-        Category category = ModelFactory.makeCategory(name, parentIndex, sortNumber);
+        Category category = ModelFactory.makeCategory(name.trim(), parentIndex, sortNumber);
         return this.insert(category);
     }
 
@@ -155,7 +155,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //from nameEdit dialog
     public void update(long id, String name) {
         CategoryTuple tuple = this.getTupleById2(id);
-        tuple.setName(name);
+        tuple.setName(name.trim());
         this.update(tuple);
     }
 
