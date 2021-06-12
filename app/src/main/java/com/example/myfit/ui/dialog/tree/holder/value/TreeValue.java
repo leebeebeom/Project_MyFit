@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
 @AllArgsConstructor
-public class BaseValue<T extends CategoryTuple> {
+public class TreeValue<T extends CategoryTuple> {
     @Getter
     private final T mTuple;
 }
