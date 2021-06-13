@@ -69,11 +69,4 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple> {
     protected View getBindingRoot() {
         return mBinding.getRoot();
     }
-
-    @Override
-    public void addChild(List<TreeNode> folderNodes) {
-        folderNodes.stream()
-                .filter(folderNode -> ((BaseTreeValue.FolderValue) folderNode.getValue()).getTuple().getParentId() == getTupleId())
-                .forEach(folderNode -> mNode.addChild(folderNode));
-    }
 }

@@ -72,13 +72,6 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple> {
         return mBinding.prefix;
     }
 
-    @Override
-    public void addChild(List<TreeNode> folderNodes) {
-        folderNodes.stream()
-                .filter(folderNode -> ((BaseTreeValue.FolderValue) folderNode.getValue()).getTuple().getParentId() == getTupleId())
-                .forEach(folderNode -> mNode.addChild(folderNode));
-    }
-
     public int getMargin() {
         AtomicInteger parentCount = new AtomicInteger(0);
         parentCount(parentCount, mNode);

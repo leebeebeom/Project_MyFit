@@ -95,5 +95,9 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
 
     protected abstract ItemTreePrefixBinding getPrefix();
 
-    protected abstract void addChild(List<TreeNode> folderNodes);
+    public void addChild(List<TreeNode> folderNodes){
+        folderNodes.stream()
+                .filter(folderNode -> ((BaseTreeValue.FolderValue) folderNode.getValue()).getTuple().getParentId() == getTupleId())
+                .forEach(folderNode -> mNode.addChild(folderNode));
+    }
 }
