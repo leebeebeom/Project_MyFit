@@ -35,7 +35,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<CategoryTuple>>> mClassifiedTuplesLive, mDeletedClassifiedTuplesLive, mDeletedSearchTuplesLive;
     private MutableLiveData<CategoryTuple> mAddedTupleLive;
-    private MutableLiveData<CategoryTuple[]> mAddedTuplesLive;
+    private MutableLiveData<List<CategoryTuple>> mAddedTuplesLive;
 
     @Inject
     public CategoryRepository(@ApplicationContext Context context) {
@@ -103,17 +103,17 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
         }).start();
     }
 
-    public MutableLiveData<CategoryTuple[]> getAddedTuplesLive() {
+    public MutableLiveData<List<CategoryTuple>> getAddedTuplesLive() {
         mAddedTuplesLive = new MutableLiveData<>();
         return mAddedTuplesLive;
     }
 
     //from restore dialog(disposable)
-    public LiveData<Long[]> insertRestoreCategories(@NotNull int[] parentIndex) {
-        MutableLiveData<Long[]> insertIdsLive = new MutableLiveData<>();
+    public LiveData<List<Long>> insertRestoreCategories(@NotNull List<Integer> parentIndex) {
+        MutableLiveData<List<Long>> insertIdsLive = new MutableLiveData<>();
         new Thread(() -> {
-            long[] insertIds = mCategoryDao.insertRestoreCategories(parentIndex);
-            CategoryTuple[] addedTuples = mCategoryDao.getTuplesByIds(insertIds);
+            List<Long> insertIds = mCategoryDao.insertRestoreCategories(parentIndex);
+            List<CategoryTuple> addedTuples = mCategoryDao.getTuplesByIds(insertIds);
             mAddedTuplesLive.postValue(addedTuples);
         }).start();
         return insertIdsLive;
@@ -127,7 +127,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     @Override
     //from adapter drag drop
     public void updateTuples(List<CategoryTuple> categoryTuples) {
-        new Thread(() -> mCategoryDao.update(categoryTuples)).start();
+        new Thread(() -> mCategoryDao.updateTuples(categoryTuples)).start();
     }
 
     @Override
