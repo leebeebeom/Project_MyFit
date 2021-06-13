@@ -2,6 +2,7 @@ package com.example.myfit.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,13 +20,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-@ViewModelScoped
+@Singleton
 @Accessors(prefix = "m")
 public class CategoryRepository extends BaseRepository<CategoryTuple> {
     private final CategoryDao mCategoryDao;

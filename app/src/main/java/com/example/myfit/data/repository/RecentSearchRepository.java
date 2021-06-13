@@ -12,11 +12,12 @@ import com.example.myfit.util.constant.RecentSearchType;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
 
-@ViewModelScoped
+@Singleton
 public class RecentSearchRepository {
     private final RecentSearchDao mRecentSearchDao;
     private LiveData<List<RecentSearchTuple>> mSearchLive, mRecycleBinLive, mDailyLookLive, mMWishListLive;

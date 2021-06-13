@@ -20,13 +20,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-@ViewModelScoped
+@Singleton
 @Accessors(prefix = "m")
 public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;

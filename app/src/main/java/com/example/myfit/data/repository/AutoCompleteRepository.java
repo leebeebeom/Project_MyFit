@@ -12,11 +12,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.scopes.ViewModelScoped;
 
-@ViewModelScoped
+@Singleton
 public class AutoCompleteRepository {
     private final AutoCompleteDao mAutoCompleteDao;
     private LiveData<Set<String>> mWordsLive, mDeletedWordsLive;
