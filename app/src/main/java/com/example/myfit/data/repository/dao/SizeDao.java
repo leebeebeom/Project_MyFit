@@ -94,7 +94,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //from listFragment(drag drop)
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
-    public abstract void update(List<SizeTuple> sizeTuples);
+    public abstract void updateTuples(List<SizeTuple> sizeTuples);
 
     //from sizeFragment
     @Transaction
@@ -116,33 +116,32 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Transaction
     //from move dialog
-    public void move(long targetId, long[] ids) {
-        ParentIdTuple[] parentIdTuples = this.getParentIdTuplesByIds(ids);
-        Arrays.stream(parentIdTuples).
-                forEach(parentIdTuple -> parentIdTuple.setParentId(targetId));
-        this.update(parentIdTuples);
+    public void move(long targetId, List<Long> ids) {
+        List<ParentIdTuple> parentIdTuples = this.getParentIdTuplesByIds(ids);
+        parentIdTuples.forEach(parentIdTuple -> parentIdTuple.setParentId(targetId));
+        this.updateParentIdTuple(parentIdTuples);
     }
 
     //to treeView(selectedSizes)
     @Query("SELECT id, parentId FROM Size WHERE id IN (:ids)")
-    public abstract ParentIdTuple[] getParentIdTuplesByIds(long[] ids);
+    public abstract List<ParentIdTuple> getParentIdTuplesByIds(List<Long> ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
-    protected abstract void update(ParentIdTuple[] parentIdTuples);
+    protected abstract void updateParentIdTuple(List<ParentIdTuple> parentIdTuples);
 
     @Transaction
     //from selectedItemDelete, restore dialog
-    public void deleteOrRestore(long[] ids) {
-        DeletedTuple[] sizeDeletedTuples = getDeletedTuples(ids);
+    public void deleteOrRestore(List<Long> ids) {
+        List<DeletedTuple> sizeDeletedTuples = getDeletedTuples(ids);
         super.setDeletedTuples(sizeDeletedTuples);
         this.updateDeletedTuples(sizeDeletedTuples);
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Size WHERE id IN (:ids)")
-    protected abstract DeletedTuple[] getDeletedTuples(long[] ids);
+    protected abstract List<DeletedTuple> getDeletedTuples(List<Long> ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
-    protected abstract void updateDeletedTuples(DeletedTuple[] deletedTuples);
+    protected abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(Size size);
