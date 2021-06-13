@@ -12,9 +12,12 @@ import androidx.navigation.NavController;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemTreeCategoryBinding;
 import com.example.myfit.databinding.ItemTreePrefixBinding;
-import com.example.myfit.ui.dialog.tree.holder.value.CategoryValue;
+import com.example.myfit.ui.dialog.tree.BaseTreeValue;
+import com.unnamed.b.atv.model.TreeNode;
 
-public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryValue> {
+import java.util.List;
+
+public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple> {
     private ItemTreeCategoryBinding mBinding;
 
     public TreeCategoryHolder(Context context, NavController navController) {
@@ -25,11 +28,6 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryVa
     protected void bind() {
         mBinding = ItemTreeCategoryBinding.inflate(LayoutInflater.from(context));
         mBinding.setCategoryHolder(this);
-    }
-
-    @Override
-    public long getTupleId() {
-        return ((CategoryValue) getNode().getValue()).getTuple().getId();
     }
 
     @Override
@@ -59,7 +57,7 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryVa
 
     @Override
     public CategoryTuple getTuple() {
-        return ((CategoryValue) getNode().getValue()).getTuple();
+        return ((BaseTreeValue.CategoryValue) getNode().getValue()).getTuple();
     }
 
     @Override
@@ -70,5 +68,12 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple, CategoryVa
     @Override
     protected View getBindingRoot() {
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void addChild(List<TreeNode> folderNodes) {
+        folderNodes.stream()
+                .filter(folderNode -> ((BaseTreeValue.FolderValue) folderNode.getValue()).getTuple().getParentId() == getTupleId())
+                .forEach(folderNode -> mNode.addChild(folderNode));
     }
 }
