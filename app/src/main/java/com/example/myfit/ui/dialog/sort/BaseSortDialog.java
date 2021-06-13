@@ -18,8 +18,7 @@ import com.google.android.material.radiobutton.MaterialRadioButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-
-import javax.inject.Inject;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -35,27 +34,28 @@ public abstract class BaseSortDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
         mBinding = LayoutDialogSortBinding.inflate(LayoutInflater.from(requireContext()));
         mCheckedNumber = savedInstanceState == null ? getRepository().getSort().getValue() : savedInstanceState.getInt(CHECKED_SORT);
-        MaterialRadioButton[] sortButtons = getSortButtons();
+        List<MaterialRadioButton> sortButtons = getSortButtons();
         addRadioButtonCheckListener(sortButtons);
-        sortButtons[mCheckedNumber].setChecked(true);
+        sortButtons.get(mCheckedNumber).setChecked(true);
     }
 
     protected abstract BaseRepository<?> getRepository();
 
     @NotNull
-    private MaterialRadioButton[] getSortButtons() {
-        return new MaterialRadioButton[]{mBinding.radioBtnCustom.button, mBinding.radioBtnCreate.button, mBinding.radioBtnCreateReverse.button,
-                mBinding.radioBtnBrand.button, mBinding.radioBtnBrandReverse.button, mBinding.radioBtnName.button, mBinding.radioBtnNameReverse.button};
+    private List<MaterialRadioButton> getSortButtons() {
+        return Arrays.asList(mBinding.radioBtnCustom.button, mBinding.radioBtnCreate.button, mBinding.radioBtnCreateReverse.button,
+                mBinding.radioBtnBrand.button, mBinding.radioBtnBrandReverse.button, mBinding.radioBtnName.button, mBinding.radioBtnNameReverse.button);
     }
 
-    private void addRadioButtonCheckListener(@NotNull MaterialRadioButton[] buttons) {
-        for (int i = 0; i < buttons.length; i++) {
+    private void addRadioButtonCheckListener(@NotNull List<MaterialRadioButton> buttons) {
+        int count = buttons.size();
+        for (int i = 0; i < count; i++) {
             int finalI = i;
-            buttons[i].setOnCheckedChangeListener((buttonView, isChecked) -> {
+            buttons.get(i).setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     mCheckedNumber = Sort.values()[finalI].getValue();
 
-                    Arrays.stream(buttons)
+                    buttons.stream()
                             .filter(button -> button != buttonView)
                             .forEach(button -> button.setChecked(false));
                 }
