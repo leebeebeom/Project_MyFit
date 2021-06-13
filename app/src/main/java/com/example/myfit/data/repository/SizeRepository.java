@@ -113,12 +113,12 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     }
 
     //to treeView
-    public LiveData<ParentIdTuple[]> getParentIdTuplesByIds(long[] ids) {
-        MutableLiveData<ParentIdTuple[]> parentIdTuplesLive = new MutableLiveData<>();
+    public LiveData<List<ParentIdTuple>> getParentIdTuplesByIds(long[] ids) {
+        MutableLiveData<List<ParentIdTuple>> parentIdTuplesLive = new MutableLiveData<>();
         new Thread(() -> {
-            ParentIdTuple[] parentIdTuples = mSizeDao.getParentIdTuplesByIds(ids);
+            List<ParentIdTuple> parentIdTuples = mSizeDao.getParentIdTuplesByIds(ids);
             parentIdTuplesLive.postValue(parentIdTuples);
-        });
+        }).start();
         return parentIdTuplesLive;
     }
 
@@ -139,7 +139,7 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
 
     //from listFragment(drag drop)
     public void updateTuples(List<SizeTuple> sizeTuples) {
-        new Thread(() -> mSizeDao.update(sizeTuples)).start();
+        new Thread(() -> mSizeDao.updateTuples(sizeTuples)).start();
     }
 }
 
