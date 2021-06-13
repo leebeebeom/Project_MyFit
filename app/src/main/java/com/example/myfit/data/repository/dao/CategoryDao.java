@@ -28,7 +28,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to main
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
-        LiveData<int[]> contentSizesLive = this.getCategoryContentSizesLive(tuplesLive);
+        LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(tuplesLive);
 
         return super.getClassifiedTuplesLive(tuplesLive, contentSizesLive);
     }
@@ -37,9 +37,9 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     protected abstract LiveData<List<CategoryTuple>> getTuplesLive();
 
     @NotNull
-    protected LiveData<int[]> getCategoryContentSizesLive(LiveData<List<CategoryTuple>> tuplesLive) {
+    protected LiveData<List<Integer>> getCategoryContentSizesLive(LiveData<List<CategoryTuple>> tuplesLive) {
         return Transformations.switchMap(tuplesLive, tuples -> {
-            long[] itemIds = getTupleIds(tuples);
+            List<Long> itemIds = getTupleIds(tuples);
             return getCategoryContentSizesLive(itemIds);
         });
     }
@@ -49,12 +49,12 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
             "LEFT OUTER JOIN Size ON category.id = size.parentId " +
             "WHERE category.id IN (:ids) " +
             "GROUP BY category.id")
-    protected abstract LiveData<int[]> getCategoryContentSizesLive(long[] ids);
+    protected abstract LiveData<List<Integer>> getCategoryContentSizesLive(List<Long> ids);
 
     //to recycleBin
     public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<int[]> contentSizesLive = this.getCategoryContentSizesLive(deletedTuplesLive);
+        LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(deletedTuplesLive);
 
         return super.getClassifiedTuplesLive(deletedTuplesLive, contentSizesLive);
     }
@@ -65,7 +65,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to recycleBin search
     public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
         LiveData<List<CategoryTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
-        LiveData<int[]> contentSizesLive = this.getCategoryContentSizesLive(deletedSearchTuplesLive);
+        LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(deletedSearchTuplesLive);
 
         return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentSizesLive);
     }
@@ -77,8 +77,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //to treeView (disposable)
     public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
         List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
-        long[] ids = super.getTupleIds(tuples);
-        int[] contentSizes = getCategoryContentSizes(ids);
+        List<Long> ids = super.getTupleIds(tuples);
+        List<Integer> contentSizes = getCategoryContentSizes(ids);
         super.setContentSize(tuples, contentSizes);
         super.sortTuples(sort, tuples);
         return tuples;
@@ -92,7 +92,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
             "LEFT OUTER JOIN Size ON category.id = size.parentId " +
             "WHERE category.id IN (:ids) " +
             "GROUP BY category.id")
-    protected abstract int[] getCategoryContentSizes(long[] ids);
+    protected abstract List<Integer> getCategoryContentSizes(List<Long> ids);
 
     //to listFragment
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id")
@@ -133,11 +133,11 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Insert
     //from appDateBase
-    public abstract long[] insert(List<Category> categories);
+    public abstract List<Long> insert(List<Category> categories);
 
     @Transaction
     //from restore dialog(disposable)
-    public long[] insertRestoreCategories(@NotNull int[] parentIndex) {
+    public List<Long> insertRestoreCategories(@NotNull List<Integer> parentIndex) {
         String name = "복구됨";
         int sortNumber = this.getLargestSortNumber() + 1;
 
@@ -161,15 +161,11 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void update(CategoryTuple categoryTuple);
-
-    //from adapter drag drop
-    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void update(List<CategoryTuple> categoryTuples);
-
+    
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids) {
-        DeletedTuple[] deletedTuples = this.getDeletedTuplesByIds(ids);
+    public void deleteOrRestore(List<Long> ids) {
+        List<DeletedTuple> deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples);
         this.update(deletedTuples);
 
@@ -177,15 +173,15 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Category WHERE id IN (:ids)")
-    protected abstract DeletedTuple[] getDeletedTuplesByIds(long[] ids);
+    protected abstract List<DeletedTuple> getDeletedTuplesByIds(List<Long> ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    protected abstract void update(DeletedTuple[] deletedTuples);
+    public abstract void update(List<DeletedTuple> deletedTuples);
 
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND deleted = 0)")
     public abstract boolean isExistingName(String name, int parentIndex);
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id IN (:ids)")
-    public abstract CategoryTuple[] getTuplesByIds(long[] ids);
+    public abstract List<CategoryTuple> getTuplesByIds(List<Long> ids);
 }
