@@ -30,11 +30,11 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
     public BaseTreeHolder(Context context, NavController navController) {
         super(context);
         this.mNavController = navController;
+        bind();
     }
 
     @Override
     public View createNodeView(TreeNode node, BaseTreeValue<U> value) {
-        bind();
         return getBindingRoot();
     }
 
