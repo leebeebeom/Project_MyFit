@@ -2,6 +2,8 @@ package com.example.myfit.ui.dialog.tree;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myfit.data.repository.CategoryRepository;
@@ -22,55 +24,56 @@ import lombok.experimental.Accessors;
 
 @HiltViewModel
 @Accessors(prefix = "m")
+@Getter
 public class TreeViewModel extends ViewModel {
     private static final String CATEGORY_INSERT_ID = "category insert id";
     private static final String FOLDER_INSERT_ID = "folder insert id";
+    private static final String PARENT_INDEX = "parent index";
+    private static final String SELECTED_FOLDER_IDS = "selected folder ids";
+    private static final String SELECTED_SIZE_IDS = "selected size ids";
 
     private final CategoryRepository mCategoryRepository;
     private final FolderRepository mFolderRepository;
     private final SizeRepository mSizeRepository;
-    @Getter
     private final MutableLiveData<CategoryTuple> mAddedCategoryTupleLive;
-    @Getter
     private final MutableLiveData<FolderTuple> mAddedFolderTupleLive;
-    private LiveData<ParentIdTuple[]> mFolderParentIdTuplesLive;
-    private LiveData<ParentIdTuple[]> mSizeParentIdTuplesLive;
-    @Getter
+    private final SavedStateHandle mStateHandle;
+    private final LiveData<ParentIdTuple[]> mFolderParentIdTuplesLive;
+    private final LiveData<ParentIdTuple[]> mSizeParentIdTuplesLive;
+    private final LiveData<List<CategoryTuple>> mCategoryTuplesLive;
+    private final LiveData<List<FolderTuple>> mFolderTuplesLive;
     private String mParentCategory;
-    private int mParentIndex;
 
     @Inject
-    public TreeViewModel(CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
+    public TreeViewModel(SavedStateHandle stateHandle, CategoryRepository categoryRepository, FolderRepository folderRepository, SizeRepository sizeRepository) {
+        this.mStateHandle = stateHandle;
         this.mCategoryRepository = categoryRepository;
         this.mFolderRepository = folderRepository;
         this.mSizeRepository = sizeRepository;
 
         this.mAddedCategoryTupleLive = mCategoryRepository.getAddedTupleLive();
         this.mAddedFolderTupleLive = mFolderRepository.getAddedTupleLive();
+
+        mCategoryTuplesLive = Transformations.switchMap(stateHandle.getLiveData(PARENT_INDEX),
+                parentIndex -> mCategoryRepository.getTuplesByParentIndex((Integer) parentIndex));
+        mFolderTuplesLive = Transformations.switchMap(stateHandle.getLiveData(PARENT_INDEX),
+                parentIndex -> mFolderRepository.getTuplesByParentIndex((Integer) parentIndex));
+        mFolderParentIdTuplesLive = Transformations.switchMap(stateHandle.getLiveData(SELECTED_FOLDER_IDS),
+                selectedFolderIds -> mFolderRepository.getParentIdTuplesByIds((long[]) selectedFolderIds));
+        mSizeParentIdTuplesLive = Transformations.switchMap(stateHandle.getLiveData(SELECTED_SIZE_IDS),
+                selectedSizeIds -> mSizeRepository.getParentIdTuplesByIds((long[]) selectedSizeIds));
     }
 
-    public LiveData<List<CategoryTuple>> getCategoryTuplesLive() {
-        return mCategoryRepository.getTuplesByParentIndex(mParentIndex);
-    }
-
-    public LiveData<List<FolderTuple>> getFolderTuplesLive() {
-        return mFolderRepository.getTuplesByParentIndex(mParentIndex);
-    }
-
-    public LiveData<ParentIdTuple[]> getFolderParentIdTuplesLive(long[] selectedFolderIds) {
-        if (mFolderParentIdTuplesLive == null)
-            mFolderParentIdTuplesLive = mFolderRepository.getParentIdTuplesByIds(selectedFolderIds);
-        return mFolderParentIdTuplesLive;
-    }
-
-    public LiveData<ParentIdTuple[]> getSizeParentIdTuplesLive(long[] selectedSizeIds) {
-        if (mSizeParentIdTuplesLive == null)
-            mSizeParentIdTuplesLive = mSizeRepository.getParentIdTuplesByIds(selectedSizeIds);
-        return mSizeParentIdTuplesLive;
-    }
-
-    public void setParentCategory(int parentIndex) {
-        this.mParentIndex = parentIndex;
+    public void setParentIndex(int parentIndex) {
+        mStateHandle.set(PARENT_INDEX, parentIndex);
         this.mParentCategory = CommonUtil.getParentCategory(parentIndex);
+    }
+
+    public void setSelectedFolderIds(long[] selectedFolderIds) {
+        mStateHandle.set(SELECTED_FOLDER_IDS, selectedFolderIds);
+    }
+
+    public void setSelectedSizeIds(long[] selectedSizeIds) {
+        mStateHandle.set(SELECTED_SIZE_IDS, selectedSizeIds);
     }
 }
