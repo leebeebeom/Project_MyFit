@@ -161,13 +161,17 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     protected abstract void update(CategoryTuple categoryTuple);
-    
+
+    //from adapter drag drop
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
+    public abstract void updateTuples(List<CategoryTuple> categoryTuples);
+
     @Transaction
     //from delete dialog, restore dialog
     public void deleteOrRestore(List<Long> ids) {
         List<DeletedTuple> deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples);
-        this.update(deletedTuples);
+        this.updateDeletedTuples(deletedTuples);
 
         this.setChildrenParentDeleted(ids);
     }
@@ -176,7 +180,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     protected abstract List<DeletedTuple> getDeletedTuplesByIds(List<Long> ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void update(List<DeletedTuple> deletedTuples);
+    public abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
 
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND deleted = 0)")
