@@ -22,21 +22,18 @@ import dagger.hilt.android.scopes.ViewModelScoped;
 @Module
 @InstallIn(ViewModelComponent.class)
 public class ListViewModelModule {
-    @ViewModelScoped
     @Qualifiers.FolderItemTouchHelper
     @Provides
     public static ItemTouchHelper provideFolderItemTouchHelper(FolderAdapter folderAdapter) {
         return new ItemTouchHelper(new FolderDragCallBack(folderAdapter));
     }
 
-    @ViewModelScoped
     @Qualifiers.SizeItemTouchHelperList
     @Provides
     public static ItemTouchHelper provideSizeItemTouchHelperList(SizeAdapterList sizeAdapterList) {
         return new ItemTouchHelper(new DragCallBackList(sizeAdapterList));
     }
 
-    @ViewModelScoped
     @Qualifiers.SizeItemTouchHelperGrid
     @Provides
     public static ItemTouchHelper provideSizeItemTouchHelperGrid(SizeAdapterGrid sizeAdapterGrid) {
