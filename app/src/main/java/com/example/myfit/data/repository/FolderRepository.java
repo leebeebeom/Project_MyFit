@@ -124,7 +124,7 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     @Override
     //from adapter drag drop
     public void updateTuples(List<FolderTuple> folderTuples) {
-        new Thread(() -> mFolderDao.update(folderTuples)).start();
+        new Thread(() -> mFolderDao.updateTuples(folderTuples)).start();
     }
 
     //from move dialog
@@ -157,12 +157,12 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     }
 
     //to treeView
-    public LiveData<ParentIdTuple[]> getParentIdTuplesByIds(long[] ids) {
-        MutableLiveData<ParentIdTuple[]> parentIdTuplesLive = new MutableLiveData<>();
+    public LiveData<List<ParentIdTuple>> getParentIdTuplesByIds(long[] ids) {
+        MutableLiveData<List<ParentIdTuple>> parentIdTuplesLive = new MutableLiveData<>();
         new Thread(() -> {
-            ParentIdTuple[] parentIdTuples = mFolderDao.getParentIdTuplesByIds(ids);
+            List<ParentIdTuple> parentIdTuples = mFolderDao.getParentIdTuplesByIds(ids);
             parentIdTuplesLive.postValue(parentIdTuples);
-        });
+        }).start();
         return parentIdTuplesLive;
     }
 
