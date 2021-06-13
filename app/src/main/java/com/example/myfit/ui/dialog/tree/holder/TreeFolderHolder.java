@@ -54,7 +54,7 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple> {
     }
 
     @Override
-    protected ItemTreePostfixBinding getPostFix() {
+    public ItemTreePostfixBinding getPostFix() {
         return mBinding.postfix;
     }
 

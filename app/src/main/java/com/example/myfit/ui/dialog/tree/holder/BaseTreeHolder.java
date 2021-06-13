@@ -83,7 +83,7 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
         getPostFix().tvCurrentPosition.setVisibility(View.VISIBLE);
     }
 
-    protected abstract ItemTreePostfixBinding getPostFix();
+    public abstract ItemTreePostfixBinding getPostFix();
 
     public TreeNode getNode() {
         return mNode;

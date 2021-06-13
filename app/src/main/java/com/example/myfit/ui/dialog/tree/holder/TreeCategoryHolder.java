@@ -42,7 +42,7 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple> {
     }
 
     @Override
-    protected ItemTreePostfixBinding getPostFix() {
+    public ItemTreePostfixBinding getPostFix() {
         return mBinding.postfix;
     }
 
