@@ -160,21 +160,21 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
 
     @Transaction
     //from move dialog
-    public void move(long targetId, List<Long> ids) {
+    public void move(long targetId, long[] ids) {
         List<ParentIdTuple> parentIdTuples = this.getParentIdTuplesByIds(ids);
         parentIdTuples.forEach(parentIdTuple -> parentIdTuple.setParentId(targetId));
         this.updateParentIdTuples(parentIdTuples);
     }
 
     @Query("SELECT id, parentId FROM Folder WHERE id IN (:ids)")
-    public abstract List<ParentIdTuple> getParentIdTuplesByIds(List<Long> ids);
+    public abstract List<ParentIdTuple> getParentIdTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     public abstract void updateParentIdTuples(List<ParentIdTuple> parentIdTuples);
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(List<Long> ids) {
+    public void deleteOrRestore(long[] ids) {
         List<DeletedTuple> deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples);
         this.updateDeletedTuples(deletedTuples);
@@ -183,7 +183,7 @@ public abstract class FolderDao extends BaseDao<FolderTuple> {
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Folder WHERE id IN (:ids)")
-    protected abstract List<DeletedTuple> getDeletedTuplesByIds(List<Long> ids);
+    protected abstract List<DeletedTuple> getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Folder.class)
     protected abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
