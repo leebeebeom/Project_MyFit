@@ -11,16 +11,18 @@ import androidx.navigation.NavController;
 import com.example.myfit.R;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemTreePrefixBinding;
+import com.example.myfit.ui.dialog.tree.BaseTreeValue;
 import com.example.myfit.ui.dialog.tree.TreeViewDialogDirections;
-import com.example.myfit.ui.dialog.tree.holder.value.BaseValue;
 import com.example.myfit.util.CommonUtil;
 import com.unnamed.b.atv.model.TreeNode;
+
+import java.util.List;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
-public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValue<U>> extends TreeNode.BaseNodeViewHolder<T> {
+public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.BaseNodeViewHolder<BaseTreeValue<U>> {
     protected final NavController mNavController;
     @Getter
     private boolean mClickable = true;
@@ -31,7 +33,7 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
     }
 
     @Override
-    public View createNodeView(TreeNode node, T value) {
+    public View createNodeView(TreeNode node, BaseTreeValue<U> value) {
         bind();
         return getBindingRoot();
     }
@@ -67,8 +69,8 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
         return getTuple().getId();
     }
 
-    public BaseTreeHolder<?, ?> getParentViewHolder() {
-        return (BaseTreeHolder<?, ?>) mNode.getParent().getViewHolder();
+    public BaseTreeHolder<?> getParentViewHolder() {
+        return (BaseTreeHolder<?>) mNode.getParent().getViewHolder();
     }
 
     public void showCurrentPosition() {
@@ -92,4 +94,6 @@ public abstract class BaseTreeHolder<U extends CategoryTuple, T extends BaseValu
     }
 
     protected abstract ItemTreePrefixBinding getPrefix();
+
+    protected abstract void addChild(List<TreeNode> folderNodes);
 }
