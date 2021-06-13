@@ -168,7 +168,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from delete dialog, restore dialog
-    public void deleteOrRestore(List<Long> ids) {
+    public void deleteOrRestore(long[] ids) {
         List<DeletedTuple> deletedTuples = this.getDeletedTuplesByIds(ids);
         super.setDeletedTuples(deletedTuples);
         this.updateDeletedTuples(deletedTuples);
@@ -177,7 +177,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Category WHERE id IN (:ids)")
-    protected abstract List<DeletedTuple> getDeletedTuplesByIds(List<Long> ids);
+    protected abstract List<DeletedTuple> getDeletedTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     public abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
