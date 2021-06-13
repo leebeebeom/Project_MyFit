@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import com.example.myfit.R;
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemTreeFolderBinding;
+import com.example.myfit.databinding.ItemTreePostfixBinding;
 import com.example.myfit.databinding.ItemTreePrefixBinding;
 import com.example.myfit.ui.dialog.tree.BaseTreeValue;
 import com.unnamed.b.atv.model.TreeNode;
@@ -38,8 +39,13 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple> {
     }
 
     @Override
-    protected LinearLayoutCompat getFolderIconLayout() {
-        return mBinding.prefix.layout;
+    public FolderTuple getTuple() {
+        return ((BaseTreeValue.FolderValue) getNode().getValue()).getTuple();
+    }
+
+    @Override
+    protected ItemTreePrefixBinding getPrefix() {
+        return mBinding.prefix;
     }
 
     @Override
@@ -48,28 +54,8 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple> {
     }
 
     @Override
-    protected AppCompatImageView getArrowIcon() {
-        return mBinding.prefix.iconArrow;
-    }
-
-    @Override
-    protected TextView getCurrentPosition() {
-        return mBinding.postfix.tvCurrentPosition;
-    }
-
-    @Override
-    public TextView getContentSize() {
-        return mBinding.postfix.tvContentSize;
-    }
-
-    @Override
-    public FolderTuple getTuple() {
-        return ((BaseTreeValue.FolderValue) getNode().getValue()).getTuple();
-    }
-
-    @Override
-    protected ItemTreePrefixBinding getPrefix() {
-        return mBinding.prefix;
+    protected ItemTreePostfixBinding getPostFix() {
+        return mBinding.postfix;
     }
 
     public int getMargin() {

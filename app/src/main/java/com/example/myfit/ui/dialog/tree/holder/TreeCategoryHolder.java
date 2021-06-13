@@ -5,17 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.databinding.ItemTreeCategoryBinding;
+import com.example.myfit.databinding.ItemTreePostfixBinding;
 import com.example.myfit.databinding.ItemTreePrefixBinding;
 import com.example.myfit.ui.dialog.tree.BaseTreeValue;
-import com.unnamed.b.atv.model.TreeNode;
-
-import java.util.List;
 
 public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple> {
     private ItemTreeCategoryBinding mBinding;
@@ -31,8 +27,13 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple> {
     }
 
     @Override
-    protected LinearLayoutCompat getFolderIconLayout() {
-        return mBinding.prefix.layout;
+    public CategoryTuple getTuple() {
+        return ((BaseTreeValue.CategoryValue) getNode().getValue()).getTuple();
+    }
+
+    @Override
+    protected ItemTreePrefixBinding getPrefix() {
+        return mBinding.prefix;
     }
 
     @Override
@@ -41,28 +42,8 @@ public class TreeCategoryHolder extends BaseTreeHolder<CategoryTuple> {
     }
 
     @Override
-    protected AppCompatImageView getArrowIcon() {
-        return mBinding.prefix.iconArrow;
-    }
-
-    @Override
-    protected TextView getCurrentPosition() {
-        return mBinding.postfix.tvCurrentPosition;
-    }
-
-    @Override
-    public TextView getContentSize() {
-        return mBinding.getCategoryHolder().getContentSize();
-    }
-
-    @Override
-    public CategoryTuple getTuple() {
-        return ((BaseTreeValue.CategoryValue) getNode().getValue()).getTuple();
-    }
-
-    @Override
-    protected ItemTreePrefixBinding getPrefix() {
-        return mBinding.prefix;
+    protected ItemTreePostfixBinding getPostFix() {
+        return mBinding.postfix;
     }
 
     @Override

@@ -4,12 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.navigation.NavController;
 
 import com.example.myfit.R;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
+import com.example.myfit.databinding.ItemTreePostfixBinding;
 import com.example.myfit.databinding.ItemTreePrefixBinding;
 import com.example.myfit.ui.dialog.tree.BaseTreeValue;
 import com.example.myfit.ui.dialog.tree.TreeViewDialogDirections;
@@ -33,29 +32,37 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
         bind();
     }
 
+    protected abstract void bind();
+
     @Override
     public View createNodeView(TreeNode node, BaseTreeValue<U> value) {
         return getBindingRoot();
     }
 
-    protected abstract void bind();
+    protected abstract View getBindingRoot();
 
     public void navigateAddFolderDialog() {
         CommonUtil.navigate(mNavController, R.id.treeViewDialog,
                 TreeViewDialogDirections.toAddFolderDialog(getTuple().getId(), getTuple().getParentIndex()));
     }
 
+    public abstract U getTuple();
+
     public void setUnClickable() {
         if (mClickable) {
-            getFolderIconLayout().setAlpha(0.5f);
+            getPrefix().layout.setAlpha(0.5f);
             getNameTextView().setAlpha(0.5f);
             mClickable = false;
         }
     }
 
+    protected abstract ItemTreePrefixBinding getPrefix();
+
+    protected abstract TextView getNameTextView();
+
     public void showArrowIcon() {
-        if (getArrowIcon().getVisibility() != View.VISIBLE)
-            getArrowIcon().setVisibility(View.VISIBLE);
+        if (getPrefix().iconArrow.getVisibility() != View.VISIBLE)
+            getPrefix().iconArrow.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -63,7 +70,6 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
         getPrefix().setActive(active);
     }
 
-    public abstract U getTuple();
 
     public long getTupleId() {
         return getTuple().getId();
@@ -74,26 +80,14 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
     }
 
     public void showCurrentPosition() {
-        getCurrentPosition().setVisibility(View.VISIBLE);
+        getPostFix().tvCurrentPosition.setVisibility(View.VISIBLE);
     }
 
-    protected abstract View getBindingRoot();
-
-    protected abstract LinearLayoutCompat getFolderIconLayout();
-
-    protected abstract TextView getNameTextView();
-
-    protected abstract AppCompatImageView getArrowIcon();
-
-    protected abstract TextView getCurrentPosition();
-
-    public abstract TextView getContentSize();
+    protected abstract ItemTreePostfixBinding getPostFix();
 
     public TreeNode getNode() {
         return mNode;
     }
-
-    protected abstract ItemTreePrefixBinding getPrefix();
 
     public void addChild(List<TreeNode> folderNodes){
         folderNodes.stream()
