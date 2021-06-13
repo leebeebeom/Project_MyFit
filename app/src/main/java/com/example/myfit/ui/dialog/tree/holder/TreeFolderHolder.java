@@ -13,32 +13,23 @@ import com.example.myfit.R;
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemTreeFolderBinding;
 import com.example.myfit.databinding.ItemTreePrefixBinding;
-import com.example.myfit.ui.dialog.tree.holder.value.FolderValue;
+import com.example.myfit.ui.dialog.tree.BaseTreeValue;
 import com.unnamed.b.atv.model.TreeNode;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
-    private final List<FolderTuple> mFolderTuples;
+public class TreeFolderHolder extends BaseTreeHolder<FolderTuple> {
     private ItemTreeFolderBinding mBinding;
 
-    public TreeFolderHolder(Context context,
-                            List<FolderTuple> folderTuples, NavController navController) {
+    public TreeFolderHolder(Context context, NavController navController) {
         super(context, navController);
-        this.mFolderTuples = folderTuples;
     }
 
     @Override
     protected void bind() {
         mBinding = ItemTreeFolderBinding.inflate(LayoutInflater.from(context));
         mBinding.setFolderHolder(this);
-    }
-
-    @Override
-    public long getTupleId() {
-        return ((FolderValue) getNode().getValue()).getTuple().getId();
     }
 
     @Override
@@ -73,7 +64,7 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
 
     @Override
     public FolderTuple getTuple() {
-        return ((FolderValue) getNode().getValue()).getTuple();
+        return ((BaseTreeValue.FolderValue) getNode().getValue()).getTuple();
     }
 
     @Override
@@ -81,24 +72,29 @@ public class TreeFolderHolder extends BaseTreeHolder<FolderTuple, FolderValue> {
         return mBinding.prefix;
     }
 
-    public View createNodeView(TreeNode node, @NotNull FolderValue value) {
-        addChildNode(value);
-        return super.createNodeView(node, value);
-    }
-
-    private void addChildNode(@NotNull FolderValue value) {
-        int plusMargin = (int) context.getResources().getDimensionPixelSize(R.dimen._8sdp);
-        mFolderTuples.stream()
-                .filter(folderTuple -> folderTuple.getParentId() == getTupleId())
-                .forEach(folderTuple -> {
-                    TreeNode treeNode = new TreeNode(new FolderValue(folderTuple, value.getMargin() + plusMargin))
-                            .setViewHolder(new TreeFolderHolder(context, mFolderTuples, mNavController));
-                    mNode.addChild(treeNode);
-                });
+    @Override
+    public void addChild(List<TreeNode> folderNodes) {
+        folderNodes.stream()
+                .filter(folderNode -> ((BaseTreeValue.FolderValue) folderNode.getValue()).getTuple().getParentId() == getTupleId())
+                .forEach(folderNode -> mNode.addChild(folderNode));
     }
 
     public int getMargin() {
-        return ((FolderValue) getNode().getValue()).getMargin();
+        AtomicInteger parentCount = new AtomicInteger(0);
+        parentCount(parentCount, mNode);
+        int margin = context.getResources().getDimensionPixelSize(R.dimen._12sdp);
+        int plusMargin = context.getResources().getDimensionPixelSize(R.dimen._8sdp);
+        int count = parentCount.get();
+        for (int i = 0; i < count; i++)
+            margin = margin + plusMargin;
+        return margin;
+    }
+
+    public void parentCount(AtomicInteger count, TreeNode node) {
+        if (node.getParent() != null) {
+            count.set(count.get() + 1);
+            parentCount(count, node.getParent());
+        }
     }
 }
 
