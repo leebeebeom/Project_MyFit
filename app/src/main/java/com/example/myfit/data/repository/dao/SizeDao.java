@@ -116,7 +116,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     @Transaction
     //from move dialog
-    public void move(long targetId, List<Long> ids) {
+    public void move(long targetId, long[] ids) {
         List<ParentIdTuple> parentIdTuples = this.getParentIdTuplesByIds(ids);
         parentIdTuples.forEach(parentIdTuple -> parentIdTuple.setParentId(targetId));
         this.updateParentIdTuple(parentIdTuples);
@@ -124,21 +124,21 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //to treeView(selectedSizes)
     @Query("SELECT id, parentId FROM Size WHERE id IN (:ids)")
-    public abstract List<ParentIdTuple> getParentIdTuplesByIds(List<Long> ids);
+    public abstract List<ParentIdTuple> getParentIdTuplesByIds(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateParentIdTuple(List<ParentIdTuple> parentIdTuples);
 
     @Transaction
     //from selectedItemDelete, restore dialog
-    public void deleteOrRestore(List<Long> ids) {
+    public void deleteOrRestore(long[] ids) {
         List<DeletedTuple> sizeDeletedTuples = getDeletedTuples(ids);
         super.setDeletedTuples(sizeDeletedTuples);
         this.updateDeletedTuples(sizeDeletedTuples);
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Size WHERE id IN (:ids)")
-    protected abstract List<DeletedTuple> getDeletedTuples(List<Long> ids);
+    protected abstract List<DeletedTuple> getDeletedTuples(long[] ids);
 
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
