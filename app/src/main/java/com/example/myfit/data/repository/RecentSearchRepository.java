@@ -38,7 +38,6 @@ public class RecentSearchRepository {
             default:
                 return getRecentSearchLive(mMWishListLive, type);
         }
-
     }
 
     public LiveData<List<RecentSearchTuple>> getRecentSearchLive(LiveData<List<RecentSearchTuple>> liveData, RecentSearchType type) {
