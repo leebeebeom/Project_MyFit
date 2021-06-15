@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.view.ActionMode;
+import androidx.fragment.app.Fragment;
 
-import com.example.myfit.R;
 import com.example.myfit.databinding.TitleActionModeBinding;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -17,20 +17,18 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ActivityContext;
-import dagger.hilt.android.scopes.FragmentScoped;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
 public abstract class ActionModeImpl implements ActionMode.Callback {
     public static ActionMode sActionMode = null;
-    public static boolean sActionModeOn;
+    public static boolean sActionModeOn = false;
     public static final String ACTION_MODE_STRING = "action mode";
     public static final int ACTION_MODE_ON = 1;
     public static final int ACTION_MODE_OFF = 2;
@@ -39,16 +37,16 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
     private final TitleActionModeBinding mBinding;
     @Getter
     private MenuItem[] mMenuItems;
-    @Setter
-    protected ActionModeListener mListener;
+    protected final ActionModeListener mListener;
 
-    public ActionModeImpl(Context context) {
+    public ActionModeImpl(Context context, Fragment fragment) {
         mBinding = TitleActionModeBinding.inflate(LayoutInflater.from(context));
+        mListener = (ActionModeListener) fragment;
     }
 
     @Override
     public boolean onCreateActionMode(@NotNull ActionMode mode, Menu menu) {
-        mode.getMenuInflater().inflate(getResId(), menu);
+        mode.getMenuInflater().inflate(mListener.getResId(), menu);
         mode.setCustomView(mBinding.getRoot());
         mBinding.setActionModeImpl(this);
 
@@ -60,7 +58,7 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         sActionMode = mode;
         sActionModeOn = actionModeState == ACTION_MODE_ON;
 
-        Arrays.stream(mListener.getAdapters()).forEach(adapter -> adapter.setActionModeState(actionModeState));
+        mListener.getAdapters().forEach(adapter -> adapter.setActionModeState(actionModeState));
     }
 
     @Override
@@ -74,8 +72,8 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
 
     public void allSelectClick(View view) {
         if (((MaterialCheckBox) view).isChecked())
-            Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::selectAll);
-        else Arrays.stream(mListener.getAdapters()).forEach(BaseAdapter::deselectAll);
+            mListener.getAdapters().forEach(BaseAdapter::selectAll);
+        else mListener.getAdapters().forEach(BaseAdapter::deselectAll);
     }
 
     @Override
@@ -93,35 +91,26 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
     }
 
     public interface ActionModeListener {
-        BaseAdapter<?, ?, ?>[] getAdapters();
+        List<BaseAdapter<?, ?, ?>> getAdapters();
 
         void actionItemClick(int itemId);
+
+        int getResId();
     }
 
     public interface ViewPagerActionModeListener extends ActionModeListener {
         void setViewPagerEnable(boolean enable);
     }
 
-    protected abstract int getResId();
+    public static class ViewPagerActionModeCallBack extends ActionModeImpl {
 
-    @FragmentScoped
-    public static class MainActionModeCallBack extends ActionModeImpl {
-
-        private ViewPagerActionModeListener mListener;
+        private final ViewPagerActionModeListener mListener;
 
         @Inject
-        protected MainActionModeCallBack(@ActivityContext Context context) {
-            super(context);
-        }
-
-        @Override
-        protected int getResId() {
-            return R.menu.menu_action_mode;
-        }
-
-        public void setListener(ViewPagerActionModeListener mListener) {
-            this.mListener = mListener;
-            super.setListener(mListener);
+        protected ViewPagerActionModeCallBack(@ActivityContext Context context,
+                                              Fragment fragment) {
+            super(context, fragment);
+            mListener = (ViewPagerActionModeListener) fragment;
         }
 
         @Override
@@ -135,19 +124,6 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
         public void onDestroyActionMode(ActionMode mode) {
             super.onDestroyActionMode(mode);
             this.mListener.setViewPagerEnable(true);
-        }
-    }
-
-    @FragmentScoped
-    public static class ListActionModeCallBack extends ActionModeImpl {
-        @Inject
-        public ListActionModeCallBack(@ActivityContext Context context) {
-            super(context);
-        }
-
-        @Override
-        protected int getResId() {
-            return R.menu.menu_action_mode;
         }
     }
 }
