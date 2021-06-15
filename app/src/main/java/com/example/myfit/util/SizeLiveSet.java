@@ -7,13 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
-public class SizeLiveSet<E> extends LinkedHashSet<E> {
+public class SizeLiveSet<E> extends HashSet<E> {
     @Getter
     private final MutableLiveData<Integer> mLiveData = new MutableLiveData<>(0);
 
