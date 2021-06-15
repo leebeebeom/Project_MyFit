@@ -10,12 +10,12 @@
         <import type="com.example.myfit.util.constant.ViewType" />
 
         <variable
-            name="listFragment"
-            type="com.example.myfit.ui.main.list.ListFragment" />
-
-        <variable
             name="model"
             type="com.example.myfit.ui.main.list.ListViewModel" />
+
+        <variable
+            name="listFragment"
+            type="com.example.myfit.ui.main.list.ListFragment" />
     </data>
 
     <FrameLayout
@@ -24,23 +24,21 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
+            layoutManager="@{model.viewTypePreferenceLive}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_8sdp"
             android:background="@drawable/recycler_background"
             android:clipToPadding="false"
-            android:minHeight="@dimen/_560sdp"
+            android:minHeight="@dimen/_600sdp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
-            android:paddingHorizontal="@{model.viewTypePreferenceLive == ViewType.LIST_VIEW ? 0 : @dimen/_560sdp}"
+            android:paddingHorizontal="@{model.viewTypePreferenceLive}"
             android:paddingTop="@dimen/_8sdp"
             android:paddingBottom="@dimen/_60sdp"
-            app:adapter="@{model.viewTypePreferenceLive ==  ViewType.LIST_VIEW ?
-                        listFragment.sizeAdapterList : listFragment.sizeAdapterGrid}"
+            app:adapter="@{model.viewTypePreferenceLive ==  0 ? listFragment.sizeAdapterList : listFragment.sizeAdapterGrid}"
             app:hasFixedSize="@{true}"
-            app:layoutManager="@{model.viewTypePreferenceLive == ViewType.LIST_VIEW ?
-                        androidx.recyclerview.widget.LinearLayoutManager : androidx.recyclerview.widget.GridLayoutManager}"
-            app:spanCount="@{model.viewTypePreferenceLive == ViewType.LIST_VIEW ? 1 : 2}"
+            app:onTouchListener="@{(v, event) -> listFragment.sizeDragSelect.onRecyclerViewTouch(v, event)}"
             tools:listitem="@layout/item_vh_size_list" />
 
         <FrameLayout
@@ -50,7 +48,7 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:background="@drawable/recycler_background"
             android:minHeight="@dimen/_560sdp"
-            android:visibility="@{model.sizeLive.empty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{model.sizeTuplesLive.empty ? View.VISIBLE : View.GONE}"
             tools:visibility="gone">
 
             <com.google.android.material.textview.MaterialTextView
