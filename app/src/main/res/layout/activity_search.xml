@@ -12,7 +12,7 @@
             android:layout_height="match_parent"
             android:background="?colorPrimary"
             android:orientation="vertical"
-            tools:context=".search.SearchActivity">
+            tools:context=".ui.search.SearchActivity">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
@@ -22,29 +22,6 @@
                     android:id="@+id/toolBar"
                     android:layout_width="0dp"
                     android:layout_height="0dp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/acTvLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:theme="@style/myEditTextOutlineColor"
-                    app:endIconMode="clear_text"
-                    app:placeholderText="@string/menu_search"
-                    app:placeholderTextAppearance="@style/myTextSize10sdp"
-                    app:startIconDrawable="@drawable/icon_search">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/acTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_36sdp"
-                        android:background="@android:color/transparent"
-                        android:completionThreshold="1"
-                        android:imeOptions="actionSearch"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:textSize="@dimen/_11sdp" />
-                </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
