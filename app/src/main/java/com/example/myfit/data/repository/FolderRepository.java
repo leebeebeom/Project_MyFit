@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ViewModelScoped;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -31,8 +30,7 @@ import lombok.experimental.Accessors;
 @Accessors(prefix = "m")
 public class FolderRepository extends BaseRepository<FolderTuple> {
     private final FolderDao mFolderDao;
-    private final SharedPreferences mListSortPreference;
-    private final SharedPreferences mFolderTogglePreference;
+    private final SharedPreferences mListSortPreference, mFolderTogglePreference;
     @Getter
     private final IntegerSharedPreferenceLiveData mListSortPreferenceLive;
     @Getter
@@ -63,16 +61,16 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     }
 
     //to searchView, recycleBin search
-    public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive(boolean deleted) {
-        if (!deleted) {
-            if (mSearchTuplesLive == null)
-                mSearchTuplesLive = mFolderDao.getSearchTuplesListLive(false);
-            return mSearchTuplesLive;
-        } else {
-            if (mDeletedSearchTuplesLive == null)
-                mDeletedSearchTuplesLive = mFolderDao.getSearchTuplesListLive(true);
-            return mDeletedSearchTuplesLive;
-        }
+    public LiveData<List<List<FolderTuple>>> getSearchTuplesListLive() {
+        if (mSearchTuplesLive == null)
+            mSearchTuplesLive = mFolderDao.getSearchTuplesListLive(false);
+        return mSearchTuplesLive;
+    }
+
+    public LiveData<List<List<FolderTuple>>> getDeletedSearchTuplesListLive(boolean deleted) {
+        if (mDeletedSearchTuplesLive == null)
+            mDeletedSearchTuplesLive = mFolderDao.getSearchTuplesListLive(true);
+        return mDeletedSearchTuplesLive;
     }
 
     //to treeView(disposable)
@@ -140,7 +138,7 @@ public class FolderRepository extends BaseRepository<FolderTuple> {
     }
 
     @Override
-    protected SharedPreferences getPreference() {
+    protected SharedPreferences getSortPreference() {
         return mListSortPreference;
     }
 
