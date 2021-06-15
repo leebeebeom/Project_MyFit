@@ -9,11 +9,11 @@
 
         <variable
             name="autoCompleteAdapter"
-            type="com.example.myfit.ui.search.adapter.AutoCompleteAdapter" />
+            type="com.example.myfit.util.adapter.AutoCompleteAdapter" />
 
         <variable
-            name="keyboardShowingLive"
-            type="androidx.lifecycle.MutableLiveData" />
+            name="activity"
+            type="com.example.myfit.ui.main.MainActivity" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_36sdp"
             android:layout_gravity="bottom"
-            android:visibility="@{keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
+            android:visibility="@{activity.keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
             app:backgroundTint="?colorPrimary"
             app:contentInsetStart="0dp"
             app:elevation="@dimen/_6sdp"
@@ -66,7 +66,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
-            android:visibility="@{keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
+            android:visibility="@{activity.keyboardShowingLive ? View.INVISIBLE : View.VISIBLE}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:elevation="0dp"
