@@ -5,28 +5,29 @@ import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.util.SizeLiveSet;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.components.ViewModelComponent;
-import dagger.hilt.android.scopes.ViewModelScoped;
+import dagger.hilt.components.SingletonComponent;
 
 @Module
-@InstallIn(ViewModelComponent.class)
-public class ViewModelModule {
-    @ViewModelScoped
+@InstallIn(SingletonComponent.class)
+public class SingletonModule {
+    @Singleton
     @Provides
     public static SizeLiveSet<CategoryTuple> provideSelectedCategoryTuples() {
         return new SizeLiveSet<>();
     }
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     public static SizeLiveSet<FolderTuple> provideSelectedFolderTuples() {
         return new SizeLiveSet<>();
     }
 
-    @ViewModelScoped
+    @Singleton
     @Provides
     public static SizeLiveSet<SizeTuple> provideSelectedSizeTuples() {
         return new SizeLiveSet<>();
