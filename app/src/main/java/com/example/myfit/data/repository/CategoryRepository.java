@@ -103,6 +103,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
         }).start();
     }
 
+    //to recycle bin
     public MutableLiveData<List<CategoryTuple>> getAddedTuplesLive() {
         mAddedTuplesLive = new MutableLiveData<>();
         return mAddedTuplesLive;
@@ -137,7 +138,7 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     }
 
     @Override
-    protected SharedPreferences getPreference() {
+    protected SharedPreferences getSortPreference() {
         return mMainSortPreference;
     }
 
