@@ -137,13 +137,13 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from restore dialog(disposable)
-    public List<Long> insertRestoreCategories(@NotNull List<Integer> parentIndexs) {
+    public List<Long> insertRestoreCategories(@NotNull List<Integer> parentIndexes) {
         String name = "복구됨";
         int sortNumber = this.getLargestSortNumber() + 1;
 
         List<Category> categories = new LinkedList<>();
-        AtomicLong id = new AtomicLong(CommonUtil.getCurrentDate());
-        for (int parentIndex : parentIndexs) {
+        AtomicLong id = new AtomicLong(CommonUtil.createId());
+        for (int parentIndex : parentIndexes) {
             categories.add(new Category(parentIndex, sortNumber, name));
             sortNumber++;
         }
