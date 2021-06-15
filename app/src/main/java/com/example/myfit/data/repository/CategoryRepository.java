@@ -2,7 +2,6 @@ package com.example.myfit.data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -23,7 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ViewModelScoped;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -73,8 +71,8 @@ public class CategoryRepository extends BaseRepository<CategoryTuple> {
     }
 
     //to listFragment
-    public LiveData<CategoryTuple> getTupleLiveById(long id) {
-        return mCategoryDao.getTupleLiveById(id);
+    public LiveData<Category> getSingleLiveById(long id) {
+        return mCategoryDao.getSingleLiveById(id);
     }
 
     //to treeView(disposable)

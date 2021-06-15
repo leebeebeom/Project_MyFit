@@ -95,8 +95,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     protected abstract List<Integer> getCategoryContentSizes(List<Long> ids);
 
     //to listFragment
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id")
-    public abstract LiveData<CategoryTuple> getTupleLiveById(long id);
+    @Query("SELECT * FROM Category WHERE id = :id")
+    public abstract LiveData<Category> getSingleLiveById(long id);
 
     @Transaction
     //to treeView(disposable)
