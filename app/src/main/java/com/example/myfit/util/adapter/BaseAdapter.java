@@ -14,10 +14,10 @@ import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_OFF;
@@ -25,8 +25,7 @@ import static com.example.myfit.util.ActionModeImpl.ACTION_MODE_ON;
 
 @Accessors(prefix = "m")
 public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener, VH extends BaseVH<T, L>> extends ListAdapter<T, VH> {
-    @Setter
-    private L mListener;
+    private final L mListener;
     @Getter
     private List<T> mNewOrderList;
     private final SizeLiveSet<T> mSelectedItems;
@@ -35,7 +34,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     @Getter
     private Sort mSort;
 
-    protected BaseAdapter(SizeLiveSet<T> selectedItems) {
+    protected BaseAdapter(SizeLiveSet<T> selectedItems, L listener) {
         super(new DiffUtil.ItemCallback<T>() {
             @Override
             public boolean areItemsTheSame(@NonNull @NotNull T oldItem, @NonNull @NotNull T newItem) {
@@ -48,6 +47,7 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
             }
         });
         this.mSelectedItems = selectedItems;
+        this.mListener = listener;
         setHasStableIds(true);
     }
 
@@ -92,8 +92,29 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     }
 
     public void moveItem(int from, int to) {
-        AdapterUtil.itemMove(from, to, mNewOrderList);
+        move(from, to);
         notifyItemMoved(from, to);
+    }
+
+    private void move(int from, int to) {
+        if (from < to) //down
+            for (int i = from; i < to; i++)
+                swap(i, i + 1);
+        else //up
+            for (int i = from; i > to; i--)
+                swap(i, i - 1);
+    }
+
+    private void swap(int i, int i2) {
+        Collections.swap(mNewOrderList, i, i2);
+        if (mNewOrderList.get(i).getId() != -1 && mNewOrderList.get(i2).getId() != -1) {
+            BaseTuple baseTuple1 = mNewOrderList.get(i);
+            BaseTuple baseTuple2 = mNewOrderList.get(i2);
+            int sortNumber1 = baseTuple1.getSortNumber();
+            int sortNumber2 = baseTuple2.getSortNumber();
+            baseTuple1.setSortNumber(sortNumber2);
+            baseTuple2.setSortNumber(sortNumber1);
+        }
     }
 
     public void selectAll() {
