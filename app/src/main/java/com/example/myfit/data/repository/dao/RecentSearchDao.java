@@ -6,9 +6,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.model.RecentSearch;
 import com.example.myfit.data.tuple.tuple.RecentSearchTuple;
+import com.example.myfit.util.CommonUtil;
 
 import java.util.List;
 
@@ -23,8 +23,8 @@ public abstract class RecentSearchDao {
     //from searchView, recycleBin search
     public void insert(String word, int type) {
         if (isExistingWord(word, type)) delete(word, type);
-
-        RecentSearch recentSearch = ModelFactory.makeRecentSearch(word, type);
+        String date = CommonUtil.getRecentSearchDate();
+        RecentSearch recentSearch = new RecentSearch(word, date, type);
         insert(recentSearch);
     }
 
