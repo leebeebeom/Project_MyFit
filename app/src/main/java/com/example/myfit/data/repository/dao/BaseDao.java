@@ -52,19 +52,17 @@ public abstract class BaseDao<T extends BaseTuple> {
         }
     }
 
-    protected <R extends CategoryTuple> LiveData<List<List<R>>> getClassifiedTuplesLive(LiveData<List<R>> tuplesLive) {
+    protected LiveData<List<List<T>>> getClassifiedTuplesLive(LiveData<List<T>> tuplesLive) {
         return Transformations.map(tuplesLive, this::getClassifiedTuplesByParentIndex);
     }
 
-    protected <R extends CategoryTuple> List<List<R>> getClassifiedTuplesByParentIndex(List<R> tuples) {
-        if (tuples != null) {
-            List<LinkedList<R>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-            List<List<R>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    protected List<List<T>> getClassifiedTuplesByParentIndex(List<T> tuples) {
+        List<LinkedList<T>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+        List<List<T>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
-            tuples.forEach(tuple -> classifiedLinkedList.get(tuple.getParentIndex()).add(tuple));
-            for (int i = 0; i < 4; i++) classifiedList.get(i).addAll(classifiedLinkedList.get(i));
-            return classifiedList;
-        } else return null;
+        tuples.forEach(tuple -> classifiedLinkedList.get(tuple.getParentIndex()).add(tuple));
+        for (int i = 0; i < 4; i++) classifiedList.get(i).addAll(classifiedLinkedList.get(i));
+        return classifiedList;
     }
 
     protected void setDeleted(List<DeletedTuple> deletedTuples) {
