@@ -8,7 +8,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.model.Category;
 import com.example.myfit.data.model.model.Folder;
 import com.example.myfit.data.model.model.RecentSearch;
@@ -38,28 +37,27 @@ public abstract class AppDataBase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             List<Category> categories = new LinkedList<>();
-                            categories.add(ModelFactory.makeCategory("반팔", ParentCategory.TOP.getValue(), 1));
-                            categories.add(ModelFactory.makeCategory("긴팔", ParentCategory.TOP.getValue(), 2));
-                            categories.add(ModelFactory.makeCategory("니트", ParentCategory.TOP.getValue(), 3));
-                            categories.add(ModelFactory.makeCategory("후드", ParentCategory.TOP.getValue(), 4));
-                            categories.add(ModelFactory.makeCategory("셔츠", ParentCategory.TOP.getValue(), 5));
+                            categories.add(new Category(1, ParentCategory.TOP.getValue(), "반팔"));
+                            categories.add(new Category(2, ParentCategory.TOP.getValue(), "긴팔"));
+                            categories.add(new Category(3, ParentCategory.TOP.getValue(), "니트"));
+                            categories.add(new Category(4, ParentCategory.TOP.getValue(), "후드"));
+                            categories.add(new Category(5, ParentCategory.TOP.getValue(), "셔츠"));
 
-                            categories.add(ModelFactory.makeCategory("청바지", ParentCategory.BOTTOM.getValue(), 6));
-                            categories.add(ModelFactory.makeCategory("슬랙스", ParentCategory.BOTTOM.getValue(), 7));
-                            categories.add(ModelFactory.makeCategory("반바지", ParentCategory.BOTTOM.getValue(), 8));
+                            categories.add(new Category(6, ParentCategory.BOTTOM.getValue(), "청바지"));
+                            categories.add(new Category(7, ParentCategory.BOTTOM.getValue(), "슬랙스"));
+                            categories.add(new Category(8, ParentCategory.BOTTOM.getValue(), "반바지"));
 
-                            categories.add(ModelFactory.makeCategory("Ma-1", ParentCategory.OUTER.getValue(), 9));
-                            categories.add(ModelFactory.makeCategory("패딩", ParentCategory.OUTER.getValue(), 10));
-                            categories.add(ModelFactory.makeCategory("야상", ParentCategory.OUTER.getValue(), 11));
-                            categories.add(ModelFactory.makeCategory("후드 집업", ParentCategory.OUTER.getValue(), 12));
+                            categories.add(new Category(9, ParentCategory.OUTER.getValue(), "Ma-1"));
+                            categories.add(new Category(10, ParentCategory.OUTER.getValue(), "패딩"));
+                            categories.add(new Category(11, ParentCategory.OUTER.getValue(), "야상"));
+                            categories.add(new Category(12, ParentCategory.OUTER.getValue(), "후드 집업"));
 
-                            categories.add(ModelFactory.makeCategory("신발", ParentCategory.ETC.getValue(), 13));
-                            categories.add(ModelFactory.makeCategory("안경", ParentCategory.ETC.getValue(), 14));
-                            categories.add(ModelFactory.makeCategory("목걸이", ParentCategory.ETC.getValue(), 15));
-                            categories.add(ModelFactory.makeCategory("기타", ParentCategory.ETC.getValue(), 16));
+                            categories.add(new Category(13, ParentCategory.ETC.getValue(), "신발"));
+                            categories.add(new Category(14, ParentCategory.ETC.getValue(), "안경"));
+                            categories.add(new Category(15, ParentCategory.ETC.getValue(), "목걸이"));
+                            categories.add(new Category(16, ParentCategory.ETC.getValue(), "기타"));
 
-
-                            AtomicLong id = new AtomicLong(CommonUtil.getCurrentDate());
+                            AtomicLong id = new AtomicLong(CommonUtil.createId());
                             categories.forEach(category -> category.setId(id.incrementAndGet()));
 
                             new CategoryRepository(context).insert(categories);
