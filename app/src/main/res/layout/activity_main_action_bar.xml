@@ -6,12 +6,14 @@
 
         <variable
             name="autoCompleteAdapter"
-            type="com.example.myfit.ui.search.adapter.AutoCompleteAdapter" />
+            type="com.example.myfit.util.adapter.AutoCompleteAdapter" />
     </data>
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
+        app:liftOnScroll="true"
         android:background="?colorPrimary">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -35,7 +37,7 @@
             <include
                 android:id="@+id/searchBar"
                 layout="@layout/activity_main_search_bar"
-                app:adapter="@{autoCompleteAdapter}" />
+                app:autoCompleteAdapter="@{autoCompleteAdapter}" />
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
