@@ -41,11 +41,6 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
         return mBindList.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
     private class AutoCompleteAdapterFilter extends Filter {
         @Override
         protected FilterResults performFiltering(@NotNull CharSequence constraint) {
@@ -53,7 +48,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> {
 
             mBindList = mOriginList.stream().filter(word -> {
                 String word2 = word.toLowerCase(Locale.getDefault()).replaceAll("\\p{Z}", "");
-                return KoreanTextMatcher.isMatch(word, keyWord);
+                return KoreanTextMatcher.isMatch(word2, keyWord);
             }).collect(Collectors.toList());
             return null;
         }
