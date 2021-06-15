@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
-public abstract class ActionModeImpl implements ActionMode.Callback {
+public class ActionModeImpl implements ActionMode.Callback {
     public static ActionMode sActionMode = null;
     public static boolean sActionModeOn = false;
     public static final String ACTION_MODE_STRING = "action mode";
@@ -39,7 +39,8 @@ public abstract class ActionModeImpl implements ActionMode.Callback {
     private MenuItem[] mMenuItems;
     protected final ActionModeListener mListener;
 
-    public ActionModeImpl(Context context, Fragment fragment) {
+    @Inject
+    public ActionModeImpl(@ActivityContext Context context, Fragment fragment) {
         mBinding = TitleActionModeBinding.inflate(LayoutInflater.from(context));
         mListener = (ActionModeListener) fragment;
     }
