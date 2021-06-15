@@ -20,7 +20,7 @@ public class BaseModel {
     private long deletedTime;
 
     protected BaseModel(int parentIndex, int sortNumber) {
-        this.id = CommonUtil.getCurrentDate();
+        this.id = CommonUtil.createId();
         this.parentIndex = parentIndex;
         this.sortNumber = sortNumber;
     }
