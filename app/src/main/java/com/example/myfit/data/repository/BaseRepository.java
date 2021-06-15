@@ -13,15 +13,15 @@ public abstract class BaseRepository<T extends BaseTuple> {
 
     public void changeSort(Sort sort) {
         if (sort != getSort())
-            getPreference().edit().putInt(SharedPreferenceKey.SORT.getValue(), sort.getValue()).apply();
+            getSortPreference().edit().putInt(SharedPreferenceKey.SORT.getValue(), sort.getValue()).apply();
     }
 
     public Sort getSort() {
-        int sort = getPreference().getInt(SharedPreferenceKey.SORT.getValue(), Sort.SORT_CUSTOM.getValue());
+        int sort = getSortPreference().getInt(SharedPreferenceKey.SORT.getValue(), Sort.SORT_CUSTOM.getValue());
         return Sort.values()[sort];
     }
 
-    protected abstract SharedPreferences getPreference();
+    protected abstract SharedPreferences getSortPreference();
 
     public abstract void updateTuples(List<T> itemList);
 }
