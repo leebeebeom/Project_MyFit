@@ -48,8 +48,13 @@ public class CommonUtil {
         }
     }
 
-    public static long getCurrentDate() {
+    public static long createId() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
         return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
+    }
+
+    public static String getRecentSearchDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일", Locale.getDefault());
+        return dateFormat.format(new Date(System.currentTimeMillis()));
     }
 }
