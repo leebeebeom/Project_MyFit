@@ -39,6 +39,8 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     public abstract void bind();
 
+    public abstract void setAdapter(BaseAdapter<?, ?, ?> baseAdapter);
+
     public void itemViewClick() {
         if (sActionMode != null) {
             if (mSelectedItems.contains(mTuple))
@@ -89,8 +91,6 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     protected void setItemViewTranslationZ(View itemView, int value) {
         itemView.setTranslationZ(value);
     }
-
-    public abstract void setAdapter(BaseAdapter<?, ?, ?> baseAdapter);
 
     public abstract static class BaseSizeVH extends BaseVH<SizeTuple, BaseVHListener.SizeVHListener> {
 
