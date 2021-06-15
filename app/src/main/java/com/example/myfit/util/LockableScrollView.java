@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +15,9 @@ import org.jetbrains.annotations.NotNull;
 public class LockableScrollView extends NestedScrollView {
     private boolean mScrollable = true;
 
-    public LockableScrollView(@NonNull @NotNull Context context) {
-        super(context);
-    }
-
     public LockableScrollView(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public LockableScrollView(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        setFillViewport(true);
     }
 
     public void setScrollable(boolean enable) {
