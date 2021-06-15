@@ -16,16 +16,12 @@ import com.example.myfit.data.tuple.tuple.SizeTuple;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 @Dao
 public abstract class SizeDao extends BaseDao<SizeTuple> {
-
     //to list
     @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, favorite, deletedTime " +
             "FROM Size WHERE parentId = :parentId AND deleted = 0 AND parentDeleted = 0")
@@ -34,28 +30,17 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     //to recycleBin
     public LiveData<List<List<SizeTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<SizeTuple>> tuplesLive = this.getDeletedTuplesLive();
-        return Transformations.map(tuplesLive, this::getClassifiedSizeTuples);
+        return Transformations.map(tuplesLive, super::getClassifiedTuplesByParentIndex);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, favorite, deletedTime FROM Size " +
             "WHERE deleted = 1 AND parentDeleted = 0 ORDER BY deletedTime DESC")
     protected abstract LiveData<List<SizeTuple>> getDeletedTuplesLive();
 
-    private List<List<SizeTuple>> getClassifiedSizeTuples(List<SizeTuple> tuples) {
-        if (tuples != null) {
-            List<LinkedList<SizeTuple>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-            List<List<SizeTuple>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-
-            tuples.forEach(tuple -> classifiedLinkedList.get(tuple.getParentIndex()).add(tuple));
-            for (int i = 0; i < 4; i++) classifiedList.get(i).addAll(classifiedLinkedList.get(i));
-            return classifiedList;
-        } else return null;
-    }
-
     //to search, recycleBin search
     public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(boolean deleted) {
         LiveData<List<SizeTuple>> tuplesLive = getSearchTuplesLive2(deleted);
-        return Transformations.map(tuplesLive, this::getClassifiedSizeTuples);
+        return Transformations.map(tuplesLive, super::getClassifiedTuplesByParentIndex);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, brand, imageUri, favorite, deletedTime FROM Size " +
@@ -88,6 +73,9 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     @Query("SELECT max(sortNumber) FROM Size")
     protected abstract int getLargestSort();
 
+    @Insert
+    protected abstract long insert(Size size);
+
     //from listFragment(favorite)
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     public abstract void update(SizeTuple sizeTuple);
@@ -98,21 +86,18 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
 
     //from sizeFragment
     @Transaction
-    public void deleteOrRestore(long id) {
-        DeletedTuple deletedTuple = getDeletedTuple(id);
-        deletedTuple.setDeleted(!deletedTuple.isDeleted());
+    public void delete(long id) {
+        DeletedTuple deletedTuple = this.getDeletedTuple(id);
+        deletedTuple.setDeleted(true);
         deletedTuple.setDeletedTime(super.getCurrentTime());
-        updateDeletedTuple(deletedTuple);
+        this.updateDeletedTuple(deletedTuple);
     }
-
-    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
-    protected abstract void updateDeletedTuple(DeletedTuple deletedTuple);
 
     @Query("SELECT id, deleted, deletedTime FROM Size WHERE id = :id")
     protected abstract DeletedTuple getDeletedTuple(long id);
 
-    @Insert
-    protected abstract long insert(Size size);
+    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
+    protected abstract void updateDeletedTuple(DeletedTuple deletedTuple);
 
     @Transaction
     //from move dialog
@@ -133,7 +118,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     //from selectedItemDelete, restore dialog
     public void deleteOrRestore(long[] ids) {
         List<DeletedTuple> sizeDeletedTuples = getDeletedTuples(ids);
-        super.setDeletedTuples(sizeDeletedTuples);
+        super.setDeleted(sizeDeletedTuples);
         this.updateDeletedTuples(sizeDeletedTuples);
     }
 
@@ -143,6 +128,7 @@ public abstract class SizeDao extends BaseDao<SizeTuple> {
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Size.class)
     protected abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
 
+    //from size fragment
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(Size size);
 }
