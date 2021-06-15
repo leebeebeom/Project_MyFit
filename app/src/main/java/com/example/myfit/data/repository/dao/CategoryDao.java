@@ -9,11 +9,11 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.myfit.data.model.ModelFactory;
 import com.example.myfit.data.model.model.Category;
 import com.example.myfit.data.tuple.DeletedTuple;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.util.CommonUtil;
+import com.example.myfit.util.SortUtil;
 import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +29,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
         LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(tuplesLive);
-
-        return super.getClassifiedTuplesLive(tuplesLive, contentSizesLive);
+        LiveData<List<CategoryTuple>> tuplesWithContentSizeLiveSet = super.getTuplesLiveWithContentSize(tuplesLive, contentSizesLive);
+        return super.getClassifiedTuplesLive(tuplesWithContentSizeLiveSet);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 0")
@@ -39,8 +39,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     @NotNull
     protected LiveData<List<Integer>> getCategoryContentSizesLive(LiveData<List<CategoryTuple>> tuplesLive) {
         return Transformations.switchMap(tuplesLive, tuples -> {
-            List<Long> itemIds = getTupleIds(tuples);
-            return getCategoryContentSizesLive(itemIds);
+            List<Long> tuplesId = getTupleIds(tuples);
+            return getCategoryContentSizesLive(tuplesId);
         });
     }
 
@@ -55,8 +55,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
         LiveData<List<CategoryTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
         LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(deletedTuplesLive);
-
-        return super.getClassifiedTuplesLive(deletedTuplesLive, contentSizesLive);
+        LiveData<List<CategoryTuple>> tuplesWithContentSizeLive = super.getTuplesLiveWithContentSize(deletedTuplesLive, contentSizesLive);
+        return super.getClassifiedTuplesLive(tuplesWithContentSizeLive);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY deletedTime DESC")
@@ -66,8 +66,8 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
         LiveData<List<CategoryTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
         LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(deletedSearchTuplesLive);
-
-        return super.getClassifiedTuplesLive(deletedSearchTuplesLive, contentSizesLive);
+        LiveData<List<CategoryTuple>> tuplesWithContentSizeLive = super.getTuplesLiveWithContentSize(deletedSearchTuplesLive, contentSizesLive);
+        return super.getClassifiedTuplesLive(tuplesWithContentSizeLive);
     }
 
     @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY name")
@@ -80,7 +80,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         List<Long> ids = super.getTupleIds(tuples);
         List<Integer> contentSizes = getCategoryContentSizes(ids);
         super.setContentSize(tuples, contentSizes);
-        super.sortTuples(sort, tuples);
+        SortUtil.sortCategoryFolderTuples(sort, tuples);
         return tuples;
     }
 
@@ -121,7 +121,7 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //from addCategory dialog(disposable)
     public long insert(String name, int parentIndex) {
         int sortNumber = this.getLargestSortNumber() + 1;
-        Category category = ModelFactory.makeCategory(name.trim(), parentIndex, sortNumber);
+        Category category = new Category(parentIndex, sortNumber, name);
         return this.insert(category);
     }
 
@@ -137,14 +137,14 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
 
     @Transaction
     //from restore dialog(disposable)
-    public List<Long> insertRestoreCategories(@NotNull List<Integer> parentIndex) {
+    public List<Long> insertRestoreCategories(@NotNull List<Integer> parentIndexs) {
         String name = "복구됨";
         int sortNumber = this.getLargestSortNumber() + 1;
 
         List<Category> categories = new LinkedList<>();
         AtomicLong id = new AtomicLong(CommonUtil.getCurrentDate());
-        for (int index : parentIndex) {
-            categories.add(ModelFactory.makeCategory(name, index, sortNumber));
+        for (int parentIndex : parentIndexs) {
+            categories.add(new Category(parentIndex, sortNumber, name));
             sortNumber++;
         }
         categories.forEach(category -> category.setId(id.incrementAndGet()));
@@ -170,10 +170,10 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids) {
         List<DeletedTuple> deletedTuples = this.getDeletedTuplesByIds(ids);
-        super.setDeletedTuples(deletedTuples);
+        super.setDeleted(deletedTuples);
         this.updateDeletedTuples(deletedTuples);
 
-        this.setChildrenParentDeleted(ids);
+        super.setChildrenParentDeleted(ids);
     }
 
     @Query("SELECT id, deleted, deletedTime FROM Category WHERE id IN (:ids)")
