@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.scopes.ViewModelScoped;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -56,16 +55,16 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     }
 
     //to search, recycleBin search
-    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive(boolean deleted) {
-        if (!deleted) {
-            if (mSearchTuplesLive == null)
-                mSearchTuplesLive = mSizeDao.getSearchTuplesLive(false);
-            return mSearchTuplesLive;
-        } else {
-            if (mDeletedSearchTuplesLive == null)
-                mDeletedSearchTuplesLive = mSizeDao.getSearchTuplesLive(true);
-            return mDeletedSearchTuplesLive;
-        }
+    public LiveData<List<List<SizeTuple>>> getSearchTuplesLive() {
+        if (mSearchTuplesLive == null)
+            mSearchTuplesLive = mSizeDao.getSearchTuplesLive(false);
+        return mSearchTuplesLive;
+    }
+
+    public LiveData<List<List<SizeTuple>>> getDeletedSearchTuplesLive() {
+        if (mDeletedSearchTuplesLive == null)
+            mDeletedSearchTuplesLive = mSizeDao.getSearchTuplesLive(true);
+        return mDeletedSearchTuplesLive;
     }
 
     //to sizeFragment
@@ -88,13 +87,14 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
         new Thread(() -> mSizeDao.update(sizeTuple)).start();
     }
 
+    //from sizeFragment
     public void update(Size size) {
         new Thread(() -> mSizeDao.update(size)).start();
     }
 
     //from sizeDelete dialog
     public void delete(long id) {
-        new Thread(() -> mSizeDao.deleteOrRestore(id)).start();
+        new Thread(() -> mSizeDao.delete(id)).start();
     }
 
     //from move dialog
@@ -109,7 +109,7 @@ public class SizeRepository extends BaseRepository<SizeTuple> {
     }
 
     @Override
-    protected SharedPreferences getPreference() {
+    protected SharedPreferences getSortPreference() {
         return mListSortPreference;
     }
 
