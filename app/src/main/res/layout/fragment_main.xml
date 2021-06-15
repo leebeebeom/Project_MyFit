@@ -45,22 +45,22 @@
                     <include
                         android:id="@+id/btnTop"
                         layout="@layout/fragment_main_button"
-                        app:text="@string/all_top_cap" />
+                        app:text="@{@string/all_top_cap}" />
 
                     <include
                         android:id="@+id/btnBottom"
                         layout="@layout/fragment_main_button"
-                        app:text="@string/all_bottom_cap" />
+                        app:text="@{@string/all_bottom_cap}" />
 
                     <include
                         android:id="@+id/btnOuter"
                         layout="@layout/fragment_main_button"
-                        app:text="@string/all_outer_cap" />
+                        app:text="@{@string/all_outer_cap}" />
 
                     <include
                         android:id="@+id/btnEtc"
                         layout="@layout/fragment_main_button"
-                        app:text="@string/all_etc_cap" />
+                        app:text="@{@string/all_etc_cap}" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <androidx.viewpager2.widget.ViewPager2
