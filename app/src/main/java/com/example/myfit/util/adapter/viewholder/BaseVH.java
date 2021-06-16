@@ -2,7 +2,6 @@ package com.example.myfit.util.adapter.viewholder;
 
 import android.annotation.SuppressLint;
 import android.view.MotionEvent;
-import android.view.View;
 
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,9 +34,10 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     public void setTuple(T tuple) {
         this.mTuple = tuple;
+        bind();
     }
 
-    public abstract void bind();
+    protected abstract void bind();
 
     public abstract void setAdapter(BaseAdapter<?, ?, ?> baseAdapter);
 
@@ -75,22 +75,16 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
     public void dragStart() {
         sDragging = true;
         mListener.dragStart(this, mTuple);
-        setDraggingView();
+        setDragging();
     }
-
-    protected abstract void setDraggingView();
 
     public void dragStop() {
         sDragging = false;
         mListener.dragStop(mTuple);
-        setDropView();
+        setDragging();
     }
 
-    protected abstract void setDropView();
-
-    protected void setItemViewTranslationZ(View itemView, int value) {
-        itemView.setTranslationZ(value);
-    }
+    protected abstract void setDragging();
 
     public abstract static class BaseSizeVH extends BaseVH<SizeTuple, BaseVHListener.SizeVHListener> {
 
