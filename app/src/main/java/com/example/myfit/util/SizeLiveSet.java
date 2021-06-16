@@ -17,34 +17,26 @@ public class SizeLiveSet<E> extends HashSet<E> {
     @Getter
     private final MutableLiveData<Integer> mLiveData = new MutableLiveData<>(0);
 
-    @Override
-    public boolean add(E e) {
-        mLiveData.setValue(size() + 1);
-        return super.add(e);
+
+    public void add2(E e) {
+        super.add(e);
+        mLiveData.setValue(size());
     }
 
-    @Override
-    public boolean addAll(@NonNull @NotNull Collection<? extends E> c) {
-        mLiveData.setValue(size() + c.size());
-        return super.addAll(c);
+    public void addAll2(@NonNull @NotNull Collection<? extends E> c) {
+        super.addAll(c);
+        mLiveData.setValue(size());
     }
 
-    @Override
-    public boolean remove(@Nullable @org.jetbrains.annotations.Nullable Object o) {
-        mLiveData.setValue(size() - 1);
-        return super.remove(o);
+
+    public void remove2(@Nullable @org.jetbrains.annotations.Nullable Object o) {
+        super.remove(o);
+        mLiveData.setValue(size());
     }
 
-    @Override
-    public boolean removeAll(@NonNull @NotNull Collection<?> c) {
-        mLiveData.setValue(0);
-        return super.removeAll(c);
-    }
-
-    @Override
-    public void clear() {
-        mLiveData.setValue(0);
+    public void clear2() {
         super.clear();
+        mLiveData.setValue(size());
     }
 
     public int getLiveDataValue() {
