@@ -51,12 +51,12 @@ public abstract class BaseVH<T extends BaseTuple, L extends BaseVHListener> exte
 
     private void removeItem(SizeLiveSet<T> selectedItemSet) {
         getCheckBox().setChecked(false);
-        selectedItemSet.remove(mTuple);
+        selectedItemSet.remove2(mTuple);
     }
 
     private void addItem(SizeLiveSet<T> selectedItemSet) {
         getCheckBox().setChecked(true);
-        selectedItemSet.add(mTuple);
+        selectedItemSet.add2(mTuple);
     }
 
     public abstract MaterialCheckBox getCheckBox();
