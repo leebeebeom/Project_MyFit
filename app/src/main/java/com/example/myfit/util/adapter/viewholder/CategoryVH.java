@@ -10,8 +10,6 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-
 public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     private final ItemVhCategoryBinding mBinding;
 
@@ -32,19 +30,8 @@ public class CategoryVH extends BaseVH<CategoryTuple, BaseVHListener> {
     }
 
     @Override
-    protected void setDraggingView() {
-        setItemViewTranslationZ(itemView, 10);
-        mBinding.cb.cb.setVisibility(View.INVISIBLE);
-        mBinding.cardView.tvName.setAlpha(0.5f);
-        mBinding.cardView.tvContentSize.setAlpha(0.5f);
-    }
-
-    @Override
-    protected void setDropView() {
-        setItemViewTranslationZ(itemView, 10);
-        mBinding.cb.cb.setVisibility(View.VISIBLE);
-        mBinding.cardView.tvName.setAlpha(0.8f);
-        mBinding.cardView.tvContentSize.setAlpha(0.8f);
+    protected void setDragging() {
+        mBinding.setDragging(sDragging);
     }
 
     @Override
