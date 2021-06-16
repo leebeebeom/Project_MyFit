@@ -1,44 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="com.example.myfit.util.ActionModeImpl" />
+
         <variable
             name="sizeVH"
             type="com.example.myfit.util.adapter.viewholder.BaseVH.BaseSizeVH" />
+
+        <variable
+            name="dragging"
+            type="boolean" />
+
+        <variable
+            name="adapter"
+            type="com.example.myfit.util.adapter.BaseAdapter" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout"
+        android:alpha="@{dragging ? 0.7f : 1f}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
         android:paddingHorizontal="@dimen/_4sdp"
-        android:paddingVertical="@dimen/_2sdp"
-        tools:ignore="ObsoleteLayoutParam">
+        android:paddingVertical="@dimen/_2sdp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@{sizeVH.tuple.brand.trim()}"
-            android:textSize="@dimen/_7sdp"
-            tools:text="앤더슨벨" />
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:gravity="bottom">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
-            android:alpha="0.8"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@{sizeVH.tuple.name.trim()}"
-            android:textSize="@dimen/_10sdp"
-            tools:text="오버핏 반팔" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvBrand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{sizeVH.tuple.brand.trim()}"
+                android:textSize="@dimen/_7sdp"
+                app:layout_constraintBottom_toTopOf="@id/tvName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="앤더슨벨" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:alpha="0.8"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{sizeVH.tuple.name.trim()}"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvBrand"
+                tools:text="오버핏 반팔" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cb"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:background="@android:color/transparent"
+            android:button="@drawable/check_box_heart"
+            android:checked="@={sizeVH.tuple.favorite}"
+            android:enabled="@{adapter.actionModeState == ActionModeImpl.ACTION_MODE_ON ? false : true}"
+            android:gravity="bottom"
+            android:onClick="@{() -> sizeVH.favoriteClick()}"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
