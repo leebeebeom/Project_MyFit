@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.example.myfit.util.adapter.viewholder.BaseVH" />
+
         <variable
             name="folderListVH"
             type="com.example.myfit.util.adapter.viewholder.FolderListVH" />
@@ -27,8 +29,8 @@
             android:id="@+id/cardView"
             layout="@layout/item_vh_include_list_card_view"
             app:baseAdapter="@{baseAdapter}"
-            app:baseVH="@{folderListVH}"
-            app:alpha="@{0.8}"
+            app:alpha="@{0.8f}"
+            app:baseVH="@{(BaseVH) folderListVH}"
             app:tuple="@{folderListVH.tuple}" />
     </FrameLayout>
 </layout>
