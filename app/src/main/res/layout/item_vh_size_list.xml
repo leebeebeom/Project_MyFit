@@ -82,6 +82,8 @@
                     app:layout_constraintEnd_toStartOf="@id/iconDragHandle"
                     app:layout_constraintStart_toEndOf="@id/iv"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:adapter="@{baseAdapter}"
+                    app:dragging="@{dragging}"
                     app:sizeVH="@{sizeListVH}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
