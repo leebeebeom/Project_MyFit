@@ -26,6 +26,7 @@
 
         <include
             android:id="@+id/cb"
+            app:dragging="@{dragging}"
             layout="@layout/item_vh_include_check_box" />
 
         <com.google.android.material.card.MaterialCardView
