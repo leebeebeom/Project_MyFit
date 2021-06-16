@@ -8,8 +8,6 @@ import com.example.myfit.util.SizeLiveSet;
 import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
-import java.util.Set;
-
 public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     private final ItemVhFolderListBinding mBinding;
 
@@ -29,11 +27,8 @@ public class FolderListVH extends BaseVH<FolderTuple, BaseVHListener> {
     }
 
     @Override
-    protected void setDraggingView() {
-    }
+    protected void setDragging() {
 
-    @Override
-    protected void setDropView() {
     }
 
     @Override
