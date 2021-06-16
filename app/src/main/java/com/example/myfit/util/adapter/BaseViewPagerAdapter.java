@@ -69,6 +69,7 @@ public class BaseViewPagerAdapter<T extends BaseAdapter<?, ?, ?>> extends Recycl
             holder.setAdapter(mAdapters.get(position));
             holder.addItemTouchListener(mDragSelectListeners.get(position));
             mItemTouchHelpers.get(position).attachToRecyclerView(holder.getRecyclerView());
+            if (getItemCount() == 0) holder.setNoData(true);
         }
     }
 
