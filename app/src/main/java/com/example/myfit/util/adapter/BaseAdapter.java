@@ -117,12 +117,12 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     }
 
     public void selectAll() {
-        mSelectedItems.addAll(getCurrentList());
+        mSelectedItems.addAll2(getCurrentList());
         notifyDataSetChanged();
     }
 
     public void deselectAll() {
-        mSelectedItems.clear();
+        mSelectedItems.clear2();
         notifyDataSetChanged();
     }
 }
