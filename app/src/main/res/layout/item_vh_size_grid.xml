@@ -87,13 +87,14 @@
 
                 <include
                     android:id="@+id/content"
-                    layout="@layout/item_vh_include_size_name_layout"
+                    layout="@layout/item_vh_include_size_content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv"
+                    app:adapter="@{baseAdapter}"
                     app:sizeVH="@{sizeGridVH}" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
