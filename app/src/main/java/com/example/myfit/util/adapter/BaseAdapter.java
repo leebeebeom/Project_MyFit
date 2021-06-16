@@ -75,7 +75,6 @@ public abstract class BaseAdapter<T extends BaseTuple, L extends BaseVHListener,
     @Override
     public void onBindViewHolder(@NonNull @NotNull VH holder, int position) {
         holder.setTuple(getItem(position));
-        holder.bind();
         holder.setAdapter(this);
 
         if (mActionModeState == ACTION_MODE_ON)
