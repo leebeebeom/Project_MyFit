@@ -22,62 +22,89 @@
         <variable
             name="alpha"
             type="float" />
+
+        <variable
+            name="dragging"
+            type="boolean" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         listActionMode="@{baseAdapter}"
+        holder="@{baseVH}"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:layout_marginVertical="@dimen/_2sdp"
+        android:translationZ="@{dragging ? 10f : 0f}"
         app:cardBackgroundColor="?myCardViewBackground"
         app:cardCornerRadius="@dimen/_4sdp"
         app:cardElevation="@dimen/_2sdp">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/dotIcon"
-                setDotIcon="@{}"
+            <FrameLayout
+                android:id="@+id/iconLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/_4sdp"
-                android:alpha="0.8"
-                android:scaleX="0.3"
-                android:scaleY="0.3"
-                android:visibility="gone"
-                tools:src="@drawable/icon_dot" />
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tvName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/folderIcon"
-                setFolderIcon="@{}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_6sdp"
-                android:alpha="0.8"
-                android:visibility="gone"
-                tools:src="@drawable/icon_folder" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/dotIcon"
+                    setDotIcon='@{""}'
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:alpha="0.8"
+                    android:scaleX="0.3"
+                    android:scaleY="0.3"
+                    android:visibility="gone"
+                    tools:src="@drawable/icon_dot"
+                    tools:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/folderIcon"
+                    setFolderIcon='@{""}'
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:alpha="0.8"
+                    android:visibility="gone"
+                    tools:src="@drawable/icon_folder" />
+            </FrameLayout>
 
             <com.google.android.material.textview.MaterialTextView
+                android:alpha="@{dragging ? 0.5f : alpha}"
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:alpha="@{alpha}"
+                android:text="@{tuple.name}"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxWidth="@dimen/_220sdp"
                 android:maxLines="1"
-                android:text="@{baseVH.tuple.name}"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/contentSizeLayout"
+                app:layout_constraintStart_toEndOf="@id/iconLayout"
+                app:layout_constraintTop_toTopOf="parent"
                 android:textSize="@dimen/_11sdp"
                 tools:text="안녕하세요" />
 
             <FrameLayout
+                android:id="@+id/contentSizeLayout"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvName"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -91,7 +118,7 @@
                     android:id="@+id/tvContentSize"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:alpha="0.6"
+                    android:alpha="@{dragging ? 0.5f : 0.6f}"
                     android:ellipsize="end"
                     android:maxWidth="@dimen/_20sdp"
                     android:maxLines="1"
@@ -99,21 +126,24 @@
                     android:textSize="@dimen/_8sdp"
                     tools:text="1234" />
             </FrameLayout>
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iconDragHandle"
-                app:onTouchListener="@{(view, event) -> baseVH.dragStart(event)}"
                 dragHandleActionMode="@{baseAdapter}"
-                setDragHandle="@{}"
+                setDragHandle='@{""}'
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:alpha="0.8"
                 android:paddingStart="0dp"
-                android:paddingEnd="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_16sdp"
                 android:scaleX="0.9"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:visibility="gone"
+                app:onTouchListener="@{(view, event) -> baseVH.dragStart(event)}"
+                tools:visibility="visible"
                 tools:src="@drawable/icon_drag_handle" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
