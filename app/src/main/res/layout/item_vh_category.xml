@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.example.myfit.util.adapter.viewholder.BaseVH" />
+
         <variable
             name="categoryVH"
             type="com.example.myfit.util.adapter.viewholder.CategoryVH" />
@@ -11,6 +13,10 @@
         <variable
             name="baseAdapter"
             type="com.example.myfit.util.adapter.BaseAdapter" />
+
+        <variable
+            name="dragging"
+            type="boolean" />
     </data>
 
     <FrameLayout
@@ -21,15 +27,16 @@
 
         <include
             android:id="@+id/cb"
+            app:dragging="@{dragging}"
             layout="@layout/item_vh_include_check_box" />
 
         <include
             android:id="@+id/cardView"
             layout="@layout/item_vh_include_list_card_view"
+            app:alpha="@{0.9f}"
             app:baseAdapter="@{baseAdapter}"
-            app:baseVH="@{categoryVH}"
+            app:baseVH="@{(BaseVH) categoryVH}"
             app:tuple="@{categoryVH.tuple}"
-            app:alpha="@{0.9}"
-             />
+            app:dragging="@{dragging}" />
     </FrameLayout>
 </layout>
