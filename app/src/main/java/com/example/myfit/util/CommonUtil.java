@@ -3,6 +3,7 @@ package com.example.myfit.util;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
+import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.util.constant.ParentCategory;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
@@ -11,7 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -56,5 +59,15 @@ public class CommonUtil {
     public static String getRecentSearchDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM월 dd일", Locale.getDefault());
         return dateFormat.format(new Date(System.currentTimeMillis()));
+    }
+
+    public static <T extends BaseTuple> void replaceNewOrderSelectedItems(List<T> newOrderList, SizeLiveSet<T> selectedItems) {
+        List<T> newOrderSelectedItems =
+                newOrderList.stream()
+                        .filter(selectedItems::contains)
+                        .collect(Collectors.toList());
+
+        selectedItems.clear();
+        selectedItems.addAll(newOrderSelectedItems);
     }
 }
