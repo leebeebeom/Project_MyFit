@@ -12,6 +12,10 @@
         <variable
             name="baseAdapter"
             type="com.example.myfit.util.adapter.BaseAdapter" />
+
+        <variable
+            name="dragging"
+            type="boolean" />
     </data>
 
     <FrameLayout
@@ -26,7 +30,9 @@
 
         <com.google.android.material.card.MaterialCardView
             listActionMode="@{baseAdapter}"
+            holder="@{sizeListVH}"
             android:id="@+id/cardView"
+            android:translationZ="@{dragging ? 10f : 0f}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
@@ -35,67 +41,66 @@
             app:cardBackgroundColor="?myCardViewBackground"
             app:cardElevation="@dimen/_2sdp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:gravity="center"
                 android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv"
+                    setUri="@{sizeListVH.tuple.imageUri}"
                     android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp">
+                    android:layout_height="0dp"
+                    android:alpha="@{dragging ? 0.5f : 1f}"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toStartOf="@id/content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iv"
-                        setUri="@{sizeListVH.tuple.imageUri}"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        setAddIcon="@{sizeListVH.tuple.imageUri}"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:alpha="0.2"
-                        android:scaleX="0.5"
-                        android:scaleY="0.5"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:src="@drawable/icon_add_image" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatImageView
+                    setAddIcon="@{sizeListVH.tuple.imageUri}"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="0dp"
+                    android:alpha="0.2"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toStartOf="@id/content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/icon_add_image" />
 
                 <include
-                    android:id="@+id/nameLayout"
-                    layout="@layout/item_vh_include_size_name_layout"
-                    app:sizeVH="@{sizeListVH}" />
-
-                <include
-                    android:id="@+id/cbFavorite"
-                    layout="@layout/item_vh_include_size_favorite_check_box"
-                    app:adapter="@{baseAdapter}"
+                    android:id="@+id/content"
+                    layout="@layout/item_vh_include_size_content"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iconDragHandle"
+                    app:layout_constraintStart_toEndOf="@id/iv"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:sizeVH="@{sizeListVH}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconDragHandle"
                     app:onTouchListener="@{(view, event) -> sizeListVH.dragStart(event)}"
                     dragHandleActionMode="@{baseAdapter}"
-                    setDragHandle="@{}"
+                    setDragHandle='@{""}'
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="end|center_vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:alpha="0.8"
                     android:paddingStart="0dp"
                     android:paddingEnd="@dimen/_12sdp"
                     android:visibility="gone"
+                    tools:visibility="visible"
                     tools:src="@drawable/icon_drag_handle" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>
