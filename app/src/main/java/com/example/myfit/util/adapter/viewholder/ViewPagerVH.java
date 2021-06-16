@@ -27,6 +27,7 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
         super(binding.getRoot());
         this.mBinding = binding;
         this.mListener = listener;
+        mBinding.setViewPagerVH(this);
     }
 
     public void setNoResult(boolean isEmpty) {
@@ -46,7 +47,7 @@ public class ViewPagerVH extends RecyclerView.ViewHolder {
     }
 
     public void addItemTouchListener(DragSelect dragSelectListener) {
-        mBinding.rv.addOnItemTouchListener(dragSelectListener.setRecyclerView(mBinding.rv));
+        mBinding.rv.addOnItemTouchListener(dragSelectListener);
     }
 
     public RecyclerView getRecyclerView() {
