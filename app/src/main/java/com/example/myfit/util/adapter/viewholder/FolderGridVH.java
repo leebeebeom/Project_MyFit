@@ -1,8 +1,5 @@
 package com.example.myfit.util.adapter.viewholder;
 
-import android.annotation.SuppressLint;
-import android.view.View;
-
 import com.example.myfit.data.tuple.tuple.FolderTuple;
 import com.example.myfit.databinding.ItemVhFolderGridBinding;
 import com.example.myfit.util.SizeLiveSet;
@@ -22,10 +19,8 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
         this.mBinding = binding;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void bind() {
-        if (mTuple.getId() != -1)
             mBinding.setFolderGridVH(this);
     }
 
@@ -35,19 +30,8 @@ public class FolderGridVH extends BaseVH<FolderTuple, BaseVHListener> {
     }
 
     @Override
-    protected void setDraggingView() {
-        setItemViewTranslationZ(itemView, 10);
-        mBinding.layoutContentsSize.setVisibility(View.INVISIBLE);
-        mBinding.tvName.setAlpha(0.5f);
-        mBinding.cb.setAlpha(0.5f);
-    }
-
-    @Override
-    protected void setDropView() {
-        setItemViewTranslationZ(itemView, 0);
-        mBinding.layoutContentsSize.setVisibility(View.VISIBLE);
-        mBinding.tvName.setAlpha(1);
-        mBinding.cb.setAlpha(0.8f);
+    protected void setDragging() {
+        mBinding.setDragging(sDragging);
     }
 
     @Override
