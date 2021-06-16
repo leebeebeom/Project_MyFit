@@ -12,6 +12,10 @@
         <variable
             name="baseAdapter"
             type="com.example.myfit.util.adapter.BaseAdapter" />
+
+        <variable
+            name="dragging"
+            type="boolean" />
     </data>
 
     <FrameLayout
@@ -23,91 +27,94 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_140sdp"
             android:layout_height="wrap_content"
+            android:translationZ="@{dragging ? 10f : 0f}"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_4sdp"
             app:cardBackgroundColor="?myCardViewBackground"
             app:cardCornerRadius="@dimen/_4sdp"
             app:cardElevation="@dimen/_2sdp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv"
+                    setUri="@{sizeGridVH.tuple.imageUri}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:alpha="@{dragging ? 0.5f : 1f}"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/content"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iv"
-                        android:scaleType="centerCrop"
-                        setUri="@{sizeGridVH.tuple.imageUri}"
-                        android:layout_width="@dimen/_140sdp"
-                        android:layout_height="@dimen/_140sdp"
-                        android:layout_marginTop="@dimen/_16sdp" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    setAddIcon="@{sizeGridVH.tuple.imageUri}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0.2"
+                    android:scaleX="0.3"
+                    android:scaleY="0.3"
+                    app:layout_constraintBottom_toTopOf="@id/content"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/icon_add_image"
+                    tools:visibility="visible" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        setAddIcon="@{sizeGridVH.tuple.imageUri}"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleX="0.3"
-                        android:scaleY="0.3"
-                        android:layout_gravity="center"
-                        tools:src="@drawable/icon_add_image"
-                        android:alpha="0.2" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconDragHandle"
+                    dragHandleActionMode="@{baseAdapter}"
+                    setDragHandle2='@{""}'
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-2dp"
+                    android:alpha="0.9"
+                    android:scaleX="0.7"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:onTouchListener="@{(view, event) -> sizeGridVH.dragStart(event)}"
+                    tools:src="@drawable/icon_drag_handle2"
+                    tools:visibility="visible" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iconDragHandle"
-                        dragHandleActionMode="@{baseAdapter}"
-                        android:visibility="gone"
-                        setDragHandle2="@{}"
-                        android:layout_gravity="end"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:onTouchListener="@{(view, event) -> sizeGridVH.dragStart(event)}"
-                        android:layout_marginTop="-2dp"
-                        android:alpha="0.9"
-                        android:scaleX="0.7"
-                        tools:src="@drawable/icon_drag_handle2" />
-                </FrameLayout>
+                <include
+                    android:id="@+id/content"
+                    layout="@layout/item_vh_include_size_name_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv"
+                    app:sizeVH="@{sizeGridVH}" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/layoutContents"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <include
-                        android:id="@+id/nameLayout"
-                        layout="@layout/item_vh_include_size_name_layout"
-                        app:sizeVH="@{sizeGridVH}" />
-
-                    <include
-                        android:id="@+id/cbFavorite"
-                        layout="@layout/item_vh_include_size_favorite_check_box"
-                        app:adapter="@{baseAdapter}"
-                        app:sizeVH="@{sizeGridVH}" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/cb"
-                gridActionMode="@{baseAdapter}"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="start"
-                android:layout_marginStart="-4dp"
-                android:layout_marginTop="-2dp"
-                android:alpha="0.8"
-                android:buttonTint="?colorControlNormal"
-                android:clickable="false"
-                android:elevation="@dimen/_4sdp"
-                android:enabled="false"
-                android:scaleX="0.6"
-                android:scaleY="0.6"
-                android:visibility="gone" />
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/cb"
+                    gridActionMode="@{baseAdapter}"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginTop="-2dp"
+                    android:alpha="@{dragging ? 0.5f : 0.8f}"
+                    android:buttonTint="?colorControlNormal"
+                    android:clickable="false"
+                    android:elevation="@dimen/_4sdp"
+                    android:enabled="false"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>
