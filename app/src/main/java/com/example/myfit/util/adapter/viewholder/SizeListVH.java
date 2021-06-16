@@ -1,7 +1,5 @@
 package com.example.myfit.util.adapter.viewholder;
 
-import android.view.View;
-
 import com.example.myfit.data.tuple.tuple.SizeTuple;
 import com.example.myfit.databinding.ItemVhSizeListBinding;
 import com.example.myfit.util.SizeLiveSet;
@@ -9,8 +7,6 @@ import com.example.myfit.util.adapter.BaseAdapter;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 public class SizeListVH extends BaseVH.BaseSizeVH {
     private final ItemVhSizeListBinding mBinding;
@@ -31,19 +27,8 @@ public class SizeListVH extends BaseVH.BaseSizeVH {
     }
 
     @Override
-    protected void setDraggingView() {
-        setItemViewTranslationZ(itemView, 10);
-        mBinding.cb.cb.setVisibility(View.INVISIBLE);
-        mBinding.nameLayout.layout.setAlpha(0.7f);
-        mBinding.iv.setAlpha(0.5f);
-    }
-
-    @Override
-    protected void setDropView() {
-        setItemViewTranslationZ(itemView, 0);
-        mBinding.cb.cb.setVisibility(View.VISIBLE);
-        mBinding.nameLayout.layout.setAlpha(1);
-        mBinding.iv.setAlpha(1f);
+    protected void setDragging() {
+        mBinding.setDragging(sDragging);
     }
 
     @Override
