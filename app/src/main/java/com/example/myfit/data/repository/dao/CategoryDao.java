@@ -1,9 +1,7 @@
 package com.example.myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -21,37 +19,20 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Dao
-public abstract class CategoryDao extends BaseDao {
-    @Transaction
-    public LiveData<List<Category>> getAllCategoriesLiveWithContentSize() {
-        LiveData<List<Category>> allCategoriesLive = getAllCategoriesLive();
-        LiveData<List<ContentSizeTuple>> folderContentSizeTuplesLive = getFolderContentSizeTuplesLive();
-        LiveData<List<ContentSizeTuple>> sizeContentSizeTuplesLive = getSizeContentSizeTuplesLive();
-        MediatorLiveData<List<Category>> mediatorLive = new MediatorLiveData<>();
+public abstract class CategoryDao extends BaseDao<Category> {
+    @Override
+    protected LiveData<List<Category>> getAllModelsLive() {
+        return getAllCategoriesLive();
+    }
 
-        mediatorLive.addSource(allCategoriesLive, categories -> {
-            if (folderContentSizeTuplesLive.getValue() != null && sizeContentSizeTuplesLive.getValue() != null) {
-                setFolderContentSize(categories, folderContentSizeTuplesLive.getValue());
-                setSizeContentSize(categories, sizeContentSizeTuplesLive.getValue());
-            }
-            mediatorLive.setValue(categories);
-        });
-        mediatorLive.addSource(folderContentSizeTuplesLive, folderContentSizeTuples -> {
-            if (allCategoriesLive.getValue() != null && sizeContentSizeTuplesLive.getValue() != null) {
-                setFolderContentSize(allCategoriesLive.getValue(), folderContentSizeTuples);
-                setSizeContentSize(allCategoriesLive.getValue(), sizeContentSizeTuplesLive.getValue());
-                mediatorLive.setValue(allCategoriesLive.getValue());
-            }
-        });
-        mediatorLive.addSource(sizeContentSizeTuplesLive, sizeContentSizeTuples -> {
-            if (allCategoriesLive.getValue() != null && folderContentSizeTuplesLive.getValue() != null) {
-                setFolderContentSize(allCategoriesLive.getValue(), folderContentSizeTuplesLive.getValue());
-                setSizeContentSize(allCategoriesLive.getValue(), sizeContentSizeTuplesLive.getValue());
-                mediatorLive.setValue(allCategoriesLive.getValue());
-            }
-        });
+    @Override
+    protected LiveData<List<ContentSizeTuple>> getFolderContentSizeTuplesLive() {
+        return getFolderContentSizeTuplesLiveImpl();
+    }
 
-        return mediatorLive;
+    @Override
+    protected LiveData<List<ContentSizeTuple>> getSizeContentSizeTuplesLive() {
+        return getSizeContentSizeTuplesLiveImpl();
     }
 
     @Query("SELECT * FROM Category")
@@ -60,29 +41,23 @@ public abstract class CategoryDao extends BaseDao {
     @Query("SELECT category.id AS parentId, SUM(folder.parentId IS NOT NULL AND folder.deleted = 0) AS size FROM Category " +
             "LEFT OUTER JOIN Folder ON folder.parentId = category.id " +
             "GROUP BY category.id")
-    protected abstract LiveData<List<ContentSizeTuple>> getFolderContentSizeTuplesLive();
+    protected abstract LiveData<List<ContentSizeTuple>> getFolderContentSizeTuplesLiveImpl();
 
     @Query("SELECT category.id AS parentId, SUM(size.parentId IS NOT NULL AND size.deleted = 0) AS size FROM Category " +
             "LEFT OUTER JOIN Size ON size.parentId = category.id " +
             "GROUP BY category.id")
-    protected abstract LiveData<List<ContentSizeTuple>> getSizeContentSizeTuplesLive();
-
-    @Insert
-    public abstract List<Long> insert(List<Category> categories);
+    protected abstract LiveData<List<ContentSizeTuple>> getSizeContentSizeTuplesLiveImpl();
 
     @Transaction
     //from addCategory dialog(disposable)
     public void insert(String name, int parentIndex) {
-        int sortNumber = this.getLargestSortNumber() + 1;
+        int sortNumber = getLargestSortNumber() + 1;
         Category category = new Category(parentIndex, sortNumber, name);
-        this.insert(category);
+        insert(category);
     }
 
     @Query("SELECT max(sortNumber) FROM Category")
     protected abstract int getLargestSortNumber();
-
-    @Insert
-    protected abstract void insert(Category category);
 
     @Transaction
     //from restore dialog(disposable)
@@ -90,20 +65,14 @@ public abstract class CategoryDao extends BaseDao {
         String name = "복구됨";
 
         List<Category> categories = new LinkedList<>();
-        int sortNumber = this.getLargestSortNumber();
+        int sortNumber = getLargestSortNumber();
         for (int parentIndex : parentIndexes)
             categories.add(new Category(parentIndex, ++sortNumber, name));
 
         AtomicLong id = new AtomicLong(CommonUtil.createId());
         categories.forEach(category -> category.setId(id.incrementAndGet()));
-        return this.insert(categories);
+        return insert(categories);
     }
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void update(Category category);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void update(List<Category> categories);
 
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
