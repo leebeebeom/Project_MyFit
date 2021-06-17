@@ -52,7 +52,7 @@ public class CategoryRepository extends BaseRepository {
         this.mMainSortPreferenceLive = new IntegerSharedPreferenceLiveData(
                 mMainSortPreference, SharedPreferenceKey.SORT.getValue(), Sort.SORT_CUSTOM.getValue());
 
-        this.mAllCategoriesLive = mCategoryDao.getAllCategoriesWithContentSize();
+        this.mAllCategoriesLive = mCategoryDao.getAllCategoriesLiveWithContentSize();
     }
 
     //from appDataBase

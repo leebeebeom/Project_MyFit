@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Dao
 public abstract class CategoryDao extends BaseDao<CategoryTuple> {
     @Transaction
-    public LiveData<List<Category>> getAllCategoriesWithContentSize() {
+    public LiveData<List<Category>> getAllCategoriesLiveWithContentSize() {
         LiveData<List<Category>> allCategoriesLive = getAllCategoriesLive();
         LiveData<List<ContentSizeTuple>> folderContentSizeTuplesLive = getFolderContentSizeTuplesLive();
         LiveData<List<ContentSizeTuple>> sizeContentSizeTuplesLive = getSizeContentSizeTuplesLive();
