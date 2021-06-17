@@ -1,7 +1,7 @@
 package com.example.myfit.data.repository.dao;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -10,182 +10,135 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.myfit.data.model.model.Category;
-import com.example.myfit.data.tuple.DeletedTuple;
+import com.example.myfit.data.tuple.ContentSizeTuple;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import com.example.myfit.util.CommonUtil;
-import com.example.myfit.util.SortUtil;
-import com.example.myfit.util.constant.Sort;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Dao
 public abstract class CategoryDao extends BaseDao<CategoryTuple> {
+    @Transaction
+    public LiveData<List<Category>> getAllCategoriesWithContentSize() {
+        LiveData<List<Category>> allCategoriesLive = getAllCategoriesLive();
+        LiveData<List<ContentSizeTuple>> folderContentSizeTuplesLive = getFolderContentSizeTuplesLive();
+        LiveData<List<ContentSizeTuple>> sizeContentSizeTuplesLive = getSizeContentSizeTuplesLive();
+        MediatorLiveData<List<Category>> mediatorLive = new MediatorLiveData<>();
 
-    //to main
-    public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
-        LiveData<List<CategoryTuple>> tuplesLive = this.getTuplesLive();
-        LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(tuplesLive);
-        LiveData<List<CategoryTuple>> tuplesWithContentSizeLiveSet = super.getTuplesLiveWithContentSize(tuplesLive, contentSizesLive);
-        return super.getClassifiedTuplesLive(tuplesWithContentSizeLiveSet);
+        mediatorLive.addSource(allCategoriesLive, categories -> {
+            if (folderContentSizeTuplesLive.getValue() != null && sizeContentSizeTuplesLive.getValue() != null) {
+                setFolderContentSize(categories, folderContentSizeTuplesLive.getValue());
+                setSizeContentSize(categories, sizeContentSizeTuplesLive.getValue());
+            }
+            mediatorLive.setValue(categories);
+        });
+        mediatorLive.addSource(folderContentSizeTuplesLive, folderContentSizeTuples -> {
+            if (allCategoriesLive.getValue() != null && sizeContentSizeTuplesLive.getValue() != null) {
+                setFolderContentSize(allCategoriesLive.getValue(), folderContentSizeTuples);
+                setSizeContentSize(allCategoriesLive.getValue(), sizeContentSizeTuplesLive.getValue());
+                mediatorLive.setValue(allCategoriesLive.getValue());
+            }
+        });
+        mediatorLive.addSource(sizeContentSizeTuplesLive, sizeContentSizeTuples -> {
+            if (allCategoriesLive.getValue() != null && folderContentSizeTuplesLive.getValue() != null) {
+                setFolderContentSize(allCategoriesLive.getValue(), folderContentSizeTuplesLive.getValue());
+                setSizeContentSize(allCategoriesLive.getValue(), sizeContentSizeTuplesLive.getValue());
+                mediatorLive.setValue(allCategoriesLive.getValue());
+            }
+        });
+
+        return mediatorLive;
     }
 
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 0")
-    protected abstract LiveData<List<CategoryTuple>> getTuplesLive();
+    private void setFolderContentSize(List<Category> categories, List<ContentSizeTuple> folderContentSizeTuples) {
+        categories.forEach(category ->
+                getContentSizeOptional(folderContentSizeTuples, category)
+                        .ifPresent(folderContentSizeTuple -> category.setFolderContentSize(folderContentSizeTuple.getSize())));
+    }
+
+    private void setSizeContentSize(List<Category> categories, List<ContentSizeTuple> sizeContentSizeTuples) {
+        categories.forEach(category ->
+                getContentSizeOptional(sizeContentSizeTuples, category)
+                        .ifPresent(sizeContentSizeTuple -> category.setSizeContentSize(sizeContentSizeTuple.getSize())));
+    }
 
     @NotNull
-    protected LiveData<List<Integer>> getCategoryContentSizesLive(LiveData<List<CategoryTuple>> tuplesLive) {
-        return Transformations.switchMap(tuplesLive, tuples -> {
-            List<Long> tuplesId = getTupleIds(tuples);
-            return getCategoryContentSizesLive(tuplesId);
-        });
+    private Optional<ContentSizeTuple> getContentSizeOptional(List<ContentSizeTuple> contentSizeTuples, Category category) {
+        return contentSizeTuples.stream()
+                .filter(contentSizeTuple -> contentSizeTuple.getSize() != 0
+                        && contentSizeTuple.getParentId() == category.getId())
+                .findAny();
     }
 
-    @Query("SELECT SUM((folder.parentId IS NOT NULL AND folder.deleted = 0) + (size.parentId IS NOT NULL AND size.deleted = 0)) FROM Category " +
-            "LEFT OUTER JOIN Folder ON category.id = folder.parentId " +
-            "LEFT OUTER JOIN Size ON category.id = size.parentId " +
-            "WHERE category.id IN (:ids) " +
+    private void setContentSize(List<ContentSizeTuple> contentSizeTuples, List<Category> categories) {
+        categories.forEach(category ->
+                contentSizeTuples.stream()
+                        .filter(contentSizeTuple -> contentSizeTuple.getSize() != 0 && contentSizeTuple.getParentId() == category.getId())
+                        .findAny()
+                        .ifPresent(contentSizeTuple -> category.setContentSize(contentSizeTuple.getSize())));
+    }
+
+    @Query("SELECT * FROM Category")
+    protected abstract LiveData<List<Category>> getAllCategoriesLive();
+
+    @Query("SELECT category.id AS parentId, SUM(folder.parentId IS NOT NULL AND folder.deleted = 0) AS size FROM Category " +
+            "LEFT OUTER JOIN Folder ON folder.parentId = category.id " +
             "GROUP BY category.id")
-    protected abstract LiveData<List<Integer>> getCategoryContentSizesLive(List<Long> ids);
+    protected abstract LiveData<List<ContentSizeTuple>> getFolderContentSizeTuplesLive();
 
-    //to recycleBin
-    public LiveData<List<List<CategoryTuple>>> getDeletedClassifiedTuplesLive() {
-        LiveData<List<CategoryTuple>> deletedTuplesLive = this.getDeletedTuplesLive();
-        LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(deletedTuplesLive);
-        LiveData<List<CategoryTuple>> tuplesWithContentSizeLive = super.getTuplesLiveWithContentSize(deletedTuplesLive, contentSizesLive);
-        return super.getClassifiedTuplesLive(tuplesWithContentSizeLive);
-    }
-
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY deletedTime DESC")
-    protected abstract LiveData<List<CategoryTuple>> getDeletedTuplesLive();
-
-    //to recycleBin search
-    public LiveData<List<List<CategoryTuple>>> getDeletedSearchTuplesLive() {
-        LiveData<List<CategoryTuple>> deletedSearchTuplesLive = getDeletedSearchTuplesLive2();
-        LiveData<List<Integer>> contentSizesLive = this.getCategoryContentSizesLive(deletedSearchTuplesLive);
-        LiveData<List<CategoryTuple>> tuplesWithContentSizeLive = super.getTuplesLiveWithContentSize(deletedSearchTuplesLive, contentSizesLive);
-        return super.getClassifiedTuplesLive(tuplesWithContentSizeLive);
-    }
-
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE deleted = 1 ORDER BY name")
-    protected abstract LiveData<List<CategoryTuple>> getDeletedSearchTuplesLive2();
-
-    @Transaction
-    //to treeView (disposable)
-    public List<CategoryTuple> getTuplesByParentIndex(int parentIndex, Sort sort) {
-        List<CategoryTuple> tuples = this.getTuplesByParentIndex(parentIndex);
-        List<Long> ids = super.getTupleIds(tuples);
-        List<Integer> contentSizes = getCategoryContentSizes(ids);
-        super.setContentSize(tuples, contentSizes);
-        SortUtil.sortCategoryFolderTuples(sort, tuples);
-        return tuples;
-    }
-
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE parentIndex = :parentIndex AND deleted = 0")
-    protected abstract List<CategoryTuple> getTuplesByParentIndex(int parentIndex);
-
-    @Query("SELECT SUM((folder.parentId IS NOT NULL AND folder.deleted = 0) + (size.parentId IS NOT NULL AND size.deleted = 0)) FROM Category " +
-            "LEFT OUTER JOIN Folder ON category.id = folder.parentId " +
-            "LEFT OUTER JOIN Size ON category.id = size.parentId " +
-            "WHERE category.id IN (:ids) " +
+    @Query("SELECT category.id AS parentId, SUM(size.parentId IS NOT NULL AND size.deleted = 0) AS size FROM Category " +
+            "LEFT OUTER JOIN Size ON size.parentId = category.id " +
             "GROUP BY category.id")
-    protected abstract List<Integer> getCategoryContentSizes(List<Long> ids);
+    protected abstract LiveData<List<ContentSizeTuple>> getSizeContentSizeTuplesLive();
 
-    //to listFragment
-    @Query("SELECT * FROM Category WHERE id = :id")
-    public abstract LiveData<Category> getSingleLiveById(long id);
-
-    @Transaction
-    //to treeView(disposable)
-    public CategoryTuple getTupleById(long id) {
-        CategoryTuple tuple = this.getTupleById2(id);
-        int contentSize = getCategoryContentSize(id);
-        tuple.setContentSize(contentSize);
-        return tuple;
-    }
-
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id = :id")
-    protected abstract CategoryTuple getTupleById2(long id);
-
-    @Query("SELECT SUM((folder.parentId IS NOT NULL AND folder.deleted = 0) + (size.parentId IS NOT NULL AND size.deleted = 0)) FROM Category " +
-            "LEFT OUTER JOIN Folder ON category.id = folder.parentId " +
-            "LEFT OUTER JOIN Size ON category.id = size.parentId " +
-            "WHERE category.id = :id " +
-            "GROUP BY category.id")
-    protected abstract int getCategoryContentSize(long id);
+    @Insert
+    public abstract List<Long> insert(List<Category> categories);
 
     @Transaction
     //from addCategory dialog(disposable)
-    public long insert(String name, int parentIndex) {
+    public void insert(String name, int parentIndex) {
         int sortNumber = this.getLargestSortNumber() + 1;
         Category category = new Category(parentIndex, sortNumber, name);
-        return this.insert(category);
+        this.insert(category);
     }
 
     @Query("SELECT max(sortNumber) FROM Category")
     protected abstract int getLargestSortNumber();
 
     @Insert
-    protected abstract long insert(Category category);
-
-    @Insert
-    //from appDateBase
-    public abstract List<Long> insert(List<Category> categories);
+    protected abstract void insert(Category category);
 
     @Transaction
     //from restore dialog(disposable)
     public List<Long> insertRestoreCategories(@NotNull List<Integer> parentIndexes) {
         String name = "복구됨";
-        int sortNumber = this.getLargestSortNumber() + 1;
 
         List<Category> categories = new LinkedList<>();
+        int sortNumber = this.getLargestSortNumber();
+        for (int parentIndex : parentIndexes)
+            categories.add(new Category(parentIndex, ++sortNumber, name));
+
         AtomicLong id = new AtomicLong(CommonUtil.createId());
-        for (int parentIndex : parentIndexes) {
-            categories.add(new Category(parentIndex, sortNumber, name));
-            sortNumber++;
-        }
         categories.forEach(category -> category.setId(id.incrementAndGet()));
         return this.insert(categories);
     }
 
-    @Transaction
-    //from nameEdit dialog
-    public void update(long id, String name) {
-        CategoryTuple tuple = this.getTupleById2(id);
-        tuple.setName(name.trim());
-        this.update(tuple);
-    }
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(Category category);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    protected abstract void update(CategoryTuple categoryTuple);
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(List<Category> categories);
 
     //from adapter drag drop
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
     public abstract void updateTuples(List<CategoryTuple> categoryTuples);
 
-    @Transaction
-    //from delete dialog, restore dialog
-    public void deleteOrRestore(long[] ids) {
-        List<DeletedTuple> deletedTuples = this.getDeletedTuplesByIds(ids);
-        super.setDeleted(deletedTuples);
-        this.updateDeletedTuples(deletedTuples);
-
-        super.setChildrenParentDeleted(ids);
-    }
-
-    @Query("SELECT id, deleted, deletedTime FROM Category WHERE id IN (:ids)")
-    protected abstract List<DeletedTuple> getDeletedTuplesByIds(long[] ids);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void updateDeletedTuples(List<DeletedTuple> deletedTuples);
-
     //from addCategory dialog
     @Query("SELECT EXISTS(SELECT name, parentIndex FROM Category WHERE name =:name AND parentIndex=:parentIndex AND deleted = 0)")
     public abstract boolean isExistingName(String name, int parentIndex);
-
-    @Query("SELECT id, parentIndex, sortNumber, name, contentSize, deletedTime FROM Category WHERE id IN (:ids)")
-    public abstract List<CategoryTuple> getTuplesByIds(List<Long> ids);
 }
