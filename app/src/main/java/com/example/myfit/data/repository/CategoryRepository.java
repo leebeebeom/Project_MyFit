@@ -163,7 +163,6 @@ public class CategoryRepository extends BaseRepository {
         new Thread(() -> mCategoryDao.updateTuples(categoryTuples)).start();
     }
 
-    @Override
     //from delete dialog, restore dialog
     public void deleteOrRestore(long[] ids) {
         if (mAllCategoriesLive.getValue() != null) {
