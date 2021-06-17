@@ -18,11 +18,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Dao
-public abstract class CategoryDao extends BaseDao<CategoryTuple> {
+public abstract class CategoryDao extends BaseDao {
     @Transaction
     public LiveData<List<Category>> getAllCategoriesLiveWithContentSize() {
         LiveData<List<Category>> allCategoriesLive = getAllCategoriesLive();
@@ -53,34 +52,6 @@ public abstract class CategoryDao extends BaseDao<CategoryTuple> {
         });
 
         return mediatorLive;
-    }
-
-    private void setFolderContentSize(List<Category> categories, List<ContentSizeTuple> folderContentSizeTuples) {
-        categories.forEach(category ->
-                getContentSizeOptional(folderContentSizeTuples, category)
-                        .ifPresent(folderContentSizeTuple -> category.setFolderContentSize(folderContentSizeTuple.getSize())));
-    }
-
-    private void setSizeContentSize(List<Category> categories, List<ContentSizeTuple> sizeContentSizeTuples) {
-        categories.forEach(category ->
-                getContentSizeOptional(sizeContentSizeTuples, category)
-                        .ifPresent(sizeContentSizeTuple -> category.setSizeContentSize(sizeContentSizeTuple.getSize())));
-    }
-
-    @NotNull
-    private Optional<ContentSizeTuple> getContentSizeOptional(List<ContentSizeTuple> contentSizeTuples, Category category) {
-        return contentSizeTuples.stream()
-                .filter(contentSizeTuple -> contentSizeTuple.getSize() != 0
-                        && contentSizeTuple.getParentId() == category.getId())
-                .findAny();
-    }
-
-    private void setContentSize(List<ContentSizeTuple> contentSizeTuples, List<Category> categories) {
-        categories.forEach(category ->
-                contentSizeTuples.stream()
-                        .filter(contentSizeTuple -> contentSizeTuple.getSize() != 0 && contentSizeTuple.getParentId() == category.getId())
-                        .findAny()
-                        .ifPresent(contentSizeTuple -> category.setContentSize(contentSizeTuple.getSize())));
     }
 
     @Query("SELECT * FROM Category")
