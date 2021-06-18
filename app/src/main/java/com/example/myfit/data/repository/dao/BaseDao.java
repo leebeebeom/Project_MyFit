@@ -1,87 +1,36 @@
 package com.example.myfit.data.repository.dao;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.model.Folder;
 import com.example.myfit.data.model.model.Size;
-import com.example.myfit.data.tuple.BaseTuple;
-import com.example.myfit.data.tuple.DeletedTuple;
 import com.example.myfit.data.tuple.ParentDeletedTuple;
-import com.example.myfit.data.tuple.tuple.CategoryTuple;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Dao
-public abstract class BaseDao<T extends BaseTuple> {
-    protected List<Long> getTupleIds(@NotNull List<T> tuples) {
-        return tuples.stream()
-                .mapToLong(BaseTuple::getId)
-                .boxed()
-                .collect(Collectors.toList());
-    }
+public abstract class BaseDao<T extends BaseModel> {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void insert(T t);
 
-    protected <R extends CategoryTuple> LiveData<List<R>> getTuplesLiveWithContentSize(LiveData<List<R>> tuplesLive,
-                                                                                       LiveData<List<Integer>> contentSizesLive) {
-        return Transformations.map(contentSizesLive, contentSizes -> {
-            List<R> tuples = tuplesLive.getValue();
-            setContentSize(tuples, contentSizes);
-            return tuples;
-        });
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract List<Long> insert(List<T> ts);
 
-    protected <R extends CategoryTuple> void setContentSize(List<R> tuples, List<Integer> contentSizes) {
-        if (tuples != null && tuples.size() == contentSizes.size()) {
-            int count = tuples.size();
-            for (int i = 0; i < count; i++) tuples.get(i).setContentSize(contentSizes.get(i));
-        }
-    }
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(T t);
 
-    protected LiveData<List<List<T>>> getClassifiedTuplesLive(LiveData<List<T>> tuplesLive) {
-        return Transformations.map(tuplesLive, this::getClassifiedTuplesByParentIndex);
-    }
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void update(List<T> ts);
 
-    protected List<List<T>> getClassifiedTuplesByParentIndex(List<T> tuples) {
-        List<LinkedList<T>> classifiedLinkedList = Arrays.asList(new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-        List<List<T>> classifiedList = Arrays.asList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-
-        tuples.forEach(tuple -> classifiedLinkedList.get(tuple.getParentIndex()).add(tuple));
-        for (int i = 0; i < 4; i++) classifiedList.get(i).addAll(classifiedLinkedList.get(i));
-        return classifiedList;
-    }
-
-    protected void setDeleted(List<DeletedTuple> deletedTuples) {
-        deletedTuples.forEach(deletedTuple -> deletedTuple.setDeleted(!deletedTuple.isDeleted()));
-        setDeletedTime(deletedTuples);
-    }
-
-    @Contract(pure = true)
-    private void setDeletedTime(@NotNull List<DeletedTuple> deletedTuples) {
-        AtomicLong currentTime = new AtomicLong(getCurrentTime());
-        deletedTuples.forEach(deletedTuple -> deletedTuple.setDeletedTime(deletedTuple.isDeleted() ? currentTime.incrementAndGet() : 0));
-    }
-
-    protected long getCurrentTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        return Long.parseLong(dateFormat.format(new Date(System.currentTimeMillis())));
-    }
-
-    protected void setChildrenParentDeleted(long[] parentIds) {
+    public void setChildrenParentDeleted(long[] parentIds) {
         LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = getAllFolderParentDeletedTuples(parentIds);
         LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = getAllSizeParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
 
