@@ -3,6 +3,7 @@ package com.example.myfit.data.repository;
 import android.content.SharedPreferences;
 
 import com.example.myfit.data.model.BaseModel;
+import com.example.myfit.data.repository.dao.BaseDao;
 import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.util.SortUtil;
 import com.example.myfit.util.constant.SharedPreferenceKey;
@@ -108,4 +109,14 @@ public abstract class BaseRepository<U extends BaseModel> {
     }
 
     protected abstract SharedPreferences getSortPreference();
+
+    public void insert(List<U> models) {
+        new Thread(() -> getDao().insert(models)).start();
+    }
+
+    public void update(List<U> models) {
+        new Thread(() -> getDao().update(models)).start();
+    }
+
+    protected abstract BaseDao<U> getDao();
 }
