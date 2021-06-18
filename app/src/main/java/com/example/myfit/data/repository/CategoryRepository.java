@@ -139,6 +139,10 @@ public class CategoryRepository extends BaseRepository<Category> {
         }
     }
 
+    public void updateTuples(List<CategoryTuple> tuples) {
+        new Thread(() -> mCategoryDao.updateTuples(tuples)).start();
+    }
+
     private List<CategoryTuple> getCategoryTuples(Stream<Category> stream) {
         return stream.map(CategoryTuple::new).collect(Collectors.toList());
     }
