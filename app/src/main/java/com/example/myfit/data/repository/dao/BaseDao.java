@@ -34,8 +34,8 @@ public abstract class BaseDao<T extends BaseModel, U extends BaseTuple> {
     public abstract void updateTuples(List<U> tuples);
 
     public void setChildrenParentDeleted(long[] parentIds) {
-        LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = getAllFolderParentDeletedTuples(parentIds);
-        LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = getAllSizeParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
+        List<ParentDeletedTuple> allFolderParentDeletedTuples = getAllFolderParentDeletedTuples(parentIds);
+        List<ParentDeletedTuple> allSizeParentDeletedTuples = getAllSizeParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
 
         setParentDeletedTuples(allFolderParentDeletedTuples);
         setParentDeletedTuples(allSizeParentDeletedTuples);
@@ -44,13 +44,13 @@ public abstract class BaseDao<T extends BaseModel, U extends BaseTuple> {
     }
 
     @NotNull
-    private LinkedList<ParentDeletedTuple> getAllFolderParentDeletedTuples(long[] parentIds) {
-        LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
+    private List<ParentDeletedTuple> getAllFolderParentDeletedTuples(long[] parentIds) {
+        List<ParentDeletedTuple> allFolderParentDeletedTuples = new LinkedList<>();
         addAllChildFolderParentDeletedTuples(parentIds, allFolderParentDeletedTuples);
         return allFolderParentDeletedTuples;
     }
 
-    private void addAllChildFolderParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
+    private void addAllChildFolderParentDeletedTuples(long[] parentIds, @NotNull List<ParentDeletedTuple> allParentDeletedTuples) {
         List<ParentDeletedTuple> childFolderParentDeletedTuples = getFolderParentDeletedTuplesByParentIds(parentIds);
         if (!childFolderParentDeletedTuples.isEmpty()) {
             allParentDeletedTuples.addAll(childFolderParentDeletedTuples);
@@ -70,19 +70,15 @@ public abstract class BaseDao<T extends BaseModel, U extends BaseTuple> {
     }
 
     @NotNull
-    private LinkedList<ParentDeletedTuple> getAllSizeParentDeletedTuples(long[] parentIds, LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples) {
-        LinkedList<ParentDeletedTuple> allSizeParentDeletedTuples = new LinkedList<>(this.getSizeParentDeletedTuplesByParentIds(parentIds));
+    private List<ParentDeletedTuple> getAllSizeParentDeletedTuples(long[] parentIds, List<ParentDeletedTuple> allFolderParentDeletedTuples) {
+        List<ParentDeletedTuple> allSizeParentDeletedTuples = new LinkedList<>(this.getSizeParentDeletedTuplesByParentIds(parentIds));
         long[] allFolderIds = getParentDeletedTupleIds(allFolderParentDeletedTuples);
-        addAllChildSizeParentDeletedTuples(allFolderIds, allSizeParentDeletedTuples);
+        allSizeParentDeletedTuples.addAll(getSizeParentDeletedTuplesByParentIds(allFolderIds));
         return allSizeParentDeletedTuples;
     }
 
     @Query("SELECT id, deleted, parentDeleted FROM Size WHERE parentId IN(:parentIds)")
     protected abstract List<ParentDeletedTuple> getSizeParentDeletedTuplesByParentIds(long[] parentIds);
-
-    private void addAllChildSizeParentDeletedTuples(long[] parentIds, @NotNull LinkedList<ParentDeletedTuple> allParentDeletedTuples) {
-        allParentDeletedTuples.addAll(getSizeParentDeletedTuplesByParentIds(parentIds));
-    }
 
     private void setParentDeletedTuples(@NotNull List<ParentDeletedTuple> parentDeletedTuples) {
         parentDeletedTuples.forEach(parentDeletedTuple -> parentDeletedTuple.setParentDeleted(!parentDeletedTuple.isDeleted()));
