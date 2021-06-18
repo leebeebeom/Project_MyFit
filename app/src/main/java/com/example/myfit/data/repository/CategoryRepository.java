@@ -51,15 +51,6 @@ public class CategoryRepository extends BaseRepository<Category> {
         this.mAllCategoriesLive = mCategoryDao.getAllModelsLiveWithContentSize();
     }
 
-    public void insert(List<Category> categories) {
-        new Thread(() -> mCategoryDao.insert(categories)).start();
-    }
-
-    @Override
-    protected BaseDao<Category> getDao() {
-        return mCategoryDao;
-    }
-
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         if (mClassifiedTuplesLive.getValue() == null) {
             mClassifiedTuplesLive.addSource(mAllCategoriesLive, this::setValue);
@@ -125,11 +116,6 @@ public class CategoryRepository extends BaseRepository<Category> {
         }
     }
 
-    //from adapter drag drop
-    public void updateTuples(List<CategoryTuple> categoryTuples) {
-        new Thread(() -> mCategoryDao.updateTuples(categoryTuples)).start();
-    }
-
     public void deleteOrRestore(long[] ids) {
         if (mAllCategoriesLive.getValue() != null) {
             Stream<Category> stream = getStreamByIds(mAllCategoriesLive.getValue(), ids);
@@ -139,11 +125,6 @@ public class CategoryRepository extends BaseRepository<Category> {
                 mCategoryDao.setChildrenParentDeleted(ids);
             }).start();
         }
-    }
-
-    @Override
-    protected SharedPreferences getSortPreference() {
-        return mMainSortPreference;
     }
 
     public MutableLiveData<Boolean> getExistingNameLive() {
@@ -160,6 +141,16 @@ public class CategoryRepository extends BaseRepository<Category> {
 
     private List<CategoryTuple> getCategoryTuples(Stream<Category> stream) {
         return stream.map(CategoryTuple::new).collect(Collectors.toList());
+    }
+
+    @Override
+    protected SharedPreferences getSortPreference() {
+        return mMainSortPreference;
+    }
+
+    @Override
+    protected BaseDao<Category> getDao() {
+        return mCategoryDao;
     }
 }
 
