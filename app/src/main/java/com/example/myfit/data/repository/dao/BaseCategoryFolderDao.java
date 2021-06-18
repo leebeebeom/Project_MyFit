@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Transaction;
 
 import com.example.myfit.data.model.model.Category;
+import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.data.tuple.ContentSizeTuple;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Dao
-public abstract class BaseCategoryFolderDao<T extends Category> extends BaseDao<T> {
+public abstract class BaseCategoryFolderDao<T extends Category, U extends BaseTuple> extends BaseDao<T, U> {
     @Transaction
     public LiveData<List<T>> getAllModelsLiveWithContentSize() {
         LiveData<List<T>> allModelsLive = getAllModelsLive();
