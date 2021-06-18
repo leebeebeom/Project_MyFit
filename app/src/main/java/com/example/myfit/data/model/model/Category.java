@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 public class Category extends BaseModel {
-    private int contentSize;
     @Ignore
     private int folderContentSize;
     @Ignore
