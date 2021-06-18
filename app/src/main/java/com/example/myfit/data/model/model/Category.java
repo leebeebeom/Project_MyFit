@@ -1,23 +1,32 @@
 package com.example.myfit.data.model.model;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 
 import com.example.myfit.data.model.BaseModel;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 public class Category extends BaseModel {
-    private String name;
     private int contentSize;
+    @Ignore
+    private int folderContentSize;
+    @Ignore
+    private int sizeContentSize;
 
     public Category(int parentIndex, int sortNumber, String name) {
-        super(parentIndex, sortNumber);
-        this.name = name;
+        super(parentIndex, sortNumber, name);
+    }
+
+    public static Category getDummy() {
+        return new Category(-1, -1, "");
+    }
+
+    public int getContentSize() {
+        return folderContentSize + sizeContentSize;
     }
 }
