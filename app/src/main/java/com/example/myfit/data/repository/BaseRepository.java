@@ -63,7 +63,7 @@ public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
     }
 
     protected Stream<U> getStreamByIds(List<U> models, long[] ids) {
-        return getStream((List<U>) models).filter(model -> Arrays.stream(ids).anyMatch(id -> model.getId() == id));
+        return getStream(models).filter(model -> Arrays.stream(ids).anyMatch(id -> model.getId() == id));
     }
 
     @NotNull
