@@ -3,6 +3,7 @@ package com.example.myfit.data.repository;
 import android.content.SharedPreferences;
 
 import com.example.myfit.data.model.BaseModel;
+import com.example.myfit.data.model.model.Folder;
 import com.example.myfit.data.repository.dao.BaseDao;
 import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.util.SortUtil;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class BaseRepository<U extends BaseModel> {
+public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
     protected Stream<U> getUndeletedSortedStreamByParentIndex(List<U> models, int parentIndex) {
         return SortUtil.sortCategoryFolderStream(getSort(), getUndeletedStreamByParentIndex(models, parentIndex));
     }
@@ -33,6 +34,14 @@ public abstract class BaseRepository<U extends BaseModel> {
 
     protected Stream<U> getUndeletedStreamByParentIndex(List<U> models, int parentIndex) {
         return getUnDeletedStream(models).filter(model -> model.getParentIndex() == parentIndex);
+    }
+
+    protected Stream<Folder> getFolderStreamByPrentId(Stream<Folder> stream, long parentId) {
+        return stream.filter(folder -> folder.getParentId() == parentId);
+    }
+
+    protected Stream<U> getUnDeletedSearchStream(List<U> models) {
+        return getUnDeletedStream(models).sorted((o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
     @NotNull
@@ -59,7 +68,9 @@ public abstract class BaseRepository<U extends BaseModel> {
 
     @NotNull
     private Stream<U> getStream(List<U> models) {
-        return models.stream();
+        if (models != null)
+            return models.stream();
+        else return Stream.empty();
     }
 
     protected <T extends BaseTuple> List<List<T>> getClassifiedTuplesByParentIndex(List<T> tuples) {
@@ -114,9 +125,17 @@ public abstract class BaseRepository<U extends BaseModel> {
         new Thread(() -> getDao().insert(models)).start();
     }
 
+    public void insert(U model) {
+        new Thread(() -> getDao().insert(model)).start();
+    }
+
     public void update(List<U> models) {
         new Thread(() -> getDao().update(models)).start();
     }
 
-    protected abstract BaseDao<U> getDao();
+    public void update(U model) {
+        new Thread(() -> getDao().update(model)).start();
+    }
+
+    protected abstract BaseDao<U, V> getDao();
 }
