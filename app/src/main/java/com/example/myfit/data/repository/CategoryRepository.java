@@ -54,10 +54,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         if (mClassifiedTuplesLive.getValue() == null) {
             mClassifiedTuplesLive.addSource(mAllCategoriesLive, this::setValue);
-            mClassifiedTuplesLive.addSource(mMainSortPreferenceLive, sortInt -> {
-                if (mAllCategoriesLive.getValue() != null)
-                    setValue(mAllCategoriesLive.getValue());
-            });
+            mClassifiedTuplesLive.addSource(mMainSortPreferenceLive, sortInt -> setValue(mAllCategoriesLive.getValue()));
         }
         return mClassifiedTuplesLive;
     }
@@ -87,7 +84,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     }
 
     public LiveData<Category> getSingleLiveById(long id) {
-        return Transformations.map(mAllCategoriesLive, categories -> getSingleOptional(categories, id).orElse(null));
+        return Transformations.map(mAllCategoriesLive, categories -> getSingleOptional(categories, id).orElse(Category.getDummy()));
     }
 
     public LiveData<List<CategoryTuple>> getTuplesLiveByParentIndex(int parentIndex) {
@@ -98,33 +95,26 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     }
 
     public void insert(String name, int parentIndex) {
-        if (mAllCategoriesLive.getValue() != null) {
             Integer largestSort = getLargestSortNumber(mAllCategoriesLive.getValue());
             Category category = new Category(parentIndex, largestSort + 1, name);
             insert(category);
-        }
     }
 
     public void update(long id, String name) {
-        if (mAllCategoriesLive.getValue() != null) {
-            Optional<Category> categoryOptional = getSingleOptional(mAllCategoriesLive.getValue(), id);
-            if (categoryOptional.isPresent()) {
-                Category category = categoryOptional.get();
-                category.setName(name);
-                update(category);
-            }
-        }
+        Optional<Category> categoryOptional = getSingleOptional(mAllCategoriesLive.getValue(), id);
+        categoryOptional.ifPresent(category -> {
+            category.setName(name);
+            update(category);
+        });
     }
 
     public void deleteOrRestore(long[] ids) {
-        if (mAllCategoriesLive.getValue() != null) {
-            Stream<Category> stream = getStreamByIds(mAllCategoriesLive.getValue(), ids);
-            setDeleted(stream);
-            new Thread(() -> {
-                mCategoryDao.update(stream.collect(Collectors.toList()));
-                mCategoryDao.setChildrenParentDeleted(ids);
-            }).start();
-        }
+        Stream<Category> stream = getStreamByIds(mAllCategoriesLive.getValue(), ids);
+        setDeleted(stream);
+        new Thread(() -> {
+            mCategoryDao.update(stream.collect(Collectors.toList()));
+            mCategoryDao.setChildrenParentDeleted(ids);
+        }).start();
     }
 
     public MutableLiveData<Boolean> getExistingNameLive() {
@@ -133,10 +123,8 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     }
 
     public void isExistingName(String name, int parentIndex) {
-        if (mAllCategoriesLive.getValue() != null) {
-            boolean existingName = isExistingName(mAllCategoriesLive.getValue(), parentIndex, name);
-            mExistingNameLive.setValue(existingName);
-        }
+        boolean existingName = isExistingName(mAllCategoriesLive.getValue(), parentIndex, name);
+        mExistingNameLive.setValue(existingName);
     }
 
     public void updateTuples(List<CategoryTuple> tuples) {
