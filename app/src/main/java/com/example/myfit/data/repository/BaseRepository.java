@@ -27,68 +27,68 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
-    protected Stream<U> getUndeletedSortedStreamByParentIndex(int parentIndex) {
-        return SortUtil.sortCategoryFolderStream(getSort(), getUndeletedStreamByParentIndex(parentIndex));
+    protected Stream<U> getUndeletedSortedStreamByParentIndex(List<U> models, int parentIndex) {
+        return SortUtil.sortCategoryFolderStream(getSort(), getUndeletedStreamByParentIndex(models, parentIndex));
     }
 
-    protected Stream<U> getUndeletedSortedStream() {
-        return SortUtil.sortCategoryFolderStream(getSort(), getUnDeletedStream());
+    protected Stream<U> getUndeletedSortedStream(List<U> models) {
+        return SortUtil.sortCategoryFolderStream(getSort(), getUnDeletedStream(models));
     }
 
-    protected Stream<U> getUndeletedStreamByParentIndex(int parentIndex) {
-        return getUnDeletedStream().filter(model -> model.getParentIndex() == parentIndex);
+    protected Stream<U> getUndeletedStreamByParentIndex(List<U> models, int parentIndex) {
+        return getUnDeletedStream(models).filter(model -> model.getParentIndex() == parentIndex);
     }
 
     protected Stream<Folder> getFolderStreamByPrentId(Stream<Folder> stream, long parentId) {
         return stream.filter(folder -> folder.getParentId() == parentId);
     }
 
-    protected Stream<U> getUnDeletedSearchStream() {
-        return getUnDeletedStream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName()));
+    protected Stream<U> getUnDeletedSearchStream(List<U> models) {
+        return getUnDeletedStream(models).sorted((o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
     @NotNull
-    protected Stream<U> getUnDeletedStream() {
-        return getStream().filter(model -> !model.isDeleted());
+    protected Stream<U> getUnDeletedStream(List<U> models) {
+        return getStream(models).filter(model -> !model.isDeleted());
     }
 
     @NotNull
-    protected Stream<U> getDeletedStream() {
-        return getStream().filter(BaseModel::isDeleted);
+    protected Stream<U> getDeletedStream(List<U> models) {
+        return getStream(models).filter(BaseModel::isDeleted);
     }
 
-    protected Stream<U> getDeletedSortedStream() {
-        return getDeletedStream().sorted((o1, o2) -> Long.compare(o1.getDeletedTime(), o2.getDeletedTime()));
+    protected Stream<U> getDeletedSortedStream(List<U> models) {
+        return getDeletedStream(models).sorted((o1, o2) -> Long.compare(o1.getDeletedTime(), o2.getDeletedTime()));
     }
 
-    protected Stream<U> getDeletedSearchStream() {
-        return getDeletedStream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName()));
+    protected Stream<U> getDeletedSearchStream(List<U> models) {
+        return getDeletedStream(models).sorted((o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
-    protected Stream<U> getStreamByIds(long[] ids) {
-        return getStream().filter(model -> Arrays.stream(ids).anyMatch(id -> model.getId() == id));
+    protected Stream<U> getStreamByIds(List<U> models, long[] ids) {
+        return getStream(models).filter(model -> Arrays.stream(ids).anyMatch(id -> model.getId() == id));
     }
 
     @NotNull
-    private Stream<U> getStream() {
-        return getModels().stream();
+    private Stream<U> getStream(List<U> models) {
+        return models.stream();
     }
 
-    protected List<List<V>> getClassifiedTuplesByParentIndex(List<V> tuples) {
-        Stream<V> stream = tuples.stream();
-        List<V> topList = stream.filter(tuple -> tuple.getParentIndex() == 0).collect(Collectors.toList());
-        List<V> bottomList = stream.filter(tuple -> tuple.getParentIndex() == 1).collect(Collectors.toList());
-        List<V> outerList = stream.filter(tuple -> tuple.getParentIndex() == 2).collect(Collectors.toList());
-        List<V> etcList = stream.filter(tuple -> tuple.getParentIndex() == 3).collect(Collectors.toList());
+    protected <T extends BaseTuple> List<List<T>> getClassifiedTuplesByParentIndex(List<T> tuples) {
+        Stream<T> stream = tuples.stream();
+        List<T> topList = stream.filter(tuple -> tuple.getParentIndex() == 0).collect(Collectors.toList());
+        List<T> bottomList = stream.filter(tuple -> tuple.getParentIndex() == 1).collect(Collectors.toList());
+        List<T> outerList = stream.filter(tuple -> tuple.getParentIndex() == 2).collect(Collectors.toList());
+        List<T> etcList = stream.filter(tuple -> tuple.getParentIndex() == 3).collect(Collectors.toList());
         return Arrays.asList(topList, bottomList, outerList, etcList);
     }
 
-    protected Optional<U> getSingleOptional(long id) {
-        return getStream().filter(model -> model.getId() == id).findAny();
+    protected Optional<U> getSingleOptional(List<U> models, long id) {
+        return getStream(models).filter(model -> model.getId() == id).findAny();
     }
 
-    protected Optional<U> getSingleOptionalByChildId(Folder folder) {
-        return getStream().filter(model -> model.getId() == folder.getParentId()).findAny();
+    protected Optional<U> getSingleOptionalByChildId(List<U> models, Folder folder) {
+        return getStream(models).filter(model -> model.getId() == folder.getParentId()).findAny();
     }
 
     protected void setDeleted(Stream<U> stream) {
@@ -99,13 +99,13 @@ public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
         });
     }
 
-    protected Integer getLargestSortNumber() {
-        List<Integer> sortNumbers = getStream().map(BaseModel::getSortNumber).collect(Collectors.toList());
+    protected Integer getLargestSortNumber(List<U> models) {
+        List<Integer> sortNumbers = getStream(models).map(BaseModel::getSortNumber).collect(Collectors.toList());
         return Collections.max(sortNumbers);
     }
 
-    protected boolean isExistingName(int parentIndex, String name) {
-        Stream<U> undeletedStreamByParentIndex = getUndeletedStreamByParentIndex(parentIndex);
+    protected boolean isExistingName(List<U> models, int parentIndex, String name) {
+        Stream<U> undeletedStreamByParentIndex = getUndeletedStreamByParentIndex(models, parentIndex);
         return undeletedStreamByParentIndex.anyMatch(model -> model.getName().equals(name));
     }
 
@@ -144,7 +144,7 @@ public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
 
     protected abstract BaseDao<U, V> getDao();
 
-    private List<U> getModels() {
+    protected List<U> getAllModelsLiveValue() {
         return Optional.ofNullable(getModelsLive().getValue()).orElse(new ArrayList<>());
     }
 

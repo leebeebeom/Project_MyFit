@@ -54,7 +54,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     public LiveData<List<List<CategoryTuple>>> getClassifiedTuplesLive() {
         if (mClassifiedTuplesLive.getValue() == null) {
             mClassifiedTuplesLive.addSource(mAllCategoriesLive, this::setValue);
-            mClassifiedTuplesLive.addSource(mMainSortPreferenceLive, sortInt -> setValue(mAllCategoriesLive.getValue()));
+            mClassifiedTuplesLive.addSource(mMainSortPreferenceLive, sortInt -> setValue(getAllModelsLiveValue()));
         }
         return mClassifiedTuplesLive;
     }
@@ -95,13 +95,13 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     }
 
     public void insert(String name, int parentIndex) {
-            Integer largestSort = getLargestSortNumber(mAllCategoriesLive.getValue());
-            Category category = new Category(parentIndex, largestSort + 1, name);
-            insert(category);
+        Integer largestSort = getLargestSortNumber(getAllModelsLiveValue());
+        Category category = new Category(parentIndex, largestSort + 1, name);
+        insert(category);
     }
 
     public void update(long id, String name) {
-        Optional<Category> categoryOptional = getSingleOptional(mAllCategoriesLive.getValue(), id);
+        Optional<Category> categoryOptional = getSingleOptional(getAllModelsLiveValue(), id);
         categoryOptional.ifPresent(category -> {
             category.setName(name);
             update(category);
@@ -109,7 +109,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     }
 
     public void deleteOrRestore(long[] ids) {
-        Stream<Category> stream = getStreamByIds(mAllCategoriesLive.getValue(), ids);
+        Stream<Category> stream = getStreamByIds(getAllModelsLiveValue(), ids);
         setDeleted(stream);
         new Thread(() -> {
             mCategoryDao.update(stream.collect(Collectors.toList()));
@@ -123,7 +123,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     }
 
     public void isExistingName(String name, int parentIndex) {
-        boolean existingName = isExistingName(mAllCategoriesLive.getValue(), parentIndex, name);
+        boolean existingName = isExistingName(getAllModelsLiveValue(), parentIndex, name);
         mExistingNameLive.setValue(existingName);
     }
 
@@ -143,6 +143,11 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     @Override
     protected BaseDao<Category, CategoryTuple> getDao() {
         return mCategoryDao;
+    }
+
+    @Override
+    protected LiveData<List<Category>> getModelsLive() {
+        return mAllCategoriesLive;
     }
 }
 
