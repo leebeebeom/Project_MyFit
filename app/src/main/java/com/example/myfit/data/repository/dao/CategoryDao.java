@@ -13,7 +13,7 @@ import com.example.myfit.data.tuple.tuple.CategoryTuple;
 import java.util.List;
 
 @Dao
-public abstract class CategoryDao extends BaseCategoryFolderDao<Category> {
+public abstract class CategoryDao extends BaseCategoryFolderDao<Category, CategoryTuple> {
     @Override
     protected LiveData<List<Category>> getAllModelsLive() {
         return getAllCategoriesLive();
@@ -42,7 +42,11 @@ public abstract class CategoryDao extends BaseCategoryFolderDao<Category> {
             "GROUP BY category.id")
     protected abstract LiveData<List<ContentSizeTuple>> getSizeContentSizeTuplesLiveImpl();
 
-    //from adapter drag drop
+    @Override
+    public void updateTuples(List<CategoryTuple> tuples) {
+        updateTuplesImpl(tuples);
+    }
+
     @Update(onConflict = OnConflictStrategy.REPLACE, entity = Category.class)
-    public abstract void updateTuples(List<CategoryTuple> categoryTuples);
+    public abstract void updateTuplesImpl(List<CategoryTuple> categoryTuples);
 }
