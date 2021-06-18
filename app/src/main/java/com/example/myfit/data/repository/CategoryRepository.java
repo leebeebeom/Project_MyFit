@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 
 @Singleton
 @Accessors(prefix = "m")
-public class CategoryRepository extends BaseRepository<Category> {
+public class CategoryRepository extends BaseRepository<Category, CategoryTuple> {
     private final CategoryDao mCategoryDao;
     private final SharedPreferences mMainSortPreference;
     @Getter
@@ -140,7 +140,7 @@ public class CategoryRepository extends BaseRepository<Category> {
     }
 
     public void updateTuples(List<CategoryTuple> tuples) {
-        new Thread(() -> mCategoryDao.updateTuples(tuples)).start();
+        new Thread(() -> mCategoryDao.updateTuplesImpl(tuples)).start();
     }
 
     private List<CategoryTuple> getCategoryTuples(Stream<Category> stream) {
@@ -153,7 +153,7 @@ public class CategoryRepository extends BaseRepository<Category> {
     }
 
     @Override
-    protected BaseDao<Category> getDao() {
+    protected BaseDao<Category, CategoryTuple> getDao() {
         return mCategoryDao;
     }
 }
