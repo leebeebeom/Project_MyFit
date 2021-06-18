@@ -101,7 +101,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
         if (mAllCategoriesLive.getValue() != null) {
             Integer largestSort = getLargestSortNumber(mAllCategoriesLive.getValue());
             Category category = new Category(parentIndex, largestSort + 1, name);
-            new Thread(() -> mCategoryDao.insert(category)).start();
+            insert(category);
         }
     }
 
@@ -111,7 +111,7 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
             if (categoryOptional.isPresent()) {
                 Category category = categoryOptional.get();
                 category.setName(name);
-                new Thread(() -> mCategoryDao.update(category)).start();
+                update(category);
             }
         }
     }
