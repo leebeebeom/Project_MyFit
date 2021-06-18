@@ -9,6 +9,7 @@ import androidx.room.Update;
 import com.example.myfit.data.model.BaseModel;
 import com.example.myfit.data.model.model.Folder;
 import com.example.myfit.data.model.model.Size;
+import com.example.myfit.data.tuple.BaseTuple;
 import com.example.myfit.data.tuple.ParentDeletedTuple;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Dao
-public abstract class BaseDao<T extends BaseModel> {
+public abstract class BaseDao<T extends BaseModel, U extends BaseTuple> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insert(T t);
 
@@ -29,6 +30,8 @@ public abstract class BaseDao<T extends BaseModel> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public abstract void update(List<T> ts);
+
+    public abstract void updateTuples(List<U> tuples);
 
     public void setChildrenParentDeleted(long[] parentIds) {
         LinkedList<ParentDeletedTuple> allFolderParentDeletedTuples = getAllFolderParentDeletedTuples(parentIds);
