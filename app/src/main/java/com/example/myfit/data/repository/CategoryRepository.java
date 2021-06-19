@@ -10,6 +10,8 @@ import androidx.lifecycle.Transformations;
 
 import com.example.myfit.data.AppDataBase;
 import com.example.myfit.data.model.model.Category;
+import com.example.myfit.data.model.model.Folder;
+import com.example.myfit.data.model.model.Size;
 import com.example.myfit.data.repository.dao.BaseDao;
 import com.example.myfit.data.repository.dao.CategoryDao;
 import com.example.myfit.data.tuple.tuple.CategoryTuple;
@@ -96,24 +98,27 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
 
     public void insert(String name, int parentIndex) {
         Integer largestSort = getLargestSortNumber(getAllModelsLiveValue());
-        Category category = new Category(parentIndex, largestSort + 1, name);
+        Category category = new Category(parentIndex, largestSort + 1, name.trim());
         insert(category);
     }
 
     public void update(long id, String name) {
         Optional<Category> categoryOptional = getSingleOptional(getAllModelsLiveValue(), id);
         categoryOptional.ifPresent(category -> {
-            category.setName(name);
+            category.setName(name.trim());
             update(category);
         });
     }
 
-    public void deleteOrRestore(long[] ids) {
+    public void deleteOrRestore(long[] ids, FolderRepository folderRepository, SizeRepository sizeRepository) {
+        List<Folder> allFolders = folderRepository.getAllModelsLiveValue();
+        List<Size> allSizes = sizeRepository.getAllModelsLiveValue();
+
         Stream<Category> stream = getStreamByIds(getAllModelsLiveValue(), ids);
         setDeleted(stream);
         new Thread(() -> {
             mCategoryDao.update(stream.collect(Collectors.toList()));
-            mCategoryDao.setChildrenParentDeleted(ids);
+            mCategoryDao.setChildrenParentDeleted(ids, folderRepository.getAllModelsLiveValue(), sizeRepository.getAllModelsLiveValue());
         }).start();
     }
 
@@ -125,10 +130,6 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     public void isExistingName(String name, int parentIndex) {
         boolean existingName = isExistingName(getAllModelsLiveValue(), parentIndex, name);
         mExistingNameLive.setValue(existingName);
-    }
-
-    public void updateTuples(List<CategoryTuple> tuples) {
-        new Thread(() -> mCategoryDao.updateTuplesImpl(tuples)).start();
     }
 
     private List<CategoryTuple> getCategoryTuples(Stream<Category> stream) {
