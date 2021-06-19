@@ -24,23 +24,25 @@ public abstract class BaseCategoryFolderDao<T extends Category, U extends BaseTu
         LiveData<List<ContentSizeTuple>> sizeContentSizeTuplesLive = getSizeContentSizeTuplesLive();
         MediatorLiveData<List<T>> mediatorLive = new MediatorLiveData<>();
 
-        mediatorLive.addSource(allModelsLive, models -> {
-            setFolderContentSize(models, getContentSizeTuplesLiveValue(folderContentSizeTuplesLive));
-            setSizeContentSize(models, getContentSizeTuplesLiveValue(sizeContentSizeTuplesLive));
-            mediatorLive.setValue(models);
-        });
+        mediatorLive.addSource(allModelsLive, models ->
+                setMediatorValue(models, getContentSizeTuplesLiveValue(folderContentSizeTuplesLive),
+                        getContentSizeTuplesLiveValue(sizeContentSizeTuplesLive), mediatorLive));
 
-        mediatorLive.addSource(folderContentSizeTuplesLive, folderContentSizeTuples -> {
-            setFolderContentSize(getAllModelsLiveValue(allModelsLive), folderContentSizeTuples);
-            setSizeContentSize(getAllModelsLiveValue(allModelsLive), getContentSizeTuplesLiveValue(sizeContentSizeTuplesLive));
-            mediatorLive.setValue(getAllModelsLiveValue(allModelsLive));
-        });
-        mediatorLive.addSource(sizeContentSizeTuplesLive, sizeContentSizeTuples -> {
-            setFolderContentSize(getAllModelsLiveValue(allModelsLive), getContentSizeTuplesLiveValue(folderContentSizeTuplesLive));
-            setSizeContentSize(getAllModelsLiveValue(allModelsLive), getContentSizeTuplesLiveValue(sizeContentSizeTuplesLive));
-            mediatorLive.setValue(getAllModelsLiveValue(allModelsLive));
-        });
+        mediatorLive.addSource(folderContentSizeTuplesLive, folderContentSizeTuples ->
+                setMediatorValue(getAllModelsLiveValue(allModelsLive), folderContentSizeTuples,
+                        getContentSizeTuplesLiveValue(sizeContentSizeTuplesLive), mediatorLive));
+
+        mediatorLive.addSource(sizeContentSizeTuplesLive, sizeContentSizeTuples ->
+                setMediatorValue(getAllModelsLiveValue(allModelsLive), getContentSizeTuplesLiveValue(folderContentSizeTuplesLive),
+                        sizeContentSizeTuples, mediatorLive));
         return mediatorLive;
+    }
+
+    protected void setMediatorValue(List<T> models, List<ContentSizeTuple> folderContentSizeTuples,
+                                    List<ContentSizeTuple> sizeContentSizeTuples, MediatorLiveData<List<T>> mediatorLive) {
+        setFolderContentSize(models, folderContentSizeTuples);
+        setSizeContentSize(models, sizeContentSizeTuples);
+        mediatorLive.setValue(models);
     }
 
     protected abstract LiveData<List<T>> getAllModelsLive();
