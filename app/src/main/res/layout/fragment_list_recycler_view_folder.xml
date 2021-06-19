@@ -9,11 +9,11 @@
 
         <variable
             name="model"
-            type="com.example.myfit.ui.main.list.ListViewModel" />
+            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
 
         <variable
             name="listFragment"
-            type="com.example.myfit.ui.main.list.ListFragment" />
+            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat

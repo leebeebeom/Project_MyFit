@@ -3,16 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View"/>
-
         <variable
-            name="size"
-            type="com.example.myfit.data.model.model.Size" />
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:visibility="@{size.parentIndex == 2 ?
-        View.VISIBLE : View.GONE}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -25,7 +21,7 @@
                 android:id="@+id/length"
                 layout="@layout/fragment_size_edit_text"
                 app:hint="@{@string/include_length}"
-                app:text="@={size.firstInfo}" />
+                app:text="@{model.sizeLive.firstInfo}" />
 
             <View
                 android:layout_width="0dp"
@@ -43,7 +39,7 @@
                 android:id="@+id/waist"
                 layout="@layout/fragment_size_edit_text"
                 app:hint="@{@string/include_waist}"
-                app:text="@={size.secondInfo}" />
+                app:text="@{model.sizeLive.secondInfo}" />
 
             <include
                 android:id="@+id/thigh"
@@ -53,7 +49,7 @@
                 android:layout_weight="1"
                 app:hint="@{@string/include_thigh}"
                 android:layout_height="wrap_content"
-                app:text="@={size.thirdInfo}" />
+                app:text="@{model.sizeLive.thirdInfo}" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -65,7 +61,7 @@
                 android:id="@+id/rise"
                 layout="@layout/fragment_size_edit_text"
                 app:hint="@{@string/include_rise}"
-                app:text="@={size.fourthInfo}" />
+                app:text="@{model.sizeLive.fourthInfo}" />
 
             <include
                 android:id="@+id/hem"
@@ -75,7 +71,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:hint="@{@string/include_hem}"
-                app:text="@={size.fifthInfo}" />
+                app:text="@{model.sizeLive.fifthInfo}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

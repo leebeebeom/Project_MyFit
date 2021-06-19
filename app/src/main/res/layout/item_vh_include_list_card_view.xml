@@ -9,15 +9,15 @@
 
         <variable
             name="baseAdapter"
-            type="com.example.myfit.util.adapter.BaseAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
 
         <variable
             name="baseVH"
-            type="com.example.myfit.util.adapter.viewholder.BaseVH" />
+            type="com.leebeebeom.closetnote.util.adapter.viewholder.BaseVH" />
 
         <variable
             name="tuple"
-            type="com.example.myfit.data.tuple.tuple.CategoryTuple" />
+            type="com.leebeebeom.closetnote.data.tuple.tuple.CategoryTuple" />
 
         <variable
             name="alpha"
@@ -28,7 +28,7 @@
             type="boolean" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <com.leebeebeom.closetnote.ui.view.CustomCardView
         android:id="@+id/cardView"
         listActionMode="@{baseAdapter}"
         holder="@{baseVH}"
@@ -36,10 +36,7 @@
         android:layout_height="@dimen/_30sdp"
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:layout_marginVertical="@dimen/_2sdp"
-        android:translationZ="@{dragging ? 10f : 0f}"
-        app:cardBackgroundColor="?myCardViewBackground"
-        app:cardCornerRadius="@dimen/_4sdp"
-        app:cardElevation="@dimen/_2sdp">
+        android:translationZ="@{dragging ? 10f : 0f}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,23 +46,18 @@
                 android:id="@+id/iconLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tvName"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <com.leebeebeom.closetnote.ui.view.IconDot
                     android:id="@+id/dotIcon"
-                    setDotIcon='@{""}'
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_4sdp"
-                    android:alpha="0.8"
-                    android:scaleX="0.3"
-                    android:scaleY="0.3"
                     android:visibility="gone"
-                    tools:src="@drawable/icon_dot"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -145,5 +137,5 @@
                 tools:visibility="visible"
                 tools:src="@drawable/icon_drag_handle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </com.leebeebeom.closetnote.ui.view.CustomCardView>
 </layout>

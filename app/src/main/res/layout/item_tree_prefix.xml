@@ -8,19 +8,22 @@
 
         <variable
             name="treeHolder"
-            type="com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder" />
+            type="com.leebeebeom.closetnote.ui.dialog.tree.holder.BaseTreeHolder" />
+
+        <variable
+            name="active"
+            type="boolean" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout"
-        android:onClick="@{() -> treeHolder.node.children.empty ?
-        treeHolder.treeView.toggleNode(treeHolder.node) : void}"
+        android:onClick="@{() -> treeHolder.node.children.empty ? void : treeHolder.treeView.toggleNode(treeHolder.node)}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iconArrow"
-            setTriangleIcon="@{}"
+            arrowActive="@{active}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_4sdp"
@@ -30,7 +33,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iconFolder"
-            setFolderIcon="@{}"
+            folderActive="@{active}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.8"

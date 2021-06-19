@@ -3,17 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View" />
-
         <variable
-            name="size"
-            type="com.example.myfit.data.model.model.Size" />
-
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:visibility="@{size.parentIndex == 0 || size.parentIndex == 2 ?
-        View.VISIBLE : View.GONE}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -26,7 +21,7 @@
                 android:id="@+id/length"
                 layout="@layout/fragment_size_edit_text"
                 app:hint="@{@string/include_length}"
-                app:text="@={size.firstInfo}" />
+                app:text="@{model.sizeLive.firstInfo}" />
 
             <include
                 android:id="@+id/shoulder"
@@ -36,7 +31,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:hint="@{@string/include_shoulder}"
-                app:text="@={size.secondInfo}" />
+                app:text="@{model.sizeLive.secondInfo}" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -48,7 +43,7 @@
                 android:id="@+id/chest"
                 layout="@layout/fragment_size_edit_text"
                 app:hint="@{@string/include_chest}"
-                app:text="@={size.thirdInfo}" />
+                app:text="@{model.sizeLive.thirdInfo}" />
 
             <include
                 android:id="@+id/sleeve"
@@ -58,7 +53,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:hint="@{@string/include_sleeve}"
-                app:text="@={size.fourthInfo}" />
+                app:text="@{model.sizeLive.fourthInfo}" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -7,11 +7,11 @@
 
         <variable
             name="listFragment"
-            type="com.example.myfit.ui.main.list.ListFragment" />
+            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
 
         <variable
             name="model"
-            type="com.example.myfit.ui.main.list.ListViewModel" />
+            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
     </data>
 
     <HorizontalScrollView
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.9"
                 android:onClick="@{() -> listFragment.navigateSelf()}"
-                android:text="@{model.categoryLive.name}"
+                android:text="@{model.categoryNameLive}"
                 android:textSize="@dimen/_11sdp"
                 tools:text="Short Sleeve" />
         </androidx.appcompat.widget.LinearLayoutCompat>

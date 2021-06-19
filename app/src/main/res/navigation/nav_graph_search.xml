@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.project_myfit.search.SearchFragment"
+        android:name="com.leebeebeom.closetnote.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search"
         android:label="SearchFragment">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.example.project_myfit.MainActivity"
+        android:name="com.leebeebeom.closetnote.ui.main.MainActivity"
         android:label="MainActivity">
         <argument
             android:name="folderId"
@@ -42,78 +42,45 @@
     </activity>
     <dialog
         android:id="@+id/deleteAllRecentSearchDialog"
-        android:name="com.example.project_myfit.dialog.DeleteAllRecentSearchDialog"
-        android:label="DeleteAllRecentSearchDialog">
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-    </dialog>
+        android:name="com.leebeebeom.closetnote.ui.dialog.DeleteAllRecentSearchDialog"
+        android:label="DeleteAllRecentSearchDialog"/>
     <dialog
         android:id="@+id/addDialog"
-        android:name="com.example.project_myfit.dialog.AddDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.AddDialog"
         android:label="AddDialog">
         <argument
-            android:name="itemType"
+            android:name="itemTypeIndex"
             app:argType="integer" />
         <argument
-            android:name="parentCategory"
-            app:argType="string" />
+            android:name="parentCategoryIndex"
+            app:argType="integer" />
         <argument
             android:name="parentId"
             app:argType="long" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
         <action
             android:id="@+id/toAddSameNameDialog"
             app:destination="@id/addSameNameDialog" />
     </dialog>
     <dialog
         android:id="@+id/addSameNameDialog"
-        android:name="com.example.project_myfit.dialog.AddSameNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.AddSameNameDialog"
         android:label="AddSameNameDialog">
         <argument
-            android:name="itemType"
+            android:name="itemTypeIndex"
             app:argType="integer" />
         <argument
-            android:name="parentCategory"
-            app:argType="string" />
+            android:name="parentCategoryIndex"
+            app:argType="integer" />
         <argument
             android:name="parentId"
             app:argType="long" />
         <argument
-            android:name="name"
+            android:name="itemName"
             app:argType="string" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-    </dialog>
-    <dialog
-        android:id="@+id/treeViewDialog"
-        android:name="com.example.project_myfit.dialog.TreeViewDialog"
-        android:label="TreeViewDialog">
-        <argument
-            android:name="parentCategory"
-            app:argType="string" />
-        <argument
-            android:name="thisCategoryId"
-            app:argType="long" />
-        <argument
-            android:name="thisFolderId"
-            app:argType="long" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-        <action
-            android:id="@+id/toAddDialog"
-            app:destination="@id/addDialog" />
-        <action
-            android:id="@+id/toMoveDialog"
-            app:destination="@id/moveDialog" />
     </dialog>
     <dialog
         android:id="@+id/moveDialog"
-        android:name="com.example.project_myfit.dialog.MoveDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.move.MoveDialog"
         android:label="MoveDialog">
         <argument
             android:name="selectedItemSize"
@@ -127,7 +94,7 @@
     </dialog>
     <dialog
         android:id="@+id/editNameDialog"
-        android:name="com.example.project_myfit.dialog.EditNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.EditNameDialog"
         android:label="toEditNameDialog">
         <argument
             android:name="itemId"
@@ -147,7 +114,7 @@
     </dialog>
     <dialog
         android:id="@+id/editSameNameDialog"
-        android:name="com.example.project_myfit.dialog.EditSameNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.EditSameNameDialog"
         android:label="EditSameNameDialog">
         <argument
             android:name="itemType"
@@ -167,13 +134,10 @@
     </dialog>
     <dialog
         android:id="@+id/deleteSelectedItemDialog"
-        android:name="com.example.project_myfit.dialog.DeleteSelectedItemDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.delete.DeleteSelectedItemDialog"
         android:label="DeleteSelectedItemDialog">
         <argument
-            android:name="selectedItemSize"
-            app:argType="integer" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
+            android:name="selectedItemId"
+            app:argType="long[]" />
     </dialog>
 </navigation>

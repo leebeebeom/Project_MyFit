@@ -35,7 +35,7 @@
             android:layout_height="@dimen/_34sdp"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
-            android:text='@={text}'
+            android:text="@={text}"
             tools:text="@string/include_length"
             android:textSize="@dimen/_10sdp" />
     </com.google.android.material.textfield.TextInputLayout>

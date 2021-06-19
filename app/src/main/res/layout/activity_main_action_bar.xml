@@ -6,21 +6,21 @@
 
         <variable
             name="autoCompleteAdapter"
-            type="com.example.myfit.util.adapter.AutoCompleteAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.AutoCompleteAdapter" />
     </data>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/layout"
+        app:liftOnScroll="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        app:liftOnScroll="true"
         android:background="?colorPrimary">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
-            app:layout_scrollFlags="scroll|enterAlways"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:titleTextAppearance="@style/myActionBarTitleStyle">
 
             <com.google.android.material.textview.MaterialTextView
@@ -32,7 +32,7 @@
                 android:text="@string/app_name"
                 android:textColor="?colorControlNormal"
                 android:textSize="@dimen/_26sdp"
-                app:fontFamily="@font/ballet_harmony" />
+                app:fontFamily="@font/rochester_regular" />
 
             <include
                 android:id="@+id/searchBar"

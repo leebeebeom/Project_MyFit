@@ -2,77 +2,70 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_recycle_bin"
-    app:startDestination="@id/recycleBinMain">
+    android:id="@+id/nav_graph_recycle_bin"></navigation>
+<!--    app:startDestination="@id/recycleBinMain">-->
 
-    <fragment
-        android:id="@+id/recycleBinMain"
-        android:name="com.example.project_myfit.recyclebin.main.RecycleBinMainFragment"
-        tools:layout="@layout/fragment_recycle_bin_main">
-        <action
-            android:id="@+id/toRecycleBinSearchFragment"
-            app:destination="@id/recycleBinSearch"
-            app:enterAnim="@anim/fragment_slide_in_from_down"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_slide_out_to_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/recycleBinSearch"
-        android:name="com.example.project_myfit.recyclebin.search.RecycleBinSearchFragment"
-        tools:layout="@layout/fragment_recycle_bin_search">
-        <action
-            android:id="@+id/toRestoreDialog"
-            app:destination="@id/restoreDialog" />
-        <action
-            android:id="@+id/toDeleteForeverDialog"
-            app:destination="@id/deleteForeverDialog" />
-        <action
-            android:id="@+id/toDeleteAllRecentSearchDialog"
-            app:destination="@id/deleteAllRecentSearchDialog" />
-    </fragment>
-    <dialog
-        android:id="@+id/restoreDialog"
-        android:name="com.example.project_myfit.dialog.RestoreDialog"
-        android:label="RestoreDialog">
-        <argument
-            android:name="selectedItemSize"
-            app:argType="integer" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-        <action
-            android:id="@+id/toNoParentDialog"
-            app:destination="@id/noParentDialog" />
-    </dialog>
-    <dialog
-        android:id="@+id/deleteForeverDialog"
-        android:name="com.example.project_myfit.dialog.DeleteForeverDialog"
-        android:label="DeleteForeverDialog">
-        <argument
-            android:name="selectedItemSize"
-            app:argType="integer" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-    </dialog>
-    <dialog
-        android:id="@+id/noParentDialog"
-        android:name="com.example.project_myfit.dialog.NoParentDialog"
-        android:label="NoParentDialog">
-        <argument
-            android:name="noParentNameList"
-            app:argType="string[]" />
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-    </dialog>
-    <dialog
-        android:id="@+id/deleteAllRecentSearchDialog"
-        android:name="com.example.project_myfit.dialog.DeleteAllRecentSearchDialog"
-        android:label="DeleteAllRecentSearchDialog">
-        <argument
-            android:name="navGraphId"
-            app:argType="integer" />
-    </dialog>
-</navigation>
+<!--    <fragment-->
+<!--        android:id="@+id/recycleBinFragment"-->
+<!--        android:name="com.leebeebeom.closetnote.ui.recyclebin.main.RecycleBinMainFragment"-->
+<!--        tools:layout="@layout/fragment_recycle_bin_main">-->
+<!--        <action-->
+<!--            android:id="@+id/toRecycleBinSearchFragment"-->
+<!--            app:destination="@id/recycleBinSearch"-->
+<!--            app:enterAnim="@anim/fragment_slide_in_from_down"-->
+<!--            app:exitAnim="@anim/fragment_fade_exit"-->
+<!--            app:popEnterAnim="@anim/fragment_fade_enter"-->
+<!--            app:popExitAnim="@anim/fragment_slide_out_to_down" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/recycleBinSearch"-->
+<!--        android:name="com.leebeebeom.closetnote.ui.recyclebin.search.RecycleBinSearchFragment"-->
+<!--        tools:layout="@layout/fragment_recycle_bin_search">-->
+<!--        <action-->
+<!--            android:id="@+id/toRestoreDialog"-->
+<!--            app:destination="@id/restoreDialog" />-->
+<!--        <action-->
+<!--            android:id="@+id/toDeleteForeverDialog"-->
+<!--            app:destination="@id/deleteForeverDialog" />-->
+<!--        <action-->
+<!--            android:id="@+id/toDeleteAllRecentSearchDialog"-->
+<!--            app:destination="@id/deleteAllRecentSearchDialog" />-->
+<!--    </fragment>-->
+<!--    <dialog-->
+<!--        android:id="@+id/restoreDialog"-->
+<!--        android:name="com.leebeebeom.closetnote.ui.dialog.RestoreDialog"-->
+<!--        android:label="RestoreDialog">-->
+<!--        <argument-->
+<!--            android:name="selectedItemSize"-->
+<!--            app:argType="integer" />-->
+<!--        <argument-->
+<!--            android:name="navGraphId"-->
+<!--            app:argType="integer" />-->
+<!--        <action-->
+<!--            android:id="@+id/toNoParentDialog"-->
+<!--            app:destination="@id/noParentDialog" />-->
+<!--    </dialog>-->
+<!--    <dialog-->
+<!--        android:id="@+id/deleteForeverDialog"-->
+<!--        android:name="com.leebeebeom.closetnote.ui.dialog.DeleteForeverDialog"-->
+<!--        android:label="DeleteForeverDialog">-->
+<!--        <argument-->
+<!--            android:name="selectedItemSize"-->
+<!--            app:argType="integer" />-->
+<!--    </dialog>-->
+<!--    <dialog-->
+<!--        android:id="@+id/noParentDialog"-->
+<!--        android:name="com.leebeebeom.closetnote.ui.dialog.NoParentDialog"-->
+<!--        android:label="NoParentDialog">-->
+<!--        <argument-->
+<!--            android:name="noParentNameList"-->
+<!--            app:argType="string[]" />-->
+<!--        <argument-->
+<!--            android:name="navGraphId"-->
+<!--            app:argType="integer" />-->
+<!--    </dialog>-->
+<!--    <dialog-->
+<!--        android:id="@+id/deleteAllRecentSearchDialog"-->
+<!--        android:name="com.leebeebeom.closetnote.ui.dialog.DeleteAllRecentSearchDialog"-->
+<!--        android:label="DeleteAllRecentSearchDialog"/>-->
+<!--</navigation>-->

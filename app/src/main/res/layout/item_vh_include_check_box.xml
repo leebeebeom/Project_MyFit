@@ -10,16 +10,12 @@
             type="boolean" />
     </data>
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <com.leebeebeom.closetnote.ui.view.CustomCheckBox
         android:id="@+id/cb"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/_8sdp"
-        android:alpha="0.8"
-        android:buttonTint="?colorControlNormal"
-        android:clickable="false"
-        android:enabled="false"
         android:scaleX="0.7"
         android:scaleY="0.7"
         android:visibility="@{dragging ? View.INVISIBLE : View.VISIBLE}" />

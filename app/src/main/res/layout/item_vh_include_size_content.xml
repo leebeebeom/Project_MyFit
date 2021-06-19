@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="com.example.myfit.util.ActionModeImpl" />
+        <import type="com.leebeebeom.closetnote.util.ActionModeImpl" />
 
         <variable
             name="sizeVH"
-            type="com.example.myfit.util.adapter.viewholder.BaseVH.BaseSizeVH" />
+            type="com.leebeebeom.closetnote.util.adapter.viewholder.BaseVH.BaseSizeVH" />
 
         <variable
             name="dragging"
@@ -17,7 +17,7 @@
 
         <variable
             name="adapter"
-            type="com.example.myfit.util.adapter.BaseAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

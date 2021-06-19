@@ -6,7 +6,7 @@
 
         <variable
             name="recentSearch"
-            type="com.example.myfit.data.model.model.RecentSearch" />
+            type="com.leebeebeom.closetnote.data.model.model.RecentSearch" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat

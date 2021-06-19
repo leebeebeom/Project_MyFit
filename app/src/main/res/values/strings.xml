@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">MyFit</string>
+    <string name="app_name">Closet Note</string>
 
-    <string name="main_bn_menu_main">메인 메뉴</string>
-    <string name="main_bn_menu_daily_look">데일리룩</string>
-    <string name="main_bn_menu_setting">설정</string>
-    <string name="main_bn_menu_wish_list">위시 리스트</string>
+    <string name="main_bottom_nav_menu_main">메인 메뉴</string>
+    <string name="main_bottom_nav_menu_daily_look">데일리룩</string>
+    <string name="main_bottom_nav_menu_setting">설정</string>
+    <string name="main_bottom_nav_menu_wish_list">위시 리스트</string>
     <string name="size_created_time">생성일 : </string>
     <string name="size_modified_time">수정일 : </string>
     <string name="size_brand">Brand</string>
@@ -77,20 +77,12 @@
 
     <string name="dialog_hint_category_name">Category Name</string>
     <string name="dialog_place_holder_category_name">카테고리 이름</string>
-    <string name="dialog_title_edit_category_name">카테고리 이름 변경</string>
 
     <string name="dialog_hint_folder_name">Folder Name</string>
     <string name="dialog_place_holder_folder_name">폴더 이름</string>
+
+    <string name="dialog_title_edit_category_name">카테고리 이름 변경</string>
     <string name="dialog_title_edit_folder_name">폴더 이름 변경</string>
-
-    <string name="dialog_sort_custom">사용자 정의</string>
-    <string name="dialog_sort_create">최근 생성 순</string>
-    <string name="dialog_sort_create_reverse">최근 생성 역순</string>
-    <string name="dialog_sort_brand">브랜드 순</string>
-    <string name="dialog_sort_brand_reverse">브랜드 역순</string>
-    <string name="dialog_sort_name">이름 순</string>
-    <string name="dialog_sort_name_reverse">이름 역순</string>
-
     <string name="dialog_message_item_move">개의 아이템을 이동하시겠습니까?</string>
     <string name="dialog_message_selected_item_delete">개의 아이템을 휴지통으로 이동하시겠습니까?</string>
     <string name="dialog_et_max_length">30자까지 입력 가능합니다.</string>
@@ -106,4 +98,13 @@
     <string name="dialog_message_delete_forever">개의 아이템을 완전 삭제하시겠습니까?\n삭제 후 복구할 수 없습니다.</string>
     <string name="dialog_message_no_parent">\n\n위 아이템의 상위 디렉토리가 존재하지 않습니다.\n확인을 누르시면 \'복구됨\' 카테고리에 복구됩니다.</string>
     <string name="restore_category_name">복구됨</string>
+
+    <string name="dialog_sort_custom">사용자 정의</string>
+    <string name="dialog_sort_create">최근 생성 순</string>
+    <string name="dialog_sort_create_reverse">최근 생성 역순</string>
+    <string name="dialog_sort_brand">브랜드 순</string>
+    <string name="dialog_sort_brand_reverse">브랜드 역순</string>
+    <string name="dialog_sort_name">이름 순</string>
+    <string name="dialog_sort_name_reverse">이름 역순</string>
+    <string name="size_fragment_attach_picture">사진 첨부</string>
 </resources>

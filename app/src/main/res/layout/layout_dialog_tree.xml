@@ -7,7 +7,10 @@
 
         <variable
             name="model"
-            type="com.example.myfit.ui.dialog.tree.TreeViewModel" />
+            type="com.leebeebeom.closetnote.ui.dialog.tree.TreeViewModel" />
+        <variable
+            name="dialog"
+            type="com.leebeebeom.closetnote.ui.dialog.tree.TreeViewDialog" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -25,11 +28,6 @@
                 android:layout_height="1px"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:background="?myColorControl" />
-
-            <FrameLayout
-                android:id="@+id/treeViewContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
@@ -56,12 +54,17 @@
                     tools:text=" TOP" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <FrameLayout
+                android:id="@+id/treeViewContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/layoutAddCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:onClick="@{() -> model.navigateAddCategoryDialog()}"
+                android:onClick="@{() -> dialog.navigateAddCategory()}"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_16sdp">
 
@@ -74,7 +77,7 @@
                     android:textSize="@dimen/_10sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    setAddIcon2="@{}"
+                    setAddIcon2='@{""}'
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:src="@drawable/icon_add"

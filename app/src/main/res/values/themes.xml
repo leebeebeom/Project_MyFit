@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Project_MyFit" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Closet_Note" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/black</item>
@@ -55,7 +55,7 @@
         <item name="android:visibility">gone</item>
     </style>
     <!--    menu icon padding-->
-    <style name="myMenuPadding" parent="Theme.Project_MyFit">
+    <style name="myMenuPadding" parent="Theme.Closet_Note">
         <item name="android:padding">@dimen/_3sdp</item>
     </style>
     <!--    edit text corner-->

@@ -7,11 +7,11 @@
 
         <variable
             name="sizeListVH"
-            type="com.example.myfit.util.adapter.viewholder.SizeListVH" />
+            type="com.leebeebeom.closetnote.util.adapter.viewholder.SizeListVH" />
 
         <variable
             name="baseAdapter"
-            type="com.example.myfit.util.adapter.BaseAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
 
         <variable
             name="dragging"
@@ -29,7 +29,7 @@
             app:dragging="@{dragging}"
             layout="@layout/item_vh_include_check_box" />
 
-        <com.google.android.material.card.MaterialCardView
+        <com.leebeebeom.closetnote.ui.view.CustomCardView
             listActionMode="@{baseAdapter}"
             holder="@{sizeListVH}"
             android:id="@+id/cardView"
@@ -37,10 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
-            android:layout_marginVertical="@dimen/_2sdp"
-            app:cardCornerRadius="@dimen/_4sdp"
-            app:cardBackgroundColor="?myCardViewBackground"
-            app:cardElevation="@dimen/_2sdp">
+            android:layout_marginVertical="@dimen/_2sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -104,6 +101,6 @@
                     tools:visibility="visible"
                     tools:src="@drawable/icon_drag_handle" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </com.leebeebeom.closetnote.ui.view.CustomCardView>
     </FrameLayout>
 </layout>

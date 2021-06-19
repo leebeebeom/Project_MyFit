@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <import type="android.view.View" />
+        <import type="com.leebeebeom.closetnote.ui.dialog.tree.holder.BaseTreeHolder"/>
 
         <variable
             name="categoryHolder"
-            type="com.example.myfit.ui.dialog.tree.holder.TreeCategoryHolder" />
+            type="com.leebeebeom.closetnote.ui.dialog.tree.holder.TreeCategoryHolder" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -26,18 +25,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_8sdp"
-                app:treeHolder="@{categoryHolder}" />
+                app:treeHolder="@{(BaseTreeHolder) categoryHolder}" />
 
             <include
                 android:id="@+id/tv"
                 layout="@layout/item_tree_text_view"
                 app:textSize="@{@dimen/_11sdp}"
-                app:name="@{categoryHolder.value.tuple.name}" />
+                app:name="@{categoryHolder.tuple.name}" />
 
             <include
                 android:id="@+id/postfix"
                 layout="@layout/item_tree_postfix"
-                app:treeHolder="@{categoryHolder}" />
+                app:contentSize="@{categoryHolder.tuple.contentSize}"
+                app:treeHolder="@{(BaseTreeHolder) categoryHolder}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View

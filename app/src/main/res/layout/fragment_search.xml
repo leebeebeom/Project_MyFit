@@ -6,13 +6,12 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".search.SearchFragment">
+        tools:context=".ui.search.SearchFragment">
 
-        <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/sv"
+        <com.leebeebeom.closetnote.ui.view.LockableScrollView
+            android:id="@+id/sv_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -30,12 +29,12 @@
                     app:tabTextAppearance="@style/myTextSize9sdp" />
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp"
+                    android:id="@+id/vp_main"
                     tools:layout="@layout/fragment_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.example.project_myfit.util.LockableScrollView>
+        </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/svRecentSearch"
@@ -88,7 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_recent_search" />
+                        tools:listitem="@layout/item_vh_recent_search" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <FrameLayout

@@ -6,7 +6,10 @@
 
         <variable
             name="treeHolder"
-            type="com.example.myfit.ui.dialog.tree.holder.BaseTreeHolder" />
+            type="com.leebeebeom.closetnote.ui.dialog.tree.holder.BaseTreeHolder" />
+        <variable
+            name="contentSize"
+            type="int" />
     </data>
 
     <LinearLayout
@@ -32,13 +35,13 @@
             android:layout_marginHorizontal="@dimen/_6sdp"
             android:layout_marginVertical="@dimen/_2sdp"
             android:alpha="0.6"
-            android:text="@{treeHolder.value.contentsSize}"
+            android:text="@{contentSize}"
             android:textSize="@dimen/_6sdp"
             tools:text="20" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iconAdd"
-            setAddIcon2="@{}"
+            setAddIcon2='@{""}'
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:alpha="0.8"

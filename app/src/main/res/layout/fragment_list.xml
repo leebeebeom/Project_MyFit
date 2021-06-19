@@ -7,11 +7,11 @@
 
         <variable
             name="listFragment"
-            type="com.example.myfit.ui.main.list.ListFragment" />
+            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
 
         <variable
             name="model"
-            type="com.example.myfit.ui.main.list.ListViewModel" />
+            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -20,11 +20,10 @@
         android:background="?android:colorBackground"
         tools:context=".ui.main.list.ListFragment">
 
-        <com.example.myfit.util.LockableScrollView
+        <com.leebeebeom.closetnote.ui.view.LockableScrollView
             android:id="@+id/sv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -49,6 +48,6 @@
                     app:listFragment="@{listFragment}"
                     app:model="@{model}" />
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.example.myfit.util.LockableScrollView>
+        </com.leebeebeom.closetnote.ui.view.LockableScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

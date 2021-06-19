@@ -4,15 +4,15 @@
 
     <data>
 
-        <import type="com.example.myfit.util.adapter.viewholder.BaseVH" />
+        <import type="com.leebeebeom.closetnote.util.adapter.viewholder.BaseVH" />
 
         <variable
             name="folderListVH"
-            type="com.example.myfit.util.adapter.viewholder.FolderListVH" />
+            type="com.leebeebeom.closetnote.util.adapter.viewholder.FolderListVH" />
 
         <variable
             name="baseAdapter"
-            type="com.example.myfit.util.adapter.BaseAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
     </data>
 
     <FrameLayout

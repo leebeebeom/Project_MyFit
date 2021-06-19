@@ -8,15 +8,16 @@
         <import type="android.view.View" />
 
         <variable
-            name="size"
-            type="com.example.myfit.data.model.model.Size" />
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
 
         <variable
-            name="autoCompleteAdapter"
-            type="com.example.myfit.ui.search.adapter.AutoCompleteAdapter" />
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeFragment" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <com.leebeebeom.closetnote.ui.view.LockableScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:colorBackground"
@@ -35,6 +36,8 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:onClick="@{() -> fragment.getImage()}"
+                    app:onLongClickListener="@{() -> fragment.navigateDeleteImage()}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginHorizontal="@dimen/_16sdp"
@@ -49,7 +52,7 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv"
-                        setUri="@{size.imageUri}"
+                        setUri="@{model.imageUriLive}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
@@ -60,7 +63,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.2"
                         android:clickable="false"
-                        setAddIcon="@{size.imageUri}"
+                        setAddIcon="@{model.imageUriLive}"
                         android:src="@drawable/icon_add_image" />
 
                 </com.google.android.material.card.MaterialCardView>
@@ -72,7 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:orientation="vertical"
-                android:visibility="@{size.id == 0 ? View.INVISIBLE : View.VISIBLE}">
+                android:visibility="@{model.sizeLive.sortNumber == -1 ? View.GONE : View.VISIBLE}"
+                tools:visibility="gone">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -80,7 +84,7 @@
                     android:layout_marginStart="@dimen/_2sdp"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:alpha="0.7"
-                    android:text="@{@string/size_created_time + ' '+size.createdTime}"
+                    android:text="@{@string/size_created_time + model.sizeLive.createdTime}"
                     android:textSize="@dimen/_7sdp"
                     tools:text="생성일 : 2021년 10월 14일 10:34:10" />
 
@@ -89,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_2sdp"
                     android:alpha="0.7"
-                    android:text="@{@string/size_modified_time + ' ' + size.modifiedTime}"
+                    android:text="@{@string/size_modified_time + model.sizeLive.modifiedTime}"
                     android:textSize="@dimen/_7sdp"
                     tools:text="수정일 : 2021년 10월 14일 10:34:10" />
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -119,9 +123,10 @@
                         android:layout_height="@dimen/_34sdp"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        app:adapter="@{autoCompleteAdapter}"
+                        setItems="@{model.autoCompleteLive}"
+                        android:text="@={model.sizeLive.brand}"
                         android:completionThreshold="0"
-                        android:text="@={size.brand}"
+                        app:adapter="@{fragment.autoCompleteAdapter}"
                         android:textSize="@dimen/_10sdp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,7 +153,7 @@
                             android:layout_height="@dimen/_34sdp"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="@={size.name}"
+                            android:text="@={model.sizeLive.name}"
                             android:textSize="@dimen/_10sdp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,22 +173,25 @@
                             android:layout_height="@dimen/_34sdp"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="@={size.size}"
+                            android:text="@={model.sizeLive.size}"
                             android:textSize="@dimen/_10sdp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <include
                     layout="@layout/fragment_size_include_top"
-                    app:size="@{size}" />
+                    android:visibility="@{model.sizeLive.parentIndex == 0 || model.sizeLive.parentIndex == 2 ? View.VISIBLE : View.GONE}"
+                    app:model="@{model}" />
 
                 <include
                     layout="@layout/fragment_size_include_bottom"
-                    app:size="@{size}" />
+                    android:visibility="@{model.sizeLive.parentIndex == 1 ? View.VISIBLE : View.GONE}"
+                    app:model="@{model}" />
 
                 <include
                     layout="@layout/fragment_size_include_etc"
-                    app:size="@{size}" />
+                    android:visibility="@{model.sizeLive.parentIndex == 3 ? View.VISIBLE : View.GONE}"
+                    app:model="@{model}" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -207,13 +215,14 @@
                             android:imeOptions="actionNext"
                             android:inputType="textUri"
                             android:linksClickable="true"
-                            android:text="@={size.link}"
+                            android:text="@={model.sizeLive.link}"
                             android:textColorLink="?colorControlNormal"
                             android:textSize="@dimen/_10sdp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnGo"
+                        android:onClick="@{() -> fragment.openBrowser()}"
                         style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="@dimen/_44sdp"
                         android:layout_height="wrap_content"
@@ -240,10 +249,10 @@
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
                         android:inputType="textMultiLine"
-                        android:text="@={size.memo}"
+                        android:text="@={model.sizeLive.memo}"
                         android:textSize="@dimen/_10sdp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.core.widget.NestedScrollView>
+    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 </layout>

@@ -4,16 +4,12 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
-            name="size"
-            type="com.example.myfit.data.model.model.Size" />
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:visibility="@{size.parentIndex == 3 ?
-        View.VISIBLE : View.GONE}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -26,7 +22,7 @@
                 android:id="@+id/option1"
                 layout="@layout/fragment_size_edit_text_no_suffix"
                 app:hint="@{@string/include_option_1}"
-                app:text="@={size.firstInfo}" />
+                app:text="@{model.sizeLive.firstInfo}" />
 
             <include
                 android:id="@+id/option2"
@@ -36,7 +32,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:hint="@{@string/include_option_2}"
-                app:text="@={size.secondInfo}" />
+                app:text="@{model.sizeLive.secondInfo}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -47,7 +43,7 @@
                 android:id="@+id/option3"
                 layout="@layout/fragment_size_edit_text_no_suffix"
                 app:hint="@{@string/include_option_3}"
-                app:text="@={size.thirdInfo}" />
+                app:text="@{model.sizeLive.thirdInfo}" />
 
             <include
                 android:id="@+id/option4"
@@ -57,7 +53,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:hint="@{@string/include_option_4}"
-                app:text="@={size.fourthInfo}" />
+                app:text="@{model.sizeLive.fourthInfo}" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -69,7 +65,7 @@
                 android:id="@+id/option5"
                 layout="@layout/fragment_size_edit_text_no_suffix"
                 app:hint="@{@string/include_option_5}"
-                app:text="@={size.fifthInfo}" />
+                app:text="@{model.sizeLive.fifthInfo}" />
 
             <include
                 android:id="@+id/option6"
@@ -79,7 +75,7 @@
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
                 app:hint="@{@string/include_option_6}"
-                app:text="@={size.sixthInfo}" />
+                app:text="@{model.sizeLive.sixthInfo}" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

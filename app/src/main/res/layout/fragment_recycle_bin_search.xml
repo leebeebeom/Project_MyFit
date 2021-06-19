@@ -7,16 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.project_myfit.util.LockableScrollView
-            android:id="@+id/sv"
+        <com.leebeebeom.closetnote.ui.view.LockableScrollView
+            android:id="@+id/sv_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".recyclebin.search.RecycleBinSearchFragment">
+                tools:context=".ui.recyclebin.search.RecycleBinSearchFragment">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
@@ -31,13 +30,13 @@
                     app:tabTextAppearance="@style/myTextSize10sdp" />
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp"
+                    android:id="@+id/vp_main"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tabLayout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.example.project_myfit.util.LockableScrollView>
+        </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/svRecentSearch"
@@ -90,7 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_recent_search" />
+                        tools:listitem="@layout/item_vh_recent_search" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <FrameLayout

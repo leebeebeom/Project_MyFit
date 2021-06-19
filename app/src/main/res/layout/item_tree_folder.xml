@@ -3,22 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <import type="android.view.View" />
-
+        <import type="com.leebeebeom.closetnote.ui.dialog.tree.holder.BaseTreeHolder" />
         <variable
             name="folderHolder"
-            type="com.example.myfit.ui.dialog.tree.holder.TreeFolderHolder" />
+            type="com.leebeebeom.closetnote.ui.dialog.tree.holder.TreeFolderHolder" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_marginStart="@{folderHolder.value.margin}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_marginStart="@{folderHolder.margin}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -28,18 +26,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_4sdp"
-                app:treeHolder="@{folderHolder}" />
+                app:treeHolder="@{(BaseTreeHolder) folderHolder}" />
 
             <include
                 android:id="@+id/tv"
                 layout="@layout/item_tree_text_view"
                 app:textSize="@{@dimen/_10sdp}"
-                app:treeHolder="@{folderHolder}" />
+                app:name="@{folderHolder.tuple.name}" />
 
             <include
                 android:id="@+id/postfix"
                 layout="@layout/item_tree_postfix"
-                app:treeHolder="@{folderHolder}" />
+                app:contentSize="@{folderHolder.tuple.contentSize}"
+                app:treeHolder="@{(BaseTreeHolder) folderHolder}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View

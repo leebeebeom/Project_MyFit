@@ -6,7 +6,11 @@
 
         <variable
             name="model"
-            type="com.example.myfit.ui.dialog.eidttext.BaseEditTextViewModel" />
+            type="com.leebeebeom.closetnote.ui.dialog.eidttext.BaseEditTextViewModel" />
+
+        <variable
+            name="dialogBuilder"
+            type="com.leebeebeom.closetnote.ui.dialog.DialogBuilder" />
     </data>
 
     <FrameLayout
@@ -22,8 +26,10 @@
             android:layout_height="wrap_content"
             android:theme="@style/myEditTextOutlineColor"
             app:endIconMode="clear_text"
+            setOnKeyListener='@{""}'
             app:errorTextAppearance="@style/myTextSize8sdp"
             app:hintTextAppearance="@style/myTextSize8sdp"
+            app:errorContentDescription="@string/dialog_et_max_length"
             app:placeholderTextAppearance="@style/myTextSize11sdp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -34,6 +40,7 @@
                 android:imeOptions="actionDone"
                 android:text="@={model.name}"
                 android:inputType="text"
+                addTextChangedListener="@{dialogBuilder}"
                 android:textSize="@dimen/_11sdp" />
         </com.google.android.material.textfield.TextInputLayout>
     </FrameLayout>

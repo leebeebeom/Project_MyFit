@@ -5,7 +5,7 @@
     <data>
         <variable
             name="autoCompleteAdapter"
-            type="com.example.myfit.util.adapter.AutoCompleteAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.AutoCompleteAdapter" />
     </data>
 
     <com.google.android.material.textfield.TextInputLayout

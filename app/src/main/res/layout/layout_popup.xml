@@ -6,11 +6,11 @@
 
         <variable
             name="mainListener"
-            type="com.example.myfit.util.popupwindow.PopupWindowListener.MainPopupWindowListener" />
+            type="com.leebeebeom.closetnote.util.popupwindow.PopupWindowListener.MainPopupWindowListener" />
 
         <variable
             name="listListener"
-            type="com.example.myfit.util.popupwindow.PopupWindowListener.ListPopupWindowListener" />
+            type="com.leebeebeom.closetnote.util.popupwindow.PopupWindowListener.ListPopupWindowListener" />
     </data>
 
     <FrameLayout

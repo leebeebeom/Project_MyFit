@@ -6,7 +6,7 @@
 
         <variable
             name="actionModeImpl"
-            type="com.example.myfit.util.ActionModeImpl" />
+            type="com.leebeebeom.closetnote.util.ActionModeImpl" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat

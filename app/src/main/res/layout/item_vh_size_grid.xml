@@ -7,11 +7,11 @@
 
         <variable
             name="sizeGridVH"
-            type="com.example.myfit.util.adapter.viewholder.SizeGridVH" />
+            type="com.leebeebeom.closetnote.util.adapter.viewholder.SizeGridVH" />
 
         <variable
             name="baseAdapter"
-            type="com.example.myfit.util.adapter.BaseAdapter" />
+            type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
 
         <variable
             name="dragging"
@@ -25,16 +25,13 @@
         app:onLongClickListener="@{() -> sizeGridVH.itemViewLongClick()}"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.card.MaterialCardView
+        <com.leebeebeom.closetnote.ui.view.CustomCardView
             android:id="@+id/cardView"
             android:layout_width="@dimen/_140sdp"
             android:layout_height="wrap_content"
             android:translationZ="@{dragging ? 10f : 0f}"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_4sdp"
-            app:cardBackgroundColor="?myCardViewBackground"
-            app:cardCornerRadius="@dimen/_4sdp"
-            app:cardElevation="@dimen/_2sdp">
+            android:layout_margin="@dimen/_4sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -98,7 +95,7 @@
                     app:adapter="@{baseAdapter}"
                     app:sizeVH="@{sizeGridVH}" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
+                <com.leebeebeom.closetnote.ui.view.CustomCheckBox
                     android:id="@+id/cb"
                     gridActionMode="@{baseAdapter}"
                     android:layout_width="@dimen/_20sdp"
@@ -106,10 +103,6 @@
                     android:layout_marginStart="-4dp"
                     android:layout_marginTop="-2dp"
                     android:alpha="@{dragging ? 0.5f : 0.8f}"
-                    android:buttonTint="?colorControlNormal"
-                    android:clickable="false"
-                    android:elevation="@dimen/_4sdp"
-                    android:enabled="false"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
                     android:visibility="gone"
@@ -117,6 +110,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="visible" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </com.leebeebeom.closetnote.ui.view.CustomCardView>
     </FrameLayout>
 </layout>
