@@ -144,7 +144,7 @@ public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
 
     protected abstract BaseDao<U, V> getDao();
 
-    protected List<U> getAllModelsLiveValue() {
+    public List<U> getAllModelsLiveValue() {
         return Optional.ofNullable(getModelsLive().getValue()).orElse(new ArrayList<>());
     }
 
