@@ -106,7 +106,7 @@ public abstract class BaseRepository<U extends BaseModel, V extends BaseTuple> {
 
     protected boolean isExistingName(List<U> models, int parentIndex, String name) {
         Stream<U> undeletedStreamByParentIndex = getUndeletedStreamByParentIndex(models, parentIndex);
-        return undeletedStreamByParentIndex.anyMatch(model -> model.getName().equals(name));
+        return undeletedStreamByParentIndex.anyMatch(model -> model.getName().equals(name.trim()));
     }
 
     protected long getCurrentTime() {
