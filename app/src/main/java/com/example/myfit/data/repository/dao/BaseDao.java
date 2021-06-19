@@ -69,17 +69,17 @@ public abstract class BaseDao<T extends BaseModel, U extends BaseTuple> {
 
     private <V extends BaseModel> long[] getModelIds(@NotNull List<V> models) {
         return models.stream()
-                .filter(parentDeletedTuple -> !parentDeletedTuple.isDeleted())
+                .filter(model -> !model.isDeleted())
                 .mapToLong(BaseModel::getId)
                 .toArray();
     }
 
     @NotNull
     private List<Size> getAllChildSizes(long[] parentIds, List<Folder> allChildFolders, List<Size> allSizes) {
-        List<Size> allSizeParentDeletedTuples = new LinkedList<>(getSizesByParentIds(parentIds, allSizes));
+        List<Size> allChildSizes = new LinkedList<>(getSizesByParentIds(parentIds, allSizes));
         long[] allFolderIds = getModelIds(allChildFolders);
-        allSizeParentDeletedTuples.addAll(getSizesByParentIds(allFolderIds, allSizes));
-        return allSizeParentDeletedTuples;
+        allChildSizes.addAll(getSizesByParentIds(allFolderIds, allSizes));
+        return allChildSizes;
     }
 
     private List<Size> getSizesByParentIds(long[] parentIds, List<Size> allSizes) {
