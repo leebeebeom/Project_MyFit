@@ -35,7 +35,7 @@ public abstract class BaseDao<T extends BaseModel, U extends BaseTuple> {
     public abstract void updateTuples(List<U> tuples);
 
     @Transaction
-    public void setChildrenParentDeleted(long[] parentIds, List<Folder> allFolders, List<Size> allSizes) {
+    public void updateChildrenParentDeleted(long[] parentIds, List<Folder> allFolders, List<Size> allSizes) {
         List<Folder> allChildFolders = getAllChildFolders(parentIds, allFolders);
         List<Size> allChildSizes = getAllChildSizes(parentIds, allChildFolders, allSizes);
 
