@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "972164532538",
+    "project_id": "closet-note",
+    "storage_bucket": "closet-note.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972164532538:android:56be4eb53775a93995a803",
+        "android_client_info": {
+          "package_name": "com.leebeebeom.closetnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972164532538-v2aid75c4st1scno2086cm25j2fdbm6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZRYeEGObsymxKD5wZ-y9hD3IINYFaAUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972164532538-v2aid75c4st1scno2086cm25j2fdbm6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -112,7 +112,7 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:hint="@string/size_brand"
                     app:endIconMode="none"
-                    android:theme="@style/myEditTextOutlineColor"
+                    android:theme="@style/myOutlineEditText"
                     app:errorTextAppearance="@style/myTextSize8sdp"
                     app:hintTextAppearance="@style/myTextSize8sdp"
                     app:shapeAppearance="@style/myEditTextCorner">
@@ -142,7 +142,7 @@
                         android:layout_marginEnd="@dimen/_4sdp"
                         android:layout_weight="3"
                         android:hint="@string/size_name"
-                        android:theme="@style/myEditTextOutlineColor"
+                        android:theme="@style/myOutlineEditText"
                         app:errorTextAppearance="@style/myTextSize8sdp"
                         app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
@@ -163,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="@string/size_size"
-                        android:theme="@style/myEditTextOutlineColor"
+                        android:theme="@style/myOutlineEditText"
                         app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
 
@@ -203,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="@string/size_https"
-                        android:theme="@style/myEditTextOutlineColor"
+                        android:theme="@style/myOutlineEditText"
                         app:hintTextAppearance="@style/myTextSize8sdp"
                         app:shapeAppearance="@style/myEditTextCorner">
 
@@ -239,7 +239,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/size_memo"
-                    android:theme="@style/myEditTextOutlineColor"
+                    android:theme="@style/myOutlineEditText"
                     app:hintTextAppearance="@style/myTextSize8sdp"
                     app:shapeAppearance="@style/myEditTextCorner">
 

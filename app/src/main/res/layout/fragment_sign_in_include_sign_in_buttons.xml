@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.leebeebeom.closetnote.ui.view.SignInButton
+        android:id="@+id/btnGoogle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_google"
+        android:text="@string/sign_in_with_google"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@android:color/transparent"
+        tools:ignore="RtlHardcoded" />
+
+    <com.leebeebeom.closetnote.ui.view.SignInButton
+        android:id="@+id/btnNaver"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_naver_small"
+        android:text="@string/sign_in_with_naver"
+        android:textColor="@color/white"
+        app:backgroundTint="#03C75A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnGoogle"
+        app:rippleColor="@android:color/transparent"
+        app:strokeColor="@android:color/transparent"
+        tools:ignore="RtlHardcoded" />
+
+    <com.leebeebeom.closetnote.ui.view.SignInButton
+        android:id="@+id/btnKakao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_kakao_small"
+        android:text="@string/sign_in_with_kakao"
+        android:textColor="@color/black"
+        app:backgroundTint="#FEE500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnNaver"
+        app:rippleColor="@android:color/transparent"
+        app:strokeColor="@android:color/transparent"
+        tools:ignore="RtlHardcoded" />
+
+    <com.leebeebeom.closetnote.ui.view.SignInButton
+        android:id="@+id/btnFacebook"
+        style="@style/mySignInButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_facebook_small"
+        android:paddingVertical="@dimen/_11sdp"
+        android:paddingStart="@dimen/_20sdp"
+        android:paddingEnd="0dp"
+        android:text="@string/sign_in_with_facebook"
+        android:textColor="@color/white"
+        app:backgroundTint="#1877F2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnKakao"
+        app:rippleColor="@android:color/transparent"
+        app:strokeColor="@android:color/transparent"
+        tools:ignore="RtlHardcoded" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

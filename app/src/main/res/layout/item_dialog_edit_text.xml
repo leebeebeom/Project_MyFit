@@ -24,7 +24,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/myEditTextOutlineColor"
+            android:theme="@style/myOutlineEditText"
             app:endIconMode="clear_text"
             setOnKeyListener='@{""}'
             app:errorTextAppearance="@style/myTextSize8sdp"

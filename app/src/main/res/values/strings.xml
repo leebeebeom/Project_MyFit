@@ -107,4 +107,16 @@
     <string name="dialog_sort_name">이름 순</string>
     <string name="dialog_sort_name_reverse">이름 역순</string>
     <string name="size_fragment_attach_picture">사진 첨부</string>
+    <string name="sign_in_welcome">WELCOME!</string>
+    <string name="sign_in_email">Email</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_in_or">or</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_naver">Sign in with Naver</string>
+    <string name="sign_in_with_kakao">Sign in with Kakao</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_find_password">비밀번호 찾기</string>
+    <string name="sign_in_find_email">이메일 찾기</string>
+    <string name="sign_in_sign_up">처음이라면? <u>회원가입</u></string>
 </resources>

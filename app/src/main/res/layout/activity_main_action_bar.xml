@@ -23,16 +23,12 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:titleTextAppearance="@style/myActionBarTitleStyle">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.leebeebeom.closetnote.ui.view.AppNameTextView
                 android:id="@+id/tvCustomTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/app_name"
-                android:textColor="?colorControlNormal"
-                android:textSize="@dimen/_26sdp"
-                app:fontFamily="@font/rochester_regular" />
+                android:textSize="@dimen/_32sdp" />
 
             <include
                 android:id="@+id/searchBar"

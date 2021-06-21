@@ -13,7 +13,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/myEditTextOutlineColor"
+        android:theme="@style/myOutlineEditText"
         app:endIconMode="clear_text"
         app:placeholderText="@string/menu_search"
         android:visibility="gone"
