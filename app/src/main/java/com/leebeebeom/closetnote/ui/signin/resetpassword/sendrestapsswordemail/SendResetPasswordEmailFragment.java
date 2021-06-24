@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentSendResetPasswordEmailBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
-import com.leebeebeom.closetnote.ui.signin.sendrestapsswordemail.SendResetPasswordEmailFragmentArgs;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 
