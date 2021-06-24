@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="verificationFragment"
+            type="com.leebeebeom.closetnote.ui.verification.VerificationFragment" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".ui.verification.VerificationFragment">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verification_send_email"
+            android:textSize="@dimen/_12sdp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verification_please_verify"
+            android:textSize="@dimen/_12sdp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:text="@string/verification_verify"
+            android:onClick="@{() -> verificationFragment.openBrowser()}"
+            android:textColor="?colorPrimary"
+            android:textSize="@dimen/_12sdp"
+            app:backgroundTint="?myColorControl" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
