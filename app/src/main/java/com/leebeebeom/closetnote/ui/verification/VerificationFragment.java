@@ -56,10 +56,8 @@ public class VerificationFragment extends BaseFragment {
             String domain = "https://" + email.substring(index + 1);
 
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
-            if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+            if (intent.resolveActivity(requireContext().getPackageManager()) != null)
                 startActivity(intent);
-                mNavController.popBackStack(R.id.signInFragment, true);
-            }
         }
     }
 
