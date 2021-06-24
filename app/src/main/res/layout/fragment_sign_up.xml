@@ -7,18 +7,18 @@
 
         <variable
             name="signUpFragment"
-            type="com.leebeebeom.closetnote.ui.signup.SignUpFragment" />
+            type="com.leebeebeom.closetnote.ui.signin.signup.SignUpFragment" />
 
         <variable
             name="model"
-            type="com.leebeebeom.closetnote.ui.signup.SignUpViewModel" />
+            type="com.leebeebeom.closetnote.ui.signin.signup.SignUpViewModel" />
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.signup.SignUpFragment">
+        tools:context=".ui.signin.signup.SignUpFragment">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                         android:text="@={model.confirmPasswordLive}" />
                 </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
 
-                <com.leebeebeom.closetnote.ui.view.SignInButton
+                <com.leebeebeom.closetnote.ui.view.CustomButton
                     android:id="@+id/btnSignUp"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_44sdp"
@@ -103,20 +103,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
-
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:foregroundGravity="center"
-                    android:indeterminate="true"
-                    android:visibility="gone"
-                    app:indicatorColor="?myColorControl"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>
