@@ -1,4 +1,4 @@
-package com.leebeebeom.closetnote.ui.signin.verification;
+package com.leebeebeom.closetnote.ui.signin.signup.verification;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
