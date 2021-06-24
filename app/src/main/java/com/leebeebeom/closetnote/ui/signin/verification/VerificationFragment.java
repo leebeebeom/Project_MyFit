@@ -1,7 +1,5 @@
-package com.leebeebeom.closetnote.ui.verification;
+package com.leebeebeom.closetnote.ui.signin.verification;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentVerificationBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
+import com.leebeebeom.closetnote.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,15 +47,10 @@ public class VerificationFragment extends BaseFragment {
         mBinding = null;
     }
 
-    public void openBrowser() {
+    public void openMail() {
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
             String email = mAuth.getCurrentUser().getEmail();
-            int index = email.indexOf("@");
-            String domain = "https://" + email.substring(index + 1);
-
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
-            if (intent.resolveActivity(requireContext().getPackageManager()) != null)
-                startActivity(intent);
+            openBrowser(CommonUtil.getDomain(email));
         }
     }
 
