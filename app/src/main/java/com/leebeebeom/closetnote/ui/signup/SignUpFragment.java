@@ -53,7 +53,11 @@ public class SignUpFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        removeAppBar();
+        removeBottomAppBar();
+
         mBinding = FragmentSignUpBinding.inflate(inflater, container, false);
+        mBinding.indicator.setVisibilityAfterHide(View.GONE);
         mBinding.setSignUpFragment(this);
         mBinding.setModel(mModel);
         mBinding.setLifecycleOwner(this);
@@ -75,10 +79,13 @@ public class SignUpFragment extends BaseFragment {
         if (mModel.isTextsNotEmpty()) {
             if (mModel.isPasswordNotEquals())
                 mBinding.confirmPasswordLayout.setError(getString(R.string.sgin_in_password_not_equal));
-            else mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
-                    .addOnFailureListener(requireActivity(), getOnFailureListener())
-                    .addOnSuccessListener(requireActivity(), getOnSuccessListener())
-                    .addOnCanceledListener(requireActivity(), getOnCanceledListener());
+            else {
+                mBinding.indicator.show();
+                mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
+                        .addOnFailureListener(requireActivity(), getOnFailureListener())
+                        .addOnSuccessListener(requireActivity(), getOnSuccessListener())
+                        .addOnCanceledListener(requireActivity(), getOnCanceledListener());
+            }
         } else setEmptyError();
     }
 
@@ -96,12 +103,16 @@ public class SignUpFragment extends BaseFragment {
                 Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
+            mBinding.indicator.hide();
         };
     }
 
     @NotNull
     private OnCanceledListener getOnCanceledListener() {
-        return () -> Toast.makeText(requireContext(), getString(R.string.sign_up_canceled), Toast.LENGTH_SHORT).show();
+        return () -> {
+            Toast.makeText(requireContext(), getString(R.string.sign_up_canceled), Toast.LENGTH_SHORT).show();
+            mBinding.indicator.hide();
+        };
     }
 
     @NotNull
@@ -114,6 +125,7 @@ public class SignUpFragment extends BaseFragment {
                                 CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment())).
                         addOnFailureListener(requireActivity(), getOnFailureListener())
                         .addOnCanceledListener(requireActivity(), getOnCanceledListener());
+                mBinding.indicator.hide();
             }
         };
     }
