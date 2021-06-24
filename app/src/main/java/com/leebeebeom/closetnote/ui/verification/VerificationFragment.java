@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentVerificationBinding;
+import com.leebeebeom.closetnote.ui.BaseFragment;
+import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class VerificationFragment extends Fragment {
+public class VerificationFragment extends BaseFragment {
     @Inject
     FirebaseAuth mAuth;
     @Inject
@@ -34,6 +35,9 @@ public class VerificationFragment extends Fragment {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        removeAppBar();
+        removeBottomAppBar();
+
         mBinding = FragmentVerificationBinding.inflate(inflater, container, false);
         mBinding.setVerificationFragment(this);
         return mBinding.getRoot();
@@ -57,5 +61,10 @@ public class VerificationFragment extends Fragment {
                 mNavController.popBackStack(R.id.signInFragment, true);
             }
         }
+    }
+
+    @Override
+    public LockableScrollView getScrollView() {
+        return mBinding.sv;
     }
 }
