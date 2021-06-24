@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
+    android:alpha="0.5"
     app:layout_constraintStart_toStartOf="parent">
 
     <View
@@ -11,11 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="1px"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:alpha="0.5"
         android:background="?myColorControl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tvOr"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginRight="@dimen/_8sdp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -40,5 +41,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvOr"
+        android:layout_marginLeft="@dimen/_8sdp"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
