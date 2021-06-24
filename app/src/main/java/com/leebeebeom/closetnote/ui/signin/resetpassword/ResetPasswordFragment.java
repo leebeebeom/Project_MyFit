@@ -11,9 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,43 +70,27 @@ public class ResetPasswordFragment extends BaseFragment {
         if (!mModel.isEmailEmpty()) {
             showIndicator();
             mAuth.sendPasswordResetEmail(mModel.getEmail(), mActionCodeSettings)
-                    .addOnSuccessListener(requireActivity(), getOnSuccessListener())
-                    .addOnCanceledListener(requireActivity(), getOnCanceledListener())
-                    .addOnFailureListener(requireActivity(), getOnFailureListener());
+                    .addOnCompleteListener(requireActivity(), task -> {
+                        if (task.isSuccessful()) {
+                            CommonUtil.navigate(mNavController, R.id.resetPasswordFragment, ResetPasswordFragmentDirections.toSendResetPasswordEmailFragment(mModel.getEmail()));
+                            hideIndicator();
+                        } else fail(task.getException());
+                    });
         } else {
             mBinding.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
         }
     }
 
-    @NotNull
-    private OnFailureListener getOnFailureListener() {
-        return e -> {
-            Log.d(TAG, "getOnFailureListener: " + e);
-            if (e instanceof FirebaseAuthInvalidCredentialsException)
-                mBinding.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
-            else if (e instanceof FirebaseNetworkException)
-                mBinding.emailLayout.setError(getString(R.string.all_please_check_internet));
-            else if (e instanceof FirebaseAuthInvalidUserException)
-                mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
-            else
-                Toast.makeText(requireContext(), R.string.reset_password_fail, Toast.LENGTH_SHORT).show();
-            hideIndicator();
-        };
-    }
-
-    @NotNull
-    private OnCanceledListener getOnCanceledListener() {
-        return () -> {
-            Toast.makeText(requireContext(), R.string.reset_password_cancled, Toast.LENGTH_SHORT).show();
-            hideIndicator();
-        };
-    }
-
-    @NotNull
-    private OnSuccessListener<Void> getOnSuccessListener() {
-        return unused ->{
-            CommonUtil.navigate(mNavController, R.id.resetPasswordFragment, ResetPasswordFragmentDirections.toSendResetPasswordEmailFragment(mModel.getEmail()));
-            hideIndicator();
-        };
+    private void fail(Exception e) {
+        Log.d(TAG, "getOnFailureListener: " + e);
+        if (e instanceof FirebaseAuthInvalidCredentialsException)
+            mBinding.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
+        else if (e instanceof FirebaseNetworkException)
+            mBinding.emailLayout.setError(getString(R.string.all_please_check_internet));
+        else if (e instanceof FirebaseAuthInvalidUserException)
+            mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
+        else
+            Toast.makeText(requireContext(), R.string.reset_password_fail, Toast.LENGTH_SHORT).show();
+        hideIndicator();
     }
 }
