@@ -8,7 +8,7 @@
 
         <variable
             name="verificationFragment"
-            type="com.leebeebeom.closetnote.ui.signin.verification.VerificationFragment" />
+            type="com.leebeebeom.closetnote.ui.signin.signup.verification.VerificationFragment" />
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            tools:context=".ui.signin.verification.VerificationFragment">
+            tools:context=".ui.signin.signup.verification.VerificationFragment">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv1"
