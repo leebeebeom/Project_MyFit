@@ -15,15 +15,18 @@ import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.leebeebeom.closetnote.BuildConfig;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
+import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +85,7 @@ public class SignUpFragment extends BaseFragment {
     @NotNull
     private OnFailureListener getOnFailureListener() {
         return e -> {
+            Log.d(TAG, "getOnFailureListener: " + e);
             if (e instanceof FirebaseAuthWeakPasswordException)
                 mBinding.et.passwordLayout.setError(getString(R.string.sign_up_password_is_less_than_6));
             else if (e instanceof FirebaseAuthInvalidCredentialsException)
@@ -90,10 +94,8 @@ public class SignUpFragment extends BaseFragment {
                 mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
             else if (e instanceof FirebaseNetworkException)
                 Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
-            else {
+            else
                 Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "getOnFailureListener: " + e);
-            }
         };
     }
 
@@ -105,9 +107,23 @@ public class SignUpFragment extends BaseFragment {
     @NotNull
     private OnSuccessListener<AuthResult> getOnSuccessListener() {
         return authResult -> {
-            Toast.makeText(requireContext(), getString(R.string.sign_up_success), Toast.LENGTH_SHORT).show();
-            mNavController.popBackStack();
+            if (authResult.getUser() != null) {
+                ActionCodeSettings actionCodeSettings = getActionCodeSettings();
+                authResult.getUser().sendEmailVerification(getActionCodeSettings()).
+                        addOnSuccessListener(requireActivity(), unused ->
+                                CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment())).
+                        addOnFailureListener(requireActivity(), getOnFailureListener())
+                        .addOnCanceledListener(requireActivity(), getOnCanceledListener());
+            }
         };
+    }
+
+    @NotNull
+    private ActionCodeSettings getActionCodeSettings() {
+        return ActionCodeSettings.newBuilder()
+                .setUrl("https://closetnote.page.link/verify")
+                .setAndroidPackageName(BuildConfig.APPLICATION_ID, false, null)
+                .build();
     }
 
     private void setEmptyError() {
