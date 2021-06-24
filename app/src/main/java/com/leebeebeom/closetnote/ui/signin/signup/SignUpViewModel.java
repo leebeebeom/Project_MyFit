@@ -1,4 +1,4 @@
-package com.leebeebeom.closetnote.ui.signup;
+package com.leebeebeom.closetnote.ui.signin.signup;
 
 import android.text.TextUtils;
 
@@ -46,5 +46,9 @@ public class SignUpViewModel extends ViewModel {
 
     String getPassword() {
         return String.valueOf(mPasswordLive.getValue());
+    }
+
+    String getUserName() {
+        return String.valueOf(mUsernameLive.getValue());
     }
 }
