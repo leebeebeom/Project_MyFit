@@ -1,4 +1,4 @@
-package com.leebeebeom.closetnote.ui.signup;
+package com.leebeebeom.closetnote.ui.signin.signup;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.leebeebeom.closetnote.BuildConfig;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
@@ -41,6 +42,8 @@ import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
 public class SignUpFragment extends BaseFragment {
     @Inject
     FirebaseAuth mAuth;
+    @Inject
+    ActionCodeSettings mActionCodeSettings;
     private SignUpViewModel mModel;
     private FragmentSignUpBinding mBinding;
 
@@ -57,7 +60,6 @@ public class SignUpFragment extends BaseFragment {
         removeBottomAppBar();
 
         mBinding = FragmentSignUpBinding.inflate(inflater, container, false);
-        mBinding.indicator.setVisibilityAfterHide(View.GONE);
         mBinding.setSignUpFragment(this);
         mBinding.setModel(mModel);
         mBinding.setLifecycleOwner(this);
@@ -80,7 +82,7 @@ public class SignUpFragment extends BaseFragment {
             if (mModel.isPasswordNotEquals())
                 mBinding.confirmPasswordLayout.setError(getString(R.string.sgin_in_password_not_equal));
             else {
-                mBinding.indicator.show();
+                showIndicator();
                 mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
                         .addOnFailureListener(requireActivity(), getOnFailureListener())
                         .addOnSuccessListener(requireActivity(), getOnSuccessListener())
@@ -103,7 +105,7 @@ public class SignUpFragment extends BaseFragment {
                 Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
-            mBinding.indicator.hide();
+            hideIndicator();
         };
     }
 
@@ -111,7 +113,7 @@ public class SignUpFragment extends BaseFragment {
     private OnCanceledListener getOnCanceledListener() {
         return () -> {
             Toast.makeText(requireContext(), getString(R.string.sign_up_canceled), Toast.LENGTH_SHORT).show();
-            mBinding.indicator.hide();
+            hideIndicator();
         };
     }
 
@@ -119,22 +121,37 @@ public class SignUpFragment extends BaseFragment {
     private OnSuccessListener<AuthResult> getOnSuccessListener() {
         return authResult -> {
             if (authResult.getUser() != null) {
-                ActionCodeSettings actionCodeSettings = getActionCodeSettings();
-                authResult.getUser().sendEmailVerification(getActionCodeSettings()).
-                        addOnSuccessListener(requireActivity(), unused ->
-                                CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment())).
-                        addOnFailureListener(requireActivity(), getOnFailureListener())
-                        .addOnCanceledListener(requireActivity(), getOnCanceledListener());
-                mBinding.indicator.hide();
+                FirebaseUser user = authResult.getUser();
+                userNameUpdate(user);
+                sendEmailVerification(user);
             }
         };
     }
 
+    private void userNameUpdate(FirebaseUser user) {
+        user.updateProfile(getUserProfileChangeRequest())
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful())
+                        Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 완료");
+                    else
+                        Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 실패" + task.getException());
+                });
+    }
+
+    private void sendEmailVerification(FirebaseUser user) {
+        user.sendEmailVerification(mActionCodeSettings).
+                addOnSuccessListener(requireActivity(), unused -> {
+                    CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
+                    hideIndicator();
+                }).
+                addOnFailureListener(requireActivity(), getOnFailureListener())
+                .addOnCanceledListener(requireActivity(), getOnCanceledListener());
+    }
+
     @NotNull
-    private ActionCodeSettings getActionCodeSettings() {
-        return ActionCodeSettings.newBuilder()
-                .setUrl("https://closetnote.page.link/verify")
-                .setAndroidPackageName(BuildConfig.APPLICATION_ID, false, null)
+    private UserProfileChangeRequest getUserProfileChangeRequest() {
+        return new UserProfileChangeRequest.Builder()
+                .setDisplayName(mModel.getUserName())
                 .build();
     }
 
