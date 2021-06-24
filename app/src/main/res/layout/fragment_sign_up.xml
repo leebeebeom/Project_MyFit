@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="signUpFragment"
+            type="com.leebeebeom.closetnote.ui.signup.SignUpFragment" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.signup.SignUpViewModel" />
+    </data>
+
+    <com.leebeebeom.closetnote.ui.view.LockableScrollView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.signup.SignUpFragment">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingHorizontal="@dimen/_28sdp">
+
+                <com.leebeebeom.closetnote.ui.view.AppNameTextView
+                    android:id="@+id/tvAppName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_48sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout
+                    android:id="@+id/usernameLayout"
+                    style="@style/myOutlineEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:hint="@string/sign_up_username"
+                    app:layout_constraintBottom_toTopOf="@id/et"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAppName"
+                    app:startIconDrawable="@drawable/icon_person">
+
+                    <com.leebeebeom.closetnote.ui.view.CustomEditText
+                        android:id="@+id/etUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_44sdp"
+                        android:inputType="text"
+                        android:text="@={model.usernameLive}" />
+                </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
+
+                <include
+                    android:id="@+id/et"
+                    layout="@layout/fragment_sign_in_include_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:emailLive="@={model.emailLive}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/usernameLayout"
+                    app:passwordLive="@={model.passwordLive}" />
+
+                <com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout
+                    android:id="@+id/confirmPasswordLayout"
+                    style="@style/myOutlineEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sign_up_confirm_password"
+                    app:endIconMode="password_toggle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et"
+                    app:startIconDrawable="@drawable/icon_key">
+
+                    <com.leebeebeom.closetnote.ui.view.CustomEditText
+                        android:id="@+id/etConfirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_44sdp"
+                        android:inputType="textPassword"
+                        android:text="@={model.confirmPasswordLive}" />
+                </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
+
+                <com.leebeebeom.closetnote.ui.view.SignInButton
+                    android:id="@+id/btnSignUp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:onClick="@{() -> signUpFragment.emailSignUp()}"
+                    android:text="@string/sign_up"
+                    android:textColor="?colorPrimary"
+                    app:backgroundTint="?myColorControl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
+</layout>
