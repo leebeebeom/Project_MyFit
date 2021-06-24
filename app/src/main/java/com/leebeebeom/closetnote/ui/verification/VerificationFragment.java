@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentVerificationBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class VerificationFragment extends Fragment {
     @Inject
     FirebaseAuth mAuth;
+    @Inject
+    NavController mNavController;
     private FragmentVerificationBinding mBinding;
 
     @Nullable
@@ -48,8 +52,10 @@ public class VerificationFragment extends Fragment {
             String domain = "https://" + email.substring(index + 1);
 
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
-            if (intent.resolveActivity(requireContext().getPackageManager()) != null)
+            if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
                 startActivity(intent);
+                mNavController.popBackStack(R.id.signInFragment, true);
+            }
         }
     }
 }
