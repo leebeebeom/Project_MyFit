@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import dagger.hilt.android.lifecycle.HiltViewModel;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -42,10 +41,10 @@ public class SignUpViewModel extends ViewModel {
     }
 
     String getEmail() {
-        return String.valueOf(mEmailLive);
+        return String.valueOf(mEmailLive.getValue());
     }
 
     String getPassword() {
-        return String.valueOf(mPasswordLive);
+        return String.valueOf(mPasswordLive.getValue());
     }
 }
