@@ -11,12 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.ActionCodeSettings;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -84,48 +80,35 @@ public class SignUpFragment extends BaseFragment {
             else {
                 showIndicator();
                 mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
-                        .addOnFailureListener(requireActivity(), getOnFailureListener())
-                        .addOnSuccessListener(requireActivity(), getOnSuccessListener())
-                        .addOnCanceledListener(requireActivity(), getOnCanceledListener());
+                        .addOnCompleteListener(requireActivity(), command -> {
+                            if (command.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    userNameUpdate(user);
+                                    sendEmailVerification(user);
+                                } else {
+                                    Toast.makeText(requireContext(), R.string.sign_up_user_is_null, Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "emailSignUp: user null");
+                                }
+                            } else fail(command.getException());
+                        });
             }
         } else setEmptyError();
     }
 
-    @NotNull
-    private OnFailureListener getOnFailureListener() {
-        return e -> {
-            Log.d(TAG, "getOnFailureListener: " + e);
-            if (e instanceof FirebaseAuthWeakPasswordException)
-                mBinding.et.passwordLayout.setError(getString(R.string.sign_up_password_is_less_than_6));
-            else if (e instanceof FirebaseAuthInvalidCredentialsException)
-                mBinding.et.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
-            else if (e instanceof FirebaseAuthUserCollisionException)
-                mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
-            else if (e instanceof FirebaseNetworkException)
-                Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
-            hideIndicator();
-        };
-    }
-
-    @NotNull
-    private OnCanceledListener getOnCanceledListener() {
-        return () -> {
-            Toast.makeText(requireContext(), getString(R.string.sign_up_canceled), Toast.LENGTH_SHORT).show();
-            hideIndicator();
-        };
-    }
-
-    @NotNull
-    private OnSuccessListener<AuthResult> getOnSuccessListener() {
-        return authResult -> {
-            if (authResult.getUser() != null) {
-                FirebaseUser user = authResult.getUser();
-                userNameUpdate(user);
-                sendEmailVerification(user);
-            }
-        };
+    private void fail(Exception e) {
+        Log.d(TAG, "getOnFailureListener: " + e);
+        if (e instanceof FirebaseAuthWeakPasswordException)
+            mBinding.et.passwordLayout.setError(getString(R.string.sign_up_password_is_less_than_6));
+        else if (e instanceof FirebaseAuthInvalidCredentialsException)
+            mBinding.et.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
+        else if (e instanceof FirebaseAuthUserCollisionException)
+            mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
+        else if (e instanceof FirebaseNetworkException)
+            Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
+        hideIndicator();
     }
 
     private void userNameUpdate(FirebaseUser user) {
@@ -133,19 +116,8 @@ public class SignUpFragment extends BaseFragment {
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful())
                         Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 완료");
-                    else
-                        Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 실패" + task.getException());
+                    else Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 실패" + task.getException());
                 });
-    }
-
-    private void sendEmailVerification(FirebaseUser user) {
-        user.sendEmailVerification(mActionCodeSettings).
-                addOnSuccessListener(requireActivity(), unused -> {
-                    CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
-                    hideIndicator();
-                }).
-                addOnFailureListener(requireActivity(), getOnFailureListener())
-                .addOnCanceledListener(requireActivity(), getOnCanceledListener());
     }
 
     @NotNull
@@ -153,6 +125,16 @@ public class SignUpFragment extends BaseFragment {
         return new UserProfileChangeRequest.Builder()
                 .setDisplayName(mModel.getUserName())
                 .build();
+    }
+
+    private void sendEmailVerification(FirebaseUser user) {
+        user.sendEmailVerification(mActionCodeSettings).
+                addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
+                        hideIndicator();
+                    } else fail(task.getException());
+                });
     }
 
     private void setEmptyError() {
