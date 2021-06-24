@@ -5,13 +5,20 @@
 
     <data>
 
+        <variable
+            name="signInFragment"
+            type="com.leebeebeom.closetnote.ui.signin.singin.SignInFragment" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.signin.singin.SignInViewModel" />
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SignInFragment">
+        tools:context=".ui.signin.singin.SignInFragment">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -36,6 +43,8 @@
                 <include
                     android:id="@+id/et"
                     layout="@layout/fragment_sign_in_include_edit_text"
+                    app:emailLive="@{model.emailLive}"
+                    app:passwordLive="@{model.passwordLive}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
@@ -43,28 +52,31 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvAppName" />
 
-                <include
-                    android:id="@+id/layoutFindAccount"
-                    layout="@layout/fragment_sign_in_include_find_account"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    app:layout_constraintBottom_toTopOf="@id/btnSignIn"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvFindPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:alpha="0.7"
+                    android:onClick="@{() -> signInFragment.navigateResetPasswordFragment()}"
+                    android:text="@string/sign_up_find_password"
+                    android:textSize="@dimen/_9sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/btnSignIn"
                     app:layout_constraintTop_toBottomOf="@id/et" />
 
-                <com.leebeebeom.closetnote.ui.view.SignInButton
+                <com.leebeebeom.closetnote.ui.view.CustomButton
                     android:id="@+id/btnSignIn"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:onClick="@{() -> signInFragment.emailSignIn()}"
                     android:text="@string/sign_in"
                     android:textColor="?colorPrimary"
                     app:backgroundTint="?myColorControl"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/layoutFindAccount" />
+                    app:layout_constraintTop_toBottomOf="@id/tvFindPassword" />
 
                 <include
                     android:id="@+id/or1"
@@ -96,14 +108,38 @@
                     app:layout_constraintTop_toBottomOf="@id/signInButtons" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sign_in_sign_up"
                     android:alpha="0.7"
-                    android:textSize="@dimen/_9sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:onClick="@{() -> signInFragment.navigateSignUpFragment()}"
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintEnd_toStartOf="@id/tvOr"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/or2" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvOr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:text="@string/sign_in_slash"
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:text="@string/sign_in_anonymously"
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvOr" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
     </com.leebeebeom.closetnote.ui.view.LockableScrollView>
