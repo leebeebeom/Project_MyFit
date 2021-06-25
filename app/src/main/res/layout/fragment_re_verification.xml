@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".ui.signin.reverification.ReVerificationFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="가입하신 이메일로 인증메일을 다시 전송했어요.\n메일함을 확인해 주세요."
-        android:textSize="@dimen/_10sdp" />
+    <data>
 
-    <com.leebeebeom.closetnote.ui.view.CustomButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send_reset_password_email_lets_check" />
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.signin.reverification.ReVerificationFragment" />
+    </data>
+
+    <com.leebeebeom.closetnote.ui.view.LockableScrollView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:context=".ui.signin.reverification.ReVerificationFragment">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/re_verification_re_send_email"
+                android:textSize="@dimen/_12sdp" />
+
+            <com.leebeebeom.closetnote.ui.view.CustomButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_reset_password_email_lets_check"
+                android:onClick="@{() -> fragment.openEmail()}"
+                android:textColor="?colorPrimary"
+                app:backgroundTint="?myColorControl" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
+</layout>
