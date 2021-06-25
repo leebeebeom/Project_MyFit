@@ -1,10 +1,9 @@
 package com.leebeebeom.closetnote.ui.signin.signup;
 
-import android.text.TextUtils;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.leebeebeom.closetnote.util.LiveDataUtil;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -22,46 +21,34 @@ public class SignUpViewModel extends ViewModel {
     }
 
     boolean isPasswordNotEquals() {
-        return !getStringValue(mPasswordLive).equals(getStringValue(mConfirmPasswordLive));
+        return !LiveDataUtil.getStringValue(mPasswordLive).equals(LiveDataUtil.getStringValue((mConfirmPasswordLive)));
     }
 
     boolean isUsernameEmpty() {
-        return isEmpty(mUsernameLive);
+        return LiveDataUtil.isStringValueEmpty(mUsernameLive);
     }
 
     boolean isEmailEmpty() {
-        return isEmpty(mEmailLive);
+        return LiveDataUtil.isStringValueEmpty(mEmailLive);
     }
 
     boolean isPasswordEmpty() {
-        return isEmpty(mPasswordLive);
+        return LiveDataUtil.isStringValueEmpty(mPasswordLive);
     }
 
     boolean isConfirmPasswordEmpty() {
-        return isEmpty(mConfirmPasswordLive);
-    }
-
-    private boolean isEmpty(LiveData<String> stringLiveData) {
-        if (stringLiveData.getValue() != null)
-            return TextUtils.isEmpty(stringLiveData.getValue().trim());
-        else return true;
+        return LiveDataUtil.isStringValueEmpty(mConfirmPasswordLive);
     }
 
     String getEmail() {
-        return getStringValue(mEmailLive);
+        return LiveDataUtil.getStringValue(mEmailLive);
     }
 
     String getPassword() {
-        return getStringValue(mPasswordLive);
+        return LiveDataUtil.getStringValue(mPasswordLive);
     }
 
     String getUserName() {
-        return getStringValue(mUsernameLive);
-    }
-
-    private String getStringValue(LiveData<String> stringLiveData) {
-        if (stringLiveData.getValue() != null)
-            return stringLiveData.getValue().trim();
-        else return "";
+        return LiveDataUtil.getStringValue(mUsernameLive);
     }
 }
