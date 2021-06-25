@@ -2,6 +2,7 @@ package com.leebeebeom.closetnote.ui.signin.signup;
 
 import android.text.TextUtils;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -25,30 +26,42 @@ public class SignUpViewModel extends ViewModel {
     }
 
     boolean isUsernameEmpty() {
-        return TextUtils.isEmpty(mUsernameLive.getValue());
+        return isEmpty(mUsernameLive);
     }
 
     boolean isEmailEmpty() {
-        return TextUtils.isEmpty(mEmailLive.getValue());
+        return isEmpty(mEmailLive);
     }
 
     boolean isPasswordEmpty() {
-        return TextUtils.isEmpty(mPasswordLive.getValue());
+        return isEmpty(mPasswordLive);
     }
 
     boolean isConfirmPasswordEmpty() {
-        return TextUtils.isEmpty(mConfirmPasswordLive.getValue());
+        return isEmpty(mConfirmPasswordLive);
+    }
+
+    private boolean isEmpty(LiveData<String> stringLiveData) {
+        if (stringLiveData.getValue() != null)
+            return TextUtils.isEmpty(stringLiveData.getValue().trim());
+        else return true;
     }
 
     String getEmail() {
-        return String.valueOf(mEmailLive.getValue());
+        return getStringValue(mEmailLive);
     }
 
     String getPassword() {
-        return String.valueOf(mPasswordLive.getValue());
+        return getStringValue(mPasswordLive);
     }
 
     String getUserName() {
-        return String.valueOf(mUsernameLive.getValue());
+        return getStringValue(mUsernameLive);
+    }
+
+    private String getStringValue(LiveData<String> stringLiveData) {
+        if (stringLiveData.getValue() != null)
+            return stringLiveData.getValue().trim();
+        else return "";
     }
 }
