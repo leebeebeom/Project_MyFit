@@ -39,8 +39,10 @@ public class SendResetPasswordEmailFragment extends BaseFragment {
     }
 
     public void openMail() {
+        showIndicator();
         String email = SendResetPasswordEmailFragmentArgs.fromBundle(getArguments()).getEmail();
         openBrowser(CommonUtil.getDomain(email));
+        hideIndicator();
     }
 
     @Override
