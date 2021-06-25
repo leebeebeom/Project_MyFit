@@ -86,9 +86,6 @@ public class SignUpFragment extends BaseFragment {
                                 if (user != null) {
                                     userNameUpdate(user);
                                     sendEmailVerification(user);
-                                } else {
-                                    Toast.makeText(requireContext(), R.string.sign_up_user_is_null, Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, "emailSignUp: user null");
                                 }
                             } else fail(command.getException());
                         });
