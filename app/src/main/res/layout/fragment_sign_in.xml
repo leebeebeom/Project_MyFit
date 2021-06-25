@@ -148,6 +148,7 @@
                     android:text="@string/sign_in_verification_email_not_arrived"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:onClick="@{() -> signInFragment.navigateReVerificationFragment()}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvSlash" />
 
