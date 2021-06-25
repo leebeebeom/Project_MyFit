@@ -38,12 +38,12 @@ public class ResetPasswordFragment extends BaseFragment {
     @Inject
     ActionCodeSettings mActionCodeSettings;
     private FragmentResetPasswordBinding mBinding;
-    private ResetPasswordVIewModel mModel;
+    private ResetPasswordViewModel mModel;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mModel = new ViewModelProvider(this).get(ResetPasswordVIewModel.class);
+        mModel = new ViewModelProvider(this).get(ResetPasswordViewModel.class);
     }
 
     @Nullable
@@ -76,9 +76,7 @@ public class ResetPasswordFragment extends BaseFragment {
                             hideIndicator();
                         } else fail(task.getException());
                     });
-        } else {
-            mBinding.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
-        }
+        } else mBinding.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
     }
 
     private void fail(Exception e) {
