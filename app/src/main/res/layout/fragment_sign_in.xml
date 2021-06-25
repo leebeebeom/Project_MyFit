@@ -7,18 +7,18 @@
 
         <variable
             name="signInFragment"
-            type="com.leebeebeom.closetnote.ui.signin.singin.SignInFragment" />
+            type="com.leebeebeom.closetnote.ui.signin.SignInFragment" />
 
         <variable
             name="model"
-            type="com.leebeebeom.closetnote.ui.signin.singin.SignInViewModel" />
+            type="com.leebeebeom.closetnote.ui.signin.SignInViewModel" />
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.signin.singin.SignInFragment">
+        tools:context=".ui.signin.SignInFragment">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -115,18 +115,18 @@
                     android:alpha="0.7"
                     android:onClick="@{() -> signInFragment.navigateSignUpFragment()}"
                     android:textSize="@dimen/_10sdp"
-                    app:layout_constraintEnd_toStartOf="@id/tvOr"
+                    app:layout_constraintEnd_toStartOf="@id/tvSlash"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/or2" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvOr"
+                    android:id="@+id/tvSlash"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.5"
                     android:text="@string/sign_in_slash"
                     android:textSize="@dimen/_10sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/or2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -136,9 +136,20 @@
                     android:alpha="0.7"
                     android:text="@string/sign_in_anonymously"
                     android:textSize="@dimen/_10sdp"
+                    app:layout_constraintStart_toEndOf="@id/tvSlash"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/or2" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:textSize="@dimen/_10sdp"
+                    android:text="@string/sign_in_verification_email_not_arrived"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tvOr" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSlash" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
