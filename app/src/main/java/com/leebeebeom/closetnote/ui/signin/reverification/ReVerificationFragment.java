@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
+import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentReVerificationBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
@@ -41,17 +43,21 @@ public class ReVerificationFragment extends BaseFragment {
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (mAuth.getCurrentUser() != null)
-            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings);
-    }
-
     public void openEmail() {
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
+            showIndicator();
             String email = mAuth.getCurrentUser().getEmail();
             openBrowser(CommonUtil.getDomain(email));
+            hideIndicator();
+        }
+    }
+
+    public void reSend() {
+        if (mAuth.getCurrentUser() != null) {
+            showIndicator();
+            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings);
+            Toast.makeText(requireContext(), R.string.re_verification_re_send_mail, Toast.LENGTH_SHORT).show();
+            hideIndicator();
         }
     }
 
