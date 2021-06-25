@@ -49,8 +49,10 @@ public class VerificationFragment extends BaseFragment {
 
     public void openMail() {
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
+            showIndicator();
             String email = mAuth.getCurrentUser().getEmail();
             openBrowser(CommonUtil.getDomain(email));
+            hideIndicator();
         }
     }
 
