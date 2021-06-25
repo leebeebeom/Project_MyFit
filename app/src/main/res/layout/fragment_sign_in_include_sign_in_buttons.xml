@@ -60,28 +60,5 @@
             app:rippleColor="@android:color/transparent"
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
-
-        <com.leebeebeom.closetnote.ui.view.CustomButton
-            android:id="@+id/btnFacebook"
-            style="@style/mySignInButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/icon_facebook_small"
-            android:paddingVertical="@dimen/_11sdp"
-            android:paddingStart="@dimen/_20sdp"
-            android:paddingLeft="@dimen/_20sdp"
-            android:onClick="@{() -> fragment.facebooSignIn()}"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:text="@string/sign_in_with_facebook"
-            android:textColor="@color/white"
-            app:backgroundTint="#1877F2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnKakao"
-            app:rippleColor="@android:color/transparent"
-            app:strokeColor="@android:color/transparent"
-            tools:ignore="RtlHardcoded" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
