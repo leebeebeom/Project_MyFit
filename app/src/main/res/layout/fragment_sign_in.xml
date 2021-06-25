@@ -43,14 +43,14 @@
                 <include
                     android:id="@+id/et"
                     layout="@layout/fragment_sign_in_include_edit_text"
-                    app:emailLive="@{model.emailLive}"
-                    app:passwordLive="@{model.passwordLive}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
+                    app:emailLive="@{model.emailLive}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAppName" />
+                    app:layout_constraintTop_toBottomOf="@id/tvAppName"
+                    app:passwordLive="@{model.passwordLive}" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvFindPassword"
@@ -61,8 +61,8 @@
                     android:onClick="@{() -> signInFragment.navigateResetPasswordFragment()}"
                     android:text="@string/sign_up_find_password"
                     android:textSize="@dimen/_9sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/btnSignIn"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/et" />
 
                 <com.leebeebeom.closetnote.ui.view.CustomButton
@@ -111,11 +111,12 @@
                     android:id="@+id/tvSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_in_sign_up"
                     android:alpha="0.7"
                     android:onClick="@{() -> signInFragment.navigateSignUpFragment()}"
-                    android:textSize="@dimen/_10sdp"
+                    android:text="@string/sign_in_sign_up"
+                    android:textSize="@dimen/_9sdp"
                     app:layout_constraintEnd_toStartOf="@id/tvSlash"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/or2" />
 
@@ -125,32 +126,21 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.5"
                     android:text="@string/sign_in_slash"
-                    android:textSize="@dimen/_10sdp"
-                    app:layout_constraintTop_toBottomOf="@id/or2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.7"
-                    android:text="@string/sign_in_anonymously"
-                    android:textSize="@dimen/_10sdp"
-                    app:layout_constraintStart_toEndOf="@id/tvSlash"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/or2" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvAnonymously"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.7"
-                    android:textSize="@dimen/_10sdp"
-                    android:text="@string/sign_in_verification_email_not_arrived"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/sign_in_anonymously"
+                    android:textSize="@dimen/_9sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:onClick="@{() -> signInFragment.navigateReVerificationFragment()}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSlash" />
+                    app:layout_constraintStart_toEndOf="@id/tvSlash"
+                    app:layout_constraintTop_toBottomOf="@id/or2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
