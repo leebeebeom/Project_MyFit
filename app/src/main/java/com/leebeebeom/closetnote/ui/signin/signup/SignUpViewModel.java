@@ -22,7 +22,7 @@ public class SignUpViewModel extends ViewModel {
     }
 
     boolean isPasswordNotEquals() {
-        return !String.valueOf(mPasswordLive.getValue()).equals(mConfirmPasswordLive.getValue());
+        return !getStringValue(mPasswordLive).equals(getStringValue(mConfirmPasswordLive));
     }
 
     boolean isUsernameEmpty() {
