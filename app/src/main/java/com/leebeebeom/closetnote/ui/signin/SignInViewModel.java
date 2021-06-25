@@ -1,9 +1,9 @@
 package com.leebeebeom.closetnote.ui.signin;
 
-import android.text.TextUtils;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.leebeebeom.closetnote.util.LiveDataUtil;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -19,18 +19,18 @@ public class SignInViewModel extends ViewModel {
     }
 
     boolean isEmailEmpty() {
-        return TextUtils.isEmpty(mEmailLive.getValue());
+        return LiveDataUtil.isStringValueEmpty(mEmailLive);
     }
 
     boolean isPasswordEmpty() {
-        return TextUtils.isEmpty(mPasswordLive.getValue());
+        return LiveDataUtil.isStringValueEmpty(mPasswordLive);
     }
 
     String getEmail() {
-        return String.valueOf(mEmailLive.getValue());
+        return LiveDataUtil.getStringValue(mEmailLive);
     }
 
     String getPassword() {
-        return String.valueOf(mPasswordLive.getValue());
+        return LiveDataUtil.getStringValue(mPasswordLive);
     }
 }
