@@ -19,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ReVerificationFragment extends BaseFragment {
     @Inject
     FirebaseAuth mAuth;
@@ -34,6 +37,7 @@ public class ReVerificationFragment extends BaseFragment {
         removeBottomAppBar();
 
         mBinding = FragmentReVerificationBinding.inflate(inflater, container, false);
+        mBinding.setFragment(this);
         return mBinding.getRoot();
     }
 
