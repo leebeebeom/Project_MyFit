@@ -96,7 +96,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_44sdp"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:onClick="@{() -> signUpFragment.emailSignUp()}"
+                    android:onClick="@{() -> model.textsNotEmpty &amp;&amp; model.passwordEquals ? signUpFragment.emailSignUp() : signUpFragment.setEditTextLayoutError()}"
                     android:text="@string/sign_up"
                     android:textColor="?colorPrimary"
                     app:backgroundTint="?myColorControl"
