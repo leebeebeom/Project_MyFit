@@ -7,7 +7,7 @@ import com.leebeebeom.closetnote.ui.dialog.eidttext.BaseEditTextViewModel;
 
 public abstract class BaseAddDialog extends BaseEditTextDialog {
     @Override
-    protected String getName() {
+    protected String getInitialText() {
         return "";
     }
 

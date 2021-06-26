@@ -17,7 +17,7 @@ public class EditFolderNameDialog extends BaseEditDialog {
     private EditFolderNameViewModel mModel;
 
     @Override
-    protected String getName() {
+    protected String getInitialText() {
         return NavGraphEditFolderNameArgs.fromBundle(getArguments()).getName();
     }
 

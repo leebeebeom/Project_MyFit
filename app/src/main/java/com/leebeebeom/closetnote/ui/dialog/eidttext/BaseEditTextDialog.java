@@ -3,7 +3,6 @@ package com.leebeebeom.closetnote.ui.dialog.eidttext;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +29,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
         mBinding = ItemDialogEditTextBinding.inflate(LayoutInflater.from(requireContext()));
         mBinding.et.requestFocus();
 
-        if (mModel.getName() == null) mModel.setName(getName());
+        if (mModel.getName() == null) mModel.setName(getInitialText());
         mBinding.setLifecycleOwner(this);
         mBinding.setModel(mModel);
         mBinding.layout.setHint(getHint());
@@ -41,7 +40,7 @@ public abstract class BaseEditTextDialog extends BaseDialog {
 
     public abstract String getPlaceHolder();
 
-    protected abstract String getName();
+    protected abstract String getInitialText();
 
     @NonNull
     @NotNull

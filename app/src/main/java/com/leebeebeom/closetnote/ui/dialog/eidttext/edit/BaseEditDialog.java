@@ -14,7 +14,7 @@ public abstract class BaseEditDialog extends BaseEditTextDialog {
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOldName = getName();
+        mOldName = getInitialText();
         setBackStackLive();
     }
 

@@ -17,7 +17,7 @@ public class EditCategoryNameDialog extends BaseEditDialog {
     private EditCategoryNameViewModel mModel;
 
     @Override
-    protected String getName() {
+    protected String getInitialText() {
         return NavGraphEditCategoryNameArgs.fromBundle(getArguments()).getName();
     }
 
