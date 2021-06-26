@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +23,7 @@ import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
+import com.leebeebeom.closetnote.util.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +39,8 @@ public class SignUpFragment extends BaseFragment {
     FirebaseAuth mAuth;
     @Inject
     ActionCodeSettings mActionCodeSettings;
+    @Inject
+    ToastUtil mToastUtil;
     private SignUpViewModel mModel;
     private FragmentSignUpBinding mBinding;
 
@@ -93,9 +95,8 @@ public class SignUpFragment extends BaseFragment {
         else if (e instanceof FirebaseAuthUserCollisionException)
             mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
         else if (e instanceof FirebaseNetworkException)
-            Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
+            mToastUtil.showCheckNetwork();
+        else mToastUtil.showUnknownError();
     }
 
     private void userNameUpdate() {
