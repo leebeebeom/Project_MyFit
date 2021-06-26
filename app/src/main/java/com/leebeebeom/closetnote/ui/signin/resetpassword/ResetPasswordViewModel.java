@@ -16,8 +16,4 @@ public class ResetPasswordViewModel extends ViewModel {
     String getEmail() {
         return LiveDataUtil.getStringValue(mEmailLive);
     }
-
-    boolean isEmailEmpty() {
-        return LiveDataUtil.isStringValueEmpty(mEmailLive);
-    }
 }

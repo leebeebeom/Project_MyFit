@@ -67,16 +67,18 @@ public class ResetPasswordFragment extends BaseFragment {
     }
 
     public void sendPasswordResetEmail() {
-        if (!mModel.isEmailEmpty()) {
-            showIndicator();
-            mAuth.sendPasswordResetEmail(mModel.getEmail(), mActionCodeSettings)
-                    .addOnCompleteListener(requireActivity(), task -> {
-                        if (task.isSuccessful()) {
-                            CommonUtil.navigate(mNavController, R.id.resetPasswordFragment, ResetPasswordFragmentDirections.toSendResetPasswordEmailFragment(mModel.getEmail()));
-                            hideIndicator();
-                        } else fail(task.getException());
-                    });
-        } else mBinding.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
+        showIndicator();
+        mAuth.sendPasswordResetEmail(mModel.getEmail(), mActionCodeSettings)
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful())
+                        CommonUtil.navigate(mNavController, R.id.resetPasswordFragment, ResetPasswordFragmentDirections.toSendResetPasswordEmailFragment(mModel.getEmail()));
+                    else fail(task.getException());
+                    hideIndicator();
+                });
+    }
+
+    public void setEmailEmptyError() {
+        mBinding.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
     }
 
     private void fail(Exception e) {
@@ -89,6 +91,5 @@ public class ResetPasswordFragment extends BaseFragment {
             mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
         else
             Toast.makeText(requireContext(), R.string.reset_password_fail, Toast.LENGTH_SHORT).show();
-        hideIndicator();
     }
 }
