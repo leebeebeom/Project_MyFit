@@ -81,7 +81,7 @@
             app:layout_anchor="@id/bottomAppBar"
             android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_48sdp"
-            android:src="@drawable/icon_arrow_up"
+            app:srcCompat="@drawable/icon_arrow_up"
             app:layout_anchorGravity="end"
             app:backgroundTint="@color/white"
             app:fabCustomSize="@dimen/_24sdp"
@@ -94,7 +94,7 @@
             android:layout_gravity="center"
             android:indeterminate="true"
             android:visibility="gone"
-            app:indicatorColor="?myColorControl" />
+            app:indicatorColor="?myIndicatorColor" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
