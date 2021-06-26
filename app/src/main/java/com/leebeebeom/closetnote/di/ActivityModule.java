@@ -2,6 +2,7 @@ package com.leebeebeom.closetnote.di;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
@@ -20,7 +21,9 @@ public class ActivityModule {
     @ActivityScoped
     @Provides
     public static ActivityMainBinding provideActivityMainBinding(@ActivityContext Context context) {
-        return ActivityMainBinding.inflate(LayoutInflater.from(context));
+        ActivityMainBinding binding = ActivityMainBinding.inflate(LayoutInflater.from(context));
+        binding.indicator.setVisibilityAfterHide(View.GONE);
+        return binding;
     }
 
     @Provides
