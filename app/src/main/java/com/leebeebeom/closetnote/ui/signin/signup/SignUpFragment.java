@@ -81,8 +81,10 @@ public class SignUpFragment extends BaseFragment {
                     if (command.isSuccessful()) {
                         userNameUpdate();
                         sendEmailVerification();
-                    } else fail(command.getException());
-                    hideIndicator();
+                    } else {
+                        fail(command.getException());
+                        hideIndicator();
+                    }
                 });
     }
 
@@ -123,6 +125,7 @@ public class SignUpFragment extends BaseFragment {
                         if (task.isSuccessful())
                             CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
                         else fail(task.getException());
+                        hideIndicator();
                     });
     }
 
