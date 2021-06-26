@@ -25,7 +25,7 @@
             android:onClick="@{() -> fragment.googleSignIn()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnNaver"
             app:rippleColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
 
@@ -40,7 +40,7 @@
             android:onClick="@{() -> fragment.naverSignIn()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnGoogle"
+            app:layout_constraintTop_toBottomOf="@id/btnKakao"
             app:rippleColor="@android:color/transparent"
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
@@ -56,7 +56,7 @@
             app:backgroundTint="#FEE500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnNaver"
+            app:layout_constraintTop_toTopOf="parent"
             app:rippleColor="@android:color/transparent"
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
