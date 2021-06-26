@@ -22,6 +22,7 @@ import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
+import com.leebeebeom.closetnote.util.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +38,8 @@ public class ResetPasswordFragment extends BaseFragment {
     FirebaseAuth mAuth;
     @Inject
     ActionCodeSettings mActionCodeSettings;
+    @Inject
+    ToastUtil mToastUtil;
     private FragmentResetPasswordBinding mBinding;
     private ResetPasswordViewModel mModel;
 
@@ -89,7 +92,6 @@ public class ResetPasswordFragment extends BaseFragment {
             mBinding.emailLayout.setError(getString(R.string.all_please_check_internet));
         else if (e instanceof FirebaseAuthInvalidUserException)
             mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
-        else
-            Toast.makeText(requireContext(), R.string.reset_password_fail, Toast.LENGTH_SHORT).show();
+        else mToastUtil.showUnknownError();
     }
 }
