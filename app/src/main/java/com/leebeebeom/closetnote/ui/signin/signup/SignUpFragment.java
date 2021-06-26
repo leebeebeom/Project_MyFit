@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
@@ -74,23 +73,15 @@ public class SignUpFragment extends BaseFragment {
     }
 
     public void emailSignUp() {
-        if (mModel.isTextsNotEmpty()) {
-            if (mModel.isPasswordNotEquals())
-                mBinding.confirmPasswordLayout.setError(getString(R.string.sgin_in_password_not_equal));
-            else {
-                showIndicator();
-                mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
-                        .addOnCompleteListener(requireActivity(), command -> {
-                            if (command.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    userNameUpdate(user);
-                                    sendEmailVerification(user);
-                                }
-                            } else fail(command.getException());
-                        });
-            }
-        } else setEmptyError();
+        showIndicator();
+        mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
+                .addOnCompleteListener(requireActivity(), command -> {
+                    if (command.isSuccessful()) {
+                        userNameUpdate();
+                        sendEmailVerification();
+                    } else fail(command.getException());
+                    hideIndicator();
+                });
     }
 
     private void fail(Exception e) {
@@ -105,16 +96,16 @@ public class SignUpFragment extends BaseFragment {
             Toast.makeText(requireContext(), R.string.all_please_check_internet, Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(requireContext(), getString(R.string.sign_up_fail) + e.getMessage(), Toast.LENGTH_SHORT).show();
-        hideIndicator();
     }
 
-    private void userNameUpdate(FirebaseUser user) {
-        user.updateProfile(getUserProfileChangeRequest())
-                .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful())
-                        Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 완료");
-                    else Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 실패" + task.getException());
-                });
+    private void userNameUpdate() {
+        if (mAuth.getCurrentUser() != null)
+            mAuth.getCurrentUser().updateProfile(getUserProfileChangeRequest())
+                    .addOnCompleteListener(requireActivity(), task -> {
+                        if (task.isSuccessful())
+                            Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 완료");
+                        else Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 실패" + task.getException());
+                    });
     }
 
     @NotNull
@@ -124,17 +115,17 @@ public class SignUpFragment extends BaseFragment {
                 .build();
     }
 
-    private void sendEmailVerification(FirebaseUser user) {
-        user.sendEmailVerification(mActionCodeSettings).
-                addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
-                        hideIndicator();
-                    } else fail(task.getException());
-                });
+    private void sendEmailVerification() {
+        if (mAuth.getCurrentUser() != null)
+            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings).
+                    addOnCompleteListener(requireActivity(), task -> {
+                        if (task.isSuccessful())
+                            CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
+                        else fail(task.getException());
+                    });
     }
 
-    private void setEmptyError() {
+    public void setEditTextLayoutError() {
         if (mModel.isUsernameEmpty())
             mBinding.usernameLayout.setError(getString(R.string.sing_up_username_is_empty));
         if (mModel.isEmailEmpty())
@@ -143,6 +134,8 @@ public class SignUpFragment extends BaseFragment {
             mBinding.et.passwordLayout.setError(getString(R.string.sign_in_password_is_empty));
         if (mModel.isConfirmPasswordEmpty())
             mBinding.confirmPasswordLayout.setError(getString(R.string.sign_in_password_is_empty));
+        if (mModel.isPasswordEquals())
+            mBinding.confirmPasswordLayout.setError(getString(R.string.sgin_in_password_not_equal));
     }
 
     @Override
