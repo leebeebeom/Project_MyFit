@@ -16,12 +16,12 @@ public class SignUpViewModel extends ViewModel {
     private final MutableLiveData<String> mPasswordLive = new MutableLiveData<>("");
     private final MutableLiveData<String> mConfirmPasswordLive = new MutableLiveData<>("");
 
-    boolean isTextsNotEmpty() {
+    public boolean isTextsNotEmpty() {
         return !isUsernameEmpty() && !isEmailEmpty() && !isPasswordEmpty() && !isConfirmPasswordEmpty();
     }
 
-    boolean isPasswordNotEquals() {
-        return !LiveDataUtil.getStringValue(mPasswordLive).equals(LiveDataUtil.getStringValue((mConfirmPasswordLive)));
+    public boolean isPasswordEquals() {
+        return LiveDataUtil.getStringValue(mPasswordLive).equals(LiveDataUtil.getStringValue((mConfirmPasswordLive)));
     }
 
     boolean isUsernameEmpty() {
