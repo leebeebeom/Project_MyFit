@@ -16,6 +16,7 @@ import com.leebeebeom.closetnote.databinding.FragmentReVerificationBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
+import com.leebeebeom.closetnote.util.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +30,8 @@ public class ReVerificationFragment extends BaseFragment {
     FirebaseAuth mAuth;
     @Inject
     ActionCodeSettings mActionCodeSettings;
+    @Inject
+    ToastUtil mToastUtil;
     private FragmentReVerificationBinding mBinding;
 
     @Nullable
@@ -56,7 +59,7 @@ public class ReVerificationFragment extends BaseFragment {
         if (mAuth.getCurrentUser() != null) {
             showIndicator();
             mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings);
-            Toast.makeText(requireContext(), R.string.re_verification_re_send_mail, Toast.LENGTH_SHORT).show();
+            mToastUtil.showEmailReSent();
             hideIndicator();
         }
     }
