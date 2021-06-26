@@ -21,6 +21,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.kakao.sdk.auth.AuthApiClient;
+import com.kakao.sdk.user.UserApiClient;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.data.tuple.BaseTuple;
 import com.leebeebeom.closetnote.data.tuple.tuple.CategoryTuple;
@@ -36,7 +40,7 @@ import com.leebeebeom.closetnote.util.adapter.viewholder.ViewPagerVH;
 import com.leebeebeom.closetnote.util.dragselect.DragSelect;
 import com.leebeebeom.closetnote.util.popupwindow.BasePopupWindow;
 import com.leebeebeom.closetnote.util.popupwindow.PopupWindowListener;
-import com.google.android.material.button.MaterialButton;
+import com.nhn.android.naverlogin.OAuthLogin;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +67,10 @@ public class MainFragment extends BaseViewPagerFragment implements ActionModeImp
     BasePopupWindow.MainPopupWindow mPopupWindow;
     @Inject
     BaseViewPagerAdapter.MainViewPagerAdapter mMainViewPagerAdapter;
+    @Inject
+    FirebaseAuth mAuth;
+    @Inject
+    OAuthLogin mOAuthLogin;
 
     private MainViewModel mModel;
     private FragmentMainBinding mBinding;
@@ -92,6 +100,7 @@ public class MainFragment extends BaseViewPagerFragment implements ActionModeImp
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         addBottomAppBar();
+        addAppBar();
         showCustomTitle();
         hideSearchBar();
         fabChange(R.drawable.icon_search);
@@ -109,6 +118,23 @@ public class MainFragment extends BaseViewPagerFragment implements ActionModeImp
         restoreActionMode(savedInstanceState);
         return mBinding.getRoot();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //TODO 삭제
+        UserApiClient kakao = UserApiClient.getInstance();
+        AuthApiClient kakao2 = AuthApiClient.getInstance();
+        if (mAuth.getCurrentUser() == null && !kakao2.hasToken())
+            CommonUtil.navigate(mNavController, R.id.mainFragment, MainFragmentDirections.toSignInFragment());
+        else {
+            mAuth.signOut();
+            mOAuthLogin.logout(requireContext());
+            mOAuthLogin.logoutAndDeleteToken(requireContext());
+            kakao.logout(throwable -> null);
+            kakao.unlink(throwable -> null);
+        }
     }
 
     private void setVpPageChangeListener() {
@@ -261,7 +287,7 @@ public class MainFragment extends BaseViewPagerFragment implements ActionModeImp
     @Override
     public void setViewPagerEnable(boolean enable) {
         mBinding.vp.setUserInputEnabled(enable);
-        mButtons.forEach(button -> button.setEnabled(enable));
+        for (MaterialButton button : mButtons) button.setEnabled(enable);
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.leebeebeom.closetnote.ui.main;
 
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.MutableLiveData;
@@ -18,16 +15,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
 import com.leebeebeom.closetnote.util.KeyBoardUtil;
@@ -58,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private final MutableLiveData<Boolean> mKeyboardShowingLive = new MutableLiveData<>(false);
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
-    private FirebaseAuth mAuth;
-    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment != null)
             mNavController = navHostFragment.getNavController();
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.loginFragment, R.id.mainFragment, R.id.dailyLookFragment,
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.signInFragment, R.id.mainFragment, R.id.dailyLookFragment,
                 R.id.wishListFragment, R.id.settingFragment).build();
 
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
@@ -93,49 +82,10 @@ public class MainActivity extends AppCompatActivity {
                 navBackStackEntry.getSavedStateHandle().getLiveData(ACTION_MODE_OFF).observe(navBackStackEntry, o -> {
                     if (sActionMode != null) sActionMode.finish();
                 }));
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-    }
-
-    //TODO
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, 0);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                Toast.makeText(this, "로그인 성공 id: " + account.getId(), Toast.LENGTH_SHORT).show();
-                firebaseAuthWithGoogle(account.getIdToken());
-            } catch (ApiException e) {
-                Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //TODO
-//        mBinding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() ->
-//                mKeyboardShowingLive.setValue(KeyBoardUtil.isKeyboardShowing(mBinding.getRoot())));
-
-//        FirebaseUser firebaseUser = mAuth.getCurrentUser();
     }
 
     @Override

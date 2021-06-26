@@ -14,7 +14,7 @@ public class SignInViewModel extends ViewModel {
     private final MutableLiveData<String> mEmailLive = new MutableLiveData<>("");
     private final MutableLiveData<String> mPasswordLive = new MutableLiveData<>("");
 
-    boolean isTextsNotEmpty() {
+    public boolean isTextsNotEmpty() {
         return !isEmailEmpty() && !isPasswordEmpty();
     }
 

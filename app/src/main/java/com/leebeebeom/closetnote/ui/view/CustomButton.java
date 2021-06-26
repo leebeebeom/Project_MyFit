@@ -1,11 +1,11 @@
 package com.leebeebeom.closetnote.ui.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,18 +15,18 @@ import com.leebeebeom.closetnote.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class SignInButton extends MaterialButton {
-    public SignInButton(@NonNull @NotNull Context context) {
+public class CustomButton extends MaterialButton {
+    public CustomButton(@NonNull @NotNull Context context) {
         super(getThemeContext(context));
         init();
     }
 
-    public SignInButton(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
+    public CustomButton(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(getThemeContext(context), attrs);
         init();
     }
 
-    public SignInButton(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr) {
+    public CustomButton(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr) {
         super(getThemeContext(context), attrs, defStyleAttr);
         init();
     }
@@ -39,12 +39,13 @@ public class SignInButton extends MaterialButton {
     private void init() {
         setAllCaps(false);
         setTypeface(Typeface.DEFAULT_BOLD);
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen._9sdp));
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen._10sdp));
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        getLayoutParams().height = getContext().getResources().getDimensionPixelSize(R.dimen._48sdp);
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT)
+            getLayoutParams().height = getContext().getResources().getDimensionPixelSize(R.dimen._48sdp);
     }
 }

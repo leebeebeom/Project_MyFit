@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -29,6 +29,13 @@
         <action
             android:id="@+id/toSortMain"
             app:destination="@id/sortMainDialog" />
+        <action
+            android:id="@+id/toSignInFragment"
+            app:destination="@id/nav_graph_sign"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/fragment_slide_out" />
     </fragment>
 
     <navigation
@@ -320,12 +327,84 @@
             android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.folder.AddSameFolderNameDialog"
             android:label="AddSameFolderNameDialog" />
     </navigation>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.leebeebeom.closetnote.SignInFragment"
-        android:label="" >
-        <action
-            android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
+    <navigation
+        android:id="@+id/nav_graph_sign"
+        app:startDestination="@id/signInFragment">
+        <fragment
+            android:id="@+id/signInFragment"
+            android:name="com.leebeebeom.closetnote.ui.signin.SignInFragment"
+            android:label=""
+            tools:layout="@layout/fragment_sign_in">
+            <action
+                android:id="@+id/toSignUpFragment"
+                app:destination="@id/signUpFragment"
+                app:enterAnim="@anim/fragment_slide_in"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_enter_anim"
+                app:popExitAnim="@anim/fragment_slide_out" />
+            <deepLink
+                android:id="@+id/deepLink"
+                app:action="ACTION_VIEW"
+                app:uri="https://www.colosetnote.com/login" />
+            <action
+                android:id="@+id/toResetPasswordFragment"
+                app:destination="@id/resetPasswordFragment"
+                app:enterAnim="@anim/fragment_slide_in"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_enter_anim"
+                app:popExitAnim="@anim/fragment_slide_out" />
+            <action
+                android:id="@+id/toReVerificationFragment"
+                app:destination="@id/reVerificationFragment"
+                app:enterAnim="@anim/fragment_slide_in"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_enter_anim"
+                app:popExitAnim="@anim/fragment_slide_out" />
+        </fragment>
+        <fragment
+            android:id="@+id/signUpFragment"
+            android:name="com.leebeebeom.closetnote.ui.signin.signup.SignUpFragment"
+            android:label=""
+            tools:layout="@layout/fragment_sign_up">
+            <action
+                android:id="@+id/toVerificationFragment"
+                app:destination="@id/verificationFragment"
+                app:enterAnim="@anim/fragment_slide_in"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_enter_anim"
+                app:popExitAnim="@anim/fragment_slide_out" />
+        </fragment>
+        <fragment
+            android:id="@+id/verificationFragment"
+            android:name="com.leebeebeom.closetnote.ui.signin.signup.verification.VerificationFragment"
+            android:label=""
+            tools:layout="@layout/fragment_verification" />
+        <fragment
+            android:id="@+id/resetPasswordFragment"
+            android:name="com.leebeebeom.closetnote.ui.signin.resetpassword.ResetPasswordFragment"
+            android:label=""
+            tools:layout="@layout/fragment_reset_password">
+            <action
+                android:id="@+id/toSendResetPasswordEmailFragment"
+                app:destination="@id/sendResetPasswordEmailFragment"
+                app:enterAnim="@anim/fragment_slide_in"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_enter_anim"
+                app:popExitAnim="@anim/fragment_slide_out" />
+        </fragment>
+        <fragment
+            android:id="@+id/sendResetPasswordEmailFragment"
+            android:name="com.leebeebeom.closetnote.ui.signin.resetpassword.sendrestapsswordemail.SendResetPasswordEmailFragment"
+            android:label=""
+            tools:layout="@layout/fragment_send_reset_password_email">
+            <argument
+                android:name="email"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/reVerificationFragment"
+            android:name="com.leebeebeom.closetnote.ui.signin.reverification.ReVerificationFragment"
+            android:label=""
+            tools:layout="@layout/fragment_re_verification" />
+    </navigation>
 </navigation>

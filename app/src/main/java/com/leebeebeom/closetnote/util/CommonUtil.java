@@ -3,10 +3,10 @@ package com.leebeebeom.closetnote.util;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
-import com.leebeebeom.closetnote.data.tuple.BaseTuple;
-import com.leebeebeom.closetnote.util.constant.ParentCategory;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
+import com.leebeebeom.closetnote.data.tuple.BaseTuple;
+import com.leebeebeom.closetnote.util.constant.ParentCategory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -69,5 +69,10 @@ public class CommonUtil {
 
         selectedItems.clear();
         selectedItems.addAll(newOrderSelectedItems);
+    }
+
+    public static String getDomain(String email) {
+        int index = email.indexOf("@");
+        return "https://" + email.substring(index + 1);
     }
 }

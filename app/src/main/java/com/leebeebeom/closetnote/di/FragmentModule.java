@@ -7,9 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.leebeebeom.closetnote.R;
-import com.leebeebeom.closetnote.util.adapter.AutoCompleteAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.leebeebeom.closetnote.R;
 
 import dagger.Module;
 import dagger.Provides;

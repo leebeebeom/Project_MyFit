@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,7 +88,7 @@ public class ResetPasswordFragment extends BaseFragment {
         if (e instanceof FirebaseAuthInvalidCredentialsException)
             mBinding.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
         else if (e instanceof FirebaseNetworkException)
-            mBinding.emailLayout.setError(getString(R.string.all_please_check_internet));
+            mBinding.emailLayout.setError(getString(R.string.toast_check_network));
         else if (e instanceof FirebaseAuthInvalidUserException)
             mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
         else mToastUtil.showUnknownError();

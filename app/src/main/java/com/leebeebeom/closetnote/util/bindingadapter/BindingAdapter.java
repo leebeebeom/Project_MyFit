@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class BindingAdapter {
-    @androidx.databinding.BindingAdapter("android:text")
-    public static void text(TextInputEditText editText, String text) {
-        if (text != null) {
-            editText.setText(text);
-            editText.setSelection(text.length());
-        }
-    }
+//    @androidx.databinding.BindingAdapter("android:text")
+//    public static void text(TextInputEditText editText, String text) {
+//        if (text != null) {
+//            editText.setText(text);
+//            editText.setSelection(text.length());
+//        }
+//    }
 
     @androidx.databinding.BindingAdapter("toggle")
     public static void toggle(ImageView imageView, boolean folderToggle) {

@@ -1,5 +1,7 @@
 package com.leebeebeom.closetnote.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
 import com.leebeebeom.closetnote.ui.main.MainGraphViewModel;
@@ -52,13 +56,29 @@ public abstract class BaseFragment extends Fragment {
     public abstract LockableScrollView getScrollView();
 
     protected void addBottomAppBar() {
-        if (mActivityBinding.root.findViewById(R.id.bottomAppBar) == null)
+        if (mActivityBinding.root.findViewById(R.id.bottomAppBar) == null) {
+            mActivityBinding.root.addView(mActivityBinding.fab);
+            mActivityBinding.root.addView(mActivityBinding.fabTop);
             mActivityBinding.root.addView(mActivityBinding.bottomAppBar);
+        }
     }
 
     protected void removeBottomAppBar() {
-        if (mActivityBinding.root.findViewById(R.id.bottomAppBar) != null)
+        if (mActivityBinding.root.findViewById(R.id.bottomAppBar) != null) {
+            mActivityBinding.root.removeView(mActivityBinding.fab);
+            mActivityBinding.root.removeView(mActivityBinding.fabTop);
             mActivityBinding.root.removeView(mActivityBinding.bottomAppBar);
+        }
+    }
+
+    protected void addAppBar() {
+        if (mActivityBinding.root.findViewById(R.id.actionBar) == null)
+            mActivityBinding.root.addView(mActivityBinding.actionBar.getRoot());
+    }
+
+    protected void removeAppBar() {
+        if (mActivityBinding.root.findViewById(R.id.actionBar) != null)
+            mActivityBinding.root.removeView(mActivityBinding.actionBar.getRoot());
     }
 
     protected void showCustomTitle() {
@@ -79,6 +99,12 @@ public abstract class BaseFragment extends Fragment {
     protected void hideSearchBar() {
         if (mActivityBinding.actionBar.searchBar.layout.getVisibility() == View.VISIBLE)
             mActivityBinding.actionBar.searchBar.layout.setVisibility(View.GONE);
+    }
+
+    protected void clearScrollFlags() {
+        MaterialToolbar toolBar = mActivityBinding.actionBar.toolBar;
+        AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) toolBar.getLayoutParams();
+        layoutParams.setScrollFlags(0);
     }
 
     protected void fabChange(int resId) {
@@ -121,5 +147,19 @@ public abstract class BaseFragment extends Fragment {
                     mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
         }
         return mMainGraphViewModel;
+    }
+
+    protected void openBrowser(String domain) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
+        if (intent.resolveActivity(requireContext().getPackageManager()) != null)
+            startActivity(intent);
+    }
+
+    protected void showIndicator() {
+        mActivityBinding.indicator.show();
+    }
+
+    protected void hideIndicator() {
+        mActivityBinding.indicator.hide();
     }
 }
