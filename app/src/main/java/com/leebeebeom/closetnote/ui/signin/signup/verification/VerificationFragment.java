@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentVerificationBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
+import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class VerificationFragment extends BaseFragment {
+public class VerificationFragment extends BaseSignInFragment {
     @Inject
     FirebaseAuth mAuth;
     @Inject
@@ -54,10 +55,5 @@ public class VerificationFragment extends BaseFragment {
             openBrowser(CommonUtil.getDomain(email));
             hideIndicator();
         }
-    }
-
-    @Override
-    public LockableScrollView getScrollView() {
-        return mBinding.sv;
     }
 }

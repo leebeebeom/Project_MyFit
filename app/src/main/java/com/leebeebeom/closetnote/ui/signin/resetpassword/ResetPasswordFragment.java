@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentResetPasswordBinding;
-import com.leebeebeom.closetnote.ui.BaseFragment;
+import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
@@ -32,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class ResetPasswordFragment extends BaseFragment {
+public class ResetPasswordFragment extends BaseSignInFragment {
     @Inject
     FirebaseAuth mAuth;
     @Inject
@@ -61,11 +61,6 @@ public class ResetPasswordFragment extends BaseFragment {
         mBinding.setLifecycleOwner(this);
         mBinding.etEmail.addTextChangedListener(new EditTextErrorKeyListener(mBinding.emailLayout));
         return mBinding.getRoot();
-    }
-
-    @Override
-    public LockableScrollView getScrollView() {
-        return mBinding.sv;
     }
 
     public void sendPasswordResetEmail() {

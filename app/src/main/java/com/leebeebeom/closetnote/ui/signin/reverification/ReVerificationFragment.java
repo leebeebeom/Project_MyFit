@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentReVerificationBinding;
-import com.leebeebeom.closetnote.ui.BaseFragment;
+import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.ToastUtil;
@@ -25,7 +23,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ReVerificationFragment extends BaseFragment {
+public class ReVerificationFragment extends BaseSignInFragment {
     @Inject
     FirebaseAuth mAuth;
     @Inject
@@ -62,10 +60,5 @@ public class ReVerificationFragment extends BaseFragment {
             mToastUtil.showEmailReSent();
             hideIndicator();
         }
-    }
-
-    @Override
-    public LockableScrollView getScrollView() {
-        return mBinding.sv;
     }
 }

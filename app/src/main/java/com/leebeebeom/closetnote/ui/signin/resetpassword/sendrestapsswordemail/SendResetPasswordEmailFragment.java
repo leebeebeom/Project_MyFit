@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentSendResetPasswordEmailBinding;
-import com.leebeebeom.closetnote.ui.BaseFragment;
+import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 
@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SendResetPasswordEmailFragment extends BaseFragment {
+public class SendResetPasswordEmailFragment extends BaseSignInFragment {
     @Inject
     FirebaseAuth mAuth;
     private FragmentSendResetPasswordEmailBinding mBinding;
@@ -43,10 +43,5 @@ public class SendResetPasswordEmailFragment extends BaseFragment {
         String email = SendResetPasswordEmailFragmentArgs.fromBundle(getArguments()).getEmail();
         openBrowser(CommonUtil.getDomain(email));
         hideIndicator();
-    }
-
-    @Override
-    public LockableScrollView getScrollView() {
-        return mBinding.sv;
     }
 }

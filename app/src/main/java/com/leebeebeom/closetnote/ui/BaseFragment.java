@@ -1,24 +1,21 @@
 package com.leebeebeom.closetnote.ui;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
 import androidx.hilt.navigation.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.R;
-import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
 import com.leebeebeom.closetnote.ui.main.MainGraphViewModel;
+import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import static com.leebeebeom.closetnote.util.adapter.viewholder.BaseVH.sDragging;
@@ -35,12 +31,9 @@ import static com.leebeebeom.closetnote.util.dragselect.ListDragSelect.sScrollEn
 
 @AndroidEntryPoint
 @Accessors(prefix = "m")
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends BaseSignInFragment {
     @Inject
-    @Getter
-    protected ActivityMainBinding mActivityBinding;
-    @Inject
-    protected NavController mNavController;
+    FirebaseAuth mAuth;
     private MainGraphViewModel mMainGraphViewModel;
 
     @Override
@@ -53,33 +46,14 @@ public abstract class BaseFragment extends Fragment {
         setOnTopFabClick();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mAuth.getCurrentUser() == null)
+            mNavController.navigate(R.id.signInFragment);
+    }
+
     public abstract LockableScrollView getScrollView();
-
-    protected void addBottomAppBar() {
-        if (mActivityBinding.root.findViewById(R.id.bottomAppBar) == null) {
-            mActivityBinding.root.addView(mActivityBinding.fab);
-            mActivityBinding.root.addView(mActivityBinding.fabTop);
-            mActivityBinding.root.addView(mActivityBinding.bottomAppBar);
-        }
-    }
-
-    protected void removeBottomAppBar() {
-        if (mActivityBinding.root.findViewById(R.id.bottomAppBar) != null) {
-            mActivityBinding.root.removeView(mActivityBinding.fab);
-            mActivityBinding.root.removeView(mActivityBinding.fabTop);
-            mActivityBinding.root.removeView(mActivityBinding.bottomAppBar);
-        }
-    }
-
-    protected void addAppBar() {
-        if (mActivityBinding.root.findViewById(R.id.actionBar) == null)
-            mActivityBinding.root.addView(mActivityBinding.actionBar.getRoot());
-    }
-
-    protected void removeAppBar() {
-        if (mActivityBinding.root.findViewById(R.id.actionBar) != null)
-            mActivityBinding.root.removeView(mActivityBinding.actionBar.getRoot());
-    }
 
     protected void showCustomTitle() {
         if (mActivityBinding.actionBar.tvCustomTitle.getVisibility() == View.GONE)
@@ -114,7 +88,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     private void setOnScrollChange() {
-        getScrollView().setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+        getScrollView().setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (v.getScrollY() == 0) mActivityBinding.fabTop.hide();
             else mActivityBinding.fabTop.show();
 
@@ -129,11 +103,11 @@ public abstract class BaseFragment extends Fragment {
         NestedScrollView scrollView = getScrollView();
         mActivityBinding.fabTop.setOnClickListener(v -> {
             scrollView.scrollTo(0, 0);
-            scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY != 0)
                     getScrollView().scrollTo(0, 0);
                 else {
-                    getScrollView().setOnScrollChangeListener((View.OnScrollChangeListener) null);
+                    getScrollView().setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) null);
                     setOnScrollChange();
                 }
             });
@@ -147,19 +121,5 @@ public abstract class BaseFragment extends Fragment {
                     mainBackStackEntry, HiltViewModelFactory.create(requireContext(), mainBackStackEntry)).get(MainGraphViewModel.class);
         }
         return mMainGraphViewModel;
-    }
-
-    protected void openBrowser(String domain) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
-        if (intent.resolveActivity(requireContext().getPackageManager()) != null)
-            startActivity(intent);
-    }
-
-    protected void showIndicator() {
-        mActivityBinding.indicator.show();
-    }
-
-    protected void hideIndicator() {
-        mActivityBinding.indicator.hide();
     }
 }

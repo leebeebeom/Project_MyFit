@@ -20,6 +20,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
 import com.leebeebeom.closetnote.ui.BaseFragment;
+import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
@@ -34,7 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class SignUpFragment extends BaseFragment {
+public class SignUpFragment extends BaseSignInFragment {
     @Inject
     FirebaseAuth mAuth;
     @Inject
@@ -140,10 +141,5 @@ public class SignUpFragment extends BaseFragment {
             mBinding.confirmPasswordLayout.setError(getString(R.string.sign_in_password_is_empty));
         if (mModel.isPasswordEquals())
             mBinding.confirmPasswordLayout.setError(getString(R.string.sgin_in_password_not_equal));
-    }
-
-    @Override
-    public LockableScrollView getScrollView() {
-        return mBinding.sv;
     }
 }

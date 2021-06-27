@@ -37,8 +37,6 @@ import com.kakao.sdk.user.model.User;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignInBinding;
 import com.leebeebeom.closetnote.di.Qualifiers;
-import com.leebeebeom.closetnote.ui.BaseFragment;
-import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
@@ -56,7 +54,7 @@ import kotlin.jvm.functions.Function2;
 import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class SignInFragment extends BaseFragment {
+public class SignInFragment extends BaseSignInFragment {
     @Inject
     NavController mNavController;
     @Inject
@@ -344,10 +342,5 @@ public class SignInFragment extends BaseFragment {
                     }
                     hideIndicator();
                 });
-    }
-
-    @Override
-    public LockableScrollView getScrollView() {
-        return mBinding.sv;
     }
 }
