@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import androidx.navigation.NavController;
 
-import com.leebeebeom.closetnote.NavGraphTreeViewDirections;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.data.tuple.tuple.CategoryTuple;
 import com.leebeebeom.closetnote.databinding.ItemTreePostfixBinding;
@@ -44,7 +43,7 @@ public abstract class BaseTreeHolder<U extends CategoryTuple> extends TreeNode.B
 
     public void navigateAddFolderDialog() {
         CommonUtil.navigate(mNavController, R.id.treeViewDialog,
-                NavGraphTreeViewDirections.toAddFolder(getTuple().getId(), getTuple().getParentIndex()));
+                TreeViewDialogDirections.toAddFolder(getTuple().getId(), getTuple().getParentIndex()));
     }
 
     public abstract U getTuple();

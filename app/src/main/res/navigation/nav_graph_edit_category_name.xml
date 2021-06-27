@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_edit_category_name"
+    app:startDestination="@id/editCategoryNameDialog">
+    <argument
+        android:name="id"
+        app:argType="long" />
+    <argument
+        android:name="name"
+        app:argType="string" />
+    <argument
+        android:name="parentIndex"
+        app:argType="integer" />
+
+    <dialog
+        android:id="@+id/editCategoryNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.category.EditCategoryNameDialog"
+        android:label="EditCategoryNameDialog">
+        <action
+            android:id="@+id/toEditSameCategoryName"
+            app:destination="@id/editSameCategoryNameDialog" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/editSameCategoryNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.category.EditSameCategoryNameDialog"
+        android:label="EditSameCategoryNameDialog" />
+
+</navigation>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_list"
+    app:startDestination="@id/listFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.leebeebeom.closetnote.ui.main.list.ListFragment"
+        tools:layout="@layout/fragment_list">
+        <argument
+            android:name="categoryId"
+            app:argType="long" />
+        <argument
+            android:name="parentId"
+            app:argType="long" />
+        <argument
+            android:name="parentIndex"
+            app:argType="integer" />
+        <action
+            android:id="@+id/toSelf"
+            app:destination="@id/listFragment"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/fragment_slide_out" />
+        <action
+            android:id="@+id/toDeleteFolderAndSizes"
+            app:destination="@id/deleteFolderAndSizesDialog" />
+        <action
+            android:id="@+id/toSize"
+            app:destination="@id/nav_graph_size"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/fragment_slide_out">
+            <argument
+                android:name="parentId"
+                app:argType="long" />
+            <argument
+                android:name="sizeId"
+                app:argType="long" />
+            <argument
+                android:name="parentIndex"
+                app:argType="integer" />
+        </action>
+        <action
+            android:id="@+id/toSortList"
+            app:destination="@id/sortListDialog" />
+
+        <action
+            android:id="@+id/toEditFolderName"
+            app:destination="@id/nav_graph_edit_folder_name">
+            <argument
+                android:name="id"
+                app:argType="long" />
+            <argument
+                android:name="name"
+                app:argType="string" />
+            <argument
+                android:name="parentId"
+                app:argType="long" />
+        </action>
+
+        <action
+            android:id="@+id/toTreeView"
+            app:destination="@id/nav_graph_tree_view">
+            <argument
+                android:name="parentIndex"
+                app:argType="integer" />
+            <argument
+                android:name="selectedFolderIds"
+                app:argType="long[]" />
+            <argument
+                android:name="selectedSizeIds"
+                app:argType="long[]" />
+            <argument
+                android:name="categoryId"
+                app:argType="long" />
+            <argument
+                android:name="currentPositionId"
+                app:argType="long" />
+            <argument
+                android:name="folderPathIds"
+                app:argType="long[]" />
+        </action>
+        <action
+            android:id="@+id/toAddFolder"
+            app:destination="@id/nav_graph_add_folder">
+            <argument
+                android:name="parentId"
+                app:argType="long" />
+            <argument
+                android:name="parentIndex"
+                app:argType="integer" />
+        </action>
+    </fragment>
+
+    <dialog
+        android:id="@+id/deleteFolderAndSizesDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.delete.DeleteFolderAndSizesDialog"
+        android:label="DeleteFolderAndSizesDialog">
+        <argument
+            android:name="selectedFolderIds"
+            app:argType="long[]" />
+        <argument
+            android:name="selectedSizeIds"
+            app:argType="long[]" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/sortListDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.sort.SortListDialog"
+        android:label="SortListDialog" />
+    <include app:graph="@navigation/nav_graph_size" />
+    <include app:graph="@navigation/nav_graph_edit_folder_name" />
+    <include app:graph="@navigation/nav_graph_tree_view" />
+    <include app:graph="@navigation/nav_graph_add_folder" />
+</navigation>

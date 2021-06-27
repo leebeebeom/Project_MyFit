@@ -1,5 +1,6 @@
 package com.leebeebeom.closetnote.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -50,7 +51,7 @@ public abstract class BaseFragment extends BaseSignInFragment {
     public void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() == null)
-            mNavController.navigate(R.id.signInFragment);
+            mNavController.navigate(Uri.parse(getString(R.string.deep_link_sign_in)));
     }
 
     public abstract LockableScrollView getScrollView();

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_edit_folder_name"
+    app:startDestination="@id/editFolderNameDialog">
+    <argument
+        android:name="id"
+        app:argType="long" />
+    <argument
+        android:name="name"
+        app:argType="string" />
+    <argument
+        android:name="parentId"
+        app:argType="long" />
+
+    <dialog
+        android:id="@+id/editFolderNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.folder.EditFolderNameDialog"
+        android:label="EditFolderNameDialog">
+        <action
+            android:id="@+id/toEditSameFolderName"
+            app:destination="@id/editSameFolderNameDialog" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/editSameFolderNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.folder.EditSameFolderNameDialog"
+        android:label="EditSameFolderNameDialog" />
+</navigation>

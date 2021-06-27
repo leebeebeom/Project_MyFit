@@ -173,4 +173,6 @@
     <string name="naver_profile_api_url">https://openapi.naver.com/v1/nid/me</string>
     <string name="firebase_dynamic_link">https://closetnote.page.link/verify</string>
     <string name="kakao_native_key">2d3aadea523ac7b61f93b71a94f20b20</string>
+
+    <string name="deep_link_sign_in">https://www.colosetnote.com/signin</string>
 </resources>

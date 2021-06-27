@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
 import com.leebeebeom.closetnote.util.KeyBoardUtil;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public final static String TAG = "로그";
     @Inject
     ActivityMainBinding mBinding;
+    @Inject
+    FirebaseAuth mAuth;
     private int mTopFabOriginVisibility = View.INVISIBLE;
     @Getter
     private final MutableLiveData<Boolean> mKeyboardShowingLive = new MutableLiveData<>(false);

@@ -10,14 +10,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        style="@style/myAutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/myOutlineEditText"
         app:endIconMode="clear_text"
         app:placeholderText="@string/menu_search"
         android:visibility="gone"
-        app:placeholderTextAppearance="@style/myTextSize10sdp"
         app:startIconDrawable="@drawable/icon_search">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView

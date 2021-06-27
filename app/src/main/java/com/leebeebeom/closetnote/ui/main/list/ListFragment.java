@@ -22,8 +22,7 @@ import androidx.navigation.NavDirections;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.leebeebeom.closetnote.NavGraphListArgs;
-import com.leebeebeom.closetnote.NavGraphListDirections;
+import com.google.android.material.textview.MaterialTextView;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.data.tuple.BaseTuple;
 import com.leebeebeom.closetnote.data.tuple.tuple.FolderTuple;
@@ -49,7 +48,6 @@ import com.leebeebeom.closetnote.util.dragselect.ListDragSelect;
 import com.leebeebeom.closetnote.util.dragselect.SizeDragSelect;
 import com.leebeebeom.closetnote.util.popupwindow.BasePopupWindow;
 import com.leebeebeom.closetnote.util.popupwindow.PopupWindowListener;
-import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -127,9 +125,9 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(ListViewModel.class);
 
-        mCategoryId = NavGraphListArgs.fromBundle(getArguments()).getCategoryId();
-        mParentId = NavGraphListArgs.fromBundle(getArguments()).getParentId();
-        mParentIndex = NavGraphListArgs.fromBundle(getArguments()).getParentIndex();
+        mCategoryId = ListFragmentArgs.fromBundle(getArguments()).getCategoryId();
+        mParentId = ListFragmentArgs.fromBundle(getArguments()).getParentId();
+        mParentIndex = ListFragmentArgs.fromBundle(getArguments()).getParentIndex();
 
         mModel.setParentId(mParentId);
         mModel.setCategoryId(mCategoryId);
@@ -236,7 +234,7 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
 
     private void setTextNavigationTvClickListener(@NotNull MaterialTextView textView, FolderTuple tuple) {
         textView.setOnClickListener(v -> {
-            ListFragmentDirections.ToSelf action = ListFragmentDirections.toSelf(mCategoryId, tuple.getId(), mParentIndex);
+            NavDirections action = ListFragmentDirections.toSelf(mCategoryId, tuple.getId(), mParentIndex);
             CommonUtil.navigate(mNavController, R.id.listFragment, action);
         });
     }
@@ -402,13 +400,13 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
 
     private void navigateNameEdit() {
         FolderTuple selectedTuple = mModel.getSelectedFolderTuples().iterator().next();
-        NavGraphListDirections.ToEditFolderName action = NavGraphListDirections.toEditFolderName(
+        ListFragmentDirections.ToEditFolderName action = ListFragmentDirections.toEditFolderName(
                 selectedTuple.getId(), selectedTuple.getName(), selectedTuple.getParentId());
         CommonUtil.navigate(mNavController, R.id.listFragment, action);
     }
 
     private void navigateTreeView() {
-        NavGraphListDirections.ToTreeView action = NavGraphListDirections.toTreeView(mParentIndex,
+        ListFragmentDirections.ToTreeView action = ListFragmentDirections.toTreeView(mParentIndex,
                 mModel.getSelectedFolderIds(), mModel.getSelectedSizeIds(), mCategoryId, mParentId, mModel.getFolderPathCompleteIds());
         CommonUtil.navigate(mNavController, R.id.listFragment, action);
     }
@@ -477,7 +475,7 @@ public class ListFragment extends BaseFragment implements ActionModeImpl.ActionM
 
     @Override
     public void createFolderClick() {
-        NavGraphListDirections.ToAddFolder action = NavGraphListDirections.toAddFolder(mParentId, mParentIndex);
+        ListFragmentDirections.ToAddFolder action = ListFragmentDirections.toAddFolder(mParentId, mParentIndex);
         CommonUtil.navigate(mNavController, R.id.listFragment, action);
         mPopupWindow.dismiss();
     }

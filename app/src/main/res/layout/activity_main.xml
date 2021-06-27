@@ -73,18 +73,18 @@
             tools:src="@drawable/icon_add"
             tools:ignore="ContentDescription" />
 
+        <!--Render problem = fabCustomSize-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabTop"
+            app:backgroundTint="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             app:layout_anchor="@id/bottomAppBar"
+            app:fabCustomSize="@dimen/_24sdp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_48sdp"
             app:srcCompat="@drawable/icon_arrow_up"
             app:layout_anchorGravity="end"
-            app:backgroundTint="@color/white"
-            app:fabCustomSize="@dimen/_24sdp"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator

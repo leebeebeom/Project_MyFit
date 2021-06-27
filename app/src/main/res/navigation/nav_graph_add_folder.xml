@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_add_folder"
+    app:startDestination="@id/addFolderDialog">
+
+    <argument
+        android:name="parentId"
+        app:argType="long" />
+    <argument
+        android:name="parentIndex"
+        app:argType="integer" />
+    <dialog
+        android:id="@+id/addFolderDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.folder.AddFolderDialog"
+        android:label="AddFolderDialog">
+        <action
+            android:id="@+id/toAddSameFolderName"
+            app:destination="@id/addSameFolderNameDialog" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/addSameFolderNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.folder.AddSameFolderNameDialog"
+        android:label="AddSameFolderNameDialog" />
+
+</navigation>

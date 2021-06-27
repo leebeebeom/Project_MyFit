@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_tree_view"
+    app:startDestination="@id/treeViewDialog">
+
+    <argument
+        android:name="parentIndex"
+        app:argType="integer" />
+    <argument
+        android:name="selectedFolderIds"
+        app:argType="long[]" />
+    <argument
+        android:name="selectedSizeIds"
+        app:argType="long[]" />
+    <argument
+        android:name="categoryId"
+        app:argType="long" />
+    <argument
+        android:name="currentPositionId"
+        app:argType="long" />
+    <argument
+        android:name="folderPathIds"
+        app:argType="long[]" />
+
+    <dialog
+        android:id="@+id/treeViewDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.tree.TreeViewDialog"
+        android:label="TreeViewDialog">
+        <action
+            android:id="@+id/toMoveFolderAndSizeDialog"
+            app:destination="@id/moveFolderAndSizeDialog" />
+        <action
+            android:id="@+id/toAddCategory"
+            app:destination="@id/nav_graph_add_category">
+            <argument
+                android:name="parentIndex"
+                app:argType="integer" />
+        </action>
+
+        <action
+            android:id="@+id/toAddFolder"
+            app:destination="@id/nav_graph_add_folder">
+            <argument
+                android:name="parentId"
+                app:argType="long" />
+            <argument
+                android:name="parentIndex"
+                app:argType="integer" />
+        </action>
+    </dialog>
+
+    <dialog
+        android:id="@+id/moveFolderAndSizeDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.MoveFolderAndSizeDialog"
+        android:label="MoveFolderAndSizeDialog">
+        <argument
+            android:name="selectedFolderIds"
+            app:argType="long[]" />
+        <argument
+            android:name="selectedSizeIds"
+            app:argType="long[]" />
+        <argument
+            android:name="targetId"
+            app:argType="long" />
+    </dialog>
+    <include app:graph="@navigation/nav_graph_add_category" />
+    <include app:graph="@navigation/nav_graph_add_folder" />
+</navigation>

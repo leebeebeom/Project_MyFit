@@ -81,6 +81,10 @@
     <style name="myOutlineEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/outlined_edit_text</item>
     </style>
+    <!--    edit text focused outline-->
+    <style name="myAutoCompleteTextView" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/outlined_edit_text</item>
+    </style>
     <!--    action bar title style-->
     <style name="myActionBarTitleStyle">
         <item name="android:textSize">@dimen/_12sdp</item>

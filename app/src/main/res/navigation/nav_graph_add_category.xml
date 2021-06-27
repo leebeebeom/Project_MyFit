@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_add_category"
+    app:startDestination="@id/addCategoryDialog">
+    <argument
+        android:name="parentIndex"
+        app:argType="integer" />
+    <dialog
+        android:id="@+id/addCategoryDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.category.AddCategoryDialog"
+        android:label="AddCategoryDialog">
+        <action
+            android:id="@+id/toAddSameCategoryName"
+            app:destination="@id/addSameCategoryNameDialog" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/addSameCategoryNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.category.AddSameCategoryNameDialog"
+        android:label="AddSameNameCategoryDialog" />
+
+</navigation>

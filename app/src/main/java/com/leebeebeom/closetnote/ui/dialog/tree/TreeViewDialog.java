@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
 import com.leebeebeom.closetnote.NavGraphTreeViewArgs;
-import com.leebeebeom.closetnote.NavGraphTreeViewDirections;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.LayoutDialogTreeBinding;
 import com.leebeebeom.closetnote.ui.dialog.BaseDialog;
@@ -183,6 +182,6 @@ public class TreeViewDialog extends BaseDialog implements TreeNode.TreeNodeClick
     }
 
     public void navigateAddCategory() {
-        CommonUtil.navigate(mNavController, R.id.treeViewDialog, NavGraphTreeViewDirections.toAddCategory(mParentIndex));
+        CommonUtil.navigate(mNavController, R.id.treeViewDialog, TreeViewDialogDirections.toAddCategory(mParentIndex));
     }
 }

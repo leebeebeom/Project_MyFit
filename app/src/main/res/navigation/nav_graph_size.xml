@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_size"
+    app:startDestination="@id/sizeFragment">
+
+    <argument
+        android:name="parentId"
+        app:argType="long" />
+    <argument
+        android:name="sizeId"
+        app:argType="long" />
+    <argument
+        android:name="parentIndex"
+        app:argType="integer" />
+
+    <fragment
+        android:id="@+id/sizeFragment"
+        android:name="com.leebeebeom.closetnote.ui.main.size.SizeFragment"
+        android:label=""
+        tools:layout="@layout/fragment_size">
+        <action
+            android:id="@+id/toGoBack"
+            app:destination="@id/goBackDialog" />
+        <action
+            android:id="@+id/toDeleteImage"
+            app:destination="@id/deleteImageDialog" />
+        <action
+            android:id="@+id/toDeleteSize"
+            app:destination="@id/deleteSizeDialog" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/deleteSizeDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.delete.DeleteSizeDialog"
+        android:label="DeleteSizeDialog">
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/deleteImageDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.DeleteImageDialog"
+        android:label="DeleteImageDialog" />
+
+    <dialog
+        android:id="@+id/goBackDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.GoBackDialog"
+        android:label="GoBackDialog" />
+
+</navigation>
