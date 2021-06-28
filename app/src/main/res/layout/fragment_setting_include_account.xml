@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.leebeebeom.closetnote.ui.view.SettingFragmentSubTextView
+        android:id="@+id/tvAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:text="@string/settings_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.leebeebeom.closetnote.ui.view.CustomCardView
+        android:id="@+id/cardViewAccount"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAccount">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/ivProfile"
+                setProfileUrl="@{model.profileUrl}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/_8sdp"
+                android:alpha="0.1"
+                app:civ_border_color="?myColorControl"
+                app:civ_border_width="1px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_person" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:text="@{model.nickname}"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintBottom_toTopOf="@id/tvEmail"
+                app:layout_constraintStart_toEndOf="@id/ivProfile"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="이비범" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{model.email}"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tvNickname"
+                app:layout_constraintTop_toBottomOf="@+id/tvNickname"
+                tools:text="leebeebeom@google.com" />
+
+            <com.leebeebeom.closetnote.ui.view.ArrowIcon
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/icon_arrow_forward" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.leebeebeom.closetnote.ui.view.CustomCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

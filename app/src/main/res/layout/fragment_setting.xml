@@ -40,203 +40,35 @@
                 android:background="@drawable/recycler_background"
                 android:paddingBottom="@dimen/_100sdp">
 
-                <com.leebeebeom.closetnote.ui.view.SettingFragmentSubTextView
-                    android:id="@+id/tvAccount"
-                    android:layout_width="wrap_content"
+                <include
+                    android:id="@+id/includeAccount"
+                    layout="@layout/fragment_setting_include_account"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@string/settings_account"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.leebeebeom.closetnote.ui.view.CustomCardView
-                    android:id="@+id/cardViewAccount"
+                <include
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAccount">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.mikhaellopez.circularimageview.CircularImageView
-                            android:id="@+id/ivProfile"
-                            setProfileUrl="@{model.profileUrl}"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/_8sdp"
-                            android:alpha="0.1"
-                            app:civ_border_color="?myColorControl"
-                            app:civ_border_width="1px"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintDimensionRatio="1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/icon_person" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tvNickname"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_12sdp"
-                            android:text="@{model.nickname}"
-                            android:textSize="@dimen/_11sdp"
-                            app:layout_constraintBottom_toTopOf="@id/tvEmail"
-                            app:layout_constraintStart_toEndOf="@id/ivProfile"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_chainStyle="packed"
-                            tools:text="이비범" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tvEmail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{model.email}"
-                            android:textSize="@dimen/_10sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/tvNickname"
-                            app:layout_constraintTop_toBottomOf="@+id/tvNickname"
-                            tools:text="leebeebeom@google.com" />
-
-                        <com.leebeebeom.closetnote.ui.view.ArrowIcon
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/icon_arrow_forward" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.leebeebeom.closetnote.ui.view.CustomCardView>
-
-                <com.leebeebeom.closetnote.ui.view.SettingFragmentSubTextView
-                    android:id="@+id/tvGlobal"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/includeGlobal"
+                    layout="@layout/fragment_setting_include_global"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:text="@string/settings_global"
-                    app:layout_constraintStart_toStartOf="@id/tvAccount"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewAccount" />
-
-                <com.leebeebeom.closetnote.ui.view.CustomCardView
-                    android:id="@+id/cardViewTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvGlobal">
+                    app:layout_constraintTop_toBottomOf="@id/includeAccount" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_12sdp"
-                            android:text="@string/settings_theme"
-                            android:textSize="@dimen/_12sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.leebeebeom.closetnote.ui.view.ArrowIcon
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/icon_arrow_forward" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.leebeebeom.closetnote.ui.view.CustomCardView>
-
-                <com.leebeebeom.closetnote.ui.view.CustomCardView
-                    android:id="@+id/cardViewNetwork"
+                <include
+                    android:id="@+id/includeEtc"
+                    layout="@layout/fragment_setting_include_etc"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewTheme">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_12sdp"
-                            android:text="@string/settings_network"
-                            android:textSize="@dimen/_12sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.leebeebeom.closetnote.ui.view.ArrowIcon
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/icon_arrow_forward" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.leebeebeom.closetnote.ui.view.CustomCardView>
-
-                <com.leebeebeom.closetnote.ui.view.SettingFragmentSubTextView
-                    android:id="@+id/tvEtc"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:text="@string/settings_etc"
-                    app:layout_constraintStart_toStartOf="@id/tvAccount"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewNetwork" />
-
-                <com.leebeebeom.closetnote.ui.view.CustomCardView
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvEtc">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_12sdp"
-                            android:text="@string/settings_contact"
-                            android:textSize="@dimen/_12sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.leebeebeom.closetnote.ui.view.ArrowIcon
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/icon_arrow_forward" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.leebeebeom.closetnote.ui.view.CustomCardView>
+                    app:layout_constraintTop_toBottomOf="@id/includeGlobal" />
 
                 <com.google.android.material.button.MaterialButton
+                    app:layout_constraintTop_toBottomOf="@id/includeEtc"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_48sdp"
@@ -246,7 +78,6 @@
                     android:textColor="?colorError"
                     android:textSize="@dimen/_12sdp"
                     app:backgroundTint="?colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
