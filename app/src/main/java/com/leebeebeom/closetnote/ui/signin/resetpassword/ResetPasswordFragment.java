@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentResetPasswordBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
@@ -29,7 +28,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
+import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
 public class ResetPasswordFragment extends BaseSignInFragment {
@@ -87,5 +86,11 @@ public class ResetPasswordFragment extends BaseSignInFragment {
         else if (e instanceof FirebaseAuthInvalidUserException)
             mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
         else mToastUtil.showUnknownError();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
     }
 }
