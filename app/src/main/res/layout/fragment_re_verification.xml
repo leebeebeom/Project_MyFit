@@ -52,7 +52,7 @@
             <com.leebeebeom.closetnote.ui.view.CustomButton
                 android:id="@+id/btnReSend"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_height="0dp"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:text="@string/re_verification_resend"
                 android:onClick="@{() -> fragment.reSend()}"
@@ -62,7 +62,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv" />
+                app:layout_constraintBottom_toBottomOf="@id/btnCheck"
+                app:layout_constraintTop_toTopOf="@id/btnCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 </layout>
