@@ -61,4 +61,10 @@ public class ReVerificationFragment extends BaseSignInFragment {
             hideIndicator();
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
+    }
 }
