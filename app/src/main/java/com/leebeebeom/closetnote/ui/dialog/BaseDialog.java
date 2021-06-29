@@ -14,7 +14,7 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 
 import com.leebeebeom.closetnote.R;
-import com.leebeebeom.closetnote.ui.main.MainGraphViewModel;
+import com.leebeebeom.closetnote.ui.MainGraphViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
