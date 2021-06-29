@@ -31,7 +31,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
+import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @Singleton
 @Accessors(prefix = "m")
@@ -41,13 +41,11 @@ public class CategoryRepository extends BaseRepository<Category, CategoryTuple> 
     @Getter
     private final IntegerSharedPreferenceLiveData mMainSortPreferenceLive;
     private final LiveData<List<Category>> mAllCategoriesLive;
-    private final Context mContext;
     private MutableLiveData<Boolean> mExistingNameLive;
     private LiveData<List<List<CategoryTuple>>> mClassifiedTuplesLive, mDeletedClassifiedTuplesLive, mDeletedSearchTuplesLive;
 
     @Inject
     public CategoryRepository(@ApplicationContext Context context) {
-        mContext = context;
         this.mCategoryDao = AppDataBase.getsInstance(context).categoryDao();
         this.mMainSortPreference = context.getSharedPreferences(SharedPreferenceKey.SORT_MAIN.getValue(), Context.MODE_PRIVATE);
         this.mMainSortPreferenceLive = new IntegerSharedPreferenceLiveData(
