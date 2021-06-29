@@ -7,46 +7,40 @@
     <data>
 
         <variable
-            name="verificationFragment"
+            name="fragment"
             type="com.leebeebeom.closetnote.ui.signin.signup.verification.VerificationFragment" />
     </data>
 
-    <com.leebeebeom.closetnote.ui.view.LockableScrollView
-        android:id="@+id/sv"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.signin.signup.verification.VerificationFragment">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            tools:context=".ui.signin.signup.verification.VerificationFragment">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvSendVerificationEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verification_send_email"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toTopOf="@id/btnVerification"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/verification_send_email"
-                android:textSize="@dimen/_12sdp" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/verification_please_verify"
-                android:textSize="@dimen/_12sdp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:onClick="@{() -> verificationFragment.openMail()}"
-                android:text="@string/verification_verify"
-                android:textColor="?colorPrimary"
-                android:textSize="@dimen/_12sdp"
-                app:backgroundTint="?myColorControl" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVerification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:onClick="@{() -> fragment.openMail()}"
+            android:text="@string/verification_verify"
+            android:textColor="?colorPrimary"
+            android:textSize="@dimen/_12sdp"
+            app:backgroundTint="?myColorControl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSendVerificationEmail" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
