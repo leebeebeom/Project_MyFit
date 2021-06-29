@@ -10,13 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.auth.ActionCodeSettings;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentResetPasswordBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
+import com.leebeebeom.closetnote.util.AuthUtil;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
@@ -30,11 +29,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class ResetPasswordFragment extends BaseSignInFragment {
+public class ResetPasswordFragment extends BaseSignInFragment implements AuthUtil.PasswordResetEmailListener {
     @Inject
-    FirebaseAuth mAuth;
-    @Inject
-    ActionCodeSettings mActionCodeSettings;
+    AuthUtil mAuthUtil;
     @Inject
     ToastUtil mToastUtil;
     private FragmentResetPasswordBinding mBinding;
@@ -62,32 +59,31 @@ public class ResetPasswordFragment extends BaseSignInFragment {
     }
 
     public void sendPasswordResetEmail() {
-        showIndicator();
-        mAuth.sendPasswordResetEmail(mModel.getEmail(), mActionCodeSettings)
-                .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful())
-                        CommonUtil.navigate(mNavController, R.id.resetPasswordFragment, ResetPasswordFragmentDirections.toSendResetPasswordEmailFragment(mModel.getEmail()));
-                    else fail(task.getException());
-                    hideIndicator();
-                });
+        mAuthUtil.sendPasswordResetEmail(mModel.getEmail(), this);
     }
 
     public void setEmailEmptyError() {
         mBinding.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
     }
 
-    private void fail(Exception e) {
-        Log.d(TAG, "ResetPasswordFragment : fail: " + e);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
+    }
+
+    @Override
+    public void sendPasswordResetEmailSuccess() {
+        CommonUtil.navigate(mNavController, R.id.resetPasswordFragment, ResetPasswordFragmentDirections.toSendResetPasswordEmailFragment(mModel.getEmail()));
+    }
+
+    @Override
+    public void sendPasswordResetEmailFail(Exception e) {
         if (e instanceof FirebaseAuthInvalidCredentialsException)
             mBinding.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
         else if (e instanceof FirebaseAuthInvalidUserException)
             mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
         else mToastUtil.showUnknownError();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBinding = null;
+        Log.d(TAG, "ResetPasswordFragment : fail: " + e);
     }
 }
