@@ -8,21 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentSendResetPasswordEmailBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
 import com.leebeebeom.closetnote.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class SendResetPasswordEmailFragment extends BaseSignInFragment {
-    @Inject
-    FirebaseAuth mAuth;
     private FragmentSendResetPasswordEmailBinding mBinding;
 
     @Nullable
