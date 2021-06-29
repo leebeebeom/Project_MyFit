@@ -20,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +50,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
-import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
+import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
 public class SignInFragment extends BaseSignInFragment {
@@ -74,15 +73,14 @@ public class SignInFragment extends BaseSignInFragment {
     private SignInViewModel mModel;
     private FragmentSignInBinding mBinding;
     private String mNickname, mProfileUrl;
-    private final ActivityResultLauncher<Intent> mGoogleLoginLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        showIndicator();
+    private final ActivityResultLauncher<Intent> mGoogleSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            firebaseAuthWithGoogle(account);
+            signInWithGoogle(account);
         } catch (ApiException e) {
             mToastUtil.showGoogleSignInFail();
-            Log.d(TAG, "mGoogleLoginLauncher: ApiException" + e.getMessage());
+            Log.d(TAG, "SignInFragment: mGoogleSignInLauncher: ApiException" + e.getMessage());
             hideIndicator();
         }
     });
@@ -100,7 +98,7 @@ public class SignInFragment extends BaseSignInFragment {
         removeAppBar();
 
         mBinding = FragmentSignInBinding.inflate(inflater, container, false);
-        mBinding.setSignInFragment(this);
+        mBinding.setFragment(this);
         mBinding.setModel(mModel);
         mBinding.setLifecycleOwner(this);
 
@@ -113,6 +111,13 @@ public class SignInFragment extends BaseSignInFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBinding = null;
+    }
+
+    public void setEmptyError() {
+        if (mModel.isEmailEmpty())
+            mBinding.et.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
+        if (mModel.isPasswordEmpty())
+            mBinding.et.passwordLayout.setError(getString(R.string.sign_in_password_is_empty));
     }
 
     public void emailSignIn() {
@@ -132,29 +137,21 @@ public class SignInFragment extends BaseSignInFragment {
     }
 
     private void emailSignInFail(Exception e) {
-        Log.d(TAG, "fail: " + e);
-        if (e instanceof FirebaseNetworkException)
-            mToastUtil.showCheckNetwork();
-        else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+        Log.d(TAG, "SignInFragment: emailSignInFail: " + e);
+        if (e instanceof FirebaseAuthInvalidCredentialsException) {
             mBinding.et.emailLayout.setError(getString(R.string.sign_in_check_email_or_password));
             mBinding.et.passwordLayout.setError(getString(R.string.sign_in_check_email_or_password));
         } else if (e instanceof FirebaseAuthInvalidUserException)
             mBinding.et.emailLayout.setError(getString(R.string.sign_in_not_exist_email));
-    }
-
-    public void setEmptyError() {
-        if (mModel.isEmailEmpty())
-            mBinding.et.emailLayout.setError(getString(R.string.sign_in_email_is_empty));
-        if (mModel.isPasswordEmpty())
-            mBinding.et.passwordLayout.setError(getString(R.string.sign_in_password_is_empty));
+        else mToastUtil.showUnknownError();
     }
 
     public void googleSignIn() {
         showIndicator();
-        mGoogleLoginLauncher.launch(mGoogleSignInIntent);
+        mGoogleSignInLauncher.launch(mGoogleSignInIntent);
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+    private void signInWithGoogle(GoogleSignInAccount account) {
         if (account != null) {
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             mAuth.signInWithCredential(credential)
@@ -164,7 +161,7 @@ public class SignInFragment extends BaseSignInFragment {
                             mNavController.popBackStack();
                         } else {
                             mToastUtil.showGoogleSignInFail();
-                            Log.d(TAG, "firebaseAuthWithGoogle: !task.isSuccessful" + task.getException());
+                            Log.d(TAG, "SignInFragment : signInWithGoogle : !task.isSuccessful" + task.getException());
                         }
                         hideIndicator();
                     });
@@ -181,6 +178,7 @@ public class SignInFragment extends BaseSignInFragment {
                     new Thread(() -> {
                         JsonElement userInfo = getNaverUserInfo();
                         String email = "naver_" + userInfo.getAsJsonObject().get("email").getAsString();
+                        //TODO 암호 만들어야함
                         String id = userInfo.getAsJsonObject().get("id").getAsString();
                         mNickname = userInfo.getAsJsonObject().get("nickname").getAsString();
                         mProfileUrl = userInfo.getAsJsonObject().get("profile_image").getAsString();
@@ -190,7 +188,7 @@ public class SignInFragment extends BaseSignInFragment {
                     mToastUtil.showNaverSignInFail();
                     String code = mOAuthLogin.getLastErrorCode(requireContext()).getCode();
                     String desc = mOAuthLogin.getLastErrorDesc(requireContext());
-                    Log.d(TAG, "errorCode: " + code + "\n errorDesc: " + desc);
+                    Log.d(TAG, "SignFragment : naverSignIn : errorCode: " + code + "\n errorDesc: " + desc);
                     hideIndicator();
                 }
             }
@@ -209,14 +207,11 @@ public class SignInFragment extends BaseSignInFragment {
                 showAnotherEmailSignInSuccessToast(email);
                 mNavController.popBackStack();
                 hideIndicatorInThread();
-            } else if (task.getException() instanceof FirebaseNetworkException) {
-                mToastUtil.showCheckNetwork();
-                hideIndicatorInThread();
             } else if (task.getException() instanceof FirebaseAuthInvalidUserException) {
                 createUserAnotherEmail(email, id);
             } else {
                 mToastUtil.showUnknownError();
-                Log.d(TAG, "signWithAnotherEmail: " + task.getException());
+                Log.d(TAG, "SignInFragment : signWithAnotherEmail: " + task.getException());
             }
         });
     }
@@ -253,10 +248,9 @@ public class SignInFragment extends BaseSignInFragment {
                     if (task.isSuccessful()) {
                         updateUserProfile();
                         showAnotherEmailSignInSuccessToast(email);
-                        mNavController.popBackStack();
                     } else {
                         showAnotherEmailSignInFailToast(email);
-                        Log.d(TAG, "createUserAnotherEmail: " + task.getException());
+                        Log.d(TAG, "SignInFragment : createUserAnotherEmail : " + task.getException());
                     }
                     hideIndicatorInThread();
                 });
@@ -264,7 +258,10 @@ public class SignInFragment extends BaseSignInFragment {
 
     private void updateUserProfile() {
         if (mAuth.getCurrentUser() != null)
-            mAuth.getCurrentUser().updateProfile(getUserProfileChangeRequest());
+            mAuth.getCurrentUser().updateProfile(getUserProfileChangeRequest())
+                    .addOnCompleteListener(requireActivity(), task -> {
+                        if (!task.isSuccessful()) mToastUtil.showProfileUpdateFail();
+                    });
     }
 
     private UserProfileChangeRequest getUserProfileChangeRequest() {
@@ -288,7 +285,7 @@ public class SignInFragment extends BaseSignInFragment {
                 callKakaoUserInfo();
             else if (throwable != null) {
                 mToastUtil.showKakaoSignInFail();
-                Log.d(TAG, "kakaoSignIn: " + throwable);
+                Log.d(TAG, "SignInFragment : kakaoSignIn: " + throwable);
             }
             return null;
         };
@@ -300,7 +297,7 @@ public class SignInFragment extends BaseSignInFragment {
                 signWithKaKaoEmail(user);
             else {
                 mToastUtil.showKakaoSignInFailCausePermission();
-                Log.d(TAG, "createUserWithKaKaoEmail: " + throwable);
+                Log.d(TAG, "SignInFragment : createUserWithKaKaoEmail: " + throwable);
                 hideIndicator();
             }
             return null;
@@ -311,6 +308,7 @@ public class SignInFragment extends BaseSignInFragment {
         Account kakaoAccount = user.getKakaoAccount();
         if (kakaoAccount != null && kakaoAccount.getProfile() != null) {
             String email = "kakao_" + kakaoAccount.getEmail();
+            //TODO 암호 만들어야함
             String id = String.valueOf(user.getId());
             mNickname = kakaoAccount.getProfile().getNickname();
             mProfileUrl = kakaoAccount.getProfile().getProfileImageUrl();
@@ -337,8 +335,8 @@ public class SignInFragment extends BaseSignInFragment {
                         mToastUtil.showAnonymouslySignInSuccess();
                         mNavController.popBackStack();
                     } else {
-                        emailSignInFail(task.getException());
                         mToastUtil.showAnonymouslySignInFail();
+                        Log.d(TAG, "SignInFragment : signInAnonymously: " + task.getException());
                     }
                     hideIndicator();
                 });
