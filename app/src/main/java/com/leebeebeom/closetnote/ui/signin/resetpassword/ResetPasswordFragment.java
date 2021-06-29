@@ -77,7 +77,7 @@ public class ResetPasswordFragment extends BaseSignInFragment {
     }
 
     private void fail(Exception e) {
-        Log.d(TAG, "getOnFailureListener: " + e);
+        Log.d(TAG, "ResetPasswordFragment : fail: " + e);
         if (e instanceof FirebaseAuthInvalidCredentialsException)
             mBinding.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
         else if (e instanceof FirebaseAuthInvalidUserException)
