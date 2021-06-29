@@ -1,8 +1,5 @@
 package com.leebeebeom.closetnote.ui.signin;
 
-import android.content.Intent;
-import android.net.Uri;
-
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 
@@ -57,19 +54,9 @@ public class BaseSignInFragment extends Fragment {
         mActivityBinding.indicator.hide();
     }
 
-    protected void openBrowser(String domain) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
-        if (intent.resolveActivity(requireContext().getPackageManager()) != null)
-            startActivity(intent);
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         hideIndicator();
-    }
-
-    public boolean isConnect() {
-        return mNetWorkChecker.isConnect();
     }
 }
