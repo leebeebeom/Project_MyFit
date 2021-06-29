@@ -10,8 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.FirebaseNetworkException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -19,9 +22,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
-import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
@@ -32,7 +33,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.leebeebeom.closetnote.ui.main.MainActivity.TAG;
+import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
 public class SignUpFragment extends BaseSignInFragment {
@@ -44,11 +45,18 @@ public class SignUpFragment extends BaseSignInFragment {
     ToastUtil mToastUtil;
     private SignUpViewModel mModel;
     private FragmentSignUpBinding mBinding;
+    private boolean isAnonymously;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+        try {
+            if (mNavController.getPreviousBackStackEntry() == mNavController.getBackStackEntry(R.id.anonymouslySignUpFragment))
+                isAnonymously = true;
+        } catch (IllegalArgumentException e) {
+            isAnonymously = false;
+        }
     }
 
     @Override
@@ -77,38 +85,53 @@ public class SignUpFragment extends BaseSignInFragment {
 
     public void emailSignUp() {
         showIndicator();
+        if (!isAnonymously) createUser();
+        else linkWithEmail();
+    }
+
+    private void createUser() {
         mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
-                .addOnCompleteListener(requireActivity(), command -> {
-                    if (command.isSuccessful()) {
-                        userNameUpdate();
-                        sendEmailVerification();
-                    } else {
-                        fail(command.getException());
-                        hideIndicator();
-                    }
-                });
+                .addOnCompleteListener(requireActivity(), getOnCompleteListener());
+    }
+
+    private void linkWithEmail() {
+        if (mAuth.getCurrentUser() != null) {
+            AuthCredential credential = EmailAuthProvider.getCredential(mModel.getEmail(), mModel.getPassword());
+            mAuth.getCurrentUser().linkWithCredential(credential)
+                    .addOnCompleteListener(requireActivity(), getOnCompleteListener());
+        }
+    }
+
+    @NotNull
+    private OnCompleteListener<AuthResult> getOnCompleteListener() {
+        return task -> {
+            if (task.isSuccessful()) {
+                userNameUpdate();
+                sendEmailVerification();
+            } else fail(task.getException());
+        };
     }
 
     private void fail(Exception e) {
-        Log.d(TAG, "getOnFailureListener: " + e);
+        Log.d(TAG, "SignUpFragment : fail: " + e);
         if (e instanceof FirebaseAuthWeakPasswordException)
             mBinding.et.passwordLayout.setError(getString(R.string.sign_up_password_is_less_than_6));
         else if (e instanceof FirebaseAuthInvalidCredentialsException)
             mBinding.et.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
         else if (e instanceof FirebaseAuthUserCollisionException)
             mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
-        else if (e instanceof FirebaseNetworkException)
-            mToastUtil.showCheckNetwork();
         else mToastUtil.showUnknownError();
+        hideIndicator();
     }
 
     private void userNameUpdate() {
         if (mAuth.getCurrentUser() != null)
             mAuth.getCurrentUser().updateProfile(getUserProfileChangeRequest())
                     .addOnCompleteListener(requireActivity(), task -> {
-                        if (task.isSuccessful())
-                            Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 완료");
-                        else Log.d(TAG, "getOnSuccessListener: 유저네임 업데이트 실패" + task.getException());
+                        if (!task.isSuccessful()) {
+                            mToastUtil.showUsernameUpdateFail();
+                            Log.d(TAG, "SignUpFragment : userNameUpdate: " + task.getException());
+                        }
                     });
     }
 
@@ -125,7 +148,10 @@ public class SignUpFragment extends BaseSignInFragment {
                     addOnCompleteListener(requireActivity(), task -> {
                         if (task.isSuccessful())
                             CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
-                        else fail(task.getException());
+                        else {
+                            mToastUtil.showSendVerificationMailFail();
+                            Log.d(TAG, "SignUpFragment : sendEmailVerification: " + task.getException());
+                        }
                         hideIndicator();
                     });
     }
