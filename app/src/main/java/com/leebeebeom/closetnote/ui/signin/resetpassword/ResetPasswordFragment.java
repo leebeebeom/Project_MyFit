@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -81,8 +80,6 @@ public class ResetPasswordFragment extends BaseSignInFragment {
         Log.d(TAG, "getOnFailureListener: " + e);
         if (e instanceof FirebaseAuthInvalidCredentialsException)
             mBinding.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
-        else if (e instanceof FirebaseNetworkException)
-            mBinding.emailLayout.setError(getString(R.string.toast_check_network));
         else if (e instanceof FirebaseAuthInvalidUserException)
             mBinding.emailLayout.setError(getString(R.string.reset_password_not_exsist_email));
         else mToastUtil.showUnknownError();
