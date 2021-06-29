@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.setting.SettingViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.setting.SettingFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.leebeebeom.closetnote.ui.view.CustomButton
+            android:id="@+id/btnSignOut"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:onClick="@{() -> model.nicknameLive.equals(@string/toast_sign_in_anonymously_success) ? fragment.navigateAnonymouslySignOutDialog() : fragment.signOut()}"
+            android:text="@string/settings_sign_out"
+            android:textColor="?colorError"
+            android:textSize="@dimen/_12sdp"
+            app:backgroundTint="?colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="?myColorControl" />
+
+        <com.leebeebeom.closetnote.ui.view.CustomButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:onClick="@{() -> fragment.navigateAnonymouslySignUpFragment()}"
+            android:text="@string/setting_switch_to_member"
+            android:textColor="?myColorControl"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="@{model.nicknameLive.equals(@string/toast_sign_in_anonymously_success) ? View.VISIBLE : View.GONE}"
+            app:backgroundTint="?colorPrimary"
+            app:layout_constraintBottom_toTopOf="@id/btnSignOut"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="?myColorControl"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
