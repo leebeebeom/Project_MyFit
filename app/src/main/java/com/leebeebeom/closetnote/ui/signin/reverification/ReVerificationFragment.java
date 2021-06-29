@@ -1,6 +1,7 @@
 package com.leebeebeom.closetnote.ui.signin.reverification;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentReVerificationBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.ToastUtil;
 
@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
+import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
 public class ReVerificationFragment extends BaseSignInFragment {
@@ -56,8 +58,15 @@ public class ReVerificationFragment extends BaseSignInFragment {
     public void reSend() {
         if (mAuth.getCurrentUser() != null) {
             showIndicator();
-            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings);
-            mToastUtil.showEmailReSent();
+            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings)
+                    .addOnCompleteListener(requireActivity(), task -> {
+                        if (task.isSuccessful())
+                            mToastUtil.showEmailReSent();
+                        else {
+                            mToastUtil.showUnknownError();
+                            Log.d(TAG, "ReVerificationFragment : reSend: " + task.getException());
+                        }
+                    });
             hideIndicator();
         }
     }
@@ -66,5 +75,11 @@ public class ReVerificationFragment extends BaseSignInFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBinding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAuth.signOut();
     }
 }
