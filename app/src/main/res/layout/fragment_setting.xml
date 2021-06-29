@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.setting.SettingViewModel" />
@@ -29,9 +28,9 @@
                 android:id="@+id/tvSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_all_cap"
-                tools:layout_marginStart="@dimen/_12sdp"
-                tools:layout_marginTop="@dimen/_8sdp" />
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/settings_all_cap" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -44,6 +43,7 @@
                     android:id="@+id/includeAccount"
                     layout="@layout/fragment_setting_include_account"
                     android:layout_height="wrap_content"
+                    app:model="@{model}"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_width="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +54,7 @@
                     android:id="@+id/includeGlobal"
                     layout="@layout/fragment_setting_include_global"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/_4sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/includeAccount" />
@@ -67,19 +68,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/includeGlobal" />
 
-                <com.google.android.material.button.MaterialButton
-                    app:layout_constraintTop_toBottomOf="@id/includeEtc"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <include
+                    layout="@layout/fragment_setting_include_sign_out"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:onClick="@{() -> fragment.signOut()}"
-                    android:text="@string/settings_sign_out"
-                    android:textColor="?colorError"
-                    android:textSize="@dimen/_12sdp"
-                    app:backgroundTint="?colorPrimary"
+                    android:layout_height="wrap_content"
+                    app:fragment="@{fragment}"
+                    app:layout_constraintTop_toBottomOf="@id/includeEtc"
+                    app:model="@{model}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </com.leebeebeom.closetnote.ui.view.LockableScrollView>
