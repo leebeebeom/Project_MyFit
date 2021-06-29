@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Closet_Note">
         <activity
-            android:name="com.leebeebeom.closetnote.ui.main.MainActivity"
+            android:name="com.leebeebeom.closetnote.ui.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
