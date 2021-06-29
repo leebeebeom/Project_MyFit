@@ -10,11 +10,15 @@ import androidx.annotation.Nullable;
 
 import com.leebeebeom.closetnote.databinding.FragmentSendResetPasswordEmailBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.CommonUtil;
+import com.leebeebeom.closetnote.util.AuthUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 public class SendResetPasswordEmailFragment extends BaseSignInFragment {
+    @Inject
+    AuthUtil mAuthUtil;
     private FragmentSendResetPasswordEmailBinding mBinding;
 
     @Nullable
@@ -30,10 +34,8 @@ public class SendResetPasswordEmailFragment extends BaseSignInFragment {
     }
 
     public void openMail() {
-        showIndicator();
         String email = SendResetPasswordEmailFragmentArgs.fromBundle(getArguments()).getEmail();
-        openBrowser(CommonUtil.getDomain(email));
-        hideIndicator();
+        mAuthUtil.openEmail(email);
     }
 
     @Override
