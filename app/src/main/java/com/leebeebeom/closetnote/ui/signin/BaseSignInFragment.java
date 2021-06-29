@@ -8,6 +8,7 @@ import androidx.navigation.NavController;
 
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
+import com.leebeebeom.closetnote.util.NetWorkChecker;
 
 import javax.inject.Inject;
 
@@ -19,6 +20,8 @@ public class BaseSignInFragment extends Fragment {
     protected ActivityMainBinding mActivityBinding;
     @Inject
     protected NavController mNavController;
+    @Inject
+    NetWorkChecker mNetWorkChecker;
 
     protected void addBottomAppBar() {
         if (mActivityBinding.root.findViewById(R.id.bottomAppBar) == null) {
@@ -58,5 +61,15 @@ public class BaseSignInFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(domain));
         if (intent.resolveActivity(requireContext().getPackageManager()) != null)
             startActivity(intent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hideIndicator();
+    }
+
+    public boolean isConnect() {
+        return mNetWorkChecker.isConnect();
     }
 }
