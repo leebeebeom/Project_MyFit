@@ -1,7 +1,6 @@
 package com.leebeebeom.closetnote.ui.signin.reverification;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.ActionCodeSettings;
-import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentReVerificationBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.CommonUtil;
+import com.leebeebeom.closetnote.util.AuthUtil;
 import com.leebeebeom.closetnote.util.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,12 +20,10 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
-
 @AndroidEntryPoint
 public class ReVerificationFragment extends BaseSignInFragment {
     @Inject
-    FirebaseAuth mAuth;
+    AuthUtil mAuthUtil;
     @Inject
     ActionCodeSettings mActionCodeSettings;
     @Inject
@@ -47,39 +43,17 @@ public class ReVerificationFragment extends BaseSignInFragment {
     }
 
     public void openEmail() {
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
-            showIndicator();
-            String email = mAuth.getCurrentUser().getEmail();
-            openBrowser(CommonUtil.getDomain(email));
-            hideIndicator();
-        }
+        String email = mAuthUtil.getEmail();
+        mAuthUtil.openEmail(email);
     }
 
     public void reSend() {
-        if (mAuth.getCurrentUser() != null) {
-            showIndicator();
-            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings)
-                    .addOnCompleteListener(requireActivity(), task -> {
-                        if (task.isSuccessful())
-                            mToastUtil.showEmailReSent();
-                        else {
-                            mToastUtil.showUnknownError();
-                            Log.d(TAG, "ReVerificationFragment : reSend: " + task.getException());
-                        }
-                    });
-            hideIndicator();
-        }
+        mAuthUtil.reSendVerificationEmail();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBinding = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAuth.signOut();
     }
 }
