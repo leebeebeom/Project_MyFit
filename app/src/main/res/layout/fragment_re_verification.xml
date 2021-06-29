@@ -10,60 +10,56 @@
             type="com.leebeebeom.closetnote.ui.signin.reverification.ReVerificationFragment" />
     </data>
 
-    <com.leebeebeom.closetnote.ui.view.LockableScrollView
-        android:id="@+id/sv"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.signin.reverification.ReVerificationFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            tools:context=".ui.signin.reverification.ReVerificationFragment">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/re_verification_please_check_email"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toTopOf="@+id/btnCheck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/re_verification_please_check_email"
-                android:textSize="@dimen/_12sdp"
-                app:layout_constraintBottom_toTopOf="@+id/btnCheck"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+        <com.leebeebeom.closetnote.ui.view.CustomButton
+            android:id="@+id/btnCheck"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_36sdp"
+            android:onClick="@{() -> fragment.openEmail()}"
+            android:text="@string/send_reset_password_email_lets_check"
+            android:textColor="?colorPrimary"
+            app:backgroundTint="?myColorControl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnReSend"
+            app:layout_constraintTop_toBottomOf="@+id/tv"
+            app:strokeColor="@android:color/transparent" />
 
-            <com.leebeebeom.closetnote.ui.view.CustomButton
-                android:id="@+id/btnCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
-                android:onClick="@{() -> fragment.openEmail()}"
-                android:text="@string/send_reset_password_email_lets_check"
-                android:textColor="?colorPrimary"
-                app:backgroundTint="?myColorControl"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btnReSend"
-                app:layout_constraintTop_toBottomOf="@+id/tv" />
-
-            <com.leebeebeom.closetnote.ui.view.CustomButton
-                android:id="@+id/btnReSend"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="@dimen/_4sdp"
-                android:text="@string/re_verification_resend"
-                android:onClick="@{() -> fragment.reSend()}"
-                android:textColor="?colorPrimary"
-                app:backgroundTint="?myColorControl"
-                app:layout_constraintEnd_toStartOf="@+id/btnCheck"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/btnCheck"
-                app:layout_constraintTop_toTopOf="@id/btnCheck" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
+        <com.leebeebeom.closetnote.ui.view.CustomButton
+            android:id="@+id/btnReSend"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:onClick="@{() -> fragment.reSend()}"
+            android:text="@string/re_verification_resend"
+            android:textColor="?colorPrimary"
+            app:backgroundTint="?myColorControl"
+            app:layout_constraintBottom_toBottomOf="@id/btnCheck"
+            app:layout_constraintEnd_toStartOf="@+id/btnCheck"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnCheck"
+            app:strokeColor="@android:color/transparent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
