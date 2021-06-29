@@ -11,9 +11,7 @@ import androidx.navigation.NavController;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentVerificationBinding;
-import com.leebeebeom.closetnote.ui.BaseFragment;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.ui.view.LockableScrollView;
 import com.leebeebeom.closetnote.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +27,16 @@ public class VerificationFragment extends BaseSignInFragment {
     @Inject
     NavController mNavController;
     private FragmentVerificationBinding mBinding;
+    private String mEmail = "";
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
+            mEmail = mAuth.getCurrentUser().getEmail();
+            mAuth.signOut();
+        }
+    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -38,7 +46,7 @@ public class VerificationFragment extends BaseSignInFragment {
         removeBottomAppBar();
 
         mBinding = FragmentVerificationBinding.inflate(inflater, container, false);
-        mBinding.setVerificationFragment(this);
+        mBinding.setFragment(this);
         return mBinding.getRoot();
     }
 
@@ -49,11 +57,8 @@ public class VerificationFragment extends BaseSignInFragment {
     }
 
     public void openMail() {
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
-            showIndicator();
-            String email = mAuth.getCurrentUser().getEmail();
-            openBrowser(CommonUtil.getDomain(email));
-            hideIndicator();
-        }
+        showIndicator();
+        openBrowser(CommonUtil.getDomain(mEmail));
+        hideIndicator();
     }
 }
