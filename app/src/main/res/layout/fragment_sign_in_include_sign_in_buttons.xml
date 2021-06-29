@@ -27,24 +27,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:rippleColor="@android:color/transparent"
             app:strokeColor="@color/black"
             tools:ignore="RtlHardcoded" />
 
         <com.leebeebeom.closetnote.ui.view.CustomButton
             android:id="@+id/btnNaver"
-            android:layout_width="0dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_naver_small"
+            android:onClick="@{() -> fragment.isConnect() ? fragment.naverSignIn() : void}"
             android:text="@string/sign_in_with_naver"
             android:textColor="@color/white"
             app:backgroundTint="#03C75A"
-            android:onClick="@{() -> fragment.isConnect() ? fragment.naverSignIn() : void}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnGoogle"
-            app:rippleColor="@android:color/transparent"
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
 
@@ -61,7 +59,6 @@
             app:layout_constraintStart_toStartOf="parent"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:layout_constraintTop_toBottomOf="@id/btnNaver"
-            app:rippleColor="@android:color/transparent"
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
     </androidx.constraintlayout.widget.ConstraintLayout>
