@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -13,12 +12,6 @@
             name="model"
             type="com.leebeebeom.closetnote.ui.signin.signup.SignUpViewModel" />
     </data>
-
-    <com.leebeebeom.closetnote.ui.view.LockableScrollView
-        android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.signin.signup.SignUpFragment">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -92,6 +85,8 @@
                 </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
 
                 <com.leebeebeom.closetnote.ui.view.CustomButton
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:strokeColor="@android:color/transparent"
                     android:id="@+id/btnSignUp"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_44sdp"
@@ -104,8 +99,5 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </FrameLayout>
-
-    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 </layout>
