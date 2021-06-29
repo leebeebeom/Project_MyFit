@@ -10,24 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.ActionCodeSettings;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
+import com.leebeebeom.closetnote.util.AuthUtil;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -36,9 +29,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class SignUpFragment extends BaseSignInFragment {
+public class SignUpFragment extends BaseSignInFragment implements AuthUtil.EmailSignUpListener {
     @Inject
-    FirebaseAuth mAuth;
+    AuthUtil mAuthUtil;
     @Inject
     ActionCodeSettings mActionCodeSettings;
     @Inject
@@ -66,7 +59,7 @@ public class SignUpFragment extends BaseSignInFragment {
         removeBottomAppBar();
 
         mBinding = FragmentSignUpBinding.inflate(inflater, container, false);
-        mBinding.setSignUpFragment(this);
+        mBinding.setFragement(this);
         mBinding.setModel(mModel);
         mBinding.setLifecycleOwner(this);
 
@@ -84,76 +77,11 @@ public class SignUpFragment extends BaseSignInFragment {
     }
 
     public void emailSignUp() {
-        showIndicator();
-        if (!isAnonymously) createUser();
-        else linkWithEmail();
-    }
-
-    private void createUser() {
-        mAuth.createUserWithEmailAndPassword(mModel.getEmail(), mModel.getPassword())
-                .addOnCompleteListener(requireActivity(), getOnCompleteListener());
-    }
-
-    private void linkWithEmail() {
-        if (mAuth.getCurrentUser() != null) {
-            AuthCredential credential = EmailAuthProvider.getCredential(mModel.getEmail(), mModel.getPassword());
-            mAuth.getCurrentUser().linkWithCredential(credential)
-                    .addOnCompleteListener(requireActivity(), getOnCompleteListener());
-        }
-    }
-
-    @NotNull
-    private OnCompleteListener<AuthResult> getOnCompleteListener() {
-        return task -> {
-            if (task.isSuccessful()) {
-                userNameUpdate();
-                sendEmailVerification();
-            } else fail(task.getException());
-        };
-    }
-
-    private void fail(Exception e) {
-        Log.d(TAG, "SignUpFragment : fail: " + e);
-        if (e instanceof FirebaseAuthWeakPasswordException)
-            mBinding.et.passwordLayout.setError(getString(R.string.sign_up_password_is_less_than_6));
-        else if (e instanceof FirebaseAuthInvalidCredentialsException)
-            mBinding.et.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
-        else if (e instanceof FirebaseAuthUserCollisionException)
-            mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
-        else mToastUtil.showUnknownError();
-        hideIndicator();
-    }
-
-    private void userNameUpdate() {
-        if (mAuth.getCurrentUser() != null)
-            mAuth.getCurrentUser().updateProfile(getUserProfileChangeRequest())
-                    .addOnCompleteListener(requireActivity(), task -> {
-                        if (!task.isSuccessful()) {
-                            mToastUtil.showUsernameUpdateFail();
-                            Log.d(TAG, "SignUpFragment : userNameUpdate: " + task.getException());
-                        }
-                    });
-    }
-
-    @NotNull
-    private UserProfileChangeRequest getUserProfileChangeRequest() {
-        return new UserProfileChangeRequest.Builder()
-                .setDisplayName(mModel.getUserName())
-                .build();
-    }
-
-    private void sendEmailVerification() {
-        if (mAuth.getCurrentUser() != null)
-            mAuth.getCurrentUser().sendEmailVerification(mActionCodeSettings).
-                    addOnCompleteListener(requireActivity(), task -> {
-                        if (task.isSuccessful())
-                            CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
-                        else {
-                            mToastUtil.showSendVerificationMailFail();
-                            Log.d(TAG, "SignUpFragment : sendEmailVerification: " + task.getException());
-                        }
-                        hideIndicator();
-                    });
+        String email = mModel.getEmail();
+        String password = mModel.getPassword();
+        String nickname = mModel.getUserName();
+        if (!isAnonymously) mAuthUtil.emailSignUp(email, password, nickname, this);
+        else mAuthUtil.anonymouslyLinkWithEmail(email, password, nickname, this);
     }
 
     public void setEditTextLayoutError() {
@@ -167,5 +95,23 @@ public class SignUpFragment extends BaseSignInFragment {
             mBinding.confirmPasswordLayout.setError(getString(R.string.sign_in_password_is_empty));
         if (mModel.isPasswordEquals())
             mBinding.confirmPasswordLayout.setError(getString(R.string.sgin_in_password_not_equal));
+    }
+
+    @Override
+    public void emailSignUpSuccess() {
+        CommonUtil.navigate(mNavController, R.id.signUpFragment, SignUpFragmentDirections.toVerificationFragment());
+    }
+
+    @Override
+    public void emailSignUpFail(Exception e) {
+        if (e instanceof FirebaseAuthWeakPasswordException)
+            mBinding.et.passwordLayout.setError(getString(R.string.sign_up_password_is_less_than_6));
+        else if (e instanceof FirebaseAuthInvalidCredentialsException)
+            mBinding.et.emailLayout.setError(getString(R.string.sgin_up_email_is_badly_formatted));
+        else if (e instanceof FirebaseAuthUserCollisionException)
+            mBinding.et.emailLayout.setError(getString(R.string.sign_up_email_is_used));
+        else mToastUtil.showUnknownError();
+        hideIndicator();
+        Log.d(TAG, "SignUpFragment : fail: " + e);
     }
 }
