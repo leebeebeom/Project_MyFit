@@ -15,6 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.leebeebeom.closetnote.ui.view.CustomButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:id="@+id/btnGoogle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,22 +23,24 @@
             android:text="@string/sign_in_with_google"
             android:textColor="@color/black"
             app:backgroundTint="@color/white"
-            android:onClick="@{() -> fragment.googleSignIn()}"
+            android:onClick="@{() -> fragment.isConnect() ? fragment.googleSignIn() : void}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:rippleColor="@android:color/transparent"
+            app:strokeColor="@color/black"
             tools:ignore="RtlHardcoded" />
 
         <com.leebeebeom.closetnote.ui.view.CustomButton
             android:id="@+id/btnNaver"
             android:layout_width="0dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_naver_small"
             android:text="@string/sign_in_with_naver"
             android:textColor="@color/white"
             app:backgroundTint="#03C75A"
-            android:onClick="@{() -> fragment.naverSignIn()}"
+            android:onClick="@{() -> fragment.isConnect() ? fragment.naverSignIn() : void}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnGoogle"
@@ -51,11 +54,12 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_kakao_small"
             android:text="@string/sign_in_with_kakao"
-            android:onClick="@{() -> fragment.kakaoSignIn()}"
+            android:onClick="@{() -> fragment.isConnect() ? fragment.kakaoSignIn() : void}"
             android:textColor="@color/black"
             app:backgroundTint="#FEE500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:layout_constraintTop_toBottomOf="@id/btnNaver"
             app:rippleColor="@android:color/transparent"
             app:strokeColor="@android:color/transparent"
