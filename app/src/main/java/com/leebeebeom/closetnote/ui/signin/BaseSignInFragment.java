@@ -5,7 +5,6 @@ import androidx.navigation.NavController;
 
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.ActivityMainBinding;
-import com.leebeebeom.closetnote.util.NetWorkChecker;
 
 import javax.inject.Inject;
 
@@ -17,8 +16,6 @@ public class BaseSignInFragment extends Fragment {
     protected ActivityMainBinding mActivityBinding;
     @Inject
     protected NavController mNavController;
-    @Inject
-    NetWorkChecker mNetWorkChecker;
 
     protected void addBottomAppBar() {
         if (mActivityBinding.root.findViewById(R.id.bottomAppBar) == null) {

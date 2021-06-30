@@ -12,7 +12,7 @@ import androidx.navigation.NavController;
 import com.google.firebase.auth.FirebaseAuth;
 import com.leebeebeom.closetnote.databinding.FragmentVerificationBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.CommonUtil;
+import com.leebeebeom.closetnote.util.auth.AuthUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,19 +23,16 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class VerificationFragment extends BaseSignInFragment {
     @Inject
-    FirebaseAuth mAuth;
-    @Inject
     NavController mNavController;
+    @Inject
+    AuthUtil mAuthUtil;
     private FragmentVerificationBinding mBinding;
     private String mEmail = "";
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail() != null) {
-            mEmail = mAuth.getCurrentUser().getEmail();
-            mAuth.signOut();
-        }
+        mEmail = mAuthUtil.getEmail();
     }
 
     @Nullable
@@ -57,8 +54,6 @@ public class VerificationFragment extends BaseSignInFragment {
     }
 
     public void openMail() {
-        showIndicator();
-        openBrowser(CommonUtil.getDomain(mEmail));
-        hideIndicator();
+        mAuthUtil.openEmail(mEmail);
     }
 }

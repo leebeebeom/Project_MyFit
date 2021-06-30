@@ -24,10 +24,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentSignInBinding;
 import com.leebeebeom.closetnote.di.Qualifiers;
-import com.leebeebeom.closetnote.util.AuthUtil;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
+import com.leebeebeom.closetnote.util.auth.AuthUtil;
+import com.leebeebeom.closetnote.util.auth.SignIn;
 
 import javax.inject.Inject;
 
@@ -36,7 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class SignInFragment extends BaseSignInFragment implements AuthUtil.EmailSignInListener {
+public class SignInFragment extends BaseSignInFragment implements SignIn.EmailSignInListener {
     @Inject
     NavController mNavController;
     @Qualifiers.GoogleSignInIntent
@@ -98,7 +99,7 @@ public class SignInFragment extends BaseSignInFragment implements AuthUtil.Email
     }
 
     public void emailSignIn() {
-        mAuthUtil.emailSignIn(mModel.getEmail(), mModel.getPassword(), this);
+        mAuthUtil.emailSignIn(mModel.createUserInfo(), this);
     }
 
     public void googleSignIn() {

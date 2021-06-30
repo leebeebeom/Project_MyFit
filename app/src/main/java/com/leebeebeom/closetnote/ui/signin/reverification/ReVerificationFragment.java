@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.leebeebeom.closetnote.databinding.FragmentReVerificationBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.AuthUtil;
+import com.leebeebeom.closetnote.util.auth.AuthUtil;
 import com.leebeebeom.closetnote.util.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;

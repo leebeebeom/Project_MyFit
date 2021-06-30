@@ -15,10 +15,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.databinding.FragmentResetPasswordBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.AuthUtil;
+import com.leebeebeom.closetnote.util.auth.AuthUtil;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
+import com.leebeebeom.closetnote.util.auth.Verification;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class ResetPasswordFragment extends BaseSignInFragment implements AuthUtil.PasswordResetEmailListener {
+public class ResetPasswordFragment extends BaseSignInFragment implements Verification.PasswordResetEmailListener {
     @Inject
     AuthUtil mAuthUtil;
     @Inject

@@ -3,6 +3,7 @@ package com.leebeebeom.closetnote.ui.signin;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.leebeebeom.closetnote.data.model.model.UserInfo;
 import com.leebeebeom.closetnote.util.LiveDataUtil;
 
 import lombok.Getter;
@@ -26,11 +27,18 @@ public class SignInViewModel extends ViewModel {
         return LiveDataUtil.isStringValueEmpty(mPasswordLive);
     }
 
-    String getEmail() {
+    private String getEmail() {
         return LiveDataUtil.getStringValue(mEmailLive);
     }
 
-    String getPassword() {
+    private String getPassword() {
         return LiveDataUtil.getStringValue(mPasswordLive);
+    }
+
+    UserInfo createUserInfo() {
+        return UserInfo.builder()
+                .email(getEmail())
+                .password(getPassword())
+                .build();
     }
 }

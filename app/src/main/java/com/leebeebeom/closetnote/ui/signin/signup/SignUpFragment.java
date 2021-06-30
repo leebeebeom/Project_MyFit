@@ -15,12 +15,15 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.leebeebeom.closetnote.R;
+import com.leebeebeom.closetnote.data.model.model.UserInfo;
 import com.leebeebeom.closetnote.databinding.FragmentSignUpBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.AuthUtil;
 import com.leebeebeom.closetnote.util.CommonUtil;
 import com.leebeebeom.closetnote.util.EditTextErrorKeyListener;
 import com.leebeebeom.closetnote.util.ToastUtil;
+import com.leebeebeom.closetnote.util.auth.AuthUtil;
+import com.leebeebeom.closetnote.util.auth.SignUp;
+import com.leebeebeom.closetnote.util.auth.Verification;
 
 import javax.inject.Inject;
 
@@ -29,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.leebeebeom.closetnote.ui.MainActivity.TAG;
 
 @AndroidEntryPoint
-public class SignUpFragment extends BaseSignInFragment implements AuthUtil.EmailSignUpListener {
+public class SignUpFragment extends BaseSignInFragment implements SignUp.EmailSignUpListener {
     @Inject
     AuthUtil mAuthUtil;
     @Inject
@@ -77,11 +80,9 @@ public class SignUpFragment extends BaseSignInFragment implements AuthUtil.Email
     }
 
     public void emailSignUp() {
-        String email = mModel.getEmail();
-        String password = mModel.getPassword();
-        String nickname = mModel.getUserName();
-        if (!isAnonymously) mAuthUtil.emailSignUp(email, password, nickname, this);
-        else mAuthUtil.anonymouslyLinkWithEmail(email, password, nickname, this);
+        UserInfo userInfo = mModel.getUserInfo();
+        if (!isAnonymously) mAuthUtil.emailSignUp(userInfo, this);
+        else mAuthUtil.anonymouslyLinkWithEmail(userInfo, this);
     }
 
     public void setEditTextLayoutError() {

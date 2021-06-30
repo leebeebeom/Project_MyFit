@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.leebeebeom.closetnote.databinding.FragmentSendResetPasswordEmailBinding;
 import com.leebeebeom.closetnote.ui.signin.BaseSignInFragment;
-import com.leebeebeom.closetnote.util.AuthUtil;
+import com.leebeebeom.closetnote.util.auth.AuthUtil;
 
 import org.jetbrains.annotations.NotNull;
 
