@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
-        <variable
-            name="autoCompleteAdapter"
-            type="com.leebeebeom.closetnote.util.adapter.AutoCompleteAdapter" />
     </data>
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/layout"
         app:liftOnScroll="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="@dimen/_44sdp"
         android:background="?colorPrimary">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -23,18 +17,13 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:titleTextAppearance="@style/myActionBarTitleStyle">
 
-            <com.leebeebeom.closetnote.ui.view.AppNameTextView
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/myAppNameTextView"
                 android:id="@+id/tvCustomTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="@dimen/_32sdp" />
-
-            <include
-                android:id="@+id/searchBar"
-                layout="@layout/activity_main_search_bar"
-                app:autoCompleteAdapter="@{autoCompleteAdapter}" />
-
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

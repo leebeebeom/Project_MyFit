@@ -24,8 +24,7 @@
 
         <include
             android:id="@+id/actionBar"
-            layout="@layout/activity_main_action_bar"
-            app:autoCompleteAdapter="@{autoCompleteAdapter}" />
+            layout="@layout/activity_main_action_bar" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/host_fragment_main"
@@ -49,13 +48,12 @@
             app:fabCradleMargin="@dimen/_6sdp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
+                style="@style/myBottomNavActiveColor"
                 android:id="@+id/bottomNav"
-                app:backgroundTintList="@{null}"
+                app:itemBackground="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_36sdp"
-                android:layout_gravity="bottom"
                 android:background="@android:color/transparent"
-                android:theme="@style/myBottomNavActiveColor"
                 app:elevation="0dp"
                 app:itemIconSize="@dimen/_22sdp"
                 app:itemRippleColor="@android:color/transparent"
