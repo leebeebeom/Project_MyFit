@@ -52,6 +52,9 @@
         <item name="android:includeFontPadding">false</item>
         <item name="myCardViewBackground">@color/white</item>
         <item name="myIndicatorColor">#D3D3D3</item>
+        <item name="mySignButtonHeight">@dimen/_48sdp</item>
+        <item name="myNormalButtonHeight">@dimen/_36sdp</item>
+        <item name="mySettingCardViewHeight">@dimen/_40sdp</item>
     </style>
     <!--    actionMode close button gone-->
     <style name="myActionBarCloseButton">
@@ -67,7 +70,7 @@
         <item name="cornerSize">@dimen/_6sdp</item>
     </style>
     <!--    bottom navigation active color-->
-    <style name="myBottomNavActiveColor" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="myBottomNavActiveColor" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="colorPrimary">@color/black</item>
     </style>
     <!--    alert dialog Style-->
@@ -119,10 +122,56 @@
         <item name="placeholderTextColor">@color/mtrl_indicator_text_color</item>
     </style>
 
+    <style name="myAppNameTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:text">@string/app_name</item>
+        <item name="fontFamily">@font/ballet_harmony</item>
+    </style>
+
+    <style name="myOutlineButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/sc_dream5</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="strokeWidth">1px</item>
+        <item name="rippleColor">@android:color/transparent</item>
+    </style>
+
+    <style name="myCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?myCardViewBackground</item>
+        <item name="cardCornerRadius">@dimen/_4sdp</item>
+        <item name="cardElevation">@dimen/_2sdp</item>
+    </style>
+
+    <style name="myCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="alpha">0.8</item>
+        <item name="android:clickable">false</item>
+        <item name="enabled">false</item>
+        <item name="android:enabled">false</item>
+        <item name="buttonTint">?myColorControl</item>
+    </style>
+
+    <style name="myFragmentMainTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="fontFamily">@font/noto_black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginStart">@dimen/_12sdp</item>
+        <item name="android:layout_marginTop">@dimen/_8sdp</item>
+    </style>
+
+    <style name="myFragmentSubTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="fontFamily">@font/noto_bold</item>
+        <item name="android:layout_marginStart">@dimen/_12sdp</item>
+        <item name="android:layout_marginTop">@dimen/_8sdp</item>
+    </style>
+
     <attr name="rvBackground" format="color" />
     <attr name="goBtnBackground" format="color" />
     <attr name="myColorControl" format="color" />
     <attr name="treeBackgroundColor" format="color" />
     <attr name="myCardViewBackground" format="color" />
     <attr name="myIndicatorColor" format="color" />
+    <attr name="mySignButtonHeight" format="dimension" />
+    <attr name="myNormalButtonHeight" format="dimension" />
+    <attr name="mySettingCardViewHeight" format="dimension" />
 </resources>
