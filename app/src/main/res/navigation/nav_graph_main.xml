@@ -72,4 +72,6 @@
     <include app:graph="@navigation/nav_graph_edit_category_name" />
     <include app:graph="@navigation/nav_graph_add_category" />
     <include app:graph="@navigation/nav_graph_list" />
+    <include app:graph="@navigation/nav_graph_sign" />
+    <include app:graph="@navigation/nav_graph_setting" />
 </navigation>
