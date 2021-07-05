@@ -4,20 +4,20 @@
     <item
         android:id="@+id/mainFragment"
         android:icon="@drawable/icon_home"
-        android:title="@string/main_bottom_nav_menu_main" />
+        android:title="@string/menu_main" />
     <item
         android:id="@+id/dailyLookFragment"
         android:icon="@drawable/icon_all_list"
-        android:title="@string/main_bottom_nav_menu_daily_look" />
+        android:title="@string/menu_daily_look" />
     <item
         android:title=""
         android:enabled="false"/>
     <item
         android:id="@+id/wishListFragment"
         android:icon="@drawable/icon_favorite"
-        android:title="@string/main_bottom_nav_menu_wish_list" />
+        android:title="@string/menu_wish_list" />
     <item
-        android:id="@+id/settingFragment"
+        android:id="@+id/nav_graph_setting"
         android:icon="@drawable/icon_setting"
-        android:title="@string/main_bottom_nav_menu_setting" />
+        android:title="@string/menu_setting" />
 </menu>
