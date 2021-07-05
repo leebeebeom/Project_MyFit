@@ -52,15 +52,4 @@
         <item name="myNormalButtonHeight">@dimen/_36sdp</item>
         <item name="mySettingCardViewHeight">@dimen/_40sdp</item>
     </style>
-    <!--    bottom navigation active color-->
-    <style name="myBottomNavActiveColor" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="colorPrimary">@color/white</item>
-    </style>
-    <!--    alert dialog style-->
-    <style name="myAlertDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/white</item>
-        <!--        single choice item text color-->
-        <item name="android:textColorAlertDialogListItem">@color/white</item>
-        <item name="android:textSize">@dimen/_12sdp</item>
-    </style>
 </resources>
