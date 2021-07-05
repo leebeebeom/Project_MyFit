@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all_caps_category">CATEGORY</string>
+    <string name="all__caps_settings">SETTINGS</string>
+
+    <string name="all_caps_top">TOP</string>
+    <string name="all_caps_bottom">BOTTOM</string>
+    <string name="all_caps_outer">OUTER</string>
+    <string name="all_caps_etc">ETC</string>
+</resources>
