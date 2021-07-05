@@ -53,7 +53,7 @@
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.leebeebeom.closetnote.ui.setting.account.AccountFragment"
-        android:label="@string/settings_account_edit_profile"
+        android:label="@string/setting_account_edit_profile"
         tools:layout="@layout/fragment_account">
         <argument
             android:name="email"
