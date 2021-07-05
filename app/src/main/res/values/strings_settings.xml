@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_account">Account</string>
+    <string name="settings_global">Global</string>
+    <string name="settings_theme">테마 설정</string>
+    <string name="settings_network">네트워크 설정</string>
+    <string name="settings_etc">etc</string>
+    <string name="settings_contact">문의하기</string>
+    <string name="settings_sign_out">로그아웃</string>
+    <string name="setting_switch_to_member">회원으로 전환하기</string>
+    <string name="setting_anonymously">비회원</string>
+</resources>
