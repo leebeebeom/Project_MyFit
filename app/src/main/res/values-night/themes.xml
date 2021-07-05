@@ -48,9 +48,12 @@
         <item name="android:includeFontPadding">false</item>
         <item name="myCardViewBackground">#FF080808</item>
         <item name="myIndicatorColor">#696969</item>
+        <item name="mySignButtonHeight">@dimen/_48sdp</item>
+        <item name="myNormalButtonHeight">@dimen/_36sdp</item>
+        <item name="mySettingCardViewHeight">@dimen/_40sdp</item>
     </style>
     <!--    bottom navigation active color-->
-    <style name="myBottomNavActiveColor" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="myBottomNavActiveColor" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="colorPrimary">@color/white</item>
     </style>
     <!--    alert dialog style-->
