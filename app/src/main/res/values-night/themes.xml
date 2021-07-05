@@ -51,6 +51,5 @@
         <item name="mySignButtonHeight">@dimen/_48sdp</item>
         <item name="myNormalButtonHeight">@dimen/_36sdp</item>
         <item name="mySettingCardViewHeight">@dimen/_40sdp</item>
-        <item name="backgroundPrimary">#121212</item>
     </style>
 </resources>
