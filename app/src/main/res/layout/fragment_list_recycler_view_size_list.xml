@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
+    </data>
+
+    <com.leebeebeom.closetnote.ui.view.recyclerview.SizeRecyclerViewList
+        android:id="@+id/rv"
+        style="@style/myRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/_8sdp"
+        tools:listitem="@layout/item_vh_size_list" />
+</layout>
