@@ -5,21 +5,20 @@
     android:id="@+id/nav_graph_size"
     app:startDestination="@id/sizeFragment">
 
-    <argument
-        android:name="parentId"
-        app:argType="long" />
-    <argument
-        android:name="sizeId"
-        app:argType="long" />
-    <argument
-        android:name="parentIndex"
-        app:argType="integer" />
-
     <fragment
         android:id="@+id/sizeFragment"
         android:name="com.leebeebeom.closetnote.ui.main.size.SizeFragment"
         android:label=""
         tools:layout="@layout/fragment_size">
+        <argument
+            android:name="parentId"
+            app:argType="long" />
+        <argument
+            android:name="sizeId"
+            app:argType="long" />
+        <argument
+            android:name="parentIndex"
+            app:argType="integer" />
         <action
             android:id="@+id/toGoBack"
             app:destination="@id/goBackDialog" />
