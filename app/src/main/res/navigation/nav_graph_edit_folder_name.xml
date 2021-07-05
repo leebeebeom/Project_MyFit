@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_edit_folder_name"
     app:startDestination="@id/editFolderNameDialog">
-    <argument
-        android:name="id"
-        app:argType="long" />
-    <argument
-        android:name="name"
-        app:argType="string" />
-    <argument
-        android:name="parentId"
-        app:argType="long" />
-
     <dialog
         android:id="@+id/editFolderNameDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.folder.EditFolderNameDialog"
         android:label="EditFolderNameDialog">
+        <argument
+            android:name="id"
+            app:argType="long" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="parentId"
+            app:argType="long" />
+
         <action
             android:id="@+id/toEditSameFolderName"
             app:destination="@id/editSameFolderNameDialog" />
