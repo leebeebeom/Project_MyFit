@@ -4,29 +4,28 @@
     android:id="@+id/nav_graph_tree_view"
     app:startDestination="@id/treeViewDialog">
 
-    <argument
-        android:name="parentIndex"
-        app:argType="integer" />
-    <argument
-        android:name="selectedFolderIds"
-        app:argType="long[]" />
-    <argument
-        android:name="selectedSizeIds"
-        app:argType="long[]" />
-    <argument
-        android:name="categoryId"
-        app:argType="long" />
-    <argument
-        android:name="currentPositionId"
-        app:argType="long" />
-    <argument
-        android:name="folderPathIds"
-        app:argType="long[]" />
-
     <dialog
         android:id="@+id/treeViewDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.tree.TreeViewDialog"
         android:label="TreeViewDialog">
+        <argument
+            android:name="parentIndex"
+            app:argType="integer" />
+        <argument
+            android:name="selectedFolderIds"
+            app:argType="long[]" />
+        <argument
+            android:name="selectedSizeIds"
+            app:argType="long[]" />
+        <argument
+            android:name="categoryId"
+            app:argType="long" />
+        <argument
+            android:name="currentPositionId"
+            app:argType="long" />
+        <argument
+            android:name="folderPathIds"
+            app:argType="long[]" />
         <action
             android:id="@+id/toMoveFolderAndSizeDialog"
             app:destination="@id/moveFolderAndSizeDialog" />
