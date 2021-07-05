@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_setting"
+    app:startDestination="@id/settingFragment">
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.leebeebeom.closetnote.ui.setting.SettingFragment"
+        android:label=""
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/toAnonymouslySignUpFragment"
+            app:destination="@id/anonymouslySignUpFragment"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/fragment_slide_out" />
+        <action
+            android:id="@+id/toAnonymouslySignOutDialog"
+            app:destination="@id/anonymouslySignOutDialog" />
+        <action
+            android:id="@+id/toAccountFragment"
+            app:destination="@id/accountFragment"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/fragment_slide_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/anonymouslySignUpFragment"
+        android:name="com.leebeebeom.closetnote.ui.setting.anonymoulysingup.AnonymouslySignUpFragment"
+        android:label=""
+        tools:layout="@layout/fragment_anonymously_sign_up">
+        <action
+            android:id="@+id/toSignUpFragment"
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/fragment_slide_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/fragment_slide_out" />
+    </fragment>
+    <dialog
+        android:id="@+id/anonymouslySignOutDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.AnonymouslySignOutDialog"
+        android:label="AnonymouslySignOut" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.leebeebeom.closetnote.ui.signin.signup.SignUpFragment"
+        android:label=""
+        tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.leebeebeom.closetnote.ui.setting.account.AccountFragment"
+        android:label="@string/settings_account_edit_profile"
+        tools:layout="@layout/fragment_account">
+        <argument
+            android:name="email"
+            app:argType="string" />
+        <argument
+            android:name="nickname"
+            app:argType="string" />
+        <argument
+            android:name="profileUrl"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/toEditNickNameDialog"
+            app:destination="@id/editNickNameDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/editNickNameDialog"
+        android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.EditNickNameDialog">
+        <argument
+            android:name="nickname"
+            app:argType="string" />
+    </dialog>
+</navigation>
