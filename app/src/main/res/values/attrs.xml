@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="rvBackground" format="color" />
+    <attr name="goBtnBackground" format="color" />
+    <attr name="myColorControl" format="color" />
+    <attr name="treeBackgroundColor" format="color" />
+    <attr name="myCardViewBackground" format="color" />
+    <attr name="myIndicatorColor" format="color" />
+    <attr name="mySignButtonHeight" format="dimension" />
+    <attr name="myNormalButtonHeight" format="dimension" />
+    <attr name="mySettingCardViewHeight" format="dimension" />
+</resources>
