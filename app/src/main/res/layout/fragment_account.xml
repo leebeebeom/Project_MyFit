@@ -8,6 +8,10 @@
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.setting.account.AccountViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.setting.account.AccountFragment" />
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
@@ -93,6 +97,7 @@
                     style="@style/myAccountFragmentSettings"
                     layout="@layout/fragment_account_include"
                     app:action="@{@string/setting_account_edit_name}"
+                    app:clickListener="@{fragment.editNickname()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iconPerson"
                     app:layout_constraintTop_toBottomOf="@id/email" />
@@ -111,6 +116,7 @@
                     android:id="@+id/changePassword"
                     style="@style/myAccountFragmentSettings"
                     layout="@layout/fragment_account_include"
+                    app:clickListener="@{fragment.editPassword()}"
                     app:action="@{@string/setting_account_change_password}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iconKey"
