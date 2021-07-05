@@ -9,10 +9,6 @@
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
-
-        <variable
-            name="listFragment"
-            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -30,16 +26,17 @@
             android:layout_marginEnd="@dimen/_4sdp"
             android:alpha="0.8"
             android:onClick="@{() -> model.changeFolderToggleState()}"
-            folderToggle="@{model.folderTogglePreferenceLive}"
+            folderToggleIcon="@{model.folderTogglePreferenceLive}"
             tools:src="@drawable/icon_triangle_down" />
 
         <com.leebeebeom.closetnote.ui.view.recyclerview.FolderRecyclerViewGrid
-            style="@style/myRecyclerView"
+            style="@style/myFolderRecyclerViewGrid"
             android:id="@+id/rv"
             android:visibility="@{model.folderTogglePreferenceLive ? View.VISIBLE : View.GONE}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/_8sdp"
+            tools:itemCount="4"
             tools:listitem="@layout/item_vh_folder_grid" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
