@@ -16,28 +16,23 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
+        style="@style/myOutlinedEditTextLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_4sdp"
         android:layout_weight="1"
         android:hint="@{hint}"
-        android:theme="@style/myOutlineEditText"
-        app:hintTextAppearance="@style/myTextSize8sdp"
-        app:shapeAppearance="@style/myEditTextCorner"
         app:suffixText="cm"
-        app:suffixTextAppearance="@style/myTextSize10sdp"
         tools:ignore="ObsoleteLayoutParam">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.leebeebeom.closetnote.ui.view.CustomEditText
             android:id="@+id/et"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_34sdp"
+            android:layout_height="@dimen/_40sdp"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:text="@={text}"
-            tools:text="@string/include_length"
-            android:textSize="@dimen/_10sdp" />
+            tools:text="@string/size_length" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </layout>

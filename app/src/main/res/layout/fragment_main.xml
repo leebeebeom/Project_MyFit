@@ -25,14 +25,10 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/myFragmentMainTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@string/all_category_cap"
-                    android:textSize="@dimen/_16sdp"
-                    android:textStyle="bold"
-                    app:fontFamily="@font/noto_black" />
+                    android:text="@string/all_caps_category" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/toggleGroup"
@@ -45,22 +41,22 @@
                     <include
                         android:id="@+id/btnTop"
                         layout="@layout/fragment_main_button"
-                        app:text="@{@string/all_top_cap}" />
+                        app:text="@{@string/all_caps_top}" />
 
                     <include
                         android:id="@+id/btnBottom"
                         layout="@layout/fragment_main_button"
-                        app:text="@{@string/all_bottom_cap}" />
+                        app:text="@{@string/all_caps_bottom}" />
 
                     <include
                         android:id="@+id/btnOuter"
                         layout="@layout/fragment_main_button"
-                        app:text="@{@string/all_outer_cap}" />
+                        app:text="@{@string/all_caps_outer}" />
 
                     <include
                         android:id="@+id/btnEtc"
                         layout="@layout/fragment_main_button"
-                        app:text="@{@string/all_etc_cap}" />
+                        app:text="@{@string/all_caps_etc}" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <androidx.viewpager2.widget.ViewPager2

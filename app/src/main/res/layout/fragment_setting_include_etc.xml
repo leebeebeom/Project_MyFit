@@ -11,19 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.leebeebeom.closetnote.ui.view.SettingFragmentSubTextView
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/myFragmentSubTextView"
             android:id="@+id/tvEtc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:text="@string/settings_etc"
+            android:text="@string/setting_etc"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.leebeebeom.closetnote.ui.view.CustomCardView
+        <com.google.android.material.card.MaterialCardView
+            style="@style/myCardView"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="?mySettingCardViewHeight"
             android:layout_marginHorizontal="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_4sdp"
             android:layout_marginBottom="@dimen/_4sdp"
@@ -40,13 +40,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
-                    android:text="@string/settings_contact"
+                    android:text="@string/setting_contact"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.leebeebeom.closetnote.ui.view.ArrowIcon
+                <com.leebeebeom.closetnote.ui.view.icon.ArrowIcon
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_8sdp"
@@ -55,6 +55,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/icon_arrow_forward" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.leebeebeom.closetnote.ui.view.CustomCardView>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

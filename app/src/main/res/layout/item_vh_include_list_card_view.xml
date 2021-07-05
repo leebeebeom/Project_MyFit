@@ -28,7 +28,8 @@
             type="boolean" />
     </data>
 
-    <com.leebeebeom.closetnote.ui.view.CustomCardView
+    <com.google.android.material.card.MaterialCardView
+        style="@style/myCardView"
         android:id="@+id/cardView"
         listActionMode="@{baseAdapter}"
         holder="@{baseVH}"
@@ -51,13 +52,17 @@
                 app:layout_constraintEnd_toStartOf="@id/tvName"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.leebeebeom.closetnote.ui.view.IconDot
+                <com.leebeebeom.closetnote.ui.view.icon.DotIcon
                     android:id="@+id/dotIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_4sdp"
                     android:visibility="gone"
+                    android:alpha="0.8"
+                    android:scaleX="0.3"
+                    android:scaleY="0.3"
+                    tools:src="@drawable/icon_dot"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -137,5 +142,5 @@
                 tools:visibility="visible"
                 tools:src="@drawable/icon_drag_handle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.leebeebeom.closetnote.ui.view.CustomCardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

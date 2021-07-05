@@ -70,7 +70,8 @@
                 tools:src="@drawable/icon_drag_handle2"
                 tools:visibility="visible" />
 
-            <com.leebeebeom.closetnote.ui.view.CustomCheckBox
+            <com.google.android.material.checkbox.MaterialCheckBox
+                style="@style/myCheckBox"
                 android:id="@+id/cb"
                 gridActionMode="@{baseAdapter}"
                 android:layout_width="@dimen/_20sdp"

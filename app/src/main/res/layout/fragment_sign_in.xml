@@ -23,7 +23,8 @@
             android:layout_gravity="center"
             android:paddingHorizontal="@dimen/_28sdp">
 
-            <com.leebeebeom.closetnote.ui.view.AppNameTextView
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/myAppNameTextView"
                 android:id="@+id/tvAppName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,20 +54,20 @@
                 android:layout_marginTop="@dimen/_2sdp"
                 android:alpha="0.7"
                 android:onClick="@{() -> fragment.navigateResetPasswordFragment()}"
-                android:text="@string/sign_up_forgot_password"
+                android:text="@string/sign_forgot_password"
                 android:textSize="@dimen/_9sdp"
                 app:layout_constraintBottom_toTopOf="@id/btnSignIn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et" />
 
-            <com.leebeebeom.closetnote.ui.view.CustomButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSignIn"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/myOutlineButton"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_44sdp"
+                android:layout_height="?mySignButtonHeight"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:onClick="@{() -> model.textsNotEmpty &amp;&amp; fragment.isConnect()  ? fragment.emailSignIn() : fragment.setEmptyError()}"
-                android:text="@string/sign_in"
+                android:onClick="@{() -> model.textsNotEmpty ? fragment.emailSignIn() : fragment.setEmptyError()}"
+                android:text="@string/sign_login"
                 android:textColor="?colorPrimary"
                 app:backgroundTint="?myColorControl"
                 app:layout_constraintBottom_toTopOf="@id/or1"
@@ -112,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.7"
                 android:onClick="@{() -> fragment.navigateSignUpFragment()}"
-                android:text="@string/sign_in_sign_up_with_other_email"
+                android:text="@string/sign_up_with_other_email"
                 android:textSize="@dimen/_9sdp"
                 app:layout_constraintEnd_toStartOf="@id/tvSlash"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -124,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.5"
-                android:text="@string/sign_in_slash"
+                android:text="@string/sign_slash"
                 android:textSize="@dimen/_9sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -135,8 +136,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.7"
-                android:onClick="@{() -> fragment.isConnect() ? fragment.signInAnonymously() : void}"
-                android:text="@string/sign_in_anonymously"
+                android:onClick="@{() -> fragment.signInAnonymously()}"
+                android:text="@string/sign_in_with_anonymously"
                 android:textSize="@dimen/_9sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tvSlash"

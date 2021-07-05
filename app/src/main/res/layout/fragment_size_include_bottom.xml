@@ -20,7 +20,7 @@
             <include
                 android:id="@+id/length"
                 layout="@layout/fragment_size_edit_text"
-                app:hint="@{@string/include_length}"
+                app:hint="@{@string/size_length}"
                 app:text="@{model.sizeLive.firstInfo}" />
 
             <View
@@ -38,7 +38,7 @@
             <include
                 android:id="@+id/waist"
                 layout="@layout/fragment_size_edit_text"
-                app:hint="@{@string/include_waist}"
+                app:hint="@{@string/size_waist}"
                 app:text="@{model.sizeLive.secondInfo}" />
 
             <include
@@ -47,7 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
-                app:hint="@{@string/include_thigh}"
+                app:hint="@{@string/size_thigh}"
                 android:layout_height="wrap_content"
                 app:text="@{model.sizeLive.thirdInfo}" />
 
@@ -60,7 +60,7 @@
             <include
                 android:id="@+id/rise"
                 layout="@layout/fragment_size_edit_text"
-                app:hint="@{@string/include_rise}"
+                app:hint="@{@string/size_rise}"
                 app:text="@{model.sizeLive.fourthInfo}" />
 
             <include
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
-                app:hint="@{@string/include_hem}"
+                app:hint="@{@string/size_hem}"
                 app:text="@{model.sizeLive.fifthInfo}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

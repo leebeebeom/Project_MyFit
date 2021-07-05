@@ -25,7 +25,8 @@
         app:onLongClickListener="@{() -> sizeGridVH.itemViewLongClick()}"
         android:layout_height="wrap_content">
 
-        <com.leebeebeom.closetnote.ui.view.CustomCardView
+        <com.google.android.material.card.MaterialCardView
+            style="@style/myCardView"
             android:id="@+id/cardView"
             android:layout_width="@dimen/_140sdp"
             android:layout_height="wrap_content"
@@ -95,7 +96,8 @@
                     app:adapter="@{baseAdapter}"
                     app:sizeVH="@{sizeGridVH}" />
 
-                <com.leebeebeom.closetnote.ui.view.CustomCheckBox
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    style="@style/myCheckBox"
                     android:id="@+id/cb"
                     gridActionMode="@{baseAdapter}"
                     android:layout_width="@dimen/_20sdp"
@@ -110,6 +112,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="visible" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.leebeebeom.closetnote.ui.view.CustomCardView>
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>

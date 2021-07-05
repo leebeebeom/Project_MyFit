@@ -29,7 +29,8 @@
             app:dragging="@{dragging}"
             layout="@layout/item_vh_include_check_box" />
 
-        <com.leebeebeom.closetnote.ui.view.CustomCardView
+        <com.google.android.material.card.MaterialCardView
+            style="@style/myCardView"
             listActionMode="@{baseAdapter}"
             holder="@{sizeListVH}"
             android:id="@+id/cardView"
@@ -101,6 +102,6 @@
                     tools:visibility="visible"
                     tools:src="@drawable/icon_drag_handle" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.leebeebeom.closetnote.ui.view.CustomCardView>
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </layout>

@@ -37,7 +37,7 @@
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
-                    android:text="@string/all_add_category"
+                    android:text="@string/dialog_add_category"
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -48,7 +48,7 @@
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
-                    android:text="@string/all_create_folder"
+                    android:text="@string/dialog_create_folder"
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -59,7 +59,7 @@
                     android:padding="@dimen/_8sdp"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_28sdp"
-                    android:text="@string/all_sort_order"
+                    android:text="@string/dialog_sort_order"
                     android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textview.MaterialTextView

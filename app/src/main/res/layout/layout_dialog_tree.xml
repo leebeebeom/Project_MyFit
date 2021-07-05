@@ -40,8 +40,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
-                    android:text="@string/tree_category"
+                    android:text='@{@string/all_caps_category + " : "}'
                     android:textSize="@dimen/_12sdp"
+                    tools:text="CATEGORY : "
                     app:fontFamily="@font/noto_bold" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -73,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/_4sdp"
-                    android:text="@string/all_add_category"
+                    android:text="@string/dialog_add_category"
                     android:textSize="@dimen/_10sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView

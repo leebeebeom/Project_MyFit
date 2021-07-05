@@ -106,28 +106,24 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutBrand"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    style="@style/myAutoCompleteTextViewLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:hint="@string/size_brand"
-                    app:endIconMode="none"
-                    android:theme="@style/myOutlineEditText"
-                    app:errorTextAppearance="@style/myTextSize8sdp"
-                    app:hintTextAppearance="@style/myTextSize8sdp"
-                    app:shapeAppearance="@style/myEditTextCorner">
+                    app:endIconMode="none">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/etBrand"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_34sdp"
+                        android:layout_height="@dimen/_40sdp"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         setItems="@{model.autoCompleteLive}"
                         android:text="@={model.sizeLive.brand}"
                         android:completionThreshold="0"
                         app:adapter="@{fragment.autoCompleteAdapter}"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_11sdp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -136,45 +132,36 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutName"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        style="@style/myOutlinedEditTextLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/_4sdp"
                         android:layout_weight="3"
-                        android:hint="@string/size_name"
-                        android:theme="@style/myOutlineEditText"
-                        app:errorTextAppearance="@style/myTextSize8sdp"
-                        app:hintTextAppearance="@style/myTextSize8sdp"
-                        app:shapeAppearance="@style/myEditTextCorner">
+                        android:hint="@string/size_name">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.leebeebeom.closetnote.ui.view.CustomEditText
                             android:id="@+id/etName"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_34sdp"
+                            android:layout_height="@dimen/_40sdp"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="@={model.sizeLive.name}"
-                            android:textSize="@dimen/_10sdp" />
+                            android:text="@={model.sizeLive.name}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        style="@style/myOutlinedEditTextLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="@string/size_size"
-                        android:theme="@style/myOutlineEditText"
-                        app:hintTextAppearance="@style/myTextSize8sdp"
-                        app:shapeAppearance="@style/myEditTextCorner">
+                        android:hint="@string/size_size">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.leebeebeom.closetnote.ui.view.CustomEditText
                             android:id="@+id/etSize"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_34sdp"
+                            android:layout_height="@dimen/_40sdp"
                             android:imeOptions="actionNext"
                             android:inputType="text"
-                            android:text="@={model.sizeLive.size}"
-                            android:textSize="@dimen/_10sdp" />
+                            android:text="@={model.sizeLive.size}" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -198,26 +185,20 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        style="@style/myOutlinedEditTextLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="@string/size_https"
-                        android:theme="@style/myOutlineEditText"
-                        app:hintTextAppearance="@style/myTextSize8sdp"
-                        app:shapeAppearance="@style/myEditTextCorner">
+                        android:hint="@string/size_https">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.leebeebeom.closetnote.ui.view.CustomEditText
                             android:id="@+id/etLink"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_34sdp"
-                            android:autoLink="web"
+                            android:layout_height="@dimen/_40sdp"
                             android:imeOptions="actionNext"
                             android:inputType="textUri"
-                            android:linksClickable="true"
                             android:text="@={model.sizeLive.link}"
-                            android:textColorLink="?colorControlNormal"
-                            android:textSize="@dimen/_10sdp" />
+                            android:textColorLink="?colorControlNormal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -235,13 +216,10 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    style="@style/myOutlinedEditTextLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/size_memo"
-                    android:theme="@style/myOutlineEditText"
-                    app:hintTextAppearance="@style/myTextSize8sdp"
-                    app:shapeAppearance="@style/myEditTextCorner">
+                    android:hint="@string/size_memo">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etMemo"
@@ -249,8 +227,7 @@
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
                         android:inputType="textMultiLine"
-                        android:text="@={model.sizeLive.memo}"
-                        android:textSize="@dimen/_10sdp" />
+                        android:text="@={model.sizeLive.memo}" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>

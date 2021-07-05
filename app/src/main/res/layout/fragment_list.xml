@@ -14,40 +14,49 @@
             type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.leebeebeom.closetnote.ui.view.LockableScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:colorBackground"
+        android:layout_height="match_parent"
         tools:context=".ui.main.list.ListFragment">
 
-        <com.leebeebeom.closetnote.ui.view.LockableScrollView
-            android:id="@+id/sv"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="?android:colorBackground">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <include
+                android:id="@+id/textNavigation"
+                layout="@layout/fragment_list_text_navigation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:listFragment="@{listFragment}"
+                app:model="@{model}" />
 
-                <include
-                    android:id="@+id/textNavigation"
-                    layout="@layout/fragment_list_text_navigation"
-                    app:listFragment="@{listFragment}"
-                    app:model="@{model}" />
+            <include
+                android:id="@+id/rvFolder"
+                layout="@layout/fragment_list_recycler_view_folder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textNavigation"
+                app:listFragment="@{listFragment}"
+                app:model="@{model}" />
 
-                <include
-                    android:id="@+id/rvFolder"
-                    layout="@layout/fragment_list_recycler_view_folder"
-                    app:listFragment="@{listFragment}"
-                    app:model="@{model}" />
-
-                <include
-                    android:id="@+id/rvSize"
-                    layout="@layout/fragment_list_recycler_view_size"
-                    app:listFragment="@{listFragment}"
-                    app:model="@{model}" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.leebeebeom.closetnote.ui.view.LockableScrollView>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <include
+                android:id="@+id/rvSize"
+                layout="@layout/fragment_list_recycler_view_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvFolder"
+                app:listFragment="@{listFragment}"
+                app:model="@{model}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 </layout>

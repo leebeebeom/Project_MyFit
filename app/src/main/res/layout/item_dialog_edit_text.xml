@@ -7,10 +7,6 @@
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.dialog.eidttext.BaseEditTextViewModel" />
-
-        <variable
-            name="dialogBuilder"
-            type="com.leebeebeom.closetnote.ui.dialog.DialogBuilder" />
     </data>
 
     <FrameLayout
@@ -21,26 +17,20 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            style="@style/myOutlinedEditTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/myOutlineEditText"
             app:endIconMode="clear_text"
-            setOnKeyListener='@{""}'
-            app:errorTextAppearance="@style/myTextSize8sdp"
-            app:hintTextAppearance="@style/myTextSize8sdp"
-            app:errorContentDescription="@string/dialog_et_max_length"
-            app:placeholderTextAppearance="@style/myTextSize11sdp">
+            setOnKeyListener='@{""}'>
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/et"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_width="match_parent"
                 android:maxLength="30"
                 android:imeOptions="actionDone"
                 android:text="@={model.name}"
                 android:inputType="text"
-                addTextChangedListener="@{dialogBuilder}"
                 android:textSize="@dimen/_11sdp" />
         </com.google.android.material.textfield.TextInputLayout>
     </FrameLayout>

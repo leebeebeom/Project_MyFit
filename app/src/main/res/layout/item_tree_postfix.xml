@@ -23,7 +23,7 @@
             android:alpha="0.5"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="@string/tree_current_position"
+            android:text="@string/dialog_current_position"
             android:textSize="@dimen/_6sdp"
             android:visibility="gone" />
 

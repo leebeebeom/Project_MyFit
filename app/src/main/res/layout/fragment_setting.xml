@@ -24,19 +24,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.leebeebeom.closetnote.ui.view.FragmentMainTextView
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/myFragmentMainTextView"
                 android:id="@+id/tvSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:text="@string/settings_all_cap" />
+                android:text="@string/all_caps_settings" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_4sdp"
-                android:background="@drawable/recycler_background"
+                android:background="@drawable/corner_round_background_grey"
                 android:paddingBottom="@dimen/_100sdp">
 
                 <include
@@ -44,6 +43,7 @@
                     layout="@layout/fragment_setting_include_account"
                     android:layout_height="wrap_content"
                     app:model="@{model}"
+                    app:fragment="@{fragment}"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_width="0dp"
                     app:layout_constraintEnd_toEndOf="parent"

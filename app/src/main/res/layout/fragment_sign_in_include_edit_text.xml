@@ -17,12 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
-            style="@style/myOutlineEditText"
+            style="@style/myOutlinedEditTextLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/sign_in_email"
+            android:hint="@string/sign_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,14 +34,14 @@
                 android:layout_height="@dimen/_44sdp"
                 android:inputType="textEmailAddress"
                 android:text="@={emailLive}" />
-        </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
-            style="@style/myOutlineEditText"
+            style="@style/myOutlinedEditTextLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/sign_in_password"
+            android:hint="@string/sign_password"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
                 android:layout_height="@dimen/_44sdp"
                 android:inputType="textPassword"
                 android:text="@={passwordLive}" />
-        </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

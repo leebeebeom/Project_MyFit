@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_8sdp"
-            android:background="@drawable/recycler_background"
+            android:background="@drawable/corner_round_background_grey"
             android:clipToPadding="false"
             android:minHeight="@dimen/_600sdp"
             android:nestedScrollingEnabled="false"
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_8sdp"
-            android:background="@drawable/recycler_background"
+            android:background="@drawable/corner_round_background_grey"
             android:minHeight="@dimen/_560sdp"
             android:visibility="@{model.sizeTuplesLive.empty ? View.VISIBLE : View.GONE}"
             tools:visibility="gone">

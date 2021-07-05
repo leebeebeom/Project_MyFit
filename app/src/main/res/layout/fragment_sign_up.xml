@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="signUpFragment"
+            name="fragement"
             type="com.leebeebeom.closetnote.ui.signin.signup.SignUpFragment" />
 
         <variable
@@ -23,8 +23,9 @@
                 android:layout_gravity="center"
                 android:paddingHorizontal="@dimen/_28sdp">
 
-                <com.leebeebeom.closetnote.ui.view.AppNameTextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvAppName"
+                    style="@style/myAppNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_48sdp"
@@ -32,13 +33,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/usernameLayout"
-                    style="@style/myOutlineEditText"
+                    style="@style/myOutlinedEditTextLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
-                    android:hint="@string/sign_up_username"
+                    android:hint="@string/sign_username"
                     app:layout_constraintBottom_toTopOf="@id/et"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +52,7 @@
                         android:layout_height="@dimen/_44sdp"
                         android:inputType="text"
                         android:text="@={model.usernameLive}" />
-                </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <include
                     android:id="@+id/et"
@@ -64,12 +65,12 @@
                     app:layout_constraintTop_toBottomOf="@id/usernameLayout"
                     app:passwordLive="@={model.passwordLive}" />
 
-                <com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/confirmPasswordLayout"
-                    style="@style/myOutlineEditText"
+                    style="@style/myOutlinedEditTextLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/sign_up_confirm_password"
+                    android:hint="@string/sign_confirm_password"
                     app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -82,16 +83,16 @@
                         android:layout_height="@dimen/_44sdp"
                         android:inputType="textPassword"
                         android:text="@={model.confirmPasswordLive}" />
-                </com.leebeebeom.closetnote.ui.view.OutlinedTextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.leebeebeom.closetnote.ui.view.CustomButton
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <com.google.android.material.button.MaterialButton
+                    style="@style/myOutlineButton"
                     app:strokeColor="@android:color/transparent"
                     android:id="@+id/btnSignUp"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_44sdp"
+                    android:layout_height="?mySignButtonHeight"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:onClick="@{() -> model.textsNotEmpty &amp;&amp; model.passwordEquals ? signUpFragment.emailSignUp() : signUpFragment.setEditTextLayoutError()}"
+                    android:onClick="@{() -> model.textsNotEmpty &amp;&amp; model.passwordEquals ? fragement.emailSignUp() : fragement.setEditTextLayoutError()}"
                     android:text="@string/sign_up"
                     android:textColor="?colorPrimary"
                     app:backgroundTint="?myColorControl"

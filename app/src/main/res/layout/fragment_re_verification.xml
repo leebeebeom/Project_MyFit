@@ -19,7 +19,7 @@
             android:id="@+id/tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/re_verification_please_check_email"
+            android:text="@string/sign_please_check_verification__email"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toTopOf="@+id/btnCheck"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,13 +28,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.leebeebeom.closetnote.ui.view.CustomButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCheck"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/myOutlineButton"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_36sdp"
+            android:layout_height="?attr/myNormalButtonHeight"
             android:onClick="@{() -> fragment.openEmail()}"
-            android:text="@string/send_reset_password_email_lets_check"
+            android:text="@string/sign_lets_check"
             android:textColor="?colorPrimary"
             app:backgroundTint="?myColorControl"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,17 +44,16 @@
             app:layout_constraintTop_toBottomOf="@+id/tv"
             app:strokeColor="@android:color/transparent" />
 
-        <com.leebeebeom.closetnote.ui.view.CustomButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReSend"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/myOutlineButton"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="?attr/myNormalButtonHeight"
             android:layout_marginEnd="@dimen/_4sdp"
             android:onClick="@{() -> fragment.reSend()}"
-            android:text="@string/re_verification_resend"
+            android:text="@string/sign_resend"
             android:textColor="?colorPrimary"
             app:backgroundTint="?myColorControl"
-            app:layout_constraintBottom_toBottomOf="@id/btnCheck"
             app:layout_constraintEnd_toStartOf="@+id/btnCheck"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"

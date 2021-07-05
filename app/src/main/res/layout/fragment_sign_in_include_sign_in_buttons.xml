@@ -14,29 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.leebeebeom.closetnote.ui.view.CustomButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <com.google.android.material.button.MaterialButton
+            style="@style/myOutlineButton"
             android:id="@+id/btnGoogle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="?mySignButtonHeight"
             android:drawableLeft="@drawable/icon_google"
             android:text="@string/sign_in_with_google"
             android:textColor="@color/black"
             app:backgroundTint="@color/white"
-            android:onClick="@{() -> fragment.isConnect() ? fragment.googleSignIn() : void}"
+            android:onClick="@{() -> fragment.googleSignIn()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/black"
             tools:ignore="RtlHardcoded" />
 
-        <com.leebeebeom.closetnote.ui.view.CustomButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNaver"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/myOutlineButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="?mySignButtonHeight"
             android:drawableLeft="@drawable/icon_naver_small"
-            android:onClick="@{() -> fragment.isConnect() ? fragment.naverSignIn() : void}"
+            android:onClick="@{() -> fragment.naverSignIn()}"
             android:text="@string/sign_in_with_naver"
             android:textColor="@color/white"
             app:backgroundTint="#03C75A"
@@ -46,18 +46,18 @@
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
 
-        <com.leebeebeom.closetnote.ui.view.CustomButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKakao"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/myOutlineButton"
             android:drawableLeft="@drawable/icon_kakao_small"
             android:text="@string/sign_in_with_kakao"
-            android:onClick="@{() -> fragment.isConnect() ? fragment.kakaoSignIn() : void}"
+            android:layout_height="?mySignButtonHeight"
             android:textColor="@color/black"
             app:backgroundTint="#FEE500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:onClick="@{() -> fragment.kakaoSignIn()}"
             app:layout_constraintTop_toBottomOf="@id/btnNaver"
             app:strokeColor="@android:color/transparent"
             tools:ignore="RtlHardcoded" />
