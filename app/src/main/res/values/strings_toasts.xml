@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_sign_in_success">로그인 되었어요.</string>
+    <string name="toast_google_sign_in_success">구글 이메일로 로그인 되었어요.</string>
+    <string name="toast_naver_sign_in_success">네이버 아이디로 로그인 되었어요.</string>
+    <string name="toast_kakao_sign_in_success">카카오 아이디로 로그인 되었어요.</string>
+    <string name="toast_sign_in_anonymously_success">비회원으로 로그인 되었어요.</string>
+
+    <string name="toast_google_sign_in_fail">구글 로그인에 실패했어요.</string>
+    <string name="toast_naver_sign_in_fail">네이버 로그인에 실패했어요.</string>
+    <string name="toast_kakao_sign_in_fail">카카오 로그인에 실패했어요.</string>
+    <string name="toast_anonymously_sign_in_fail">비회원 로그인에 실패하였어요.</string>
+
+    <string name="toast_exist_email_google">이미 존재하는 이메일이에요.\n구글 로그인을 이용해 주세요.</string>
+    <string name="toast_exist_email_naver">이미 존재하는 이메일이에요.\n네이버 로그인을 이용해 주세요.</string>
+    <string name="toast_exist_email_kakao">이미 존재하는 이메일이에요.\n카카오 로그인을 이용해 주세요.</string>
+
+    <string name="toast_link_with_google_success">구글 이메일로 연동 되었어요.</string>
+    <string name="toast_link_with_naver_success">네이버 아이디와 연동되었어요.</string>
+    <string name="toast_link_with_kakao_success">카카오 아이디와 연동되었어요.</string>
+
+    <string name="toast_sign_out_seccess">로그아웃 되었어요</string>
+
+    <string name="toast_sent_verification_mail_success">인증메일이 전송되었어요.\n메일함을 확인해 주세요.</string>
+    <string name="toast_sent_verification_mail_fail">인증메일 전송에 실패했어요.\n로그인 후 재인증 하시거나, 관리자에게 문의해주세요.</string>
+    <string name="toast_re_sent_verification_mail">메일이 재전송 되었어요.</string>
+
+    <string name="toast_fail_unknown_error">알 수 없는 이유로 실패했어요.\n관리자에게 문의해주세요.</string>
+    <string name="toast_check_network">네트워크 연결상태가 확인되지 않아요.\n연결상태를 확인해 주세요.</string>
+    <string name="toast_kakao_sign_in_fail_permission">카카오 정보 권한이 없어 연동에 실패하였어요.</string>
+    <string name="toast_username_update_fail">닉네임 업데이트에 실패했어요.\n로그인 후 닉네임을 변경해주세요.</string>
+    <string name="toast_profile_update_fail">정보연동에 실패하였어요.\n로그인하여 닉네임과 이메일을 수정해주세요.</string>
+    <string name="toast_too_many_request">요청을 처리하지 못했어요.\n잠시 후 다시 시도해주세요.</string>
+    <string name="toast_not_allow_to_anonymously">비회원은 이용할 수 없어요.</string>
+</resources>
