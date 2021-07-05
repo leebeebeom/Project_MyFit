@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_login">로그인</string>
+    <string name="sign_in_with_google">구글 이메일로 계속하기</string>
+    <string name="sign_in_with_naver">네이버 아이디로 계속하기</string>
+    <string name="sign_in_with_kakao">카카오 아이디로 계속하기</string>
+    <string name="sign_forgot_password"><u>비밀번호를 잊어버리셨나요?</u></string>
+    <string name="sign_or">or</string>
+    <string name="sign_up_with_other_email"><u>다른 이메일로 회원가입</u></string>
+    <string name="sign_slash">/</string>
+    <string name="sign_in_with_anonymously"><u>비회원으로 시작하기</u></string>
+
+    <string name="sign_email">Email</string>
+    <string name="sign_password">Password</string>
+    <string name="sign_username">Username</string>
+    <string name="sign_confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+
+    <string name="sign_error_email_is_empty">이메일을 입력해주세요.</string>
+    <string name="sign_error_password_is_empty">비밀번호를 입력해주세요.</string>
+    <string name="sign_error_password_not_equal">비밀번호가 일치하지 않아요.</string>
+    <string name="sign_error_username_is_empty">이름을 입력해주세요.</string>
+    <string name="sign_error_email_is_badly_formatted">이메일이 유효하지 않아요.</string>
+    <string name="sign_error_password_is_less_than_6">최소 6자 이상이어야 해요.</string>
+    <string name="sign_error_email_is_used">이미 사용중인 이메일이에요.</string>
+    <string name="sign_error_not_exist_email">가입된 이메일이 존재하지 않아요.</string>
+    <string name="sign_error_check_email_or_password">비밀번호 혹은 이메일이 올바르지 않아요.</string>
+
+    <string name="sign_lets_check">확인하기</string>
+    <string name="sign_sent_reset_password_email">입력하신 이메일로\n비밀번호 재설정 메일이 전송되었어요.\n메일함을 확인해 주세요.</string>
+    <string name="sign_next">다음</string>
+    <string name="sign_reset_password">비밀번호 재설정</string>
+
+    <string name="sign_resend">재전송</string>
+    <string name="sign_please_check_verification__email">이메일 인증이 확인되지 않았어요.\n메일함을 확인해 주세요.\n메일이 보이지 않는다면\n휴지통 혹은 스팸메일함을 확인해 주세요.</string>
+
+    <string name="naver_client_id">R7D_EUivu6CPSTLpzzkp</string>
+    <string name="naver_client_secret">0sBCSITgqA</string>
+    <string name="naver_profile_api_url">https://openapi.naver.com/v1/nid/me</string>
+    <string name="firebase_dynamic_link">https://closetnote.page.link/verify</string>
+    <string name="sign_in_deep_link">https://www.colosetnote.com/signin</string>
+    <string name="kakao_native_key">2d3aadea523ac7b61f93b71a94f20b20</string>
+</resources>
