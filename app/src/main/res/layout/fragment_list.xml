@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="listFragment"
-            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
-
-        <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
     </data>
@@ -33,7 +29,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:listFragment="@{listFragment}"
                 app:model="@{model}" />
 
             <include
@@ -44,18 +39,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textNavigation"
-                app:listFragment="@{listFragment}"
                 app:model="@{model}" />
 
             <include
                 android:id="@+id/rvSize"
-                layout="@layout/fragment_list_recycler_view_size"
+                layout="@layout/fragment_list_recycler_view_size_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvFolder"
-                app:listFragment="@{listFragment}"
                 app:model="@{model}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.leebeebeom.closetnote.ui.view.LockableScrollView>
