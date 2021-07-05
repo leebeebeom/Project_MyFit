@@ -72,4 +72,11 @@
         <item name="android:layout_marginStart">@dimen/_12sdp</item>
         <item name="android:layout_marginTop">@dimen/_8sdp</item>
     </style>
+
+    <style name="myRecyclerView">
+        <item name="android:clipToPadding">false</item>
+        <item name="nestedScrollable">false</item>
+        <item name="android:nestedScrollingEnabled">false</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
 </resources>
