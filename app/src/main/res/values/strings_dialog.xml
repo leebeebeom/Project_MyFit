@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_add_category">카테고리 추가</string>
+    <string name="dialog_create_folder">폴더 생성</string>
+    <string name="dialog_sort_order">정렬 순서</string>
+    <string name="dialog_confirm">확인</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_select_move_position">이동할 위치를 선택해 주세요.</string>
+    <string name="dialog_current_position">(현재 위치)</string>
+
+    <string name="dialog_hint_category_name">Category Name</string>
+    <string name="dialog_place_holder_category_name">카테고리 이름</string>
+    <string name="dialog_hint_folder_name">Folder Name</string>
+    <string name="dialog_place_holder_folder_name">폴더 이름</string>
+
+    <string name="dialog_edit_category_name">카테고리 이름 변경</string>
+    <string name="dialog_edit_folder_name">폴더 이름 변경</string>
+
+    <string name="dialog_items_move">개의 아이템을 이동할까요?</string>
+    <string name="dialog_items_delete">개의 아이템을 휴지통으로 이동할까요?</string>
+
+    <string name="dialog_max_length">30자까지 가능해요.</string>
+    <string name="dialog_same_category_name_add">이미 존재하는 카테고리 이름이에요.\n그래도 추가할까요?</string>
+    <string name="dialog_same_folder_name_add">이미 존재하는 폴더 이름이에요.\n그래도 추가할까요?</string>
+    <string name="dialog_same_category_name_edit">이미 존재하는 카테고리 이름이에요.\n그래도 변경할까요?</string>
+    <string name="dialog_same_folder_name_edit">이미 존재하는 폴더 이름이에요.\n그래도 변경할까요?</string>
+    <string name="dialog_delete">휴지통으로 이동할까요?</string>
+    <string name="dialog_go_back">저장되지 않았어요.\n종료할까요?</string>
+    <string name="dialog_image_clear">이미지를 삭제할까요?</string>
+
+    <string name="dialog_sort_custom">사용자 정의</string>
+    <string name="dialog_sort_create">최근 생성 순</string>
+    <string name="dialog_sort_create_reverse">최근 생성 역순</string>
+    <string name="dialog_sort_brand">브랜드 순</string>
+    <string name="dialog_sort_brand_reverse">브랜드 역순</string>
+    <string name="dialog_sort_name">이름 순</string>
+    <string name="dialog_sort_name_reverse">이름 역순</string>
+
+    <string name="dialog_anonymously_sing_out">비회원은 데이터가 저장되지 않아요.\n 그래도 로그아웃 할까요?</string>
+</resources>
