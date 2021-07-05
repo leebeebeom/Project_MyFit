@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="size_created_time">생성일 : </string>
+    <string name="size_modified_time">수정일 : </string>
+    <string name="size_brand">Brand</string>
+    <string name="size_name">Name</string>
+    <string name="size_size">Size</string>
+    <string name="size_https">https://</string>
+    <string name="size_go">GO</string>
+    <string name="size_memo">memo</string>
+    <string name="size_brand_necessary_field">브랜드는 필수 입력 항목입니다.</string>
+    <string name="size_name_necessary_field">이름은 필수 입력 항목입니다.</string>
+    <string name="size_intent_title_attach_picture">사진 첨부</string>
+
+    <string name="size_length">Length</string>
+    <string name="size_shoulder">Shoulder</string>
+    <string name="size_chest">Chest</string>
+    <string name="size_sleeve">Sleeve</string>
+    <string name="size_waist">Waist</string>
+    <string name="size_thigh">Thigh</string>
+    <string name="size_rise">Rise</string>
+    <string name="size_hem">Hem</string>
+    <string name="size_option_1">Option 1</string>
+    <string name="size_option_2">Option 2</string>
+    <string name="size_option_3">Option 3</string>
+    <string name="size_option_4">Option 4</string>
+    <string name="size_option_5">Option 5</string>
+    <string name="size_option_6">Option 6</string>
+</resources>
