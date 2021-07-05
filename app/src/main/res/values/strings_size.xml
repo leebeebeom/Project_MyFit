@@ -8,8 +8,8 @@
     <string name="size_https">https://</string>
     <string name="size_go">GO</string>
     <string name="size_memo">memo</string>
-    <string name="size_brand_necessary_field">브랜드는 필수 입력 항목입니다.</string>
-    <string name="size_name_necessary_field">이름은 필수 입력 항목입니다.</string>
+    <string name="size_brand_necessary_field">브랜드는 필수 입력 항목이에요.</string>
+    <string name="size_name_necessary_field">이름은 필수 입력 항목이에요.</string>
     <string name="size_intent_title_attach_picture">사진 첨부</string>
 
     <string name="size_length">Length</string>
