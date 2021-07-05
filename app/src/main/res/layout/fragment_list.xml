@@ -12,6 +12,10 @@
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
@@ -33,6 +37,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:fragment="@{fragment}"
                 app:model="@{model}" />
 
             <include
@@ -53,7 +58,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvFolder"
-                android:visibility="@{model.viewType == ViewType.values()[0] ? View.VISIBLE : View.GONE}"
+                android:visibility="@{model.viewTypePreferenceLive == ViewType.LIST_VIEW.value ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <include
@@ -61,7 +66,7 @@
                 layout="@layout/fragment_list_recycler_view_size_grid"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="@{model.viewType == ViewType.values()[1] ? View.VISIBLE : View.GONE}"
+                android:visibility="@{model.viewTypePreferenceLive == ViewType.GRID_VIEW.value ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:visibility="@{model.sizeTuplesLive.empty ? View.VISIBLE : View.GONE}"
+                android:visibility="@{model.sizeTuplesLive.empty || model.sizeTuplesLive == null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

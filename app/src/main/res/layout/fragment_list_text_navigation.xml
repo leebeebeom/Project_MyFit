@@ -40,7 +40,7 @@
             <include
                 layout="@layout/fragment_list_text_navigation_text"
                 app:fragment="@{fragment}"
-                app:model="@{model}" />
+                app:name="@{model.categoryNameLive}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </HorizontalScrollView>
 </layout>

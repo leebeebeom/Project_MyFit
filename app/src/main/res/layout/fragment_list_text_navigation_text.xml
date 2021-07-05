@@ -10,17 +10,15 @@
             type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
 
         <variable
-            name="model"
-            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
+            name="name"
+            type="androidx.lifecycle.LiveData&lt;String>" />
     </data>
 
-    <merge
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat"
-        tools:showIn="@layout/fragment_list_text_navigation">
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -36,8 +34,8 @@
             android:alpha="0.9"
             android:maxLines="1"
             android:onClick="@{() -> fragment.navigateSelf()}"
-            android:text="@{model.categoryNameLive}"
+            android:text="@{name}"
             android:textSize="@dimen/_11sdp"
             tools:text="Short Sleeve" />
-    </merge>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

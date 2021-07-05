@@ -2,15 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="model"
-            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
-    </data>
-
     <FrameLayout
         android:id="@+id/layoutNoData"
         style="@style/myRecyclerView"
@@ -25,7 +16,6 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/all_no_data"
-            android:textSize="@dimen/_20sdp"
-            android:visibility="@{model.sizeTuplesLive.empty ? View.VISIBLE : View.GONE}" />
+            android:textSize="@dimen/_20sdp" />
     </FrameLayout>
 </layout>
