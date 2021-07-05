@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_main">메인 메뉴</string>
+    <string name="menu_daily_look">데일리룩</string>
+    <string name="menu_setting">설정</string>
+    <string name="menu_wish_list">위시 리스트</string>
+    <string name="menu_search">검색</string>
+    <string name="menu_edit">수정</string>
+    <string name="menu_delete">삭제</string>
+    <string name="menu_restore">복원</string>
+    <string name="menu_move">이동</string>
+    <string name="menu_favorite">즐겨찾기</string>
+    <string name="menu_menu">메뉴</string>
+    <string name="menu_recycle_bin">휴지통</string>
+    <string name="menu_view_type">보기 방식</string>
+
+    <string name="action_mode_title">%1$d개 선택됨.</string>
+</resources>
