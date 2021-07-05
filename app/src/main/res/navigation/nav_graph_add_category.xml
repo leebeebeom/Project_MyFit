@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_add_category"
     app:startDestination="@id/addCategoryDialog">
-    <argument
-        android:name="parentIndex"
-        app:argType="integer" />
     <dialog
         android:id="@+id/addCategoryDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.category.AddCategoryDialog"
         android:label="AddCategoryDialog">
+        <argument
+            android:name="parentIndex"
+            app:argType="integer" />
         <action
             android:id="@+id/toAddSameCategoryName"
             app:destination="@id/addSameCategoryNameDialog" />
