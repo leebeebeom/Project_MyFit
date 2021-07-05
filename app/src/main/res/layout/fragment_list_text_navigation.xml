@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="listFragment"
+            name="fragment"
             type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
 
         <variable
@@ -34,26 +33,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.9"
-                android:onClick="@{() -> listFragment.navigateMainFragment()}"
+                android:onClick="@{() -> fragment.navigateMainFragment()}"
                 app:srcCompat="@drawable/icon_home"
                 app:tint="?colorControlNormal" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.8"
-                app:srcCompat="@drawable/icon_arrow_forward"
-                app:tint="?colorControlNormal" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.9"
-                android:onClick="@{() -> listFragment.navigateSelf()}"
-                android:text="@{model.categoryNameLive}"
-                android:textSize="@dimen/_11sdp"
-                tools:text="Short Sleeve" />
+            <include
+                layout="@layout/fragment_list_text_navigation_text"
+                app:fragment="@{fragment}"
+                app:model="@{model}" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </HorizontalScrollView>
 </layout>

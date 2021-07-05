@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.main.list.ListFragment" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
+    </data>
+
+    <merge
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat"
+        tools:showIn="@layout/fragment_list_text_navigation">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            app:srcCompat="@drawable/icon_arrow_forward"
+            app:tint="?colorControlNormal" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:maxLines="1"
+            android:onClick="@{() -> fragment.navigateSelf()}"
+            android:text="@{model.categoryNameLive}"
+            android:textSize="@dimen/_11sdp"
+            tools:text="Short Sleeve" />
+    </merge>
+</layout>
