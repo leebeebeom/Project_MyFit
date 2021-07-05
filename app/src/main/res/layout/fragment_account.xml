@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.setting.account.AccountViewModel" />
+    </data>
+
+    <com.leebeebeom.closetnote.ui.view.LockableScrollView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/backgroundGrey">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profileImage"
+                setProfileUrl="@{model.profileUrlLive}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_120sdp"
+                android:layout_marginVertical="@dimen/_40sdp"
+                app:civ_border_color="?myColorControl"
+                app:civ_border_width="1px"
+                app:layout_constraintBottom_toTopOf="@id/layoutSetting"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:alpha="0.1"
+                tools:srcCompat="@drawable/icon_person" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:alpha="0.9"
+                android:text="@{model.nicknameLive}"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileImage"
+                tools:text="이비범" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutSetting"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/corner_round_background_primary"
+                android:paddingTop="@dimen/_4sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileImage">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconEmail"
+                    style="@style/myAccountFragmentIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/email"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/email"
+                    app:srcCompat="@drawable/icon_email" />
+
+                <include
+                    android:id="@+id/email"
+                    style="@style/myAccountFragmentSettings"
+                    layout="@layout/fragment_account_include"
+                    app:action="@{model.emailLive.toString()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iconEmail"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconPerson"
+                    style="@style/myAccountFragmentIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/changeNickname"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/changeNickname"
+                    app:srcCompat="@drawable/icon_person" />
+
+                <include
+                    android:id="@+id/changeNickname"
+                    style="@style/myAccountFragmentSettings"
+                    layout="@layout/fragment_account_include"
+                    app:action="@{@string/setting_account_edit_name}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iconPerson"
+                    app:layout_constraintTop_toBottomOf="@id/email" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconKey"
+                    style="@style/myAccountFragmentIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/changePassword"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/changePassword"
+                    app:srcCompat="@drawable/icon_key" />
+
+                <include
+                    android:id="@+id/changePassword"
+                    style="@style/myAccountFragmentSettings"
+                    layout="@layout/fragment_account_include"
+                    app:action="@{@string/setting_account_change_password}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iconKey"
+                    app:layout_constraintTop_toBottomOf="@id/changeNickname" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
+</layout>
