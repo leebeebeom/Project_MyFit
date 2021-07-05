@@ -40,19 +40,7 @@
         android:name="com.leebeebeom.closetnote.ui.signin.signup.SignUpFragment"
         android:label=""
         tools:layout="@layout/fragment_sign_up">
-        <action
-            android:id="@+id/toVerificationFragment"
-            app:destination="@id/verificationFragment"
-            app:enterAnim="@anim/fragment_slide_in"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/fragment_slide_out" />
     </fragment>
-    <fragment
-        android:id="@+id/verificationFragment"
-        android:name="com.leebeebeom.closetnote.ui.signin.signup.verification.VerificationFragment"
-        android:label=""
-        tools:layout="@layout/fragment_verification" />
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.leebeebeom.closetnote.ui.signin.resetpassword.ResetPasswordFragment"
@@ -80,5 +68,4 @@
         android:name="com.leebeebeom.closetnote.ui.signin.reverification.ReVerificationFragment"
         android:label=""
         tools:layout="@layout/fragment_re_verification" />
-
 </navigation>
