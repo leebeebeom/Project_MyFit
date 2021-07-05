@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="rvBackground" format="color" />
+    <attr name="backgroundGrey" format="color" />
+    <attr name="backgroundPrimary" format="color" />
     <attr name="goBtnBackground" format="color" />
     <attr name="myColorControl" format="color" />
     <attr name="treeBackgroundColor" format="color" />

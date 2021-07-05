@@ -34,7 +34,7 @@
         <!--        font-->
         <item name="fontFamily">@font/noto</item>
         <!--        my background color-->
-        <item name="rvBackground">@color/myBackgroundColorNight</item>
+        <item name="backgroundGrey">@color/myBackgroundColorNight</item>
         <!--        go button color-->
         <item name="goBtnBackground">@color/myGoButtonBackgroundColorNight</item>
         <!--        ripple color remove-->
@@ -51,5 +51,6 @@
         <item name="mySignButtonHeight">@dimen/_48sdp</item>
         <item name="myNormalButtonHeight">@dimen/_36sdp</item>
         <item name="mySettingCardViewHeight">@dimen/_40sdp</item>
+        <item name="backgroundPrimary">#121212</item>
     </style>
 </resources>
