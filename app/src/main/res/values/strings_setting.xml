@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting_account">Account</string>
+    <string name="setting_global">Global</string>
+    <string name="setting_theme">테마 설정</string>
+    <string name="setting_network">네트워크 설정</string>
+    <string name="setting_etc">etc</string>
+    <string name="setting_contact">문의하기</string>
+    <string name="setting_sign_out">로그아웃</string>
+    <string name="setting_switch_to_member">회원으로 전환하기</string>
+    <string name="setting_anonymously">비회원</string>
+
+    <string name="setting_account_edit_name">이름 변경</string>
+    <string name="setting_account_change_password">패스워드 변경</string>
+    <string name="setting_account_edit_profile">프로필 수정</string>
+</resources>
