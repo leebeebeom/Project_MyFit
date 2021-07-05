@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.setting.anonymoulysingup.AnonymouslySignUpFragment" />
+    </data>
+
+    <com.leebeebeom.closetnote.ui.view.LockableScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.setting.anonymoulysingup.AnonymouslySignUpFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/_28sdp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvSignUpMethod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:text="@string/sign_up_choose_sign_up_method"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintBottom_toTopOf="@id/btnGoogle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEmail"
+                style="@style/myOutlineButton"
+                android:layout_width="0dp"
+                android:layout_height="?attr/mySignButtonHeight"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:drawableLeft="@drawable/icon_email_small"
+                android:drawableTint="@color/black"
+                android:onClick="@{() -> fragment.navigateSignUpFragment()}"
+                android:text="@string/sign_email"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@id/btnGoogle"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSignUpMethod"
+                app:layout_constraintTop_toTopOf="@id/btnGoogle"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:strokeColor="@color/black"
+                tools:ignore="RtlHardcoded" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogle"
+                style="@style/myOutlineButton"
+                android:layout_width="0dp"
+                android:layout_height="?attr/mySignButtonHeight"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:drawableLeft="@drawable/icon_google"
+                android:onClick="@{() -> fragment.googleSignIn()}"
+                android:text="@string/all_google"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/btnKakao"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnEmail"
+                app:layout_constraintTop_toBottomOf="@id/tvSignUpMethod"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:strokeColor="@color/black"
+                tools:ignore="RtlHardcoded" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNaver"
+                style="@style/myOutlineButton"
+                android:layout_width="0dp"
+                android:layout_height="?attr/mySignButtonHeight"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:drawableLeft="@drawable/icon_naver_small"
+                android:onClick="@{() -> fragment.naverSignIn()}"
+                android:text="@string/all_naver"
+                android:textColor="@color/white"
+                app:backgroundTint="#03C75A"
+                app:layout_constraintEnd_toStartOf="@id/btnKakao"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnEmail"
+                app:strokeColor="@android:color/transparent"
+                tools:ignore="RtlHardcoded" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnKakao"
+                style="@style/myOutlineButton"
+                android:layout_width="0dp"
+                android:layout_height="?attr/mySignButtonHeight"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:drawableLeft="@drawable/icon_kakao_small"
+                android:onClick="@{() -> fragment.kakaoSignIn()}"
+                android:text="@string/all_kakao"
+                android:textColor="@color/black"
+                app:backgroundTint="#FEE500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnNaver"
+                app:layout_constraintTop_toBottomOf="@id/btnGoogle"
+                app:strokeColor="@android:color/transparent"
+                tools:ignore="RtlHardcoded" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.leebeebeom.closetnote.ui.view.LockableScrollView>
+</layout>
