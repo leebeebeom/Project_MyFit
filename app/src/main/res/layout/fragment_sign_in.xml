@@ -48,14 +48,13 @@
                 app:passwordLive="@{model.passwordLive}" />
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/mySignInTextView"
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:alpha="0.7"
                 android:onClick="@{() -> fragment.navigateResetPasswordFragment()}"
                 android:text="@string/sign_forgot_password"
-                android:textSize="@dimen/_9sdp"
                 app:layout_constraintBottom_toTopOf="@id/btnSignIn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et" />
@@ -107,42 +106,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/signInButtons" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvSignUp"
-                android:layout_width="wrap_content"
+            <include
+                layout="@layout/fragment_sign_in_include_other_start"
                 android:layout_height="wrap_content"
-                android:alpha="0.7"
-                android:onClick="@{() -> fragment.navigateSignUpFragment()}"
-                android:text="@string/sign_up_with_other_email"
-                android:textSize="@dimen/_9sdp"
-                app:layout_constraintEnd_toStartOf="@id/tvSlash"
-                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/or2" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvSlash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:text="@string/sign_slash"
-                android:textSize="@dimen/_9sdp"
+                android:layout_width="0dp"
+                app:fragment="@{fragment}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/or2" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvAnonymously"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.7"
-                android:onClick="@{() -> fragment.signInAnonymously()}"
-                android:text="@string/sign_in_with_anonymously"
-                android:textSize="@dimen/_9sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tvSlash"
-                app:layout_constraintTop_toBottomOf="@id/or2" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
