@@ -28,14 +28,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/myCardView"
+            style="@style/mySettingCardView"
             android:onClick="@{() -> fragment.navigateAccountFragment()}"
             android:id="@+id/cardViewAccount"
             android:layout_width="0dp"
             android:layout_height="@dimen/_48sdp"
-            android:layout_marginHorizontal="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,14 +81,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvNickname"
                     tools:text="leebeebeom@google.com" />
 
-                <com.leebeebeom.closetnote.ui.view.icon.ArrowIcon
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/icon_arrow_forward" />
+                <include layout="@layout/fragment_setting_include_arrow_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
