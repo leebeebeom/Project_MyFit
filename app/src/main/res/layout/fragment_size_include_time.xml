@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvCreateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:alpha="0.7"
+            android:text="@{@string/size_created_time + model.sizeLive.createdTime}"
+            android:textSize="@dimen/_7sdp"
+            android:visibility="@{model.sizeLive.sortNumber == -1 ? View.GONE : View.VISIBLE}"
+            tools:text="생성일 : 2021년 10월 14일 10:34:10" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvModifiedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:alpha="0.7"
+            android:text="@{@string/size_modified_time + model.sizeLive.modifiedTime}"
+            android:textSize="@dimen/_7sdp"
+            android:visibility="@{model.sizeLive.sortNumber == -1 ? View.GONE : View.VISIBLE}"
+            tools:text="수정일 : 2021년 10월 14일 10:34:10" />
+    </LinearLayout>
+</layout>

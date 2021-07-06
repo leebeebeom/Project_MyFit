@@ -18,6 +18,7 @@
         style="@style/myOutlinedEditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:hint="Option"
         android:hint="@{hint}">
 
         <com.leebeebeom.closetnote.ui.view.CustomEditText
@@ -26,8 +27,7 @@
             android:layout_height="?myEditTextHeight"
             android:imeOptions="actionNext"
             android:inputType="text"
-            android:text="@={text}"
-            tools:text="@string/size_option_1" />
+            android:text="@={text}" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </layout>

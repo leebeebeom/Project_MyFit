@@ -21,215 +21,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:colorBackground"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        android:paddingBottom="@dimen/_68sdp"
         tools:context=".ui.main.size.SizeFragment">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_68sdp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <include
+                android:id="@+id/cardView"
+                layout="@layout/fragment_size_include_cardview"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                app:fragment="@{fragment}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:model="@{model}" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:onClick="@{() -> fragment.getImage()}"
-                    app:onLongClickListener="@{() -> fragment.navigateDeleteImage()}"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginHorizontal="@dimen/_16sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_4sdp"
-                    app:cardElevation="@dimen/_2sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="3:4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iv"
-                        setUri="@{model.imageUriLive}"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iconAddImage"
-                        android:layout_width="@dimen/_60sdp"
-                        android:layout_height="@dimen/_60sdp"
-                        android:layout_gravity="center"
-                        android:alpha="0.2"
-                        android:clickable="false"
-                        setAddIcon="@{model.imageUriLive}"
-                        android:src="@drawable/icon_add_image" />
-
-                </com.google.android.material.card.MaterialCardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/layoutTime"
+            <include
+                android:id="@+id/time"
+                layout="@layout/fragment_size_include_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:orientation="vertical"
-                android:visibility="@{model.sizeLive.sortNumber == -1 ? View.GONE : View.VISIBLE}"
-                tools:visibility="gone">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:model="@{model}" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_2sdp"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:alpha="0.7"
-                    android:text="@{@string/size_created_time + model.sizeLive.createdTime}"
-                    android:textSize="@dimen/_7sdp"
-                    tools:text="생성일 : 2021년 10월 14일 10:34:10" />
+            <include
+                android:id="@+id/basicInfo1"
+                layout="@layout/fragment_size_include_basic_info_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_2sdp"
-                    android:alpha="0.7"
-                    android:text="@{@string/size_modified_time + model.sizeLive.modifiedTime}"
-                    android:textSize="@dimen/_7sdp"
-                    tools:text="수정일 : 2021년 10월 14일 10:34:10" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            <include
+                android:id="@+id/detail"
+                layout="@layout/fragment_size_include_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/basicInfo1"
+                app:model="@{model}" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/_16sdp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutBrand"
-                    style="@style/myAutoCompleteTextViewLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:hint="@string/size_brand"
-                    app:endIconMode="none">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/etBrand"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_40sdp"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        setItems="@{model.autoCompleteLive}"
-                        android:text="@={model.sizeLive.brand}"
-                        android:completionThreshold="0"
-                        app:adapter="@{fragment.autoCompleteAdapter}"
-                        android:textSize="@dimen/_11sdp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layoutName"
-                        style="@style/myOutlinedEditTextLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_4sdp"
-                        android:layout_weight="3"
-                        android:hint="@string/size_name">
-
-                        <com.leebeebeom.closetnote.ui.view.CustomEditText
-                            android:id="@+id/etName"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_40sdp"
-                            android:imeOptions="actionNext"
-                            android:inputType="text"
-                            android:text="@={model.sizeLive.name}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/myOutlinedEditTextLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/size_size">
-
-                        <com.leebeebeom.closetnote.ui.view.CustomEditText
-                            android:id="@+id/etSize"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_40sdp"
-                            android:imeOptions="actionNext"
-                            android:inputType="text"
-                            android:text="@={model.sizeLive.size}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <include
-                    layout="@layout/fragment_size_include_top"
-                    android:visibility="@{model.sizeLive.parentIndex == 0 || model.sizeLive.parentIndex == 2 ? View.VISIBLE : View.GONE}"
-                    app:model="@{model}" />
-
-                <include
-                    layout="@layout/fragment_size_include_bottom"
-                    android:visibility="@{model.sizeLive.parentIndex == 1 ? View.VISIBLE : View.GONE}"
-                    app:model="@{model}" />
-
-                <include
-                    layout="@layout/fragment_size_include_etc"
-                    android:visibility="@{model.sizeLive.parentIndex == 3 ? View.VISIBLE : View.GONE}"
-                    app:model="@{model}" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/myOutlinedEditTextLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/size_https">
-
-                        <com.leebeebeom.closetnote.ui.view.CustomEditText
-                            android:id="@+id/etLink"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_40sdp"
-                            android:imeOptions="actionNext"
-                            android:inputType="textUri"
-                            android:text="@={model.sizeLive.link}"
-                            android:textColorLink="?colorControlNormal" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnGo"
-                        android:onClick="@{() -> fragment.openBrowser()}"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="@dimen/_44sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginHorizontal="@dimen/_6sdp"
-                        android:text="@string/size_go"
-                        android:textColor="?colorControlNormal"
-                        android:textSize="@dimen/_10sdp"
-                        app:backgroundTint="?attr/goBtnBackground" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/myOutlinedEditTextLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/size_memo">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etMemo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionDone"
-                        android:inputType="textMultiLine"
-                        android:text="@={model.sizeLive.memo}" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <include
+                android:id="@+id/basicInfo2"
+                layout="@layout/fragment_size_include_basic_info_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.leebeebeom.closetnote.ui.view.LockableScrollView>
 </layout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeFragment" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/linkLayout"
+            style="@style/myOutlinedEditTextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:hint="@string/size_https"
+            app:layout_constraintEnd_toStartOf="@id/btnGo"
+            app:layout_constraintHorizontal_weight="4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.leebeebeom.closetnote.ui.view.CustomEditText
+                android:id="@+id/etLink"
+                android:layout_width="match_parent"
+                android:layout_height="?myEditTextHeight"
+                android:imeOptions="actionNext"
+                android:inputType="textUri"
+                android:text="@={model.sizeLive.link}"
+                android:textColorLink="?colorControlNormal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGo"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="?myEditTextHeight"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:onClick="@{() -> fragment.openBrowser()}"
+            android:text="@string/size_move"
+            android:textColor="?myColorControl"
+            app:backgroundTint="?myBackgroundGrey"
+            app:fontFamily="@font/sc_dream4"
+            app:layout_constraintBottom_toBottomOf="@id/linkLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/linkLayout"
+            app:layout_constraintTop_toTopOf="@id/linkLayout"
+            app:strokeColor="?myColorControl" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/myOutlinedEditTextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/size_memo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linkLayout">
+
+            <com.leebeebeom.closetnote.ui.view.CustomEditText
+                android:id="@+id/etMemo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine"
+                android:minHeight="?myEditTextHeight"
+                android:text="@={model.sizeLive.memo}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
