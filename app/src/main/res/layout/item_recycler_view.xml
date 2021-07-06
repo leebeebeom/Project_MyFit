@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
+            android:minHeight="@dimen/_580sdp"
             android:background="@drawable/corner_round_background_grey"
             android:clipToPadding="false"
             android:overScrollMode="never"
