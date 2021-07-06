@@ -18,17 +18,14 @@
         style="@style/myOutlinedEditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_4sdp"
-        android:layout_weight="1"
-        android:hint="@{hint}"
-        tools:ignore="ObsoleteLayoutParam">
+        android:hint="@{hint}">
 
         <com.leebeebeom.closetnote.ui.view.CustomEditText
             android:id="@+id/et"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="?myEditTextHeight"
             android:imeOptions="actionNext"
-            android:inputType="numberDecimal"
+            android:inputType="text"
             android:text="@={text}"
             tools:text="@string/size_option_1" />
     </com.google.android.material.textfield.TextInputLayout>

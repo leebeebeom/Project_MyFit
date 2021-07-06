@@ -19,16 +19,13 @@
         style="@style/myOutlinedEditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_4sdp"
-        android:layout_weight="1"
         android:hint="@{hint}"
-        app:suffixText="cm"
-        tools:ignore="ObsoleteLayoutParam">
+        app:suffixText="cm">
 
         <com.leebeebeom.closetnote.ui.view.CustomEditText
             android:id="@+id/et"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="?myEditTextHeight"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:text="@={text}"
