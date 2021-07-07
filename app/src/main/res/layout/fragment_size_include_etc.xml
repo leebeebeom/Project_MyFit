@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toStartOf="@id/option2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:text="@{model.sizeLive.firstInfo}" />
+            app:text="@={model.sizeLive.firstInfo}" />
 
         <include
             android:id="@+id/option2"
@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/option1"
             app:layout_constraintTop_toTopOf="parent"
-            app:text="@{model.sizeLive.secondInfo}" />
+            app:text="@={model.sizeLive.secondInfo}" />
 
         <include
             android:id="@+id/option3"
@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toStartOf="@id/option4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/option1"
-            app:text="@{model.sizeLive.thirdInfo}" />
+            app:text="@={model.sizeLive.thirdInfo}" />
 
         <include
             android:id="@+id/option4"
@@ -59,7 +59,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/option3"
             app:layout_constraintTop_toBottomOf="@id/option2"
-            app:text="@{model.sizeLive.fourthInfo}" />
+            app:text="@={model.sizeLive.fourthInfo}" />
 
         <include
             android:id="@+id/option5"
@@ -71,7 +71,7 @@
             app:layout_constraintEnd_toStartOf="@id/option6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/option3"
-            app:text="@{model.sizeLive.fifthInfo}" />
+            app:text="@={model.sizeLive.fifthInfo}" />
 
         <include
             android:id="@+id/option6"
@@ -83,7 +83,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/option5"
             app:layout_constraintTop_toBottomOf="@id/option4"
-            app:text="@{model.sizeLive.sixthInfo}" />
+            app:text="@={model.sizeLive.sixthInfo}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

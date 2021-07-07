@@ -47,7 +47,7 @@
             style="@style/myOutlinedEditTextLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
             android:hint="@string/size_name"
             app:layout_constraintEnd_toStartOf="@id/sizeLayout"
             app:layout_constraintHorizontal_weight="3"

@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toStartOf="@id/view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:text="@{model.sizeLive.firstInfo}" />
+            app:text="@={model.sizeLive.firstInfo}" />
 
         <View
             android:id="@+id/view"
@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toStartOf="@id/thigh"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/length"
-            app:text="@{model.sizeLive.secondInfo}" />
+            app:text="@={model.sizeLive.secondInfo}" />
 
         <include
             android:id="@+id/thigh"
@@ -57,7 +57,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/waist"
             app:layout_constraintTop_toBottomOf="@id/length"
-            app:text="@{model.sizeLive.thirdInfo}" />
+            app:text="@={model.sizeLive.thirdInfo}" />
 
 
         <include
@@ -70,7 +70,7 @@
             app:layout_constraintEnd_toStartOf="@id/hem"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/waist"
-            app:text="@{model.sizeLive.fourthInfo}" />
+            app:text="@={model.sizeLive.fourthInfo}" />
 
         <include
             android:id="@+id/hem"
@@ -82,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/rise"
             app:layout_constraintTop_toBottomOf="@id/thigh"
-            app:text="@{model.sizeLive.fifthInfo}" />
+            app:text="@={model.sizeLive.fifthInfo}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

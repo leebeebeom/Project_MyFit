@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toStartOf="@id/shoulder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:text="@{model.sizeLive.firstInfo}" />
+            app:text="@={model.sizeLive.firstInfo}" />
 
         <include
             android:id="@+id/shoulder"
@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/length"
             app:layout_constraintTop_toTopOf="parent"
-            app:text="@{model.sizeLive.secondInfo}" />
+            app:text="@={model.sizeLive.secondInfo}" />
 
 
         <include
@@ -49,7 +49,7 @@
             app:layout_constraintEnd_toStartOf="@id/sleeve"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/length"
-            app:text="@{model.sizeLive.thirdInfo}" />
+            app:text="@={model.sizeLive.thirdInfo}" />
 
         <include
             android:id="@+id/sleeve"
@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/chest"
             app:layout_constraintTop_toBottomOf="@id/shoulder"
-            app:text="@{model.sizeLive.fourthInfo}" />
+            app:text="@={model.sizeLive.fourthInfo}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
