@@ -14,7 +14,6 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:titleTextAppearance="@style/myActionBarTitleStyle">
 
             <com.google.android.material.textview.MaterialTextView
