@@ -25,13 +25,12 @@
 
             <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/et"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="?myEditTextHeight"
                 android:layout_width="match_parent"
                 android:maxLength="30"
                 android:imeOptions="actionDone"
                 android:text="@={model.name}"
-                android:inputType="text"
-                android:textSize="@dimen/_11sdp" />
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
     </FrameLayout>
 </layout>

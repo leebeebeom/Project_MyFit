@@ -5,9 +5,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewPagerVH"
             type="com.leebeebeom.closetnote.util.adapter.viewholder.ViewPagerVH" />
+
+        <variable
+            name="adapter"
+            type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
     </data>
 
     <FrameLayout
@@ -18,6 +24,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             app:onTouchListener="@{(view, event) ->viewPagerVH.recyclerViewTouch(event)}"
+            app:adapter="@{adapter}"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,13 +44,15 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_4sdp"
             android:background="@drawable/corner_round_background_grey"
-            android:minHeight="@dimen/_540sdp"
-            android:visibility="gone">
+            android:minHeight="@dimen/_580sdp"
+            android:visibility="@{adapter.itemCount == 0 ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_40sdp"
                 android:alpha="0.5"
                 android:text="@string/all_no_data"
                 android:textSize="@dimen/_20sdp" />

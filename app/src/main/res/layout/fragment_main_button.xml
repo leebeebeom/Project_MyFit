@@ -7,7 +7,7 @@
         android:id="@+id/btn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_34sdp"
+        android:layout_height="@dimen/_36sdp"
         android:textSize="@dimen/_9sdp"
         app:rippleColor="@android:color/transparent"
         android:layout_weight="1"
