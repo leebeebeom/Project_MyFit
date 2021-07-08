@@ -31,7 +31,7 @@
 
             <include
                 android:id="@+id/cardView"
-                layout="@layout/fragment_size_include_cardview"
+                layout="@layout/fragment_size_include_card_view"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 app:fragment="@{fragment}"
