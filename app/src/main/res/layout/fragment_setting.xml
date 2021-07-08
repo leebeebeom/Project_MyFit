@@ -40,7 +40,7 @@
 
                 <include
                     android:id="@+id/includeAccount"
-                    layout="@layout/fragment_setting_include_account"
+                    layout="@layout/fragment_setting_account"
                     android:layout_height="wrap_content"
                     app:model="@{model}"
                     app:fragment="@{fragment}"
@@ -51,7 +51,7 @@
 
                 <include
                     android:id="@+id/includeGlobal"
-                    layout="@layout/fragment_setting_include_global"
+                    layout="@layout/fragment_setting_global"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
 
                 <include
                     android:id="@+id/includeEtc"
-                    layout="@layout/fragment_setting_include_etc"
+                    layout="@layout/fragment_setting_etc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,7 @@
                     app:layout_constraintTop_toBottomOf="@id/includeGlobal" />
 
                 <include
-                    layout="@layout/fragment_setting_include_sign_out"
+                    layout="@layout/fragment_setting_sign_out"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:fragment="@{fragment}"

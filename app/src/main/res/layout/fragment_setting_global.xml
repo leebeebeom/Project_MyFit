@@ -12,21 +12,21 @@
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/myFragmentSubTextView"
-            android:id="@+id/tvEtc"
+            android:id="@+id/tvGlobal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/setting_etc"
+            android:text="@string/setting_global"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
             style="@style/mySettingCardView"
+            android:id="@+id/cardViewTheme"
             android:layout_width="0dp"
             android:layout_height="?mySettingCardViewHeight"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEtc">
+            app:layout_constraintTop_toBottomOf="@id/tvGlobal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -36,12 +36,39 @@
                     style="@style/mySettingTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/setting_contact"
+                    android:text="@string/setting_theme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <include layout="@layout/fragment_setting_include_arrow_icon" />
+                <include layout="@layout/fragment_setting_arrow_icon" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/mySettingCardView"
+            android:id="@+id/cardViewNetwork"
+            android:layout_width="0dp"
+            android:layout_height="?mySettingCardViewHeight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewTheme">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/mySettingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_network"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <include layout="@layout/fragment_setting_arrow_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
