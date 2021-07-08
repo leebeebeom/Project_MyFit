@@ -31,7 +31,7 @@
 
             <include
                 android:id="@+id/cardView"
-                layout="@layout/fragment_size_include_card_view"
+                layout="@layout/fragment_size_card_view"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 app:fragment="@{fragment}"
@@ -42,7 +42,7 @@
 
             <include
                 android:id="@+id/time"
-                layout="@layout/fragment_size_include_time"
+                layout="@layout/fragment_size_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
 
             <include
                 android:id="@+id/basicInfo1"
-                layout="@layout/fragment_size_include_basic_info_1"
+                layout="@layout/fragment_size_basic_info_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:fragment="@{fragment}"
@@ -62,7 +62,7 @@
 
             <include
                 android:id="@+id/detail"
-                layout="@layout/fragment_size_include_detail"
+                layout="@layout/fragment_size_detail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +72,7 @@
 
             <include
                 android:id="@+id/basicInfo2"
-                layout="@layout/fragment_size_include_basic_info_2"
+                layout="@layout/fragment_size_basic_info_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:fragment="@{fragment}"

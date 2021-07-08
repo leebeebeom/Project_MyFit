@@ -17,7 +17,7 @@
         android:layout_height="match_parent">
 
         <include
-            layout="@layout/fragment_size_include_top"
+            layout="@layout/fragment_size_top"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="@{model.sizeLive.parentIndex == 0 || model.sizeLive.parentIndex == 2 ? View.VISIBLE : View.GONE}"
@@ -28,7 +28,7 @@
             tools:visibility="gone" />
 
         <include
-            layout="@layout/fragment_size_include_bottom"
+            layout="@layout/fragment_size_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="@{model.sizeLive.parentIndex == 1 ? View.VISIBLE : View.GONE}"
@@ -39,7 +39,7 @@
             tools:visibility="visible" />
 
         <include
-            layout="@layout/fragment_size_include_etc"
+            layout="@layout/fragment_size_etc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="@{model.sizeLive.parentIndex == 3 ? View.VISIBLE : View.GONE}"
