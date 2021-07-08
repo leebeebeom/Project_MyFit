@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.leebeebeom.closetnote.util.constant.ViewType" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/rvSizeList"
+            layout="@layout/fragment_list_recycler_view_size_list"
+            android:visibility="@{model.viewTypePreferenceLive == ViewType.LIST_VIEW.value ? View.VISIBLE : View.GONE}" />
+
+        <include
+            android:id="@+id/rvSizeGrid"
+            layout="@layout/fragment_list_recycler_view_size_grid"
+            android:visibility="@{model.viewTypePreferenceLive == ViewType.GRID_VIEW.value ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/noData"
+            layout="@layout/fragment_list_no_data"
+            android:visibility="@{model.sizeTuplesLive.empty || model.sizeTuplesLive == null ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone" />
+
+    </FrameLayout>
+</layout>

@@ -12,10 +12,11 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNoData"
             android:alpha="0.5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_200sdp"
+            android:layout_gravity="center_horizontal"
             android:text="@string/all_no_data"
-            android:textSize="@dimen/_20sdp" />
+            android:textSize="@dimen/_18sdp" />
     </FrameLayout>
 </layout>

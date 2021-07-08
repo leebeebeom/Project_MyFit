@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="android.view.View" />
-
-        <import type="com.leebeebeom.closetnote.util.constant.ViewType" />
-
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
@@ -26,7 +21,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="?android:colorBackground">
 
             <include
@@ -51,37 +46,13 @@
                 app:model="@{model}" />
 
             <include
-                android:id="@+id/rvSizeList"
-                layout="@layout/fragment_list_recycler_view_size_list"
+                android:id="@+id/rvSize"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                layout="@layout/fragment_list_recycler_view_size"
+                android:layout_height="wrap_content"
+                app:model="@{model}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvFolder"
-                android:visibility="@{model.viewTypePreferenceLive == ViewType.LIST_VIEW.value ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <include
-                android:id="@+id/rvSizeGrid"
-                layout="@layout/fragment_list_recycler_view_size_grid"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="@{model.viewTypePreferenceLive == ViewType.GRID_VIEW.value ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvFolder" />
-
-            <include
-                android:id="@+id/noData"
-                layout="@layout/fragment_list_no_data"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:visibility="@{model.sizeTuplesLive.empty || model.sizeTuplesLive == null ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvFolder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
