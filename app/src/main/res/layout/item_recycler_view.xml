@@ -23,41 +23,20 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
-            app:onTouchListener="@{(view, event) ->viewPagerVH.recyclerViewTouch(event)}"
-            app:adapter="@{adapter}"
-            android:nestedScrollingEnabled="false"
+            style="@style/myRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:minHeight="@dimen/_580sdp"
-            android:background="@drawable/corner_round_background_grey"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingTop="@dimen/_8sdp"
-            android:paddingBottom="@dimen/_100sdp"
+            android:paddingHorizontal="0dp"
+            app:adapter="@{adapter}"
+            app:onTouchListener="@{(view, event) -> viewPagerVH.recyclerViewTouch(event)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_vh_category" />
 
-        <FrameLayout
-            android:id="@+id/layoutNoData"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:background="@drawable/corner_round_background_grey"
-            android:minHeight="@dimen/_580sdp"
+        <include
+            android:id="@+id/no_data"
+            layout="@layout/fragment_list_no_data"
             android:visibility="@{adapter.itemCount == 0 ? View.VISIBLE : View.GONE}"
-            tools:visibility="visible">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_40sdp"
-                android:alpha="0.5"
-                android:text="@string/all_no_data"
-                android:textSize="@dimen/_20sdp" />
-        </FrameLayout>
-
+            tools:visibility="gone" />
     </FrameLayout>
 
 </layout>
