@@ -76,7 +76,7 @@
                 <include
                     android:id="@+id/email"
                     style="@style/myAccountFragmentSettings"
-                    layout="@layout/fragment_account_include"
+                    layout="@layout/fragment_account_text_view"
                     app:action="@{model.emailLive.toString()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iconEmail"
@@ -95,7 +95,7 @@
                 <include
                     android:id="@+id/changeNickname"
                     style="@style/myAccountFragmentSettings"
-                    layout="@layout/fragment_account_include"
+                    layout="@layout/fragment_account_text_view"
                     app:action="@{@string/setting_account_edit_name}"
                     app:clickListener="@{fragment.editNickname()}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +115,7 @@
                 <include
                     android:id="@+id/changePassword"
                     style="@style/myAccountFragmentSettings"
-                    layout="@layout/fragment_account_include"
+                    layout="@layout/fragment_account_text_view"
                     app:clickListener="@{fragment.editPassword()}"
                     app:action="@{@string/setting_account_change_password}"
                     app:layout_constraintEnd_toEndOf="parent"
