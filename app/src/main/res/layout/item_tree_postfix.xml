@@ -12,9 +12,9 @@
             type="int" />
     </data>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvCurrentPosition"
@@ -25,6 +25,7 @@
             android:maxLines="1"
             android:text="@string/dialog_current_position"
             android:textSize="@dimen/_6sdp"
+            tools:visibility="visible"
             android:visibility="gone" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -39,9 +40,8 @@
             android:textSize="@dimen/_6sdp"
             tools:text="20" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.leebeebeom.closetnote.ui.view.icon.AddIcon
             android:id="@+id/iconAdd"
-            setAddIcon2='@{""}'
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:alpha="0.8"
@@ -49,6 +49,5 @@
             android:paddingStart="0dp"
             android:paddingEnd="@dimen/_16sdp"
             tools:src="@drawable/icon_add" />
-
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

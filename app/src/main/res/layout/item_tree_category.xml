@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.leebeebeom.closetnote.ui.dialog.tree.holder.BaseTreeHolder"/>
+
+        <import type="com.leebeebeom.closetnote.ui.dialog.tree.holder.BaseTreeHolder" />
 
         <variable
             name="categoryHolder"
             type="com.leebeebeom.closetnote.ui.dialog.tree.holder.TreeCategoryHolder" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -25,25 +27,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:treeHolder="@{(BaseTreeHolder) categoryHolder}" />
 
-            <include
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv"
-                layout="@layout/item_tree_text_view"
-                app:textSize="@{@dimen/_11sdp}"
-                app:name="@{categoryHolder.tuple.name}" />
+                style="@style/myTreeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{categoryHolder.tuple.name}"
+                android:textSize="@dimen/_11sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/prefix"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Short Sleeve" />
 
             <include
                 android:id="@+id/postfix"
                 layout="@layout/item_tree_postfix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:contentSize="@{categoryHolder.tuple.contentSize}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:treeHolder="@{(BaseTreeHolder) categoryHolder}" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginHorizontal="@dimen/_20sdp"
-            android:background="?myColorControl" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            android:background="?myColorControl"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </LinearLayout>
+
 </layout>
