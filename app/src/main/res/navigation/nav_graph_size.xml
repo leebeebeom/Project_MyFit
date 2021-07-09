@@ -33,7 +33,7 @@
     <dialog
         android:id="@+id/deleteSizeDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.delete.DeleteSizeDialog"
-        android:label="DeleteSizeDialog">
+        android:label="">
         <argument
             android:name="id"
             app:argType="long" />
@@ -42,11 +42,11 @@
     <dialog
         android:id="@+id/deleteImageDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.DeleteImageDialog"
-        android:label="DeleteImageDialog" />
+        android:label="" />
 
     <dialog
         android:id="@+id/goBackDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.GoBackDialog"
-        android:label="GoBackDialog" />
+        android:label="" />
 
 </navigation>

@@ -44,7 +44,7 @@
     <dialog
         android:id="@+id/anonymouslySignOutDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.AnonymouslySignOutDialog"
-        android:label="AnonymouslySignOut" />
+        android:label="" />
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.leebeebeom.closetnote.ui.signin.signup.SignUpFragment"

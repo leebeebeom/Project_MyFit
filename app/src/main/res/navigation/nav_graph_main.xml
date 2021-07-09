@@ -58,7 +58,7 @@
     <dialog
         android:id="@+id/deleteCategoriesDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.delete.DeleteCategoriesDialog"
-        android:label="DeleteCategoriesDialog">
+        android:label="">
         <argument
             android:name="selectedItemIds"
             app:argType="long[]" />
@@ -67,7 +67,7 @@
     <dialog
         android:id="@+id/sortMainDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.sort.SortMainDialog"
-        android:label="SortMainDialog" />
+        android:label="" />
 
     <include app:graph="@navigation/nav_graph_edit_category_name" />
     <include app:graph="@navigation/nav_graph_add_category" />

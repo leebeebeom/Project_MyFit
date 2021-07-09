@@ -6,7 +6,7 @@
     <dialog
         android:id="@+id/editCategoryNameDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.category.EditCategoryNameDialog"
-        android:label="EditCategoryNameDialog">
+        android:label="">
         <argument
             android:name="id"
             app:argType="long" />
@@ -24,6 +24,6 @@
     <dialog
         android:id="@+id/editSameCategoryNameDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.edit.category.EditSameCategoryNameDialog"
-        android:label="EditSameCategoryNameDialog" />
+        android:label="" />
 
 </navigation>

@@ -58,7 +58,7 @@
         android:id="@+id/sendResetPasswordEmailFragment"
         android:name="com.leebeebeom.closetnote.ui.signin.resetpassword.sendrestapsswordemail.SendResetPasswordEmailFragment"
         android:label=""
-        tools:layout="@layout/fragment_send_reset_password_email">
+        tools:layout="@layout/fragment_sent_reset_password_email">
         <argument
             android:name="email"
             app:argType="string" />

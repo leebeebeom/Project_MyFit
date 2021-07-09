@@ -6,7 +6,7 @@
     <dialog
         android:id="@+id/addFolderDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.folder.AddFolderDialog"
-        android:label="AddFolderDialog">
+        android:label="">
         <argument
             android:name="parentId"
             app:argType="long" />
@@ -21,6 +21,6 @@
     <dialog
         android:id="@+id/addSameFolderNameDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.eidttext.add.folder.AddSameFolderNameDialog"
-        android:label="AddSameFolderNameDialog" />
+        android:label="" />
 
 </navigation>

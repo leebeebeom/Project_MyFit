@@ -8,6 +8,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.leebeebeom.closetnote.ui.main.list.ListFragment"
+        android:label=""
         tools:layout="@layout/fragment_list">
         <argument
             android:name="categoryId"
@@ -100,7 +101,7 @@
     <dialog
         android:id="@+id/deleteFolderAndSizesDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.delete.DeleteFolderAndSizesDialog"
-        android:label="DeleteFolderAndSizesDialog">
+        android:label="">
         <argument
             android:name="selectedFolderIds"
             app:argType="long[]" />
@@ -112,7 +113,7 @@
     <dialog
         android:id="@+id/sortListDialog"
         android:name="com.leebeebeom.closetnote.ui.dialog.sort.SortListDialog"
-        android:label="SortListDialog" />
+        android:label="" />
     <include app:graph="@navigation/nav_graph_size" />
     <include app:graph="@navigation/nav_graph_edit_folder_name" />
     <include app:graph="@navigation/nav_graph_tree_view" />
