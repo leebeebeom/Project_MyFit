@@ -12,15 +12,12 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
             app:titleTextAppearance="@style/myActionBarTitleStyle">
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/myAppNameTextView"
                 android:id="@+id/tvCustomTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="@dimen/_32sdp" />
         </com.google.android.material.appbar.MaterialToolbar>

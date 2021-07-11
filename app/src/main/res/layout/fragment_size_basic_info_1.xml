@@ -13,15 +13,11 @@
             type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchParent">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutBrand"
             style="@style/myAutoCompleteTextViewLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_4sdp"
             android:hint="@string/size_brand"
             app:endIconMode="none"
@@ -32,8 +28,7 @@
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/etBrand"
                 setItems="@{model.autoCompleteLive}"
-                android:layout_width="match_parent"
-                android:layout_height="?myEditTextHeight"
+                style="@style/myEditText"
                 android:completionThreshold="0"
                 android:imeOptions="actionNext"
                 android:inputType="text"
@@ -45,8 +40,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutName"
             style="@style/myOutlinedEditTextLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_2sdp"
             android:hint="@string/size_name"
             app:layout_constraintEnd_toStartOf="@id/sizeLayout"
@@ -56,8 +49,7 @@
 
             <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/etName"
-                android:layout_width="match_parent"
-                android:layout_height="?myEditTextHeight"
+                style="@style/myEditText"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:text="@={model.sizeLive.name}" />
@@ -66,8 +58,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/sizeLayout"
             style="@style/myOutlinedEditTextLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:hint="@string/size_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
@@ -76,8 +66,7 @@
 
             <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/etSize"
-                android:layout_width="match_parent"
-                android:layout_height="?myEditTextHeight"
+                style="@style/myEditText"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:text="@={model.sizeLive.size}" />

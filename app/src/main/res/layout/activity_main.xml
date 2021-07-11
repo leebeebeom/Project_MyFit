@@ -20,8 +20,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/myMatchParent"
         tools:context=".ui.MainActivity">
 
         <include
@@ -31,8 +30,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/host_fragment_main"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph_main"
@@ -50,7 +48,7 @@
             app:fabCradleMargin="@dimen/_6sdp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                style="@style/myBottomNav"
+                style="@style/myBottomNavActiveColor"
                 android:id="@+id/bottomNav"
                 app:itemBackground="@android:color/transparent"
                 android:layout_width="match_parent"
@@ -64,22 +62,18 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/myFab"
             android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:elevation="@dimen/_1sdp"
-            app:layout_anchor="@id/bottomAppBar"
             app:tint="?colorPrimary"
             tools:src="@drawable/icon_add"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/myFab"
             android:id="@+id/fabTop"
             app:backgroundTint="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:tint="@color/black"
-            app:layout_anchor="@id/bottomAppBar"
             app:fabSize="mini"
             app:fabCustomSize="@dimen/_24sdp"
             android:layout_marginEnd="@dimen/_16sdp"
@@ -90,8 +84,7 @@
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_gravity="center"
             android:indeterminate="true"
             android:visibility="gone"

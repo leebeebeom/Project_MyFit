@@ -17,15 +17,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:paddingHorizontal="@dimen/_8sdp"
-        android:layout_height="wrap_content">
+        style="@style/myMatchWrap"
+        android:paddingHorizontal="@dimen/_8sdp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignOut"
-            style="@style/myOutlineButton"
-            android:layout_width="0dp"
-            android:layout_height="?mySignButtonHeight"
+            style="@style/mySignInButton"
             android:onClick="@{() -> model.emailLive.equals(@string/setting_anonymously) ? fragment.navigateAnonymouslySignOutDialog() : fragment.signOut()}"
             android:text="@string/setting_sign_out"
             android:textColor="?colorError"
@@ -36,9 +33,7 @@
             app:strokeColor="@android:color/transparent" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/myOutlineButton"
-            android:layout_width="0dp"
-            android:layout_height="?mySignButtonHeight"
+            style="@style/mySignInButton"
             android:onClick="@{() -> fragment.navigateAnonymouslySignUpFragment()}"
             android:text="@string/setting_switch_to_member"
             android:textColor="?myColorControl"

@@ -18,22 +18,19 @@
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:colorBackground"
+        style="@style/myMatchParent"
         tools:context=".ui.main.size.SizeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
+            android:background="?android:colorBackground"
             android:paddingHorizontal="@dimen/_16sdp"
             android:paddingBottom="@dimen/_68sdp">
 
             <include
                 android:id="@+id/cardView"
                 layout="@layout/fragment_size_card_view"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
+                style="@style/my0dpWrapContent"
                 app:fragment="@{fragment}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,8 +40,7 @@
             <include
                 android:id="@+id/time"
                 layout="@layout/fragment_size_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardView"
                 app:model="@{model}" />
@@ -52,8 +48,7 @@
             <include
                 android:id="@+id/basicInfo1"
                 layout="@layout/fragment_size_basic_info_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:fragment="@{fragment}"
                 app:model="@{model}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,8 +58,7 @@
             <include
                 android:id="@+id/detail"
                 layout="@layout/fragment_size_detail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/basicInfo1"
@@ -73,8 +67,7 @@
             <include
                 android:id="@+id/basicInfo2"
                 layout="@layout/fragment_size_basic_info_2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:fragment="@{fragment}"
                 app:model="@{model}"
                 app:layout_constraintEnd_toEndOf="parent"

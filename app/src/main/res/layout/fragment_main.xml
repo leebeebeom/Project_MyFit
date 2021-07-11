@@ -12,27 +12,21 @@
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/myMatchParent"
         tools:context=".ui.main.main.MainFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchParent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvCategory"
                 style="@style/myFragmentMainTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/all_caps_category"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.leebeebeom.closetnote.ui.view.main.MainToggleGroup
                 android:id="@+id/toggleGroup"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/_16sdp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -43,8 +37,7 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:adapter="@{mainViewPagerAdapter}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

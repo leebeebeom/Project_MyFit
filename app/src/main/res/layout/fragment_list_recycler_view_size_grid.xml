@@ -2,16 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <com.leebeebeom.closetnote.ui.view.recyclerview.SizeRecyclerViewGrid
             android:id="@+id/rv"
             style="@style/myRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="0dp"
+            android:paddingHorizontal="@dimen/_4sdp"
             tools:listitem="@layout/item_vh_size_grid" />
-    </FrameLayout>
 </layout>

@@ -9,9 +9,7 @@
             type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchWrap">
 
         <include
             android:id="@+id/length"
@@ -26,10 +24,8 @@
             app:text="@={model.sizeLive.firstInfo}" />
 
         <View
+            style="@style/myHorizontalDivider"
             android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/length"

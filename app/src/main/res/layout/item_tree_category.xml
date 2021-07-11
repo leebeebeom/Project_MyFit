@@ -12,14 +12,11 @@
             type="com.leebeebeom.closetnote.ui.dialog.tree.holder.TreeCategoryHolder" />
     </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        style="@style/myMatchWrap"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchWrap">
 
             <include
                 android:id="@+id/prefix"
@@ -35,8 +32,6 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv"
                 style="@style/myTreeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@{categoryHolder.tuple.name}"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -47,8 +42,7 @@
             <include
                 android:id="@+id/postfix"
                 layout="@layout/item_tree_postfix"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 app:contentSize="@{categoryHolder.tuple.contentSize}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -58,11 +52,9 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
+            style="@style/myHorizontalDivider"
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:background="?myColorControl"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </LinearLayout>
+            android:layout_marginHorizontal="@dimen/_20sdp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </layout>

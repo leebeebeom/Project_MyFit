@@ -13,21 +13,16 @@
             type="com.leebeebeom.closetnote.ui.signin.SignInViewModel" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout style="@style/myMatchParent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/myMatchWrap"
             android:layout_gravity="center"
             android:paddingHorizontal="@dimen/_28sdp">
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/myAppNameTextView"
                 android:id="@+id/tvAppName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:textSize="@dimen/_48sdp"
                 app:layout_constraintBottom_toTopOf="@id/et"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -50,8 +45,6 @@
             <com.google.android.material.textview.MaterialTextView
                 style="@style/mySignInTextView"
                 android:id="@+id/tvForgotPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:onClick="@{() -> fragment.navigateResetPasswordFragment()}"
                 android:text="@string/sign_forgot_password"
@@ -61,9 +54,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSignIn"
-                style="@style/myOutlineButton"
-                android:layout_width="0dp"
-                android:layout_height="?mySignButtonHeight"
+                style="@style/mySignInButton"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:onClick="@{() -> model.textsNotEmpty ? fragment.emailSignIn() : fragment.setEmptyError()}"
                 android:text="@string/sign_login"
@@ -78,8 +69,7 @@
             <include
                 android:id="@+id/or1"
                 layout="@layout/fragment_sign_in_or"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:layout_constraintBottom_toTopOf="@id/signInButtons"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,8 +78,7 @@
             <include
                 android:id="@+id/signInButtons"
                 layout="@layout/fragment_sign_in_sign_in_buttons"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:fragment="@{fragment}"
                 app:layout_constraintBottom_toTopOf="@id/or2"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -99,8 +88,7 @@
             <include
                 android:id="@+id/or2"
                 layout="@layout/fragment_sign_in_or"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:layout_constraintBottom_toTopOf="@id/tvSlash"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -108,9 +96,8 @@
 
             <include
                 layout="@layout/fragment_sign_in_other_start"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="0dp"
                 app:fragment="@{fragment}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/or2" />

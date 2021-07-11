@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="com.leebeebeom.closetnote.util.adapter.viewholder.BaseVH" />
+        <import type="android.view.View" />
 
         <variable
             name="categoryVH"
@@ -19,24 +20,85 @@
             type="boolean" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:onClick="@{() -> categoryVH.itemViewClick()}"
         app:onLongClickListener="@{() -> categoryVH.itemViewLongClick()}"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/myMatchWrap">
 
-        <include
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb"
-            app:dragging="@{dragging}"
-            layout="@layout/item_vh_include_check_box" />
+            style="@style/myListCheckBox"
+            android:visibility="@{dragging ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/cardView"
-            layout="@layout/item_vh_include_list_card_view"
-            app:alpha="@{0.9f}"
-            app:baseAdapter="@{baseAdapter}"
-            app:baseVH="@{(BaseVH) categoryVH}"
-            app:tuple="@{categoryVH.tuple}"
-            app:dragging="@{dragging}" />
-    </FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            style="@style/myListCardView"
+            holder="@{categoryVH}"
+            listActionMode="@{baseAdapter}"
+            android:translationZ="@{dragging ? 10f : 0f}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchParent">
+
+                <com.leebeebeom.closetnote.ui.view.icon.DotIcon
+                    android:id="@+id/dotIcon"
+                    style="@style/myWrap0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:alpha="0.8"
+                    android:scaleX="0.3"
+                    android:scaleY="0.3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/icon_dot" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvName"
+                    style="@style/myWrapContent"
+                    android:alpha="0.9"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxWidth="@dimen/_220sdp"
+                    android:maxLines="1"
+                    android:text="@{categoryVH.tuple.name}"
+                    android:textSize="@dimen/_11sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/dotIcon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="안녕하세요" />
+
+                <FrameLayout
+                    android:id="@+id/contentSizeLayout"
+                    style="@style/myContentSizeLayout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvName"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvContentSize"
+                        style="@style/myContentSizeTextView"
+                        android:alpha="@{dragging ? 0.5f : 0.6f}"
+                        android:text="@{categoryVH.tuple.contentSize}"
+                        tools:text="1234" />
+                </FrameLayout>
+
+                <com.leebeebeom.closetnote.ui.view.icon.DragHandleIcon
+                    android:id="@+id/iconDragHandle"
+                    style="@style/myDragHandle"
+                    dragHandleActionMode="@{baseAdapter}"
+                    app:layout_constraintBottom_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:onTouchListener="@{(view, event) -> categoryVH.dragStart(event)}"
+                    tools:src="@drawable/icon_drag_handle"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

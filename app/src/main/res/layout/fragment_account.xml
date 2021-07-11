@@ -16,33 +16,28 @@
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        style="@style/myMatchParent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
             android:background="?attr/myBackgroundGrey">
 
             <com.mikhaellopez.circularimageview.CircularImageView
+                style="@style/myProfileImageView"
                 android:id="@+id/profileImage"
                 setProfileUrl="@{model.profileUrlLive}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_120sdp"
                 android:layout_marginVertical="@dimen/_40sdp"
-                app:civ_border_color="?myColorControl"
-                app:civ_border_width="1px"
                 app:layout_constraintBottom_toTopOf="@id/layoutSetting"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:alpha="0.1"
                 tools:srcCompat="@drawable/icon_person" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:alpha="0.9"
                 android:text="@{model.nicknameLive}"
@@ -54,8 +49,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutSetting"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                style="@style/my0dp"
                 android:background="@drawable/corner_round_background_primary"
                 android:paddingTop="@dimen/_4sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -66,8 +60,6 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconEmail"
                     style="@style/myAccountFragmentIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="@id/email"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/email"
@@ -85,8 +77,6 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconPerson"
                     style="@style/myAccountFragmentIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="@id/changeNickname"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/changeNickname"
@@ -105,8 +95,6 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iconKey"
                     style="@style/myAccountFragmentIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="@id/changePassword"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/changePassword"

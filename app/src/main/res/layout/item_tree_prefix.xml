@@ -19,14 +19,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout"
         android:onClick="@{() -> treeHolder.node.children.empty ? void : treeHolder.treeView.toggleNode(treeHolder.node)}"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        style="@style/myWrapContent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iconArrow"
             arrowActive="@{active}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_marginStart="@dimen/_4sdp"
             android:alpha="0.8"
             android:visibility="@{treeHolder.node.children.empty ? View.INVISIBLE : View.VISIBLE}"
@@ -41,8 +39,7 @@
             app:layout_constraintStart_toEndOf="@id/iconArrow"
             app:layout_constraintTop_toTopOf="parent"
             folderActive="@{active}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:alpha="0.8"
             tools:srcCompat="@drawable/icon_folder" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,17 +16,11 @@
             type="com.leebeebeom.closetnote.util.adapter.BaseAdapter" />
     </data>
 
-    <FrameLayout
-        android:background="@android:color/transparent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout style="@style/myMatchParent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             style="@style/myRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="0dp"
             app:adapter="@{adapter}"
             app:onTouchListener="@{(view, event) -> viewPagerVH.recyclerViewTouch(event)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -38,5 +32,4 @@
             android:visibility="@{adapter.itemCount == 0 ? View.VISIBLE : View.GONE}"
             tools:visibility="gone" />
     </FrameLayout>
-
 </layout>

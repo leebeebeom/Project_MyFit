@@ -7,11 +7,18 @@
         <variable
             name="model"
             type="com.leebeebeom.closetnote.ui.dialog.eidttext.BaseEditTextViewModel" />
+
+        <variable
+            name="oldName"
+            type="String" />
+
+        <variable
+            name="dialogBuilder"
+            type="com.leebeebeom.closetnote.ui.dialog.DialogBuilder" />
     </data>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/myMatchWrap"
         android:paddingHorizontal="@dimen/_20sdp"
         android:paddingTop="@dimen/_10sdp">
 
@@ -19,14 +26,14 @@
             android:id="@+id/layout"
             style="@style/myOutlinedEditTextLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             app:endIconMode="clear_text"
             setOnKeyListener='@{""}'>
 
             <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/et"
-                android:layout_height="?myEditTextHeight"
-                android:layout_width="match_parent"
+                style="@style/myEditText"
+                addTextChangedListener="@{dialogBuilder}"
+                oldName="@{oldName}"
                 android:maxLength="30"
                 android:imeOptions="actionDone"
                 android:text="@={model.name}"

@@ -11,14 +11,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/myMatchParent"
         tools:context=".ui.signin.reverification.ReVerificationFragment">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:text="@string/sign_please_check_verification__email"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toTopOf="@+id/btnCheck"
@@ -30,35 +28,25 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCheck"
-            style="@style/myOutlineButton"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/myNormalButtonHeight"
+            style="@style/myNormalButton"
             android:onClick="@{() -> fragment.openEmail()}"
             android:text="@string/sign_lets_check"
-            android:textColor="?colorPrimary"
-            app:backgroundTint="?myColorControl"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnReSend"
-            app:layout_constraintTop_toBottomOf="@+id/tv"
-            app:strokeColor="@android:color/transparent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReSend"
-            style="@style/myOutlineButton"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/myNormalButtonHeight"
+            style="@style/myNormalButton"
             android:layout_marginEnd="@dimen/_4sdp"
             android:onClick="@{() -> fragment.reSend()}"
             android:text="@string/sign_resend"
-            android:textColor="?colorPrimary"
-            app:backgroundTint="?myColorControl"
             app:layout_constraintEnd_toStartOf="@+id/btnCheck"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnCheck"
-            app:strokeColor="@android:color/transparent" />
+            app:layout_constraintTop_toTopOf="@id/btnCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,15 +5,12 @@
     <FrameLayout
         android:id="@+id/layoutNoData"
         style="@style/myRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         tools:visibility="visible">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNoData"
             android:alpha="0.5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_marginTop="@dimen/_240sdp"
             android:layout_gravity="center_horizontal"
             android:text="@string/all_no_data"

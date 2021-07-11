@@ -12,14 +12,11 @@
             type="int" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <androidx.appcompat.widget.LinearLayoutCompat style="@style/myWrapContent">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvCurrentPosition"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/myWrapMatch"
             android:alpha="0.5"
             android:gravity="center_vertical"
             android:maxLines="1"
@@ -30,8 +27,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_content_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_6sdp"
             android:layout_marginVertical="@dimen/_2sdp"
@@ -42,8 +38,7 @@
 
         <com.leebeebeom.closetnote.ui.view.icon.AddIcon
             android:id="@+id/iconAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/myWrapMatch"
             android:alpha="0.8"
             android:onClick="@{() -> treeHolder.navigateAddFolderDialog()}"
             android:paddingStart="0dp"

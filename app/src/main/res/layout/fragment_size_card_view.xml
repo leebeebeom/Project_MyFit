@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,9 +14,7 @@
             type="com.leebeebeom.closetnote.ui.main.size.SizeViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchWrap">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
@@ -36,18 +35,16 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv"
                 setUri="@{model.imageUriLive}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                style="@style/myMatchParent" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <com.leebeebeom.closetnote.ui.view.icon.AddImageIcon
                 android:id="@+id/iconAddImage"
+                style="@style/myAddImageIcon"
                 setAddIcon="@{model.imageUriLive}"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_60sdp"
                 android:layout_gravity="center"
-                android:alpha="0.2"
-                android:clickable="false"
-                android:src="@drawable/icon_add_image" />
+                tools:src="@drawable/icon_add_image" />
 
         </com.google.android.material.card.MaterialCardView>
 

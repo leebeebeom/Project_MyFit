@@ -17,16 +17,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout"
         style="@style/myOutlinedEditTextLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        tools:layout_width="match_parent"
         android:hint="@{hint}"
         tools:hint="Length"
         app:suffixText="cm">
 
         <com.leebeebeom.closetnote.ui.view.CustomEditText
             android:id="@+id/et"
-            android:layout_width="match_parent"
-            android:layout_height="?myEditTextHeight"
+            style="@style/myEditText"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:text="@={text}" />

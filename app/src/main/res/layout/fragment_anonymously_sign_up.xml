@@ -11,19 +11,16 @@
     </data>
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/myMatchParent"
         tools:context=".ui.setting.anonymoulysingup.AnonymouslySignUpFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
             android:paddingHorizontal="@dimen/_28sdp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvSignUpMethod"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 android:layout_margin="@dimen/_4sdp"
                 android:text="@string/sign_up_choose_sign_up_method"
                 android:textSize="@dimen/_13sdp"
@@ -35,9 +32,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEmail"
-                style="@style/myOutlineButton"
-                android:layout_width="0dp"
-                android:layout_height="?attr/mySignButtonHeight"
+                style="@style/mySignInButton"
                 android:layout_marginEnd="@dimen/_2sdp"
                 android:drawableLeft="@drawable/icon_email_small"
                 android:drawableTint="@color/black"
@@ -56,9 +51,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoogle"
-                style="@style/myOutlineButton"
-                android:layout_width="0dp"
-                android:layout_height="?attr/mySignButtonHeight"
+                style="@style/mySignInButton"
                 android:layout_marginStart="@dimen/_2sdp"
                 android:drawableLeft="@drawable/icon_google"
                 android:onClick="@{() -> fragment.googleSignIn()}"
@@ -75,9 +68,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnNaver"
-                style="@style/myOutlineButton"
-                android:layout_width="0dp"
-                android:layout_height="?attr/mySignButtonHeight"
+                style="@style/mySignInButton"
                 android:layout_marginEnd="@dimen/_2sdp"
                 android:drawableLeft="@drawable/icon_naver_small"
                 android:onClick="@{() -> fragment.naverSignIn()}"
@@ -93,9 +84,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnKakao"
-                style="@style/myOutlineButton"
-                android:layout_width="0dp"
-                android:layout_height="?attr/mySignButtonHeight"
+                style="@style/mySignInButton"
                 android:layout_marginStart="@dimen/_2sdp"
                 android:drawableLeft="@drawable/icon_kakao_small"
                 android:onClick="@{() -> fragment.kakaoSignIn()}"

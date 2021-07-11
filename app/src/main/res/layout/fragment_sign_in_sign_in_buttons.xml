@@ -10,15 +10,11 @@
             type="com.leebeebeom.closetnote.ui.signin.SignInFragment" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchWrap">
 
         <com.google.android.material.button.MaterialButton
-            style="@style/myOutlineButton"
+            style="@style/mySignInButton"
             android:id="@+id/btnGoogle"
-            android:layout_width="0dp"
-            android:layout_height="?mySignButtonHeight"
             android:drawableLeft="@drawable/icon_google"
             android:text="@string/sign_in_with_google"
             android:textColor="@color/black"
@@ -32,9 +28,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNaver"
-            style="@style/myOutlineButton"
-            android:layout_width="0dp"
-            android:layout_height="?mySignButtonHeight"
+            style="@style/mySignInButton"
             android:drawableLeft="@drawable/icon_naver_small"
             android:onClick="@{() -> fragment.naverSignIn()}"
             android:text="@string/sign_in_with_naver"
@@ -48,11 +42,9 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnKakao"
-            android:layout_width="0dp"
-            style="@style/myOutlineButton"
+            style="@style/mySignInButton"
             android:drawableLeft="@drawable/icon_kakao_small"
             android:text="@string/sign_in_with_kakao"
-            android:layout_height="?mySignButtonHeight"
             android:textColor="@color/black"
             app:backgroundTint="#FEE500"
             app:layout_constraintEnd_toEndOf="parent"

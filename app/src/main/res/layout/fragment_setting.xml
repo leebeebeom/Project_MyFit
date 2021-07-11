@@ -15,62 +15,53 @@
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/myMatchParent"
         tools:context=".ui.setting.SettingFragment">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
             android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/myFragmentMainTextView"
                 android:id="@+id/tvSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/all_caps_settings" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/myMatchParent"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:background="@drawable/corner_round_background_grey"
                 android:paddingBottom="@dimen/_100sdp">
 
                 <include
+                    style="@style/my0dpWrapContent"
                     android:id="@+id/includeAccount"
                     layout="@layout/fragment_setting_account"
-                    android:layout_height="wrap_content"
                     app:model="@{model}"
                     app:fragment="@{fragment}"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_width="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <include
+                    style="@style/my0dpWrapContent"
                     android:id="@+id/includeGlobal"
                     layout="@layout/fragment_setting_global"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/includeAccount" />
 
                 <include
+                    style="@style/my0dpWrapContent"
                     android:id="@+id/includeEtc"
                     layout="@layout/fragment_setting_etc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/includeGlobal" />
 
                 <include
+                    style="@style/my0dpWrapContent"
                     layout="@layout/fragment_setting_sign_out"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     app:fragment="@{fragment}"
                     app:layout_constraintTop_toBottomOf="@id/includeEtc"
                     app:model="@{model}"

@@ -14,15 +14,11 @@
             type="com.leebeebeom.closetnote.ui.setting.SettingFragment" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchWrap">
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/myFragmentSubTextView"
             android:id="@+id/tvAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/setting_account"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,36 +27,30 @@
             style="@style/mySettingCardView"
             android:onClick="@{() -> fragment.navigateAccountFragment()}"
             android:id="@+id/cardViewAccount"
-            android:layout_width="0dp"
             android:layout_height="@dimen/_48sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAccount">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchParent">
 
                 <com.mikhaellopez.circularimageview.CircularImageView
+                    style="@style/myProfileImageView"
                     android:id="@+id/ivProfile"
                     setProfileUrl="@{model.profileUrlLive}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_margin="@dimen/_8sdp"
-                    app:civ_border_color="?myColorControl"
-                    app:civ_border_width="1px"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:alpha="0.1"
                     tools:srcCompat="@drawable/icon_person" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvNickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/myWrapContent"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:text="@{model.nicknameLive}"
                     android:textSize="@dimen/_11sdp"
@@ -72,8 +62,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/myWrapContent"
                     android:text="@{model.emailLive}"
                     android:textSize="@dimen/_10sdp"
                     app:layout_constraintBottom_toBottomOf="parent"

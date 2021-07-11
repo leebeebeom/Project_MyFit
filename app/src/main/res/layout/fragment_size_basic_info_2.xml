@@ -20,8 +20,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/linkLayout"
             style="@style/myOutlinedEditTextLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_4sdp"
             android:hint="@string/size_https"
             app:layout_constraintEnd_toStartOf="@id/btnGo"
@@ -31,8 +29,7 @@
 
             <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/etLink"
-                android:layout_width="match_parent"
-                android:layout_height="?myEditTextHeight"
+                style="@style/myEditText"
                 android:imeOptions="actionNext"
                 android:inputType="textUri"
                 android:text="@={model.sizeLive.link}"
@@ -43,7 +40,7 @@
             android:id="@+id/btnGo"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
-            android:layout_height="?myEditTextHeight"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/_4sdp"
             android:onClick="@{() -> fragment.openBrowser()}"
             android:text="@string/size_move"
@@ -60,14 +57,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/myOutlinedEditTextLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:hint="@string/size_memo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linkLayout">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.leebeebeom.closetnote.ui.view.CustomEditText
                 android:id="@+id/etMemo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

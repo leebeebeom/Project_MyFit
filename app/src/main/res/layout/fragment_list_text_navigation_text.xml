@@ -15,22 +15,19 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/myWrapContent"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:alpha="0.8"
             app:srcCompat="@drawable/icon_arrow_forward"
             app:tint="?colorControlNormal" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:alpha="0.9"
             android:maxLines="1"
             android:onClick="@{() -> fragment.navigateSelf()}"

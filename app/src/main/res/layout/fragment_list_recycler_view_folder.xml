@@ -13,15 +13,13 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/myMatchWrap"
         android:orientation="vertical"
         android:visibility="@{model.folderTuplesLive.empty ? View.GONE : View.VISIBLE}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iconToggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/_4sdp"
             android:alpha="0.8"
@@ -33,8 +31,6 @@
             style="@style/myFolderRecyclerViewGrid"
             android:id="@+id/rv"
             android:visibility="@{model.folderTogglePreferenceLive ? View.VISIBLE : View.GONE}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/_8sdp"
             tools:itemCount="4"
             tools:listitem="@layout/item_vh_folder_grid" />

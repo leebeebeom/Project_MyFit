@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
         <variable
             name="sizeListVH"
             type="com.leebeebeom.closetnote.util.adapter.viewholder.SizeListVH" />
@@ -18,56 +18,50 @@
             type="boolean" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/myMatchWrap"
         android:onClick="@{() -> sizeListVH.itemViewClick()}"
-        app:onLongClickListener="@{() -> sizeListVH.itemViewLongClick()}"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:onLongClickListener="@{() -> sizeListVH.itemViewLongClick()}">
 
-        <include
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb"
-            app:dragging="@{dragging}"
-            layout="@layout/item_vh_include_check_box" />
+            style="@style/myListCheckBox"
+            android:visibility="@{dragging ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/myCardView"
-            listActionMode="@{baseAdapter}"
+            style="@style/myListCardView"
             holder="@{sizeListVH}"
-            android:id="@+id/cardView"
+            listActionMode="@{baseAdapter}"
+            android:layout_height="@dimen/_40sdp"
             android:translationZ="@{dragging ? 10f : 0f}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_12sdp"
-            android:layout_marginVertical="@dimen/_2sdp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchParent">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv"
                     setUri="@{sizeListVH.tuple.imageUri}"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="0dp"
+                    style="@style/my0dp"
                     android:alpha="@{dragging ? 0.5f : 1f}"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1"
-                    app:layout_constraintEnd_toStartOf="@id/content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <com.leebeebeom.closetnote.ui.view.icon.AddImageIcon
                     setAddIcon="@{sizeListVH.tuple.imageUri}"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="0dp"
-                    android:alpha="0.2"
+                    style="@style/myAddImageIcon"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1"
-                    app:layout_constraintEnd_toStartOf="@id/content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/icon_add_image" />
@@ -75,8 +69,7 @@
                 <include
                     android:id="@+id/content"
                     layout="@layout/item_vh_include_size_content"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    style="@style/my0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/iconDragHandle"
                     app:layout_constraintStart_toEndOf="@id/iv"
@@ -85,23 +78,17 @@
                     app:dragging="@{dragging}"
                     app:sizeVH="@{sizeListVH}" />
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <com.leebeebeom.closetnote.ui.view.icon.DragHandleIcon
                     android:id="@+id/iconDragHandle"
                     app:onTouchListener="@{(view, event) -> sizeListVH.dragStart(event)}"
                     dragHandleActionMode="@{baseAdapter}"
-                    setDragHandle='@{""}'
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    style="@style/myDragHandle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:alpha="0.8"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="@dimen/_12sdp"
-                    android:visibility="gone"
                     tools:visibility="visible"
                     tools:src="@drawable/icon_drag_handle" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -14,24 +14,21 @@
     </data>
 
     <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/myMatchWrap"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/_8sdp"
         android:scrollbars="none">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_marginTop="@dimen/_4sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iconHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 android:alpha="0.9"
                 android:onClick="@{() -> fragment.navigateMainFragment()}"
                 app:srcCompat="@drawable/icon_home"

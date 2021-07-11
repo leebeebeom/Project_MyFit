@@ -9,15 +9,11 @@
             type="com.leebeebeom.closetnote.ui.signin.SignInFragment" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/myMatchWrap">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvSignUp"
             style="@style/mySignInTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:onClick="@{() -> fragment.navigateSignUpFragment()}"
             android:text="@string/sign_up_with_other_email"
             app:layout_constraintEnd_toStartOf="@id/tvSlash"
@@ -28,8 +24,6 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvSlash"
             style="@style/mySignInTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:alpha="0.5"
             android:text="@string/sign_slash"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +34,6 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvAnonymously"
             style="@style/mySignInTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:onClick="@{() -> fragment.signInAnonymously()}"
             android:text="@string/sign_in_with_anonymously"
             app:layout_constraintEnd_toEndOf="parent"

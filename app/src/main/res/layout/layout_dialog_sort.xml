@@ -2,71 +2,82 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <View
+            android:id="@+id/divider"
+            style="@style/myHorizontalDivider"
+            android:layout_marginBottom="@dimen/_4sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="1px"
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:background="?myColorControl" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             layout="@layout/layout_dialog_sort_radio_btn"
             android:id="@+id/radioBtnCustom"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/mySortRadioButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
             app:text="@{@string/dialog_sort_custom}" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <include
+            android:id="@+id/radioBtnCreate"
+            style="@style/mySortRadioButton"
+            layout="@layout/layout_dialog_sort_radio_btn"
+            app:layout_constraintEnd_toStartOf="@id/radioBtnCreateReverse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radioBtnCustom"
+            app:text="@{@string/dialog_sort_create}" />
 
-            <include
-                android:id="@+id/radioBtnCreate"
-                layout="@layout/layout_dialog_sort_radio_btn"
-                app:text="@{@string/dialog_sort_create}" />
+        <include
+            android:id="@+id/radioBtnCreateReverse"
+            style="@style/mySortRadioButton"
+            layout="@layout/layout_dialog_sort_radio_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/radioBtnCreate"
+            app:layout_constraintTop_toBottomOf="@id/radioBtnCustom"
+            app:text="@{@string/dialog_sort_create_reverse}" />
 
-            <include
-                android:id="@+id/radioBtnCreateReverse"
-                layout="@layout/layout_dialog_sort_radio_btn"
-                app:text="@{@string/dialog_sort_create_reverse}" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        <include
+            android:id="@+id/radioBtnBrand"
+            style="@style/mySortRadioButton"
+            layout="@layout/layout_dialog_sort_radio_btn"
+            app:layout_constraintEnd_toStartOf="@id/radioBtnBrandReverse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radioBtnCreate"
+            app:text="@{@string/dialog_sort_brand}" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/brandLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <include
+            android:id="@+id/radioBtnBrandReverse"
+            style="@style/mySortRadioButton"
+            layout="@layout/layout_dialog_sort_radio_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/radioBtnBrand"
+            app:layout_constraintTop_toBottomOf="@id/radioBtnCreateReverse"
+            app:text="@{@string/dialog_sort_brand_reverse}" />
 
-            <include
-                android:id="@+id/radioBtnBrand"
-                layout="@layout/layout_dialog_sort_radio_btn"
-                app:text="@{@string/dialog_sort_brand}" />
+        <include
+            android:id="@+id/radioBtnName"
+            style="@style/mySortRadioButton"
+            layout="@layout/layout_dialog_sort_radio_btn"
+            app:layout_constraintEnd_toStartOf="@id/radioBtnNameReverse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radioBtnBrand"
+            app:text="@{@string/dialog_sort_name}" />
 
-            <include
-                android:id="@+id/radioBtnBrandReverse"
-                layout="@layout/layout_dialog_sort_radio_btn"
-                app:text="@{@string/dialog_sort_brand_reverse}" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include
-                android:id="@+id/radioBtnName"
-                layout="@layout/layout_dialog_sort_radio_btn"
-                app:text="@{@string/dialog_sort_name}" />
-
-            <include
-                android:id="@+id/radioBtnNameReverse"
-                layout="@layout/layout_dialog_sort_radio_btn"
-                app:text="@{@string/dialog_sort_name_reverse}" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        <include
+            android:id="@+id/radioBtnNameReverse"
+            style="@style/mySortRadioButton"
+            layout="@layout/layout_dialog_sort_radio_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/radioBtnName"
+            app:layout_constraintTop_toBottomOf="@id/radioBtnBrandReverse"
+            app:text="@{@string/dialog_sort_name_reverse}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

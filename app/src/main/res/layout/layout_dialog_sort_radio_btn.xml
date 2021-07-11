@@ -11,15 +11,11 @@
 
     <com.google.android.material.radiobutton.MaterialRadioButton
         android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/myWrapContent"
         android:layout_marginStart="@dimen/_12sdp"
-        android:layout_weight="1"
         android:button="@drawable/radio_button"
-        android:paddingStart="@dimen/_4sdp"
-        android:paddingEnd="0dp"
+        android:paddingHorizontal="@dimen/_4sdp"
         android:text="@{text}"
         android:textSize="@dimen/_11sdp"
-        tools:ignore="ObsoleteLayoutParam"
-        tools:text="아" />
+        tools:text="정렬" />
 </layout>

@@ -14,13 +14,11 @@
     </data>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/myMatchWrap"
         android:onClick="@{clickListener}">
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/myMatchWrap"
             android:paddingHorizontal="@dimen/_4sdp"
             android:paddingVertical="@dimen/_12sdp"
             android:text="@{action}"
@@ -28,10 +26,9 @@
             tools:text="비번 변경띠" />
 
         <View
+            style="@style/myHorizontalDivider"
             android:layout_width="match_parent"
-            android:layout_height="1px"
             android:layout_gravity="bottom"
-            android:alpha="0.5"
-            android:background="?myColorControl" />
+            android:alpha="0.5" />
     </FrameLayout>
 </layout>

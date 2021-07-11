@@ -13,21 +13,16 @@
             type="com.leebeebeom.closetnote.ui.signin.signup.SignUpViewModel" />
     </data>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <FrameLayout style="@style/myMatchParent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/myMatchWrap"
                 android:layout_gravity="center"
                 android:paddingHorizontal="@dimen/_28sdp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvAppName"
                     style="@style/myAppNameTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:textSize="@dimen/_48sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -36,8 +31,6 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/usernameLayout"
                     style="@style/myOutlinedEditTextLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:hint="@string/sign_username"
                     app:layout_constraintBottom_toTopOf="@id/et"
@@ -48,8 +41,7 @@
 
                     <com.leebeebeom.closetnote.ui.view.CustomEditText
                         android:id="@+id/etUsername"
-                        android:layout_width="match_parent"
-                        android:layout_height="?myEditTextHeight"
+                        style="@style/myEditText"
                         android:inputType="text"
                         android:text="@={model.usernameLive}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -57,8 +49,7 @@
                 <include
                     android:id="@+id/et"
                     layout="@layout/fragment_sign_in_edit_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/my0dpWrapContent"
                     app:emailLive="@={model.emailLive}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -68,8 +59,6 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/confirmPasswordLayout"
                     style="@style/myOutlinedEditTextLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:hint="@string/sign_confirm_password"
                     app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -79,18 +68,15 @@
 
                     <com.leebeebeom.closetnote.ui.view.CustomEditText
                         android:id="@+id/etConfirmPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="?myEditTextHeight"
+                        style="@style/myEditText"
                         android:inputType="textPassword"
                         android:text="@={model.confirmPasswordLive}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/myOutlineButton"
+                    style="@style/mySignInButton"
                     app:strokeColor="@android:color/transparent"
                     android:id="@+id/btnSignUp"
-                    android:layout_width="0dp"
-                    android:layout_height="?mySignButtonHeight"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:onClick="@{() -> model.textsNotEmpty &amp;&amp; model.passwordEquals ? fragement.emailSignUp() : fragement.setEditTextLayoutError()}"
                     android:text="@string/sign_up"

@@ -9,26 +9,20 @@
             type="com.leebeebeom.closetnote.util.ActionModeImpl" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.appcompat.widget.LinearLayoutCompat style="@style/myMatchWrap">
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            style="@style/myCheckBox"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_10sdp"
-            android:alpha="0.8"
-            android:buttonTint="?colorControlNormal"
             android:onClick="@{actionModeImpl::allSelectClick}"
             android:scaleX="0.9"
             android:scaleY="0.9" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/myWrapContent"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_8sdp"
             android:textSize="@dimen/_12sdp"

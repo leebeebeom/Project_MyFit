@@ -15,20 +15,17 @@
 
     <com.leebeebeom.closetnote.ui.view.LockableScrollView
         android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/myMatchParent"
         tools:context=".ui.main.list.ListFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/myMatchParent"
             android:background="?android:colorBackground">
 
             <include
                 android:id="@+id/textNavigation"
                 layout="@layout/fragment_list_text_navigation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -38,8 +35,7 @@
             <include
                 android:id="@+id/rvFolder"
                 layout="@layout/fragment_list_recycler_view_folder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/my0dpWrapContent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textNavigation"
@@ -47,9 +43,8 @@
 
             <include
                 android:id="@+id/rvSize"
-                android:layout_width="0dp"
+                style="@style/my0dpWrapContent"
                 layout="@layout/fragment_list_recycler_view_size"
-                android:layout_height="wrap_content"
                 app:model="@{model}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

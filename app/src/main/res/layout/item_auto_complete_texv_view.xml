@@ -9,18 +9,14 @@
             type="String" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_item_ac_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_18sdp"
+            style="@style/myMatchWrap"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/_18sdp"
             android:text="@{word}"
             android:textSize="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_8sdp"
             tools:text="검색된 단어" />
-    </FrameLayout>
 </layout>

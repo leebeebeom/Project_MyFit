@@ -23,8 +23,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:onClick="@{() -> folderGridVH.tuple.id != -1 ? folderGridVH.itemViewClick() : void}"
         android:visibility="@{folderGridVH.tuple.id != -1 ? View.VISIBLE : View.INVISIBLE}"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/myMatchWrap"
         app:onLongClickListener="@{() -> folderGridVH.tuple.id != -1 ? folderGridVH.itemViewLongClick() : false}">
 
         <com.google.android.material.card.MaterialCardView
@@ -36,14 +35,14 @@
             app:cardCornerRadius="@dimen/_8sdp"
             app:cardElevation="@dimen/_3sdp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/myMatchParent"
                 android:alpha="@{dragging ? 0.5f : 1}"
                 android:ellipsize="end"
                 android:gravity="center"
@@ -53,19 +52,15 @@
                 android:textSize="@dimen/_9sdp"
                 tools:text="아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <com.leebeebeom.closetnote.ui.view.icon.DragHandleIcon2
                 android:id="@+id/iconDragHandle"
                 dragHandleActionMode="@{baseAdapter}"
-                setDragHandle2='@{""}'
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myDragHandle2"
                 android:layout_gravity="end"
                 android:layout_marginTop="-4dp"
                 android:layout_marginEnd="-3dp"
-                android:alpha="0.9"
                 android:scaleX="0.5"
                 android:scaleY="0.7"
-                android:visibility="gone"
                 app:onTouchListener="@{(view, event) -> folderGridVH.tuple.id != -1 ? folderGridVH.dragStart(event) : false}"
                 tools:src="@drawable/icon_drag_handle2"
                 tools:visibility="visible" />
@@ -74,8 +69,6 @@
                 style="@style/myCheckBox"
                 android:id="@+id/cb"
                 gridActionMode="@{baseAdapter}"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="start"
                 android:layout_marginStart="-4dp"
                 android:layout_marginTop="-3dp"
@@ -84,14 +77,11 @@
                 android:scaleY="0.6"
                 android:visibility="gone"
                 tools:visibility="visible" />
-
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/layoutContentsSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            style="@style/myWrapContent"
             android:visibility="@{dragging ? View.INVISIBLE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -100,16 +90,14 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvContentSize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 android:text="@{folderGridVH.tuple.contentSize}"
                 android:textSize="@dimen/_8sdp"
                 tools:text="2" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvItems"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/myWrapContent"
                 android:layout_marginStart="@dimen/_2sdp"
                 android:text="@{folderGridVH.tuple.contentSize == 1 ? @string/item_folder_item : @string/item_folder_items}"
                 android:textSize="@dimen/_8sdp"

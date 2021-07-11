@@ -13,9 +13,7 @@
             type="com.leebeebeom.closetnote.ui.main.list.ListViewModel" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout style="@style/myMatchParent">
 
         <include
             android:id="@+id/rvSizeList"
@@ -26,7 +24,7 @@
             android:id="@+id/rvSizeGrid"
             layout="@layout/fragment_list_recycler_view_size_grid"
             android:visibility="@{model.viewTypePreferenceLive == ViewType.GRID_VIEW.value ? View.VISIBLE : View.GONE}"
-            tools:visibility="gone" />
+            />
 
         <include
             android:id="@+id/noData"
