@@ -64,7 +64,6 @@
                     android:textSize="@dimen/_10sdp" />
 
                 <com.leebeebeom.closetnote.ui.view.icon.AddIcon
-                    setAddIcon2='@{""}'
                     style="@style/myWrapContent"
                     tools:src="@drawable/icon_add" />
             </androidx.appcompat.widget.LinearLayoutCompat>
