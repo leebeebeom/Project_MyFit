@@ -16,6 +16,8 @@
             style="@style/myCheckBox"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_10sdp"
+            android:clickable="true"
+            android:enabled="true"
             android:onClick="@{actionModeImpl::allSelectClick}"
             android:scaleX="0.9"
             android:scaleY="0.9" />
