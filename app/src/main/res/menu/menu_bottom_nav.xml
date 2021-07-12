@@ -7,14 +7,12 @@
         android:title="@string/menu_main" />
     <item
         android:id="@+id/dailyLookFragment"
-        android:icon="@drawable/icon_all_list"
         android:title="@string/menu_daily_look" />
     <item
         android:title=""
         android:enabled="false"/>
     <item
         android:id="@+id/wishListFragment"
-        android:icon="@drawable/icon_favorite"
         android:title="@string/menu_wish_list" />
     <item
         android:id="@+id/nav_graph_setting"
