@@ -16,14 +16,25 @@
         <item name="cornerSize">@dimen/_6sdp</item>
     </style>
 
-    <!--    bottom navigation active color-->
-    <style name="myBottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+    <style name="myBottomNavActiveColor" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="colorPrimary">?myColorControl</item>
     </style>
 
-    <!--    action bar title size-->
     <style name="myActionBarTitleStyle">
         <item name="android:textSize">@dimen/_14sdp</item>
+    </style>
+
+    <style name="myAccountFragmentIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/_16sdp</item>
+        <item name="alpha">0.9</item>
+    </style>
+
+    <style name="myAccountFragmentSettings">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">@dimen/_8sdp</item>
     </style>
 
     <style name="myTextSize9sdp" parent="Widget.Design.TextInputLayout">
