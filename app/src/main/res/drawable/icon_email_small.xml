@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/_22sdp"
+        android:height="@dimen/_22sdp"
+        android:drawable="@drawable/icon_email"
+        android:start="@dimen/_4sdp" />
+</layer-list>

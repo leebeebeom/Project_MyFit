@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <stroke android:color="?attr/rvBackground" />
-    <solid android:color="?attr/rvBackground" />
+    <stroke android:color="?attr/myBackgroundGrey" />
+    <solid android:color="?attr/myBackgroundGrey" />
     <corners
         android:bottomLeftRadius="@dimen/_28sdp"
         android:bottomRightRadius="@dimen/_28sdp"
