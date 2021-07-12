@@ -6,7 +6,7 @@
     <string name="size_name">Name</string>
     <string name="size_size">Size</string>
     <string name="size_https">https://</string>
-    <string name="size_go">GO</string>
+    <string name="size_move">이동</string>
     <string name="size_memo">memo</string>
     <string name="size_brand_necessary_field">브랜드는 필수 입력 항목이에요.</string>
     <string name="size_name_necessary_field">이름은 필수 입력 항목이에요.</string>
