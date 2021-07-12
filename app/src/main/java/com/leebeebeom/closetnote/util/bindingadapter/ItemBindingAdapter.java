@@ -7,25 +7,28 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.textview.MaterialTextView;
 import com.leebeebeom.closetnote.R;
 import com.leebeebeom.closetnote.util.adapter.BaseAdapter;
 import com.leebeebeom.closetnote.util.adapter.viewholder.BaseVH;
 import com.leebeebeom.closetnote.util.constant.Sort;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.textview.MaterialTextView;
 
 import org.jetbrains.annotations.NotNull;
 
 import static com.leebeebeom.closetnote.util.ActionModeImpl.ACTION_MODE_OFF;
 import static com.leebeebeom.closetnote.util.ActionModeImpl.ACTION_MODE_ON;
+import static com.leebeebeom.closetnote.util.ActionModeImpl.sActionMode;
 
 
 public class ItemBindingAdapter {
     private static Animation sOpenAnimation;
+    private static Animation sCloseAnimation;
 
     @BindingAdapter("android:text")
     public static void text(@NotNull MaterialTextView textView, int i) {
@@ -48,49 +51,14 @@ public class ItemBindingAdapter {
         else Glide.with(imageView).clear(imageView);
     }
 
-    @BindingAdapter("setDragHandle")
-    public static void setDragHandle(@NotNull ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_drag_handle).into(imageView);
-    }
-
-    @BindingAdapter("setDragHandle2")
-    public static void setDragHandle2(@NotNull ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_drag_handle2).into(imageView);
-    }
-
-    @BindingAdapter("setAddIcon")
-    public static void setAddIcon(@NotNull ImageView imageView, String imageUri) {
+    @BindingAdapter("addIconVisibility")
+    public static void addIconVisibility(@NotNull ImageView imageView, String imageUri) {
         imageView.setVisibility(imageUri == null ? View.VISIBLE : View.GONE);
     }
 
-    @BindingAdapter("setAddIcon")
-    public static void setAddIcon(@NotNull ImageView imageView, Uri uri) {
+    @BindingAdapter("addIconVisibility")
+    public static void addIconVisibility(@NotNull ImageView imageView, Uri uri) {
         imageView.setVisibility(uri == null ? View.VISIBLE : View.GONE);
-    }
-
-    @BindingAdapter("setAddIcon2")
-    public static void setAddIcon2(ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_add).into(imageView);
-    }
-
-    @BindingAdapter("setRecentSearchIcon")
-    public static void setRecentSearchIcon(@NotNull ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_recent_search).into(imageView);
-    }
-
-    @BindingAdapter("setCloseIcon")
-    public static void setCloseIcon(@NotNull ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_close).into(imageView);
-    }
-
-    @BindingAdapter("setFolderIcon")
-    public static void setFolderIcon(@NotNull ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_folder).into(imageView);
-    }
-
-    @BindingAdapter("setDotIcon")
-    public static void setDotIcon(@NotNull ImageView imageView, String dummy) {
-        Glide.with(imageView).load(dummy).error(R.drawable.icon_dot).into(imageView);
     }
 
     @BindingAdapter("dragHandleActionMode")
@@ -102,17 +70,15 @@ public class ItemBindingAdapter {
 
     @BindingAdapter({"listActionMode", "holder"})
     public static void listActionMode(MaterialCardView cardView, BaseAdapter<?, ?, ?> adapter, BaseVH<?, ?> baseVH) {
-        if (adapter.getActionModeState() == ACTION_MODE_ON) {
-            if (sOpenAnimation == null)
-                sOpenAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_right);
-            cardView.setAnimation(sOpenAnimation);
-        } else if (adapter.getActionModeState() == ACTION_MODE_OFF) {
-            if (sOpenAnimation != null)
-                sOpenAnimation = null;
-            cardView.setAnimation(AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_left));
-            if (baseVH.getLayoutPosition() == adapter.getItemCount() - 1)
-                adapter.setActionModeState(0);
-        }
+        if (sOpenAnimation == null)
+            sOpenAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_right);
+        if (sCloseAnimation == null)
+            sCloseAnimation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_list_slide_left);
+
+        if (sActionMode != null && adapter.getActionModeState() == ACTION_MODE_ON && cardView.getAnimation() != sOpenAnimation)
+            cardView.startAnimation(sOpenAnimation);
+        else if (adapter.getActionModeState() == ACTION_MODE_OFF && cardView.getAnimation() == sOpenAnimation)
+            cardView.startAnimation(sCloseAnimation);
     }
 
     @BindingAdapter("gridActionMode")
@@ -125,9 +91,9 @@ public class ItemBindingAdapter {
         }
     }
 
-    @BindingAdapter("android:layout_marginStart")
-    public static void setMargin(LinearLayoutCompat linearLayoutCompat, int margin) {
-        LinearLayoutCompat.LayoutParams layoutParams = (LinearLayoutCompat.LayoutParams) linearLayoutCompat.getLayoutParams();
+    @BindingAdapter("marginStart")
+    public static void marginStart(ConstraintLayout layout, int margin) {
+        LinearLayoutCompat.LayoutParams layoutParams = (LinearLayoutCompat.LayoutParams) layout.getLayoutParams();
         layoutParams.setMarginStart(margin);
     }
 
@@ -136,10 +102,6 @@ public class ItemBindingAdapter {
         if (active)
             imageView.setImageResource(R.drawable.icon_triangle_down);
         else imageView.setImageResource(R.drawable.icon_triangle_right);
-
-//        if (active)
-//            Glide.with(imageView).load("").error(R.drawable.icon_triangle_down).into(imageView);
-//        else Glide.with(imageView).load("").error(R.drawable.icon_triangle_right).into(imageView);
     }
 
     @BindingAdapter("folderActive")
@@ -147,9 +109,5 @@ public class ItemBindingAdapter {
         if (active)
             imageView.setImageResource(R.drawable.icon_folder_open);
         else imageView.setImageResource(R.drawable.icon_folder);
-
-//        if (active)
-//            Glide.with(imageView).load("").error(R.drawable.icon_folder_open).into(imageView);
-//        else Glide.with(imageView).load("").error(R.drawable.icon_folder).into(imageView);
     }
 }
