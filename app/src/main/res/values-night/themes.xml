@@ -34,9 +34,7 @@
         <!--        font-->
         <item name="fontFamily">@font/noto</item>
         <!--        my background color-->
-        <item name="backgroundGrey">@color/myBackgroundColorNight</item>
-        <!--        go button color-->
-        <item name="goBtnBackground">@color/myGoButtonBackgroundColorNight</item>
+        <item name="myBackgroundGrey">@color/myBackgroundColorNight</item>
         <!--        ripple color remove-->
         <item name="colorControlHighlight">@android:color/transparent</item>
         <!--        my color control-->
@@ -48,8 +46,6 @@
         <item name="android:includeFontPadding">false</item>
         <item name="myCardViewBackground">#FF080808</item>
         <item name="myIndicatorColor">#696969</item>
-        <item name="mySignButtonHeight">@dimen/_48sdp</item>
-        <item name="myNormalButtonHeight">@dimen/_36sdp</item>
-        <item name="mySettingCardViewHeight">@dimen/_40sdp</item>
+        <item name="myEditTextHeight">@dimen/_40sdp</item>
     </style>
 </resources>
