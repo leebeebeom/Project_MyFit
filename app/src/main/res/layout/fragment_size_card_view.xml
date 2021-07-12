@@ -40,7 +40,7 @@
             <com.leebeebeom.closetnote.ui.view.icon.AddImageIcon
                 android:id="@+id/iconAddImage"
                 style="@style/myAddImageIcon"
-                setAddIcon="@{model.imageUriLive}"
+                addIconVisibility="@{model.imageUriLive}"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_60sdp"
                 android:layout_gravity="center"

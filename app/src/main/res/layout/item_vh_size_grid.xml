@@ -51,7 +51,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.leebeebeom.closetnote.ui.view.icon.AddImageIcon
-                    setAddIcon="@{sizeGridVH.tuple.imageUri}"
+                    addIconVisibility="@{sizeGridVH.tuple.imageUri}"
                     style="@style/myAddImageIcon"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:scaleX="0.3"
